@@ -1,0 +1,23 @@
+
+[tags]
+  theme = "blue"
+
+  # Use no screen option or screen = -1 to set tag on each screen
+  [tag]
+      name = " 1 "
+      # statusline=""
+  [/tag]
+
+  [tag] name = " 2 " [/tag]
+  [tag] name = " 3 " [/tag]
+  [tag] name = " 4 " [/tag]
+  [tag] name = " Forge " [/tag]
+  [tag] name = " Music " [/tag]
+  [tag] name = " Mail " [/tag]
+
+  # Mousebinds associated to Tags element button
+  [mouse] button = "1" func = "tag_click" [/mouse]
+  [mouse] button = "4" func = "tag_next"  [/mouse]
+  [mouse] button = "5" func = "tag_prev"  [/mouse]
+
+[/tags]

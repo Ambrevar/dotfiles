@@ -1,0 +1,19 @@
+########################################################################
+## Shell -- Personal Definitions.
+## Date 2012-04-22
+########################################################################
+
+##======================================================================
+## Personal
+##======================================================================
+
+if [ -e "/media/data1/Personal" ]; then
+    PERSONAL="/media/data1/Personal"
+elif [ -e "$HOME/Dropbox/Personal" ]; then
+    PERSONAL="$HOME/Dropbox/Personal"
+fi
+
+[ -e /media/data1/TEMP ] && TEMP="/media/data1/TEMP"
+
+# alias todo='$EDITOR $PERSONAL/TODO/TODO.txt'
+# alias todo='emacsclient -t $PERSONAL/TODO/TODO.txt'

@@ -1,0 +1,224 @@
+#!/bin/bash
+################################################################################
+## Home Config Backup Script
+## 2012-05-12
+################################################################################
+## Note for Zsh: because of the KSH-style arrays (index starting at 0), the
+## KSH_ARRAYS option must be used.
+
+##==============================================================================
+## Options
+##==============================================================================
+
+## Set Debug mode on
+DEBUG=no
+if [ "$DEBUG" = "yes" ]; then
+	set -x
+fi
+
+## Variables
+OLDPATH="$(pwd)" # Enclose into a sub or use $OLDPATH
+cd "$HOME"
+SCRIPTPATH="$(readlink -f $(dirname "$0"))"
+COMPRESSION="gz"
+ARCHIVENAME="$HOME/home-config-$(date "+%y-%m-%d-%H%M%S")"
+ARCEXT="tar.gz"
+ARCOPT="cvzf"
+
+print_help()
+{
+    echo "Synopsis:"
+    echo "  $1 [-o ARCHIVENAME] [-m COMPRESSION]"
+    echo
+    echo "Usage:"
+    echo "  default: "
+    echo "  -h:\t\tDisplay this help."
+    echo "  -m: compression method among"
+    echo "      * gz (default)"
+    echo "      * xz"
+    echo "  -o: output archive name (without extension)."
+    echo ""
+    echo "Note: xz is not available on older Unices."
+
+}
+
+while getopts ":hm:o:" opt; do
+    case $opt in
+        h)
+            print_help "$0"
+            exit 1
+            ;;
+
+        m)
+            COMPRESSION="$OPTARG"
+            ;;
+
+        o)
+	        ARCHIVENAME="$(pwd)/$OPTARG"
+            ;;
+
+        ?) 
+            print_help "$0"
+            exit 1
+            ;;
+        :)
+            echo "Missing argument."
+            echo "Use $0 -h for help."
+            exit 1
+            ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+case $COMPRESSION in
+    "gz")
+        ARCEXT="tar.gz"
+        ARCOPT="cvzf"
+        ;;
+
+    "xz")
+        ARCEXT="tar.xz"
+        ARCOPT="cvJf"
+        ;;
+
+    *)
+        ARCEXT="tar.gz"
+        ARCOPT="cvzf"
+        ;;
+esac
+
+
+if [ "${DEBUG}" = "yes" ]; then
+    echo "COMPRESSION=[$COMPRESSION]"
+    echo "ARCHIVENAME=[$ARCHIVENAME]"
+    echo "ARCEXT=[$ARCEXT]"
+    echo "ARCOPT=[$ARCOPT]"
+fi
+
+if [ -e "${ARCHIVENAME}.${ARCEXT}" ]; then
+	echo "Error: ${ARCHIVENAME}.${ARCEXT} already exists!">&2
+    exit 0
+fi
+
+##==============================================================================
+## Arch Linux packages list
+##==============================================================================
+
+if [ -e "/usr/bin/pacman" ]; then
+	ARCH_PKG_OFFICIAL="$HOME/.arch-pkg-official"
+	ARCH_PKG_EXPLICIT="$HOME/.arch-pkg-explicit"
+	ARCH_PKG_AUR="$HOME/.arch-pkg-aur"
+	ARCH_MIRRORS="$HOME/.arch-mirrors"
+
+	PKG_LOCAL='pacman -Qq | sort'
+	PKG_FOREIGN='pacman -Qmq | sort'
+	PKG_EXPLICIT='pacman -Qeq | sort'
+	PKG_FILTER='grep \< | cut -f2 -d" "'
+
+	diff <(eval "${PKG_LOCAL}") <(eval "${PKG_FOREIGN}") | eval "${PKG_FILTER}" >"${ARCH_PKG_OFFICIAL}-$(hostname)"
+
+    eval "${PKG_EXPLICIT}" >"${ARCH_PKG_EXPLICIT}-$(hostname)"
+    eval "${PKG_FOREIGN}" >"${ARCH_PKG_AUR}-$(hostname)"
+
+	cat /etc/pacman.conf | grep "^\[">"${ARCH_MIRRORS}-$(hostname)"
+fi
+
+##==============================================================================
+## Let's fill the file list:
+##==============================================================================
+FILELIST=()
+
+# Arch Linux package list
+if [ -e "/usr/bin/pacman" ]; then
+    FILELIST[${#FILELIST[*]}]="$(find . -maxdepth 1 -name '.arch*'  -exec basename {} \;)"
+fi
+
+# Awesome
+FILELIST[${#FILELIST[*]}]="$(find .config/awesome \( -name "*.lua" -o -name "*.sh" \) -type f)"
+
+# cmus
+FILELIST[${#FILELIST[*]}]="$(ls .cmus/{autosave,*.theme}) "
+
+# Conky
+FILELIST[${#FILELIST[*]}]=".conkyrc"
+
+# Emacs
+FILELIST[${#FILELIST[*]}]=".emacs"
+FILELIST[${#FILELIST[*]}]=".emacs.d/plugins"
+FILELIST[${#FILELIST[*]}]=".emacs.d/abbrev_defs"
+
+# GTK
+FILELIST[${#FILELIST[*]}]=".gtkrc-2.0"
+FILELIST[${#FILELIST[*]}]=".config/gtk-3.0/settings.ini"
+
+# Luakit
+FILELIST[${#FILELIST[*]}]=".config/luakit/"
+
+# LXTerminal
+FILELIST[${#FILELIST[*]}]=".config/lxterminal/lxterminal.conf"
+
+# MPlayer
+FILELIST[${#FILELIST[*]}]=".mplayer"
+
+# Mutt
+# FILELIST[${#FILELIST[*]}]=".muttrc"
+
+# Nano
+FILELIST[${#FILELIST[*]}]=".nanorc"
+
+# Netinit
+FILELIST[${#FILELIST[*]}]=".netinit"
+
+# Ranger
+FILELIST[${#FILELIST[*]}]="$(ls -d --indicator-style=none .config/ranger/*|grep -vi 'pycache\|bookmarks\|history\|tagged')"
+
+# rtorrent
+FILELIST[${#FILELIST[*]}]=".rtorrent.rc"
+
+# Shells
+FILELIST[${#FILELIST[*]}]=".bashrc"
+FILELIST[${#FILELIST[*]}]=".zshrc"
+FILELIST[${#FILELIST[*]}]="$(ls .shell.d/*|grep -vi 'bhistory')"
+
+# Taskwarrior
+FILELIST[${#FILELIST[*]}]=".taskrc"
+
+# TeXlive
+FILELIST[${#FILELIST[*]}]="$(find texmf -type f|grep -vi 'moderncv/examples\|moderncv/manual\|.bzr')"
+
+# Vim
+FILELIST[${#FILELIST[*]}]=".vimrc"
+
+# WMFS
+FILELIST[${#FILELIST[*]}]=".config/wmfs"
+
+# Xinit
+FILELIST[${#FILELIST[*]}]=".xinitrc"
+
+# Xresource
+FILELIST[${#FILELIST[*]}]=".Xresources"
+
+# Xscreensaver
+FILELIST[${#FILELIST[*]}]=".xscreensaver"
+
+
+##==============================================================================
+## Archiving
+##==============================================================================
+
+if [ "$DEBUG" = "yes" ]; then
+	tar -zcvf "$ARCHIVENAME"  -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")" --exclude-vcs
+else
+	tar ${ARCOPT} "${ARCHIVENAME}.${ARCEXT}"  -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")" --exclude-vcs >/dev/null
+fi
+
+##==============================================================================
+## Cleaning
+##==============================================================================
+cd "$OLDPATH"
+
+## Set Debug mode off
+if [ "$DEBUG" = "yes" ]; then
+	set +x
+fi

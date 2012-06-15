@@ -1,0 +1,177 @@
+################################################################################
+## Bash specific options
+################################################################################
+
+if isShell "bash"; then
+
+## Enable programmable completion features (you don't need to enable
+## this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+## sources /etc/bash.bashrc).
+    if [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
+
+## Sudo completion
+    complete -cf sudo
+
+    set +o nounset	# Otherwise some completions will fail
+    set completion-ignore-case on
+    set show-all-if-ambiguous on
+
+## Use TAB to switch between completions instead of waiting for the next character.
+#bind '"\t":menu-complete'
+
+    export FIGNORE=".o:~"			# A list of suffixes to ignore when performing filename completion
+    set filec				# To search and fill the complete name of a file (with <Esc>)
+
+
+
+##======================================================================
+## History management
+##======================================================================
+    export HISTCONTROL=ignoredups # don't put duplicate lines in the history. See bash(1) for more options
+    export HISTFILESIZE=1000 # Define number of previous commands stored
+    export HISTIGNORE="&:bg:fg:ll:h:ls:la:la:lk:clear:exit:history"
+    export HISTTIMEFORMAT="%Y-%m-%d_%H:%M:%S_%a  "
+
+##======================================================================
+## Various options
+##======================================================================
+    set -o notify				# Jobs notify shell about their states immediately
+#set ignoreeof				# To avoid accidentally quitting the shell with <Ctrl-D>
+
+#shopt -u mailwarn 			# Disable the shell ability to warn about incoming mail
+    shopt -s cdable_vars      # if cd arg is not valid, assumes its a var defining a dir
+    shopt -s cdspell			# To correct minor error in the directory spelling (during cd)
+    shopt -s checkhash
+    shopt -s checkwinsize     # update the value of LINES and COLUMNS after each command if altered
+    shopt -s cmdhist          # save multi-line commands in history as single line
+    shopt -s dirspell
+    shopt -s dotglob          # include dotfiles in pathname expansion
+    shopt -s expand_aliases   # expand aliases
+    shopt -s extglob          # enable extended pattern-matching features
+    shopt -s histappend       # append to (not overwrite) the history file
+    shopt -s hostcomplete     # attempt hostname expansion when @ is at the beginning ofa word
+    shopt -s no_empty_cmd_completion 	# No completion on an empty line
+    shopt -s nocaseglob       # pathname expansion will be treated as case-insensitive
+    shopt -s progcomp #To enable the programmable completion
+
+
+##==============================================================================
+## PS1 -- Full width bar with informations.
+##==============================================================================
+## An external function is needed to update $COLUMNS value, as well as path, time, and other variables.
+    function PSBAR ()
+    {
+	# Initialization.
+	    BARCOLOR=$BBlue
+	    OUTPUT="$BARCOLOR["
+	    SYMBOLVAR='='
+	    CENTERVAR=" $(date +%H:%M:%S) "
+
+	# Truncated path.
+	    local PWDMAXLEN=$(($COLUMNS/2-${#CENTERVAR}/2-3)) # '3' stands for '[ $SYMBOLVAR'.
+	    local TRUNC_SYMBOL="..."
+	    if [[ $PWD == $HOME* ]]; then
+		    newPWD="~${PWD#$HOME}"
+	    else
+		    newPWD=${PWD}
+	    fi
+	    if [ ${#newPWD} -gt $PWDMAXLEN ]; then
+	        local PWDOFFSET=$(( ${#newPWD} - $PWDMAXLEN + ${#TRUNC_SYMBOL} ))
+		    newPWD="${TRUNC_SYMBOL}${newPWD:$PWDOFFSET:$PWDMAXLEN}"
+	    fi
+
+	# Truncated login information.
+	    local LOGINFO="$(whoami)@$HOSTNAME"
+	    if [ ${#LOGINFO} -gt $(($COLUMNS/2-${#CENTERVAR}/2-3)) ] # '3' stands for '$SYMBOLVAR ]'
+	    then
+		    LOGINFO=$USER
+		    if [ ${#LOGINFO} -gt $(($COLUMNS/2-${#CENTERVAR}/2-3)) ] # '3' stands for '$SYMBOLVAR ]'
+		    then
+			    unset LOGINFO
+		    fi
+	    fi
+
+	# Left and right side. Empty if terminal width is too small.
+	    if [ $COLUMNS -gt 50 ]
+	    then
+		    LEFTSIDEVAR="$newPWD "
+		    RIGHTSIDEVAR=" $LOGINFO"
+	    fi
+
+	# Left side.
+	    OUTPUT="$OUTPUT$BPurple$LEFTSIDEVAR"
+
+
+	# Reset bar color
+	    OUTPUT="$OUTPUT$BARCOLOR"
+
+	# In case of odd values.
+	    if [ $(($COLUMNS%2)) -eq 1 ]
+	    then
+		    OUTPUT="$OUTPUT$SYMBOLVAR"
+	    fi
+
+	# Fill 'OUTPUT' variable with the desired chars.
+	    for i in $( seq $(($COLUMNS/2-${#LEFTSIDEVAR}-${#CENTERVAR}/2-1)) ) # '1' stands for '['
+	    do
+		    OUTPUT="$OUTPUT$SYMBOLVAR"
+	    done
+
+
+	# Center.
+	    OUTPUT="$OUTPUT$Color_Off$CENTERVAR"
+
+
+	# Reset bar color
+	    OUTPUT="$OUTPUT$BARCOLOR"
+
+	# Fill 'OUTPUT' variable with the desired chars.
+	    for i in $( seq $(($COLUMNS/2-${#CENTERVAR}/2-${#RIGHTSIDEVAR}-1)) ) # '1' stands for ']'
+	    do
+		    OUTPUT="$OUTPUT$SYMBOLVAR"
+	    done
+
+
+	# Right side.
+	    OUTPUT="$OUTPUT$BGreen$RIGHTSIDEVAR"
+
+	# Reset bar color
+	    OUTPUT="$OUTPUT$BARCOLOR"
+
+	# Close bar
+	    OUTPUT="$OUTPUT]\n"
+
+
+	# Prompt.
+	    if [ $(id -u) -eq 0 ]
+	    then
+		# Root access
+		    OUTPUT="$OUTPUT$BRed# $Color_Off"
+	    else
+		# Normal user
+		    OUTPUT="$OUTPUT$BYellow$ $Color_Off"
+	    fi
+
+	# Set result to PS1.
+	    PS1="$OUTPUT"
+    }
+
+
+##==============================================================================
+## Add informations to history.
+##==============================================================================
+#PROMPT_COMMAND='hpwd=$(history 1); hpwd="${hpwd# *[0-9]*  }"; if [[ ${hpwd%% *} == "cd" ]]; then cwd=$OLDPWD; else cwd=$PWD; fi; hpwd="${hpwd% ### *} ### $cwd"; history -s "$hpwd;"'
+
+##==============================================================================
+## PS1
+##==============================================================================
+
+## PS1 using PSBAR function.
+#PROMPT_COMMAND='PSBAR'
+
+## Simple PS1
+    PS1='\[\e[0;32m\]\u\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[1;32m\]\$\[\e[m\] '
+
+fi

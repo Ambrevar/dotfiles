@@ -1,0 +1,104 @@
+################################################################################
+## Zsh specific options
+## Date 2011-11-19
+################################################################################
+
+
+if isShell "zsh"; then
+
+##==============================================================================
+## History options
+##==============================================================================
+    HISTFILE=~/.zshistfile
+    HISTSIZE=1000
+    SAVEHIST=1000
+    setopt hist_ignore_all_dups
+    setopt hist_ignore_space # Commands beginning with a space won't be recorded.
+    setopt appendhistory
+
+##==============================================================================
+## Various
+##==============================================================================
+    # setopt completealiases              # Not recommended.
+    setopt autocd                       # When only dirname is entered, then auto cd to it.
+    # setopt extendedglob nomatch notify  # ???
+    unsetopt beep                       # ???
+
+##==============================================================================
+## VCS
+##==============================================================================
+## TODO: work on it...
+# autoload -Uz vcs_info zstyle ':vcs_info:*' enable git hg svn
+# autoload -Uz vcs_info
+
+##==============================================================================
+## Dir stack
+##==============================================================================
+    DIRSTACKSIZE=20
+
+    setopt autopushd pushdsilent pushdtohome
+    setopt pushdignoredups
+    # setopt pushdminus ## This revert the +/- operators.
+
+    alias dh='dirs -v'
+
+    if [[ -f ~/.zdirs ]] && [[ ${#dirstack[*]} -eq 0 ]]; then
+        dirstack=( $(< ~/.zdirs) )
+        popd > /dev/null
+    fi
+    precmd() {
+        dirs -l >! ~/.zdirs
+    }
+
+##==============================================================================
+## ???
+##==============================================================================
+    zstyle :compinstall filename "$HOME/.zshrc"
+
+
+##==============================================================================
+## Completion
+##==============================================================================
+    autoload -Uz compinit
+    compinit
+
+    zstyle ':completion:*' menu select
+    zstyle ':completion:*:descriptions' format '%U%B%d%b%u'
+    zstyle ':completion:*:commands' rehash true # New binaries in path get recognized.
+
+    zstyle ':completion:*' completer _complete _match _approximate ## Allow approximate
+    zstyle ':completion:*:match:*' original only
+    zstyle ':completion:*:approximate:*' max-errors 1 numeric
+
+## Tab completion for PID :D -- Useless ?
+    # zstyle ':completion:*:*:kill:*' menu yes select
+    # zstyle ':completion:*:kill:*' force-list always
+
+##==============================================================================
+## TESTING
+##==============================================================================
+
+# Remove RPS1 after <enter>
+    setopt transient_rprompt
+
+# Color vars
+    autoload -U colors terminfo
+    colors
+    
+# Zargs pawa
+    autoload -U zargs
+
+##==============================================================================
+## Prompt
+##==============================================================================
+    autoload -U promptinit
+    promptinit
+    prompt adam2
+
+##==============================================================================
+## Colors for dirs.
+##==============================================================================
+    eval `dircolors -b`
+
+fi
+

@@ -1,0 +1,101 @@
+# -*- mode: snippet -*-
+# contributor: Mads D. Kristensen <madsdk@gmail.com>
+# contributor : Song Qiang <tsiangsung@gmail.com>
+# contributor : Pierre Neidhardt <ambrevar@gmail.com> 2012-03-17
+# key: art
+# group: skeleton
+# name: \documentclass{article} ...
+# --
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+% \usepackage{lmodern}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{${1:Title}}
+\author{${2:\textsc{P.~Neidhardt}}}
+
+%%=============================================================================
+
+\usepackage[]{amsmath,amssymb,amsfonts}
+\usepackage[]{gensymb}
+\usepackage[]{geometry}
+\usepackage[]{graphicx}
+\usepackage[]{listings}
+\usepackage[]{needspace}
+\usepackage[svgnames]{xcolor}
+\usepackage{tikz}
+
+%% Load last.
+\usepackage[]{hyperref}
+\usepackage[frenchb]{babel}
+
+%% Href.
+\hypersetup{
+  colorlinks=true,
+  linkcolor=orange,
+  linktoc=page,
+  urlcolor=blue,
+}
+
+%% Source code.
+\lstdefinestyle{customc}{
+  % numbers=left,
+  belowcaptionskip=1\baselineskip,
+  frame=L,
+  xleftmargin=\parindent,
+  % framexleftmargin=\parindent,
+  language=C,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+  numberstyle=\ttfamily
+}
+
+\lstdefinestyle{customasm}{
+  % numbers=left,
+  belowcaptionskip=1\baselineskip,
+  frame=L,
+  xleftmargin=\parindent,
+  language=[x86masm]Assembler,
+  basicstyle=\footnotesize\ttfamily,
+  commentstyle=\itshape\color{purple!40!black},
+}
+
+\lstset{escapechar=@,style=customc}
+
+%% Misc.
+\newcommand{\fancybox}[2]{
+  \begin{figure}[h]
+    \centering
+    \caption{#1}
+    \begin{tikzpicture}
+      \node[draw,rounded corners]{#2};
+    \end{tikzpicture}
+  \end{figure}
+}
+
+\newcommand{\comment}[1]{}
+% \renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
+% \renewcommand{\arraystretch}{1.5}
+
+\let\latexbak\LaTeX
+\renewcommand{\LaTeX}{{\rm \latexbak}}
+
+\let\texbak\TeX
+\renewcommand{\TeX}{{\rm \texbak}}
+
+\def\unix{\textsc{Unix}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\maketitle
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

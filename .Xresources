@@ -1,0 +1,88 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! Xresources
+!! 2011-10-25
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+! vim:nu:ai:si:et:ts=4:sw=4:ft=xdefaults:
+
+! Commands : xfontsel
+! Colors : LightYellow Black
+
+!xterm*background: black
+!xterm*faceName:terminus
+!xterm*faceSize:8
+!xterm*font:-*-terminus-medium-r-normal-*-14-*-*-*-*-*-*-*
+
+! -------------------------------------------------
+! terminal colors
+! -------------------------------------------------
+
+!tangoesque scheme
+!*background: #111111
+!*background: #000000
+! *foreground: #babdb6
+!Black (not tango) + DarkGrey
+! *color0:  #000000
+! *color8:  #555753
+! DarkRed + Red
+! *color1:  #ff6565
+! *color9:  #ff8d8d
+! DarkGreen + Green
+! *color2:  #93d44f
+! *color10: #c8e7a8
+! DarkYellow + Yellow
+! *color3:  #eab93d
+! *color11: #ffc123
+! DarkBlue + Blue
+! *color4:  #204a87
+! *color12: #3465a4
+! DarkMangenta + Mangenta
+! *color5:  #ce5c00
+! *color13: #f57900
+!DarkCyan + Cyan (both not tango)
+! *color6:  #89b6e2
+! *color14: #46a4ff
+! LightGrey + White
+! *color7:  #cccccc
+! *color15: #ffffff
+! 
+!=================
+! Urxvt
+!=================
+
+urxvt*background: black
+urxvt*foreground: white
+urxvt*saveLines: 10000
+URxvt.font: xft:DejaVu Sans Mono:pixelsize=12
+! URxvt.font: -*-dina-medium-r-*-*-16-*-*-*-*-*-*-*
+! URxvt.font: xft:monaco:size=10
+urxvt*scrollBar:false
+
+URxvt.perl-ext:      default,url-select,tabbed
+! URxvt.perl-ext-common:      
+URxvt.keysym.M-u:    perl:url-select:select_next
+URxvt.urlLauncher:   luakit
+URxvt.underlineURLs: true
+
+! urxvt*font: -*-fixed-medium-r-*-*-18-*-*-*-*-*-iso8859-*
+! urxvt*charClass: 33:48,35:48,37-38:48,43-47:48,58:48,61:48,63-64:48,95:48,126:48
+! urxvt.perl-ext-common: default,tabbed
+! urxvt.tabbed.tabbar-fg: 2
+! urxvt.tabbed.tabbar-bg: 0
+
+! urxvt.tabbed.tab-bg: 0
+! urxvt.tabbed.tab-fg: 3
+
+
+!=================
+! Xterm
+!=================
+
+!xterm*background: black
+!xterm*saveLines: 10000
+!xterm*foreground: white
+!xterm*font: -*-fixed-medium-r-*-*-18-*-*-*-*-*-iso8859-*
+!xterm*charClass: 33:48,35:48,37-38:48,43-47:48,58:48,61:48,63-64:48,95:48,126:48
+! xterm*scrollBar:true
+! xterm*Scrollbar.backgroundPixmap: gradient:horizontal?dimension=14&start=darkgreen&end=pink
+! xterm*Scrollbar.foregroungPixmap: black
