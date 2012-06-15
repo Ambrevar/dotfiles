@@ -1,0 +1,15 @@
+#
+# WMFS2 configuration file
+#
+
+# Possible file inclusion:
+# @include "file"
+
+@include "wmfs.d/themes"
+@include "wmfs.d/bars"
+@include "wmfs.d/tags"
+@include "wmfs.d/client"
+@include "wmfs.d/launchers"
+@include "wmfs.d/rules"
+@include "wmfs.d/keys"
+

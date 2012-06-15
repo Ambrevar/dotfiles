@@ -1,0 +1,266 @@
+# Multi theme section
+[themes]
+# No name mean default
+
+  [theme]
+     # font = "fixed"
+
+     # Bars
+     bars_width = 21
+     bars_fg = "#E6E6E6"
+     bars_bg = "#4D0000"
+
+     # Element tags
+     tags_normal_fg = "#E6E6E6"
+     tags_normal_bg = "#800000"
+
+     tags_sel_fg    = "#E6E6E6"
+     tags_sel_bg    = "#CC6666"
+
+     tags_occupied_fg = "#E6E6E6"
+     tags_occupied_bg = "#994D4D"
+     tags_occupied_statusline = "\R[0;0;100;1;#994D4D]"
+
+     tags_urgent_fg    = "#E6E6E6"
+     tags_urgent_bg    = "#D88C34"
+
+     tags_border_color = "#000000"
+     #tags_border_color = "#112211"
+     tags_border_width = 1
+
+     # Frame / Client
+     client_normal_fg = "#E6E6E6"
+     client_normal_bg = "#330000"
+     client_normal_statusline = "\s[3;9;#121212;x] \s[2;8;#E6E6E6;x](1;client_close)"
+
+     client_sel_fg = "#E6E6E6"
+     client_sel_bg = "#660000"
+     client_sel_statusline = "\s[3;9;#121212;x] \s[2;8;#E6E6E6;x](1;client_close)"
+
+     frame_bg = "#555555"
+     client_titlebar_width = 18
+     client_border_width = 1
+   [/theme]
+
+  [theme]
+     name = "blue"
+     font = "dejavu-8"
+
+# BAR
+#         bg     = "#191919"
+#         fg     = "#D4D4D4"
+# TAGS
+#         occupied_bg    = "#003366"
+#         occupied_fg    = "#D4D4D4"
+#         sel_fg         = "#191919"
+#         sel_bg         = "#7E89A2"
+#         urgent_bg      = "#DD1111"
+#         urgent_fg      = "#000000"
+
+# CLIENT
+#         fg_focus  = "#9F9AB3"
+#         border_focus         = "#003366"
+# CLIENT          
+#         border_normal        = "#191919"
+#         fg_normal = "#7E89A2"
+
+
+     # Bars
+     bars_width = 21
+     bars_fg = "#D4D4D4"
+     bars_bg = "#000000"
+
+     # Element tags
+     tags_normal_fg = "#D4D4D4"
+     tags_normal_bg = "#191919"
+
+     tags_sel_fg    = "#191919"
+     tags_sel_bg    = "#7E89A2"
+
+     tags_occupied_fg = "#D4D4D4"
+     tags_occupied_bg = "#003366"
+     # tags_occupied_statusline = "\R[0;0;100;1;#994D4D]"
+
+     tags_urgent_fg    = "#000000"
+     tags_urgent_bg    = "#DD1111"
+
+     tags_border_color = "#000000"
+     tags_border_width = 1
+
+     # Frame / Client
+     client_normal_fg = "#7E89A2"
+     client_normal_bg = "#333333"
+     client_normal_statusline = "\s[3;9;#121212;x] \s[2;8;#E6E6E6;x](1;client_close)"
+
+     client_sel_fg = "#9F9AB3"
+     client_sel_bg = "#003366"
+     client_sel_statusline = "\s[3;9;#121212;x] \s[2;8;#E6E6E6;x](1;client_close)"
+
+     frame_bg = "#FF0000"
+     client_titlebar_width = 18
+     client_border_width = 1
+   [/theme]
+
+
+    [theme]
+        # default arp theme
+        name = "greygreen"
+        font = "snap"
+        # Bars
+        bars_width = 12
+        bars_fg = "#7D7D7D"
+        bars_bg = "#222222"
+        # Element tags
+        tags_normal_fg = "#7D7D7D"
+        tags_normal_bg = "#222222"
+        #tags_normal_statusline = ""
+        tags_sel_fg    = "#222222"
+        tags_sel_bg    = "#6DDD00"
+        #tags_sel_statusline = ""
+        tags_occupied_fg = "#7D7D7D"
+        tags_occupied_bg = "#1A1A1A"
+        tags_occupied_statusline = "\R[2;11;11;1;#6DDD00]"
+        tags_border_color = "#222222"
+        tags_border_width = 0
+        # Frame / Client
+        client_normal_fg = "#7D7D7D"
+        client_normal_bg = "#222222"
+        #client_normal_statusline = ""
+        client_sel_fg = "#222222"
+        client_sel_bg = "#7D7D7D"
+        #client_sel_statusline = ""
+        frame_bg = "#C7C7C7"
+        client_titlebar_width = 1
+        client_border_width = 1
+    [/theme]
+
+    [theme]
+        name = "bluish"
+        font = "snap"
+        # Bars
+        bars_width = 12
+        bars_fg = "#63b8ff"
+        bars_bg = "#222222"
+        # Element tags
+        tags_normal_fg = "#7D7D7D"
+        tags_normal_bg = "#222222"
+        # tags_normal_statusline = ""
+        tags_sel_fg    = "#222222"
+        tags_sel_bg    = "#63b8ff"
+        # tags_sel_statusline = ""
+        tags_occupied_fg = "#7D7D7D"
+        tags_occupied_bg = "#1A1A1A"
+        tags_occupied_statusline = "\R[2;11;14;1;#63b8ff]"
+        tags_border_color = "#222222"
+        tags_border_width = 0
+        # Frame / Client
+        client_normal_fg = "#7D7D7D"
+        client_normal_bg = "#222222"
+        client_normal_statusline = "\s[3;9;#7D7D7D;#](1;client_close)"
+        client_sel_fg = "#222222"
+        client_sel_bg = "#63b8ff"
+        client_sel_statusline = "\s[3;9;#222222;#](1;client_close)"
+        frame_bg = "#63b8ff"
+        client_titlebar_width = 12
+        client_border_width = 1
+    [/theme]
+
+    [theme]
+        name = "topbar"
+        font = "-*-terminus-medium-*-*-*-*-*-*-*-*-*-*-pt154"
+        # Bars
+        bars_width = 2
+        bars_fg = "#63b8ff"
+        bars_bg = "#222222"
+        # Element tags
+        tags_normal_fg = "#7D7D7D"
+        tags_normal_bg = "#222222"
+        # tags_normal_statusline = ""
+        tags_sel_fg    = "#222222"
+        tags_sel_bg    = "#63b8ff"
+        # tags_sel_statusline = ""
+        tags_occupied_fg = "#7D7D7D"
+        tags_occupied_bg = "#222222"
+        tags_occupied_statusline = "\R[1;0;2;4;#63b8ff]"
+        tags_border_color = "#222222"
+        tags_border_width = 0
+        # Frame / Client
+        client_normal_fg = "#7D7D7D"
+        client_normal_bg = "#222222"
+        client_normal_statusline = "\s[3;9;#7D7D7D;#](1;client_close)"
+        client_sel_fg = "#222222"
+        client_sel_bg = "#63b8ff"
+        client_sel_statusline = "\s[3;9;#222222;#](1;client_close)"
+        frame_bg = "#63b8ff"
+        client_titlebar_width = 12
+        client_border_width = 1
+    [/theme]
+
+    [theme]
+        # clients without title
+        name = "titleless"
+        font = "-*-terminus-medium-*-*-*-*-*-*-*-*-*-*-pt154"
+        # Bars
+        bars_width = 12
+        bars_fg = "#7D7D7D"
+        bars_bg = "#222222"
+        # Element tags
+        tags_normal_fg = "#7D7D7D"
+        tags_normal_bg = "#222222"
+        #tags_normal_statusline = ""
+        tags_sel_fg    = "#222222"
+        tags_sel_bg    = "#6DDD00"
+        #tags_sel_statusline = ""
+        tags_occupied_fg = "#7D7D7D"
+        tags_occupied_bg = "#222222"
+        tags_occupied_statusline = "\R[1;0;2;4;#6DDD00]"
+        tags_border_color = "#222222"
+        tags_border_width = 0
+        # Frame / Client
+        client_normal_fg = "#7D7D7D"
+        client_normal_bg = "#222222"
+        #client_normal_statusline = ""
+        client_sel_fg = "#7D7D7D"
+        client_sel_bg = "#222222"
+        #client_sel_statusline = ""
+        frame_bg = "#C7C7C7"
+        client_titlebar_width = 0
+        client_border_width = 2
+    [/theme]
+
+    [theme]
+        # theme from sources
+        name = "defaultnew"
+        font = "fixed"
+        # Bars
+        bars_width = 14
+        bars_fg = "#AABBAA"
+        bars_bg = "#223322"
+        # Element tags
+        tags_normal_fg = "#AABBAA"
+        tags_normal_bg = "#223322"
+        # tags_normal_statusline = ""
+        tags_sel_fg    = "#223322"
+        tags_sel_bg    = "#AABBAA"
+        # tags_sel_statusline = ""
+        tags_occupied_fg = "#AABBAA"
+        tags_occupied_bg = "#445544"
+        tags_occupied_statusline = "\R[0;0;3;3;#AABBAA]"
+        tags_urgent_fg    = "#223322"
+        tags_urgent_bg    = "#CC5544"
+        # tags_urgent_statusline = ""
+        tags_border_color = "#112211"
+        tags_border_width = 1
+        # Frame / Client
+        client_normal_fg = "#AABBAA"
+        client_normal_bg = "#223322"
+        client_normal_statusline = "\s[3;9;#121212;x] \s[2;8;#ff0000;x](1;client_close)"
+        client_sel_fg = "#223322"
+        client_sel_bg = "#AABBAA"
+        client_sel_statusline = "\s[3;9;#121212;x] \s[2;8;#ff0000;x](1;client_close)"
+        frame_bg = "#555555"
+        client_titlebar_width = 12
+        client_border_width = 1
+    [/theme]
+
+[/themes]

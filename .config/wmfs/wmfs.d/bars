@@ -1,0 +1,58 @@
+[bars]
+
+  # Position:
+  #
+  # 0  Top
+  # 1  Bottom
+  # 2  Hide
+
+  # Element type:
+  #
+  # t  Tags
+  # s  Statustext (will take available space)
+  # y  Systray (can be set only ONE time among all element)
+  # l  Launcher (will be expended at launcher use)
+
+    # [bar]
+    #     name        = "rightbar"
+    #     position    = 1
+    #     screen      = 1
+    #     elements    = "yslt"
+    #     theme       = "blue"
+    # [/bar]
+
+    # [bar]
+    #     name        = "topbar"
+    #     position    = 2
+    #     screen      = 0
+    #     elements    = "s"
+    #     theme       = "topbar"
+    # [/bar]
+
+
+[bar]
+   name = "topbar"
+   position = 0
+   screen = 0
+   elements = "tlsy"   # element order in bar
+   theme = "blue"
+   #theme = "default"
+[/bar]
+
+[bar]
+   name = "bottombar"
+   position = 1
+   screen = 0
+   elements = "s"   # element order in bar
+   # theme = "blue"
+   theme = "bluish"
+[/bar]
+
+# [bar]
+#    position = 0
+#    screen = 1
+#    elements = "ts"
+#    theme = "default"
+# [/bar]
+
+[/bars]

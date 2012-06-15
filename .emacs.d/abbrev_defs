@@ -1,0 +1,117 @@
+;;-*-coding: emacs-mule;-*-
+(define-abbrev-table 'Buffer-menu-mode-abbrev-table '())
+
+(define-abbrev-table 'apropos-mode-abbrev-table '())
+
+(define-abbrev-table 'awk-mode-abbrev-table '())
+
+(define-abbrev-table 'c++-mode-abbrev-table '())
+
+(define-abbrev-table 'c-mode-abbrev-table '())
+
+(define-abbrev-table 'comint-mode-abbrev-table '())
+
+(define-abbrev-table 'completion-list-mode-abbrev-table '())
+
+(define-abbrev-table 'docTeX-mode-abbrev-table '())
+
+(define-abbrev-table 'emacs-lisp-mode-abbrev-table '())
+
+(define-abbrev-table 'fundamental-mode-abbrev-table '())
+
+(define-abbrev-table 'global-abbrev-table '())
+
+(define-abbrev-table 'idl-mode-abbrev-table '())
+
+(define-abbrev-table 'java-mode-abbrev-table '())
+
+(define-abbrev-table 'lisp-mode-abbrev-table '())
+
+(define-abbrev-table 'objc-mode-abbrev-table '())
+
+(define-abbrev-table 'outline-mode-abbrev-table '())
+
+(define-abbrev-table 'pike-mode-abbrev-table '())
+
+(define-abbrev-table 'select-tags-table-mode-abbrev-table '())
+
+(define-abbrev-table 'snippet-mode-abbrev-table '())
+
+(define-abbrev-table 'special-mode-abbrev-table '())
+
+(define-abbrev-table 'text-mode-abbrev-table
+  '(
+    ("Arch" "Arch~Linux" nil 1)
+    ("ac" "avec" nil 0)
+    ("ajd" "aujourd'hui" nil 2)
+    ("arch" "architecture" nil 1)
+    ("autom" "automatique" nil 2)
+    ("bcp" "beaucoup" nil 2)
+    ("biblio" "bibliothÅËque" nil 1)
+    ("chai" "je ne sais" nil 1)
+    ("config" "configuration" nil 1)
+    ("configs" "configurations" nil 1)
+    ("cÅ‡d" "c'est-Å‡-dire" nil 1)
+    ("dc" "donc" nil 1)
+    ("dep" "dÅÈpendance" nil 1)
+    ("deps" "dÅÈpendances" nil 1)
+    ("dico" "Dictionnaire" nil 2)
+    ("dispo" "disponible" nil 1)
+    ("dispos" "disponibles" nil 1)
+    ("distro" "distribution" nil 1)
+    ("ds" "dans" nil 1)
+    ("ex" "exemple" nil 3)
+    ("exo" "exercice" nil 1)
+    ("ficheir" "fichier" nil 0)
+    ("ficheirs" "fichiers" nil 0)
+    ("gd" "grand" nil 3)
+    ("infos" "informations" nil 1)
+    ("latex" "LaTeX" nil 10)
+    ("linux" "GNU/Linux" nil 1)
+    ("lng" "language" nil 1)
+    ("lq" "lorsque" nil 3)
+    ("lql" "lequel" nil 2)
+    ("lqls" "lesquels" nil 1)
+    ("mail" "e-mail" nil 1)
+    ("mm" "mÅÍme" nil 16)
+    ("mnt" "maintenant" nil 2)
+    ("ms" "mais" nil 4)
+    ("nb" "nombre" nil 0)
+    ("ns" "nous" nil 1)
+    ("pb" "problÅËme" nil 4)
+    ("pbs" "problÅËmes" nil 1)
+    ("pcq" "parce que" nil 3)
+    ("pgrm" "programme" nil 1)
+    ("pgrms" "programmes" nil 1)
+    ("plsu" "plus" nil 3)
+    ("poru" "pour" nil 1)
+    ("pq" "pourquoi" nil 2)
+    ("pr" "pour" nil 3)
+    ("ptt" "petit" nil 1)
+    ("pÅÍ" "peut-ÅÍtre" nil 2)
+    ("qd" "quand" nil 4)
+    ("qq" "quelque" nil 1)
+    ("qqch" "quelque chose" nil 1)
+    ("qqn" "quelqu'un" nil 1)
+    ("qqns" "quelques-uns" nil 1)
+    ("qqs" "quelques" nil 1)
+    ("quelque" "quelque" nil 1)
+    ("ques" "question" nil 1)
+    ("ss" "sous" nil 1)
+    ("ssi" "si et seulement si" nil 1)
+    ("stp" "s'il te plaÅÓt" nil 1)
+    ("svp" "s'il vous plaÅÓt" nil 1)
+    ("teh" "the" nil 1)
+    ("tex" "TeX" nil 2)
+    ("tjrs" "toujours" nil 4)
+    ("ts" "tous" nil 1)
+    ("tt" "tout" nil 3)
+    ("tte" "toute" nil 1)
+    ("ttes" "toutes" nil 1)
+    ("ya" "il y a" nil 6)
+    ("yen" "il y en" nil 1)
+    ("ÅÍ" "ÅÍtre" nil 1)
+   ))
+
+(define-abbrev-table 'vc-svn-log-view-mode-abbrev-table '())
+
