@@ -1,1 +1,78 @@
-Work in progress.
+###########################
+# Unix Home Configuration #
+###########################
+Author: Ambrevar
+Date: 2012-06-18
+Target distribution: Arch Linux (might work for most Unices as well)
+
+Synopsis
+********
+This repository contains configuration files for various Unix-programs.
+
+Generic Comments
+****************
+There is no use in blind-copying the content of any file into your personal home
+folder. At best it might break things. The only purpose is to be a source of
+inspiration. Examples are always a good tehcnical support. (Especially for
+applications that do not provide examples in their documentation.)
+
+In case you still want to copy some files -- for bare testing -- do not forget
+that most of the files are in hidden folders.  Also note that in some shells,
+the '*' joker will NOT match hidden files, that is
+
+        cp -r source-dir/* dest-dir/
+
+will copy non-hidden folders only.  To match all folders, use the following
+joker instead:
+
+        cp -r source-dir/.??* dest-dir/
+
+Some applications will need extra dependencies other than the default ones. You
+might have a look at the .arch-pkg-explicit* files to see what software I've
+been using.
+
+Final word: do not forget to read the manpages!
+
+################################################################################
+
+Shell
+*****
+Target: zsh, bash
+
+Probably the most interesting part here. A lot of stuff: aliases, functions,
+shell options, etc.
+
+Please note that this config is mainly intended--and tested--for zsh. It should
+be mostly bash-compatible though.  When incompabilities have been encountered,
+it has been reported in the configuration files.  Hence the shared folder
+.shell.d/, whose files get sourced by both bash and zsh.  Bash-specific and
+zsh-specific options are in dedicated files ending with the apropriate shell
+name.
+
+Vim
+***
+I've only been a casual Vim user, so do not expect to much from it.
+
+WMFS
+****
+The last time I used WMFS, the development was in a transition from version 1.x
+to 2.x. So beware!, configuration files might be quite broken.
+
+Awesome
+*******
+Extra deps: Vicious
+
+Configuration is very close to the default one, which mostly fits my needs.
+Most of the work I've done is for the status bar, but since I'm using the
+Vicious plugin, it has not been a tremendous task.
+
+Emacs
+*****
+Extra deps: auctex, auto-complete, emacs-lua-mode, emacs-yasnippet,
+emacs-yasnippet-latex-git
+
+Not much personal work, mostly use of plugins. Still very powerful.
+
+Scripts
+*******
+.save archives the home configuration.

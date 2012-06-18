@@ -1,7 +1,7 @@
 #!/bin/bash
 ################################################################################
 ## Home Config Backup Script
-## 2012-05-12
+## 2012-06-15
 ################################################################################
 ## Note for Zsh: because of the KSH-style arrays (index starting at 0), the
 ## KSH_ARRAYS option must be used.

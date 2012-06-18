@@ -264,6 +264,9 @@ root.buttons(awful.util.table.join(
 -- }}}
 
 -- CUSTOM
+--------------------------------------------------------------------------------
+-- Mouse control
+--------------------------------------------------------------------------------
 -- set the desired pixel coordinates:
 local safeCoords = {x=0, y=0}
 -- Flag to tell Awesome whether to do this at startup.
@@ -274,11 +277,9 @@ local function moveMouseAway(x_co, y_co)
    mouse.coords({ x=x_co, y=y_co })
 end
 
--- Does not work
 local function moveMouse(x_co, y_co)
    t=mouse.coords()
-   -- t is 'nil', why?
-   -- mouse.coords( {x=t[1], y=t[2]} )
+   mouse.coords( {x = t.x + x_co, y = t.y + y_co} )
 end
 
 -- Optionally move the mouse when rc.lua is read (startup)
@@ -300,7 +301,10 @@ globalkeys = awful.util.table.join(
 -- Bind ''Meta4+Ctrl+m'' to move the mouse to the coordinates set above.
 --   this is useful if you needed the mouse for something and now want it out of the way
     awful.key({ modkey, "Control" }, "m", function() moveMouseAway(safeCoords.x, safeCoords.y) end),
-    awful.key({ modkey, "Control" }, "h", function() moveMouse(5, 0) end),
+    awful.key({ modkey, "Control" }, "h", function() moveMouse(-5, 0) end),
+    awful.key({ modkey, "Control" }, "j", function() moveMouse(0, 5) end),
+    awful.key({ modkey, "Control" }, "k", function() moveMouse(0, -5) end),
+    awful.key({ modkey, "Control" }, "l", function() moveMouse(5, 0) end),
 
 
     awful.key({ modkey, "Mod1"    }, "a", function () awful.util.spawn("cmus-remote -u") end),
