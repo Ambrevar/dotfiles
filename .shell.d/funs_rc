@@ -415,18 +415,16 @@ sanitize()
     chown -R ${USER}:users "$@"
 }
 
-## sanitize - set file/directory owner and permissions to normal values (644/755)
-## usage: sanitize <file>
 asciify()
 {
     asciify_help()
     {
         echo
-        echo "Synopsis:"
-        echo -e "\tConvert non-ASCII characters to their ASCII equivalent."
-        echo
         echo "Usage:"
         echo -e "\t$1 FILES"
+        echo
+        echo "Synopsis:"
+        echo -e "\tConvert non-ASCII characters to their ASCII equivalent."
         echo
     }
 
@@ -454,7 +452,33 @@ asciify()
     done;
 }
 
+## steal
+steal()
+{
+    steal_help()
+    {
+        echo
+        echo "Usage:"
+        echo -e "\t$1 STRING FILE"
+        echo
+        echo "Synopsis:"
+        echo -e "\tAppend a silently prompted string to STRING from FILE."
+        echo
+    }
 
+    if [ $# -ne 2 ]; then
+        echo "Wrong number of arguments."
+        steal_help $0
+        return
+    fi 
+
+    STRING="$1"
+    FILE="$2"
+
+    read -s DUMMY
+    sed -i "s/${STRING}/${STRING}${DUMMY}/g" "${FILE}"
+    echo File stolen.
+}
 
 
 

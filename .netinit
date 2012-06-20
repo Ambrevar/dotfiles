@@ -1,0 +1,39 @@
+#!/bin/bash
+################################################################################
+## Custom network initialization script.
+## 2012-04-09
+################################################################################
+
+if [ $(id -u) -ne 0 ]; then
+    echo "You must be root to run this script."
+    exit
+fi
+
+NET_INTERFACE=wlan0
+WPA_SUPPLICANT_CONF="/etc/wpa_supplicant.conf"
+TIMEOUT_LIMIT=500
+
+## Clean running processes if any.
+pkill dhcpcd
+pkill wpa_supplicant
+
+## In case network inteface is not up.
+ip link set ${NET_INTERFACE} up
+
+
+## Connection.
+if [ $# -eq 0 ]; then
+    # Associate if needed.
+    if [ "$(iwconfig ${NET_INTERFACE} | grep 'Not-Associated')" != "" ]; then
+        wpa_supplicant -B -i ${NET_INTERFACE} -D wext -c "${WPA_SUPPLICANT_CONF}"
+    fi
+
+    ## Wait until wpa_supplicant has finished association.
+    i=0
+    while [ "$(iwconfig ${NET_INTERFACE} | grep 'off/any')" != "" ] && [ $i -lt $TIMEOUT_LIMIT ] ; do
+        i=$(($i+1))
+    done
+
+	## Get IP.
+    dhcpcd $NET_INTERFACE
+fi
