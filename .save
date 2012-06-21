@@ -1,7 +1,7 @@
 #!/bin/bash
 ################################################################################
 ## Home Config Backup Script
-## 2012-06-15
+## 2012-06-21
 ################################################################################
 ## Note for Zsh: because of the KSH-style arrays (index starting at 0), the
 ## KSH_ARRAYS option must be used.
@@ -17,7 +17,7 @@ if [ "$DEBUG" = "yes" ]; then
 fi
 
 ## Variables
-OLDPATH="$(pwd)" # Enclose into a sub or use $OLDPATH
+OLDPATH="$(pwd)"
 cd "$HOME"
 SCRIPTPATH="$(readlink -f $(dirname "$0"))"
 COMPRESSION="gz"
@@ -54,7 +54,7 @@ while getopts ":hm:o:" opt; do
             ;;
 
         o)
-	        ARCHIVENAME="$(pwd)/$OPTARG"
+	        ARCHIVENAME="${OLDPATH}/$OPTARG"
             ;;
 
         ?) 
@@ -138,7 +138,8 @@ fi
 FILELIST[${#FILELIST[*]}]="$(find .config/awesome \( -name "*.lua" -o -name "*.sh" \) -type f)"
 
 # cmus
-FILELIST[${#FILELIST[*]}]="$(ls .cmus/{autosave,*.theme}) "
+# FILELIST[${#FILELIST[*]}]="$(ls .cmus/{autosave,*.theme}) "
+FILELIST[${#FILELIST[*]}]="$(ls .cmus/autosave) "
 
 # Conky
 FILELIST[${#FILELIST[*]}]=".conkyrc"
@@ -159,10 +160,11 @@ FILELIST[${#FILELIST[*]}]=".config/luakit/"
 FILELIST[${#FILELIST[*]}]=".config/lxterminal/lxterminal.conf"
 
 # MPlayer
-FILELIST[${#FILELIST[*]}]=".mplayer"
+# FILELIST[${#FILELIST[*]}]=".mplayer"
 
 # Mutt
-# FILELIST[${#FILELIST[*]}]=".muttrc"
+FILELIST[${#FILELIST[*]}]=".muttrc"
+FILELIST[${#FILELIST[*]}]=".ml.sh"
 
 # Nano
 FILELIST[${#FILELIST[*]}]=".nanorc"
@@ -185,7 +187,7 @@ FILELIST[${#FILELIST[*]}]="$(ls .shell.d/*|grep -vi 'bhistory')"
 FILELIST[${#FILELIST[*]}]=".taskrc"
 
 # TeXlive
-FILELIST[${#FILELIST[*]}]="$(find texmf -type f|grep -vi 'moderncv/examples\|moderncv/manual\|.bzr')"
+# FILELIST[${#FILELIST[*]}]="$(find texmf -type f|grep -vi 'moderncv/examples\|moderncv/manual\|.bzr')"
 
 # Vim
 FILELIST[${#FILELIST[*]}]=".vimrc"
@@ -200,7 +202,7 @@ FILELIST[${#FILELIST[*]}]=".xinitrc"
 FILELIST[${#FILELIST[*]}]=".Xresources"
 
 # Xscreensaver
-FILELIST[${#FILELIST[*]}]=".xscreensaver"
+# FILELIST[${#FILELIST[*]}]=".xscreensaver"
 
 
 ##==============================================================================
@@ -216,7 +218,7 @@ fi
 ##==============================================================================
 ## Cleaning
 ##==============================================================================
-cd "$OLDPATH"
+cd "${OLDPATH}"
 
 ## Set Debug mode off
 if [ "$DEBUG" = "yes" ]; then

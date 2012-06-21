@@ -1,6 +1,6 @@
 ################################################################################
 ## Shell Config -- Alias Definitions.
-## Date 2011-11-19
+## Date 2012-06-21
 ################################################################################
 
 ##==============================================================================
@@ -20,9 +20,58 @@ if isShell "zsh"; then
     alias ssrc='source ~/.zshrc'
 fi
 
+##==============================================================================
+##==============================================================================
+
 alias cp="cp -i" # confirm before overwriting something
 alias xmx='xrdb -merge ~/.Xresources'
 alias grep='grep --color=auto'
+ 
+## Emacs
+if [ -e "/usr/bin/emacs" ]; then
+    alias emacs='emacsclient -t -a "" -c'
+    alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; /usr/bin/emacs --daemon"
+fi
+
+## Check colors supported by the current terminal.
+alias printcolors='(x=`tput op` y=`printf %76s`;for i in {0..256};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done)'
+
+# List desktop applications
+alias applist='grep -r "^Name=" /usr/share/applications/* | cut -d'=' -f2| sort'
+
+## Remove executable attribute
+alias nox='find . -type f -exec chmod a-x {} \;'
+
+## Get your external IP
+[ -e "/usr/bin/curl" ] && alias myip='curl ifconfig.me'
+
+## Network discovery
+[ -e "/usr/bin/nmap" ] && alias netdiscover='nmap -sP "192.168.1.*"'
+
+# Prevents accidentally clobbering files.
+alias mkdir='mkdir -p'
+
+# Reset terminal -- Faster alternative of 'reset'
+alias cls='printf "\ec"'
+
+# Display PATH and LD_LIBRARY_PATH in a more readable way
+alias echopath='echo -e ${PATH//:/\\n}'
+alias echolibpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
+
+## Shutdown / Reboot
+## Will only work with consolekit and dbus daemons running.
+if [ -e "/usr/bin/dbus-send" ]; then
+    alias halt='dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop'
+    alias reboot='dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart'
+    alias restart='dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart'
+    alias shutdown='dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop'
+fi
+
+## Screensaver
+[ -e "/usr/bin/xscreensaver-command" ] && alias xss='xscreensaver-command --lock'
+
+## Configuration files
+[ -e "/etc/rc.conf" ] && alias ercc='sudo $EDITOR /etc/rc.conf'
 
 ##==============================================================================
 ## Zsh power aliases
@@ -38,7 +87,7 @@ alias grep='grep --color=auto'
 
 # fi
 
-##===============================================================================
+##==============================================================================
 ## Listing aliases
 ##==============================================================================
 
@@ -59,7 +108,7 @@ alias ll='ls -lh --group-directories-first' # Detailed view with human readable 
 alias lx='ls -lXh --group-directories-first' # sort by extension
 
 ##==============================================================================
-## Arch Linux aliases
+## Pacman aliases
 ##==============================================================================
 [ -e "/usr/bin/pacman" ] && PACMAN_FRONTEND='pacman'
 
@@ -105,87 +154,6 @@ if [ "$PACMAN_FRONTEND" = "pacman-color" ]; then
     alias pql='pacman-color -Qi | awk '"'"'/^Name/ {pkg=$3} /Size/ {print $4$5,pkg}'"'"' | sort -n'
 fi
 
-## Configuration files
-[ -e "/etc/rc.conf" ] && alias ercc='sudo $EDITOR /etc/rc.conf'
-
-##===============================================================================
-## Session management
-##==============================================================================
-
-## Start X and lock current terminal (press ENTER when back in terminal to prompt for password)
-if [ -e "/usr/bin/vlock" ]; then
-    sx(){
-	startx &
-	vlock
-    }
-fi
-
-## Shutdown / Reboot
-## Will only work with consolekit and dbus daemons running.
-if [ -e "/usr/bin/dbus-send" ]; then
-    alias halt='dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop'
-    alias reboot='dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart'
-    alias restart='dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart'
-    alias shutdown='dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop'
-fi
-
-## Screensaver
-[ -e "/usr/bin/xscreensaver-command" ] && alias xss='xscreensaver-command --lock'
-
-##==============================================================================
-## Useful commands
-##==============================================================================
-
-# List desktop applications
-alias applist='grep -r "^Name=" /usr/share/applications/* | cut -d'=' -f2| sort'
-
-## Remove executable attribute
-alias nox='find . -type f -exec chmod a-x {} \;'
-
-## Get your external IP
-[ -e "/usr/bin/curl" ] && alias myip='curl www.whatismyip.org;echo'
-
-## Extractor -- Useless when using 'atool'.
-if [ ! -e "/usr/bin/atool" ]; then
-    extract () {
-	if [ -f $1 ] ; then
-	    case $1 in
-		*.tar.bz2)   tar xvjf $1    ;;
-		*.tar.gz)    tar xvzf $1    ;;
-		*.tar.xz)    tar xvJf $1    ;;
-		*.bz2)       bunzip2 $1     ;;
-		*.rar)       unrar x $1     ;;
-		*.gz)        gunzip $1      ;;
-		*.tar)       tar xvf $1     ;;
-		*.tbz2)      tar xvjf $1    ;;
-		*.tgz)       tar xvzf $1    ;;
-		*.zip)       unzip $1       ;;
-		*.Z)         uncompress $1  ;;
-		*.7z)        7z x $1        ;;
-		*.xz)        unxz $1        ;;
-		*.exe)       cabextract $1  ;;
-		*)           echo "\`$1': unrecognized file compression" ;;
-	    esac
-	else
-	    echo "\`$1' is not a valid file"
-	fi
-    }
-fi
-
-## Network discovery
-[ -e "/usr/bin/nmap" ] && alias netdiscover='nmap -sP "192.168.1.*"'
-
-# Prevents accidentally clobbering files.
-alias mkdir='mkdir -p'
-
-# Reset terminal -- Faster alternative of 'reset'
-alias cls='printf "\ec"'
-
-# Display PATH and LD_LIBRARY_PATH in a more readable way
-alias echopath='echo -e ${PATH//:/\\n}'
-alias echolibpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
-
-
 ##==============================================================================
 ## APT aliases
 ##==============================================================================
@@ -195,17 +163,3 @@ if [ -e "/usr/bin/apt-get" ]; then
     alias ac='sudo apt-get autoremove && sudo apt-get clean'
     alias ai='sudo apt-get install'
 fi
- 
-##==============================================================================
-## Emacs
-##==============================================================================
-
-if [ -e "/usr/bin/emacs" ]; then
-    alias emacs='emacsclient -t -a "" -c'
-    alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; /usr/bin/emacs --daemon"
-fi
-
-##==============================================================================
-## Misc
-##==============================================================================
-alias printcolors='(x=`tput op` y=`printf %76s`;for i in {0..256};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done)'

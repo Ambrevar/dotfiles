@@ -1,24 +1,26 @@
-###########################
-# Unix Home Configuration #
-###########################
-Author: Ambrevar
-Date: 2012-06-18
-Target distribution: Arch Linux (might work for most Unices as well)
+################################################################################
+#                           Unix Home Configuration                            #
+#                               Author: Ambrevar                               #
+#                               Date: 2012-06-21                               #
+################################################################################
 
 Synopsis
 ********
 This repository contains configuration files for various Unix-programs.
 
+Target distribution: Arch Linux (might work for most Unices as well)
+
 Generic Comments
 ****************
-There is no use in blind-copying the content of any file into your personal home
-folder. At best it might break things. The only purpose is to be a source of
-inspiration. Examples are always a good tehcnical support. (Especially for
-applications that do not provide examples in their documentation.)
 
-In case you still want to copy some files -- for bare testing -- do not forget
-that most of the files are in hidden folders.  Also note that in some shells,
-the '*' joker will NOT match hidden files, that is
+The only purpose is to be a source of inspiration. Examples are always a good
+tehcnical support. (Especially for applications that do not provide examples in
+their documentation.)  There is no use in blind-copying the content of any file
+into your personal home folder. At best it might break things.
+
+In case you still want to copy some files -- for quick genuine testing purpose
+-- do not forget that most of the files are in hidden folders.  Also note that
+in some shells, the '*' joker will NOT match hidden files, that is
 
         cp -r source-dir/* dest-dir/
 
@@ -42,11 +44,11 @@ Target: zsh, bash
 Probably the most interesting part here. A lot of stuff: aliases, functions,
 shell options, etc.
 
-Please note that this config is mainly intended--and tested--for zsh. It should
-be mostly bash-compatible though.  When incompabilities have been encountered,
-it has been reported in the configuration files.  Hence the shared folder
-.shell.d/, whose files get sourced by both bash and zsh.  Bash-specific and
-zsh-specific options are in dedicated files ending with the apropriate shell
+Please note that this config is mainly intended -- and tested -- for zsh. It
+should be mostly bash-compatible though.  When incompabilities have been
+encountered, it has been reported into the configuration files. Hence the shared
+folder .shell.d/, whose files get sourced by both bash and zsh.  Bash-specific
+and zsh-specific options are in dedicated files ending with the apropriate shell
 name.
 
 Vim
@@ -64,7 +66,7 @@ Extra deps: Vicious
 
 Configuration is very close to the default one, which mostly fits my needs.
 Most of the work I've done is for the status bar, but since I'm using the
-Vicious plugin, it has not been a tremendous task.
+Vicious plugin, it is quite straightforward.
 
 Emacs
 *****
@@ -73,6 +75,18 @@ emacs-yasnippet-latex-git
 
 Not much personal work, mostly use of plugins. Still very powerful.
 
+Mutt
+****
+This one is not easy to get into it. I managed to get multiple accounts with
+pgp-encrypted passwords working, which means there is no plain password stored
+on the disk. As a result, I just get prompted for a main password on mutt
+startup, then everything works out of the box.
+
+For now, I'm using mutt-smtp for Gmail accounts and msmtp for other
+accounts. Both work fine with gpg.
+
 Scripts
 *******
-.save archives the home configuration.
+.save: generates a home configuration archive.
+.network: network setup. Works with wpa_supplicant. May replace any network
+          manager.

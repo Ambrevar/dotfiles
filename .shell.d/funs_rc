@@ -1,12 +1,183 @@
 ################################################################################
 ## Shell -- Functions.
-## Date 2012-04-23
+## Date 2012-06-21
 ################################################################################
 
+## Make dir and go into it.
+mkcd () {
+    mkdir -p "$*"
+    cd "$*"
+}
 
-##==============================================================================
-## Man Pager
-##==============================================================================
+## Quick search.
+search()
+{
+    find . -iname "*$1*"
+}
+
+## Cut last n lines in file, 10 by default.
+cuttail()
+{
+    nlines=${2:-10}
+    #sed -n -e :a -e "1,${nlines}!{P;N;D;};N;ba" $1
+    head $1 -n$(($(cat $1|wc -l) - $nlines))
+}
+
+## Cut first n lines in file, 10 by default.
+cuthead()
+{
+    nlines=${2:-10}
+    tail $1 -n$(($(cat $1|wc -l) - $nlines))
+}
+
+## Move filenames to lowercase.
+## Use ranger + bulkrename + vim/emacs (+ TwindleCase) for more interactivity.
+renamelower()
+{
+    for file ; do
+	    filename=${file##*/}
+	    case "$filename" in
+	        */*)
+		        dirname==${file%/*} ;;
+	        *)
+                dirname=.;;
+        esac
+
+        nf=$(echo $filename | tr A-Z a-z)
+        newname="${dirname}/${nf}"
+        if [ "$nf" != "$filename" ]; then
+	        mv "$file" "$newname"
+	        echo "lowercase: $file --> $newname"
+        else
+	        echo "lowercase: $file not changed."
+        fi
+    done
+}
+
+## Swap 2 filenames around.
+renameswap()
+{
+    local TMPFILE=tmp.$$
+    mv "$1" $TMPFILE
+    mv "$2" "$1"
+    mv $TMPFILE "$2"
+}
+
+## Finds directory sizes and lists them for the current directory.
+dirsize ()
+{
+    TEMPFILE="$(mktemp)"
+    # du -shx * .[a-zA-Z0-9_]* 2> /dev/null | \
+    du -shx * 2> /dev/null | \
+	    egrep '^ *[0-9.]*[MG]' | sort -n > ${TEMPFILE}
+    egrep '^ *[0-9.]*M' ${TEMPFILE}
+    egrep '^ *[0-9.]*G' ${TEMPFILE}
+    rm -rf ${TEMPFILE}
+}
+
+## Network operations
+if [ -e "/usr/bin/nmap" ]; then
+    networkmap() {
+        echo "$1"
+        for SCANIP in $( nmap -sL "$1" | grep -i "\([[:digit:]]\+\.\)\{3,\}[[:digit:]]\+" | awk '{print $5}' ); do
+            sudo nmap -oX - -n -sT -T Normal -O -sR -I -F -P0 "$SCANIP"
+            echo
+        done
+    }
+fi
+
+## Vim-only: search the vim reference manual for a keyword
+## usage: :h <keyword>
+if [ -e "/usr/bin/vim" ]; then
+    :h()
+    {
+        vim --cmd ":silent help $@" --cmd "only";
+    }
+fi
+
+## Set file/directory owner and permissions according to umask.
+## Usage: sanitize FILE|FOLDER
+sanitize()
+{
+    chown -R ${UID}:${GID} "$@"
+    chmod -R $(umask -S) "$@"
+}
+
+asciify()
+{
+    asciify_help()
+    {
+        echo
+        echo "Usage:"
+        echo -e "\t$1 FILES"
+        echo
+        echo "Synopsis:"
+        echo -e "\tConvert non-ASCII characters to their ASCII equivalent."
+        echo
+    }
+
+    if [ $# -eq 0 ]; then
+        echo "Missing arguments."
+        asciify_help $0
+        return
+    fi 
+
+    for i; do
+        sed -i 's/[àáâä]/a/g' "$i"
+        sed -i 's/[éèêë]/e/g' "$i"
+        sed -i 's/[ïîí]/i/g' "$i"
+        sed -i 's/[öôó]/o/g' "$i"
+        sed -i 's/[ùúûü]/u/g' "$i"
+        sed -i 's/[À]/A/g' "$i"
+        sed -i 's/[ÉÈ]/E/g' "$i"
+        sed -i 's/[ñ]/n/g' "$i"
+        sed -i 's/[œ]/oe/g' "$i"
+        sed -i 's/[Œ]/Oe/g' "$i"
+        sed -i 's/[æ]/ae/g' "$i"
+        sed -i 's/[Æ]/Ae/g' "$i"
+        sed -i 's/[ç]/c/g' "$i"
+        sed -i 's/[Ç]/C/g' "$i"
+    done;
+}
+
+## steal
+steal()
+{
+    steal_help()
+    {
+        echo
+        echo "Usage:"
+        echo -e "\t$1 STRING FILE"
+        echo
+        echo "Synopsis:"
+        echo -e "\tAppend a silently prompted string to STRING from FILE."
+        echo
+    }
+
+    if [ $# -ne 2 ]; then
+        echo "Wrong number of arguments."
+        steal_help $0
+        return
+    fi 
+
+    STRING="$1"
+    FILE="$2"
+
+    read -s DUMMY
+    sed -i "s/${STRING}/${STRING}${DUMMY}/g" "${FILE}"
+    echo File stolen.
+}
+
+
+## Start X and lock current terminal (press ENTER when back in terminal to prompt for password)
+if [ -e "/usr/bin/vlock" ]; then
+    sx(){
+	    startx &
+	    vlock
+    }
+fi
+
+## Colored man pager. 
 man()
 {
 	env \
@@ -20,86 +191,236 @@ man()
 		man "$@"
 }
 
-##==============================================================================
-## Arch Linux Functions
-##==============================================================================
-
-
-## Compare installed packages with list.
-# Parameters:
-# -m : compare only to foreign local (m)
-# -q : see installed packages. Display only not installed packages by default. (\<)
-# FILE1 [FILE2...] : file(s) containing package list.
-pacman-diff()
-{
-    OPTION_FOREIGN=""
-    OPTION_LOCAL=">"
-
-    pdhelp()
-    {
-        echo "Synopsis:"
-        echo -e "  $1 [-m|-e] [-q] FILE"
-        echo
-        echo "Usage:"
-        echo -e "  default:\tDisplay packages included in FILE but not installed."
-        echo -e "  -e:\t\tCompare FILE to explicitly installed packages."
-        echo -e "  -h:\t\tDisplay this help."
-        echo -e "  -m:\t\tCompare FILE to foreign installed packages."
-        echo -e "  -q:\t\tDisplay installed packages not included in FILE."
+## Extractor -- Useless when using 'atool'.
+if [ ! -e "/usr/bin/atool" ]; then
+    extract () {
+	if [ -f $1 ] ; then
+	    case $1 in
+		*.tar.bz2)   tar xvjf $1    ;;
+		*.tar.gz)    tar xvzf $1    ;;
+		*.tar.xz)    tar xvJf $1    ;;
+		*.bz2)       bunzip2 $1     ;;
+		*.rar)       unrar x $1     ;;
+		*.gz)        gunzip $1      ;;
+		*.tar)       tar xvf $1     ;;
+		*.tbz2)      tar xvjf $1    ;;
+		*.tgz)       tar xvzf $1    ;;
+		*.zip)       unzip $1       ;;
+		*.Z)         uncompress $1  ;;
+		*.7z)        7z x $1        ;;
+		*.xz)        unxz $1        ;;
+		*.exe)       cabextract $1  ;;
+		*)           echo "\`$1': unrecognized file compression" ;;
+	    esac
+	else
+	    echo "\`$1' is not a valid file"
+	fi
     }
+fi
 
-    OPTION_EXPLICIT=""
-    OPTION_FOREIGN=""
-    OPTION_LOCAL=">"
-
-    while getopts ":hmqe" opt; do
-        case $opt in
-            e)
-                OPTION_EXPLICIT="e"
-                ;;
-            h)
-                pdhelp "$0"
-                return 1
-                ;;
-            m)
-                OPTION_FOREIGN="m"
-                ;;
-            q)
-                OPTION_LOCAL="<"
-                ;;
-            ?) 
-                pdhelp "$0"
-                return 1
-                ;;
-            :)
-                echo "Missing argument."
-                echo "Use $0 -h for help."
-                return 1
-                ;;
-        esac
-    done
-
-    shift $(($OPTIND - 1))
-
-    if [ $# -eq 0 ]; then
-        echo "Missing argument."
-        echo "Use $0 -h for help."
-        return 1
+# Warning: use this function with caution.  It may drastically improve
+# compression of some PDF files, but in some case, the output filesize will be
+# greater! You should not use it over PDF files embedding pictures as well.
+pdfcompress ()
+{
+    if [ $# -lt 1 -o $# -gt 2 ]; then
+    	echo "Usage: pdfcompress PDFFILE [DESTFILE]"
+	    return
     fi
 
-    if [ -e "/usr/bin/pacman" ]; then
-        diff <(pacman -Qq${OPTION_FOREIGN}${OPTION_EXPLICIT} | sort) <(cat "$*" | sort) | grep "${OPTION_LOCAL}" | cut -f2 -d" "
+    if [ ! -f "$1" ]; then
+	    echo "$1 is not a valid PDF file!"
+    fi
+    INPUTFILE="$1"
+
+    if [ -z "$2" ]; then
+	    gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="${INPUTFILE%%.*}-COMPRESSED.pdf" "${INPUTFILE}"
+	    rm -rf "${INPUTFILE}"
+	    mv "${INPUTFILE%%.*}-COMPRESSED.pdf" "${INPUTFILE}"
     else
-        echo "ERROR: pacman is needed."
+	    OUTPUTFILE="$2"
+	    gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="${OUTPUTFILE}" "${INPUTFILE}"
     fi
 }
 
-## pacman-deps
-# Parameters:
-# PACKAGE: if found locally, everything is checked
-# locally. Otherwise, everything is checked from the pacman index, which is much
-# slower.
-if [ -e "/usr/bin/pacman" ]; then
+# This function will clean TeX/LaTeX project folders recursively.
+function texclean ()
+{
+    if [ -z "$1" ]; then
+	    WORKDIR="$PWD"
+    else
+	    WORKDIR="$1"
+    fi
+
+    find "$WORKDIR" \( \
+	    -name "*.aux" -o \
+        -name "*.idx" -o \
+        -name "*.ilg" -o \
+        -name "*.ind" -o \
+        -name "*.lof" -o \
+        -name "*.log" -o \
+        -name "*.nav" -o \
+        -name "*.out" -o \
+        -name "*.snm" -o \
+        -name "*.tns" -o \
+        -name "*.toc" \) \
+        -exec echo {} \; \
+        -exec rm -f {} \;
+}
+
+
+
+## Create an archive from a single or multiples files/folders.
+## This archive 
+archive-project ()
+{
+    if [ $# -eq 1 ]; then
+        ARCPATH="$(dirname $(readlink -f "$1"))"
+        ARCSOURCE="$(basename $(readlink -f "$1"))"
+        ARCNAME="${ARCSOURCE}-$(date +%y-%m-%d-%H%M%S).tgz"
+
+        (cd "$ARCPATH" && \
+            tar cvzf "$ARCNAME" "$ARCSOURCE" --exclude-vcs)            
+
+    else
+        ARCSOURCE="$(basename $PWD)"
+        ARCNAME="$(basename "$ARCSOURCE")-$(date +%y-%m-%d-%H%M%S).tgz"
+
+        if [ $# = 0 ];then
+
+            (cd "$PWD/.." && \
+                tar cvzf "$ARCNAME" "$ARCSOURCE" --exclude-vcs)
+
+        else
+            FILELIST=()
+
+            for i; do
+                FILELIST=(${FILELIST[*]} "$i")
+            done
+
+            tar cvzf "$ARCNAME" ${FILELIST[*]} --exclude-vcs
+        fi 
+
+    fi
+}
+
+## Clean current folder
+cleanvcs()
+{
+    unset CHOICE
+    echo "This will clean current folder from all VCS control files."
+    echo -n "Proceed ? [y/N] "
+    while [ -z "$CHOICE" ];
+    do
+        # read 'Proceed [y/N] ' CHOICE
+        read CHOICE
+    done
+
+    CHOICE=$(echo $CHOICE | tr '[:upper:]' '[:lower:]')
+    if [ "$CHOICE" = "y"  ]; then
+        find . -type d -name ".svn" -exec rm -rf {} \;
+        echo "VCS files cleaned."
+    fi
+}
+
+
+
+
+##==============================================================================
+## Pacman Functions
+##==============================================================================
+
+## Compare installed packages with list.
+if [ -f "/usr/bin/pacman" ]; then
+    pacman-size()
+    {
+        if [ $# -ne 1 ];then
+            echo "Wrong number of arguments."
+            return
+        fi
+        
+        echo "$1"
+        RESULT=""
+
+        for i in $(pacman -Qlq $1); do
+            if [ -f "$i" ]; then
+                RESULT+="$(du -sh "$i")\n"
+            fi 
+        done
+
+        echo -e "${RESULT}" | grep -v "^$" | sort -h
+
+        # English locale only.
+        echo -n "Total:  "
+        pacman -Qi $1 | grep "Size" | sed 's/^[^[:digit:]]*//'
+    }
+fi
+    
+## Compare installed packages with list.
+if [ -f "/usr/bin/pacman" ]; then
+    pacman-diff()
+    {
+        OPTION_FOREIGN=""
+        OPTION_LOCAL=">"
+
+        pdhelp()
+        {
+            echo "Synopsis:"
+            echo -e "  $1 [-m|-e] [-q] FILE"
+            echo
+            echo "Usage:"
+            echo -e "  default:\tDisplay packages included in FILE but not installed."
+            echo -e "  -e:\t\tCompare FILE to explicitly installed packages."
+            echo -e "  -h:\t\tDisplay this help."
+            echo -e "  -m:\t\tCompare FILE to foreign installed packages."
+            echo -e "  -q:\t\tDisplay installed packages not included in FILE."
+        }
+
+        OPTION_EXPLICIT=""
+        OPTION_FOREIGN=""
+        OPTION_LOCAL=">"
+
+        while getopts ":hmqe" opt; do
+            case $opt in
+                e)
+                    OPTION_EXPLICIT="e"
+                    ;;
+                h)
+                    pdhelp "$0"
+                    return 1
+                    ;;
+                m)
+                    OPTION_FOREIGN="m"
+                    ;;
+                q)
+                    OPTION_LOCAL="<"
+                    ;;
+                ?) 
+                    pdhelp "$0"
+                    return 1
+                    ;;
+                :)
+                    echo "Missing argument."
+                    echo "Use $0 -h for help."
+                    return 1
+                    ;;
+            esac
+        done
+
+        shift $(($OPTIND - 1))
+
+        if [ $# -eq 0 ]; then
+            echo "Missing argument."
+            echo "Use $0 -h for help."
+            return 1
+        fi
+
+        diff <(pacman -Qq${OPTION_FOREIGN}${OPTION_EXPLICIT} | sort) <(cat "$*" | sort) | grep "${OPTION_LOCAL}" | cut -f2 -d" "
+    }
+fi
+
+## Print a detailed view of package deps size and total size.
+if [ -f "/usr/bin/pacman" ]; then
     pacman-deps()
     {
         ## Arguments
@@ -170,316 +491,4 @@ if [ -e "/usr/bin/pacman" ]; then
     #     complete -o default -o nospace -F _pacman pacman-deps
     # fi
 fi
-
-##==============================================================================
-## LaTeX functions
-##==============================================================================
-
-# Warning: use this function with caution.  It may drastically improve
-# compression of some PDF files, but in some case, the output filesize will be
-# greater!  You should not use it over PDF files embedding pictures as well.
-
-pdfcompress ()
-{
-    if [ $# -lt 1 -o $# -gt 2 ]; then
-    	echo "Usage: pdfcompress PDFFILE [DESTFILE]"
-	    return
-    fi
-
-    if [ ! -f "$1" ]; then
-	    echo "$1 is not a valid PDF file!"
-    fi
-    INPUTFILE="$1"
-
-    if [ -z "$2" ]; then
-	    gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="${INPUTFILE%%.*}-COMPRESSED.pdf" "${INPUTFILE}"
-	    rm -rf "${INPUTFILE}"
-	    mv "${INPUTFILE%%.*}-COMPRESSED.pdf" "${INPUTFILE}"
-    else
-	    OUTPUTFILE="$2"
-	    gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="${OUTPUTFILE}" "${INPUTFILE}"
-    fi
-}
-
-# This function will clean TeX/LaTeX project folders recursively.
-function texclean ()
-{
-    if [ -z "$1" ]; then
-	    WORKDIR="$PWD"
-    else
-	    WORKDIR="$1"
-    fi
-
-    echo "$(find "$WORKDIR" \
-	    -name "*.aux" -o \
-        -name "*.idx" -o \
-        -name "*.ilg" -o \
-        -name "*.ind" -o \
-        -name "*.lof" -o \
-        -name "*.log" -o \
-        -name "*.nav" -o \
-        -name "*.out" -o \
-        -name "*.snm" -o \
-        -name "*.tns" -o \
-        -name "*.toc")"
-
-    rm -f $(find "$WORKDIR" \
-	    -name "*.aux" -o \
-        -name "*.idx" -o \
-        -name "*.ilg" -o \
-        -name "*.ind" -o \
-        -name "*.lof" -o \
-        -name "*.log" -o \
-        -name "*.nav" -o \
-        -name "*.out" -o \
-        -name "*.snm" -o \
-        -name "*.tns" -o \
-        -name "*.toc")
-}
-
-
-
-##==============================================================================
-## Project Archiving
-##==============================================================================
-
-archive-project ()
-{
-    if [ $# -eq 1 ]; then
-        ARCPATH="$(dirname $(readlink -f "$1"))"
-        ARCSOURCE="$(basename $(readlink -f "$1"))"
-        ARCNAME="${ARCSOURCE}-$(date +%y-%m-%d-%H%M%S).tgz"
-
-        (cd "$ARCPATH" && \
-            tar cvzf "$ARCNAME" "$ARCSOURCE" --exclude-vcs)            
-
-    else
-        ARCSOURCE="$(basename $PWD)"
-        ARCNAME="$(basename "$ARCSOURCE")-$(date +%y-%m-%d-%H%M%S).tgz"
-
-        if [ $# = 0 ];then
-
-            (cd "$PWD/.." && \
-                tar cvzf "$ARCNAME" "$ARCSOURCE" --exclude-vcs)
-
-        else
-            unset FILELIST
-
-            for i;do
-                FILELIST+="$i "
-            done
-
-            # FIXME: Does not work with zsh
-            tar cvzf "$ARCNAME" ${FILELIST} --exclude-vcs
-
-        fi 
-
-    fi
-}
-
-
-##==============================================================================
-## Network operations
-##==============================================================================
-
-if [ -e "/usr/bin/nmap" ]; then
-    function networkmap() {
-        echo "$1"
-        for SCANIP in $( nmap -sL "$1" | grep -i "\([[:digit:]]\+\.\)\{3,\}[[:digit:]]\+" | awk '{print $5}' ); do
-            sudo nmap -oX - -n -sT -T Normal -O -sR -I -F -P0 "$SCANIP"
-            echo
-        done
-    }
-fi
-
-##==============================================================================
-## File & strings related functions
-##==============================================================================
-
-## Search
-function search()
-{
-    find . -name "*$1*"
-}
-
-## Find a file with a pattern in name:
-function ff()
-{ find . -type f -iname '*'$*'*' -ls ; }
-
-## Find a file with pattern $1 in name and Execute $2 on it:
-fe()
-{
-    if [ $# -lt 2 ]; then
-        find . -name "*$1*" -exec $2 $3 {} \;
-    fi
-}
-# { find . -type f -iname '*'$1'*' -exec "${2:-file}" {} \;  ; }
-
-## Clean current folder
-cleanvcs()
-{
-    unset CHOICE
-    echo "This will clean current folder from all VCS control files."
-    echo -n "Proceed ? [y/N] "
-    while [ -z "$CHOICE" ];
-    do
-        # read 'Proceed [y/N] ' CHOICE
-        read CHOICE
-    done
-
-    CHOICE=$(echo $CHOICE | tr '[:upper:]' '[:lower:]')
-    if [ "$CHOICE" = "y"  ]; then
-        find . -type d -name ".svn" -exec rm -rf {} \;
-        echo "VCS files cleaned."
-    fi
-}
-
-
-## Cut last n lines in file, 10 by default.
-function cuttail()
-{
-    nlines=${2:-10}
-    #sed -n -e :a -e "1,${nlines}!{P;N;D;};N;ba" $1
-    head $1 -n$(($(cat $1|wc -l) - $nlines))
-}
-
-## Cut first n lines in file, 10 by default.
-function cuthead()
-{
-    nlines=${2:-10}
-    tail $1 -n$(($(cat $1|wc -l) - $nlines))
-}
-
-## Move filenames to lowercase.
-## Use ranger + bulkrename + vim/emacs (+ TwindleCase) for more interactivity.
-function renamelower()
-{
-    for file ; do
-	    filename=${file##*/}
-	        case "$filename" in
-	            */*)
-		dirname==${file%/*} ;;
-	        *)
-dirname=.;;
-esac
-
-nf=$(echo $filename | tr A-Z a-z)
-newname="${dirname}/${nf}"
-if [ "$nf" != "$filename" ]; then
-	mv "$file" "$newname"
-	echo "lowercase: $file --> $newname"
-else
-	echo "lowercase: $file not changed."
-fi
-done
-}
-
-## Swap 2 filenames around.
-function renameswap()
-{
-    local TMPFILE=tmp.$$
-    mv "$1" $TMPFILE
-    mv "$2" "$1"
-    mv $TMPFILE "$2"
-}
-
-## Finds directory sizes and lists them for the current directory.
-dirsize ()
-{
-    du -shx * .[a-zA-Z0-9_]* 2> /dev/null | \
-	    egrep '^ *[0-9.]*[MG]' | sort -n > /tmp/list
-    egrep '^ *[0-9.]*M' /tmp/list
-    egrep '^ *[0-9.]*G' /tmp/list
-    rm -rf /tmp/list
-}
-
-
-## Make dir and go into it.
-mkcd () {
-    mkdir -p "$*"
-    cd "$*"
-}
-
-
-## Vim: search the vim reference manual for a keyword
-## usage: :h <keyword>
-if [ -e "/usr/bin/vim" ]; then
-    :h() {  vim --cmd ":silent help $@" --cmd "only"; }
-fi
-
-## sanitize - set file/directory owner and permissions to normal values (644/755)
-## usage: sanitize <file>
-sanitize()
-{
-    chmod -R u=rwX,go=rX "$@"
-    chown -R ${USER}:users "$@"
-}
-
-asciify()
-{
-    asciify_help()
-    {
-        echo
-        echo "Usage:"
-        echo -e "\t$1 FILES"
-        echo
-        echo "Synopsis:"
-        echo -e "\tConvert non-ASCII characters to their ASCII equivalent."
-        echo
-    }
-
-    if [ $# -eq 0 ]; then
-        echo "Missing arguments."
-        asciify_help $0
-        return
-    fi 
-
-    for i; do
-        sed -i 's/[àáâä]/a/g' "$i"
-        sed -i 's/[éèêë]/e/g' "$i"
-        sed -i 's/[ïîí]/i/g' "$i"
-        sed -i 's/[öôó]/o/g' "$i"
-        sed -i 's/[ùúûü]/u/g' "$i"
-        sed -i 's/[À]/A/g' "$i"
-        sed -i 's/[ÉÈ]/E/g' "$i"
-        sed -i 's/[ñ]/n/g' "$i"
-        sed -i 's/[œ]/oe/g' "$i"
-        sed -i 's/[Œ]/Oe/g' "$i"
-        sed -i 's/[æ]/ae/g' "$i"
-        sed -i 's/[Æ]/Ae/g' "$i"
-        sed -i 's/[ç]/c/g' "$i"
-        sed -i 's/[Ç]/C/g' "$i"
-    done;
-}
-
-## steal
-steal()
-{
-    steal_help()
-    {
-        echo
-        echo "Usage:"
-        echo -e "\t$1 STRING FILE"
-        echo
-        echo "Synopsis:"
-        echo -e "\tAppend a silently prompted string to STRING from FILE."
-        echo
-    }
-
-    if [ $# -ne 2 ]; then
-        echo "Wrong number of arguments."
-        steal_help $0
-        return
-    fi 
-
-    STRING="$1"
-    FILE="$2"
-
-    read -s DUMMY
-    sed -i "s/${STRING}/${STRING}${DUMMY}/g" "${FILE}"
-    echo File stolen.
-}
-
-
-
 

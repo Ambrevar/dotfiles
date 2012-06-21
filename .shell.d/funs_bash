@@ -159,7 +159,7 @@ if isShell "bash"; then
 
 
 ##==============================================================================
-## Alias auto completion
+## Alias auto completion
 ##==============================================================================
 # wrap_alias takes three arguments:
 # $1: The name of the alias

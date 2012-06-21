@@ -9,7 +9,7 @@
 
 ## Useful tools
 numlockx on
-amixer set PCM 80%
+[ "$(amixer | grep PCM)" != "" ] && amixer set PCM 80%
 # xscreensaver -no-splash &
 
 ##==============================================================================

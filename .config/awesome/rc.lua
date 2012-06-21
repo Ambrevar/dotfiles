@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
 -- Awesome configuration
--- Date 2012-03-25
+-- Date 2012-06-21
 --------------------------------------------------------------------------------
 
 -- Standard awesome library
@@ -55,13 +55,13 @@ end
 -- beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
 beautiful.init(awful.util.getdir("config") .. "/themes/custom/theme.lua")
 terminal = "lxterminal"
+termcmd = "lxterminal -e "
 -- webbrowser = os.getenv("BROWSER") or "luakit"
 webbrowser = "luakit"
-mailclient = "thunderbird"
+mailclient = termcmd .. os.getenv("HOME") .. "/.ml.sh" -- Mutt Launcher
 pdfreader = "zathura"
-termcmd = "lxterminal -e "
 editor = os.getenv("EDITOR") or "nano"
-editor_cmd = terminal .. " -e " .. editor
+editor_cmd = termcmd .. editor
 
 --------------------------------------------------------------------------------
 -- Default modkey.
@@ -101,26 +101,6 @@ end
 
 --------------------------------------------------------------------------------
 
--- {{{ Menu
--- Create a laucher widget and a main menu
-myawesomemenu = {
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
-   { "quit", awesome.quit }
-}
-
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", terminal }
-                                  }
-                        })
-
-mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
-                                     menu = mymainmenu })
--- }}}
-
---------------------------------------------------------------------------------
-
 -- {{{ Wibox
 
 -- Clock
@@ -131,11 +111,11 @@ systraywidget = widget({ type = "systray" })
 
 -- CPU
 cpuwidget = widget({ type = "textbox" })
-vicious.register(cpuwidget, vicious.widgets.cpu, '<span color="#CC8F52">CPU $1%</span> | ')
+vicious.register(cpuwidget, vicious.widgets.cpu, '<span color="#CC8F52">CPU $1%</span>')
 
 -- Net
 netwidget = widget({ type = "textbox" })
-vicious.register(netwidget, vicious.widgets.net, '<span color="#CC9393">↓${eth0 down_kb}</span> <span color="#7F9F7F">↑${eth0 up_kb}</span> | ', 3)
+vicious.register(netwidget, vicious.widgets.net, '<span color="#CC9393">↓${eth0 down_kb}</span> <span color="#7F9F7F">↑${eth0 up_kb}</span>', 3)
 
 -- Battery
 batwidget = widget({ type = "textbox" })
@@ -143,10 +123,11 @@ local batf = io.popen("ls '/sys/class/power_supply' 2>/dev/null")
 local batl = batf:read("*a")
 if batl ~= "" then
    -- vicious.register(batwidget, vicious.widgets.bat, '<span color="#73A9CD">$2%$1$3</span> | ', 60, "BAT0")
+   -- This functions changes the status color when a specific level is reached.
    vicious.register(batwidget, vicious.widgets.bat, 
                     function (widget, args)
-                       if   args[2] <= 10 then return '<span color="#FF0000">' .. args[2] .. '%' .. args[1] .. args[3] .. '</span> | '
-                       else return '<span color="#73A9CD">' .. args[2] .. '%' .. args[1] .. args[3] .. '</span> | '
+                       if   args[2] <= 10 then return '<span color="#FF0000">' .. args[2] .. '%' .. args[1] .. args[3] .. '</span>'
+                       else return '<span color="#73A9CD">' .. args[2] .. '%' .. args[1] .. args[3] .. '</span>'
                        end
                     end,
                     60, "BAT0")
@@ -156,9 +137,18 @@ batf:close()
 
 -- Volume
 volmwidget = widget({ type = "textbox" })
-volpwidget = widget({ type = "textbox" })
 vicious.register(volmwidget, vicious.widgets.volume, "Master: $1% $2 ", 1, "Master")
-vicious.register(volpwidget, vicious.widgets.volume, "PCM: $1% | ", 1, "PCM")
+-- PCM may not be available all the time on every machine.
+-- If PCM is toggled after awesome has been started, you'll need to reload the
+-- configuration.
+-- If 'amixer' is not installed, status will never display.
+local volpf = io.popen("amixer | grep PCM 2>/dev/null")
+local volpl = volpf:read("*a")
+if volpl ~= "" then
+   volpwidget = widget({ type = "textbox" })
+   vicious.register(volpwidget, vicious.widgets.volume, "PCM: $1%", 1, "PCM")
+end
+volpf:close()
 
 -- Separator
 separator = widget({ type = "textbox" })
@@ -241,10 +231,14 @@ for s = 1, screen.count() do
         },
         s == 1 and systraywidget or nil,
         clockwidget,
+        separator,
         volpwidget,
         volmwidget,
+        separator,
         cpuwidget,
+        separator,
         netwidget,
+        separator,
         batwidget,
         separator,
         mytasklist[s],
@@ -318,16 +312,21 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "p", function () awful.util.spawn(pdfreader) end),
 
     -- Sound Volume
-    awful.key({ modkey,           }, "KP_Subtract", function () awful.util.spawn("amixer set Master 5%-") end),
-    awful.key({ modkey,           }, "KP_Add", function () awful.util.spawn("amixer set Master 5%+") end),
-    awful.key({ modkey,           }, "KP_Enter", function () awful.util.spawn("amixer set Master toggle") end),
-    awful.key({ modkey,           }, "-", function () awful.util.spawn("amixer set Master 5%-") end),
-    awful.key({ modkey,           }, "+", function () awful.util.spawn("amixer set Master 5%+") end),
-    awful.key({ modkey,           }, "=", function () awful.util.spawn("amixer set Master toggle") end),
+    -- Note that some laptop will not work when pressing Super+Fn.
+    -- Therefore we only use Fn and Mod1+Fn.
+    awful.key({ modkey,           }, "KP_Subtract", function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
+    awful.key({ modkey,           }, "KP_Add", function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
+    awful.key({ modkey,           }, "KP_Enter", function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
 
-    awful.key({ modkey, "Mod1"    }, "KP_Subtract", function () awful.util.spawn("amixer set PCM 5%-") end),
-    awful.key({ modkey, "Mod1"    }, "KP_Add", function () awful.util.spawn("amixer set PCM 5%+") end),
+    awful.key({            }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
+    awful.key({            }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
+    awful.key({            }, "XF86AudioMute", function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
 
+    awful.key({ modkey, "Mod1"    }, "KP_Subtract", function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end),
+    awful.key({ modkey, "Mod1"    }, "KP_Add", function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
+
+    awful.key({ "Mod1"    }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
+    awful.key({ "Mod1"    }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end),
 
 
     -- Misc
