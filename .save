@@ -3,8 +3,9 @@
 ## Home Config Backup Script
 ## 2012-06-21
 ################################################################################
-## Note for Zsh: because of the KSH-style arrays (index starting at 0), the
-## KSH_ARRAYS option must be used.
+## Note for Zsh: because of the KSH-style arrays (index starting at 0), you
+## cannot use array index to append elements to arrays -- or the KSH_ARRAYS
+## option for zsh must be used.
 
 ##==============================================================================
 ## Options
@@ -131,78 +132,93 @@ FILELIST=()
 
 # Arch Linux package list
 if [ -e "/usr/bin/pacman" ]; then
-    FILELIST[${#FILELIST[*]}]="$(find . -maxdepth 1 -name '.arch*'  -exec basename {} \;)"
+    for i in $(find . -maxdepth 1 -name '.arch*'  -exec basename {} \;)
+    do
+        FILELIST=(${FILELIST[*]} "$i")
+    done
 fi
 
 # Awesome
-FILELIST[${#FILELIST[*]}]="$(find .config/awesome \( -name "*.lua" -o -name "*.sh" \) -type f)"
+for i in $(find .config/awesome \( -name "*.lua" -o -name "*.sh" \) -type f)
+do
+    FILELIST=(${FILELIST[*]} "$i")
+done
 
 # cmus
-# FILELIST[${#FILELIST[*]}]="$(ls .cmus/{autosave,*.theme}) "
-FILELIST[${#FILELIST[*]}]="$(ls .cmus/autosave) "
+# FILELIST=(${FILELIST[*]} "$(ls .cmus/{autosave,*.theme}) ")
+FILELIST=(${FILELIST[*]} "$(ls .cmus/autosave)")
 
 # Conky
-FILELIST[${#FILELIST[*]}]=".conkyrc"
+FILELIST=(${FILELIST[*]} ".conkyrc")
 
 # Emacs
-FILELIST[${#FILELIST[*]}]=".emacs"
-FILELIST[${#FILELIST[*]}]=".emacs.d/plugins"
-FILELIST[${#FILELIST[*]}]=".emacs.d/abbrev_defs"
+FILELIST=(${FILELIST[*]} ".emacs")
+FILELIST=(${FILELIST[*]} ".emacs.d/plugins")
+FILELIST=(${FILELIST[*]} ".emacs.d/abbrev_defs")
 
 # GTK
-FILELIST[${#FILELIST[*]}]=".gtkrc-2.0"
-FILELIST[${#FILELIST[*]}]=".config/gtk-3.0/settings.ini"
+FILELIST=(${FILELIST[*]} ".gtkrc-2.0")
+FILELIST=(${FILELIST[*]} ".config/gtk-3.0/settings.ini")
 
 # Luakit
-FILELIST[${#FILELIST[*]}]=".config/luakit/"
+FILELIST=(${FILELIST[*]} ".config/luakit/")
 
 # LXTerminal
-FILELIST[${#FILELIST[*]}]=".config/lxterminal/lxterminal.conf"
+FILELIST=(${FILELIST[*]} ".config/lxterminal/lxterminal.conf")
 
 # MPlayer
-# FILELIST[${#FILELIST[*]}]=".mplayer"
+# FILELIST=(${FILELIST[*]} ".mplayer")
 
 # Mutt
-FILELIST[${#FILELIST[*]}]=".muttrc"
-FILELIST[${#FILELIST[*]}]=".ml.sh"
+FILELIST=(${FILELIST[*]} ".muttrc")
+FILELIST=(${FILELIST[*]} ".ml.sh")
 
 # Nano
-FILELIST[${#FILELIST[*]}]=".nanorc"
+FILELIST=(${FILELIST[*]} ".nanorc")
 
 # Netinit
-FILELIST[${#FILELIST[*]}]=".netinit"
+FILELIST=(${FILELIST[*]} ".netinit")
 
 # Ranger
-FILELIST[${#FILELIST[*]}]="$(ls -d --indicator-style=none .config/ranger/*|grep -vi 'pycache\|bookmarks\|history\|tagged')"
+for i in $(ls -d --indicator-style=none .config/ranger/* | grep -vi 'pycache\|bookmarks\|history\|tagged')
+do
+    FILELIST=(${FILELIST[*]} "$i")
+done
 
 # rtorrent
-FILELIST[${#FILELIST[*]}]=".rtorrent.rc"
+FILELIST=(${FILELIST[*]} ".rtorrent.rc")
 
 # Shells
-FILELIST[${#FILELIST[*]}]=".bashrc"
-FILELIST[${#FILELIST[*]}]=".zshrc"
-FILELIST[${#FILELIST[*]}]="$(ls .shell.d/*|grep -vi 'bhistory')"
+FILELIST=(${FILELIST[*]} ".bashrc")
+FILELIST=(${FILELIST[*]} ".zshrc")
+for i in $(ls .shell.d/*|grep -vi 'bhistory')
+do
+    FILELIST=(${FILELIST[*]} "$i")
+done
 
 # Taskwarrior
-FILELIST[${#FILELIST[*]}]=".taskrc"
+FILELIST=(${FILELIST[*]} ".taskrc")
 
 # TeXlive
-# FILELIST[${#FILELIST[*]}]="$(find texmf -type f|grep -vi 'moderncv/examples\|moderncv/manual\|.bzr')"
+# for i in $(find texmf -type f|grep -vi 'moderncv/examples\|moderncv/manual\|.bzr')
+# do
+#     FILELIST=(${FILELIST[*]} "$i")
+# done
 
 # Vim
-FILELIST[${#FILELIST[*]}]=".vimrc"
+FILELIST=(${FILELIST[*]} ".vimrc")
 
 # WMFS
-FILELIST[${#FILELIST[*]}]=".config/wmfs"
+FILELIST=(${FILELIST[*]} ".config/wmfs")
 
 # Xinit
-FILELIST[${#FILELIST[*]}]=".xinitrc"
+FILELIST=(${FILELIST[*]} ".xinitrc")
 
 # Xresource
-FILELIST[${#FILELIST[*]}]=".Xresources"
+FILELIST=(${FILELIST[*]} ".Xresources")
 
 # Xscreensaver
-# FILELIST[${#FILELIST[*]}]=".xscreensaver"
+# FILELIST=(${FILELIST[*]} ".xscreensaver")
 
 
 ##==============================================================================
@@ -210,7 +226,7 @@ FILELIST[${#FILELIST[*]}]=".Xresources"
 ##==============================================================================
 
 if [ "$DEBUG" = "yes" ]; then
-	tar -zcvf "$ARCHIVENAME"  -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")" --exclude-vcs
+	tar ${ARCOPT} "$ARCHIVENAME"  -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")" --exclude-vcs
 else
 	tar ${ARCOPT} "${ARCHIVENAME}.${ARCEXT}"  -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")" --exclude-vcs >/dev/null
 fi
