@@ -11,8 +11,8 @@ folder-hook '$my_ac_university' 'source ~/.mutt/$my_ac_university'
 
 # Switch to default account on startup
 #source ~/.mutt/$my_ac_personal
-source ~/.mutt/$my_ac_work
-#source ~/.mutt/$my_ac_university
+#source ~/.mutt/$my_ac_work
+source ~/.mutt/$my_ac_university
 
 macro index <f2> '<sync-mailbox><enter-command>source ~/.mutt/$my_ac_personal<enter><change-folder>!<enter>'
 macro index <f3> '<sync-mailbox><enter-command>source ~/.mutt/$my_ac_work<enter><change-folder>!<enter>'
@@ -35,7 +35,11 @@ set imap_keepalive = 300
 # How often to check for new mail (time in seconds).
 set mail_check = 120
 
+# Manual fetch
 bind index "^" imap-fetch-mail
+
+# Beep on new incoming mails
+set beep_new = "yes"
 
 #-------------------------------------------------------------------------------
 # Sending options
@@ -44,7 +48,7 @@ bind index "^" imap-fetch-mail
 set mbox_type=Maildir
 set edit_headers=yes
 
+#set record=~/sent
 #set folder=~/mail
 #set mbox=+mbox
-#set record=+sent
 #set postponed=+drafts

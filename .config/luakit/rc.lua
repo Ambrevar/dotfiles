@@ -190,11 +190,25 @@ if unique then
     end)
 end
 
+--------------------------------------------------------------------------------
 -- CUSTOM
+--------------------------------------------------------------------------------
+-- Always save tabs before closing
 local close_win = window.methods.close_win
 window.methods.close_win = function (w, ...)
    session.save{w}
    close_win(w, ...)
 end
+
+-- Always open in a new tab in current instance.
+webview.init_funcs.window_decision = function (view, w)
+    view:add_signal("new-window-decision", function (v, uri, reason)
+        w:new_tab(uri)
+        return true
+    end)
+end
+
+-- Adblock
+require("adblock")
 
 -- vim: et:sw=4:ts=8:sts=4:tw=80

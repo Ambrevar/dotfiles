@@ -14,7 +14,7 @@ Generic Comments
 ****************
 
 The only purpose is to be a source of inspiration. Examples are always a good
-tehcnical support. (Especially for applications that do not provide examples in
+technical support. (Especially for applications that do not provide examples in
 their documentation.)  There is no use in blind-copying the content of any file
 into your personal home folder. At best it might break things.
 
@@ -36,6 +36,47 @@ been using.
 Final word: do not forget to read the manpages!
 
 ################################################################################
+
+
+Awesome
+*******
+Extra deps: Vicious
+
+Configuration is very close to the default one, which mostly fits my needs.
+Most of the work I've done is for the status bar, but since I'm using the
+Vicious plugin, it is quite straightforward.
+
+Emacs
+*****
+Extra deps: auctex, auto-complete, emacs-lua-mode, emacs-yasnippet,
+emacs-yasnippet-latex-git
+
+Not much personal work, mostly use of plugins. Still very powerful.
+
+Luakit
+******
+Some custom bindings, download location, search engines, etc.
+Functional Adblock script.
+
+Mutt
+****
+This one is not easy to get into it. I managed to get multiple accounts with
+pgp-encrypted passwords working, which means there is no plain password stored
+on the disk. As a result, I just get prompted for a main password on mutt
+startup, then everything works out of the box.
+
+For now, I'm using mutt-smtp for Gmail accounts and msmtp for other
+accounts. Both work fine with gpg.
+
+Ranger
+******
+Custom bindings, file association, tweaked a few options.
+
+Scripts
+*******
+.save: generates a home configuration archive.
+.network: network setup. Works with wpa_supplicant. May replace any network
+          manager.
 
 Shell
 *****
@@ -59,34 +100,3 @@ WMFS
 ****
 The last time I used WMFS, the development was in a transition from version 1.x
 to 2.x. So beware!, configuration files might be quite broken.
-
-Awesome
-*******
-Extra deps: Vicious
-
-Configuration is very close to the default one, which mostly fits my needs.
-Most of the work I've done is for the status bar, but since I'm using the
-Vicious plugin, it is quite straightforward.
-
-Emacs
-*****
-Extra deps: auctex, auto-complete, emacs-lua-mode, emacs-yasnippet,
-emacs-yasnippet-latex-git
-
-Not much personal work, mostly use of plugins. Still very powerful.
-
-Mutt
-****
-This one is not easy to get into it. I managed to get multiple accounts with
-pgp-encrypted passwords working, which means there is no plain password stored
-on the disk. As a result, I just get prompted for a main password on mutt
-startup, then everything works out of the box.
-
-For now, I'm using mutt-smtp for Gmail accounts and msmtp for other
-accounts. Both work fine with gpg.
-
-Scripts
-*******
-.save: generates a home configuration archive.
-.network: network setup. Works with wpa_supplicant. May replace any network
-          manager.
