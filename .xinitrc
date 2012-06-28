@@ -25,7 +25,7 @@ numlockx on
 ## Launch session
 ##==============================================================================
 # [ -e /usr/bin/awesome ] && exec ck-launch-session dbus-launch awesome
-[ -e /usr/bin/awesome ] && exec ck-launch-session dbus-launch awesome
+[ -e /usr/bin/awesome ] && exec ck-launch-session bash -c "udiskie & awesome"
 
 # [ -e /usr/bin/startlxde ] && exec ck-launch-session startlxde
 
