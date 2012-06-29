@@ -11,6 +11,7 @@ bash-completion
 bashmount
 binutils
 bison
+bustle
 bzip2
 bzr
 calc
@@ -73,6 +74,7 @@ libtool
 licenses
 links
 linux
+linux-custom
 linux-docs
 linux-lts
 logrotate
@@ -137,6 +139,7 @@ syslog-ng
 sysvinit
 tar
 task
+tcpdump
 texinfo
 texlive-genericextra
 texlive-latexextra
@@ -156,6 +159,8 @@ waf
 wget
 which
 wireless_tools
+wireshark-cli
+wireshark-gtk
 wpa_supplicant
 xf86-input-synaptics
 xf86-video-intel

@@ -1,9 +1,6 @@
 -- Global variables for luakit
 globals = {
     homepage            = "about:blank",
-    -- homepage            = "http://google.com/",
-    -- homepage            = "http://luakit.org/",
- -- homepage            = "http://github.com/mason-larobina/luakit",
     scroll_step         = 40,
     zoom_step           = 0.1,
     max_cmd_history     = 100,
@@ -54,8 +51,6 @@ soup.accept_policy = cookie_policy.always
 -- See: http://www.lua.org/manual/5.1/manual.html#pdf-string.format
 
 search_engines = {
-    -- arch        = "http://wiki.archlinux.org/wiki/Special:Search?search=%s",
-    -- debbugs     = "http://bugs.debian.org/%s",
     -- duckduckgo  = "http://duckduckgo.com/?q=%s",
     -- luakit      = "http://luakit.org/search/index/luakit?q=%s",
     -- sourceforge = "http://sf.net/search/?words=%s",
@@ -68,6 +63,8 @@ search_engines = {
     wb             = "http://en.wikibooks.org/wiki/Special:Search?search=%s",
     wbf            = "http://fr.wikibooks.org/wiki/Special:Search?search=%s",
     wf             = "http://fr.wikipedia.org/wiki/Special:Search?search=%s",
+    wkf            = "http://fr.wiktionary.org/wiki/Special:Search?search=%s",
+    wk             = "http://en.wiktionary.org/wiki/Special:Search?search=%s",
     wr             = "http://www.wordreference.com/enfr/%s",
     youtube        = "http://www.youtube.com/results?search_query=%s",
 }

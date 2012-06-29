@@ -1,13 +1,12 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                               Author: Ambrevar                               #
-#                               Date: 2012-06-21                               #
+#                               Date: 2012-06-29                               #
 ################################################################################
 
 Synopsis
 ********
 This repository contains configuration files for various Unix-programs.
-
 Target distribution: Arch Linux (might work for most Unices as well)
 
 Generic Comments
@@ -18,7 +17,7 @@ technical support. (Especially for applications that do not provide examples in
 their documentation.)  There is no use in blind-copying the content of any file
 into your personal home folder. At best it might break things.
 
-In case you still want to copy some files -- for quick genuine testing purpose
+In case you still want to copy some files -- for quick and dirty testing purpose
 -- do not forget that most of the files are in hidden folders.  Also note that
 in some shells, the '*' joker will NOT match hidden files, that is
 
@@ -27,7 +26,16 @@ in some shells, the '*' joker will NOT match hidden files, that is
 will copy non-hidden folders only.  To match all folders, use the following
 joker instead:
 
-        cp -r source-dir/.??* dest-dir/
+        cp -r source-dir/{.*,*} dest-dir/   # zsh
+        cp -r source-dir/{.??*,*} dest-dir/ # bash
+
+Still, the solution for bash is not perfect as it affects 3 characters files
+only. A more convenient solution:
+
+      # bash only.
+      shopt -s dotglob
+      cp -r source-dir/* dest-dir/
+
 
 Some applications will need extra dependencies other than the default ones. You
 might have a look at the .arch-pkg-explicit* files to see what software I've

@@ -374,6 +374,8 @@ pcre
 perl
 perl-error
 perl-locale-gettext
+perl-test-pod
+perl-yaml-syck
 pidgin
 pinentry
 pixman
@@ -442,6 +444,7 @@ t1lib
 talloc
 tar
 task
+tcpdump
 tdb
 texinfo
 texlive-bin
@@ -471,6 +474,8 @@ wget
 which
 wildmidi
 wireless_tools
+wireshark-cli
+wireshark-gtk
 wpa_supplicant
 wxgtk
 x264
@@ -492,6 +497,7 @@ xfsprogs
 xineramaproto
 xkeyboard-config
 xmlrpc-c
+xmlto
 xorg-bdftopcf
 xorg-fonts-alias
 xorg-fonts-encodings

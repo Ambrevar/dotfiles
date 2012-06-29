@@ -323,8 +323,16 @@ cleanvcs()
     fi
 }
 
-
-
+## LSOF stats. Print number of open files per process.
+lsofstat()
+{
+    LSOFOUT=$(lsof|awk '{print $1}')
+    
+    for i in $(echo $LSOFOUT |sort -u);do
+        echo -n "$i "
+        echo $LSOFOUT | grep ^$i | wc -l
+    done
+}
 
 ##==============================================================================
 ## Pacman Functions
@@ -353,6 +361,14 @@ if [ -f "/usr/bin/pacman" ]; then
         # English locale only.
         echo -n "Total:  "
         pacman -Qi $1 | grep "Size" | sed 's/^[^[:digit:]]*//'
+    }
+fi
+
+## Retrieve official packages list.
+if [ -f "/usr/bin/pacman" ]; then
+    pacman-official()
+    {
+        diff <(pacman -Qq|sort) <(pacman -Qmq | sort) --new-line-format='' --unchanged-group-format='%>'
     }
 fi
     
