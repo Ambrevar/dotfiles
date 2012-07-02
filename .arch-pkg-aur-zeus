@@ -1,5 +1,4 @@
 auto-complete
-bashmount
 bustle
 dropbox
 dropbox-cli
@@ -8,7 +7,7 @@ gsharkdown
 linux-custom
 movgrab
 msmtp-pwpatched
-otf-texgyre
+notmuch
 package-query
 pacman-color
 trash-cli

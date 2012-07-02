@@ -115,7 +115,7 @@
 ;; Mutt support
 (setq auto-mode-alist
       (append
-       '(("mutt.*" . text-mode)
+       '(("mutt.*" . mail-mode)
          )
        auto-mode-alist)
       )

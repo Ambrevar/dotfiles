@@ -1,6 +1,6 @@
 ################################################################################
 ## Shell Config -- Master File
-## Date 2011-11-19
+## Date 2012-07-02
 ################################################################################
 
 ##==============================================================================
@@ -23,28 +23,16 @@ isShell()
     fi
 }
 
-safeSource()
-{
-	if [ -f "$1" ]; then
-		source "$1"
-        return 0
-	else
-		echo "Warning: $1 not found when sourcing!"
-        return 1
-	fi
-}
-
-
 ##==============================================================================
 ## Sourcing
 ##==============================================================================
 
 SHELLDIR="$HOME/.shell.d"
 
-safeSource "${SHELLDIR}/main_rc" # Should be sourced first.
-safeSource "${SHELLDIR}/options_zsh"
-safeSource "${SHELLDIR}/funs_rc"
-safeSource "${SHELLDIR}/alias_rc"
-safeSource "${SHELLDIR}/keys_zsh"
-safeSource "${SHELLDIR}/personal_rc"
+source "${SHELLDIR}/main_rc" # Should be sourced first.
+source "${SHELLDIR}/options_zsh"
+source "${SHELLDIR}/funs_rc"
+source "${SHELLDIR}/alias_rc"
+source "${SHELLDIR}/keys_zsh"
+source "${SHELLDIR}/personal_rc"
 

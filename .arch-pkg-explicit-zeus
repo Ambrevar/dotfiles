@@ -2,13 +2,13 @@ abook
 acpi
 alsa-utils
 atool
+auctex
 auto-complete
 autoconf
 automake
 awesome
 bash
 bash-completion
-bashmount
 binutils
 bison
 bustle
@@ -98,10 +98,10 @@ nasm
 ncdu
 net-tools
 nmap
+notmuch
 ntfs-3g
 numlockx
 openssh
-otf-texgyre
 p7zip
 package-query
 pacman

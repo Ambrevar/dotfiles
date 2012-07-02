@@ -11,6 +11,7 @@ atk
 atkmm
 atool
 attr
+auctex
 autoconf
 automake
 avahi
@@ -111,6 +112,7 @@ glibc
 glibmm
 glib-networking
 glproto
+gmime
 gmp
 gnupg
 gnuplot
@@ -121,7 +123,6 @@ gpm
 grep
 groff
 grub
-gsasl
 gsettings-desktop-schemas
 gsl
 gsm
@@ -139,7 +140,6 @@ gtk-update-icon-cache
 gzip
 hdparm
 heirloom-mailx
-help2man
 hicolor-icon-theme
 highlight
 hplip
@@ -209,7 +209,6 @@ libgl
 libglade
 libglapi
 libgme
-libgnome-keyring
 libgpg-error
 libgssglue
 libice
@@ -372,9 +371,6 @@ pcmciautils
 pcre
 perl
 perl-error
-perl-locale-gettext
-perl-test-pod
-perl-yaml-syck
 pidgin
 pinentry
 pixman
@@ -478,6 +474,7 @@ wireshark-gtk
 wpa_supplicant
 wxgtk
 x264
+xapian-core
 xbitmaps
 xcb-proto
 xcb-util
@@ -496,7 +493,6 @@ xfsprogs
 xineramaproto
 xkeyboard-config
 xmlrpc-c
-xmlto
 xorg-bdftopcf
 xorg-fonts-alias
 xorg-fonts-encodings

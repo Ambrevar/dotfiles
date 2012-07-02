@@ -1,4 +1,4 @@
-;;-*-coding: emacs-mule;-*-
+;;-*-coding: utf-8;-*-
 (define-abbrev-table 'Buffer-menu-mode-abbrev-table '())
 
 (define-abbrev-table 'apropos-mode-abbrev-table '())
@@ -21,6 +21,8 @@
 
 (define-abbrev-table 'global-abbrev-table '())
 
+(define-abbrev-table 'help-mode-abbrev-table '())
+
 (define-abbrev-table 'idl-mode-abbrev-table '())
 
 (define-abbrev-table 'java-mode-abbrev-table '())
@@ -29,11 +31,21 @@
 
 (define-abbrev-table 'objc-mode-abbrev-table '())
 
+(define-abbrev-table 'occur-edit-mode-abbrev-table '())
+
+(define-abbrev-table 'occur-mode-abbrev-table '())
+
 (define-abbrev-table 'outline-mode-abbrev-table '())
 
 (define-abbrev-table 'pike-mode-abbrev-table '())
 
+(define-abbrev-table 'process-menu-mode-abbrev-table '())
+
+(define-abbrev-table 'prog-mode-abbrev-table '())
+
 (define-abbrev-table 'select-tags-table-mode-abbrev-table '())
+
+(define-abbrev-table 'sh-mode-abbrev-table '())
 
 (define-abbrev-table 'snippet-mode-abbrev-table '())
 
@@ -41,20 +53,24 @@
 
 (define-abbrev-table 'text-mode-abbrev-table
   '(
-    ("Arch" "Arch~Linux" nil 1)
+    ("Arch" "Arch Linux" nil 1)
     ("ac" "avec" nil 0)
+    ("afaik" "as far as I know" nil 0)
+    ("afaict" "as far as I can tell" nil 0)
     ("ajd" "aujourd'hui" nil 2)
     ("arch" "architecture" nil 1)
     ("autom" "automatique" nil 2)
+    ("atm" "at the moment" nil 1)
     ("bcp" "beaucoup" nil 2)
-    ("biblio" "bibliothÅËque" nil 1)
+    ("biblio" "biblioth√®que" nil 1)
+    ("btw" "by the way" nil 1)
     ("chai" "je ne sais" nil 1)
     ("config" "configuration" nil 1)
     ("configs" "configurations" nil 1)
-    ("cÅ‡d" "c'est-Å‡-dire" nil 1)
+    ("c√†d" "c'est-√†-dire" nil 1)
     ("dc" "donc" nil 1)
-    ("dep" "dÅÈpendance" nil 1)
-    ("deps" "dÅÈpendances" nil 1)
+    ("dep" "d√©pendance" nil 1)
+    ("deps" "d√©pendances" nil 1)
     ("dico" "Dictionnaire" nil 2)
     ("dispo" "disponible" nil 1)
     ("dispos" "disponibles" nil 1)
@@ -64,6 +80,7 @@
     ("exo" "exercice" nil 1)
     ("ficheir" "fichier" nil 0)
     ("ficheirs" "fichiers" nil 0)
+    ("fyi" "for your information" nil 0)
     ("gd" "grand" nil 3)
     ("infos" "informations" nil 1)
     ("latex" "LaTeX" nil 10)
@@ -73,13 +90,13 @@
     ("lql" "lequel" nil 2)
     ("lqls" "lesquels" nil 1)
     ("mail" "e-mail" nil 1)
-    ("mm" "mÅÍme" nil 16)
+    ("mm" "m√™me" nil 16)
     ("mnt" "maintenant" nil 2)
     ("ms" "mais" nil 4)
     ("nb" "nombre" nil 0)
     ("ns" "nous" nil 1)
-    ("pb" "problÅËme" nil 4)
-    ("pbs" "problÅËmes" nil 1)
+    ("pb" "probl√®me" nil 4)
+    ("pbs" "probl√®mes" nil 1)
     ("pcq" "parce que" nil 3)
     ("pgrm" "programme" nil 1)
     ("pgrms" "programmes" nil 1)
@@ -88,7 +105,7 @@
     ("pq" "pourquoi" nil 2)
     ("pr" "pour" nil 3)
     ("ptt" "petit" nil 1)
-    ("pÅÍ" "peut-ÅÍtre" nil 2)
+    ("p√™" "peut-√™tre" nil 2)
     ("qd" "quand" nil 4)
     ("qq" "quelque" nil 1)
     ("qqch" "quelque chose" nil 1)
@@ -99,20 +116,22 @@
     ("ques" "question" nil 1)
     ("ss" "sous" nil 1)
     ("ssi" "si et seulement si" nil 1)
-    ("stp" "s'il te plaÅÓt" nil 1)
-    ("svp" "s'il vous plaÅÓt" nil 1)
+    ("stp" "s'il te pla√Æt" nil 1)
+    ("svp" "s'il vous pla√Æt" nil 1)
     ("teh" "the" nil 1)
     ("tex" "TeX" nil 2)
-    ("tps" "temps" nil 4)
     ("tjrs" "toujours" nil 4)
+    ("tps" "temps" nil 5)
     ("ts" "tous" nil 1)
     ("tt" "tout" nil 3)
     ("tte" "toute" nil 1)
     ("ttes" "toutes" nil 1)
     ("ya" "il y a" nil 6)
     ("yen" "il y en" nil 1)
-    ("ÅÍ" "ÅÍtre" nil 1)
+    ("√™" "√™tre" nil 1)
    ))
+
+(define-abbrev-table 'vc-git-log-view-mode-abbrev-table '())
 
 (define-abbrev-table 'vc-svn-log-view-mode-abbrev-table '())
 
