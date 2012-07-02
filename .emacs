@@ -20,7 +20,7 @@
 (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
 (global-set-key (kbd "C-<f5>") 'linum-mode)
 (setq linum-format "%d ")
-(global-linum-mode 1)
+(global-linum-mode 1) ; This may generate warnings. Bug?
 
 ;; Indentation
 ;(setq standard-indent 4) ;; Set standard indent to 2 rather that 4
@@ -66,15 +66,15 @@
 (setq-default fill-column 80)
 ;; (setq auto-fill-mode 1) ;; Does not work ?
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
-(add-hook 'c-mode-common-hook 
-          (lambda ()
-            (auto-fill-mode 1)
-            (set (make-local-variable 'fill-nobreak-predicate)
-                 (lambda ()
-                   (not (eq (get-text-property (point) 'face)
-                            'font-lock-comment-face ))
-                   ))
-            ))
+;; (add-hook 'c-mode-common-hook 
+;;           (lambda ()
+;;             (auto-fill-mode 1)
+;;             (set (make-local-variable 'fill-nobreak-predicate)
+;;                  (lambda ()
+;;                    (not (eq (get-text-property (point) 'face)
+;;                             'font-lock-comment-face ))
+;;                    ))
+;;             ))
 
 
 ;; Man-mode
@@ -84,10 +84,12 @@
 ;; Theme
 ;;==============================================================================
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(lazy-highlight ((t (:background "blue"))))
+ '(link ((t (:foreground "cyan" :underline t))))
  '(minibuffer-prompt ((t (:foreground "cyan")))))
 
 ;;==============================================================================
@@ -99,11 +101,21 @@
 
 
 ;;==============================================================================
-;; Example of automode default modification
+;; Automode default modification
 ;;==============================================================================
+
+;; Read Matlab files in Octave mode.
 (setq auto-mode-alist
       (append
-       '(("\\.m$" . octave-mode)
+       '(("\\.m\\'" . octave-mode)
+         )
+       auto-mode-alist)
+      )
+
+;; Mutt support
+(setq auto-mode-alist
+      (append
+       '(("mutt.*" . text-mode)
          )
        auto-mode-alist)
       )
@@ -324,19 +336,22 @@
 ;;==============================================================================
 ;; Yasnippet
 ;;==============================================================================
+;; Yasnippet is slow when loading snipepts from source.
+;; Generate a bundle instead: yas/compile-bundle
+;; Besides you can convert the generated file to bytecode.
+
+(add-to-list 'load-path "~/.emacs.d/plugins")
+(require 'yasnippet-bundle)
 
 ;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/yas")
 ;; (require 'yasnippet) ;; not yasnippet-bundle
 ;; (yas/initialize)
 
-;; ;; Develop and keep personal snippets under ~/emacs.d/mysnippets
-;; ;; (setq yas/root-directory "~/emacs.d/mysnippets")
+;; ;; Personal snippets
 ;; (setq yas/root-directory "~/.emacs.d/plugins/yas/snippets" )
 
-;; ;; "/usr/share/emacs/site-lisp/yas/snippets"
-
-;; ;; Load the snippets
-;; (yas/load-directory "/usr/share/emacs/site-lisp/yas/snippets")
+;; Load the snippets
+;; (yas/load-directory  "~/.emacs.d/plugins/yas/snippets") ; Warning: slow!
 ;; (yas/load-directory yas/root-directory)
 
 ;;==============================================================================
@@ -417,3 +432,11 @@
 ;; (setq mediawiki-site-alist
 ;;       (append '("ArchWiki" "https://wiki.archlinux.org/" "username" "password" "Main Page")
 ;;               mediawiki-site-alist))
+
+
+;; (custom-set-variables
+;;  ;; custom-set-variables was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  )

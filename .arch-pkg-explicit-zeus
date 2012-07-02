@@ -34,7 +34,6 @@ e2fsprogs
 emacs-lua-mode
 emacs-nox
 emacs-yasnippet
-emacs-yasnippet-latex-git
 epdfview
 fakeroot
 feh
@@ -91,7 +90,8 @@ mediainfo
 mercurial
 movgrab
 mplayer
-msmtp
+msmtp-mta
+msmtp-pwpatched
 mutt
 nano
 nasm

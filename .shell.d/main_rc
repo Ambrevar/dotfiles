@@ -53,10 +53,8 @@ if [ "" != "$(command -v vim)" ]; then
     EDITOR=vim
 fi
 if [ "" != "$(command -v emacs)" ]; then
-    alias emacs='emacsclient -t'
-    EDITOR=emacs
-    # EDITOR="emacsclient --alternate-editor emacs +%d %s"
-
+   #EDITOR=emacs
+   EDITOR='emacsclient -a "" -t'
 fi
 export EDITOR
 

@@ -1,6 +1,6 @@
 ################################################################################
 ## Shell Config -- Alias Definitions.
-## Date 2012-06-21
+## Date 2012-07-02
 ################################################################################
 
 ##==============================================================================
@@ -20,17 +20,34 @@ if isShell "zsh"; then
     alias ssrc='source ~/.zshrc'
 fi
 
+## Enable color support of ls and also add handy aliases.
+if [ "$TERM" != "dumb" ]; then
+    eval "`dircolors -b`"
+fi
+
 ##==============================================================================
 ##==============================================================================
 
+## 'ls' redefinition
+alias ls='ls --color=auto -F -v'
+
+## Listing aliases
+alias l='ls -1'
+alias la='ls -lAh --group-directories-first' # Hidden files
+alias lc='ls -ltcrh --group-directories-first' # by change time
+alias lk='ls -lSrh --group-directories-first' # by size
+alias ll='ls -lh --group-directories-first' # Detailed view with human readable values.
+alias lx='ls -lXh --group-directories-first' # sort by extension
+
+# Misc
 alias cp="cp -i" # confirm before overwriting something
 alias xmx='xrdb -merge ~/.Xresources'
 alias grep='grep --color=auto'
  
 ## Emacs
 if [ -e "/usr/bin/emacs" ]; then
-    alias emacs='emacsclient -t -a "" -c'
-    alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; /usr/bin/emacs --daemon"
+   alias em='emacsclient -a "" -t'
+   alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; /usr/bin/emacs --daemon"
 fi
 
 ## Check colors supported by the current terminal.
@@ -86,26 +103,6 @@ fi
 #alias -s jpg='/usr/bin/gpicview'
 
 # fi
-
-##==============================================================================
-## Listing aliases
-##==============================================================================
-
-## Enable color support of ls and also add handy aliases.
-if [ "$TERM" != "dumb" ]; then
-    eval "`dircolors -b`"
-fi
-
-## 'ls' redefinition
-alias ls='ls --color=auto -F -v'
-
-## Shortcuts
-alias l='ls -1'
-alias la='ls -lAh --group-directories-first' # Hidden files
-alias lc='ls -ltcrh --group-directories-first' # by change time
-alias lk='ls -lSrh --group-directories-first' # by size
-alias ll='ls -lh --group-directories-first' # Detailed view with human readable values.
-alias lx='ls -lXh --group-directories-first' # sort by extension
 
 ##==============================================================================
 ## Pacman aliases

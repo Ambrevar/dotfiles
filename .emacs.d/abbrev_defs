@@ -103,6 +103,7 @@
     ("svp" "s'il vous plaît" nil 1)
     ("teh" "the" nil 1)
     ("tex" "TeX" nil 2)
+    ("tps" "temps" nil 4)
     ("tjrs" "toujours" nil 4)
     ("ts" "tous" nil 1)
     ("tt" "tout" nil 3)
