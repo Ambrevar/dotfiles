@@ -1,6 +1,35 @@
-#-------------------------------------------------------------------------------
-# Multiple accounts
-#-------------------------------------------------------------------------------
+## -*- mode:sh -*- #
+################################################################################
+## Mutt Configuration
+## Date 2012-07-03
+################################################################################
+
+## Note on folders:
+## These folders are assumed to exist:
+## -~/.mutt   = personal stuff (contacts, account information)
+## -~/.mutt.d = public stuff (cache, theme, mailcap)
+## Optional:
+## -~/.mutt.d/hcache = see hcache below.
+
+##-------------------------------------------------------------------------------
+## General options
+##-------------------------------------------------------------------------------
+
+## TODO: why doesn't the $EDITOR variable work for connecting to emacs daemon?
+set editor="emacsclient -a \"\" -t"
+
+## Fix the BackSpace bug that happens on some terminals.
+#bind index,pager  previous-page
+
+## Mailcap
+# set mailcap_path = ~/.mutt.d/mailcap
+# auto_view text/html
+# alternative_order text/plain text/html
+
+##-------------------------------------------------------------------------------
+## Multiple accounts
+##-------------------------------------------------------------------------------
+
 set my_ac_personal=personal
 set my_ac_work=work
 set my_ac_university=university
@@ -9,7 +38,7 @@ folder-hook '$my_ac_personal' 'source ~/.mutt/$my_ac_personal'
 folder-hook '$my_ac_work' 'source ~/.mutt/$my_ac_work'
 folder-hook '$my_ac_university' 'source ~/.mutt/$my_ac_university'
 
-# Switch to default account on startup
+## Switch to default account on startup
 #source ~/.mutt/$my_ac_personal
 #source ~/.mutt/$my_ac_work
 source ~/.mutt/$my_ac_university
@@ -18,19 +47,14 @@ macro index <f2> '<sync-mailbox><enter-command>source ~/.mutt/$my_ac_personal<en
 macro index <f3> '<sync-mailbox><enter-command>source ~/.mutt/$my_ac_work<enter><change-folder>!<enter>'
 macro index <f4> '<sync-mailbox><enter-command>source ~/.mutt/$my_ac_university<enter><change-folder>!<enter>'
 
-#-------------------------------------------------------------------------------
-# General options
-#-------------------------------------------------------------------------------
-
-# TODO: why doesn't the $EDITOR variable work for connecting to emacs daemon?
-set editor="emacsclient -a \"\" -t"
-
-#-------------------------------------------------------------------------------
-# Receiving options
-#-------------------------------------------------------------------------------
+##------------------------------------------------------------------------------
+## Receiving options
+##------------------------------------------------------------------------------
 
 # Store message headers locally to speed things up.
-set header_cache = ~/.mutt/hcache
+# Gentoo wiki says that if a folder is specified, it is even faster.
+# If no folder exists, the cache will be a single file.
+set header_cache = ~/.mutt.d/hcache
 
 # Allow mutt to open new imap connection automatically.
 unset imap_passive
@@ -41,101 +65,64 @@ set imap_keepalive = 300
 # How often to check for new mail (time in seconds).
 set mail_check = 120
 
-# Manual fetch
-bind index "^" imap-fetch-mail
-
-# Beep on new incoming mails
+# Beep on new incoming mails.
 set beep_new = "yes"
 
-#-------------------------------------------------------------------------------
-# Sending options
-#-------------------------------------------------------------------------------
+##------------------------------------------------------------------------------
+## Sending options
+##------------------------------------------------------------------------------
 
 set mbox_type=Maildir
 set edit_headers=yes
 
+##------------------------------------------------------------------------------
+## Aliasses
+##------------------------------------------------------------------------------
 
+set alias_file= ~/.mutt/aliases
+set sort_alias= alias
+set reverse_alias=yes
+source $alias_file
 
+##------------------------------------------------------------------------------
+## Keys
+##------------------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
-# Theme
-#-------------------------------------------------------------------------------
+# Manual fetch.
+bind index "^" imap-fetch-mail
 
+##------------------------------------------------------------------------------
+## Custom headers for outgoing mail
+##------------------------------------------------------------------------------
 
-# Colours for items in the index
-color index brightcyan black ~N
-# Hmm, don't like this.
-#color index brightgreen black "~N (~x byers.world)|(~x byers.x)|(~x langly.levallois123.axialys.net)|(~x the.earth.li)"
-color index brightyellow black ~F
-color index black green ~T
-color index brightred black ~D
-mono index bold ~N
-mono index bold ~F
-mono index bold ~T
-mono index bold ~D
+## Undo any custom headers that may have been put in by the global Muttrc
+# unmy_hdr *
 
-# Highlights inside the body of a message.
+## Remove any global From: header
+#unset use_from
+## Don't append a domain to my outgoing mails
+#unset use_domain
 
-# URLs
-color body brightgreen black "(http|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
-color body brightgreen black "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
-mono body bold "(http|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
-mono body bold "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
+#my_hdr From: Firstname Lastname <myfirstname@mymailserver>
 
-# email addresses
-color body brightgreen black "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
-#mono body bold "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+## Extra info.
+# my_hdr X-Info: Simplicity is the ultimate sophistication.
 
-# header
-color header green black "^from:"
-color header green black "^to:"
-color header green black "^cc:"
-color header green black "^date:"
-color header yellow black "^newsgroups:"
-color header yellow black "^reply-to:"
-color header brightcyan black "^subject:"
-color header red black "^x-spam-rule:"
-color header green black "^x-mailer:"
-color header yellow black "^message-id:"
-color header yellow black "^Organization:"
-color header yellow black "^Organisation:"
-color header yellow black "^User-Agent:"
-color header yellow black "^message-id: .*pine"
-color header yellow black "^X-Fnord:"
-color header yellow black "^X-WebTV-Stationery:"
-color header yellow black "^X-Message-Flag:"
-color header yellow black "^X-Spam-Status:"
-color header yellow black "^X-SpamProbe:"
-color header red black "^X-SpamProbe: SPAM"
+## OS Info.
+# my_hdr X-Operating-System: `uname -s`, kernel `uname -r`
+# my_hdr X-Operating-System: Neidy\'s OS
 
+## This header only appears to MS Outlook users
+#my_hdr X-Message-Flag: WARNING!! Outlook sucks!
 
-# Coloring quoted text - coloring the first 7 levels:
-color quoted cyan black
-color quoted1 yellow black
-color quoted2 red black
-color quoted3 green black
-color quoted4 cyan black
-color quoted5 yellow black
-color quoted6 red black
-color quoted7 green black
+## Custom Mail-User-Agent ID.
+# set user_agent = no
+#my_hdr User-Agent: Every email client sucks, this one just sucks less.
 
+##------------------------------------------------------------------------------
+## Theme
+##------------------------------------------------------------------------------
 
-# Default color definitions
-#color hdrdefault white green
-color signature brightmagenta black
-color indicator black cyan 
-color attachment black green
-color error red black
-color message white black
-color search brightwhite magenta
-color status brightyellow blue
-color tree brightblue black
-color normal white black
-color tilde green black
-color bold brightyellow black
-#color underline magenta black
-color markers brightcyan black
-# Colour definitions when on a mono screen
-mono bold bold
-mono underline underline
-mono indicator reverse
+#source ~/.mutt.d/colors.default
+#source ~/.mutt.d/colors.linux
+source ~/.mutt.d/colors.nongeek

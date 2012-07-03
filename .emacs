@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs config
-;; 2012-06-22
+;; 2012-07-02
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;==============================================================================
@@ -104,6 +104,23 @@
 ;; Automode default modification
 ;;==============================================================================
 
+;; rc support
+(setq auto-mode-alist
+      (append
+       '(("rc\\'" . sh-mode)
+         )
+       auto-mode-alist)
+      )
+
+;; Shell support
+;; We do not put 'sh' only because it could get messy.
+(setq auto-mode-alist
+      (append
+       '(("\\(bash\\'\\|zsh\\'\\|csh\\'\\|tcsh\\'\\|ksh\\'\\)" . sh-mode)
+         )
+       auto-mode-alist)
+      )
+
 ;; Read Matlab files in Octave mode.
 (setq auto-mode-alist
       (append
@@ -112,10 +129,12 @@
        auto-mode-alist)
       )
 
-;; Mutt support
+;; Mutt support.
+;; We make sure the file name has not dot in front of mutt to prevent .muttrc
+;; from being seen as a mail file.
 (setq auto-mode-alist
       (append
-       '(("mutt.*" . mail-mode)
+       '(("[^\\./]mutt.*" . mail-mode)
          )
        auto-mode-alist)
       )
@@ -336,23 +355,24 @@
 ;;==============================================================================
 ;; Yasnippet
 ;;==============================================================================
-;; Yasnippet is slow when loading snipepts from source.
+;; Yasnippet is slow when loading snippets from source.
 ;; Generate a bundle instead: yas/compile-bundle
 ;; Besides you can convert the generated file to bytecode.
 
 (add-to-list 'load-path "~/.emacs.d/plugins")
 (require 'yasnippet-bundle)
 
-;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/yas")
-;; (require 'yasnippet) ;; not yasnippet-bundle
-;; (yas/initialize)
+;; Next follows a traditional, yet not-optimized configuration for Yasnippet.
+; (add-to-list 'load-path "/usr/share/emacs/site-lisp/yas")
+; (require 'yasnippet) ;; not yasnippet-bundle
+; (yas/initialize)
 
-;; ;; Personal snippets
-;; (setq yas/root-directory "~/.emacs.d/plugins/yas/snippets" )
+;; Personal snippets
+; (setq yas/root-directory "~/.emacs.d/plugins/yas/snippets" )
 
 ;; Load the snippets
-;; (yas/load-directory  "~/.emacs.d/plugins/yas/snippets") ; Warning: slow!
-;; (yas/load-directory yas/root-directory)
+; (yas/load-directory  "~/.emacs.d/plugins/yas/snippets") ; Warning: slow!
+; (yas/load-directory yas/root-directory)
 
 ;;==============================================================================
 ;; Auto-Complete
@@ -432,11 +452,3 @@
 ;; (setq mediawiki-site-alist
 ;;       (append '("ArchWiki" "https://wiki.archlinux.org/" "username" "password" "Main Page")
 ;;               mediawiki-site-alist))
-
-
-;; (custom-set-variables
-;;  ;; custom-set-variables was added by Custom.
-;;  ;; If you edit it by hand, you could mess it up, so be careful.
-;;  ;; Your init file should contain only one such instance.
-;;  ;; If there is more than one, they won't work right.
-;;  )

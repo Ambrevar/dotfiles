@@ -45,10 +45,15 @@ case "$extension" in
 	pdf)
 		pdftotext -l 10 -nopgbrk -q "$path" - | head -n $maxln | fmt -s -w $width
 		success && exit 0 || exit 1;;
+
     # CUSTOM
 	# MKV videos:
 	mkv)
 		mediainfo "$path" | sed 's/  \+:/: /;'
+		success && exit 5 || exit 1;;
+	# doc files:
+	doc)
+		antiword "$path"
 		success && exit 5 || exit 1;;
 
 	# BitTorrent Files
