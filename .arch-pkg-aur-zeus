@@ -4,11 +4,10 @@ dropbox
 dropbox-cli
 emacs-yasnippet
 gsharkdown
-linux-custom
 movgrab
 msmtp-pwpatched
-notmuch
 package-query
 pacman-color
 trash-cli
+urlview
 yaourt

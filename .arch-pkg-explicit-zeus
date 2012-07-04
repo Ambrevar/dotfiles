@@ -1,6 +1,8 @@
-abook
 acpi
 alsa-utils
+antiword
+aspell-en
+aspell-fr
 atool
 auctex
 auto-complete
@@ -34,7 +36,6 @@ e2fsprogs
 emacs-lua-mode
 emacs-nox
 emacs-yasnippet
-epdfview
 fakeroot
 feh
 file
@@ -42,6 +43,7 @@ filesystem
 findutils
 flashplugin
 flex
+fortune-mod
 gawk
 gcc
 gcc-libs
@@ -62,11 +64,13 @@ heirloom-mailx
 highlight
 hplip
 htop
+hunspell-en
 inetutils
 initscripts
 inkscape
 iptables
 iputils
+ispell
 jfsutils
 laptop-mode-tools
 less
@@ -75,7 +79,6 @@ libtool
 licenses
 links
 linux
-linux-custom
 linux-docs
 linux-lts
 logrotate
@@ -91,7 +94,7 @@ mdadm
 mediainfo
 mercurial
 movgrab
-mplayer
+mplayer2
 msmtp-mta
 msmtp-pwpatched
 mutt
@@ -100,7 +103,6 @@ nasm
 ncdu
 net-tools
 nmap
-notmuch
 ntfs-3g
 numlockx
 openssh
@@ -126,7 +128,6 @@ ranger
 reiserfsprogs
 rtorrent
 rxvt-unicode
-scons
 scrot
 sdparm
 sed
@@ -150,6 +151,7 @@ trash-cli
 tree
 unrar
 unzip
+urlview
 usbutils
 util-linux
 valgrind
@@ -157,6 +159,7 @@ vi
 vicious
 vim
 vlock
+w3m
 waf
 wget
 which
@@ -164,6 +167,7 @@ wireless_tools
 wireshark-cli
 wireshark-gtk
 wpa_supplicant
+wv
 xf86-input-synaptics
 xf86-video-intel
 xf86-video-vesa

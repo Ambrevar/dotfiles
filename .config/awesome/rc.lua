@@ -58,10 +58,10 @@ terminal = "lxterminal"
 termcmd = "lxterminal -e "
 -- webbrowser = os.getenv("BROWSER") or "luakit"
 webbrowser = "luakit"
-mailclient = termcmd .. os.getenv("HOME") .. "/.ml.sh" -- Mutt Launcher
+mailclient = termcmd .. "mutt"
 pdfreader = "zathura"
-editor = os.getenv("EDITOR") or "nano"
-editor_cmd = termcmd .. editor
+-- editor = os.getenv("EDITOR") or "nano"
+-- editor_cmd = termcmd .. editor
 
 --------------------------------------------------------------------------------
 -- Default modkey.

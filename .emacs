@@ -134,7 +134,7 @@
 ;; from being seen as a mail file.
 (setq auto-mode-alist
       (append
-       '(("[^\\./]mutt.*" . mail-mode)
+       '(("[^\\.]mutt.*" . mail-mode)
          )
        auto-mode-alist)
       )
@@ -359,20 +359,20 @@
 ;; Generate a bundle instead: yas/compile-bundle
 ;; Besides you can convert the generated file to bytecode.
 
-(add-to-list 'load-path "~/.emacs.d/plugins")
-(require 'yasnippet-bundle)
+;; (add-to-list 'load-path "~/.emacs.d/plugins")
+;; (require 'yasnippet-bundle)
 
 ;; Next follows a traditional, yet not-optimized configuration for Yasnippet.
-; (add-to-list 'load-path "/usr/share/emacs/site-lisp/yas")
-; (require 'yasnippet) ;; not yasnippet-bundle
-; (yas/initialize)
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/yas")
+(require 'yasnippet) ;; not yasnippet-bundle
+(yas/initialize)
 
 ;; Personal snippets
-; (setq yas/root-directory "~/.emacs.d/plugins/yas/snippets" )
+(setq yas/root-directory "~/.emacs.d/plugins/yas/snippets" )
 
 ;; Load the snippets
 ; (yas/load-directory  "~/.emacs.d/plugins/yas/snippets") ; Warning: slow!
-; (yas/load-directory yas/root-directory)
+(yas/load-directory yas/root-directory)
 
 ;;==============================================================================
 ;; Auto-Complete

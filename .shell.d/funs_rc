@@ -141,32 +141,49 @@ asciify()
     done;
 }
 
-## steal
-steal()
+blind-append()
 {
-    steal_help()
+    blind_help()
     {
         echo
         echo "Usage:"
-        echo -e "\t$1 STRING FILE"
+        echo -e "\t$1 FILE [STRING]"
         echo
         echo "Synopsis:"
-        echo -e "\tAppend a silently prompted string to STRING from FILE."
+        echo -e "\tAppend to all STRING found in FILE a secret phrase being prompted."
+        echo -e "\tIf STRING is omitted, secret phrase will be appended to the end of the file."
+        echo -e "\tIf FILE does not exist, it will be created and secret phrase will be inserted. STRING will be ignored."
         echo
     }
 
-    if [ $# -ne 2 ]; then
+    if [ $# -gt 2 ] || [ $# -lt 1 ]; then
         echo "Wrong number of arguments."
-        steal_help $0
+        blind_help $0
         return
     fi 
 
-    STRING="$1"
-    FILE="$2"
+    FILE="$1"
+    STRING=""
+    if [ $# -eq 2 ]; then
+        STRING="$2"
+    fi
 
     read -s DUMMY
-    sed -i "s/${STRING}/${STRING}${DUMMY}/g" "${FILE}"
-    echo File stolen.
+
+    if [ ! -e "$FILE" ] || [ "$STRING" = "" ]; then
+        echo "$DUMMY" >> "$FILE"
+        echo "Secrect blindly appended to ${FILE} at the end."
+        return
+    fi 
+
+
+    if [ $# -eq 1 ]; then
+        echo "$DUMMY" >> "$FILE"
+    else
+        sed -i "s/${STRING}/${STRING}${DUMMY}/g" "${FILE}"
+    fi
+    echo "Secret blindly appended to ${FILE}."
+    return
 }
 
 

@@ -1,12 +1,14 @@
 a52dec
 aalib
-abook
 acl
 acpi
 alsa-lib
 alsa-utils
+antiword
 archlinux-keyring
 aspell
+aspell-en
+aspell-fr
 atk
 atkmm
 atool
@@ -28,7 +30,6 @@ cairo
 cairomm
 calc
 cdparanoia
-cifs-utils
 cloog
 cmus
 compositeproto
@@ -65,7 +66,6 @@ emacs-lua-mode
 emacs-nox
 enca
 enchant
-epdfview
 eventlog
 expat
 faac
@@ -73,6 +73,7 @@ faad2
 fakeroot
 farstream
 feh
+ffmpeg
 fftw
 file
 filesystem
@@ -86,6 +87,7 @@ fontsproto
 foomatic-db
 foomatic-db-engine
 foomatic-filters
+fortune-mod
 freeglut
 freetype2
 fribidi
@@ -112,7 +114,6 @@ glibc
 glibmm
 glib-networking
 glproto
-gmime
 gmp
 gnupg
 gnuplot
@@ -141,12 +142,14 @@ gtk-update-icon-cache
 gzip
 hdparm
 heirloom-mailx
+help2man
 hicolor-icon-theme
 highlight
 hplip
 hspell
 htop
 hunspell
+hunspell-en
 hwids
 iana-etc
 icu
@@ -161,6 +164,7 @@ iproute2
 iptables
 iputils
 isl
+ispell
 jack
 jasper
 jfsutils
@@ -168,6 +172,7 @@ json-c
 kbd
 kbproto
 keyutils
+khrplatform-devel
 kmod
 krb5
 ladspa
@@ -185,7 +190,6 @@ libatasmart
 libbluray
 libcaca
 libcap
-libcap-ng
 libcdaudio
 libcddb
 libcdio
@@ -197,9 +201,11 @@ libdc1394
 libdca
 libdrm
 libdv
+libdvdcss
 libdvdnav
 libdvdread
 libedit
+libegl
 libev
 libexif
 libffi
@@ -212,6 +218,7 @@ libglapi
 libgme
 libgnome-keyring
 libgpg-error
+libgsf
 libgssglue
 libice
 libid3tag
@@ -265,10 +272,10 @@ libtorrent
 libunique
 libusb-compat
 libusbx
+libva
 libvdpau
 libvorbis
 libvpx
-libwbclient
 libwebkit
 libx11
 libxau
@@ -333,7 +340,7 @@ mkinitcpio-busybox
 mozilla-common
 mpfr
 mpg123
-mplayer
+mplayer2
 msmtp-mta
 mtdev
 musicbrainz
@@ -373,6 +380,7 @@ pcmciautils
 pcre
 perl
 perl-error
+perl-locale-gettext
 pidgin
 pinentry
 pixman
@@ -415,7 +423,6 @@ rtorrent
 run-parts
 rxvt-unicode
 schroedinger
-scons
 scrnsaverproto
 scrot
 sdl
@@ -425,8 +432,8 @@ sg3_utils
 shadow
 shared-mime-info
 slock
-smbclient
 soundtouch
+speex
 splint
 sqlite
 startup-notification
@@ -438,11 +445,9 @@ syslog-ng
 systemd-tools
 sysvinit
 t1lib
-talloc
 tar
 task
 tcpdump
-tdb
 texinfo
 texlive-bin
 texlive-core
@@ -466,6 +471,7 @@ vim-runtime
 vlock
 vte
 vte-common
+w3m
 waf
 wget
 which
@@ -474,9 +480,9 @@ wireless_tools
 wireshark-cli
 wireshark-gtk
 wpa_supplicant
+wv
 wxgtk
 x264
-xapian-core
 xbitmaps
 xcb-proto
 xcb-util

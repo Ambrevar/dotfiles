@@ -1,11 +1,11 @@
 #!/bin/bash
 ################################################################################
 ## Home Config Backup Script
-## 2012-06-29
+## 2012-07-04
 ################################################################################
-## Note for Zsh: because of the KSH-style arrays (index starting at 0), you
-## cannot use array index to append elements to arrays -- or the KSH_ARRAYS
-## option for zsh must be used.
+## Note for Zsh: because of the Ksh-style arrays (index starting at 0), you
+## cannot use array index to append elements to arrays -- otherwise the
+## KSH_ARRAYS option for zsh must be used.
 
 ##==============================================================================
 ## Options
@@ -129,7 +129,7 @@ fi
 ##==============================================================================
 FILELIST=()
 
-# Arch Linux package list
+## Arch Linux package list
 if [ -e "/usr/bin/pacman" ]; then
     for i in $(find . -maxdepth 1 -name '.arch*'  -exec basename {} \;)
     do
@@ -137,86 +137,99 @@ if [ -e "/usr/bin/pacman" ]; then
     done
 fi
 
-# Awesome
+## Awesome
 for i in $(find .config/awesome \( -name "*.lua" -o -name "*.sh" \) -type f)
 do
     FILELIST=(${FILELIST[*]} "$i")
 done
 
-# cmus
+## cmus
 # FILELIST=(${FILELIST[*]} "$(ls .cmus/{autosave,*.theme}) ")
-FILELIST=(${FILELIST[*]} "$(ls .cmus/autosave)")
+FILELIST=(${FILELIST[*]} ".cmus/autosave")
 
-# Conky
+## Conky
 FILELIST=(${FILELIST[*]} ".conkyrc")
 
-# Emacs
+## Emacs
 FILELIST=(${FILELIST[*]} ".emacs")
 FILELIST=(${FILELIST[*]} ".emacs.d/plugins")
 FILELIST=(${FILELIST[*]} ".emacs.d/abbrev_defs")
 
-# GTK
+## GnuPG
+FILELIST=(${FILELIST[*]} ".gnupg/gpg-agent.conf")
+
+## GTK
 FILELIST=(${FILELIST[*]} ".gtkrc-2.0")
 FILELIST=(${FILELIST[*]} ".config/gtk-3.0/settings.ini")
 
-# Luakit
+## Luakit
 FILELIST=(${FILELIST[*]} ".config/luakit/")
 
-# LXTerminal
+## LXTerminal
 FILELIST=(${FILELIST[*]} ".config/lxterminal/lxterminal.conf")
 
-# MPlayer
+## MPlayer
 # FILELIST=(${FILELIST[*]} ".mplayer")
 
-# Mutt
+## Mutt
 FILELIST=(${FILELIST[*]} ".muttrc")
 FILELIST=(${FILELIST[*]} ".ml.sh")
+for i in $(ls -ad --indicator-style=none .mutt.d/* | grep -vi 'cache')
+do
+    FILELIST=(${FILELIST[*]} "$i")
+done
 
-# Nano
+## Nano
 FILELIST=(${FILELIST[*]} ".nanorc")
 
-# Netinit
+## Netinit
 FILELIST=(${FILELIST[*]} ".netinit")
 
-# Ranger
-for i in $(ls -d --indicator-style=none .config/ranger/* | grep -vi 'pycache\|bookmarks\|history\|tagged')
+## Ranger
+for i in $(ls -ad --indicator-style=none .config/ranger/* | grep -vi 'pycache\|bookmarks\|history\|tagged')
 do
     FILELIST=(${FILELIST[*]} "$i")
 done
 
-# rtorrent
+## rtorrent
 FILELIST=(${FILELIST[*]} ".rtorrent.rc")
 
-# Shells
+## Shells
 FILELIST=(${FILELIST[*]} ".bashrc")
 FILELIST=(${FILELIST[*]} ".zshrc")
-for i in $(ls .shell.d/*|grep -vi 'bhistory')
+for i in $(ls -a .shell.d/*|grep -vi 'bhistory')
 do
     FILELIST=(${FILELIST[*]} "$i")
 done
 
-# Taskwarrior
+## Taskwarrior
 FILELIST=(${FILELIST[*]} ".taskrc")
 
-# TeXlive
+## Terminfo
+FILELIST=(${FILELIST[*]} ".terminfo/x/xterm")
+
+## TeXlive
 # for i in $(find texmf -type f|grep -vi 'moderncv/examples\|moderncv/manual\|.bzr')
 # do
 #     FILELIST=(${FILELIST[*]} "$i")
 # done
 
-# Vim
+## Urlview
+FILELIST=(${FILELIST[*]} ".urlview")
+
+## Vim
 FILELIST=(${FILELIST[*]} ".vimrc")
 
-# WMFS
+## WMFS
 FILELIST=(${FILELIST[*]} ".config/wmfs")
 
-# Xinit
+## Xinit
 FILELIST=(${FILELIST[*]} ".xinitrc")
 
-# Xresource
+## Xresource
 FILELIST=(${FILELIST[*]} ".Xresources")
 
-# Xscreensaver
+## Xscreensaver
 # FILELIST=(${FILELIST[*]} ".xscreensaver")
 
 

@@ -1,7 +1,7 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Mutt Configuration
-## Date 2012-07-03
+## Date 2012-07-04
 ################################################################################
 
 ## Note on folders:
@@ -9,22 +9,19 @@
 ## -~/.mutt   = personal stuff (contacts, account information)
 ## -~/.mutt.d = public stuff (cache, theme, mailcap)
 ## Optional:
-## -~/.mutt.d/hcache = see hcache below.
+## -~/.mutt.d/hcache = see header_cache below.
 
 ##-------------------------------------------------------------------------------
 ## General options
 ##-------------------------------------------------------------------------------
 
-## TODO: why doesn't the $EDITOR variable work for connecting to emacs daemon?
+## TODO: why doesn't the $EDITOR variable work for connection to emacs daemon?
 set editor="emacsclient -a \"\" -t"
 
-## Fix the BackSpace bug that happens on some terminals.
-#bind index,pager  previous-page
-
 ## Mailcap
-# set mailcap_path = ~/.mutt.d/mailcap
-# auto_view text/html
-# alternative_order text/plain text/html
+set mailcap_path = ~/.mutt.d/mailcap
+auto_view text/html
+alternative_order text/plain text/html
 
 ##-------------------------------------------------------------------------------
 ## Multiple accounts
@@ -91,6 +88,14 @@ source $alias_file
 # Manual fetch.
 bind index "^" imap-fetch-mail
 
+## Fix the BackSpace bug that happens on some terminals.
+#bind index,pager  previous-page
+
+## Fix Backspace -- Shell alternative.
+#$ infocmp > termbs.src
+## Changed kbs=^H to kbs=\177, then:
+#$ tic -x termbs.src
+
 ##------------------------------------------------------------------------------
 ## Custom headers for outgoing mail
 ##------------------------------------------------------------------------------
@@ -106,7 +111,7 @@ bind index "^" imap-fetch-mail
 #my_hdr From: Firstname Lastname <myfirstname@mymailserver>
 
 ## Extra info.
-# my_hdr X-Info: Simplicity is the ultimate sophistication.
+my_hdr X-Info: Simplicity is the ultimate sophistication.
 
 ## OS Info.
 # my_hdr X-Operating-System: `uname -s`, kernel `uname -r`
@@ -116,13 +121,24 @@ bind index "^" imap-fetch-mail
 #my_hdr X-Message-Flag: WARNING!! Outlook sucks!
 
 ## Custom Mail-User-Agent ID.
-# set user_agent = no
-#my_hdr User-Agent: Every email client sucks, this one just sucks less.
+set user_agent = yes
+# my_hdr User-Agent: Every email client sucks, this one just sucks less.
 
 ##------------------------------------------------------------------------------
-## Theme
+## Themes
 ##------------------------------------------------------------------------------
 
-#source ~/.mutt.d/colors.default
-#source ~/.mutt.d/colors.linux
+## TODO: Use these variables to get dynamic column size.
+# set my_col_from = `echo $((30 * ($COLUMNS-34) / 100))`
+# set my_col_subject = `echo $((70 * ($COLUMNS-34) / 100))`
+
+## Index format
+## See 'man 3 strftime' and 'man 3 printf'.
+# set index_format="%?M?_%M_ ?%Z %2C %.13d (%-68.68F) %-68.68s %?M?_%M_&(%c/%l?"
+set date_format="%y-%m-%d %T"
+set index_format="%2C | %Z [%d] %-30.30F (%-4.4c) %s"
+
+#source /usr/share/doc/mutt/samples/colors.default
+#source /usr/share/doc/mutt/samples/colors.linux
+
 source ~/.mutt.d/colors.nongeek
