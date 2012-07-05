@@ -1,7 +1,7 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                               Author: Ambrevar                               #
-#                               Date: 2012-06-29                               #
+#                               Date: 2012-07-05                               #
 ################################################################################
 
 Synopsis
@@ -57,24 +57,28 @@ Vicious plugin, it is quite straightforward.
 Emacs
 *****
 Extra deps: auctex, auto-complete, emacs-lua-mode, emacs-yasnippet,
-emacs-yasnippet-latex-git
 
 Not much personal work, mostly use of plugins. Still very powerful.
 
 Luakit
 ******
 Some custom bindings, download location, search engines, etc.
-Functional Adblock script.
+Functional Adblock script. Script+Plugins toggle.
 
 Mutt
 ****
 This one is not easy to get into it. I managed to get multiple accounts with
 pgp-encrypted passwords working, which means there is no plain password stored
-on the disk. As a result, I just get prompted for a main password on mutt
+on the disk. As a result, I just get prompted for a main password on Mutt
 startup, then everything works out of the box.
 
-For now, I'm using mutt-smtp for Gmail accounts and msmtp for other
-accounts. Both work fine with gpg.
+I use GPG for password management, mostly because it features a password agent.
+
+I'm using embedded imap and smtp services -- you must provide the required
+compilation options.
+
+Some customization: custom index view, good Emacs integration -- see .emacs --,
+custom theme.
 
 Ranger
 ******
@@ -82,7 +86,7 @@ Custom bindings, file association, tweaked a few options.
 
 Scripts
 *******
-.save: generates a home configuration archive.
+.save:    generates a home configuration archive.
 .network: network setup. Works with wpa_supplicant. May replace any network
           manager.
 

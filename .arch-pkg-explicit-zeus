@@ -1,3 +1,4 @@
+abs
 acpi
 alsa-utils
 antiword
@@ -26,6 +27,7 @@ cryptsetup
 ctags
 cups
 cyrus-sasl
+dconf
 device-mapper
 d-feet
 dhcpcd

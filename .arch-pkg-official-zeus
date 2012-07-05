@@ -1,11 +1,13 @@
 a52dec
 aalib
+abs
 acl
 acpi
 alsa-lib
 alsa-utils
 antiword
 archlinux-keyring
+asciidoc
 aspell
 aspell-en
 aspell-fr
@@ -49,6 +51,7 @@ db
 dbus
 dbus-core
 dbus-glib
+dconf
 desktop-file-utils
 device-mapper
 d-feet
@@ -58,6 +61,8 @@ diffutils
 dirmngr
 djvulibre
 dnssec-anchors
+docbook-xml
+docbook-xsl
 dri2proto
 e2fsprogs
 eject
@@ -420,6 +425,7 @@ recode
 recordproto
 reiserfsprogs
 renderproto
+rsync
 rtmpdump
 rtorrent
 run-parts
