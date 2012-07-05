@@ -305,7 +305,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "a", function () awful.util.spawn("cmus-remote -n") end),
     awful.key({ modkey, "Control" }, "a", function () awful.util.spawn("cmus-remote -r") end),
 
-    awful.key({}, "Print", function () awful.util.spawn("scrot '%Y-%m-%d-%H%M%S_$wx$h.png' -e 'mkdir -p ~/shots && mv $f ~/shots/'") end),
+    awful.key({}, "Print", function () awful.util.spawn("scrot '%Y-%m-%d-%H%M%S_$wx$h.png' -e 'mkdir -p ~/shots && mv $f ~/temp/'") end),
 
     awful.key({ modkey,           }, "w", function () awful.util.spawn(webbrowser) end),
     awful.key({ modkey,           }, "t", function () awful.util.spawn(mailclient) end),
@@ -479,6 +479,12 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "Thunderbird" },
       properties = { tag = tags[1][7] } },
+
+    { rule = { instance = "plugin-container" },
+      properties = { floating = true } },
+
+    { rule = { instance = "exe" },
+      properties = { floating = true } },
 
     -- TODO: does not work.
     { rule = { name = "cmus"},

@@ -12,7 +12,7 @@
 [ "$(amixer | grep PCM)" != "" ] && amixer set PCM 80%
 
 ## GPG-Agent
-[ "$(which gpg-agent)" != "" ] && eval $(gpg-agent --daemon)
+# [ "$(which gpg-agent)" != "" ] && eval $(gpg-agent --daemon)
 
 ##==============================================================================
 ## Launch session
