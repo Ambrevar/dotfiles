@@ -82,15 +82,15 @@ domain_props = { --[[
         enable_plugins          = false,
         enable_private_browsing = false,
         user_stylesheet_uri     = "",
-    },
+   },
     ["youtube.com"] = {
         enable_scripts = true,
         enable_plugins = true,
-    },
+    }, 
     ["bbs.archlinux.org"] = {
-        user_stylesheet_uri     = "file://" .. luakit.data_dir .. "/styles/dark.css",
-        enable_private_browsing = true,
-    }, ]]
+        user_stylesheet_uri     = "file://" .. luakit.data_dir .. "/styles/ArchLinux.css",
+    },
+    --]]
 }
 
 -- vim: et:sw=4:ts=8:sts=4:tw=80

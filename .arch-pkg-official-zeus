@@ -316,6 +316,7 @@ linux-firmware
 linux-lts
 lirc-utils
 logrotate
+lrzip
 lsof
 ltrace
 lua
@@ -324,6 +325,7 @@ luajit
 luakit
 lvm2
 lxterminal
+lzo2
 m4
 make
 man-db

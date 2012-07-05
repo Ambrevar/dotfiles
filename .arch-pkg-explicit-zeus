@@ -82,6 +82,7 @@ linux
 linux-docs
 linux-lts
 logrotate
+lrzip
 ltrace
 luakit
 lvm2

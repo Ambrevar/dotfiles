@@ -4,6 +4,7 @@
 
 ## Colours for items in the index
 color index brightcyan black ~N
+color index brightred black ~O
 ## Hmm, don't like this.
 #color index brightgreen black "~N (~x byers.world)|(~x byers.x)|(~x langly.levallois123.axialys.net)|(~x the.earth.li)"
 color index brightyellow black ~F

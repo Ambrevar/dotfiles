@@ -243,6 +243,12 @@ add_binds("normal", {
     buf("^ZQ$",                     function (w) w:close_win() end),
     -- buf("^D$",                      function (w) w:close_win() end),
 
+    -- CUSTOM
+    -- Download page.
+
+    buf("^D$",                      function (w, c) w:enter_cmd(":download " .. (w.view.uri or "")) end),
+
+
     -- Enter passthrough mode
     key({"Control"}, "z",           function (w) w:set_mode("passthrough") end),
 })

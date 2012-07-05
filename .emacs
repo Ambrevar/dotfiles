@@ -134,7 +134,15 @@
 ;; from being seen as a mail file.
 (setq auto-mode-alist
       (append
-       '(("[^\\.]mutt.*" . mail-mode)
+       '(("/tmp/mutt.*" . mail-mode)
+         )
+       auto-mode-alist)
+      )
+
+;; Arch Linux PKGBUILD
+(setq auto-mode-alist
+      (append
+       '(("PKGBUILD" . sh-mode)
          )
        auto-mode-alist)
       )

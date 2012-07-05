@@ -173,7 +173,6 @@ FILELIST=(${FILELIST[*]} ".config/lxterminal/lxterminal.conf")
 
 ## Mutt
 FILELIST=(${FILELIST[*]} ".muttrc")
-FILELIST=(${FILELIST[*]} ".ml.sh")
 for i in $(ls -ad --indicator-style=none .mutt.d/* | grep -vi 'cache')
 do
     FILELIST=(${FILELIST[*]} "$i")

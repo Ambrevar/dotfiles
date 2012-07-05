@@ -1,0 +1,6 @@
+#name : function
+# --
+${1:function} ()
+{
+    $0
+}
