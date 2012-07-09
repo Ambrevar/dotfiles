@@ -130,8 +130,6 @@
       )
 
 ;; Mutt support.
-;; We make sure the file name has not dot in front of mutt to prevent .muttrc
-;; from being seen as a mail file.
 (setq auto-mode-alist
       (append
        '(("/tmp/mutt.*" . mail-mode)

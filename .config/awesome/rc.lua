@@ -48,20 +48,11 @@ end
 
 
 --------------------------------------------------------------------------------
--- {{{ Variable definitions
---------------------------------------------------------------------------------
 -- Themes define colours, icons, and wallpapers
+--------------------------------------------------------------------------------
 -- beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 -- beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
 beautiful.init(awful.util.getdir("config") .. "/themes/custom/theme.lua")
-terminal = "lxterminal"
-termcmd = "lxterminal -e "
--- webbrowser = os.getenv("BROWSER") or "luakit"
-webbrowser = "luakit"
-mailclient = termcmd .. "mutt"
-pdfreader = "zathura"
--- editor = os.getenv("EDITOR") or "nano"
--- editor_cmd = termcmd .. editor
 
 --------------------------------------------------------------------------------
 -- Default modkey.
@@ -248,19 +239,10 @@ end
 -- }}}
 
 --------------------------------------------------------------------------------
-
--- {{{ Mouse bindings
-root.buttons(awful.util.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
-))
--- }}}
-
 -- CUSTOM
 --------------------------------------------------------------------------------
+
 -- Mouse control
---------------------------------------------------------------------------------
 -- set the desired pixel coordinates:
 local safeCoords = {x=0, y=0}
 -- Flag to tell Awesome whether to do this at startup.
@@ -282,70 +264,91 @@ if moveMouseOnStartup then
 end
 
 --------------------------------------------------------------------------------
+-- Key bindings
+-- Note that some laptop will not work when pressing Super+Fn.
+-- Therefore we only use Fn and Mod1+Fn.
+--------------------------------------------------------------------------------
+termcmd = "lxterminal -e "
 
--- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    -- Custom
-    -- awful.key({ modkey,           }, "l", function () awful.util.spawn("xscreensaver-command --lock") end),
-    awful.key({ modkey,           }, "l", function () awful.util.spawn("slock") end),
-    awful.key({ modkey,           }, "e", function () awful.util.spawn(termcmd .. "ranger") end),
+   -- Terminal
+    awful.key({ modkey,  }, "Return", function () awful.util.spawn("lxterminal") end),
+    awful.key({ }, "XF86Terminal",    function () awful.util.spawn("lxterminal") end),
+
+    -- Calc
+    awful.key({ modkey,  }, "c",     function () awful.util.spawn(termcmd .. "calc") end),
+    awful.key({ }, "XF86Calculator", function () awful.util.spawn(termcmd .. "calc") end),
+
+    -- File browser
+    awful.key({ modkey,  }, "e",     function () awful.util.spawn(termcmd .. "ranger") end),
+    awful.key({ }, "XF86Explorer",   function () awful.util.spawn(termcmd .. "ranger") end),
+    awful.key({ }, "XF86MyComputer", function () awful.util.spawn(termcmd .. "ranger") end),
+
+    -- Screen lock
+    awful.key({ modkey,  }, "l",      function () awful.util.spawn("slock") end),
+    awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn("slock") end),
+    awful.key({ }, "XF86Sleep",       function () awful.util.spawn("slock") end),
+    awful.key({ }, "XF86Standby",     function () awful.util.spawn("slock") end),
+
+    -- PDF Reader
+    awful.key({ modkey,  }, "p", function () awful.util.spawn("zathura") end),
+
+    -- Mail user agent
+    awful.key({ modkey,  }, "t", function () awful.util.spawn(termcmd .. "mutt") end),
+    awful.key({ }, "XF86Mail",   function () awful.util.spawn(termcmd .. "mutt") end),
+
+    -- Web browser
+    awful.key({ modkey, }, "w",       function () awful.util.spawn("luakit") end),
+    awful.key({         }, "XF86WWW", function () awful.util.spawn("luakit") end),
+
+    -- Music player
     awful.key({ modkey,           }, "a", function () awful.util.spawn(termcmd .. "cmus") end),
+    awful.key({ modkey, "Mod1"    }, "a", function () awful.util.spawn("cmus-remote -u") end),
+    awful.key({ modkey, "Shift"   }, "a", function () awful.util.spawn("cmus-remote -n") end),
+    awful.key({ modkey, "Control" }, "a", function () awful.util.spawn("cmus-remote -r") end),
 
+    awful.key({ }, "XF86AudioMedia", function () awful.util.spawn(termcmd .. "cmus") end),
+    awful.key({ }, "XF86AudioPlay",  function () awful.util.spawn("cmus-remote -u") end),
+    awful.key({ }, "XF86AudioNext",  function () awful.util.spawn("cmus-remote -n") end),
+    awful.key({ }, "XF86AudioPrev",  function () awful.util.spawn("cmus-remote -r") end),
 
--- Bind ''Meta4+Ctrl+m'' to move the mouse to the coordinates set above.
---   this is useful if you needed the mouse for something and now want it out of the way
+    -- Screenshot
+    awful.key({}, "Print", function () awful.util.spawn("scrot '%Y-%m-%d-%H%M%S_$wx$h.png' -e 'mkdir -p ~/temp && mv $f ~/temp/'") end),
+
+    -- Sound Volume
+    awful.key({ modkey,           }, "KP_Subtract",   function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
+    awful.key({ modkey,           }, "KP_Add",        function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
+    awful.key({ modkey,           }, "KP_Enter",      function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
+    awful.key({ modkey, "Mod1"    }, "KP_Subtract",   function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end),
+    awful.key({ modkey, "Mod1"    }, "KP_Add",        function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
+
+    awful.key({            }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
+    awful.key({            }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
+    awful.key({            }, "XF86AudioMute",        function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
+    awful.key({ "Mod1"     }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
+    awful.key({ "Mod1"     }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end),
+
+    -- Mouse control
+    -- Bind ''Meta4+Ctrl+m'' to move the mouse to the coordinates set above.
+    -- This is useful if you needed the mouse for something and now want it out of the way.
     awful.key({ modkey, "Control" }, "m", function() moveMouseAway(safeCoords.x, safeCoords.y) end),
     awful.key({ modkey, "Control" }, "h", function() moveMouse(-5, 0) end),
     awful.key({ modkey, "Control" }, "j", function() moveMouse(0, 5) end),
     awful.key({ modkey, "Control" }, "k", function() moveMouse(0, -5) end),
     awful.key({ modkey, "Control" }, "l", function() moveMouse(5, 0) end),
 
+    --------------------------------------------------------------------------------
+    -- Awesome specific
+    --------------------------------------------------------------------------------
 
-    awful.key({ modkey, "Mod1"    }, "a", function () awful.util.spawn("cmus-remote -u") end),
-    awful.key({ modkey, "Shift"   }, "a", function () awful.util.spawn("cmus-remote -n") end),
-    awful.key({ modkey, "Control" }, "a", function () awful.util.spawn("cmus-remote -r") end),
+    -- Standard program
+    awful.key({ modkey, "Control" }, "r", awesome.restart),
+    awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
-    awful.key({}, "Print", function () awful.util.spawn("scrot '%Y-%m-%d-%H%M%S_$wx$h.png' -e 'mkdir -p ~/shots && mv $f ~/temp/'") end),
-
-    awful.key({ modkey,           }, "w", function () awful.util.spawn(webbrowser) end),
-    awful.key({ modkey,           }, "t", function () awful.util.spawn(mailclient) end),
-    awful.key({ modkey,           }, "p", function () awful.util.spawn(pdfreader) end),
-
-    -- Sound Volume
-    -- Note that some laptop will not work when pressing Super+Fn.
-    -- Therefore we only use Fn and Mod1+Fn.
-    awful.key({ modkey,           }, "KP_Subtract", function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
-    awful.key({ modkey,           }, "KP_Add", function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
-    awful.key({ modkey,           }, "KP_Enter", function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
-
-    awful.key({            }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
-    awful.key({            }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
-    awful.key({            }, "XF86AudioMute", function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
-
-    awful.key({ modkey, "Mod1"    }, "KP_Subtract", function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end),
-    awful.key({ modkey, "Mod1"    }, "KP_Add", function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
-
-    awful.key({ "Mod1"    }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
-    awful.key({ "Mod1"    }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end),
-
-
-    -- Misc
-
+    -- Tags
     awful.key({ modkey,           }, "Prior",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Next",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
-
-    awful.key({ modkey,           }, "Right",
-        function ()
-            awful.client.focus.byidx( 1)
-            if client.focus then client.focus:raise() end
-        end),
-    awful.key({ modkey,           }, "Left",
-        function ()
-            awful.client.focus.byidx(-1)
-            if client.focus then client.focus:raise() end
-        end),
-
 
     -- Layout manipulation
     awful.key({ modkey, "Mod1"   }, "Right", function () awful.client.swap.byidx(  1)    end),
@@ -361,15 +364,19 @@ globalkeys = awful.util.table.join(
             end
         end),
 
-
-
-    -- Standard program
-    awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
-    awful.key({ modkey, "Control" }, "r", awesome.restart),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit),
+    awful.key({ modkey,           }, "Right",
+        function ()
+            awful.client.focus.byidx( 1)
+            if client.focus then client.focus:raise() end
+        end),
+    awful.key({ modkey,           }, "Left",
+        function ()
+            awful.client.focus.byidx(-1)
+            if client.focus then client.focus:raise() end
+        end),
 
     awful.key({ modkey,"Shift"     }, "Right",     function () awful.tag.incmwfact( 0.05)    end),
-    awful.key({ modkey,"Shift"     }, "Left",     function () awful.tag.incmwfact(-0.05)    end),
+    awful.key({ modkey,"Shift"     }, "Left",      function () awful.tag.incmwfact(-0.05)    end),
     -- awful.key({ modkey, "Shift"   }, "Right",     function () awful.tag.incnmaster( 1)      end),
     -- awful.key({ modkey, "Shift"   }, "Left",     function () awful.tag.incnmaster(-1)      end),
     -- awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
@@ -381,8 +388,9 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
     -- Prompt
-    awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
+    awful.key({ modkey }, "r", function () mypromptbox[mouse.screen]:run() end),
 
+    -- Lua code
     awful.key({ modkey }, "x",
               function ()
                   awful.prompt.run({ prompt = "Run Lua code: " },
@@ -392,6 +400,7 @@ globalkeys = awful.util.table.join(
               end)
 )
 
+-- Client keys
 clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
@@ -400,12 +409,14 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
-    awful.key({ modkey,           }, "n",
-        function (c)
-            -- The client currently has the input focus, so it cannot be
-            -- minimized, since minimized clients can't have the focus.
-            c.minimized = true
-        end),
+
+    -- awful.key({ modkey,           }, "n",
+    --     function (c)
+    --         -- The client currently has the input focus, so it cannot be
+    --         -- minimized, since minimized clients can't have the focus.
+    --         c.minimized = true
+    --     end),
+
     awful.key({ modkey,           }, "m",
         function (c)
             c.maximized_horizontal = not c.maximized_horizontal

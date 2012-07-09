@@ -63,6 +63,7 @@ djvulibre
 dnssec-anchors
 docbook-xml
 docbook-xsl
+dosfstools
 dri2proto
 e2fsprogs
 eject
@@ -168,6 +169,7 @@ intel-dri
 iproute2
 iptables
 iputils
+irssi
 isl
 ispell
 jack
@@ -348,8 +350,9 @@ mozilla-common
 mpfr
 mpg123
 mplayer2
-msmtp-mta
+msmtp
 mtdev
+mtools
 musicbrainz
 mutt
 nano
@@ -470,6 +473,7 @@ unrar
 unzip
 usbutils
 util-linux
+v4l-utils
 valgrind
 vi
 vicious
@@ -481,9 +485,11 @@ vte
 vte-common
 w3m
 waf
+weechat
 wget
 which
 wildmidi
+wipe
 wireless_tools
 wireshark-cli
 wireshark-gtk
@@ -502,7 +508,7 @@ xextproto
 xf86dgaproto
 xf86-input-evdev
 xf86-input-synaptics
-xf86-video-intel
+xf86-video-intel-uxa
 xf86-video-vesa
 xf86vidmodeproto
 xfsprogs
@@ -527,6 +533,7 @@ xorg-xev
 xorg-xinit
 xorg-xkbcomp
 xorg-xmessage
+xorg-xprop
 xorg-xrandr
 xorg-xrdb
 xorg-xset

@@ -45,7 +45,6 @@ Final word: do not forget to read the manpages!
 
 ################################################################################
 
-
 Awesome
 *******
 Extra deps: Vicious
@@ -67,6 +66,9 @@ Functional Adblock script. Script+Plugins toggle.
 
 Mutt
 ****
+Compile options: IMAP and SMTP support.
+Extra deps: urlview, w3m, sxiv, fortune.
+
 This one is not easy to get into it. I managed to get multiple accounts with
 pgp-encrypted passwords working, which means there is no plain password stored
 on the disk. As a result, I just get prompted for a main password on Mutt
@@ -78,7 +80,7 @@ I'm using embedded imap and smtp services -- you must provide the required
 compilation options.
 
 Some customization: custom index view, good Emacs integration -- see .emacs --,
-custom theme.
+custom theme, various tweaks.
 
 Ranger
 ******
@@ -112,3 +114,73 @@ WMFS
 ****
 The last time I used WMFS, the development was in a transition from version 1.x
 to 2.x. So beware!, configuration files might be quite broken.
+
+################################################################################
+Other apps:
+***********
+
+antiword
+atool
+bashmount
+calc
+cmus
+cppcheck
+doxygen
+dropbox
+feh
+fortune
+gcolor2
+gdb
+gimp
+gnumeric
+gnuplot
+handbrake
+hdparm
+highlight
+htop
+inkscape
+irssi
+lrzip
+lxterminal
+mediainfo
+mencoder
+mkvtoolnix
+movgrav
+mplayer2
+nasm
+ncdu
+nmap
+numlockx
+okular
+openshot
+openssh
+p7zip
+pari
+pidgin
+pwgen
+pwsafe
+ranger
+rtorrent
+rxvt-unicode
+scrot
+sdparm
+slock
+splint
+strace
+submarine
+sudo
+sxiv
+task
+tcpdump
+texlive
+trash-cli
+tree
+valgrind
+vlock
+w3m
+weechat
+wipe
+wv
+xsel
+yasm
+zathura

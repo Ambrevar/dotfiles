@@ -1,49 +1,27 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Shell Config -- Main
-## Date 2011-11-19
+## Date 2012-07-09
 ################################################################################
 
+## Mask
+## Result for 027 is: rwxr-x---
+umask 027
 
-##==============================================================================
-## Pager
-##==============================================================================
+## Path
+export PATH=.:$PATH
+
+## Terminal
+# export TERM=xterm-256color
+
 ## Make 'less' more friendly for non-text input files, see lesspipe(1).
 [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
 
 ## Choose pager.
 export MANPAGER="less -s"
 
-##==============================================================================
 ## Time display (with ls command for example)
-##==============================================================================
 export TIME_STYLE=+"| %d/%m/%Y  %H:%M | "
-
-##==============================================================================
-## Title
-##==============================================================================
-## If this is an xterm set the title to user@host:dir
-
-#case "$TERM" in
-#xterm*|rxvt*)
-#    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD/$HOME/~}\007"'
-#    ;;
-#*)
-#    ;;
-#esac
-
-##==============================================================================
-## File access rights
-##==============================================================================
-## Result for 027 is: rwxr-x---
-umask 027
-
-##==============================================================================
-## Variables
-##==============================================================================
-
-## Path
-export PATH=.:$PATH
 
 ## System locale
 # export LC_MESSAGES=fr_FR.utf8
@@ -60,9 +38,15 @@ fi
 export EDITOR
 
 ## Internet Browser
-[ -e "/usr/bin/firefox" ] && export BROWSER="firefox"
+# [ -e "/usr/bin/firefox" ] && export BROWSER="firefox"
 [ -e "/usr/bin/luakit" ] && export BROWSER="luakit"
 
-## Android SDK
-[ -e "/opt/android-sdk" ] && export ANDROID_HOME=/opt/android-sdk/
-
+## Title
+## If this is an xterm set the title to user@host:dir
+#case "$TERM" in
+#xterm*|rxvt*)
+#    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD/$HOME/~}\007"'
+#    ;;
+#*)
+#    ;;
+#esac
