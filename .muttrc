@@ -59,7 +59,9 @@ set my_ac_work=work
 set my_ac_university=university
 
 ## Login
-source "~/.mutt/credentials"
+## Store password as follows:
+## set my_pw_account = foo
+source "gpg2 -dq ~/.mutt-pwds.gpg |"
 
 ## Accounts list
 folder-hook '$my_ac_personal' 'source ~/.mutt/$my_ac_personal'

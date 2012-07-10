@@ -62,7 +62,7 @@ Not much personal work, mostly use of plugins. Still very powerful.
 Luakit
 ******
 Some custom bindings, download location, search engines, etc.
-Functional Adblock script. Script+Plugins toggle.
+Functional Adblock script. Script+Plugin toggle.
 
 Mutt
 ****
@@ -108,7 +108,7 @@ name.
 
 Vim
 ***
-I've only been a casual Vim user, so do not expect to much from it.
+I've only been a casual Vim user, so do not expect too much from it.
 
 WMFS
 ****
@@ -151,6 +151,7 @@ nasm
 ncdu
 nmap
 numlockx
+octave
 okular
 openshot
 openssh

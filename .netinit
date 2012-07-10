@@ -20,7 +20,6 @@ pkill wpa_supplicant
 ## In case network inteface is not up.
 ip link set ${NET_INTERFACE} up
 
-
 ## Connection.
 if [ $# -eq 0 ]; then
     # Associate if needed.
@@ -37,3 +36,8 @@ if [ $# -eq 0 ]; then
 	## Get IP.
     dhcpcd $NET_INTERFACE
 fi
+
+if [ "$1" == "ucd" ]; then
+    iwconfig ${NET_INTERFACE} essid "WaveLAN Network"
+fi
+
