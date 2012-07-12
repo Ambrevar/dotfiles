@@ -32,12 +32,12 @@ if [ $# -eq 0 ]; then
     while [ "$(iwconfig ${NET_INTERFACE} | grep 'off/any')" != "" ] && [ $i -lt $TIMEOUT_LIMIT ] ; do
         i=$(($i+1))
     done
-
-	## Get IP.
-    dhcpcd $NET_INTERFACE
 fi
 
 if [ "$1" == "ucd" ]; then
     iwconfig ${NET_INTERFACE} essid "WaveLAN Network"
 fi
+
+## Get IP.
+dhcpcd ${NET_INTERFACE}
 

@@ -31,6 +31,8 @@ ca-certificates
 cairo
 cairomm
 calc
+catdvi
+ccrypt
 cdparanoia
 cloog
 cmus
@@ -78,6 +80,7 @@ faac
 faad2
 fakeroot
 farstream
+fbv
 feh
 ffmpeg
 fftw
@@ -166,6 +169,7 @@ initscripts
 inkscape
 inputproto
 intel-dri
+intltool
 iproute2
 iptables
 iputils
@@ -390,6 +394,7 @@ pcre
 perl
 perl-error
 perl-locale-gettext
+perl-xml-parser
 pidgin
 pinentry
 pixman
@@ -431,7 +436,6 @@ rsync
 rtmpdump
 rtorrent
 run-parts
-rxvt-unicode
 schroedinger
 scrnsaverproto
 scrot
@@ -458,6 +462,7 @@ t1lib
 tar
 task
 tcpdump
+texi2html
 texinfo
 texlive-bin
 texlive-core

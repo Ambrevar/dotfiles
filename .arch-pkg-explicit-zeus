@@ -19,6 +19,8 @@ bustle
 bzip2
 bzr
 calc
+catdvi
+ccrypt
 cmus
 consolekit
 coreutils
@@ -38,9 +40,11 @@ dropbox
 dropbox-cli
 e2fsprogs
 emacs-lua-mode
+emacs-mediawiki-bzr
 emacs-nox
 emacs-yasnippet
 fakeroot
+fbv
 feh
 file
 filesystem
@@ -132,7 +136,7 @@ python2-udiskie
 ranger
 reiserfsprogs
 rtorrent
-rxvt-unicode
+rxvt-unicode-patched
 scrot
 sdparm
 sed
@@ -148,6 +152,7 @@ sysvinit
 tar
 task
 tcpdump
+texi2html
 texinfo
 texlive-genericextra
 texlive-latexextra

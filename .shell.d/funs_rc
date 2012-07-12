@@ -187,6 +187,29 @@ blind-append()
 }
 
 
+## Term properties
+termcolors(){
+    x=$(tput op)
+    y=$(printf %76s)
+    for i in {0..256}; do
+        o=00$i
+        echo -e "${o:${#o}-3:3} $(tput setaf $i;tput setab $i)${y// /=}$x"
+    done
+}
+
+termprop()
+{
+    infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'| column -c80
+}
+
+termsupport()
+{
+    for T in `find "/usr/share/terminfo" -type f -printf '%f\n'`;do
+        echo "$T `tput -T $T colors`"
+    done | sort -nk2
+}
+
+
 ## Start X and lock current terminal (press ENTER when back in terminal to prompt for password)
 if [ -e "/usr/bin/vlock" ]; then
     sx(){

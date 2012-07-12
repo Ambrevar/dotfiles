@@ -3,11 +3,13 @@ bashmount
 bustle
 dropbox
 dropbox-cli
+emacs-mediawiki-bzr
 emacs-yasnippet
 gsharkdown
 movgrab
 package-query
 pacman-color
+rxvt-unicode-patched
 trash-cli
 urlview
 yaourt

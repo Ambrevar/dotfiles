@@ -90,7 +90,10 @@
  ;; If there is more than one, they won't work right.
  '(lazy-highlight ((t (:background "blue"))))
  '(link ((t (:foreground "cyan" :underline t))))
- '(minibuffer-prompt ((t (:foreground "cyan")))))
+ '(minibuffer-prompt ((t (:foreground "cyan"))))
+ '(shadow ((t (:foreground "green")))))
+
+(set-face-foreground 'font-lock-comment-face "Red" ) 
 
 ;;==============================================================================
 ;; Completion
@@ -454,7 +457,15 @@
 ;;==============================================================================
 ;; MediaWiki
 ;;==============================================================================
+(require 'mediawiki)
+(custom-set-variables
+ '(mediawiki-site-alist
+   ( quote 
+     (
+      ("Wikipedia" "http://en.wikipedia.org/w/" "Ambrevar" "" "Main Page")
+      ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX")
+      ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt")
+      ))))
 
-;; (setq mediawiki-site-alist
-;;       (append '("ArchWiki" "https://wiki.archlinux.org/" "username" "password" "Main Page")
-;;               mediawiki-site-alist))
+;;==============================================================================
+;;==============================================================================

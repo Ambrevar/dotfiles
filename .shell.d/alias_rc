@@ -51,9 +51,6 @@ if [ -e "/usr/bin/emacs" ]; then
    alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; /usr/bin/emacs --daemon"
 fi
 
-## Check colors supported by the current terminal.
-alias printcolors='(x=`tput op` y=`printf %76s`;for i in {0..256};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done)'
-
 # List desktop applications
 alias applist='grep -r "^Name=" /usr/share/applications/* | cut -d'=' -f2| sort'
 
@@ -146,10 +143,11 @@ if [ "$PACMAN_FRONTEND" = "pacman-color" ]; then
     alias pr='sudo pacman-color -Rs'
     alias pss='pacman-color -Ss'
     alias pu='sudo pacman-color -Syu'
+    alias pql='pacman -Ql'
 
 ## Change 'name' and 'size' variables according your locale.
     # alias pql='pacman-color -Qi | awk '"'"'/^Nom/ {pkg=$3} /Taille/ {print $4$5,pkg}'"'"' | sort -n'
-    alias pql='pacman-color -Qi | awk '"'"'/^Name/ {pkg=$3} /Size/ {print $4$5,pkg}'"'"' | sort -n'
+    alias pacman-list='pacman-color -Qi | awk '"'"'/^Name/ {pkg=$3} /Size/ {print $4$5,pkg}'"'"' | sort -n'
 fi
 
 ##==============================================================================

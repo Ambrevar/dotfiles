@@ -1,88 +1,131 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! Xresources
-!! 2011-10-25
+!! 2012-07-12
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-! vim:nu:ai:si:et:ts=4:sw=4:ft=xdefaults:
+!! TODO: what is charclass ?
+!! TODO: prevent URxvt from intercepting ALT+Arrows and PageUp/Down.
 
-! Commands : xfontsel
-! Colors : LightYellow Black
+!! Xft options
+! Xft.hinting: true 
+! Xft.hintstyle: hintfull 
+! Xft.antialias: rgba 
+! Xft.rgba: rgb
 
-!xterm*background: black
-!xterm*faceName:terminus
-!xterm*faceSize:8
-!xterm*font:-*-terminus-medium-r-normal-*-14-*-*-*-*-*-*-*
+!!------------------------------------------------------------------------------
+!!URxvt
+!!------------------------------------------------------------------------------
 
-! -------------------------------------------------
-! terminal colors
-! -------------------------------------------------
+URxvt*saveLines: 1000
+URxvt*scrollBar: false
 
-!tangoesque scheme
+!! URL Support
+URxvt.perl-ext-common  : default,matcher
+URxvt.matcher.button   : 1
+URxvt.keysym.C-Delete  : perl:matcher:last
+URxvt.keysym.M-Delete  : perl:matcher:list
+URxvt.urlLauncher      : luakit
+URxvt.underlineURLs    : true
+
+!! Font
+! URxvt*letterSpace: -1
+
+URxvt*font       : xft:Monospace:pixelsize=14
+URxvt*boldFont   : xft:Monospace:bold:pixelsize=14
+! URxvt.font     : xft:Bitstream Vera Sans Mono:pixelsize=14
+! URxvt.font     : -misc-fixed-medium-r-normal--15-140-75-75-c-90-iso8859-1
+! URxvt.font     : -*-dina-medium-r-*-*-16-*-*-*-*-*-*-*
+! URxvt.font     : xft:DejaVu Sans Mono:pixelsize=12
+! URxvt.font     : xft:Monospace 10:pixelsize=12
+! URxvt.font     : xft:Monospace:pixelsize=12
+! URxvt.font     : xft:monaco:size=10
+! URxvt*boldFont : xft:Monospace Bold:pixelsize=12
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! Styles
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!! Colors list
+!! color0  = black 	
+!! color1  = red 	        
+!! color2  = green 	
+!! color3  = yellow 	
+!! color4  = blue 	        
+!! color5  = magenta 	
+!! color6  = cyan 	        
+!! color7  = white 	
+!! color8  = bright black 	
+!! color9  = bright red 	
+!! color10 = bright green 	
+!! color11 = bright yellow 
+!! color12 = bright blue 	
+!! color13 = bright magenta
+!! color14 = bright cyan 	
+!! color15 = bright white 	
+
+!! Gnome style
+URxvt*background: black
+URxvt*foreground: #CCCCCC
+URxvt.color0  : #000000
+URxvt.color1  : #AA0000
+URxvt.color2  : #00AA00
+URxvt.color3  : #AA5500
+URxvt.color4  : #0000AA
+URxvt.color5  : #AA00AA
+URxvt.color6  : #00AAAA
+URxvt.color7  : #AAAAAA
+URxvt.color8  : #555555
+URxvt.color9  : #FF5555
+URxvt.color10 : #55FF55
+URxvt.color11 : #FFFF55
+URxvt.color12 : #5555FF
+URxvt.color13 : #FF55FF
+URxvt.color14 : #55FFFF
+URxvt.color15 : #FFFFFF
+
+!! Dark style
+! urxvt.color0: rgb:00/00/00
+! urxvt.color1: rgb:9e/18/28
+! urxvt.color2: rgb:5c/b2/47
+! urxvt.color3: rgb:96/8a/38
+! urxvt.color4: rgb:41/61/a0
+! urxvt.color5: rgb:9b/76/8e
+! urxvt.color6: rgb:41/91/89
+! urxvt.color7: rgb:de/de/de
+! urxvt.color8: rgb:66/66/66
+! urxvt.color9: rgb:cf/61/71
+! urxvt.color10: rgb:c5/f7/79
+! urxvt.color11: rgb:ff/f7/96
+! urxvt.color12: rgb:41/86/be
+! urxvt.color13: rgb:cf/9e/be
+! urxvt.color14: rgb:71/be/be
+! urxvt.color15: rgb:dd/dd/dd
+
+!! Tangoesque style
 !*background: #111111
 !*background: #000000
-! *foreground: #babdb6
-!Black (not tango) + DarkGrey
+!*foreground: #babdb6
+!! Black (not tango) + DarkGrey
 ! *color0:  #000000
 ! *color8:  #555753
-! DarkRed + Red
+!! DarkRed + Red
 ! *color1:  #ff6565
 ! *color9:  #ff8d8d
-! DarkGreen + Green
+!! DarkGreen + Green
 ! *color2:  #93d44f
 ! *color10: #c8e7a8
-! DarkYellow + Yellow
+!! DarkYellow + Yellow
 ! *color3:  #eab93d
 ! *color11: #ffc123
-! DarkBlue + Blue
+!! DarkBlue + Blue
 ! *color4:  #204a87
 ! *color12: #3465a4
-! DarkMangenta + Mangenta
+!! DarkMangenta + Mangenta
 ! *color5:  #ce5c00
 ! *color13: #f57900
-!DarkCyan + Cyan (both not tango)
+!! DarkCyan + Cyan (both not tango)
 ! *color6:  #89b6e2
 ! *color14: #46a4ff
-! LightGrey + White
+!! LightGrey + White
 ! *color7:  #cccccc
 ! *color15: #ffffff
-! 
-!=================
-! Urxvt
-!=================
-
-urxvt*background: black
-urxvt*foreground: white
-urxvt*saveLines: 10000
-URxvt.font: xft:DejaVu Sans Mono:pixelsize=12
-! URxvt.font: -*-dina-medium-r-*-*-16-*-*-*-*-*-*-*
-! URxvt.font: xft:monaco:size=10
-urxvt*scrollBar:false
-
-URxvt.perl-ext:      default,url-select,tabbed
-! URxvt.perl-ext-common:      
-URxvt.keysym.M-u:    perl:url-select:select_next
-URxvt.urlLauncher:   luakit
-URxvt.underlineURLs: true
-
-! urxvt*font: -*-fixed-medium-r-*-*-18-*-*-*-*-*-iso8859-*
-! urxvt*charClass: 33:48,35:48,37-38:48,43-47:48,58:48,61:48,63-64:48,95:48,126:48
-! urxvt.perl-ext-common: default,tabbed
-! urxvt.tabbed.tabbar-fg: 2
-! urxvt.tabbed.tabbar-bg: 0
-
-! urxvt.tabbed.tab-bg: 0
-! urxvt.tabbed.tab-fg: 3
-
-
-!=================
-! Xterm
-!=================
-
-!xterm*background: black
-!xterm*saveLines: 10000
-!xterm*foreground: white
-!xterm*font: -*-fixed-medium-r-*-*-18-*-*-*-*-*-iso8859-*
-!xterm*charClass: 33:48,35:48,37-38:48,43-47:48,58:48,61:48,63-64:48,95:48,126:48
-! xterm*scrollBar:true
-! xterm*Scrollbar.backgroundPixmap: gradient:horizontal?dimension=14&start=darkgreen&end=pink
-! xterm*Scrollbar.foregroungPixmap: black

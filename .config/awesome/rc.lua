@@ -268,12 +268,13 @@ end
 -- Note that some laptop will not work when pressing Super+Fn.
 -- Therefore we only use Fn and Mod1+Fn.
 --------------------------------------------------------------------------------
-termcmd = "lxterminal -e "
+-- termcmd = "lxterminal -e "
+termcmd = "urxvt -e "
 
 globalkeys = awful.util.table.join(
    -- Terminal
-    awful.key({ modkey,  }, "Return", function () awful.util.spawn("lxterminal") end),
-    awful.key({ }, "XF86Terminal",    function () awful.util.spawn("lxterminal") end),
+    awful.key({ modkey,  }, "Return", function () awful.util.spawn("urxvt") end),
+    awful.key({ }, "XF86Terminal",    function () awful.util.spawn("urxvt") end),
 
     -- Calc
     awful.key({ modkey,  }, "c",     function () awful.util.spawn(termcmd .. "calc") end),
@@ -285,7 +286,7 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86MyComputer", function () awful.util.spawn(termcmd .. "ranger") end),
 
     -- Screen lock
-    awful.key({ modkey,  }, "l",      function () awful.util.spawn("slock") end),
+    awful.key({ modkey,  }, "s",      function () awful.util.spawn("slock") end),
     awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn("slock") end),
     awful.key({ }, "XF86Sleep",       function () awful.util.spawn("slock") end),
     awful.key({ }, "XF86Standby",     function () awful.util.spawn("slock") end),
@@ -294,7 +295,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,  }, "p", function () awful.util.spawn("zathura") end),
 
     -- Mail user agent
-    awful.key({ modkey,  }, "t", function () awful.util.spawn(termcmd .. "mutt") end),
+    awful.key({ modkey,  }, "m", function () awful.util.spawn(termcmd .. "mutt") end),
     awful.key({ }, "XF86Mail",   function () awful.util.spawn(termcmd .. "mutt") end),
 
     -- Web browser
@@ -313,29 +314,33 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86AudioPrev",  function () awful.util.spawn("cmus-remote -r") end),
 
     -- Screenshot
-    awful.key({}, "Print", function () awful.util.spawn("scrot '%Y-%m-%d-%H%M%S_$wx$h.png' -e 'mkdir -p ~/temp && mv $f ~/temp/'") end),
+    awful.key({}, "Print", function () awful.util.spawn("scrot 'screen-%Y-%m-%d-%H%M%S.png' -e 'mkdir -p ~/temp && mv $f ~/temp/'") end),
 
     -- Sound Volume
-    awful.key({ modkey,           }, "KP_Subtract",   function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
-    awful.key({ modkey,           }, "KP_Add",        function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
-    awful.key({ modkey,           }, "KP_Enter",      function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
-    awful.key({ modkey, "Mod1"    }, "KP_Subtract",   function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end),
-    awful.key({ modkey, "Mod1"    }, "KP_Add",        function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
+    awful.key({ modkey,        }, "KP_Subtract",   function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
+    awful.key({ modkey,        }, "KP_Add",        function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
+    awful.key({ modkey,        }, "KP_Enter",      function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
+    awful.key({ modkey, "Mod1" }, "KP_Subtract",   function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end),
+    awful.key({ modkey, "Mod1" }, "KP_Add",        function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
 
-    awful.key({            }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
-    awful.key({            }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
-    awful.key({            }, "XF86AudioMute",        function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
-    awful.key({ "Mod1"     }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
-    awful.key({ "Mod1"     }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end),
+    awful.key({        }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
+    awful.key({        }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
+    awful.key({        }, "XF86AudioMute",        function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
+    awful.key({ "Mod1" }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
+    awful.key({ "Mod1" }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end),
+
+    -- Touchpad
+    awful.key({ }, "XF86TouchpadToggle", function () awful.util.spawn("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
+    -- awful.key({ }, "XF86Tool",           function () awful.util.spawn("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
 
     -- Mouse control
     -- Bind ''Meta4+Ctrl+m'' to move the mouse to the coordinates set above.
     -- This is useful if you needed the mouse for something and now want it out of the way.
     awful.key({ modkey, "Control" }, "m", function() moveMouseAway(safeCoords.x, safeCoords.y) end),
-    awful.key({ modkey, "Control" }, "h", function() moveMouse(-5, 0) end),
-    awful.key({ modkey, "Control" }, "j", function() moveMouse(0, 5) end),
-    awful.key({ modkey, "Control" }, "k", function() moveMouse(0, -5) end),
-    awful.key({ modkey, "Control" }, "l", function() moveMouse(5, 0) end),
+    -- awful.key({ modkey, "Control" }, "h", function() moveMouse(-5, 0) end),
+    -- awful.key({ modkey, "Control" }, "j", function() moveMouse(0, 5) end),
+    -- awful.key({ modkey, "Control" }, "k", function() moveMouse(0, -5) end),
+    -- awful.key({ modkey, "Control" }, "l", function() moveMouse(5, 0) end),
 
     --------------------------------------------------------------------------------
     -- Awesome specific
@@ -346,46 +351,56 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
     -- Tags
-    awful.key({ modkey,           }, "Prior",   awful.tag.viewprev       ),
-    awful.key({ modkey,           }, "Next",  awful.tag.viewnext       ),
-    awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
+    awful.key({ modkey }, "Prior",  awful.tag.viewprev       ),
+    awful.key({ modkey }, "Next",   awful.tag.viewnext       ),
+    awful.key({ modkey }, "Escape", awful.tag.history.restore),
 
-    -- Layout manipulation
-    awful.key({ modkey, "Mod1"   }, "Right", function () awful.client.swap.byidx(  1)    end),
-    awful.key({ modkey, "Mod1"   }, "Left", function () awful.client.swap.byidx( -1)    end),
-    -- awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
-    -- awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
-    awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
-    awful.key({ modkey,           }, "Tab",
-        function ()
-            awful.client.focus.history.previous()
-            if client.focus then
-                client.focus:raise()
-            end
-        end),
+    -- Layout select and switch
+    awful.key({ modkey }, "Up", function () awful.client.swap.byidx(  1)    end),
+    awful.key({ modkey }, "Down", function () awful.client.swap.byidx( -1)    end),
+    -- awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
+    awful.key({ modkey }, "Tab",
+              function ()
+                 awful.client.focus.history.previous()
+                 if client.focus then
+                    client.focus:raise()
+                 end
+              end),
 
-    awful.key({ modkey,           }, "Right",
+    awful.key({ modkey }, "Right",
         function ()
             awful.client.focus.byidx( 1)
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ modkey,           }, "Left",
+    awful.key({ modkey }, "Left",
         function ()
             awful.client.focus.byidx(-1)
             if client.focus then client.focus:raise() end
         end),
 
-    awful.key({ modkey,"Shift"     }, "Right",     function () awful.tag.incmwfact( 0.05)    end),
-    awful.key({ modkey,"Shift"     }, "Left",      function () awful.tag.incmwfact(-0.05)    end),
-    -- awful.key({ modkey, "Shift"   }, "Right",     function () awful.tag.incnmaster( 1)      end),
-    -- awful.key({ modkey, "Shift"   }, "Left",     function () awful.tag.incnmaster(-1)      end),
-    -- awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
-    -- awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
+    -- Layout resize
+    awful.key({ modkey, "Mod1" }, "Up",    function () awful.tag.incmwfact( 0.05)   end),
+    awful.key({ modkey, "Mod1" }, "Down",  function () awful.tag.incmwfact(-0.05)   end),
+    awful.key({ modkey, "Mod1" }, "Left",  function () awful.client.incwfact(-0.05) end),
+    awful.key({ modkey, "Mod1" }, "Right", function () awful.client.incwfact( 0.05) end),
+
+    -- Floating clients move and resize
+    awful.key({ modkey , "Mod1"}, "j", function () awful.client.moveresize( 20,  20, -40, -40) end),
+    awful.key({ modkey , "Mod1"}, "k", function () awful.client.moveresize(-20, -20,  40,  40) end),
+    awful.key({ modkey }, "j",         function () awful.client.moveresize(  0,  20,   0,   0) end),
+    awful.key({ modkey }, "k",         function () awful.client.moveresize(  0, -20,   0,   0) end),
+    awful.key({ modkey }, "h",         function () awful.client.moveresize(-20,   0,   0,   0) end),
+    awful.key({ modkey }, "l",         function () awful.client.moveresize( 20,   0,   0,   0) end),
+
+    -- Layout organization
+    awful.key({ modkey, "Control" }, "Up", function () awful.tag.incnmaster( 1) end),
+    awful.key({ modkey, "Control" }, "Down",  function () awful.tag.incnmaster(-1) end),
+    awful.key({ modkey, "Control" }, "Left",    function () awful.tag.incncol( 1)    end),
+    awful.key({ modkey, "Control" }, "Right",  function () awful.tag.incncol(-1)    end),
 
     awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
-    awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
     -- Prompt
     awful.key({ modkey }, "r", function () mypromptbox[mouse.screen]:run() end),
@@ -416,8 +431,9 @@ clientkeys = awful.util.table.join(
     --         -- minimized, since minimized clients can't have the focus.
     --         c.minimized = true
     --     end),
+    -- awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
-    awful.key({ modkey,           }, "m",
+    awful.key({ modkey, "Shift" }, "m",
         function (c)
             c.maximized_horizontal = not c.maximized_horizontal
             c.maximized_vertical   = not c.maximized_vertical
@@ -482,24 +498,32 @@ awful.rules.rules = {
                      focus = true,
                      keys = clientkeys,
                      buttons = clientbuttons } },
+
     { rule = { class = "MPlayer" },
       properties = { floating = true } },
+    { rule = { class = "mplayer2" },
+      properties = { floating = true } },
+
     { rule = { class = "pinentry" },
       properties = { floating = true } },
+
     { rule = { class = "Gimp" },
       properties = { floating = true } },
-    { rule = { class = "Thunderbird" },
-      properties = { tag = tags[1][7] } },
 
+    -- Flash workaround. Does not work?
     { rule = { instance = "plugin-container" },
       properties = { floating = true } },
 
     { rule = { instance = "exe" },
       properties = { floating = true } },
 
-    -- TODO: does not work.
+    -- TODO: Only works for terminal with WM_COMMAND property?
+    -- Does not work with LXTerminal.
     { rule = { name = "cmus"},
       properties = { tag = tags[1][6] } },
+    { rule = { name = "mutt"},
+      properties = { tag = tags[1][7] } },
+
 }
 -- }}}
 

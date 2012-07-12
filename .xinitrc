@@ -5,7 +5,7 @@
 ################################################################################
 
 ## Config (for rxvt)
-[ -f "~/.Xresources" ] && xrdb -merge "~/.Xresources"
+[ -f "${HOME}/.Xresources" ] && xrdb -merge "${HOME}/.Xresources"
 
 ## Useful tools
 [ "$(which numlockx)" != "" ] && numlockx on
