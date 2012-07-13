@@ -219,12 +219,12 @@
   (interactive)
   (select-window (previous-window)))
 
-(global-set-key (kbd "M-<next>") 'select-next-window)
-(global-set-key (kbd "M-<prior>")  'select-previous-window)
-;; (global-set-key (kbd "M-<up>") 'select-next-window)
-;; (global-set-key (kbd "M-<down>") 'select-previous-window)
-(global-set-key (kbd "M-<left>") 'previous-buffer)
-(global-set-key (kbd "M-<right>") 'next-buffer)
+(global-set-key (kbd "C-<next>") 'select-next-window)
+(global-set-key (kbd "C-<prior>")  'select-previous-window)
+;; (global-set-key (kbd "M-<up>") 'previous-buffer)
+;; (global-set-key (kbd "M-<down>") 'next-buffer)
+;; (global-set-key [?\e <left>] 'previous-buffer)
+;; (global-set-key (kbd "C-M-<right>") 'next-buffer)
 
 
 ;;==============================================================================

@@ -38,6 +38,7 @@ diffutils
 dosfstools
 dropbox
 dropbox-cli
+dtach
 e2fsprogs
 emacs-lua-mode
 emacs-mediawiki-bzr
@@ -162,6 +163,8 @@ tree
 unrar
 unzip
 urlview
+urxvt-clipboard
+urxvt-keyboard-select
 usbutils
 util-linux
 valgrind

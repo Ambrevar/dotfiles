@@ -12,4 +12,6 @@ pacman-color
 rxvt-unicode-patched
 trash-cli
 urlview
+urxvt-clipboard
+urxvt-keyboard-select
 yaourt

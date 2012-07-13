@@ -42,7 +42,7 @@ alias lx='ls -lXh --group-directories-first' # sort by extension
 
 # Misc
 alias cp="cp -i" # confirm before overwriting something
-alias xmx='xrdb -merge ~/.Xresources'
+alias xlx='xrdb -load ~/.Xresources'
 alias grep='grep --color=auto'
  
 ## Emacs

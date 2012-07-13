@@ -35,16 +35,15 @@
 if isShell "zsh"; then
     bindkey -e # Emacs bindings
 
-
-## Set '/' as a word delimiter.
+	## Set '/' as a word delimiter.
     autoload -U select-word-style
     select-word-style bash
 
-## ???
-# typeset -g -A key
+	## ???
+	# typeset -g -A key
 
-## For non RH/Debian xterm, can't hurt for RH/Debian xterm.
-    if [ "xterm" = "$TERM" ]; then
+	## Note that double brackets are needed to expand wildcards properly.
+    if [[ $TERM = *xterm* ]] ; then
         bindkey "\e[3~" delete-char
         bindkey "\e[1;5D" backward-word
         bindkey "\e[1;5C" forward-word
@@ -53,6 +52,17 @@ if isShell "zsh"; then
 
         bindkey "\e[Z" reverse-menu-complete # Shift+Tab
     fi
+
+    if [[ $TERM = *rxvt* ]] ; then
+        bindkey "\e[3~" delete-char
+        bindkey "\eOd"  backward-word
+        bindkey "\eOc"  forward-word
+        bindkey "\e[7~" beginning-of-line
+        bindkey "\e[8~" end-of-line
+
+        bindkey "\e[Z" reverse-menu-complete # Shift+Tab
+    fi
+
 
 ## For rxvt.
     # bindkey "\e[7~" beginning-of-line # Home

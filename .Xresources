@@ -16,16 +16,31 @@
 !!URxvt
 !!------------------------------------------------------------------------------
 
+! URxvt*modifier: alt
 URxvt*saveLines: 1000
 URxvt*scrollBar: false
 
+!! Plugins
+!! clipboard and keyboard-select are not provided by default.
+URxvt.perl-ext-common  : default,matcher,keyboard-select,clipboard
+
+! URxvt.keysym.M-v:   perl:clipboard:paste
+! URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+
+!! Keyboard-Select
+URxvt.keysym.M-Escape:  perl:keyboard-select:activate
+! URxvt.keysym.M-s:       perl:keyboard-select:search
+
 !! URL Support
-URxvt.perl-ext-common  : default,matcher
 URxvt.matcher.button   : 1
 URxvt.keysym.C-Delete  : perl:matcher:last
 URxvt.keysym.M-Delete  : perl:matcher:list
 URxvt.urlLauncher      : luakit
 URxvt.underlineURLs    : true
+
+
+URxvt*keysym.M-Left:  \033[1;3D
+
 
 !! Font
 ! URxvt*letterSpace: -1
