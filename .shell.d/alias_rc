@@ -85,6 +85,9 @@ fi
 ## Screensaver
 [ -e "/usr/bin/xscreensaver-command" ] && alias xss='xscreensaver-command --lock'
 
+## Zathura -- Fork to background.
+[ -e "/usr/bin/zathura" ] && alias zat='zathura --fork'
+
 ## Configuration files
 [ -e "/etc/rc.conf" ] && alias ercc='sudo $EDITOR /etc/rc.conf'
 

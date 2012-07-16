@@ -87,7 +87,7 @@
 (set-face-foreground 'font-lock-builtin-face  "red" ) 
 (set-face-foreground 'font-lock-comment-delimiter-face  "color-240" ) 
 (set-face-foreground 'font-lock-comment-face  "color-240" ) 
-(set-face-foreground 'font-lock-constant-face  "color-240" ) 
+(set-face-foreground 'font-lock-constant-face  "magenta" ) 
 (set-face-foreground 'font-lock-doc-face  "brightgreen" ) 
 (set-face-foreground 'font-lock-function-name-face  "brightcyan" ) 
 (set-face-bold-p 'font-lock-function-name-face  t ) 
@@ -101,6 +101,10 @@
 (set-face-underline-p 'link t)
 (set-face-foreground 'minibuffer-prompt  "cyan" ) 
 (set-face-background 'region "color-17")
+(set-face-foreground 'error "red")
+(set-face-bold-p 'error t)
+
+;; (set-face-foreground 'compilation-column-number "magenta")
 
 ;; (set-face-background 'lazy-highlight  "brightgreen" ) 
 ;; (set-face-background 'secondary-selection "SkyBlue4")
