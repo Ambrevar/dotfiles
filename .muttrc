@@ -59,7 +59,7 @@ set my_ac_work=work
 set my_ac_university=university
 
 ## Login
-## Store password as follows:
+## Store passwords as follows:
 ## set my_pw_account = foo
 source "gpg2 -dq ~/.mutt-pwds.gpg |"
 
@@ -69,9 +69,9 @@ folder-hook '$my_ac_work' 'source ~/.mutt/$my_ac_work'
 folder-hook '$my_ac_university' 'source ~/.mutt/$my_ac_university'
 
 ## Switch to default account on startup
-#source "~/.mutt/$my_ac_personal"
+source "~/.mutt/$my_ac_personal"
 #source "~/.mutt/$my_ac_work"
-source "~/.mutt/$my_ac_university"
+# source "~/.mutt/$my_ac_university"
 
 ## Keys
 macro index <f2> '<sync-mailbox><enter-command>source ~/.mutt/$my_ac_personal<enter><change-folder>!<enter>'

@@ -83,25 +83,41 @@
 ;;==============================================================================
 ;; Theme
 ;;==============================================================================
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(lazy-highlight ((t (:background "blue"))))
- '(link ((t (:foreground "cyan" :underline t))))
- '(minibuffer-prompt ((t (:foreground "cyan"))))
- '(shadow ((t (:foreground "green")))))
 
-(set-face-foreground 'font-lock-comment-face "Red" ) 
+(set-face-foreground 'font-lock-builtin-face  "red" ) 
+(set-face-foreground 'font-lock-comment-delimiter-face  "color-240" ) 
+(set-face-foreground 'font-lock-comment-face  "color-240" ) 
+(set-face-foreground 'font-lock-constant-face  "color-240" ) 
+(set-face-foreground 'font-lock-doc-face  "brightgreen" ) 
+(set-face-foreground 'font-lock-function-name-face  "brightcyan" ) 
+(set-face-bold-p 'font-lock-function-name-face  t ) 
+(set-face-foreground 'font-lock-keyword-face  "brightred" ) 
+(set-face-foreground 'font-lock-preprocessor-face  "green" ) 
+(set-face-foreground 'font-lock-string-face  "color-39" ) 
+(set-face-foreground 'font-lock-type-face  "color-166" ) 
+(set-face-foreground 'font-lock-variable-name-face  "brightyellow" ) 
+
+(set-face-foreground 'link  "brightblue" ) 
+(set-face-underline-p 'link t)
+(set-face-foreground 'minibuffer-prompt  "cyan" ) 
+(set-face-background 'region "color-17")
+
+;; (set-face-background 'lazy-highlight  "brightgreen" ) 
+;; (set-face-background 'secondary-selection "SkyBlue4")
+;; (set-face-background 'trailing-whitespace "red1")
+;; (set-face-background 'vertical-border  "color-17")
+;; (set-face-foreground 'warning  "DarkOrange")
+;; (set-face-bold-p 'warning  t)
+;; (set-face-foreground 'nobreak-space "cyan")
+;; (set-face-foreground 'shadow  "grey70" ) ;; For line numbers.
+;; (set-face-foreground 'success "Green1")
+;; (set-face-bold-p 'success t)
 
 ;;==============================================================================
 ;; Completion
 ;;==============================================================================
 ;(global-set-key (kbd "C-<tab>") 'dabbrev-expand)
 ;(define-key minibuffer-local-map (kbd "C-<tab>") 'dabbrev-expand)
-
-
 
 ;;==============================================================================
 ;; Automode default modification
@@ -459,13 +475,11 @@
 ;;==============================================================================
 (require 'mediawiki)
 (custom-set-variables
- '(mediawiki-site-alist
-   ( quote 
-     (
-      ("Wikipedia" "http://en.wikipedia.org/w/" "Ambrevar" "" "Main Page")
-      ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX")
-      ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt")
-      ))))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(mediawiki-site-alist (quote (("Wikipedia" "http://en.wikipedia.org/w/" "Ambrevar" "" "Main Page") ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX") ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt")))))
 
 ;;==============================================================================
 ;;==============================================================================
