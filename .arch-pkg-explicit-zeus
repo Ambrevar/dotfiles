@@ -2,6 +2,7 @@ abs
 acpi
 alsa-utils
 antiword
+asciidoc
 aspell-en
 aspell-fr
 atool
@@ -50,6 +51,7 @@ feh
 file
 filesystem
 findutils
+firefox
 flashplugin
 flex
 fortune-mod
@@ -70,6 +72,7 @@ gsharkdown
 gzip
 hdparm
 heirloom-mailx
+help2man
 highlight
 hplip
 htop

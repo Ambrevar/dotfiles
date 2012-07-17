@@ -88,6 +88,7 @@ fftw
 file
 filesystem
 findutils
+firefox
 fixesproto
 flac
 flashplugin
@@ -170,7 +171,6 @@ initscripts
 inkscape
 inputproto
 intel-dri
-intltool
 iproute2
 iptables
 iputils
@@ -219,6 +219,7 @@ libdvdread
 libedit
 libegl
 libev
+libevent
 libexif
 libffi
 libfontenc
@@ -245,7 +246,6 @@ libltdl
 libmad
 libmediainfo
 libmms
-libmng
 libmodplug
 libmp4v2
 libmpc
@@ -395,7 +395,6 @@ pcre
 perl
 perl-error
 perl-locale-gettext
-perl-xml-parser
 pidgin
 pinentry
 pixman

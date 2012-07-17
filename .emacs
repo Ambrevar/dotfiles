@@ -85,14 +85,13 @@
 ;; Theme
 ;;==============================================================================
 
-(set-face-foreground  'font-lock-builtin-face           "brightmagenta" )
+(set-face-foreground  'font-lock-builtin-face           "color-75" )
 (set-face-bold-p      'font-lock-builtin-face           t ) 
 (set-face-foreground  'font-lock-comment-delimiter-face "color-242" ) 
 (set-face-foreground  'font-lock-comment-face           "color-242" ) 
 (set-face-foreground  'font-lock-constant-face          "color-105" ) 
 (set-face-foreground  'font-lock-doc-face               "color-28" ) 
-;; (set-face-underline-p 'font-lock-doc-face               t ) 
-(set-face-foreground  'font-lock-function-name-face     "brightcyan" ) 
+(set-face-foreground  'font-lock-function-name-face     "color-75" ) 
 (set-face-bold-p      'font-lock-function-name-face     t ) 
 (set-face-foreground  'font-lock-keyword-face           "brightred" ) 
 (set-face-bold-p      'font-lock-keyword-face           t )
