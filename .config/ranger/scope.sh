@@ -72,6 +72,8 @@ case "$mimetype" in
 	# Syntax highlight for text files:
 	text/* | */xml)
 		highlight --out-format=ansi "$path" | head -n $maxln
+        # FIXME: does not work!
+		# highlight --out-format=xterm256 -s zmrok "$path" | head -n $maxln
 		success && exit 5 || exit 2;;
 	# Ascii-previews of images:
 	image/*)

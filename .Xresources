@@ -3,7 +3,8 @@
 !! 2012-07-12
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-!! TODO: what is charclass ?
+!! TODO: set up charclass.
+!! TODO: check Xft options.
 !! TODO: prevent URxvt from intercepting ALT+Arrows and PageUp/Down.
 
 !! Xft options
@@ -17,12 +18,12 @@
 !!------------------------------------------------------------------------------
 
 ! URxvt*modifier: alt
-URxvt*saveLines: 1000
+URxvt*saveLines: 5000
 URxvt*scrollBar: false
 
 !! Plugins
 !! clipboard and keyboard-select are not provided by default.
-URxvt.perl-ext-common  : default,matcher,keyboard-select,clipboard
+URxvt.perl-ext-common  : default,matcher,keyboard-select
 
 ! URxvt.keysym.M-v:   perl:clipboard:paste
 ! URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
@@ -38,9 +39,8 @@ URxvt.keysym.M-Delete  : perl:matcher:list
 URxvt.urlLauncher      : luakit
 URxvt.underlineURLs    : true
 
-
+!! TODO: Does not work.
 URxvt*keysym.M-Left:  \033[1;3D
-
 
 !! Font
 ! URxvt*letterSpace: -1
@@ -118,29 +118,20 @@ URxvt.color15 : #FFFFFF
 
 !! Tangoesque style
 !*background: #111111
-!*background: #000000
 !*foreground: #babdb6
-!! Black (not tango) + DarkGrey
 ! *color0:  #000000
-! *color8:  #555753
-!! DarkRed + Red
 ! *color1:  #ff6565
-! *color9:  #ff8d8d
-!! DarkGreen + Green
 ! *color2:  #93d44f
-! *color10: #c8e7a8
-!! DarkYellow + Yellow
 ! *color3:  #eab93d
-! *color11: #ffc123
-!! DarkBlue + Blue
 ! *color4:  #204a87
-! *color12: #3465a4
-!! DarkMangenta + Mangenta
 ! *color5:  #ce5c00
-! *color13: #f57900
-!! DarkCyan + Cyan (both not tango)
 ! *color6:  #89b6e2
-! *color14: #46a4ff
-!! LightGrey + White
 ! *color7:  #cccccc
+! *color8:  #555753
+! *color9:  #ff8d8d
+! *color10: #c8e7a8
+! *color11: #ffc123
+! *color12: #3465a4
+! *color13: #f57900
+! *color14: #46a4ff
 ! *color15: #ffffff

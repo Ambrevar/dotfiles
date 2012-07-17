@@ -19,7 +19,7 @@
 # Which colorscheme to use?  These colorschemes are available by default:
 # default, default88, jungle, snow
 # Snow is monochrome and default88 uses 88 colors.
-# colorscheme = 'jungle'
+# colorscheme = 'default'
 
 # Display the directory name in tabs?
 dirname_in_tabs = True

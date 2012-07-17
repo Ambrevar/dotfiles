@@ -232,6 +232,53 @@ man()
 		man "$@"
 }
 
+## Highlight themes viewer for 256-colors terminals.
+hlt-viewer ()
+{
+    print_help()
+    {
+        echo "Synopsis:"
+        echo -e "  $1"
+        echo
+        echo "This script displays a preview for every highlight's theme."
+        echo "Press ENTER to display next preview. Press anything else then ENTER to quit."
+    }
+    
+    if [ ! -f "/usr/bin/highlight" ];then
+        echo "Please install 'highlight'."
+        return
+    fi
+
+    if [ $# -gt 0 ]; then
+        print_help "$0"
+        return
+    fi
+
+
+    LIST=$(highlight -w | grep -v "\s\|^$")
+    SAMPLE="void function(char* pointer, int &ref)
+{
+  int integer=3;
+  char* string=\"Hello!\";
+
+  // Line comment
+  for ( i=0; i<10; i++)
+  {
+    printf(\"Sum: %d\\\n\", i*( integer+14 ) );
+  }
+}"
+
+    unset DUMMY
+    for i in $(highlight -w | grep -v "\s\|^$"); do
+        echo "******************** $i ********************"
+        highlight -S c -O xterm256 <(echo $SAMPLE) -s "$i" 
+        read -s DUMMY
+        if [ ! "$DUMMY" = "" ];then
+            return
+        fi 
+    done
+}
+
 ## Extractor -- Useless when using 'atool'.
 if [ ! -e "/usr/bin/atool" ]; then
     extract () {

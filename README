@@ -1,7 +1,7 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                               Author: Ambrevar                               #
-#                               Date: 2012-07-05                               #
+#                               Date: 2012-07-17                               #
 ################################################################################
 
 Synopsis
@@ -57,7 +57,9 @@ Emacs
 *****
 Extra deps: auctex, auto-complete, emacs-lua-mode, emacs-yasnippet,
 
-Not much personal work, mostly use of plugins. Still very powerful.
+Some keybindings and custom colors. (I find it more convenient on a 256-colors
+terminal.) Some customization -- columns, kill whole line, etc. Some plugins
+customization too.
 
 Luakit
 ******
@@ -84,6 +86,8 @@ custom theme, various tweaks.
 
 Ranger
 ******
+Extra deps: antiword, atool, highlight, img2txt, mediainfo, pdftotext, w3m.
+
 Custom bindings, file association, tweaked a few options.
 
 Scripts
@@ -105,6 +109,10 @@ encountered, it has been reported into the configuration files. Hence the shared
 folder .shell.d/, whose files get sourced by both bash and zsh.  Bash-specific
 and zsh-specific options are in dedicated files ending with the apropriate shell
 name.
+
+URxvt
+*****
+Custom font and colors, no scroll bar, url-matcher and keyboard-select.
 
 Vim
 ***

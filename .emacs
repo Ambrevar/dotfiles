@@ -19,8 +19,9 @@
 ;; Line numbers
 (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
 (global-set-key (kbd "C-<f5>") 'linum-mode)
+;; (setq linum-format "%-4d ")
 (setq linum-format "%d ")
-(global-linum-mode 1) ; This may generate warnings. Bug?
+(global-linum-mode 1) ;; FIXME: This may generate warnings. Bug?
 
 ;; Indentation
 ;(setq standard-indent 4) ;; Set standard indent to 2 rather that 4
@@ -84,26 +85,78 @@
 ;; Theme
 ;;==============================================================================
 
-(set-face-foreground 'font-lock-builtin-face  "red" ) 
-(set-face-foreground 'font-lock-comment-delimiter-face  "color-240" ) 
-(set-face-foreground 'font-lock-comment-face  "color-240" ) 
-(set-face-foreground 'font-lock-constant-face  "magenta" ) 
-(set-face-foreground 'font-lock-doc-face  "brightgreen" ) 
-(set-face-foreground 'font-lock-function-name-face  "brightcyan" ) 
-(set-face-bold-p 'font-lock-function-name-face  t ) 
-(set-face-foreground 'font-lock-keyword-face  "brightred" ) 
-(set-face-foreground 'font-lock-preprocessor-face  "green" ) 
-(set-face-foreground 'font-lock-string-face  "color-39" ) 
-(set-face-foreground 'font-lock-type-face  "color-166" ) 
-(set-face-foreground 'font-lock-variable-name-face  "brightyellow" ) 
+(set-face-foreground  'font-lock-builtin-face           "brightmagenta" )
+(set-face-bold-p      'font-lock-builtin-face           t ) 
+(set-face-foreground  'font-lock-comment-delimiter-face "color-242" ) 
+(set-face-foreground  'font-lock-comment-face           "color-242" ) 
+(set-face-foreground  'font-lock-constant-face          "color-105" ) 
+(set-face-foreground  'font-lock-doc-face               "color-28" ) 
+;; (set-face-underline-p 'font-lock-doc-face               t ) 
+(set-face-foreground  'font-lock-function-name-face     "brightcyan" ) 
+(set-face-bold-p      'font-lock-function-name-face     t ) 
+(set-face-foreground  'font-lock-keyword-face           "brightred" ) 
+(set-face-bold-p      'font-lock-keyword-face           t )
+(set-face-foreground  'font-lock-preprocessor-face      "color-99" ) 
+(set-face-foreground  'font-lock-string-face            "color-39" ) 
+(set-face-foreground  'font-lock-type-face              "color-166" ) 
+(set-face-foreground  'font-lock-variable-name-face     "brightyellow" ) 
+(set-face-foreground  'font-lock-warning-face           "DarkOrange" ) 
 
-(set-face-foreground 'link  "brightblue" ) 
-(set-face-underline-p 'link t)
-(set-face-foreground 'minibuffer-prompt  "cyan" ) 
-(set-face-background 'region "color-17")
-(set-face-foreground 'error "red")
-(set-face-bold-p 'error t)
+;; General
+(set-face-foreground  'link              "brightblue" ) 
+(set-face-underline-p 'link              t)
+(set-face-foreground  'minibuffer-prompt "brightcyan" ) 
+(set-face-background  'region            "color-17")
+(set-face-foreground  'error             "red")
+(set-face-bold-p      'error             t)
+(set-face-background  'shadow            "color-234" ) ;; For line numbers.
 
+
+;; FIXME: fix C functions color.
+(font-lock-add-keywords
+ 'c-mode
+ '(
+   ("&" . font-lock-keyword-face)
+   ("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)
+   ))
+
+(mapcar
+ (lambda (mode)
+   (font-lock-add-keywords
+    mode
+    '(
+      ("[^[:digit:][:space:]][[:space:]]*\\(-\\)[[:digit:]]+" 1 font-lock-constant-face)
+      ("\\(0x[[:digit:]a-fA-F]+\\)[^[:alnum:]_]" 1 font-lock-constant-face)
+      ("\\([[:digit:]]+\\)[^[:alnum:]_]" 1 font-lock-constant-face)
+      ("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
+      ("\\<\\(TODO\\):" 1 font-lock-warning-face prepend)
+      )))
+ '( text-mode mail-mode 
+              sh-mode  emacs-lisp-mode lua-mode
+              c-mode 
+              latex-mode html-mode texinfo-mode))
+
+;; C-mode printf highlight.
+(defvar font-lock-format-specifier-face		'font-lock-format-specifier-face
+  "Face name to use for format specifiers.")
+
+(defface font-lock-format-specifier-face
+  '((t (:foreground "OrangeRed1")))
+  "Font Lock mode face used to highlight format specifiers."
+  :group 'font-lock-faces)
+
+;; FIXME: disable highlighting outside of string.
+(add-hook
+ 'c-mode-common-hook
+ (lambda ()
+   (font-lock-add-keywords
+    nil
+    '(("[^%]\\(%\\([[:digit:]]+\\$\\)?[-+' #0*]*\\([[:digit:]]*\\|\\*\\|\\*[[:digit:]]+\\$\\)\\(\\.\\([[:digit:]]*\\|\\*\\|\\*[[:digit:]]+\\$\\)\\)?\\([hlLjzt]\\|ll\\|hh\\)?\\([aAbdiuoxXDOUfFeEgGcCsSpn]\\|\\[\\^?.[^]]*\\]\\)\\)"
+       1 font-lock-format-specifier-face t)
+      ("\\(%%\\)" 
+       1 font-lock-format-specifier-face t)) )))
+
+;; FIXME: Does not work.
 ;; (set-face-foreground 'compilation-column-number "magenta")
 
 ;; (set-face-background 'lazy-highlight  "brightgreen" ) 
@@ -113,7 +166,6 @@
 ;; (set-face-foreground 'warning  "DarkOrange")
 ;; (set-face-bold-p 'warning  t)
 ;; (set-face-foreground 'nobreak-space "cyan")
-;; (set-face-foreground 'shadow  "grey70" ) ;; For line numbers.
 ;; (set-face-foreground 'success "Green1")
 ;; (set-face-bold-p 'success t)
 
@@ -164,6 +216,14 @@
 (setq auto-mode-alist
       (append
        '(("PKGBUILD" . sh-mode)
+         )
+       auto-mode-alist)
+      )
+
+;; README
+(setq auto-mode-alist
+      (append
+       '(("README" . text-mode)
          )
        auto-mode-alist)
       )
@@ -254,18 +314,19 @@
 ;; Original idea from
 ;; http://www.opensubscriber.com/message/emacs-devel@gnu.org/10971693.html
 (defun comment-dwim-line (&optional arg)
-  "Replacement for the comment-dwim command.
-        If no region is selected and current line is not blank and we are not at the end of the line,
-        then comment current line.
-        Replaces default behaviour of comment-dwim, when it inserts comment at the end of the line."
+  "Replacement for the comment-dwim command. If no region is
+selected and current line is not blank and we are not at the end
+of the line, then comment current line.  Replaces default
+behaviour of comment-dwim, when it inserts comment at the end of
+the line."
   (interactive "*P")
   (comment-normalize-vars)
-  (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
+  ;; (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
+  (if (and (not (region-active-p)) )
       (comment-or-uncomment-region (line-beginning-position) (line-end-position))
     (comment-dwim arg)))
+
 (global-set-key "\M-;" 'comment-dwim-line)
-
-
 
 ;;==============================================================================
 ;; My Keys Minor-Mode
@@ -455,6 +516,14 @@
 (add-hook 'TeX-mode-hook 'my-tex-mode-hook)
 
 
+;; Theme
+(defun my-tex-font-hook ()
+  (set-face-foreground 'font-latex-sedate-face "brightred" ) 
+  (set-face-bold-p 'font-latex-sedate-face t) 
+)
+(add-hook 'TeX-mode-hook 'my-tex-font-hook)
+
+
 ;;==============================================================================
 ;; Lua
 ;;==============================================================================
@@ -487,3 +556,4 @@
 
 ;;==============================================================================
 ;;==============================================================================
+;;
