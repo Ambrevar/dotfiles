@@ -2,6 +2,21 @@
 ## Theme kindly inspired from 
 ## http://nongeekshandbook.blogspot.ie/2009/03/mutt-color-configuration.html
 
+## Emacs colors.
+set my_col_builtin = color75
+set my_col_comment = color242
+set my_col_constant = color105
+set my_col_doc = color28
+set my_col_function = color75
+set my_col_keyword = brightred
+set my_col_preprocessor = color99
+set my_col_string = color39
+set my_col_type = color166
+set my_col_variable = brightyellow
+set my_col_warning = color202
+set my_col_shadow = color250
+set my_col_shadow_bg = color234
+
 ## Colours for items in the index
 color index brightcyan black ~N
 color index brightred black ~O
@@ -24,17 +39,19 @@ mono body bold "(http|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
 mono body bold "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
 
 ## Email addresses.
-color body brightgreen black "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+# color body brightgreen black "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+color body $my_col_string black "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
 #mono body bold "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
 
 ## Header
-color header green black "^from:"
-color header green black "^to:"
-color header green black "^cc:"
-color header green black "^date:"
+color header $my_col_preprocessor black "^from:"
+color header $my_col_function black "^to:"
+color header $my_col_keyword black "^cc:"
+color header $my_col_keyword black "^bcc:"
+color header yellow black "^date:"
 color header yellow black "^newsgroups:"
-color header yellow black "^reply-to:"
-color header brightcyan black "^subject:"
+color header $my_col_keyword black "^reply-to:"
+color header $my_col_warning black "^subject:"
 color header red black "^x-spam-rule:"
 color header green black "^x-mailer:"
 color header yellow black "^message-id:"
@@ -42,28 +59,29 @@ color header yellow black "^Organization:"
 color header yellow black "^Organisation:"
 color header yellow black "^User-Agent:"
 color header yellow black "^message-id: .*pine"
-color header yellow black "^X-Fnord:"
-color header yellow black "^X-WebTV-Stationery:"
-color header yellow black "^X-Message-Flag:"
-color header yellow black "^X-Spam-Status:"
-color header yellow black "^X-SpamProbe:"
+color header $my_col_string black "^X-Fnord:"
+color header $my_col_string black "^X-WebTV-Stationery:"
+color header $my_col_string black "^X-Message-Flag:"
+color header $my_col_string black "^X-Spam-Status:"
+color header $my_col_string black "^X-SpamProbe:"
 color header red black "^X-SpamProbe: SPAM"
 
 ## Coloring quoted text - coloring the first 7 levels:
-color quoted cyan black
-color quoted1 yellow black
-color quoted2 red black
-color quoted3 green black
-color quoted4 cyan black
-color quoted5 yellow black
-color quoted6 red black
-color quoted7 green black
+color quoted $my_col_doc black
+color quoted1 $my_col_constant black
+color quoted2 $my_col_type black
+color quoted3 $my_col_variable black
+color quoted4 $my_col_comment black
+color quoted5 $my_col_comment black
+color quoted6 $my_col_comment black
+color quoted7 $my_col_comment black
+
 
 ## Default color definitions
 #color hdrdefault white green
-color signature brightmagenta black
+color signature $my_col_comment black
 color indicator black cyan 
-color attachment black green
+color attachment $my_col_shadow $my_col_shadow_bg
 color error red black
 color message white black
 color search brightwhite magenta

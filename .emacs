@@ -124,12 +124,22 @@
  'mail-mode
  '(
       ("^From:" . font-lock-preprocessor-face)
-      ("^Subject:" . font-lock-builtin-face)
+      ("^Subject:" . font-lock-warning-face)
       ("^In-Reply-To:" . font-lock-builtin-face)
+      ;; Mail addresses.
       ("\\([[:alnum:]._-]+@[[:alnum:]]+.[[:alnum:]]+\\)" 1 font-lock-string-face)
+      ;; Quote
       ("^\> *\\([^\> ]\\).*$" . font-lock-doc-face)
+      ;; Quote1
       ("^\> *\> *\\([^\> ]\\).*$" . font-lock-constant-face)
       ("^\> *\> *\> *\\([^\> ]\\).*$" . font-lock-type-face)
+      ("^\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-variable-name-face)
+      ("^\> *\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-comment-face)
+      ("^\> *\> *\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-comment-face)
+      ("^\> *\> *\> *\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-comment-face)
+      ("^\> *\> *\> *\> *\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-comment-face)
+
+      ;; Signature
       ("^--.*\\(\n.*\\)*" . font-lock-comment-face)
       ))
 
