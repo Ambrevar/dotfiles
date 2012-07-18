@@ -18,7 +18,7 @@
 ## Launch session
 ##==============================================================================
 # [ -e /usr/bin/awesome ] && exec ck-launch-session awesome
-[ -e /usr/bin/awesome ] && exec ck-launch-session bash -c "udiskie & awesome"
+[ -e /usr/bin/awesome ] && exec ck-launch-session zsh -c "udiskie & awesome"
 
 
 

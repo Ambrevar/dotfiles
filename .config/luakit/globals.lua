@@ -57,6 +57,7 @@ search_engines = {
     arch           = "http://wiki.archlinux.org/index.php?title=Special%%3ASearch&search=%s&go=Go",
     aur            = "https://aur.archlinux.org/packages.php?O=0&K=%s&do_Search=Go",
     google         = "http://google.com/search?q=%s",
+    gm             = "https://maps.google.com/maps?q=%s",
     imdb           = "http://imdb.com/find?s=all&q=%s", -- Note that imdb is messy with spaces.
     torrent        = "http://torrentz.eu/search?f=%s",
     w              = "http://en.wikipedia.org/wiki/Special:Search?search=%s",

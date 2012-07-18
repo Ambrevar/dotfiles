@@ -124,17 +124,20 @@ The last time I used WMFS, the development was in a transition from version 1.x
 to 2.x. So beware!, configuration files might be quite broken.
 
 ################################################################################
-Other apps:
-***********
+Complete applist
+****************
 
 antiword
 atool
+awesome
 bashmount
+bc
 calc
 cmus
 cppcheck
 doxygen
 dropbox
+emacs
 feh
 fortune
 gcolor2
@@ -144,17 +147,20 @@ gnumeric
 gnuplot
 handbrake
 hdparm
+help2man
 highlight
 htop
 inkscape
 irssi
 lrzip
+luakit
 lxterminal
 mediainfo
 mencoder
 mkvtoolnix
 movgrav
 mplayer2
+mutt
 nasm
 ncdu
 nmap
@@ -169,6 +175,7 @@ pidgin
 pwgen
 pwsafe
 ranger
+re2c
 rtorrent
 rxvt-unicode
 scrot
@@ -185,11 +192,14 @@ texlive
 trash-cli
 tree
 valgrind
+vim
 vlock
 w3m
 weechat
 wipe
+wmfs
 wv
 xsel
 yasm
 zathura
+zsh

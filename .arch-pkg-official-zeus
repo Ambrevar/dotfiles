@@ -60,6 +60,7 @@ d-feet
 dhcpcd
 dialog
 diffutils
+directfb
 dirmngr
 djvulibre
 dnssec-anchors
@@ -424,6 +425,7 @@ python-configobj
 python-dbus-common
 python-notify
 python-pycurl
+qingy
 randrproto
 ranger
 raptor

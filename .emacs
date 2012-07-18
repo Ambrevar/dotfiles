@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs config
-;; 2012-07-02
+;; 2012-07-18
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;==============================================================================
@@ -119,6 +119,20 @@
    ("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)
    ))
 
+;; TODO: make emacs and mutt colors fit.
+(font-lock-add-keywords
+ 'mail-mode
+ '(
+      ("^From:" . font-lock-preprocessor-face)
+      ("^Subject:" . font-lock-builtin-face)
+      ("^In-Reply-To:" . font-lock-builtin-face)
+      ("\\([[:alnum:]._-]+@[[:alnum:]]+.[[:alnum:]]+\\)" 1 font-lock-string-face)
+      ("^\> *\\([^\> ]\\).*$" . font-lock-doc-face)
+      ("^\> *\> *\\([^\> ]\\).*$" . font-lock-constant-face)
+      ("^\> *\> *\> *\\([^\> ]\\).*$" . font-lock-type-face)
+      ("^--.*\\(\n.*\\)*" . font-lock-comment-face)
+      ))
+
 (mapcar
  (lambda (mode)
    (font-lock-add-keywords
@@ -126,14 +140,14 @@
     '(
       ("[^[:digit:][:space:]][[:space:]]*\\(-\\)[[:digit:]]+" 1 font-lock-constant-face)
       ("\\(0x[[:digit:]a-fA-F]+\\)[^[:alnum:]_]" 1 font-lock-constant-face)
-      ("\\([[:digit:]]+\\)[^[:alnum:]_]" 1 font-lock-constant-face)
+      ("[^[:alnum:]_]\\([[:digit:]]+\\)[^[:alnum:]_]" 1 font-lock-constant-face)
       ("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
       ("\\<\\(TODO\\):" 1 font-lock-warning-face prepend)
       )))
- '( text-mode mail-mode 
-              sh-mode  emacs-lisp-mode lua-mode
-              c-mode 
-              latex-mode html-mode texinfo-mode))
+ '( text-mode 
+    sh-mode  emacs-lisp-mode lua-mode
+    c-mode 
+    latex-mode html-mode texinfo-mode))
 
 ;; C-mode printf highlight.
 (defvar font-lock-format-specifier-face		'font-lock-format-specifier-face
@@ -156,7 +170,10 @@
        1 font-lock-format-specifier-face t)) )))
 
 ;; FIXME: Does not work.
-;; (set-face-foreground 'compilation-column-number "magenta")
+;; (add-hook
+;;  'c-mode-common-hook
+;;  (set-face-foreground 'compilation-column-number "magenta")
+;; )
 
 ;; (set-face-background 'lazy-highlight  "brightgreen" ) 
 ;; (set-face-background 'secondary-selection "SkyBlue4")
@@ -546,6 +563,8 @@ the line."
 ;; MediaWiki
 ;;==============================================================================
 (require 'mediawiki)
+
+;; TODO:  make it 'customize' independant.
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -508,7 +508,7 @@ awful.rules.rules = {
       properties = { floating = true } },
 
     { rule = { class = "Gimp" },
-      properties = { floating = true } },
+      properties = { floating = false } },
 
     -- Flash workaround. Does not work?
     { rule = { instance = "plugin-container" },
@@ -517,7 +517,7 @@ awful.rules.rules = {
     { rule = { instance = "exe" },
       properties = { floating = true } },
 
-    -- TODO: Only works for terminal with WM_COMMAND property?
+    -- Only works for terminal with WM_COMMAND property?
     -- Does not work with LXTerminal.
     { rule = { name = "cmus"},
       properties = { tag = tags[1][6] } },
