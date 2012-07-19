@@ -426,6 +426,8 @@ lsofstat()
 ## Pacman Functions
 ##==============================================================================
 
+if [ -f "/usr/bin/pacman" ]; then
+
 ## TODO: completion does not work as is. It requires pacman arguments like -S or -Q.
 ## There should be a way to use it.
 # if isShell "zsh" ; then
@@ -439,10 +441,6 @@ lsofstat()
 ## Note: you should always call _pacman_unset_vars in the end.
 _pacman_set_vars()
 {
-    if [ ! -f "/usr/bin/pacman" ]; then
-        echo "Could not get pacman's variables."
-        return 1
-    fi 
     local pacman_var_list="$(pacman -Qi tzdata | cut -f1 -d':')"
     if [ "$pacman_var_list" = "" ];then
         echo "Could not get pacman's variables."
@@ -566,22 +564,22 @@ fi
 if [ -f "/usr/bin/pacman" ]; then
     pacman-size()
     {
-        ## Help
         printhelp()
         {
             echo "Synopsis:"
-            echo -e "  $1 [-h|-n] PACKAGES"
+            echo -e "  $1 [-a|-h|-n|-q] PACKAGES"
+            echo -e "  Arguments MUST be set before package list."
             echo
             echo "Usage:"
             echo -e "  default:\tDisplay package size. Output contains no double and is alphabetically sorted. A grand total is printed at the end. It will only work for repos packages by default."
-            echo -e "  -n:\t\tOutput is sorted by size. Argument MUST be set before package list."
-            echo -e "  -q:\t\tUses installed packages database instead of repos database. It speeds up query and allow displaying size of local packages not available in repos."
+            echo -e "  -h:\t\tShow this help."
+            echo -e "  -n:\t\tOutput is sorted by size.."
+            echo -e "  -q:\t\tUses installed packages database instead of repos database. It speeds up queries and allows displaying size of local packages not available in repos."
         }
 
         CMD="pacman -Si"
         SEP=": "
         TOTAL_SIZE=0
-        # OPTION_SORT=""
         SORT="sort -u -k3"
         SORT_SIZE="cat"
 
@@ -640,17 +638,58 @@ fi
 if [ -f "/usr/bin/pacman" ]; then
     pacman-deps()
     {
-        ## Arguments
-        if [ $# -lt 1 ];then
-            echo "Please provide packages."
-            return
-        fi
+        printhelp()
+        {
+            echo "Synopsis:"
+            echo -e "  $1 [-a|-h|-q] PACKAGES"
+            echo -e "  Arguments MUST be set before package list."
+            echo
+            echo "Usage:"
+            echo -e "  default:\tDisplay package dependencies. Output contains no double and is alphabetically sorted. It will only work for repos packages by default."
+            echo -e "  -a:\t\tUses Yaourt queries instead of repos database. It slows down query but allow displaying size of local any packages not available in repos."
+            echo -e "  -h:\t\tShow this help."
+            echo -e "  -q:\t\tUses installed packages database instead of repos database. It speeds up queries and allows displaying size of local packages not available in repos."
+        }
 
         CMD="pacman -Si"
         SEP=": "
 
+        while getopts ":ahq" opt; do
+            case $opt in
+                a)
+                    CMD="yaourt -Si"
+                    ;;
+                h)
+                    printhelp "$0"
+                    return 1
+                    ;;
+                q)
+                    CMD="pacman -Qi"
+                    ;;
+                ?) 
+                    printhelp "$0"
+                    return 1
+                    ;;
+                :)
+                    echo "Missing argument."
+                    echo "Use $0 -h for help."
+                    return 1
+                    ;;
+            esac
+        done
+
+        shift $(($OPTIND - 1))
+
+        if [ $# -eq 0 ]; then
+            echo "Missing argument."
+            echo "Use $0 -h for help."
+            return 1
+        fi
+
         _pacman_set_vars
-        eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_deps" '$0 ~ filter {gsub(/[>=<][^ ]*/,"") ; print $2}'
+        eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_deps" '$0 ~ filter {gsub(/[>=<][^ ]*/,"",$2) ; gsub(/ +/,"\n",$2) ; print $2}' | sort -u
         _pacman_unset_vars
     }
+fi
+
 fi
