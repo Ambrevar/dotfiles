@@ -505,7 +505,7 @@ if [ -f "/usr/bin/pacman" ]; then
         OPTION_FOREIGN=""
         OPTION_LOCAL=">"
 
-        pdhelp()
+        printhelp()
         {
             echo "Synopsis:"
             echo -e "  $1 [-m|-e] [-q] FILE"
@@ -528,7 +528,7 @@ if [ -f "/usr/bin/pacman" ]; then
                     OPTION_EXPLICIT="e"
                     ;;
                 h)
-                    pdhelp "$0"
+                    printhelp "$0"
                     return 1
                     ;;
                 m)
@@ -538,7 +538,7 @@ if [ -f "/usr/bin/pacman" ]; then
                     OPTION_LOCAL="<"
                     ;;
                 ?) 
-                    pdhelp "$0"
+                    printhelp "$0"
                     return 1
                     ;;
                 :)
@@ -562,30 +562,76 @@ if [ -f "/usr/bin/pacman" ]; then
     }
 fi
 
-## Print of specified package and a grand total.
+## Print specified package size and a grand total.
 if [ -f "/usr/bin/pacman" ]; then
     pacman-size()
     {
-        ## Arguments
-        if [ $# -lt 1 ];then
-            echo "Please provide packages."
-            return
-        fi
+        ## Help
+        printhelp()
+        {
+            echo "Synopsis:"
+            echo -e "  $1 [-h|-n] PACKAGES"
+            echo
+            echo "Usage:"
+            echo -e "  default:\tDisplay package size. Output contains no double and is alphabetically sorted. A grand total is printed at the end. It will only work for repos packages by default."
+            echo -e "  -n:\t\tOutput is sorted by size. Argument MUST be set before package list."
+            echo -e "  -q:\t\tUses installed packages database instead of repos database. It speeds up query and allow displaying size of local packages not available in repos."
+        }
 
-        CMD="pacman -Qi" 
+        CMD="pacman -Si"
+        SEP=": "
         TOTAL_SIZE=0
+        # OPTION_SORT=""
+        SORT="sort -u -k3"
+        SORT_SIZE="cat"
 
-        _pacman_set_vars
-        for i ; do
-            ## TODO: better awk command?
-            SIZE=$(eval "${CMD} $i" 2>&1 | grep "^$pacman_size" | cut -f2 -d':' | sed -e 's/\..*\| //g')
-            if [ ! "${SIZE}" = "" ];then
-                printf "%6s KiB %s\n" ${SIZE} $i
-                TOTAL_SIZE=$(($TOTAL_SIZE+$SIZE))
-            fi 
+        while getopts ":hnq" opt; do
+            case $opt in
+                h)
+                    printhelp "$0"
+                    return 1
+                    ;;
+                n)
+                    SORT_SIZE="sort -n"
+                    ;;
+                q)
+                    CMD="pacman -Qi"
+                    ;;
+                ?) 
+                    printhelp "$0"
+                    return 1
+                    ;;
+                :)
+                    echo "Missing argument."
+                    echo "Use $0 -h for help."
+                    return 1
+                    ;;
+            esac
         done
 
-        echo -e "${BIRed}Total size${CReset}: $(echo ${TOTAL_SIZE}) KiB"
+        shift $(($OPTIND - 1))
+
+        if [ $# -eq 0 ]; then
+            echo "Missing argument."
+            echo "Use $0 -h for help."
+            return 1
+        fi
+
+        _pacman_set_vars
+
+        RESULT=$(eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
+            '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | eval "$SORT" | eval "$SORT_SIZE")
+
+        echo "$RESULT"
+
+        ## Print total size.
+        echo "$RESULT" | awk '{TOTAL=$1+TOTAL} END {printf("Total : %d KiB\n",TOTAL)}'
+
+        ## One line version. ~ same performance.
+        # eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
+        #     '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | sort -u -k3 \
+        # | tee >(awk '{TOTAL=$1+TOTAL} END {printf("Total : %d KiB\n",TOTAL)}')
+
         _pacman_unset_vars
     }
 fi
@@ -600,26 +646,11 @@ if [ -f "/usr/bin/pacman" ]; then
             return
         fi
 
-        CMD="pacman -Qi"
-
-        APP_OUTPUT=$(eval "${CMD} $1" 2>&1)
-        if [ ! -z "$(echo "$APP_OUTPUT" | grep "^error:")" ];then
-            CMD="pacman -Si"
-            APP_OUTPUT=$(eval "${CMD} $1" 2>&1)
-
-            # Make sure package is available online.
-            if [ ! -z "$(echo "$APP_OUTPUT" | grep "^error:")" ];then
-                echo "Package not found!"
-                return
-            fi
-        fi
+        CMD="pacman -Si"
+        SEP=": "
 
         _pacman_set_vars
-        for i ; do
-            ## TODO: better awk command.
-            echo $( eval "${CMD} $i" 2>&1 | grep "^$pacman_deps"| cut -f2 -d':' | sed -e 's/[>=<][^ ]*//g')
-        done
+        eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_deps" '$0 ~ filter {gsub(/[>=<][^ ]*/,"") ; print $2}'
         _pacman_unset_vars
     }
-
 fi

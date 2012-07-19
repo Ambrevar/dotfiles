@@ -131,10 +131,6 @@ if [ "$PACMAN_FRONTEND" = "pacman" ]; then
     alias pr='sudo pacman -Rs'
     alias pss='pacman -Ss'
     alias pu='sudo pacman -Syu'
-
-## Change 'name' and 'size' variables according your locale.
-    # alias pql='pacman -Qi | awk '"'"'/^Nom/ {pkg=$3} /Taille/ {print $4$5,pkg}'"'"' | sort -n'
-    alias pql='pacman -Qi | awk '"'"'/^Name/ {pkg=$3} /Size/ {print $4$5,pkg}'"'"' | sort -n'
 fi
 
 if [ "$PACMAN_FRONTEND" = "pacman-color" ]; then
@@ -147,10 +143,6 @@ if [ "$PACMAN_FRONTEND" = "pacman-color" ]; then
     alias pss='pacman-color -Ss'
     alias pu='sudo pacman-color -Syu'
     alias pql='pacman -Ql'
-
-## Change 'name' and 'size' variables according your locale.
-    # alias pql='pacman-color -Qi | awk '"'"'/^Nom/ {pkg=$3} /Taille/ {print $4$5,pkg}'"'"' | sort -n'
-    alias pacman-list='pacman-color -Qi | awk '"'"'/^Name/ {pkg=$3} /Size/ {print $4$5,pkg}'"'"' | sort -n'
 fi
 
 ##==============================================================================
