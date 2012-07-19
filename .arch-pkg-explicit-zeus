@@ -21,7 +21,6 @@ bzip2
 bzr
 calc
 catdvi
-ccrypt
 cmus
 consolekit
 coreutils
@@ -31,7 +30,6 @@ cryptsetup
 ctags
 cups
 cyrus-sasl
-dconf
 device-mapper
 d-feet
 dhcpcd
@@ -61,6 +59,7 @@ gcc-libs
 gcolor2
 gdb
 gettext
+gimp
 git
 glibc
 gnuplot
@@ -70,6 +69,8 @@ grub
 gsasl
 gsharkdown
 gzip
+handbrake-cli-svn
+handbrake-svn
 hdparm
 heirloom-mailx
 help2man
@@ -87,7 +88,6 @@ ispell
 jfsutils
 laptop-mode-tools
 less
-libgnome-keyring
 libtool
 licenses
 links
@@ -99,7 +99,6 @@ lrzip
 ltrace
 luakit
 lvm2
-lxterminal
 m4
 make
 man-db
@@ -137,7 +136,6 @@ pwgen
 pwsafe
 pygtk
 python2-udiskie
-qingy
 ranger
 reiserfsprogs
 rtorrent
@@ -177,7 +175,6 @@ vicious
 vim
 vlock
 w3m
-waf
 weechat
 wget
 which
@@ -199,7 +196,6 @@ xorg-xprop
 xorg-xrandr
 xorg-xrdb
 xsel
-xterm
 yaourt
 zathura
 zathura-djvu

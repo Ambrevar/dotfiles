@@ -133,6 +133,8 @@ awesome
 bashmount
 bc
 calc
+catdvi
+ccrypt
 cmus
 cppcheck
 doxygen
@@ -154,7 +156,6 @@ inkscape
 irssi
 lrzip
 luakit
-lxterminal
 mediainfo
 mencoder
 mkvtoolnix

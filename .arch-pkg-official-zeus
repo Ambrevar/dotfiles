@@ -20,6 +20,7 @@ autoconf
 automake
 avahi
 awesome
+babl
 bash
 bash-completion
 bc
@@ -32,7 +33,6 @@ cairo
 cairomm
 calc
 catdvi
-ccrypt
 cdparanoia
 cloog
 cmus
@@ -53,14 +53,12 @@ db
 dbus
 dbus-core
 dbus-glib
-dconf
 desktop-file-utils
 device-mapper
 d-feet
 dhcpcd
 dialog
 diffutils
-directfb
 dirmngr
 djvulibre
 dnssec-anchors
@@ -113,11 +111,13 @@ gd
 gdb
 gdbm
 gdk-pixbuf2
+gegl
 geoclue
 gettext
 ghostscript
 giblib
 giflib
+gimp
 girara-common
 girara-gtk2
 git
@@ -138,6 +138,7 @@ groff
 grub
 gsasl
 gsettings-desktop-schemas
+gsfonts
 gsl
 gsm
 gstreamer0.10
@@ -230,7 +231,6 @@ libgl
 libglade
 libglapi
 libgme
-libgnome-keyring
 libgpg-error
 libgsf
 libgssglue
@@ -247,6 +247,7 @@ libltdl
 libmad
 libmediainfo
 libmms
+libmng
 libmodplug
 libmp4v2
 libmpc
@@ -290,6 +291,7 @@ libvdpau
 libvorbis
 libvpx
 libwebkit
+libwmf
 libx11
 libxau
 libxaw
@@ -337,7 +339,6 @@ luafilesystem
 luajit
 luakit
 lvm2
-lxterminal
 lzo2
 m4
 make
@@ -425,7 +426,6 @@ python-configobj
 python-dbus-common
 python-notify
 python-pycurl
-qingy
 randrproto
 ranger
 raptor
@@ -487,10 +487,7 @@ videoproto
 vim
 vim-runtime
 vlock
-vte
-vte-common
 w3m
-waf
 weechat
 wget
 which
@@ -503,7 +500,6 @@ wpa_supplicant
 wv
 wxgtk
 x264
-xbitmaps
 xcb-proto
 xcb-util
 xcb-util-image
@@ -527,7 +523,6 @@ xorg-fonts-encodings
 xorg-fonts-misc
 xorg-font-util
 xorg-font-utils
-xorg-luit
 xorg-mkfontdir
 xorg-mkfontscale
 xorg-server
@@ -545,7 +540,6 @@ xorg-xrdb
 xorg-xset
 xproto
 xsel
-xterm
 xvidcore
 xz
 yajl

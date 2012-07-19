@@ -426,9 +426,46 @@ lsofstat()
 ## Pacman Functions
 ##==============================================================================
 
-## Compare installed packages with list.
+## TODO: completion does not work as is. It requires pacman arguments like -S or -Q.
+## There should be a way to use it.
+# if isShell "zsh" ; then
+#     compdef _pacman pacman-deps
+# elif isShell "bash"; then
+#     complete -o default -o nospace -F _pacman pacman-deps
+# fi
+
+## This function gets the pacman variabless when necessary.
+## Note: some functions uses pacman localized output. It should work in any case.
+## Note: you should always call _pacman_unset_vars in the end.
+_pacman_set_vars()
+{
+    if [ ! -f "/usr/bin/pacman" ]; then
+        echo "Could not get pacman's variables."
+        return 1
+    fi 
+    local pacman_var_list="$(pacman -Qi tzdata | cut -f1 -d':')"
+    if [ "$pacman_var_list" = "" ];then
+        echo "Could not get pacman's variables."
+        return 2
+    fi 
+
+    pacman_name="$(echo "$pacman_var_list" | sed -n '1p')"
+    pacman_deps="$(echo "$pacman_var_list" | sed -n '7p')"
+    pacman_optdeps="$(echo "$pacman_var_list" | sed -n '8p')"
+    pacman_size="$(echo "$pacman_var_list" | sed -n '12p')"
+}
+
+_pacman_unset_vars()
+{
+    unset pacman_name
+    unset pacman_deps
+    unset pacman_optdeps
+    unset pacman_size
+}
+
+## Get detailed file size list for a specified package.
 if [ -f "/usr/bin/pacman" ]; then
-    pacman-size()
+    pacman-files()
     {
         if [ $# -ne 1 ];then
             echo "Wrong number of arguments."
@@ -446,9 +483,10 @@ if [ -f "/usr/bin/pacman" ]; then
 
         echo -e "${RESULT}" | grep -v "^$" | sort -h
 
-        # English locale only.
         echo -n "Total:  "
-        pacman -Qi $1 | grep "Size" | sed 's/^[^[:digit:]]*//'
+        _pacman_set_vars
+        pacman -Qi $1 | grep "$pacman_size" | sed 's/^[^[:digit:]]*//'
+        _pacman_unset_vars
     }
 fi
 
@@ -519,31 +557,48 @@ if [ -f "/usr/bin/pacman" ]; then
             return 1
         fi
 
+        ## TODO: Use pacman-official diff parameters.
         diff <(pacman -Qq${OPTION_FOREIGN}${OPTION_EXPLICIT} | sort) <(cat "$*" | sort) | grep "${OPTION_LOCAL}" | cut -f2 -d" "
     }
 fi
 
-## Print a detailed view of package deps size and total size.
+## Print of specified package and a grand total.
+if [ -f "/usr/bin/pacman" ]; then
+    pacman-size()
+    {
+        ## Arguments
+        if [ $# -lt 1 ];then
+            echo "Please provide packages."
+            return
+        fi
+
+        CMD="pacman -Qi" 
+        TOTAL_SIZE=0
+
+        _pacman_set_vars
+        for i ; do
+            ## TODO: better awk command?
+            SIZE=$(eval "${CMD} $i" 2>&1 | grep "^$pacman_size" | cut -f2 -d':' | sed -e 's/\..*\| //g')
+            if [ ! "${SIZE}" = "" ];then
+                printf "%6s KiB %s\n" ${SIZE} $i
+                TOTAL_SIZE=$(($TOTAL_SIZE+$SIZE))
+            fi 
+        done
+
+        echo -e "${BIRed}Total size${CReset}: $(echo ${TOTAL_SIZE}) KiB"
+        _pacman_unset_vars
+    }
+fi
+
+## Print deps list.
 if [ -f "/usr/bin/pacman" ]; then
     pacman-deps()
     {
         ## Arguments
-        if [ $# -ne 1 ];then
-            echo "Requires only one single argument."
+        if [ $# -lt 1 ];then
+            echo "Please provide packages."
             return
         fi
-
-		## Bold High Intensty colors
-        BIBlack='\e[1;90m'  # Black
-        BIRed='\e[1;91m'    # Red
-        BIGreen='\e[1;92m'  # Green
-        BIYellow='\e[1;93m' # Yellow
-        BIBlue='\e[1;94m'   # Blue
-        BIPurple='\e[1;95m' # Purple
-        BICyan='\e[1;96m'   # Cyan
-        BIWhite='\e[1;97m'  # White
-        CReset='\e[0m'      # Text Reset
-        ARROW="${BIBlue}==>${CReset}"
 
         CMD="pacman -Qi"
 
@@ -559,40 +614,12 @@ if [ -f "/usr/bin/pacman" ]; then
             fi
         fi
 
-        ## List of dependencies. Note that it is stored as an ARRAY!
-        DEPLIST=($( echo "$APP_OUTPUT" | grep "Depends"| sed -e 's/Depends On.*: //g' | sed -e 's/[>=<][^ ]*//g'))
-
-        DEPLIST_INFO="$(eval "$CMD ${DEPLIST[*]}" 2>&1)"
-        SKIPPED_DEPS="$(echo "$DEPLIST_INFO" | awk '/^error:/ {print $3}')"
-        SIZE_ARRAY="$(echo "$DEPLIST_INFO" | awk '/^Installed Size/ {print $4}' | sed -e 's/\.[[:digit:]]*//g')"
-
-        echo -e "${ARROW} ${BIGreen}Deps size for ${BIYellow}$1${CReset}"
-        echo "$DEPLIST_INFO" | awk '/^Name/ {pkg=$3} /^Installed Size/ {print $4 " " $5,pkg}' | sort -n
-
-        TOTAL_SIZE=0
-        for i in $(echo "$SIZE_ARRAY"); do
-            TOTAL_SIZE=$(($TOTAL_SIZE+$i))
+        _pacman_set_vars
+        for i ; do
+            ## TODO: better awk command.
+            echo $( eval "${CMD} $i" 2>&1 | grep "^$pacman_deps"| cut -f2 -d':' | sed -e 's/[>=<][^ ]*//g')
         done
-
-        echo -e "${ARROW} ${BIGreen}Summary${CReset}"
-        echo "$APP_OUTPUT"
-        
-        echo -e "${BIRed}Deps size${CReset}      : $(echo "${TOTAL_SIZE}") KiB"
-        TOTAL_SIZE=$(($TOTAL_SIZE+$(echo "$APP_OUTPUT" | awk '/^Installed Size/ {print $4}'| sed -e 's/\.[[:digit:]]*//g')))
-        echo -e "${BIRed}Total size${CReset}     : $(echo "${TOTAL_SIZE}") KiB"
-
-        if [ ! -z "$SKIPPED_DEPS" ]; then
-            echo -e "$ARROW${BIPurple} Warning!${CReset} Errors were ecountered on"
-            echo -e "$SKIPPED_DEPS"
-        fi
+        _pacman_unset_vars
     }
 
-    ## TODO: completion does not work as is. It requires pacman arguments like -S or -Q.
-    ## There should be a way to use it.
-    # if isShell "zsh" ; then
-    #     compdef _pacman pacman-deps
-    # elif isShell "bash"; then
-    #     complete -o default -o nospace -F _pacman pacman-deps
-    # fi
 fi
-

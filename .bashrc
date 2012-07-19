@@ -29,7 +29,9 @@ isShell()
 SHELLDIR="$HOME/.shell.d"
 
 source "${SHELLDIR}/main_rc" # Should be sourced first.
-source "${SHELLDIR}/options_bash"
+source "${SHELLDIR}/options_bash" # Should be sourced first.
+source "${SHELLDIR}/colors_rc" # Should be sourced first.
+
 source "${SHELLDIR}/funs_rc"
 source "${SHELLDIR}/funs_bash"
 source "${SHELLDIR}/alias_rc"

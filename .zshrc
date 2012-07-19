@@ -30,7 +30,9 @@ isShell()
 SHELLDIR="$HOME/.shell.d"
 
 source "${SHELLDIR}/main_rc" # Should be sourced first.
-source "${SHELLDIR}/options_zsh"
+source "${SHELLDIR}/options_zsh" # Should be sourced first.
+source "${SHELLDIR}/colors_rc" # Should be sourced first.
+
 source "${SHELLDIR}/funs_rc"
 source "${SHELLDIR}/alias_rc"
 source "${SHELLDIR}/keys_zsh"
