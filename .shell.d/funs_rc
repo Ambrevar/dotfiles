@@ -461,30 +461,20 @@ _pacman_unset_vars()
     unset pacman_size
 }
 
-## Get detailed file size list for a specified package.
+## Get detailed file size list for the specified packages.
 if [ -f "/usr/bin/pacman" ]; then
     pacman-files()
     {
-        if [ $# -ne 1 ];then
+        if [ $# -lt 1 ];then
             echo "Wrong number of arguments."
             return
         fi
         
-        echo "$1"
-        RESULT=""
+        RESULT_HUMAN="$(du -bh $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u))"
+        RESULT="$(du -b $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u))"
+        echo "${RESULT_HUMAN}"
 
-        for i in $(pacman -Qlq $1); do
-            if [ -f "$i" ]; then
-                RESULT+="$(du -sh "$i")\n"
-            fi 
-        done
-
-        echo -e "${RESULT}" | grep -v "^$" | sort -h
-
-        echo -n "Total:  "
-        _pacman_set_vars
-        pacman -Qi $1 | grep "$pacman_size" | sed 's/^[^[:digit:]]*//'
-        _pacman_unset_vars
+        echo "$RESULT" | awk -F "[[:alpha:]]" '{TOTAL=$1+TOTAL} END {printf("Total:  %d KiB\n",TOTAL/1024)}'
     }
 fi
 
@@ -492,7 +482,10 @@ fi
 if [ -f "/usr/bin/pacman" ]; then
     pacman-official()
     {
-        diff <(pacman -Qq|sort) <(pacman -Qmq | sort) --new-line-format='' --unchanged-group-format='%>'
+        # Alternative 'diff' verision.
+        # diff <(pacman -Qq | sort) <(pacman -Qmq | sort) --new-line-format='' --unchanged-group-format='%>'
+
+        comm -3 <(pacman -Qq | sort) <(pacman -Qmq | sort)
     }
 fi
     
@@ -500,9 +493,6 @@ fi
 if [ -f "/usr/bin/pacman" ]; then
     pacman-diff()
     {
-        OPTION_FOREIGN=""
-        OPTION_LOCAL=">"
-
         printhelp()
         {
             echo "Synopsis:"
@@ -518,7 +508,7 @@ if [ -f "/usr/bin/pacman" ]; then
 
         OPTION_EXPLICIT=""
         OPTION_FOREIGN=""
-        OPTION_LOCAL=">"
+        OPTION_LOCAL="-1"
 
         while getopts ":hmqe" opt; do
             case $opt in
@@ -533,7 +523,7 @@ if [ -f "/usr/bin/pacman" ]; then
                     OPTION_FOREIGN="m"
                     ;;
                 q)
-                    OPTION_LOCAL="<"
+                    OPTION_LOCAL="-2"
                     ;;
                 ?) 
                     printhelp "$0"
@@ -555,8 +545,8 @@ if [ -f "/usr/bin/pacman" ]; then
             return 1
         fi
 
-        ## TODO: Use pacman-official diff parameters.
-        diff <(pacman -Qq${OPTION_FOREIGN}${OPTION_EXPLICIT} | sort) <(cat "$*" | sort) | grep "${OPTION_LOCAL}" | cut -f2 -d" "
+        comm -3 ${OPTION_LOCAL} <(pacman -Qq${OPTION_FOREIGN}${OPTION_EXPLICIT} | sort) <(sort "$*")
+
     }
 fi
 
@@ -623,12 +613,12 @@ if [ -f "/usr/bin/pacman" ]; then
         echo "$RESULT"
 
         ## Print total size.
-        echo "$RESULT" | awk '{TOTAL=$1+TOTAL} END {printf("Total : %d KiB\n",TOTAL)}'
+        echo "$RESULT" | awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}'
 
         ## One line version. ~ same performance.
         # eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
         #     '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | sort -u -k3 \
-        # | tee >(awk '{TOTAL=$1+TOTAL} END {printf("Total : %d KiB\n",TOTAL)}')
+        # | tee >(awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}')
 
         _pacman_unset_vars
     }

@@ -1,7 +1,7 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                               Author: Ambrevar                               #
-#                               Date: 2012-07-17                               #
+#                               Date: 2012-07-20                               #
 ################################################################################
 
 Synopsis
@@ -55,11 +55,13 @@ Vicious plugin, it is quite straightforward.
 
 Emacs
 *****
-Extra deps: auctex, auto-complete, emacs-lua-mode, emacs-yasnippet,
+Extra deps: auctex, auto-complete, emacs-lua-mode, emacs-mediawiki,
+emacs-yasnippet.
 
-Some keybindings and custom colors. (I find it more convenient on a 256-colors
-terminal.) Some customization -- columns, kill whole line, etc. Some plugins
-customization too.
+Some keybindings and custom colors (for 256-colors terminals). Extended file
+support (shell files, mutt mails, Arch Linux PKGBUILDs). Some customization --
+columns, kill whole line, etc. Some plugins customization too (LaTeX, Mediawiki,
+snippets). Some custom functions (duplicate line, unfill-paragraph, etc.).
 
 Luakit
 ******
@@ -81,8 +83,8 @@ I use GPG for password management, mostly because it features a password agent.
 I'm using embedded imap and smtp services -- you must provide the required
 compilation options.
 
-Some customization: custom index view, good Emacs integration -- see .emacs --,
-custom theme, various tweaks.
+Some customization: custom index view, good Emacs integration (see .emacs),
+custom theme (matches Emacs colors), various tweaks.
 
 Ranger
 ******
