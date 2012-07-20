@@ -277,7 +277,7 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86Terminal",    function () awful.util.spawn("urxvt") end),
 
     -- Calc
-    awful.key({ modkey,  }, "c",     function () awful.util.spawn(termcmd .. "calc") end),
+    awful.key({ modkey,  }, "b",     function () awful.util.spawn(termcmd .. "calc") end),
     awful.key({ }, "XF86Calculator", function () awful.util.spawn(termcmd .. "calc") end),
 
     -- File browser
@@ -330,8 +330,8 @@ globalkeys = awful.util.table.join(
     awful.key({ "Mod1" }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end),
 
     -- Touchpad
-    awful.key({ }, "XF86TouchpadToggle", function () awful.util.spawn("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
-    -- awful.key({ }, "XF86Tool",           function () awful.util.spawn("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
+    awful.key({ }, "XF86TouchpadToggle", function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
+    -- awful.key({ }, "XF86Tool",           function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
 
     -- Mouse control
     -- Bind ''Meta4+Ctrl+m'' to move the mouse to the coordinates set above.
@@ -379,10 +379,10 @@ globalkeys = awful.util.table.join(
         end),
 
     -- Layout resize
-    awful.key({ modkey, "Mod1" }, "Up",    function () awful.tag.incmwfact( 0.05)   end),
-    awful.key({ modkey, "Mod1" }, "Down",  function () awful.tag.incmwfact(-0.05)   end),
-    awful.key({ modkey, "Mod1" }, "Left",  function () awful.client.incwfact(-0.05) end),
-    awful.key({ modkey, "Mod1" }, "Right", function () awful.client.incwfact( 0.05) end),
+    awful.key({ modkey, "Mod1" }, "Left",    function () awful.tag.incmwfact(-0.05)   end),
+    awful.key({ modkey, "Mod1" }, "Right",  function () awful.tag.incmwfact(0.05)   end),
+    awful.key({ modkey, "Mod1" }, "Up",  function () awful.client.incwfact(0.05) end),
+    awful.key({ modkey, "Mod1" }, "Down", function () awful.client.incwfact(-0.05) end),
 
     -- Floating clients move and resize
     awful.key({ modkey , "Mod1"}, "j", function () awful.client.moveresize( 20,  20, -40, -40) end),
@@ -393,10 +393,10 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "l",         function () awful.client.moveresize( 20,   0,   0,   0) end),
 
     -- Layout organization
-    awful.key({ modkey, "Control" }, "Up", function () awful.tag.incnmaster( 1) end),
-    awful.key({ modkey, "Control" }, "Down",  function () awful.tag.incnmaster(-1) end),
-    awful.key({ modkey, "Control" }, "Left",    function () awful.tag.incncol( 1)    end),
-    awful.key({ modkey, "Control" }, "Right",  function () awful.tag.incncol(-1)    end),
+    awful.key({ modkey, "Control" }, "Left", function () awful.tag.incnmaster( 1) end),
+    awful.key({ modkey, "Control" }, "Right",  function () awful.tag.incnmaster(-1) end),
+    awful.key({ modkey, "Control" }, "Up",    function () awful.tag.incncol( 1)    end),
+    awful.key({ modkey, "Control" }, "Down",  function () awful.tag.incncol(-1)    end),
 
     awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
@@ -465,18 +465,19 @@ for i = 1, keynumber do
                           awful.tag.viewtoggle(tags[screen][i])
                       end
                   end),
-        awful.key({ modkey, "Shift" }, "#" .. i + 9,
+        awful.key({ modkey, "Mod1" }, "#" .. i + 9,
                   function ()
                       if client.focus and tags[client.focus.screen][i] then
                           awful.client.movetotag(tags[client.focus.screen][i])
                       end
-                  end),
-        awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
-                  function ()
-                      if client.focus and tags[client.focus.screen][i] then
-                          awful.client.toggletag(tags[client.focus.screen][i])
-                      end
-                  end))
+                  end)
+                                      )
+        -- awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
+        --           function ()
+        --               if client.focus and tags[client.focus.screen][i] then
+        --                   awful.client.toggletag(tags[client.focus.screen][i])
+        --               end
+        --           end)
 end
 
 clientbuttons = awful.util.table.join(

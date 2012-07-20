@@ -147,11 +147,13 @@ gdb
 gimp
 gnumeric
 gnuplot
+gpicview
 handbrake
 hdparm
 help2man
 highlight
 htop
+imagemagick
 inkscape
 irssi
 lrzip
@@ -172,6 +174,7 @@ openshot
 openssh
 p7zip
 pari
+pdfinfo
 pidgin
 pwgen
 pwsafe
@@ -192,6 +195,7 @@ tcpdump
 texlive
 trash-cli
 tree
+udiskie
 valgrind
 vim
 vlock

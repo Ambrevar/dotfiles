@@ -81,6 +81,10 @@
 ;; Man-mode
 (setenv "MANWIDTH" "80")
 
+;; Browser
+(setq browse-url-generic-program (executable-find "luakit")
+browse-url-browser-function 'browse-url-generic)
+
 ;;==============================================================================
 ;; Theme
 ;;==============================================================================
@@ -572,6 +576,7 @@ the line."
 ;;==============================================================================
 ;; MediaWiki
 ;;==============================================================================
+
 (require 'mediawiki)
 
 ;; TODO:  make it 'customize' independant.
@@ -582,6 +587,13 @@ the line."
  ;; If there is more than one, they won't work right.
  '(mediawiki-site-alist (quote (("Wikipedia" "http://en.wikipedia.org/w/" "Ambrevar" "" "Main Page") ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX") ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt")))))
 
-;;==============================================================================
+
+(setq mediawiki-mode-hook (lambda ()
+                            (visual-line-mode 1)
+                            (turn-off-auto-fill)
+))
+
+
+;;=============================================================================↑=
 ;;==============================================================================
 ;;
