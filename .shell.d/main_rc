@@ -11,6 +11,9 @@ umask 027
 ## Path
 export PATH=.:$PATH
 
+## TeXlive
+export PATH=/usr/local/texlive/2012/bin/x86_64-linux/:$PATH
+
 ## Terminal
 # if [[ "$TERM" = "*rxvt*" ]]; then 
 #     export TERM="rxvt-unicode"

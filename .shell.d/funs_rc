@@ -422,6 +422,74 @@ lsofstat()
     done
 }
 
+## Format C
+formatc()
+{
+    echo "WARNING: Work in progress."
+
+    if [ ! $# -eq 1 ]; then
+        echo "Wrong number of argument."
+        return
+    fi
+
+    
+    FILE="$1"
+
+    ## Remove trailing whitespace
+    sed -i 's/\s*$//g' "$FILE"
+
+    ## Function parenthesis
+    sed -i 's/\([^ ]\)(/\1 (/g' "$FILE"
+    sed -i 's/\s\s\+(/ (/g' "$FILE"
+ 
+    ## Semicolon
+    sed -i 's/\([^ ]\);/\1 ;/g' "$FILE"
+    sed -i 's/;\([^ ]\)/; \1/g' "$FILE"
+    # Skip line -- Bad idea because of 'for' loops.
+    # sed -i 's/^\(\s*\)\(.*\);\s*\(.\+\)$/\1\2;\n\1\3/g' "$FILE"
+
+    ## Commas
+    sed -i 's/\s\s\+,/,/g' "$FILE"
+    sed -i 's/,\([^ ]\)/, \1/g' "$FILE"
+
+    ## Plus/Minus
+    sed -i 's/\([^+-]\)\([-+]\)\([^ +-]\)/\1\2 \3/g' "$FILE"
+    sed -i 's/\([^ +-]\)\([-+]\)\([^+-]\)/\1 \2\3/g' "$FILE"
+    sed -i 's/\( \+++\)/++/g' "$FILE"
+    sed -i 's/\(++ \+\)/++/g' "$FILE"
+    sed -i 's/\( \+--\)/--/g' "$FILE"
+    sed -i 's/\(-- \+\)/--/g' "$FILE"
+
+    ## Modulus, Equality, Affectation, Binary ops, Comparison
+    sed -i 's/\s\s\+\(%\|==\|&&\|||\|<=\|>=\|!=\)/ \1/g' "$FILE"
+    sed -i 's/\(%\|==\|&&\|||\|<=\|>=\|!=\)\s\s\+/\1 /g' "$FILE"
+    sed -i 's/\([^ ]\)\(%\|==\|&&\|||\|<=\|>=\|!=\)/\1 \2/g' "$FILE"
+    sed -i 's/\(%\|==\|&&\|||\|<=\|>=\|!=\)\([^ ]\)/\1 \2/g' "$FILE"
+
+    ## Equality, >, <
+    sed -i 's/\s\s\+\([<>=]\)/ \1/g' "$FILE"
+    sed -i 's/\([<>=]\)\s\s\+/\1 /g' "$FILE"
+    sed -i 's/\([<>=]\)\([^ =]\)/\1 \2/g' "$FILE"
+    sed -i 's/\([^ ]\)\([<>]\)/\1 \2/g' "$FILE"
+    sed -i 's/\([^ =<>]\)\(=\)/\1 \2/g' "$FILE"
+
+    ## Asterisk, slash
+    sed -i 's/\s\s\+\*/ \*/g' "$FILE"
+    sed -i 's/\*\s\s\+/\* /g' "$FILE"
+
+    sed -i 's/\([^\/]\)\/\s\+/\1\//g' "$FILE"
+    sed -i 's/\s\+\/\([^\/]\)/\/\1/g' "$FILE"
+
+
+    ## Braces
+    sed -i 's/^\( *\)\(.\+\) *{ *$/\1\2\n\1{/g' "$FILE"
+
+    ## Proper comments
+    sed -i 's:// *\([[:lower:]]\):// \u\1:g' "$FILE"
+    sed -i 's:\(//.*[^\.]\)$:\1\.:g' "$FILE"
+}
+
+
 ##==============================================================================
 ## Pacman Functions
 ##==============================================================================

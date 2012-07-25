@@ -22,7 +22,6 @@ bzr
 calc
 catdvi
 cmus
-consolekit
 coreutils
 cpufrequtils
 cronie
@@ -43,6 +42,7 @@ emacs-lua-mode
 emacs-mediawiki-bzr
 emacs-nox
 emacs-yasnippet
+expac
 fakeroot
 fbv
 feh
@@ -92,7 +92,6 @@ libtool
 licenses
 links
 linux
-linux-docs
 linux-lts
 logrotate
 lrzip
@@ -157,9 +156,7 @@ task
 tcpdump
 texi2html
 texinfo
-texlive-genericextra
-texlive-latexextra
-texlive-pictures
+texlive-dummy
 trash-cli
 tree
 unrar
@@ -185,7 +182,7 @@ wireshark-gtk
 wpa_supplicant
 wv
 xf86-input-synaptics
-xf86-video-intel-uxa
+xf86-video-intel
 xf86-video-vesa
 xfsprogs
 xorg-server

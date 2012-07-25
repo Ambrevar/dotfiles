@@ -76,10 +76,8 @@ alias echolibpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 ## Shutdown / Reboot
 ## Will only work with consolekit and dbus daemons running.
 if [ -e "/usr/bin/dbus-send" ]; then
-    alias halt='dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop'
-    alias reboot='dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart'
-    alias restart='dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart'
-    alias shutdown='dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop'
+    alias halt='sudo halt'
+    alias reboot='sudo reboot'
 fi
 
 ## Screensaver
@@ -126,9 +124,11 @@ if [ "$PACMAN_FRONTEND" = "pacman" ]; then
     alias pc='sudo pacman -Scc'
     alias pi='sudo pacman -S --needed'
     alias pqi='pacman -Qi'
+    alias pql='pacman -Ql'
+    alias pqo='pacman -Qo'
     alias pqs='pacman -Qs'
-    alias psi='pacman -Si'
     alias pr='sudo pacman -Rs'
+    alias psi='pacman -Si'
     alias pss='pacman -Ss'
     alias pu='sudo pacman -Syu'
 fi
@@ -137,12 +137,13 @@ if [ "$PACMAN_FRONTEND" = "pacman-color" ]; then
     alias pc='sudo pacman-color -Scc'
     alias pi='sudo pacman -S --needed'
     alias pqi='pacman-color -Qi'
+    alias pql='pacman-color -Ql'
+    alias pqo='pacman-color -Qo'
     alias pqs='pacman-color -Qs'
-    alias psi='pacman-color -Si'
     alias pr='sudo pacman-color -Rs'
+    alias psi='pacman-color -Si'
     alias pss='pacman-color -Ss'
     alias pu='sudo pacman-color -Syu'
-    alias pql='pacman -Ql'
 fi
 
 ##==============================================================================

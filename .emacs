@@ -366,18 +366,33 @@ the line."
 
 ;; Duplicate line
 (define-key my-keys-minor-mode-map (kbd "C-d") 'duplicate-line)
+(define-key my-keys-minor-mode-map (kbd "M-a") 'beginning-of-defun)
+(define-key my-keys-minor-mode-map (kbd "M-e") 'end-of-defun)
 
 ;; Paste from clipboard.
 ;; (define-key my-keys-minor-mode-map (kbd "M-p") (kbd "C-u M-! xclip <SPC> -o"))
-(define-key my-keys-minor-mode-map (kbd "M-p") (kbd "C-u M-! xsel <SPC> -o"))
+(define-key my-keys-minor-mode-map (kbd "C-<f6>") (kbd "M-| xsel <SPC> -p <SPC> -i"))
+(define-key my-keys-minor-mode-map (kbd "C-<f7>") (kbd "C-u M-! xsel <SPC> -o"))
+(define-key my-keys-minor-mode-map (kbd "C-<f8>") (kbd "C-u M-! xsel <SPC> -o -b"))
+
+;; Modern scrolling
+(global-set-key [next]
+                (lambda () (interactive)
+                  (condition-case nil (scroll-up)
+                    (end-of-buffer (goto-char (point-max))))))
+
+(global-set-key [prior]
+                (lambda () (interactive)
+                  (condition-case nil (scroll-down)
+                    (beginning-of-buffer (goto-char (point-min))))))
 
 ;; Compilation
 (define-key my-keys-minor-mode-map (kbd "<f10>") 'compile)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
 
 ;; Window resize
-(define-key my-keys-minor-mode-map (kbd "S-C-<right>") 'shrink-window-horizontally)
-(define-key my-keys-minor-mode-map (kbd "S-C-<left>") 'enlarge-window-horizontally)
+;; (define-key my-keys-minor-mode-map (kbd "S-C-<right>") 'shrink-window-horizontally)
+;; (define-key my-keys-minor-mode-map (kbd "S-C-<left>") 'enlarge-window-horizontally)
 ;; (define-key my-keys-minor-mode-map (kbd "S-C-<down>") 'shrink-window)
 ;; (define-key my-keys-minor-mode-map (kbd "S-C-<up>") 'enlarge-window)
 
@@ -497,10 +512,10 @@ the line."
 ;;==============================================================================
 ;; Auto-Complete
 ;;==============================================================================
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/auto-complete")
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "/usr/share/emacs/site-lisp/auto-complete/ac-dict")
-(ac-config-default)
+;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/auto-complete")
+;; (require 'auto-complete-config)
+;; (add-to-list 'ac-dictionary-directories "/usr/share/emacs/site-lisp/auto-complete/ac-dict")
+;; (ac-config-default)
 
 ;;==============================================================================
 ;; AucTeX

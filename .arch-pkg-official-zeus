@@ -37,7 +37,6 @@ cdparanoia
 cloog
 cmus
 compositeproto
-consolekit
 coreutils
 cpufrequtils
 cracklib
@@ -75,6 +74,7 @@ emacs-nox
 enca
 enchant
 eventlog
+expac
 expat
 faac
 faad2
@@ -135,7 +135,6 @@ gpgme
 gpm
 grep
 groff
-grub
 gsasl
 gsettings-desktop-schemas
 gsfonts
@@ -326,7 +325,6 @@ licenses
 links
 linux
 linux-api-headers
-linux-docs
 linux-firmware
 linux-lts
 lirc-utils
@@ -466,11 +464,6 @@ task
 tcpdump
 texi2html
 texinfo
-texlive-bin
-texlive-core
-texlive-genericextra
-texlive-latexextra
-texlive-pictures
 tree
 ttf-dejavu
 tzdata
@@ -510,7 +503,7 @@ xextproto
 xf86dgaproto
 xf86-input-evdev
 xf86-input-synaptics
-xf86-video-intel-uxa
+xf86-video-intel
 xf86-video-vesa
 xf86vidmodeproto
 xfsprogs

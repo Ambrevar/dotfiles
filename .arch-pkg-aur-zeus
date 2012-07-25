@@ -5,6 +5,7 @@ dropbox
 dropbox-cli
 emacs-mediawiki-bzr
 emacs-yasnippet
+grub
 gsharkdown
 handbrake-cli-svn
 handbrake-svn
@@ -12,6 +13,7 @@ movgrab
 package-query
 pacman-color
 rxvt-unicode-patched
+texlive-dummy
 trash-cli
 urlview
 urxvt-clipboard

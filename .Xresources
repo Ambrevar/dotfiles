@@ -23,13 +23,15 @@ URxvt*scrollBar: false
 
 !! Plugins
 !! clipboard and keyboard-select are not provided by default.
-URxvt.perl-ext-common  : default,matcher,keyboard-select
+! URxvt.perl-ext-common  : default,matcher,keyboard-select
+URxvt.perl-ext-common  : matcher,keyboard-select
+
 
 ! URxvt.keysym.M-v:   perl:clipboard:paste
 ! URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
 
 !! Keyboard-Select
-URxvt.keysym.M-Escape:  perl:keyboard-select:activate
+URxvt.keysym.M-Escape:  perl:keyboard-select:activate   
 ! URxvt.keysym.M-s:       perl:keyboard-select:search
 
 !! URL Support

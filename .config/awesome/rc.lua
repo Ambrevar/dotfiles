@@ -128,7 +128,7 @@ batf:close()
 
 -- Volume
 volmwidget = widget({ type = "textbox" })
-vicious.register(volmwidget, vicious.widgets.volume, "Master: $1% $2 ", 1, "Master")
+vicious.register(volmwidget, vicious.widgets.volume, "Master $1% $2 ", 1, "Master")
 -- PCM may not be available all the time on every machine.
 -- If PCM is toggled after awesome has been started, you'll need to reload the
 -- configuration.
@@ -137,13 +137,17 @@ local volpf = io.popen("amixer | grep PCM 2>/dev/null")
 local volpl = volpf:read("*a")
 if volpl ~= "" then
    volpwidget = widget({ type = "textbox" })
-   vicious.register(volpwidget, vicious.widgets.volume, "PCM: $1%", 1, "PCM")
+   vicious.register(volpwidget, vicious.widgets.volume, "PCM $1%", 1, "PCM")
 end
 volpf:close()
 
 -- Separator
 separator = widget({ type = "textbox" })
 separator.text = " | "
+separatordate = widget({ type = "textbox" })
+separatordate.text = " |"
+separatorapps = widget({ type = "textbox" })
+separatorapps.text = " "
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -222,7 +226,7 @@ for s = 1, screen.count() do
         },
         s == 1 and systraywidget or nil,
         clockwidget,
-        separator,
+        separatordate,
         volpwidget,
         volmwidget,
         separator,
@@ -231,7 +235,7 @@ for s = 1, screen.count() do
         netwidget,
         separator,
         batwidget,
-        separator,
+        separatorapps,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -331,7 +335,7 @@ globalkeys = awful.util.table.join(
 
     -- Touchpad
     awful.key({ }, "XF86TouchpadToggle", function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
-    -- awful.key({ }, "XF86Tool",           function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
+    awful.key({ }, "XF86Tools",           function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
 
     -- Mouse control
     -- Bind ''Meta4+Ctrl+m'' to move the mouse to the coordinates set above.
