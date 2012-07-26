@@ -31,7 +31,7 @@ URxvt.perl-ext-common  : matcher,keyboard-select
 ! URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
 
 !! Keyboard-Select
-URxvt.keysym.M-Escape:  perl:keyboard-select:activate   
+URxvt.keysym.M-Escape:  perl:keyboard-select:activate
 ! URxvt.keysym.M-s:       perl:keyboard-select:search
 
 !! URL Support

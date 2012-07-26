@@ -209,6 +209,8 @@ add_binds("normal", {
     -- key({},          "b",           function (w, m) w:back(m.count)    end),
 
     -- Tab
+    key({"Control"}, "k",     function (w)       w:prev_tab() end),
+    key({"Control"}, "j",   function (w)       w:next_tab() end),
     key({"Control"}, "Page_Up",     function (w)       w:prev_tab() end),
     key({"Control"}, "Page_Down",   function (w)       w:next_tab() end),
     key({"Control"}, "Tab",         function (w)       w:next_tab() end),
@@ -245,7 +247,6 @@ add_binds("normal", {
 
     -- CUSTOM
     -- Download page.
-
     buf("^D$",                      function (w, c) w:enter_cmd(":download " .. (w.view.uri or "")) end),
 
 

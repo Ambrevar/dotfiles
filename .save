@@ -162,6 +162,9 @@ FILELIST=(${FILELIST[*]} ".gnupg/gpg-agent.conf")
 FILELIST=(${FILELIST[*]} ".gtkrc-2.0")
 FILELIST=(${FILELIST[*]} ".config/gtk-3.0/settings.ini")
 
+## Git
+FILELIST=(${FILELIST[*]} ".git")
+
 ## Irssi
 FILELIST=(${FILELIST[*]} ".irssi")
 
