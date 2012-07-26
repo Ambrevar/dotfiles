@@ -12,8 +12,17 @@ umask 027
 export PATH=.:$PATH
 
 ## TeXlive
-if [ -d "/usr/local/texlive/2012/bin/x86_64-linux/" ]; then
-    export PATH=/usr/local/texlive/2012/bin/x86_64-linux/:$PATH
+TEXROOT="/usr/local/texlive"
+if [ -d "${TEXROOT}" ]; then
+    TEXYEAR=$(/bin/ls -1r "${TEXROOT}" | grep -m1 "[0-9]\{4\}")
+    TEXDISTRO=$(uname | tr "[[:upper:]]" "[[:lower:]]")
+    TEXFOLDER="/usr/local/texlive/${TEXYEAR}/bin/$(uname -m)-${TEXDISTRO}/"
+    if [ -d "${TEXFOLDER}" ]; then
+        export PATH=${TEXFOLDER}:$PATH
+    fi
+    unset TEXYEAR
+    unset TEXDISTRO
+    unset TEXFOLDER
 fi
 
 ## Terminal
