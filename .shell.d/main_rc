@@ -1,7 +1,7 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Shell Config -- Main
-## Date 2012-07-09
+## Date 2012-07-27
 ################################################################################
 
 ## Mask
@@ -34,8 +34,9 @@ fi
 ## Make 'less' more friendly for non-text input files, see lesspipe(1).
 [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
 
-## Choose pager.
+## Manpage.
 export MANPAGER="less -s"
+export MANWIDTH=80
 
 ## Time display (with ls command for example)
 export TIME_STYLE=+"| %d/%m/%Y  %H:%M | "

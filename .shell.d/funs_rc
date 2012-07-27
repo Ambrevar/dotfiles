@@ -359,36 +359,95 @@ function texclean ()
 
 
 ## Create an archive from a single or multiples files/folders.
-## This archive 
 archive-project ()
 {
+    printhelp()
+    {
+        echo "Synopsis:"
+        echo -e "  $1 [-m METHOD] [-v] FILE"
+        echo
+        echo "Usage:"
+        echo -e "  default:\tDisplay packages included in FILE but not installed."
+        echo -e "  -h:\t\tDisplay this help."
+        echo -e "  -m:\t\tChoose compression method."
+        echo -e "    gz\t\tgzip (default)."
+        echo -e "    xz\t\tLZMA."
+        echo -e "  -v:\t\tInclude VCS data."
+    }
+
+    OPTION_VCS="--exclude-vcs"
+
+    while getopts ":hm:v" opt; do
+        case $opt in
+            h)
+                printhelp "$0"
+                return 1
+                ;;
+            m)
+                OPTION_METHOD="${OPTARG}"
+                ;;
+            v)
+                OPTION_VCS=""
+                ;;
+            ?) 
+                printhelp "$0"
+                return 1
+                ;;
+            :)
+                echo "Missing argument."
+                echo "Use $0 -h for help."
+                return 1
+                ;;
+        esac
+    done
+
+    case $OPTION_METHOD in
+        "gz")
+            ARCEXT="tar.gz"
+            ARCOPT="z"
+            ;;
+        "xz")
+            ARCEXT="tar.xz"
+            ARCOPT="J"
+            ;;
+        *)
+            ARCEXT="tar.gz"
+            ARCOPT="z"
+            ;;
+    esac
+
+    shift $(($OPTIND - 1))
+
+    if [ $# -eq 0 ]; then
+        echo "Missing argument."
+        echo "Use $0 -h for help."
+        return 1
+    fi
+
     if [ $# -eq 1 ]; then
         ARCPATH="$(dirname $(readlink -f "$1"))"
         ARCSOURCE="$(basename $(readlink -f "$1"))"
-        ARCNAME="${ARCSOURCE}-$(date +%y-%m-%d-%H%M%S).tgz"
+        ARCNAME="${ARCSOURCE}-$(date +%y-%m-%d-%H%M%S).${ARCEXT}"
 
         (cd "$ARCPATH" && \
-            tar cvzf "$ARCNAME" "$ARCSOURCE" --exclude-vcs)            
+            tar -${ARCOPT} -cvf "$ARCNAME" "$ARCSOURCE" ${OPTION_VCS})
 
     else
         ARCSOURCE="$(basename $PWD)"
-        ARCNAME="$(basename "$ARCSOURCE")-$(date +%y-%m-%d-%H%M%S).tgz"
+        ARCNAME="$(basename "$ARCSOURCE")-$(date +%y-%m-%d-%H%M%S).${ARCEXT}"
 
         if [ $# = 0 ];then
 
             (cd "$PWD/.." && \
-                tar cvzf "$ARCNAME" "$ARCSOURCE" --exclude-vcs)
+                tar -${ARCOPT} -cvf "$ARCNAME" "$ARCSOURCE" ${OPTION_VCS})
 
         else
             FILELIST=()
-
             for i; do
                 FILELIST=(${FILELIST[*]} "$i")
             done
-
-            tar cvzf "$ARCNAME" ${FILELIST[*]} --exclude-vcs
+            tar -${ARCOPT} -cvf "$ARCNAME" ${FILELIST[*]} ${OPTION_VCS}
         fi 
-
     fi
 }
 

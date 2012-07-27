@@ -179,6 +179,7 @@ irssi
 isl
 ispell
 jack
+jansson
 jasper
 jfsutils
 json-c
@@ -322,6 +323,7 @@ libxxf86dga
 libxxf86vm
 libzen
 licenses
+lighttpd
 links
 linux
 linux-api-headers

@@ -21,6 +21,7 @@ bzip2
 bzr
 calc
 catdvi
+cgdb
 cmus
 coreutils
 cpufrequtils
@@ -53,6 +54,7 @@ firefox
 flashplugin
 flex
 fortune-mod
+fortune-mod-tbbt
 gawk
 gcc
 gcc-libs
@@ -85,11 +87,13 @@ iptables
 iputils
 irssi
 ispell
+jansson
 jfsutils
 laptop-mode-tools
 less
 libtool
 licenses
+lighttpd
 links
 linux
 linux-lts
