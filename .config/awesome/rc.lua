@@ -272,13 +272,13 @@ end
 -- Note that some laptop will not work when pressing Super+Fn.
 -- Therefore we only use Fn and Mod1+Fn.
 --------------------------------------------------------------------------------
--- termcmd = "lxterminal -e "
-termcmd = "urxvt -e "
+term = "urxvt"
+termcmd = term .. " -e "
 
 globalkeys = awful.util.table.join(
    -- Terminal
-    awful.key({ modkey,  }, "Return", function () awful.util.spawn("urxvt") end),
-    awful.key({ }, "XF86Terminal",    function () awful.util.spawn("urxvt") end),
+    awful.key({ modkey,  }, "Return", function () awful.util.spawn(term) end),
+    awful.key({ }, "XF86Terminal",    function () awful.util.spawn(term) end),
 
     -- Calc
     awful.key({ modkey,  }, "b",     function () awful.util.spawn(termcmd .. "calc") end),
