@@ -59,8 +59,12 @@ set my_ac_work=work
 set my_ac_university=university
 
 ## Login
-## Store passwords as follows:
-## set my_pw_account = foo
+## Store passwords as follows in .mutt-pwds:
+##   set my_pw_account = foo
+## Generate a key pair with:
+##   gpg2 --gen-key
+## Encrypt them with:
+##   gpg2 -e -r <user> ".mutt-pwds"
 source "gpg2 -dq ~/.mutt-pwds.gpg |"
 
 ## Accounts list
@@ -70,7 +74,7 @@ folder-hook '$my_ac_university' 'source ~/.mutt/$my_ac_university'
 
 ## Switch to default account on startup
 source "~/.mutt/$my_ac_personal"
-#source "~/.mutt/$my_ac_work"
+# source "~/.mutt/$my_ac_work"
 # source "~/.mutt/$my_ac_university"
 
 ## Keys
