@@ -1,28 +1,21 @@
 #!/bin/sh
 ################################################################################
 ## XINITRC
-## Last updated: 2012-07-04
+## Last updated: 2012-07-30
 ################################################################################
 
-## Config (for rxvt)
+## Config (for URxvt)
 [ -f "${HOME}/.Xresources" ] && xrdb -merge "${HOME}/.Xresources"
 
 ## Useful tools
-[ "$(which numlockx)" != "" ] && numlockx on
+numlockx on
 [ "$(amixer | grep PCM)" != "" ] && amixer set PCM 80%
-
-## GPG-Agent
-# [ "$(which gpg-agent)" != "" ] && eval $(gpg-agent --daemon)
 
 ##==============================================================================
 ## Launch session
 ##==============================================================================
 udiskie &
-[ -e /usr/bin/awesome ] && exec awesome
-# [ -e /usr/bin/awesome ] && exec ck-launch-session awesome
-# [ -e /usr/bin/awesome ] && exec ck-launch-session zsh -c "udiskie & awesome"
-# [ -e /usr/bin/awesome ] && exec zsh -c "udiskie & awesome"
-
+exec awesome
 
 
 # [ -e /usr/bin/startlxde ] && exec ck-launch-session startlxde

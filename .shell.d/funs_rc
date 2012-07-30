@@ -209,15 +209,6 @@ termsupport()
     done | sort -nk2
 }
 
-
-## Start X and lock current terminal (press ENTER when back in terminal to prompt for password)
-if [ -e "/usr/bin/vlock" ]; then
-    sx(){
-	    startx &
-	    vlock
-    }
-fi
-
 ## Colored man pager. 
 man()
 {
@@ -331,35 +322,8 @@ pdfcompress ()
     fi
 }
 
-# This function will clean TeX/LaTeX project folders recursively.
-function texclean ()
-{
-    if [ -z "$1" ]; then
-	    WORKDIR="$PWD"
-    else
-	    WORKDIR="$1"
-    fi
-
-    find "$WORKDIR" \( \
-	    -name "*.aux" -o \
-        -name "*.idx" -o \
-        -name "*.ilg" -o \
-        -name "*.ind" -o \
-        -name "*.lof" -o \
-        -name "*.log" -o \
-        -name "*.nav" -o \
-        -name "*.out" -o \
-        -name "*.snm" -o \
-        -name "*.tns" -o \
-        -name "*.toc" \) \
-        -exec echo {} \; \
-        -exec rm -f {} \;
-}
-
-
-
 ## Create an archive from a single or multiples files/folders.
-archive-project ()
+archive ()
 {
     printhelp()
     {
@@ -451,22 +415,60 @@ archive-project ()
     fi
 }
 
-## Clean current folder
-cleanvcs()
+# This function will clean TeX/LaTeX project folders recursively.
+function texclean ()
 {
+    if [ -z "$1" ]; then
+	    WORKDIR="$PWD"
+    else
+	    WORKDIR="$1"
+    fi
+
+    find "$WORKDIR" -type f \( \
+	    -name "*.aux" -o \
+        -name "*.idx" -o \
+        -name "*.ilg" -o \
+        -name "*.ind" -o \
+        -name "*.lof" -o \
+        -name "*.log" -o \
+        -name "*.nav" -o \
+        -name "*.out" -o \
+        -name "*.snm" -o \
+        -name "*.tns" -o \
+        -name "*.toc" \) \
+        -print \
+        -delete
+}
+
+## Clean current folder
+vcsclean()
+{
+    if [ -z "$1" ]; then
+	    WORKDIR="$PWD"
+    else
+	    WORKDIR="$1"
+    fi
+
     unset CHOICE
     echo "This will clean current folder from all VCS control files."
     echo -n "Proceed ? [y/N] "
     while [ -z "$CHOICE" ];
     do
-        # read 'Proceed [y/N] ' CHOICE
         read CHOICE
     done
 
     CHOICE=$(echo $CHOICE | tr '[:upper:]' '[:lower:]')
     if [ "$CHOICE" = "y"  ]; then
-        find . -type d -name ".svn" -exec rm -rf {} \;
-        echo "VCS files cleaned."
+        find "$WORKDIR" -type d \( \
+	        -name ".bzr" -o \
+	        -name ".cvs" -o \
+	        -name ".git" -o \
+	        -name ".hg" -o \
+	        -name ".svn" \) \
+            -print \
+            -delete
+
+            echo "VCS files cleaned."
     fi
 }
 
@@ -482,6 +484,7 @@ lsofstat()
 }
 
 ## Format C
+## Consider indent, astyle, uncrustify.
 formatc()
 {
     echo "WARNING: Work in progress."
@@ -519,7 +522,7 @@ formatc()
     sed -i 's/\( \+--\)/--/g' "$FILE"
     sed -i 's/\(-- \+\)/--/g' "$FILE"
 
-    ## Modulus, Equality, Affectation, Binary ops, Comparison
+    ## Modulus, equality, affectation, binary ops, comparison
     sed -i 's/\s\s\+\(%\|==\|&&\|||\|<=\|>=\|!=\)/ \1/g' "$FILE"
     sed -i 's/\(%\|==\|&&\|||\|<=\|>=\|!=\)\s\s\+/\1 /g' "$FILE"
     sed -i 's/\([^ ]\)\(%\|==\|&&\|||\|<=\|>=\|!=\)/\1 \2/g' "$FILE"
@@ -592,12 +595,49 @@ _pacman_unset_vars()
 if [ -f "/usr/bin/pacman" ]; then
     pacman-files()
     {
-        if [ $# -lt 1 ];then
-            echo "Wrong number of arguments."
-            return
+        printhelp()
+        {
+            echo "Synopsis:"
+            echo -e "  $1 [-n] PACKAGES"
+            echo
+            echo "Usage:"
+            echo -e "  default:\tDisplay file size of PACKAGES."
+            echo -e "  -h:\t\tDisplay this help."
+            echo -e "  -n:\t\tSort by size."
+        }
+
+        OPTION_SORT="cat"
+
+        while getopts ":hn" opt; do
+            case $opt in
+                h)
+                    printhelp "$0"
+                    return 1
+                    ;;
+                n)
+                    OPTION_SORT="sort -h"
+                    ;;
+                ?) 
+                    printhelp "$0"
+                    return 1
+                    ;;
+                :)
+                    echo "Missing argument."
+                    echo "Use $0 -h for help."
+                    return 1
+                    ;;
+            esac
+        done
+
+        shift $(($OPTIND - 1))
+
+        if [ $# -eq 0 ]; then
+            echo "Missing argument."
+            echo "Use $0 -h for help."
+            return 1
         fi
         
-        RESULT_HUMAN="$(du -bh $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u))"
+        RESULT_HUMAN="$(du -bh $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u) | eval ${OPTION_SORT})"
         RESULT="$(du -b $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u))"
         echo "${RESULT_HUMAN}"
 
@@ -690,7 +730,7 @@ if [ -f "/usr/bin/pacman" ]; then
             echo "Usage:"
             echo -e "  default:\tDisplay package size. Output contains no double and is alphabetically sorted. A grand total is printed at the end. It will only work for repos packages by default."
             echo -e "  -h:\t\tShow this help."
-            echo -e "  -n:\t\tOutput is sorted by size.."
+            echo -e "  -n:\t\tOutput is sorted by size."
             echo -e "  -q:\t\tUses installed packages database instead of repos database. It speeds up queries and allows displaying size of local packages not available in repos."
         }
 
@@ -808,5 +848,60 @@ if [ -f "/usr/bin/pacman" ]; then
         _pacman_unset_vars
     }
 fi
+
+fi
+
+
+##==============================================================================
+## TeXlive functions
+##==============================================================================
+
+## TeXlive
+if [ -d "/usr/local/texlive" ]; then
+
+    tlinit ()
+    {
+        if [ $(id -u) -ne 0 ]; then
+            echo "You must be root to run this script."
+            exit
+        fi
+
+        ## Warning: it is important to set umask properly, otherwise users might
+        ## not have authorization to use the packages.
+        umask 022
+
+        tlmgr install \
+            amscls \
+            amsfonts \
+            amsmath \
+            bigfoot \
+            colortbl \
+            easylist \
+            ec \
+            enctex \
+            eso-pic \
+            etoolbox \
+            fancyhdr \
+            fix2col \
+            geometry \
+            glyphlist \
+            graphics \
+            hyperref \
+            lipsum \
+            listings \
+            marvosym \
+            mdwtools \
+            microtype \
+            moderncv \
+            needspace \
+            oberdiek \
+            pgf \
+            url \
+            was \
+            wrapfig \
+            xargs \
+            xcolor \
+            zapfding
+    }
 
 fi

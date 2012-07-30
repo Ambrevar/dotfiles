@@ -130,6 +130,7 @@ Complete applist
 ****************
 
 antiword
+astyle
 atool
 awesome
 bashmount
@@ -156,6 +157,7 @@ help2man
 highlight
 htop
 imagemagick
+indent
 inkscape
 irssi
 lrzip

@@ -80,6 +80,9 @@ if [ -e "/usr/bin/dbus-send" ]; then
     alias reboot='sudo reboot'
 fi
 
+## Start X and lock current terminal (press ENTER when back in terminal to prompt for password)
+[ -e "/usr/bin/vlock" ] && alias sx='startx & vlock'
+
 ## Screensaver
 [ -e "/usr/bin/xscreensaver-command" ] && alias xss='xscreensaver-command --lock'
 
@@ -144,6 +147,19 @@ if [ "$PACMAN_FRONTEND" = "pacman-color" ]; then
     alias psi='pacman-color -Si'
     alias pss='pacman-color -Ss'
     alias pu='sudo pacman-color -Syu'
+fi
+
+
+##==============================================================================
+## TeXlive aliases
+##==============================================================================
+
+## TeXlive
+if [ -d "/usr/local/texlive" ]; then
+    ## FIXME: umask does not work with sudo.
+    alias tli="sudo umask 022 && tlmgr install"
+    alias tls="tlmgr search --global"
+    alias tll="tlmgr show --list"
 fi
 
 ##==============================================================================
