@@ -5,6 +5,7 @@ antiword
 asciidoc
 aspell-en
 aspell-fr
+astyle
 atool
 auctex
 auto-complete
@@ -64,6 +65,7 @@ gettext
 gimp
 git
 glibc
+gnu-netcat
 gnuplot
 gparted
 grep
@@ -80,6 +82,7 @@ highlight
 hplip
 htop
 hunspell-en
+indent
 inetutils
 initscripts
 inkscape
@@ -89,8 +92,10 @@ irssi
 ispell
 jansson
 jfsutils
+js
 laptop-mode-tools
 less
+libmicrohttpd
 libtool
 licenses
 lighttpd
@@ -109,6 +114,7 @@ man-pages
 mdadm
 mediainfo
 mercurial
+midori
 movgrab
 mplayer2
 mtools
@@ -132,6 +138,7 @@ pcmciautils
 perl
 pidgin
 pkg-config
+pkgstats
 ppp
 procps-ng
 psmisc
@@ -161,11 +168,11 @@ tcpdump
 texi2html
 texinfo
 texlive-dummy
+tig
 trash-cli
 tree
 unrar
 unzip
-urlview
 urxvt-clipboard
 urxvt-keyboard-select
 usbutils

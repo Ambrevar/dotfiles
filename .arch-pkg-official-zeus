@@ -11,6 +11,7 @@ asciidoc
 aspell
 aspell-en
 aspell-fr
+astyle
 atk
 atkmm
 atool
@@ -36,6 +37,7 @@ catdvi
 cdparanoia
 cloog
 cmus
+colord
 compositeproto
 coreutils
 cpufrequtils
@@ -127,6 +129,7 @@ glibmm
 glib-networking
 glproto
 gmp
+gnu-netcat
 gnupg
 gnuplot
 gnutls
@@ -167,6 +170,7 @@ iana-etc
 icu
 imagemagick
 imlib2
+indent
 inetutils
 initscripts
 inkscape
@@ -182,6 +186,7 @@ jack
 jansson
 jasper
 jfsutils
+js
 json-c
 kbd
 kbproto
@@ -232,11 +237,14 @@ libglade
 libglapi
 libgme
 libgpg-error
+libgphoto2
 libgsf
 libgssglue
+libgusb
 libice
 libid3tag
 libidn
+libieee1284
 libirman
 libjpeg-turbo
 libksba
@@ -246,6 +254,7 @@ liblrdf
 libltdl
 libmad
 libmediainfo
+libmicrohttpd
 libmms
 libmng
 libmodplug
@@ -349,6 +358,7 @@ mdadm
 mediainfo
 mercurial
 mesa
+midori
 mime-types
 mjpegtools
 mkinitcpio
@@ -401,6 +411,7 @@ pidgin
 pinentry
 pixman
 pkg-config
+pkgstats
 polkit
 poppler
 poppler-data
@@ -438,6 +449,7 @@ rsync
 rtmpdump
 rtorrent
 run-parts
+sane
 schroedinger
 scrnsaverproto
 scrot
@@ -446,6 +458,7 @@ sdparm
 sed
 sg3_utils
 shadow
+shared-color-profiles
 shared-mime-info
 slock
 soundtouch
@@ -466,6 +479,7 @@ task
 tcpdump
 texi2html
 texinfo
+tig
 tree
 ttf-dejavu
 tzdata

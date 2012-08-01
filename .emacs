@@ -147,6 +147,8 @@ browse-url-browser-function 'browse-url-generic)
       ("^--.*\\(\n.*\\)*" . font-lock-comment-face)
       ))
 
+;; General purpose. Hightlight the following:
+;; Digits, FIXME, TODO.
 (mapcar
  (lambda (mode)
    (font-lock-add-keywords
@@ -189,6 +191,7 @@ browse-url-browser-function 'browse-url-generic)
 ;;  (set-face-foreground 'compilation-column-number "magenta")
 ;; )
 
+;; Old/useless.
 ;; (set-face-background 'lazy-highlight  "brightgreen" ) 
 ;; (set-face-background 'secondary-selection "SkyBlue4")
 ;; (set-face-background 'trailing-whitespace "red1")
@@ -206,10 +209,10 @@ browse-url-browser-function 'browse-url-generic)
 ;(define-key minibuffer-local-map (kbd "C-<tab>") 'dabbrev-expand)
 
 ;;==============================================================================
-;; Automode default modification
+;; Automode (Mode recognition)
 ;;==============================================================================
 
-;; rc support
+;; rc files support
 (setq auto-mode-alist
       (append
        '(("rc\\'" . sh-mode)
@@ -218,7 +221,7 @@ browse-url-browser-function 'browse-url-generic)
       )
 
 ;; Shell support
-;; We do not put 'sh' only because it could get messy.
+;; We do not put 'sh' only because it could get messy. Emacs knows it anyway.
 (setq auto-mode-alist
       (append
        '(("\\(bash\\'\\|zsh\\'\\|csh\\'\\|tcsh\\'\\|ksh\\'\\)" . sh-mode)
@@ -369,7 +372,7 @@ the line."
 (define-key my-keys-minor-mode-map (kbd "M-a") 'beginning-of-defun)
 (define-key my-keys-minor-mode-map (kbd "M-e") 'end-of-defun)
 
-;; Paste from clipboard.
+;; Copy/Paste to/from clipboard.
 ;; (define-key my-keys-minor-mode-map (kbd "M-p") (kbd "C-u M-! xclip <SPC> -o"))
 (define-key my-keys-minor-mode-map (kbd "C-<f6>") (kbd "M-| xsel <SPC> -p <SPC> -i"))
 (define-key my-keys-minor-mode-map (kbd "C-<f7>") (kbd "C-u M-! xsel <SPC> -o"))
@@ -480,7 +483,7 @@ the line."
 (defun my-c-mode-hook ()
   (local-set-key (kbd "<f9>") (kbd "C-x C-s M-x smart-compile C-j C-j"))
   )
-(define-key my-keys-minor-mode-map (kbd "C-<f9>") 'next-error)
+;; (define-key my-keys-minor-mode-map (kbd "C-<f9>") 'next-error)
 
 (add-hook 'c-mode-hook 'my-c-mode-hook)
 (add-hook 'c++-mode-hook 'my-c-mode-hook)
@@ -506,16 +509,8 @@ the line."
 (setq yas/root-directory "~/.emacs.d/plugins/yas/snippets" )
 
 ;; Load the snippets
-; (yas/load-directory  "~/.emacs.d/plugins/yas/snippets") ; Warning: slow!
+; (yas/load-directory  "~/.emacs.d/plugins/yas/snippets") ;; Warning: slow!
 (yas/load-directory yas/root-directory)
-
-;;==============================================================================
-;; Auto-Complete
-;;==============================================================================
-;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/auto-complete")
-;; (require 'auto-complete-config)
-;; (add-to-list 'ac-dictionary-directories "/usr/share/emacs/site-lisp/auto-complete/ac-dict")
-;; (ac-config-default)
 
 ;;==============================================================================
 ;; AucTeX
@@ -533,11 +528,13 @@ the line."
         (output-ps "PS Viewer")
         (output-pdf "PDF Viewer")
         (output-html "Web browser")))
+
+;; Zathura will crash when being forked while document is regenerated.
 (setq TeX-view-program-list
-      '(("DVI Viewer" "zathura --fork %o")
-        ("PS Viewer" "zathura --fork %o")
-        ("PDF Viewer" "zathura --fork %o")
-        ("Web browser" "luakit %o")))
+      '(("DVI Viewer" "zathura %o")
+        ("PS Viewer" "zathura  %o")
+        ("PDF Viewer" "zathura  %o")
+        ("Web browser" "luakit -n %o")))
 
 ;; Add 'Compress PDF' compilation command
 (eval-after-load "TeX"
@@ -576,19 +573,6 @@ the line."
 (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
 
 ;;==============================================================================
-;; DoxyMacs
-;;==============================================================================
-
-;; (require 'doxymacs)
-;; (add-hook 'c-mode-common-hook 'doxymacs-mode)
-
-;; ;; Fontified comments.
-;; (defun my-doxymacs-font-lock-hook ()
-;;   (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
-;;       (doxymacs-font-lock)))
-;; (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
-
-;;==============================================================================
 ;; MediaWiki
 ;;==============================================================================
 
@@ -609,6 +593,28 @@ the line."
                             (define-key mediawiki-mode-map (kbd "C-c RET") 'mediawiki-open-page-at-point)
                             (define-key mediawiki-mode-map (kbd "C-c o") 'mediawiki-browse)
 ))
+
+;;==============================================================================
+;; DoxyMacs
+;;==============================================================================
+
+;; (require 'doxymacs)
+;; (add-hook 'c-mode-common-hook 'doxymacs-mode)
+
+;; ;; Fontified comments.
+;; (defun my-doxymacs-font-lock-hook ()
+;;   (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
+;;       (doxymacs-font-lock)))
+;; (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
+
+
+;;==============================================================================
+;; Auto-Complete
+;;==============================================================================
+;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/auto-complete")
+;; (require 'auto-complete-config)
+;; (add-to-list 'ac-dictionary-directories "/usr/share/emacs/site-lisp/auto-complete/ac-dict")
+;; (ac-config-default)
 
 
 ;;=============================================================================↑=

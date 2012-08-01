@@ -156,8 +156,8 @@ fi
 
 ## TeXlive
 if [ -d "/usr/local/texlive" ]; then
-    ## FIXME: umask does not work with sudo.
-    alias tli="sudo umask 022 && tlmgr install"
+    alias tli="sudo bash -c 'umask 022 && tlmgr install'"
+    alias tlu="sudo bash -c 'umask 022 && tlmgr update --self'"
     alias tls="tlmgr search --global"
     alias tll="tlmgr show --list"
 fi

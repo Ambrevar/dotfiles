@@ -71,20 +71,24 @@ Functional Adblock script. Script+Plugin toggle.
 Mutt
 ****
 Compile options: IMAP and SMTP support.
-Extra deps: urlview, w3m, sxiv, fortune.
+Extra deps: antiword, fortune, sxiv, w3m.
 
 This one is not easy to get into it. I managed to get multiple accounts with
 pgp-encrypted passwords working, which means there is no plain password stored
 on the disk. As a result, I just get prompted for a main password on Mutt
 startup, then everything works out of the box.
 
-I use GPG for password management, mostly because it features a password agent.
+I use GPG for password management because it is a Mutt dependency anyway. It
+could also work well with pwsafe or other tools.
 
-I'm using embedded imap and smtp services -- you must provide the required
+I'm using embedded IMAP and SMTP services -- you must provide the required
 compilation options.
 
 Some customization: custom index view, good Emacs integration (see .emacs),
 custom theme (matches Emacs colors), various tweaks.
+
+URxvt has an URL support that works also for Mutt. For other terminals, you
+might consider using the 'urlview' plugin for Mutt.
 
 Ranger
 ******
@@ -94,9 +98,14 @@ Custom bindings, file association, tweaked a few options.
 
 Scripts
 *******
-.save:    generates a home configuration archive.
+
 .network: network setup. Works with wpa_supplicant. May replace any network
           manager.
+
+.homeinit: initialize a new home configuration, i.e. get needed files, create
+           symlinks, etc.
+
+.save: generates a home configuration archive.
 
 Shell
 *****
@@ -138,10 +147,13 @@ bc
 calc
 catdvi
 ccrypt
+chrpath
 cmus
 cppcheck
+dash
 doxygen
 dropbox
+dvtm
 emacs
 feh
 fortune
@@ -161,6 +173,7 @@ indent
 inkscape
 irssi
 lrzip
+lshw
 luakit
 mediainfo
 mencoder
@@ -170,6 +183,7 @@ mplayer2
 mutt
 nasm
 ncdu
+ngrep
 nmap
 numlockx
 octave
@@ -201,6 +215,7 @@ texlive
 trash-cli
 tree
 udiskie
+upx
 valgrind
 vim
 vlock
@@ -209,6 +224,7 @@ weechat
 wipe
 wmfs
 wv
+xclip
 xsel
 yasm
 zathura
