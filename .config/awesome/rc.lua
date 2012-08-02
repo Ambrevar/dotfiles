@@ -388,13 +388,9 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Mod1" }, "Up",  function () awful.client.incwfact(0.05) end),
     awful.key({ modkey, "Mod1" }, "Down", function () awful.client.incwfact(-0.05) end),
 
-    -- Floating clients move and resize
+    -- Floating clients resize
     awful.key({ modkey , "Mod1"}, "j", function () awful.client.moveresize( 20,  20, -40, -40) end),
     awful.key({ modkey , "Mod1"}, "k", function () awful.client.moveresize(-20, -20,  40,  40) end),
-    awful.key({ modkey }, "j",         function () awful.client.moveresize(  0,  20,   0,   0) end),
-    awful.key({ modkey }, "k",         function () awful.client.moveresize(  0, -20,   0,   0) end),
-    awful.key({ modkey }, "h",         function () awful.client.moveresize(-20,   0,   0,   0) end),
-    awful.key({ modkey }, "l",         function () awful.client.moveresize( 20,   0,   0,   0) end),
 
     -- Layout organization
     awful.key({ modkey, "Control" }, "Left", function () awful.tag.incnmaster( 1) end),
@@ -404,6 +400,10 @@ globalkeys = awful.util.table.join(
 
     awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
+
+    -- Multi screen
+    awful.key({ modkey, "Mod1" }, "Next", function () awful.screen.focus_relative( 1) end),
+    awful.key({ modkey, "Mod1" }, "Prior", function () awful.screen.focus_relative(-1) end),
 
 
     -- Prompt
@@ -428,6 +428,13 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
+
+    
+    -- Floating clients move
+    awful.key({ modkey }, "j",         function () awful.client.moveresize(  0,  20,   0,   0) end),
+    awful.key({ modkey }, "k",         function () awful.client.moveresize(  0, -20,   0,   0) end),
+    awful.key({ modkey }, "h",         function () awful.client.moveresize(-20,   0,   0,   0) end),
+    awful.key({ modkey }, "l",         function () awful.client.moveresize( 20,   0,   0,   0) end),
 
     -- awful.key({ modkey,           }, "n",
     --     function (c)

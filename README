@@ -135,6 +135,19 @@ The last time I used WMFS, the development was in a transition from version 1.x
 to 2.x. So beware!, configuration files might be quite broken.
 
 ################################################################################
+Known issues
+************
+
+Emacs: some colors do not work as intended.
+
+Ranger: if editor is 'emacsclient -t -a""', it will not show up if emacs daemon
+is not running.
+
+Shell: some custom functions would need auto-completion.
+
+Zathura: app will hang forever sometimes (document being regenerated).
+
+################################################################################
 Complete applist
 ****************
 

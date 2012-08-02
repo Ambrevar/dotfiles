@@ -50,6 +50,7 @@ cups-filters
 curl
 cyrus-sasl
 damageproto
+dash
 db
 dbus
 dbus-core
