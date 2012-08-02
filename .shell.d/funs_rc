@@ -565,6 +565,32 @@ formatc()
     # sed -i 's:\(//.*[^\.]\)$:\1\.:g' "$FILE"
 }
 
+## This function will try to find an input binary file in the content of binary
+## files in current folder.
+bindatasearch()
+{
+    if [ $# -ne 1 ] || [ ! -f "$1" ]; then
+        echo "Please provide a valid single file as argument."
+        return
+    fi
+
+    ## TODO: add option to config WORKDIR?
+    WORKDIR=$PWD
+    
+    ## The awk command suppresses first column, spaces and line breaks.
+    SOURCE=$(od -tx8 "$1" | awk '($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }')
+
+
+    ## Solution 1
+    find "$WORKDIR" -type f -exec bash -c '
+          TARGET=$(od -tx8 "$1" | awk '"'"'($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }'"'"')
+          grep -q "$2" <(echo $TARGET)
+
+          [ $? -eq 0 ] && echo "$1"
+' _ {} "$SOURCE" \;
+
+
+}
 
 ##==============================================================================
 ## Pacman Functions
