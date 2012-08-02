@@ -92,6 +92,14 @@ fi
 ## Configuration files
 [ -e "/etc/rc.conf" ] && alias ercc='sudo $EDITOR /etc/rc.conf'
 
+## Xrandr
+alias xmulti="xrandr --output VGA1 --auto --right-of $(xrandr | grep -A1 current | sed -n 2p | awk '{print $1}')"
+alias xmultioff="xrandr --output VGA1 --off"
+alias xmorphsw="xrandr --output $(xrandr | grep -A1 current | sed -n 2p | awk '{print $1}') --transform 1.24,0.16,-124,0,1.24,0,0,0.000316,1"
+alias xmorphnone="xrandr --output $(xrandr | grep -A1 current | sed -n 2p | awk '{print $1}') --transform none"
+alias xmorphzo="xrandr --output $(xrandr | grep -A1 current | sed -n 2p | awk '{print $1}') --scale 1.2x1.2"
+alias xmorphzi="xrandr --output $(xrandr | grep -A1 current | sed -n 2p | awk '{print $1}') --scale 0.8x0.8"
+
 ##==============================================================================
 ## Zsh power aliases
 ##==============================================================================
