@@ -1,7 +1,5 @@
-auto-complete
 bashmount
 bustle
-cgdb
 dropbox
 dropbox-cli
 emacs-mediawiki-bzr
@@ -11,7 +9,9 @@ grub
 gsharkdown
 handbrake-cli-svn
 handbrake-svn
+mongoose
 movgrab
+openmw-git
 package-query
 pacman-color
 rxvt-unicode-patched

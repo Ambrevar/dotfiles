@@ -11,7 +11,6 @@ asciidoc
 aspell
 aspell-en
 aspell-fr
-astyle
 atk
 atkmm
 atool
@@ -23,19 +22,22 @@ avahi
 awesome
 babl
 bash
-bash-completion
 bc
 binutils
 bison
+boost
+boost-libs
+bullet
 bzip2
-bzr
 ca-certificates
 cairo
 cairomm
 calc
 catdvi
 cdparanoia
+cifs-utils
 cloog
+cmake
 cmus
 colord
 compositeproto
@@ -102,6 +104,7 @@ foomatic-db-engine
 foomatic-filters
 fortune-mod
 freeglut
+freeimage
 freetype2
 fribidi
 fuse
@@ -124,17 +127,18 @@ gimp
 girara-common
 girara-gtk2
 git
+glew
 glib2
 glibc
 glibmm
 glib-networking
 glproto
 gmp
+gnuchess
 gnu-netcat
 gnupg
 gnuplot
 gnutls
-gparted
 gpgme
 gpm
 grep
@@ -197,7 +201,6 @@ kmod
 krb5
 ladspa
 lame
-laptop-mode-tools
 lcms
 lcms2
 ldns
@@ -210,6 +213,7 @@ libatasmart
 libbluray
 libcaca
 libcap
+libcap-ng
 libcdaudio
 libcddb
 libcdio
@@ -300,6 +304,7 @@ libva
 libvdpau
 libvorbis
 libvpx
+libwbclient
 libwebkit
 libwmf
 libx11
@@ -341,7 +346,6 @@ linux-firmware
 linux-lts
 lirc-utils
 logrotate
-lrzip
 lsof
 ltrace
 lua
@@ -349,7 +353,6 @@ luafilesystem
 luajit
 luakit
 lvm2
-lzo2
 m4
 make
 man-db
@@ -357,8 +360,10 @@ man-pages
 mcpp
 mdadm
 mediainfo
+mencoder
 mercurial
 mesa
+mesa-demos
 midori
 mime-types
 mjpegtools
@@ -372,7 +377,7 @@ mtdev
 mtools
 musicbrainz
 mutt
-nano
+mygui
 nasm
 ncdu
 ncurses
@@ -385,6 +390,10 @@ nspr
 nss
 ntfs-3g
 numlockx
+nvidia-cg-toolkit
+ogre
+ois
+openal
 opencore-amr
 openjpeg
 openslp
@@ -423,7 +432,6 @@ ppp
 procps-ng
 psmisc
 pth
-pwgen
 pwsafe
 pygobject2-devel
 pygtk
@@ -438,6 +446,7 @@ python-configobj
 python-dbus-common
 python-notify
 python-pycurl
+qt
 randrproto
 ranger
 raptor
@@ -462,6 +471,7 @@ shadow
 shared-color-profiles
 shared-mime-info
 slock
+smbclient
 soundtouch
 speex
 splint
@@ -475,9 +485,12 @@ syslog-ng
 systemd-tools
 sysvinit
 t1lib
+talloc
 tar
 task
+tcc
 tcpdump
+tdb
 texi2html
 texinfo
 tig
@@ -502,7 +515,6 @@ weechat
 wget
 which
 wildmidi
-wipe
 wireless_tools
 wireshark-cli
 wireshark-gtk
@@ -538,7 +550,6 @@ xorg-mkfontscale
 xorg-server
 xorg-server-common
 xorg-setxkbmap
-xorg-twm
 xorg-xauth
 xorg-xev
 xorg-xinit

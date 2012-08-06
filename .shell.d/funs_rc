@@ -19,15 +19,15 @@ search()
 ## Cut last n lines in file, 10 by default.
 cuttail()
 {
-    nlines=${2:-10}
-    #sed -n -e :a -e "1,${nlines}!{P;N;D;};N;ba" $1
-    head $1 -n$(($(cat $1|wc -l) - $nlines))
+    local nlines=${2:-10}
+    sed -n -e :a -e "1,${nlines}!{P;N;D;};N;ba" $1
+    # head $1 -n$(($(cat $1|wc -l) - $nlines))
 }
 
 ## Cut first n lines in file, 10 by default.
 cuthead()
 {
-    nlines=${2:-10}
+    local nlines=${2:-10}
     tail $1 -n$(($(cat $1|wc -l) - $nlines))
 }
 
@@ -35,6 +35,10 @@ cuthead()
 ## Use ranger + bulkrename + vim/emacs (+ TwindleCase) for more interactivity.
 renamelower()
 {
+    local file
+    local filename
+    local dirname
+
     for file ; do
 	    filename=${file##*/}
 	    case "$filename" in
@@ -44,8 +48,8 @@ renamelower()
                 dirname=.;;
         esac
 
-        nf=$(echo $filename | tr A-Z a-z)
-        newname="${dirname}/${nf}"
+        local nf=$(echo $filename | tr A-Z a-z)
+        local newname="${dirname}/${nf}"
         if [ "$nf" != "$filename" ]; then
 	        mv "$file" "$newname"
 	        echo "lowercase: $file --> $newname"
@@ -67,7 +71,7 @@ renameswap()
 ## Finds directory sizes and lists them for the current directory.
 dirsize ()
 {
-    TEMPFILE="$(mktemp)"
+    local TEMPFILE="$(mktemp)"
     # du -shx * .[a-zA-Z0-9_]* 2> /dev/null | \
     du -shx * 2> /dev/null | \
 	    egrep '^ *[0-9.]*[MG]' | sort -n > ${TEMPFILE}
@@ -162,8 +166,10 @@ blind-append()
         return
     fi 
 
-    FILE="$1"
-    STRING=""
+    local FILE="$1"
+    local STRING=""
+    local DUMMY
+
     if [ $# -eq 2 ]; then
         STRING="$2"
     fi
@@ -246,8 +252,8 @@ hlt-viewer ()
     fi
 
 
-    LIST=$(highlight -w | grep -v "\s\|^$")
-    SAMPLE="void function(char* pointer, int &ref)
+    local LIST=$(highlight -w | grep -v "\s\|^$")
+    local SAMPLE="void function(char* pointer, int &ref)
 {
   int integer=3;
   char* string=\"Hello!\";
@@ -310,14 +316,14 @@ pdfcompress ()
     if [ ! -f "$1" ]; then
 	    echo "$1 is not a valid PDF file!"
     fi
-    INPUTFILE="$1"
+    local INPUTFILE="$1"
 
     if [ -z "$2" ]; then
 	    gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="${INPUTFILE%%.*}-COMPRESSED.pdf" "${INPUTFILE}"
 	    rm -rf "${INPUTFILE}"
 	    mv "${INPUTFILE%%.*}-COMPRESSED.pdf" "${INPUTFILE}"
     else
-	    OUTPUTFILE="$2"
+	    local OUTPUTFILE="$2"
 	    gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="${OUTPUTFILE}" "${INPUTFILE}"
     fi
 }
@@ -339,7 +345,8 @@ archive ()
         echo -e "  -v:\t\tInclude VCS data."
     }
 
-    OPTION_VCS="--exclude-vcs"
+    local OPTION_VCS="--exclude-vcs"
+    local OPTION_METHOD=""
 
     while getopts ":hm:v" opt; do
         case $opt in
@@ -365,6 +372,9 @@ archive ()
         esac
     done
 
+    local ARCEXT
+    local ARCOPT
+
     case $OPTION_METHOD in
         "gz")
             ARCEXT="tar.gz"
@@ -388,6 +398,10 @@ archive ()
         return 1
     fi
 
+    local ARCPATH
+    local ARCSOURCE
+    local ARCNAME
+
     if [ $# -eq 1 ]; then
         ARCPATH="$(dirname $(readlink -f "$1"))"
         ARCSOURCE="$(basename $(readlink -f "$1"))"
@@ -406,7 +420,7 @@ archive ()
                 tar -${ARCOPT} -cvf "$ARCNAME" "$ARCSOURCE" ${OPTION_VCS})
 
         else
-            FILELIST=()
+            local FILELIST=()
             for i; do
                 FILELIST=(${FILELIST[*]} "$i")
             done
@@ -443,13 +457,14 @@ function texclean ()
 ## Clean current folder
 vcsclean()
 {
+    local WORKDIR
     if [ -z "$1" ]; then
 	    WORKDIR="$PWD"
     else
 	    WORKDIR="$1"
     fi
-
-    unset CHOICE
+    
+    local CHOICE
     echo "This will clean current folder from all VCS control files."
     echo -n "Proceed ? [y/N] "
     while [ -z "$CHOICE" ];
@@ -475,7 +490,7 @@ vcsclean()
 ## LSOF stats. Print number of open files per process.
 lsofstat()
 {
-    LSOFOUT=$(lsof|awk '{print $1}')
+    local LSOFOUT=$(lsof|awk '{print $1}')
     
     for i in $(echo $LSOFOUT |sort -u);do
         echo -n "$i "
@@ -492,6 +507,7 @@ formatc()
         return
     fi
 
+    local WORKDIR
     if [ -z "$1" ]; then
 	    WORKDIR="$PWD"
     else
@@ -575,10 +591,10 @@ bindatasearch()
     fi
 
     ## TODO: add option to config WORKDIR?
-    WORKDIR=$PWD
+    local WORKDIR=$PWD
     
     ## The awk command suppresses first column, spaces and line breaks.
-    SOURCE=$(od -tx8 "$1" | awk '($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }')
+    local SOURCE=$(od -tx8 "$1" | awk '($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }')
 
 
     ## Solution 1
@@ -644,7 +660,7 @@ if [ -f "/usr/bin/pacman" ]; then
             echo -e "  -n:\t\tSort by size."
         }
 
-        OPTION_SORT="cat"
+        local OPTION_SORT="cat"
 
         while getopts ":hn" opt; do
             case $opt in
@@ -675,8 +691,8 @@ if [ -f "/usr/bin/pacman" ]; then
             return 1
         fi
         
-        RESULT_HUMAN="$(du -bh $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u) | eval ${OPTION_SORT})"
-        RESULT="$(du -b $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u))"
+        local RESULT_HUMAN="$(du -bh $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u) | eval ${OPTION_SORT})"
+        local RESULT="$(du -b $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u))"
         echo "${RESULT_HUMAN}"
 
         echo "$RESULT" | awk -F "[[:alpha:]]" '{TOTAL=$1+TOTAL} END {printf("Total:  %d KiB\n",TOTAL/1024)}'
@@ -711,9 +727,9 @@ if [ -f "/usr/bin/pacman" ]; then
             echo -e "  -q:\t\tDisplay installed packages not included in FILE."
         }
 
-        OPTION_EXPLICIT=""
-        OPTION_FOREIGN=""
-        OPTION_LOCAL="-1"
+        local OPTION_EXPLICIT=""
+        local OPTION_FOREIGN=""
+        local OPTION_LOCAL="-1"
 
         while getopts ":hmqe" opt; do
             case $opt in
@@ -772,11 +788,11 @@ if [ -f "/usr/bin/pacman" ]; then
             echo -e "  -q:\t\tUses installed packages database instead of repos database. It speeds up queries and allows displaying size of local packages not available in repos."
         }
 
-        CMD="pacman -Si"
-        SEP=": "
-        TOTAL_SIZE=0
-        SORT="sort -u -k3"
-        SORT_SIZE="cat"
+        local CMD="pacman -Si"
+        local SEP=": "
+        local TOTAL_SIZE=0
+        local SORT="sort -u -k3"
+        local SORT_SIZE="cat"
 
         while getopts ":hnq" opt; do
             case $opt in
@@ -812,7 +828,7 @@ if [ -f "/usr/bin/pacman" ]; then
 
         _pacman_set_vars
 
-        RESULT=$(eval "${CMD} $@" | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
+        local RESULT=$(eval "${CMD} $@" | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
             '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | eval "$SORT" | eval "$SORT_SIZE")
 
         echo "$RESULT"
@@ -846,8 +862,8 @@ if [ -f "/usr/bin/pacman" ]; then
             echo -e "  -q:\t\tUses installed packages database instead of repos database. It speeds up queries and allows displaying size of local packages not available in repos."
         }
 
-        CMD="pacman -Si"
-        SEP=": "
+        local CMD="pacman -Si"
+        local SEP=": "
 
         while getopts ":ahq" opt; do
             case $opt in
