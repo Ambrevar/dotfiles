@@ -1,7 +1,7 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                               Author: Ambrevar                               #
-#                               Date: 2012-07-20                               #
+#                               Date: 2012-08-07                               #
 ################################################################################
 
 Synopsis
@@ -145,7 +145,8 @@ is not running.
 
 Shell: some custom functions would need auto-completion.
 
-Zathura: app will hang forever sometimes (document being regenerated).
+Zathura: app will hang forever sometimes (when document is being regenerated, or
+when launched from Ranger).
 
 ################################################################################
 Complete applist
