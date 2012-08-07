@@ -110,6 +110,7 @@
     ("nchui" "je ne suis" nil 1)
     ("ns" "nous" nil 1)
     ("nvm" "nevermind" nil 1)
+    ("oeil" "œil" nil 1)
     ("pb" "problème" nil 4)
     ("pbs" "problèmes" nil 1)
     ("pcq" "parce que" nil 3)

@@ -128,20 +128,22 @@ asciify()
     fi 
 
     for i; do
-        sed -i 's/[àáâä]/a/g' "$i"
-        sed -i 's/[éèêë]/e/g' "$i"
-        sed -i 's/[ïîí]/i/g' "$i"
-        sed -i 's/[öôó]/o/g' "$i"
-        sed -i 's/[ùúûü]/u/g' "$i"
-        sed -i 's/[À]/A/g' "$i"
-        sed -i 's/[ÉÈ]/E/g' "$i"
-        sed -i 's/[ñ]/n/g' "$i"
-        sed -i 's/[œ]/oe/g' "$i"
-        sed -i 's/[Œ]/Oe/g' "$i"
-        sed -i 's/[æ]/ae/g' "$i"
-        sed -i 's/[Æ]/Ae/g' "$i"
-        sed -i 's/[ç]/c/g' "$i"
-        sed -i 's/[Ç]/C/g' "$i"
+        sed -i \
+        -e 's/[àáâä]/a/g' \
+        -e 's/[éèêë]/e/g' \
+        -e 's/[ïîí]/i/g'  \
+        -e 's/[öôó]/o/g'  \
+        -e 's/[ùúûü]/u/g' \
+        -e 's/[À]/A/g'    \
+        -e 's/[ÉÈ]/E/g'   \
+        -e 's/[ñ]/n/g'    \
+        -e 's/[œ]/oe/g'   \
+        -e 's/[Œ]/Oe/g'   \
+        -e 's/[æ]/ae/g'   \
+        -e 's/[Æ]/Ae/g'   \
+        -e 's/[ç]/c/g'    \
+        -e 's/[Ç]/C/g'    \
+        "$i"
     done;
 }
 
