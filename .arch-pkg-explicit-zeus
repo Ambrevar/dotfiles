@@ -54,6 +54,7 @@ fortune-mod
 fortune-mod-tbbt
 gawk
 gcc
+gcc-go
 gcc-libs
 gcolor2
 gdb
@@ -64,10 +65,12 @@ glibc
 gnuchess
 gnu-netcat
 gnuplot
+go
 grep
 grub
 gsasl
 gsharkdown
+gtk3
 gzip
 handbrake-cli-svn
 handbrake-svn

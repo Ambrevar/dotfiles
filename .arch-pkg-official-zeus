@@ -25,7 +25,6 @@ bash
 bc
 binutils
 bison
-boost
 boost-libs
 bullet
 bzip2
@@ -37,7 +36,6 @@ catdvi
 cdparanoia
 cifs-utils
 cloog
-cmake
 cmus
 colord
 compositeproto
@@ -111,6 +109,7 @@ fuse
 gawk
 gc
 gcc
+gcc-go
 gcc-libs
 gcolor2
 gd
@@ -139,6 +138,7 @@ gnu-netcat
 gnupg
 gnuplot
 gnutls
+go
 gpgme
 gpm
 grep
@@ -156,6 +156,7 @@ gstreamer0.10-ffmpeg
 gstreamer0.10-good
 gstreamer0.10-python
 gtk2
+gtk3
 gtkmm
 gtkspell
 gtk-update-icon-cache
@@ -283,7 +284,6 @@ librsvg
 libsamplerate
 libsasl
 libsigc++
-libsigsegv
 libsm
 libsndfile
 libsoup
@@ -484,7 +484,6 @@ sysfsutils
 syslog-ng
 systemd-tools
 sysvinit
-t1lib
 talloc
 tar
 task

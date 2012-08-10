@@ -149,6 +149,7 @@ browse-url-browser-function 'browse-url-generic)
 
 ;; General purpose. Hightlight the following:
 ;; Digits, FIXME, TODO.
+;; FIXME: Digits regex are not perfect, and may make emacs slow. Sure?
 (mapcar
  (lambda (mode)
    (font-lock-add-keywords
@@ -159,6 +160,7 @@ browse-url-browser-function 'browse-url-generic)
       ("[^[:alnum:]_]\\([[:digit:]]*\\.?[[:digit:]]+\\)[^[:alnum:]_.]" 1 font-lock-constant-face)
       ("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
       ("\\<\\(TODO\\):" 1 font-lock-warning-face prepend)
+      ("\\<\\(WARNING\\):" 1 font-lock-warning-face prepend)
       )))
  '( text-mode 
     sh-mode  emacs-lisp-mode lua-mode
@@ -593,6 +595,18 @@ the line."
                             (define-key mediawiki-mode-map (kbd "C-c RET") 'mediawiki-open-page-at-point)
                             (define-key mediawiki-mode-map (kbd "C-c o") 'mediawiki-browse)
 ))
+
+
+;;==============================================================================
+;; HTML
+;;==============================================================================
+
+(add-hook 'html-mode-hook
+          (lambda ()
+            (turn-off-auto-fill)
+            (toggle-truncate-lines)
+))
+
 
 ;;==============================================================================
 ;; DoxyMacs
