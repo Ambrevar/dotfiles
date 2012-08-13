@@ -166,13 +166,13 @@ FILELIST=(${FILELIST[*]} ".config/gtk-3.0/settings.ini")
 FILELIST=(${FILELIST[*]} ".git")
 
 ## Irssi
-FILELIST=(${FILELIST[*]} ".irssi")
+# FILELIST=(${FILELIST[*]} ".irssi")
 
 ## Luakit
 FILELIST=(${FILELIST[*]} ".config/luakit/")
 
 ## LXTerminal
-FILELIST=(${FILELIST[*]} ".config/lxterminal/lxterminal.conf")
+# FILELIST=(${FILELIST[*]} ".config/lxterminal/lxterminal.conf")
 
 ## MPlayer
 # FILELIST=(${FILELIST[*]} ".mplayer")
@@ -185,7 +185,7 @@ do
 done
 
 ## Nano
-FILELIST=(${FILELIST[*]} ".nanorc")
+# FILELIST=(${FILELIST[*]} ".nanorc")
 
 ## Netinit
 FILELIST=(${FILELIST[*]} ".netinit")
@@ -214,7 +214,7 @@ done
 FILELIST=(${FILELIST[*]} ".taskrc")
 
 ## Terminfo
-FILELIST=(${FILELIST[*]} ".terminfo/x/xterm")
+# FILELIST=(${FILELIST[*]} ".terminfo/x/xterm")
 
 ## TeXlive
 # for i in $(find texmf -type f|grep -vi 'moderncv/examples\|moderncv/manual\|.bzr')
@@ -223,13 +223,13 @@ FILELIST=(${FILELIST[*]} ".terminfo/x/xterm")
 # done
 
 ## Urlview
-FILELIST=(${FILELIST[*]} ".urlview")
+# FILELIST=(${FILELIST[*]} ".urlview")
 
 ## Vim
 FILELIST=(${FILELIST[*]} ".vimrc")
 
 ## WMFS
-FILELIST=(${FILELIST[*]} ".config/wmfs")
+# FILELIST=(${FILELIST[*]} ".config/wmfs")
 
 ## Xinit
 FILELIST=(${FILELIST[*]} ".xinitrc")
