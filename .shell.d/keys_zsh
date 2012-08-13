@@ -1,15 +1,11 @@
-## -*- mode:sh -*- #
 ################################################################################
 ## Zsh Key bindings
-## Date 2011-11-19
+## 2012-08-11
 ################################################################################
 
-
-##==============================================================================
-## Zsh keys
-##==============================================================================
-# http://mundy.yazzy.org/unix/zsh.php
-# http://www.zsh.org/mla/users/2000/msg00727.html
+## References:
+## http://mundy.yazzy.org/unix/zsh.php
+## http://www.zsh.org/mla/users/2000/msg00727.html
 
 ## Bindings functions:
 # backward-char
@@ -32,44 +28,43 @@
 # up-line-or-search
 # expand-or-complete-prefix ## completion in the middle of a line
 
-if isShell "zsh"; then
-    bindkey -e # Emacs bindings
+## Emacs bindings
+bindkey -e
 
-	## Set '/' as a word delimiter.
-    autoload -U select-word-style
-    select-word-style bash
+## Set '/' as a word delimiter.
+autoload -U select-word-style
+select-word-style bash
 
-	## ???
-	# typeset -g -A key
+## ???
+# typeset -g -A key
 
-	## Note that double brackets are needed to expand wildcards properly.
-    if [[ $TERM = *xterm* ]] ; then
-        bindkey "\e[3~" delete-char
-        bindkey "\e[1;5D" backward-word
-        bindkey "\e[1;5C" forward-word
-        bindkey "\eOH" beginning-of-line
-        bindkey "\eOF" end-of-line
+## Note that double brackets are needed to expand wildcards properly.
+if [[ $TERM = *xterm* ]] ; then
+    bindkey "\e[3~" delete-char
+    bindkey "\e[1;5D" backward-word
+    bindkey "\e[1;5C" forward-word
+    bindkey "\eOH" beginning-of-line
+    bindkey "\eOF" end-of-line
 
-        bindkey "\e[Z" reverse-menu-complete # Shift+Tab
-    fi
+    bindkey "\e[Z" reverse-menu-complete # Shift+Tab
+fi
 
-    if [[ $TERM = *rxvt* ]] ; then
-        bindkey "\e[3~" delete-char
-        bindkey "\eOd"  backward-word
-        bindkey "\eOc"  forward-word
-        bindkey "\e[7~" beginning-of-line
-        bindkey "\e[8~" end-of-line
+if [[ $TERM = *rxvt* ]] ; then
+    bindkey "\e[3~" delete-char
+    bindkey "\eOd"  backward-word
+    bindkey "\eOc"  forward-word
+    bindkey "\e[7~" beginning-of-line
+    bindkey "\e[8~" end-of-line
 
-        bindkey "\e[Z" reverse-menu-complete # Shift+Tab
-    fi
+    bindkey "\e[Z" reverse-menu-complete # Shift+Tab
+fi
 
 
 ## For rxvt.
-    # bindkey "\e[7~" beginning-of-line # Home
-    # bindkey "\e[8~" end-of-line # End
+# bindkey "\e[7~" beginning-of-line # Home
+# bindkey "\e[8~" end-of-line # End
 
 ## For FreeBSD console.
-    # bindkey "\e[H" beginning-of-line
-    # bindkey "\e[F" end-of-line
+# bindkey "\e[H" beginning-of-line
+# bindkey "\e[F" end-of-line
 
-fi

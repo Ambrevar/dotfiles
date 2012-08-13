@@ -1,4 +1,4 @@
-set aaa_mode=album
+set aaa_mode=all
 set altformat_current= %F 
 set altformat_playlist= %f%= %d 
 set altformat_title=%f
@@ -33,11 +33,11 @@ set continue=true
 set display_artist_sort_name=false
 set dsp.alsa.device=default
 set dsp.oss.device=
-set format_current= %a - %l -%3n. %t%= %y 
-set format_playlist= %-25%a %3n. %t%= %y %d 
+set format_current= %a - %y. %l -%3n. %t 
+set format_playlist= %-18%a %y. %-25%l %3n. %t%= %d 
 set format_playlist_va= %-25%A %3n. %t (%a)%= %y %d 
-set format_title=%a - %l - %t (%y)
-set format_trackwin=%3n. %t%= %y %d 
+set format_title=%a - %y. %l -%3n. %t 
+set format_trackwin=%y %3n. %t%= %d [%{codec} %{bitrate} kbps]
 set format_trackwin_va=%3n. %t (%a)%= %y %d 
 set id3_default_charset=ISO-8859-1
 set lib_sort=albumartist date album discnumber tracknumber title filename
@@ -49,7 +49,7 @@ set mixer.pulse.restore_volume=1
 set output_plugin=alsa
 set passwd=
 set pl_sort=
-set play_library=false
+set play_library=true
 set play_sorted=false
 set repeat=false
 set repeat_current=false
@@ -60,7 +60,7 @@ set resume=true
 set set_term_title=true
 set show_hidden=false
 set show_remaining_time=false
-set shuffle=false
+set shuffle=true
 set smart_artist_sort=true
 set softvol=false
 set softvol_state=0 0

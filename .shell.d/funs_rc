@@ -1,13 +1,27 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Shell -- Functions.
-## Date 2012-06-21
+## Date 2012-08-11
 ################################################################################
 
-## Make dir and go into it.
+## Colored man pager. 
+man()
+{
+	env \
+		LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+		LESS_TERMCAP_md=$(printf "\e[1;31m") \
+		LESS_TERMCAP_me=$(printf "\e[0m") \
+		LESS_TERMCAP_se=$(printf "\e[0m") \
+		LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+		LESS_TERMCAP_ue=$(printf "\e[0m") \
+		LESS_TERMCAP_us=$(printf "\e[1;32m") \
+		man "$@"
+}
+
+## Make directories and change into the first one.
 mkcd () {
-    mkdir -p "$*"
-    cd "$*"
+    mkdir -p "$@"
+    cd "$1"
 }
 
 ## Quick search.
@@ -25,6 +39,7 @@ cuttail()
 }
 
 ## Cut first n lines in file, 10 by default.
+## TODO: use sed command instead.
 cuthead()
 {
     local nlines=${2:-10}
@@ -41,13 +56,12 @@ renamelower()
 
     for file ; do
 	    filename=${file##*/}
-	    case "$filename" in
-	        */*)
-		        dirname==${file%/*} ;;
-	        *)
-                dirname=.;;
-        esac
 
+	    case "$filename" in
+	        */*) dirname="${file%/*}" ;;
+	        *) dirname="." ;;
+        esac
+        
         local nf=$(echo $filename | tr A-Z a-z)
         local newname="${dirname}/${nf}"
         if [ "$nf" != "$filename" ]; then
@@ -62,10 +76,10 @@ renamelower()
 ## Swap 2 filenames around.
 renameswap()
 {
-    local TMPFILE=tmp.$$
-    mv "$1" $TMPFILE
+    local TEMPFILE="$(mktemp)"
+    mv "$1" "$TEMPFILE"
     mv "$2" "$1"
-    mv $TMPFILE "$2"
+    mv "$TEMPFILE" "$2"
 }
 
 ## Finds directory sizes and lists them for the current directory.
@@ -74,15 +88,15 @@ dirsize ()
     local TEMPFILE="$(mktemp)"
     # du -shx * .[a-zA-Z0-9_]* 2> /dev/null | \
     du -shx * 2> /dev/null | \
-	    egrep '^ *[0-9.]*[MG]' | sort -n > ${TEMPFILE}
-    egrep '^ *[0-9.]*M' ${TEMPFILE}
-    egrep '^ *[0-9.]*G' ${TEMPFILE}
-    rm -rf ${TEMPFILE}
+	    egrep '^ *[0-9.]*[MG]' | sort -n > "${TEMPFILE}"
+    egrep '^ *[0-9.]*M' "${TEMPFILE}"
+    egrep '^ *[0-9.]*G' "${TEMPFILE}"
+    rm -rf "${TEMPFILE}"
 }
 
 ## Network operations
 if [ -e "/usr/bin/nmap" ]; then
-    networkmap() {
+    network-map() {
         echo "$1"
         for SCANIP in $( nmap -sL "$1" | grep -i "\([[:digit:]]\+\.\)\{3,\}[[:digit:]]\+" | awk '{print $5}' ); do
             sudo nmap -oX - -n -sT -T Normal -O -sR -I -F -P0 "$SCANIP"
@@ -91,8 +105,8 @@ if [ -e "/usr/bin/nmap" ]; then
     }
 fi
 
-## Vim-only: search the vim reference manual for a keyword
-## usage: :h <keyword>
+## Vim-only: search the vim reference manual for a keyword.
+## Usage: :h <keyword>
 if [ -e "/usr/bin/vim" ]; then
     :h()
     {
@@ -129,21 +143,21 @@ asciify()
 
     for i; do
         sed -i \
-        -e 's/[àáâä]/a/g' \
-        -e 's/[éèêë]/e/g' \
-        -e 's/[ïîí]/i/g'  \
-        -e 's/[öôó]/o/g'  \
-        -e 's/[ùúûü]/u/g' \
-        -e 's/[À]/A/g'    \
-        -e 's/[ÉÈ]/E/g'   \
-        -e 's/[ñ]/n/g'    \
-        -e 's/[œ]/oe/g'   \
-        -e 's/[Œ]/Oe/g'   \
-        -e 's/[æ]/ae/g'   \
-        -e 's/[Æ]/Ae/g'   \
-        -e 's/[ç]/c/g'    \
-        -e 's/[Ç]/C/g'    \
-        "$i"
+            -e 's/[àáâä]/a/g' \
+            -e 's/[éèêë]/e/g' \
+            -e 's/[ïîí]/i/g'  \
+            -e 's/[öôó]/o/g'  \
+            -e 's/[ùúûü]/u/g' \
+            -e 's/[À]/A/g'    \
+            -e 's/[ÉÈ]/E/g'   \
+            -e 's/[ñ]/n/g'    \
+            -e 's/[œ]/oe/g'   \
+            -e 's/[Œ]/Oe/g'   \
+            -e 's/[æ]/ae/g'   \
+            -e 's/[Æ]/Ae/g'   \
+            -e 's/[ç]/c/g'    \
+            -e 's/[Ç]/C/g'    \
+            "$i"
     done;
 }
 
@@ -176,11 +190,13 @@ blind-append()
         STRING="$2"
     fi
 
+    echo -n "Secret: "
     read -s DUMMY
+    echo ""
 
     if [ ! -e "$FILE" ] || [ "$STRING" = "" ]; then
         echo "$DUMMY" >> "$FILE"
-        echo "Secrect blindly appended to ${FILE} at the end."
+        echo "Secret appended to ${FILE} at the end."
         return
     fi 
 
@@ -190,10 +206,9 @@ blind-append()
     else
         sed -i "s/${STRING}/${STRING}${DUMMY}/g" "${FILE}"
     fi
-    echo "Secret blindly appended to ${FILE}."
+    echo "Secret appended to ${FILE}."
     return
 }
-
 
 ## Term properties
 termcolors(){
@@ -217,45 +232,27 @@ termsupport()
     done | sort -nk2
 }
 
-## Colored man pager. 
-man()
-{
-	env \
-		LESS_TERMCAP_mb=$(printf "\e[1;31m") \
-		LESS_TERMCAP_md=$(printf "\e[1;31m") \
-		LESS_TERMCAP_me=$(printf "\e[0m") \
-		LESS_TERMCAP_se=$(printf "\e[0m") \
-		LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
-		LESS_TERMCAP_ue=$(printf "\e[0m") \
-		LESS_TERMCAP_us=$(printf "\e[1;32m") \
-		man "$@"
-}
-
 ## Highlight themes viewer for 256-colors terminals.
-hlt-viewer ()
-{
-    print_help()
+if [ -f "/usr/bin/highlight" ] ; then
+    hlt-viewer ()
     {
-        echo "Synopsis:"
-        echo -e "  $1"
-        echo
-        echo "This script displays a preview for every highlight's theme."
-        echo "Press ENTER to display next preview. Press anything else then ENTER to quit."
-    }
-    
-    if [ ! -f "/usr/bin/highlight" ];then
-        echo "Please install 'highlight'."
-        return
-    fi
-
-    if [ $# -gt 0 ]; then
-        print_help "$0"
-        return
-    fi
+        print_help()
+        {
+            echo "Synopsis:"
+            echo -e "  $1"
+            echo
+            echo "This script displays a preview for every highlight's theme."
+            echo "Press ENTER to display next preview. Press anything else then ENTER to quit."
+        }
+        
+        if [ $# -gt 0 ]; then
+            print_help "$0"
+            return
+        fi
 
 
-    local LIST=$(highlight -w | grep -v "\s\|^$")
-    local SAMPLE="void function(char* pointer, int &ref)
+        local LIST=$(highlight -w | grep -v "\s\|^$")
+        local SAMPLE="void function(char* pointer, int &ref)
 {
   int integer=3;
   char* string=\"Hello!\";
@@ -267,41 +264,42 @@ hlt-viewer ()
   }
 }"
 
-    unset DUMMY
-    for i in $(highlight -w | grep -v "\s\|^$"); do
-        echo "******************** $i ********************"
-        highlight -S c -O xterm256 <(echo $SAMPLE) -s "$i" 
-        read -s DUMMY
-        if [ ! "$DUMMY" = "" ];then
-            return
-        fi 
-    done
-}
+        unset DUMMY
+        for i in $(highlight -w | grep -v "\s\|^$"); do
+            echo "******************** $i ********************"
+            highlight -S c -O xterm256 <(echo $SAMPLE) -s "$i" 
+            read -s DUMMY
+            if [ ! "$DUMMY" = "" ];then
+                return
+            fi 
+        done
+    }
+fi
 
 ## Extractor -- Useless when using 'atool'.
 if [ ! -e "/usr/bin/atool" ]; then
     extract () {
-	if [ -f $1 ] ; then
-	    case $1 in
-		*.tar.bz2)   tar xvjf $1    ;;
-		*.tar.gz)    tar xvzf $1    ;;
-		*.tar.xz)    tar xvJf $1    ;;
-		*.bz2)       bunzip2 $1     ;;
-		*.rar)       unrar x $1     ;;
-		*.gz)        gunzip $1      ;;
-		*.tar)       tar xvf $1     ;;
-		*.tbz2)      tar xvjf $1    ;;
-		*.tgz)       tar xvzf $1    ;;
-		*.zip)       unzip $1       ;;
-		*.Z)         uncompress $1  ;;
-		*.7z)        7z x $1        ;;
-		*.xz)        unxz $1        ;;
-		*.exe)       cabextract $1  ;;
-		*)           echo "\`$1': unrecognized file compression" ;;
-	    esac
-	else
-	    echo "\`$1' is not a valid file"
-	fi
+	    if [ -f $1 ] ; then
+	        case $1 in
+		        *.tar.bz2)   tar xvjf $1    ;;
+		        *.tar.gz)    tar xvzf $1    ;;
+		        *.tar.xz)    tar xvJf $1    ;;
+		        *.bz2)       bunzip2 $1     ;;
+		        *.rar)       unrar x $1     ;;
+		        *.gz)        gunzip $1      ;;
+		        *.tar)       tar xvf $1     ;;
+		        *.tbz2)      tar xvjf $1    ;;
+		        *.tgz)       tar xvzf $1    ;;
+		        *.zip)       unzip $1       ;;
+		        *.Z)         uncompress $1  ;;
+		        *.7z)        7z x $1        ;;
+		        *.xz)        unxz $1        ;;
+		        *.exe)       cabextract $1  ;;
+		        *)           echo "\`$1': unrecognized file compression" ;;
+	        esac
+	    else
+	        echo "\`$1' is not a valid file"
+	    fi
     }
 fi
 
@@ -432,7 +430,7 @@ archive ()
 }
 
 # This function will clean TeX/LaTeX project folders recursively.
-function texclean ()
+texclean ()
 {
     if [ -z "$1" ]; then
 	    WORKDIR="$PWD"
@@ -535,7 +533,7 @@ formatc()
     # ## Function parenthesis
     # sed -i 's/\([^ ]\)(/\1 (/g' "$FILE"
     # sed -i 's/\s\s\+(/ (/g' "$FILE"
- 
+        
     # ## Semicolon
     # sed -i 's/\([^ ]\);/\1 ;/g' "$FILE"
     # sed -i 's/;\([^ ]\)/; \1/g' "$FILE"
@@ -598,8 +596,11 @@ bindatasearch()
     ## The awk command suppresses first column, spaces and line breaks.
     local SOURCE=$(od -tx8 "$1" | awk '($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }')
 
-
-    ## Solution 1
+    ## This special, not well-known syntax allows us to execute a set of
+    ## functions of the result of find.  Since everything MUST be between simple
+    ## quotes, we cannot use external varaibles directly. So we pass the $SOURCE
+    ## varaible as argument. The underscore at the end allow the use of
+    ## arguments.
     find "$WORKDIR" -type f -exec bash -c '
           TARGET=$(od -tx8 "$1" | awk '"'"'($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }'"'"')
           grep -q "$2" <(echo $TARGET)
@@ -613,300 +614,8 @@ bindatasearch()
 ##==============================================================================
 
 if [ -f "/usr/bin/pacman" ]; then
-
-## TODO: completion does not work as is. It requires pacman arguments like -S or -Q.
-## There should be a way to use it.
-# if isShell "zsh" ; then
-#     compdef _pacman pacman-deps
-# elif isShell "bash"; then
-#     complete -o default -o nospace -F _pacman pacman-deps
-# fi
-
-## This function gets the pacman variabless when necessary.
-## Note: some functions uses pacman localized output. It should work in any case.
-## Note: you should always call _pacman_unset_vars in the end.
-_pacman_set_vars()
-{
-    local pacman_var_list="$(pacman -Qi tzdata | cut -f1 -d':')"
-    if [ "$pacman_var_list" = "" ];then
-        echo "Could not get pacman's variables."
-        return 2
-    fi 
-
-    pacman_name="$(echo "$pacman_var_list" | sed -n '1p')"
-    pacman_deps="$(echo "$pacman_var_list" | sed -n '7p')"
-    pacman_optdeps="$(echo "$pacman_var_list" | sed -n '8p')"
-    pacman_size="$(echo "$pacman_var_list" | sed -n '12p')"
-}
-
-_pacman_unset_vars()
-{
-    unset pacman_name
-    unset pacman_deps
-    unset pacman_optdeps
-    unset pacman_size
-}
-
-## Get detailed file size list for the specified packages.
-if [ -f "/usr/bin/pacman" ]; then
-    pacman-files()
-    {
-        printhelp()
-        {
-            echo "Synopsis:"
-            echo -e "  $1 [-n] PACKAGES"
-            echo
-            echo "Usage:"
-            echo -e "  default:\tDisplay file size of PACKAGES."
-            echo -e "  -h:\t\tDisplay this help."
-            echo -e "  -n:\t\tSort by size."
-        }
-
-        local OPTION_SORT="cat"
-
-        while getopts ":hn" opt; do
-            case $opt in
-                h)
-                    printhelp "$0"
-                    return 1
-                    ;;
-                n)
-                    OPTION_SORT="sort -h"
-                    ;;
-                ?) 
-                    printhelp "$0"
-                    return 1
-                    ;;
-                :)
-                    echo "Missing argument."
-                    echo "Use $0 -h for help."
-                    return 1
-                    ;;
-            esac
-        done
-
-        shift $(($OPTIND - 1))
-
-        if [ $# -eq 0 ]; then
-            echo "Missing argument."
-            echo "Use $0 -h for help."
-            return 1
-        fi
-        
-        local RESULT_HUMAN="$(du -bh $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u) | eval ${OPTION_SORT})"
-        local RESULT="$(du -b $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u))"
-        echo "${RESULT_HUMAN}"
-
-        echo "$RESULT" | awk -F "[[:alpha:]]" '{TOTAL=$1+TOTAL} END {printf("Total:  %d KiB\n",TOTAL/1024)}'
-    }
+    source "${SHELL_DIR}/funs_pacman"
 fi
-
-## Retrieve official packages list.
-if [ -f "/usr/bin/pacman" ]; then
-    pacman-official()
-    {
-        # Alternative 'diff' verision.
-        # diff <(pacman -Qq | sort) <(pacman -Qmq | sort) --new-line-format='' --unchanged-group-format='%>'
-
-        comm -3 <(pacman -Qq | sort) <(pacman -Qmq | sort)
-    }
-fi
-    
-## Compare installed packages with list.
-if [ -f "/usr/bin/pacman" ]; then
-    pacman-diff()
-    {
-        printhelp()
-        {
-            echo "Synopsis:"
-            echo -e "  $1 [-m|-e] [-q] FILE"
-            echo
-            echo "Usage:"
-            echo -e "  default:\tDisplay packages included in FILE but not installed."
-            echo -e "  -e:\t\tCompare FILE to explicitly installed packages."
-            echo -e "  -h:\t\tDisplay this help."
-            echo -e "  -m:\t\tCompare FILE to foreign installed packages."
-            echo -e "  -q:\t\tDisplay installed packages not included in FILE."
-        }
-
-        local OPTION_EXPLICIT=""
-        local OPTION_FOREIGN=""
-        local OPTION_LOCAL="-1"
-
-        while getopts ":hmqe" opt; do
-            case $opt in
-                e)
-                    OPTION_EXPLICIT="e"
-                    ;;
-                h)
-                    printhelp "$0"
-                    return 1
-                    ;;
-                m)
-                    OPTION_FOREIGN="m"
-                    ;;
-                q)
-                    OPTION_LOCAL="-2"
-                    ;;
-                ?) 
-                    printhelp "$0"
-                    return 1
-                    ;;
-                :)
-                    echo "Missing argument."
-                    echo "Use $0 -h for help."
-                    return 1
-                    ;;
-            esac
-        done
-
-        shift $(($OPTIND - 1))
-
-        if [ $# -eq 0 ]; then
-            echo "Missing argument."
-            echo "Use $0 -h for help."
-            return 1
-        fi
-
-        comm -3 ${OPTION_LOCAL} <(pacman -Qq${OPTION_FOREIGN}${OPTION_EXPLICIT} | sort) <(sort "$*")
-
-    }
-fi
-
-## Print specified package size and a grand total.
-if [ -f "/usr/bin/pacman" ]; then
-    pacman-size()
-    {
-        printhelp()
-        {
-            echo "Synopsis:"
-            echo -e "  $1 [-a|-h|-n|-q] PACKAGES"
-            echo -e "  Arguments MUST be set before package list."
-            echo
-            echo "Usage:"
-            echo -e "  default:\tDisplay package size. Output contains no double and is alphabetically sorted. A grand total is printed at the end. It will only work for repos packages by default."
-            echo -e "  -h:\t\tShow this help."
-            echo -e "  -n:\t\tOutput is sorted by size."
-            echo -e "  -q:\t\tUses installed packages database instead of repos database. It speeds up queries and allows displaying size of local packages not available in repos."
-        }
-
-        local CMD="pacman -Si"
-        local SEP=": "
-        local TOTAL_SIZE=0
-        local SORT="sort -u -k3"
-        local SORT_SIZE="cat"
-
-        while getopts ":hnq" opt; do
-            case $opt in
-                h)
-                    printhelp "$0"
-                    return 1
-                    ;;
-                n)
-                    SORT_SIZE="sort -n"
-                    ;;
-                q)
-                    CMD="pacman -Qi"
-                    ;;
-                ?) 
-                    printhelp "$0"
-                    return 1
-                    ;;
-                :)
-                    echo "Missing argument."
-                    echo "Use $0 -h for help."
-                    return 1
-                    ;;
-            esac
-        done
-
-        shift $(($OPTIND - 1))
-
-        if [ $# -eq 0 ]; then
-            echo "Missing argument."
-            echo "Use $0 -h for help."
-            return 1
-        fi
-
-        _pacman_set_vars
-
-        local RESULT=$(eval "${CMD} $@" | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
-            '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | eval "$SORT" | eval "$SORT_SIZE")
-
-        echo "$RESULT"
-
-        ## Print total size.
-        echo "$RESULT" | awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}'
-
-        ## One line version. ~ same performance.
-        # eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
-        #     '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | sort -u -k3 \
-        # | tee >(awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}')
-
-        _pacman_unset_vars
-    }
-fi
-
-## Print deps list.
-if [ -f "/usr/bin/pacman" ]; then
-    pacman-deps()
-    {
-        printhelp()
-        {
-            echo "Synopsis:"
-            echo -e "  $1 [-a|-h|-q] PACKAGES"
-            echo -e "  Arguments MUST be set before package list."
-            echo
-            echo "Usage:"
-            echo -e "  default:\tDisplay package dependencies. Output contains no double and is alphabetically sorted. It will only work for repos packages by default."
-            echo -e "  -a:\t\tUses Yaourt queries instead of repos database. It slows down query but allow displaying size of local any packages not available in repos."
-            echo -e "  -h:\t\tShow this help."
-            echo -e "  -q:\t\tUses installed packages database instead of repos database. It speeds up queries and allows displaying size of local packages not available in repos."
-        }
-
-        local CMD="pacman -Si"
-        local SEP=": "
-
-        while getopts ":ahq" opt; do
-            case $opt in
-                a)
-                    CMD="yaourt -Si"
-                    ;;
-                h)
-                    printhelp "$0"
-                    return 1
-                    ;;
-                q)
-                    CMD="pacman -Qi"
-                    ;;
-                ?) 
-                    printhelp "$0"
-                    return 1
-                    ;;
-                :)
-                    echo "Missing argument."
-                    echo "Use $0 -h for help."
-                    return 1
-                    ;;
-            esac
-        done
-
-        shift $(($OPTIND - 1))
-
-        if [ $# -eq 0 ]; then
-            echo "Missing argument."
-            echo "Use $0 -h for help."
-            return 1
-        fi
-
-        _pacman_set_vars
-        eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_deps" '$0 ~ filter {gsub(/[>=<][^ ]*/,"",$2) ; gsub(/ +/,"\n",$2) ; print $2}' | sort -u
-        _pacman_unset_vars
-    }
-fi
-
-fi
-
 
 ##==============================================================================
 ## TeXlive functions
@@ -915,6 +624,8 @@ fi
 ## TeXlive
 if [ -d "/usr/local/texlive" ]; then
 
+    ## This function installs basic TeX and LaTeX packages. This is very
+    ## user-specific, so you should adapt the list to your needs.
     tlinit ()
     {
         ## Warning: it is important to set umask properly, otherwise users might
@@ -954,5 +665,4 @@ if [ -d "/usr/local/texlive" ]; then
             xcolor \
             zapfding'
     }
-
 fi

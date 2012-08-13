@@ -1,175 +1,177 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Bash specific functions
+## WARNING: this file needs a serious update and rewrite!
 ################################################################################
-
-if isShell "bash"; then
 
 ##==============================================================================
 ## Browse History
 ##==============================================================================
-# Parameters usage -- should be set before sourcing the function.
+
+## Parameters usage -- should be set before sourcing the function.
+if [ -d "$SHELLDIR" ]; then
+    BHISTORY="${SHELLDIR}/bhistory"
+else
+    BHISTORY="$HOME/.bhistory"
+fi
+BHISTFILESIZE=20
+BHISTREVERT=true
+BHISTLOADLAST=true
+
+
+## Where to store the history file.
+if [ "$BHISTORY" == "" ]; then
     if [ -d "$SHELLDIR" ]; then
         BHISTORY="${SHELLDIR}/bhistory"
     else
         BHISTORY="$HOME/.bhistory"
     fi
-    BHISTFILESIZE=20
-    BHISTREVERT=true
-    BHISTLOADLAST=true
+fi
+
+## History prompted to the user.
+## BHISTFILESIZE +1 entry are stored, the additional one
+## is for the current directory to be remembered for new session.
+[ "$BHISTFILESIZE" == "" ] && BHISTFILESIZE=20
+
+## If true, first listed is last browsed.
+[ "$BHISTREVERT" == "" ] && BHISTREVERT=true
+
+## Go back to previous folder when starting a new session.
+[ "$BHISTLOADLAST" == "" ] && BHISTLOADLAST=true
 
 
-# Where to store the history file.
-    if [ "$BHISTORY" == "" ]; then
-        if [ -d "$SHELLDIR" ]; then
-            BHISTORY="${SHELLDIR}/bhistory"
-        else
-            BHISTORY="$HOME/.bhistory"
-        fi
-    fi
-# History prompted to the user.
-# BHISTFILESIZE +1 entry are stored, the additional one
-# is for the current directory to be remembered for new session.
-    [ "$BHISTFILESIZE" == "" ] && BHISTFILESIZE=20
+## Prevent infinite recursiveness when sourcing multiple times.
+unalias cd>/dev/null 2>&1
 
-# If true, first listed is last browsed.
-    [ "$BHISTREVERT" == "" ] && BHISTREVERT=true
+## SEED is used to generate uniq filenames.
+SEED=$(date "+%y-%m-%d-%H%M%S")
 
-# Go back to previous folder when starting a new session.
-    [ "$BHISTLOADLAST" == "" ] && BHISTLOADLAST=true
+## Makes sure destination folder exists.
+mkdir -p $(dirname "$BHISTORY")
 
-
-# Prevent infinite recursiveness when sourcing multiple times.
-    unalias cd>/dev/null 2>&1
-
-# SEED is used to generate uniq filenames.
-    SEED=$(date "+%y-%m-%d-%H%M%S")
-
-# Makes sure destination folder exists.
-    mkdir -p $(dirname "$BHISTORY")
-
-# Use 'head' or 'tail' depending on BHISTREVERT
-    if $BHISTREVERT; then
-	    BFUNC=head
-	    BFUNCREV=tail
-	    touch "${BHISTORY}-true"
-	    if [ -e "$BHISTORY" -a -e "${BHISTORY}-false" ]; then
-	        rm -rf "${BHISTORY}-false"
-	        touch "${BHISTORY}-${SEED}_REV"
-	        tac "$BHISTORY" > "${BHISTORY}_${SEED}_REV"
-	        cat "${BHISTORY}_${SEED}_REV" > "$BHISTORY"
-	        rm -rf "${BHISTORY}_${SEED}_REV"
-	    fi
-    else
-	    BFUNC=tail
-	    BFUNCREV=head
-	    touch "${BHISTORY}-false"
-	    if [ -e "$BHISTORY" -a -e "${BHISTORY}-true" ]; then
-	        rm -rf "${BHISTORY}-true"
-	        touch "${BHISTORY}-${SEED}_REV"
-	        tac "$BHISTORY" > "${BHISTORY}_${SEED}_REV"
-	        cat "${BHISTORY}_${SEED}_REV" > "$BHISTORY"
-	        rm -rf "${BHISTORY}_${SEED}_REV"
-	    fi
-    fi
+## Use 'head' or 'tail' depending on BHISTREVERT
+if $BHISTREVERT; then
+	BFUNC=head
+	BFUNCREV=tail
+	touch "${BHISTORY}-true"
+	if [ -e "$BHISTORY" -a -e "${BHISTORY}-false" ]; then
+	    rm -rf "${BHISTORY}-false"
+	    touch "${BHISTORY}-${SEED}_REV"
+	    tac "$BHISTORY" > "${BHISTORY}_${SEED}_REV"
+	    cat "${BHISTORY}_${SEED}_REV" > "$BHISTORY"
+	    rm -rf "${BHISTORY}_${SEED}_REV"
+	fi
+else
+	BFUNC=tail
+	BFUNCREV=head
+	touch "${BHISTORY}-false"
+	if [ -e "$BHISTORY" -a -e "${BHISTORY}-true" ]; then
+	    rm -rf "${BHISTORY}-true"
+	    touch "${BHISTORY}-${SEED}_REV"
+	    tac "$BHISTORY" > "${BHISTORY}_${SEED}_REV"
+	    cat "${BHISTORY}_${SEED}_REV" > "$BHISTORY"
+	    rm -rf "${BHISTORY}_${SEED}_REV"
+	fi
+fi
 
 
-# Go back to previous folder when starting a new session.
-# Need to put this part before the new 'cd' is set to prevent $HOME from being added as last entry in the history.
-    if [ $BHISTLOADLAST -a -e $BHISTORY ]; then
-	    LASTPATH="$($BFUNC -n1 $BHISTORY)"
-	    if [[ -e "$LASTPATH" ]]; then
-		    cd "$LASTPATH"
-	    fi
-	    unset LASTPATH
-    fi
+## Go back to previous folder when starting a new session.
+## Need to put this part before the new 'cd' is set to prevent $HOME from being added as last entry in the history.
+if [ $BHISTLOADLAST -a -e $BHISTORY ]; then
+	LASTPATH="$($BFUNC -n1 $BHISTORY)"
+	if [[ -e "$LASTPATH" ]]; then
+		cd "$LASTPATH"
+	fi
+	unset LASTPATH
+fi
 
 
-    function bcd(){
-	# First character is an hyphen.
-	    if [ "${1:0:1}" == "-" ]; then
-		    if [ ${#1} -eq 1 ]; then # cd -
-			    cd -
-		    else
-			    DEST=${1:1} # After the hyphen
+function bcd(){
+	## First character is an hyphen.
+	if [ "${1:0:1}" == "-" ]; then
+		if [ ${#1} -eq 1 ]; then # cd -
+			cd -
+		else
+			DEST=${1:1} # After the hyphen
 
 			# Check if the content after the hyphen is a number.
-			    if [[ $DEST == ${DEST//[^0-9]/} ]]; then
-				    let DEST=$DEST # Set DEST as an integer only here to avoid errors.
+			if [[ $DEST == ${DEST//[^0-9]/} ]]; then
+				let DEST=$DEST # Set DEST as an integer only here to avoid errors.
 
-				    if $BHISTREVERT; then
-					    let DEST=${DEST}+1
-				    fi
+				if $BHISTREVERT; then
+					let DEST=${DEST}+1
+				fi
 
-				    NEWPATH=$(head -n$DEST "$BHISTORY"|tail -n1)
-				    echo ${NEWPATH}
-				    cd "${NEWPATH}"
-			    else
-				    cd "$1"
-			    fi
-		    fi
-	    else
-		    if [ -z "$1" ]; then
-			    cd
-		    else
-			    cd "$1"
-		    fi
-	    fi
+				NEWPATH=$(head -n$DEST "$BHISTORY"|tail -n1)
+				echo ${NEWPATH}
+				cd "${NEWPATH}"
+			else
+				cd "$1"
+			fi
+		fi
+	else
+		if [ -z "$1" ]; then
+			cd
+		else
+			cd "$1"
+		fi
+	fi
 
 
 	## Let's update the history.
-	    touch $BHISTORY
+	touch $BHISTORY
 
-	# A buffer is used to avoid flow errors.
-	    if $BHISTREVERT; then
-		    echo ${PWD} >> "${BHISTORY}_$SEED"
-		    cat "$BHISTORY" >> "${BHISTORY}_$SEED"
-	    else
-		    cat "$BHISTORY" >> "${BHISTORY}_$SEED"
-		    echo "${PWD}" >> "${BHISTORY}_$SEED"
-	    fi
+	## A buffer is used to avoid flow errors.
+	if $BHISTREVERT; then
+		echo ${PWD} >> "${BHISTORY}_$SEED"
+		cat "$BHISTORY" >> "${BHISTORY}_$SEED"
+	else
+		cat "$BHISTORY" >> "${BHISTORY}_$SEED"
+		echo "${PWD}" >> "${BHISTORY}_$SEED"
+	fi
 
-	# The 'awk' command makes sure there is duplicates.
-	# If the history size is beyond the limit set by $BHISTFILESIZE+1, it is cut.
-	# The '+1' is for storing the current folder which is not displayed to the used.
-	    let BHISTSIZEREAL=${BHISTFILESIZE}+1
-	    awk ' !x[$0]++' "${BHISTORY}_$SEED" | $BFUNC -n $BHISTSIZEREAL > "$BHISTORY"
+	## The 'awk' command makes sure there is duplicates.
+	## If the history size is beyond the limit set by $BHISTFILESIZE+1, it is cut.
+	## The '+1' is for storing the current folder which is not displayed to the used.
+	let BHISTSIZEREAL=${BHISTFILESIZE}+1
+	awk ' !x[$0]++' "${BHISTORY}_$SEED" | $BFUNC -n $BHISTSIZEREAL > "$BHISTORY"
 
-	    rm "${BHISTORY}_$SEED"
-    }
+	rm "${BHISTORY}_$SEED"
+}
 
-    function bhistory(){
-	    if [ ! -e "$BHISTORY" ]; then
-		    echo "Browse history empty"
-	    else
-		    let BHISTDISPLAY=$(cat "$BHISTORY"| wc -l)-1
-		    $BFUNCREV -n$BHISTDISPLAY "$BHISTORY"| cat -n
-	    fi
-    }
+function bhistory(){
+	if [ ! -e "$BHISTORY" ]; then
+		echo "Browse history empty"
+	else
+		let BHISTDISPLAY=$(cat "$BHISTORY"| wc -l)-1
+		$BFUNCREV -n$BHISTDISPLAY "$BHISTORY"| cat -n
+	fi
+}
 
-# Clean -- buggy?
+## Clean -- buggy?
 #unset BFUNC BFUNCREV SEED BHISTSIZEREAL
 
-# Replace 'cd' command
-    alias cd='bcd'
+## Replace 'cd' command
+alias cd='bcd'
 
-    shopt -s extglob  # To allow bash to understand generic expression
-    shopt -s progcomp # To enable the programmable completion
-    set +o nounset    # Otherwise some completions will fail
-    complete -A directory cd
+shopt -s extglob  ## To allow bash to understand generic expression
+shopt -s progcomp ## To enable the programmable completion
+set +o nounset    ## Otherwise some completions will fail
+complete -A directory cd
 
 
 ##==============================================================================
 ## Alias auto completion
 ##==============================================================================
-# wrap_alias takes three arguments:
-# $1: The name of the alias
-# $2: The command used in the alias
-# $3: The arguments in the alias all in one string
-# Generate a wrapper completion function (completer) for an alias
-# based on the command and the given arguments, if there is a
-# completer for the command, and set the wrapper as the completer for
-# the alias.
+## wrap_alias takes three arguments:
+## $1: The name of the alias
+## $2: The command used in the alias
+## $3: The arguments in the alias all in one string
+## Generate a wrapper completion function (completer) for an alias
+## based on the command and the given arguments, if there is a
+## completer for the command, and set the wrapper as the completer for
+## the alias.
+
 #function wrap_alias() {
 #  [[ "$#" == 3 ]] || return 1
 #
@@ -178,28 +180,28 @@ if isShell "bash"; then
 #  local alias_arguments="$3"
 #  local num_alias_arguments=$(echo "$alias_arguments" | wc -w)
 #
-#  # The completion currently being used for the aliased command.
+#  ## The completion currently being used for the aliased command.
 #  local completion=$(complete -p $aliased_command 2> /dev/null)
 #
-#  # Only a completer based on a function can be wrapped so look for -F
-#  # in the current completion. This check will also catch commands
-#  # with no completer for which $completion will be empty.
+#  ## Only a completer based on a function can be wrapped so look for -F
+#  ## in the current completion. This check will also catch commands
+#  ## with no completer for which $completion will be empty.
 #  echo $completion | grep -q -- -F || return 0
 #
 #  local namespace=alias_completion::
 #
-#  # Extract the name of the completion function from a string that
-#  # looks like: something -F function_name something
-#  # First strip the beginning of the string up to the function name by
-#  # removing "* -F " from the front.
+#  ## Extract the name of the completion function from a string that
+#  ## looks like: something -F function_name something
+#  ## First strip the beginning of the string up to the function name by
+#  ## removing "* -F " from the front.
 #  local completion_function=${completion##* -F }
-#  # Then strip " *" from the end, leaving only the function name.
+#  ## Then strip " *" from the end, leaving only the function name.
 #  completion_function=${completion_function%% *}
 #
-#  # Try to prevent an infinite loop by not wrapping a function
-#  # generated by this function. This can happen when the user runs
-#  # this twice for an alias like ls='ls --color=auto' or alias l='ls'
-#  # and alias ls='l foo'
+#  ## Try to prevent an infinite loop by not wrapping a function
+#  ## generated by this function. This can happen when the user runs
+#  ## this twice for an alias like ls='ls --color=auto' or alias l='ls'
+#  ## and alias ls='l foo'
 #  [[ "${completion_function#$namespace}" != $completion_function ]] && return 0
 #
 #  local wrapper_name="${namespace}${alias_name}"
@@ -213,20 +215,18 @@ if isShell "bash"; then
 #  }
 #"
 #
-  # To create the new completion we use the old one with two
-  # replacements:
-  # 1) Replace the function with the wrapper.
+#  ## To create the new completion we use the old one with two
+#  ## replacements:
+#  ## 1) Replace the function with the wrapper.
 #  local new_completion=${completion/-F * /-F $wrapper_name }
-  # 2) Replace the command being completed with the alias.
+#  ## 2) Replace the command being completed with the alias.
 #  new_completion="${new_completion% *} $alias_name"
-
+#
 #  eval "$new_completion"
 #}
 
-# For each defined alias, extract the necessary elements and use them
-# to call wrap_alias.
+## For each defined alias, extract the necessary elements and use them
+## to call wrap_alias.
 #eval "$(alias -p | sed -e 's/alias \([^=][^=]*\)='\''\([^ ][^ ]*\) *\(.*\)'\''/wrap_alias \1 \2 '\''\3'\'' /')"
 
 #unset wrap_alias
-
-fi

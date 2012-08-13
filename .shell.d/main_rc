@@ -25,6 +25,11 @@ if [ -d "${TEXROOT}" ]; then
     unset TEXFOLDER
 fi
 
+## Enable color support of ls.
+if [ "$TERM" != "dumb" ]; then
+    eval "`dircolors -b`"
+fi
+
 ## Terminal
 ## WARNING: this is always a bad idea!
 # if [[ "$TERM" = "*rxvt*" ]]; then 
@@ -39,7 +44,7 @@ export MANPAGER="less -s"
 export MANWIDTH=80
 
 ## Time display (with ls command for example)
-export TIME_STYLE=+"| %d/%m/%Y  %H:%M | "
+export TIME_STYLE=+"| %d/%m/%Y %H:%M:%S | "
 
 ## System locale
 # export LC_MESSAGES=fr_FR.utf8

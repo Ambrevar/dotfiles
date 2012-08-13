@@ -1,6 +1,6 @@
 ################################################################################
 ## Shell Config -- Master File
-## Date 2012-07-02
+## Date 2012-08-11
 ################################################################################
 
 ##==============================================================================
@@ -9,32 +9,21 @@
 ## Useless for Zsh ?
 [ -z "$PS1" ] && return
 
-
-##==============================================================================
-## Base functions
-##==============================================================================
-
-isShell()
-{
-    if [ "$1" = "$(ps | grep $$ | awk '{print $4}')" ]; then
-        return 0
-    else
-        return 1
-    fi
-}
-
 ##==============================================================================
 ## Sourcing
 ##==============================================================================
 
-SHELLDIR="$HOME/.shell.d"
+SHELL_CURRENT="$(ps | awk -v shellpid=$$ '$0 ~ shellpid {print $4}')"
+SHELL_DIR="$HOME/.shell.d"
 
-source "${SHELLDIR}/main_rc" # Should be sourced first.
-source "${SHELLDIR}/options_zsh" # Should be sourced first.
-source "${SHELLDIR}/colors_rc" # Should be sourced first.
+## Should be sourced first.
+source "${SHELL_DIR}/main_rc"
+source "${SHELL_DIR}/options_zsh"
 
-source "${SHELLDIR}/funs_rc"
-source "${SHELLDIR}/alias_rc"
-source "${SHELLDIR}/keys_zsh"
-source "${SHELLDIR}/personal_rc"
+## Source order should not matter.
+source "${SHELL_DIR}/alias_rc"
+source "${SHELL_DIR}/colors_zsh"    
+source "${SHELL_DIR}/funs_rc"
+source "${SHELL_DIR}/keys_zsh"
+source "${SHELL_DIR}/personal_rc"
 

@@ -8,22 +8,18 @@
 ## General
 ##==============================================================================
 
-# Warning: if this does not work if you change of shell without relogging, use
-# 'source .[shell]rc' instead.
-if isShell "bash"; then
+## Warning: if this does not work if you change shell without relogging, use
+## 'source .<shell>rc' instead.
+
+if [ "bash" = "$SHELL_CURRENT" ]; then
     alias ..='cd ..'
     alias esrc='$EDITOR ~/.bashrc'
     alias ssrc='source ~/.bashrc'
 fi
 
-if isShell "zsh"; then
+if [ "zsh" = "$SHELL_CURRENT" ]; then
     alias esrc='$EDITOR ~/.zshrc'
     alias ssrc='source ~/.zshrc'
-fi
-
-## Enable color support of ls and also add handy aliases.
-if [ "$TERM" != "dumb" ]; then
-    eval "`dircolors -b`"
 fi
 
 ##==============================================================================
@@ -32,15 +28,15 @@ fi
 ## 'ls' redefinition
 alias ls='ls --color=auto -F -v'
 
-## Listing aliases
+## Listing aliases.
 alias l='ls -1'
-alias la='ls -lAh --group-directories-first' # Hidden files
+alias la='ls -lAh --group-directories-first'   # Hidden files
 alias lc='ls -ltcrh --group-directories-first' # by change time
-alias lk='ls -lSrh --group-directories-first' # by size
-alias ll='ls -lh --group-directories-first' # Detailed view with human readable values.
-alias lx='ls -lXh --group-directories-first' # sort by extension
+alias lk='ls -lSrh --group-directories-first'  # by size
+alias ll='ls -lh --group-directories-first'    # Detailed view with human readable values.
+alias lx='ls -lXh --group-directories-first'   # sort by extension
 
-# Misc
+## Misc
 alias cp="cp -i" # confirm before overwriting something
 alias xlx='xrdb -load ~/.Xresources'
 alias grep='grep --color=auto'
@@ -51,36 +47,36 @@ if [ -e "/usr/bin/emacs" ]; then
    alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; /usr/bin/emacs --daemon"
 fi
 
-# List desktop applications
+# List desktop applications.
 alias applist='grep -r "^Name=" /usr/share/applications/* | cut -d'=' -f2| sort'
 
-## Remove executable attribute
+## Remove executable attribute.
 alias nox='find . -type f -exec chmod a-x {} \;'
 
-## Get your external IP
+## Get your external IP.
 [ -e "/usr/bin/curl" ] && alias myip='curl ifconfig.me'
 
-## Network discovery
-[ -e "/usr/bin/nmap" ] && alias netdiscover='nmap -sP "192.168.1.*"'
+## Network discovery.
+[ -e "/usr/bin/nmap" ] && alias network-discover='nmap -sP "192.168.1.*"'
 
-# Prevents accidentally clobbering files.
+## Prevents accidentally clobbering files.
 alias mkdir='mkdir -p'
 
-# Reset terminal -- Faster alternative of 'reset'
+## Reset terminal -- Faster alternative of 'reset'.
 alias cls='printf "\ec"'
 
-# Display PATH and LD_LIBRARY_PATH in a more readable way
+## Display PATH and LD_LIBRARY_PATH in a more readable way.
 alias echopath='echo -e ${PATH//:/\\n}'
 alias echolibpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 
-## Shutdown / Reboot
-## Will only work with consolekit and dbus daemons running.
+## Shutdown / Reboot.
+## If you do not want to get prompted for your password, configure sudo properly.
 if [ -e "/usr/bin/dbus-send" ]; then
     alias halt='sudo halt'
     alias reboot='sudo reboot'
 fi
 
-## Start X and lock current terminal (press ENTER when back in terminal to prompt for password)
+## Start X and lock current terminal (press ENTER when back in terminal to prompt for password).
 [ -e "/usr/bin/vlock" ] && alias sx='startx & vlock'
 
 ## Screensaver
@@ -88,9 +84,6 @@ fi
 
 ## Zathura -- Fork to background.
 [ -e "/usr/bin/zathura" ] && alias zat='zathura --fork'
-
-## Configuration files
-[ -e "/etc/rc.conf" ] && alias ercc='sudo $EDITOR /etc/rc.conf'
 
 ## Xrandr
 alias xmulti='xrandr --output VGA1 --auto --right-of $(xrandr | grep -A1 current | sed -n 2p | awk '"'"'{print $1}'"'"')'
@@ -104,7 +97,7 @@ alias xmorphzi='xrandr --output $(xrandr | grep -A1 current | sed -n 2p | awk '"
 ## Zsh power aliases
 ##==============================================================================
 
-# if isShell "zsh"; then
+#if [ "zsh" = "$SHELL_CURRENT" ]; then
 ## Inline aliases, zsh -g aliases can be anywhere in command line
 #alias -g G='| grep -'
 #alias -g L='| less'
@@ -117,46 +110,49 @@ alias xmorphzi='xrandr --output $(xrandr | grep -A1 current | sed -n 2p | awk '"
 ##==============================================================================
 ## Pacman aliases
 ##==============================================================================
-[ -e "/usr/bin/pacman" ] && PACMAN_FRONTEND='pacman'
+if [ -e "/usr/bin/pacman" ] ; then
 
-## Use of Pacman-Color
-if [ -e "/usr/bin/pacman-color" ]; then
-    PACMAN_FRONTEND='pacman-color'
+    PACMAN_FRONTEND='pacman'
 
-    if isShell "zsh" ; then
-        compdef _pacman pacman-color
-    elif isShell "bash"; then
-        complete -o default -o nospace -F _pacman pacman-color
+    ## Use of Pacman-Color
+    if [ -e "/usr/bin/pacman-color" ]; then
+        PACMAN_FRONTEND='pacman-color'
+
+        if [ "zsh" = "$SHELL_CURRENT" ]; then
+            compdef _pacman pacman-color
+        elif [ "bash" = "$SHELL_CURRENT" ]; then
+            complete -o default -o nospace -F _pacman pacman-color
+        fi
     fi
-fi
 
-## Pacman aliases
-if [ "$PACMAN_FRONTEND" = "pacman" ]; then
-    alias pc='sudo pacman -Scc'
-    alias pi='sudo pacman -S --needed'
-    alias pqi='pacman -Qi'
-    alias pql='pacman -Ql'
-    alias pqo='pacman -Qo'
-    alias pqs='pacman -Qs'
-    alias pr='sudo pacman -Rs'
-    alias psi='pacman -Si'
-    alias pss='pacman -Ss'
-    alias pu='sudo pacman -Syu'
-fi
+    ## Pacman aliases
+    if [ "$PACMAN_FRONTEND" = "pacman" ]; then
+        alias pc='sudo pacman -Scc'
+        alias pi='sudo pacman -S --needed'
+        alias pqi='pacman -Qi'
+        alias pql='pacman -Ql'
+        alias pqo='pacman -Qo'
+        alias pqs='pacman -Qs'
+        alias pr='sudo pacman -Rs'
+        alias psi='pacman -Si'
+        alias pss='pacman -Ss'
+        alias pu='sudo pacman -Syu'
+    fi
 
-if [ "$PACMAN_FRONTEND" = "pacman-color" ]; then
-    alias pc='sudo pacman-color -Scc'
-    alias pi='sudo pacman -S --needed'
-    alias pqi='pacman-color -Qi'
-    alias pql='pacman-color -Ql'
-    alias pqo='pacman-color -Qo'
-    alias pqs='pacman-color -Qs'
-    alias pr='sudo pacman-color -Rs'
-    alias psi='pacman-color -Si'
-    alias pss='pacman-color -Ss'
-    alias pu='sudo pacman-color -Syu'
-fi
+    if [ "$PACMAN_FRONTEND" = "pacman-color" ]; then
+        alias pc='sudo pacman-color -Scc'
+        alias pi='sudo pacman -S --needed'
+        alias pqi='pacman-color -Qi'
+        alias pql='pacman-color -Ql'
+        alias pqo='pacman-color -Qo'
+        alias pqs='pacman-color -Qs'
+        alias pr='sudo pacman-color -Rs'
+        alias psi='pacman-color -Si'
+        alias pss='pacman-color -Ss'
+        alias pu='sudo pacman-color -Syu'
+    fi
 
+fi
 
 ##==============================================================================
 ## TeXlive aliases

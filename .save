@@ -196,6 +196,9 @@ do
     FILELIST=(${FILELIST[*]} "$i")
 done
 
+## README
+FILELIST=(${FILELIST[*]} "README")
+
 ## rtorrent
 FILELIST=(${FILELIST[*]} ".rtorrent.rc")
 
