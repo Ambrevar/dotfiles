@@ -188,9 +188,11 @@ inkscape
 irssi
 lrzip
 lshw
+ltrace
 luakit
 mediainfo
 mencoder
+mercurial
 mkvtoolnix
 movgrav
 mplayer2
@@ -226,7 +228,9 @@ sxiv
 task
 tcc
 tcpdump
+texi2html
 texlive
+tig
 trash-cli
 tree
 udiskie

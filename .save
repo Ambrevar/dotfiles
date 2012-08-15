@@ -153,6 +153,7 @@ FILELIST=(${FILELIST[*]} ".conkyrc")
 ## Emacs
 FILELIST=(${FILELIST[*]} ".emacs")
 FILELIST=(${FILELIST[*]} ".emacs.d/plugins")
+FILELIST=(${FILELIST[*]} ".emacs.d/snippets")
 FILELIST=(${FILELIST[*]} ".emacs.d/abbrev_defs")
 
 ## GnuPG

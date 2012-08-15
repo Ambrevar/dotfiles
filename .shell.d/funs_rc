@@ -635,6 +635,7 @@ if [ -d "/usr/local/texlive" ]; then
             amscls \
             amsfonts \
             amsmath \
+            beamer \
             bigfoot \
             colortbl \
             easylist \

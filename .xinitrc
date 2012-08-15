@@ -17,20 +17,10 @@ numlockx on
 udiskie &
 exec awesome
 
+# exec startkde
 
-# [ -e /usr/bin/startlxde ] && exec ck-launch-session startlxde
-
-# exec ck-launch-session dbus-launch wmfs2
-# exec ck-launch-session dbus-launch wmfs
-# exec ck-launch-session dbus-launch startkde
-# exec ck-launch-session dbus-launch cinnamon 
+# exec ck-launch-session startlxde
 # exec ck-launch-session gnome-session
-
-## WMII
-#exec wmii
-#until wmii; do
-#	true
-#done
 
 ##==============================================================================
 ## Wallpaper

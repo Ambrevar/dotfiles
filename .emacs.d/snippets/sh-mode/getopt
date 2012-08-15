@@ -1,0 +1,33 @@
+# name: getopt
+# key: getopt
+# --
+local missing_arg ()
+{
+    echo "Missing argument."
+    echo "Use \$1 -h for help."
+}
+
+while getopts ":h" opt; do
+    case $opt in
+        h)
+            printhelp "\$0"
+            return 1
+            ;;
+        ?) 
+            printhelp "\$0"
+            return 1
+            ;;
+        :)
+            missing_arg \$0
+            return 1
+            ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+if [ $# -eq 0 ]; then
+    missing_arg \$0
+    return 1
+fi
+$0

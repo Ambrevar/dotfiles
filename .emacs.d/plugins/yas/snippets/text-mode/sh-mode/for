@@ -1,5 +1,0 @@
-#name : for i do done
-# --
-for i ; do
-    $0
-done

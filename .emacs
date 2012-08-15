@@ -281,6 +281,11 @@ browse-url-browser-function 'browse-url-generic)
   (let ((fill-column (point-max)))
     (fill-region (region-beginning) (region-end) nil)))
 
+(defun remove-duplicates ()
+  (interactive)
+  ((shell-command (echo blah)))
+)
+
 ;;==============================================================================
 ;; Duplicate line
 ;;==============================================================================
@@ -503,16 +508,20 @@ the line."
 ;; (require 'yasnippet-bundle)
 
 ;; Next follows a traditional, yet not-optimized configuration for Yasnippet.
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/yas")
+;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/yas")
 (require 'yasnippet) ;; not yasnippet-bundle
-(yas/initialize)
+(yas-global-mode 1)
+;; (yas/initialize)
+
+(setq yas-snippet-dirs "~/.emacs.d/snippets" )
 
 ;; Personal snippets
-(setq yas/root-directory "~/.emacs.d/plugins/yas/snippets" )
+;; (setq yas/root-directory "~/.emacs.d/plugins/yas/snippets" )
 
 ;; Load the snippets
-; (yas/load-directory  "~/.emacs.d/plugins/yas/snippets") ;; Warning: slow!
-(yas/load-directory yas/root-directory)
+;; (yas/load-directory  "~/.emacs.d/plugins/yas/snippets") ;; Warning: slow!
+;; (yas/load-directory yas/root-directory)
+(yas-load-directory yas-snippet-dirs)
 
 ;;==============================================================================
 ;; AucTeX

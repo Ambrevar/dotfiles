@@ -1,4 +1,5 @@
-#name : function
+# name: function
+# key: fun
 # --
 ${1:function} ()
 {

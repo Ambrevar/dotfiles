@@ -1,6 +1,7 @@
 # -*- mode: snippet -*-
-# name : fprintf 
+# name: fprintf 
 # contributor : joaotavora, ambrevar
+# key: fprintf
 # --
 fprintf ($1, "${2:%s}\\n"${2:$(if (string-match "%" text) ", " "\);")
 }$3${2:$(if (string-match "%" text) "\);" "")}
