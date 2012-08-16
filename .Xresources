@@ -1,6 +1,6 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! Xresources
-!! 2012-07-12
+!! 2012-08-16
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 !! TODO: set up charclass.
@@ -24,11 +24,13 @@ URxvt*scrollBar: false
 !! Plugins
 !! clipboard and keyboard-select are not provided by default.
 ! URxvt.perl-ext-common  : default,matcher,keyboard-select
-URxvt.perl-ext-common  : matcher,keyboard-select
+URxvt.perl-ext-common  : matcher,keyboard-select,clipboard
 
 
-! URxvt.keysym.M-v:   perl:clipboard:paste
-! URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+URxvt.keysym.M-v:   perl:clipboard:paste
+URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+! URxvt.clipboard.copycmd:  xsel -ib
+URxvt.clipboard.pastecmd: xsel -op
 
 !! Keyboard-Select
 URxvt.keysym.M-Escape:  perl:keyboard-select:activate
@@ -42,25 +44,34 @@ URxvt.urlLauncher      : luakit
 URxvt.underlineURLs    : true
 
 !! TODO: Does not work.
-URxvt*keysym.M-Left:  \033[1;3D
+! URxvt*keysym.M-Left:  \033[1;3D
+
 
 !! Font
-! URxvt*letterSpace: -1
-
 URxvt*font       : xft:Monospace:pixelsize=14
-URxvt*boldFont   : xft:Monospace:bold:pixelsize=14
-! URxvt.font     : xft:Bitstream Vera Sans Mono:pixelsize=14
-! URxvt.font     : -misc-fixed-medium-r-normal--15-140-75-75-c-90-iso8859-1
+
+! URxvt*boldFont   : xft:Monospace:bold:pixelsize=14
+! URxvt*boldFont : xft:Monospace Bold:pixelsize=12
+! URxvt*letterSpace: -1
 ! URxvt.font     : -*-dina-medium-r-*-*-16-*-*-*-*-*-*-*
+! URxvt.font     : -misc-fixed-medium-r-normal--15-140-75-75-c-90-iso8859-1
+! URxvt.font     : xft:Bitstream Vera Sans Mono:pixelsize=14
+! URxvt.font     : xft:DejaVu Sans Mono-10
 ! URxvt.font     : xft:DejaVu Sans Mono:pixelsize=12
 ! URxvt.font     : xft:Monospace 10:pixelsize=12
 ! URxvt.font     : xft:Monospace:pixelsize=12
 ! URxvt.font     : xft:monaco:size=10
-! URxvt*boldFont : xft:Monospace Bold:pixelsize=12
+! Xft.antialias: true
+! Xft.hinting: true
+! Xft.hintstyle: hintlight
+! Xft.rgba: rgb
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! Styles
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! Find more styles on:
+!! http://xcolors.net/
+!! https://bbs.archlinux.org/viewtopic.php?id=51818
 
 !! Colors list
 !! color0  = black 	
@@ -99,6 +110,27 @@ URxvt.color12 : #5555FF
 URxvt.color13 : #FF55FF
 URxvt.color14 : #55FFFF
 URxvt.color15 : #FFFFFF
+
+!! Derp style
+!! http://xcolors.net/dl/derp
+! URxvt*background: black
+! URxvt*foreground: #CCCCCC
+! URxvt.color0:   #111111
+! URxvt.color8:   #666666
+! URxvt.color1:   rgb:d3/62/65
+! URxvt.color9:   rgb:ef/81/71
+! URxvt.color2:   #aece91
+! URxvt.color10:  #cfefb3
+! URxvt.color3:   rgb:e7/e1/8c
+! URxvt.color11:  rgb:ff/f7/96
+! URxvt.color4:   #5297cf
+! URxvt.color12:  #74b8ef
+! URxvt.color5:   #963c59
+! URxvt.color13:  #b85e7b
+! URxvt.color6:   #5E7175
+! URxvt.color14:  #A3BABF
+! URxvt.color7:   #bebebe
+! URxvt.color15:  #ffffff
 
 !! Dark style
 ! urxvt.color0: rgb:00/00/00

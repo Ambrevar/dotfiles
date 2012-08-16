@@ -1,0 +1,320 @@
+## -*- mode:sh -*- #
+##==============================================================================
+## Pacman Functions
+##==============================================================================
+
+## TODO: completion does not work as is. It requires pacman arguments like -S or
+## -Q.  There should be a way to use it.
+
+# if [ "zsh" = "$SHELL_CURRENT" ]; then
+#     compdef _pacman pacman-deps
+# if [ "bash" = "$SHELL_CURRENT" ]; then
+#     complete -o default -o nospace -F _pacman pacman-deps
+# fi
+
+## This function gets the pacman variables when necessary.
+
+## Note: some functions uses pacman localized output. It should work in any
+## case.
+
+## Note: you should always call _pacman_unset_vars in the end.
+_pacman_set_vars()
+{
+    local pacman_var_list="$(pacman -Qi tzdata | cut -f1 -d':')"
+    if [ "$pacman_var_list" = "" ];then
+        echo "Could not get pacman's variables."
+        return 2
+    fi 
+
+    pacman_name="$(echo "$pacman_var_list" | sed -n '1p')"
+    pacman_deps="$(echo "$pacman_var_list" | sed -n '7p')"
+    pacman_optdeps="$(echo "$pacman_var_list" | sed -n '8p')"
+    pacman_size="$(echo "$pacman_var_list" | sed -n '12p')"
+}
+
+_pacman_unset_vars()
+{
+    unset pacman_name
+    unset pacman_deps
+    unset pacman_optdeps
+    unset pacman_size
+}
+
+## Get detailed file size list for the specified packages.
+pacman-files()
+{
+    printhelp()
+    {
+        echo "Synopsis:"
+        echo -e "  $1 [-n] PACKAGES"
+        echo
+        echo "Usage:"
+        echo -e "  default:\tDisplay file size of PACKAGES."
+        echo -e "  -h:\t\tDisplay this help."
+        echo -e "  -n:\t\tSort by size."
+    }
+
+    local OPTION_SORT="cat"
+
+    while getopts ":hn" opt; do
+        case $opt in
+            h)
+                printhelp "$0"
+                return 1
+                ;;
+            n)
+                OPTION_SORT="sort -h"
+                ;;
+            ?) 
+                printhelp "$0"
+                return 1
+                ;;
+            :)
+                echo "Missing argument."
+                echo "Use $0 -h for help."
+                return 1
+                ;;
+        esac
+    done
+
+    shift $(($OPTIND - 1))
+
+    if [ $# -eq 0 ]; then
+        echo "Missing argument."
+        echo "Use $0 -h for help."
+        return 1
+    fi
+
+    local RESULT_HUMAN="$(du -bh $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u) | eval ${OPTION_SORT})"
+    local RESULT="$(du -b $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u))"
+    echo "${RESULT_HUMAN}"
+
+    echo "$RESULT" | awk -F "[[:alpha:]]" '{TOTAL=$1+TOTAL} END {printf("Total:  %d KiB\n",TOTAL/1024)}'
+}
+
+## Retrieve official packages list.
+pacman-official()
+{
+# Alternative 'diff' verision.
+# diff <(pacman -Qq | sort) <(pacman -Qmq | sort) --new-line-format='' --unchanged-group-format='%>'
+
+    comm -3 <(pacman -Qq | sort) <(pacman -Qmq | sort)
+}
+
+## Compare installed packages with list.
+pacman-diff()
+{
+    printhelp()
+    {
+        echo "Synopsis:"
+        echo -e "  $1 [-m|-e] [-q] FILE"
+        echo
+        echo "Usage:"
+        echo -e "  default:\tDisplay packages included in FILE but not installed."
+        echo -e "  -e:\t\tCompare FILE to explicitly installed packages."
+        echo -e "  -h:\t\tDisplay this help."
+        echo -e "  -m:\t\tCompare FILE to foreign installed packages."
+        echo -e "  -q:\t\tDisplay installed packages not included in FILE."
+    }
+
+    local OPTION_EXPLICIT=""
+    local OPTION_FOREIGN=""
+    local OPTION_LOCAL="-1"
+
+    while getopts ":hmqe" opt; do
+        case $opt in
+            e)
+                OPTION_EXPLICIT="e"
+                ;;
+            h)
+                printhelp "$0"
+                return 1
+                ;;
+            m)
+                OPTION_FOREIGN="m"
+                ;;
+            q)
+                OPTION_LOCAL="-2"
+                ;;
+            ?) 
+                printhelp "$0"
+                return 1
+                ;;
+            :)
+                echo "Missing argument."
+                echo "Use $0 -h for help."
+                return 1
+                ;;
+        esac
+    done
+
+    shift $(($OPTIND - 1))
+
+    if [ $# -eq 0 ]; then
+        echo "Missing argument."
+        echo "Use $0 -h for help."
+        return 1
+    fi
+
+    comm -3 ${OPTION_LOCAL} <(pacman -Qq${OPTION_FOREIGN}${OPTION_EXPLICIT} | sort) <(sort "$*")
+
+}
+
+## Print specified package size and a grand total.
+pacman-size()
+{
+    printhelp()
+    {
+        echo "Synopsis:"
+        echo -e "  $1 [-a|-h|-n|-q] PACKAGES"
+        echo -e "  Arguments MUST be set before package list."
+        echo
+        echo "Usage:"
+        echo -e "  default:\tDisplay package size. Output contains no double and is alphabetically sorted. A grand total is printed at the end. It will only work for repos packages by default."
+        echo -e "  -h:\t\tShow this help."
+        echo -e "  -n:\t\tOutput is sorted by size."
+        echo -e "  -q:\t\tUses installed packages database instead of repos database. It speeds up queries and allows displaying size of local packages not available in repos."
+    }
+
+    local CMD="pacman -Si"
+    local SEP=": "
+    local TOTAL_SIZE=0
+    local SORT="sort -u -k3"
+    local SORT_SIZE="cat"
+
+    while getopts ":hnq" opt; do
+        case $opt in
+            h)
+                printhelp "$0"
+                return 1
+                ;;
+            n)
+                SORT_SIZE="sort -n"
+                ;;
+            q)
+                CMD="pacman -Qi"
+                ;;
+            ?) 
+                printhelp "$0"
+                return 1
+                ;;
+            :)
+                echo "Missing argument."
+                echo "Use $0 -h for help."
+                return 1
+                ;;
+        esac
+    done
+
+    shift $(($OPTIND - 1))
+
+    if [ $# -eq 0 ]; then
+        echo "Missing argument."
+        echo "Use $0 -h for help."
+        return 1
+    fi
+
+    _pacman_set_vars
+
+    local RESULT="$(eval "${CMD} $@" | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
+'$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | eval "$SORT" | eval "$SORT_SIZE")"
+
+    echo "$RESULT"
+
+## Print total size.
+    echo "$RESULT" | awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}'
+
+## One line version. ~ same performance.
+# eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
+#     '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | sort -u -k3 \
+# | tee >(awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}')
+
+    _pacman_unset_vars
+}
+
+## Print deps list.
+pacman-deps()
+{
+    printhelp()
+    {
+        echo "Synopsis:"
+        echo -e "  $1 [-a|-h|-q] PACKAGES"
+        echo -e "  Arguments MUST be set before package list."
+        echo
+        echo "Usage:"
+        echo -e "  default:\tDisplay package dependencies. Output contains no double and is alphabetically sorted. It will only work for repos packages by default."
+        echo -e "  -a:\t\tUses Yaourt queries instead of repos database. It slows down query but allow displaying size of local any packages not available in repos."
+        echo -e "  -h:\t\tShow this help."
+        echo -e "  -q:\t\tUses installed packages database instead of repos database. It speeds up queries and allows displaying size of local packages not available in repos."
+    }
+
+    local CMD="pacman -Si"
+    local SEP=": "
+
+    while getopts ":ahq" opt; do
+        case $opt in
+            a)
+                CMD="yaourt -Si"
+                ;;
+            h)
+                printhelp "$0"
+                return 1
+                ;;
+            q)
+                CMD="pacman -Qi"
+                ;;
+            ?) 
+                printhelp "$0"
+                return 1
+                ;;
+            :)
+                echo "Missing argument."
+                echo "Use $0 -h for help."
+                return 1
+                ;;
+        esac
+    done
+
+    shift $(($OPTIND - 1))
+
+    if [ $# -eq 0 ]; then
+        echo "Missing argument."
+        echo "Use $0 -h for help."
+        return 1
+    fi
+
+    _pacman_set_vars
+    eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_deps" '$0 ~ filter {gsub(/[>=<][^ ]*/,"",$2) ; gsub(/ +/,"\n",$2) ; print $2}' | sort -u
+    _pacman_unset_vars
+}
+
+pacman-aur-rebuild ()
+{
+    if [ ! -f /usr/bin/yaourt ]; then
+        echo "Yaourt needs to be installed."
+        return
+    fi
+
+    # local PKG_LIST=()
+    # if [ $# -eq 1 ]; then
+    #     for i in $(pacman -Qmq); do
+    #         PKG_LIST=
+    #     done
+    # fi
+    
+    # yaourt -G $(pacman -Qmq)
+    # for i in $(pacman -Qmq); do
+    #     cd "$i"
+    #     makepkg -s --nocheck --noconfirm
+    #     rm -r $(ls | grep -v "\.pkg\.tar\.xz")
+    #     cd ..
+    # done
+
+    yaourt -G ncdu xsel
+    for i in ncdu xsel; do
+        cd "$i"
+        makepkg -s --nocheck --noconfirm
+        rm -r $(ls | grep -v "\.pkg\.tar\.xz")
+        cd ..
+    done
+}

@@ -36,6 +36,10 @@ if [ ! -e ${THEME_DEST} ]; then
 fi
 echo
 
+## rtorrent
+echo "==> Awesome"
+mkdir -p "${HOME}/.session"
+
 ## Luakit -- Fetch Adblock list.
 echo "==> Luakit"
 mkdir -p "$XDG_DATA_HOME/luakit"
