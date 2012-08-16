@@ -1,5 +1,4 @@
 bashmount
-bustle
 dropbox
 dropbox-cli
 emacs-mediawiki-bzr
@@ -14,6 +13,5 @@ pacman-color
 rxvt-unicode-patched
 texlive-dummy
 trash-cli
-urxvt-clipboard
-urxvt-keyboard-select
+urxvt-perls-git
 yaourt

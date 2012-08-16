@@ -6,6 +6,8 @@ acpi
 alsa-lib
 alsa-utils
 antiword
+apr
+apr-util
 archlinux-keyring
 asciidoc
 aspell
@@ -26,6 +28,7 @@ bc
 binutils
 bison
 bzip2
+bzr
 ca-certificates
 cairo
 cairomm
@@ -134,6 +137,7 @@ gnu-netcat
 gnupg
 gnuplot
 gnutls
+gparted
 gpgme
 gpm
 grep
@@ -177,6 +181,7 @@ initscripts
 inkscape
 inputproto
 intel-dri
+intltool
 iproute2
 iptables
 iputils
@@ -406,6 +411,7 @@ pcmciautils
 pcre
 perl
 perl-error
+perl-xml-parser
 pidgin
 pinentry
 pixman
@@ -468,6 +474,7 @@ speex
 splint
 sqlite
 startup-notification
+subversion
 sudo
 sxiv
 sysfsutils
@@ -486,6 +493,7 @@ ttf-dejavu
 tzdata
 udisks
 udisks2
+unixodbc
 unrar
 unzip
 upx
@@ -549,6 +557,7 @@ xsel
 xvidcore
 xz
 yajl
+yasm
 zathura
 zathura-djvu
 zathura-pdf-poppler

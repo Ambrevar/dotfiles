@@ -164,7 +164,10 @@ FILELIST=(${FILELIST[*]} ".gtkrc-2.0")
 FILELIST=(${FILELIST[*]} ".config/gtk-3.0/settings.ini")
 
 ## Git
-FILELIST=(${FILELIST[*]} ".git")
+FILELIST=(${FILELIST[*]} ".gitconfig")
+
+## Homeinit
+FILELIST=(${FILELIST[*]} ".homeinit")
 
 ## Irssi
 # FILELIST=(${FILELIST[*]} ".irssi")

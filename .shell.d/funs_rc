@@ -451,13 +451,23 @@ archive ()
     fi
 }
 
-# This function will clean TeX/LaTeX project folders recursively.
-texclean ()
+## Git compare
+git-compare()
 {
+    if [ $# -ne 1 ]; then
+        echo "Wrong number of argument."
+        return
+    fi
+
+    comm -3 <(git ls-files | sort) <(find "$1" -type f | sed 's/^[^\/]*\///g' | sort)
+}
+
+## This function will clean TeX/LaTeX project folders recursively.
+texclean () {
     if [ -z "$1" ]; then
-	    WORKDIR="$PWD"
+        WORKDIR="$PWD"
     else
-	    WORKDIR="$1"
+        WORKDIR="$1"
     fi
 
     find "$WORKDIR" -type f \( \

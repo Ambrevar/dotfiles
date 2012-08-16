@@ -288,30 +288,23 @@ pacman-deps()
     _pacman_unset_vars
 }
 
-pacman-aur-rebuild ()
+pacman-rebuild ()
 {
     if [ ! -f /usr/bin/yaourt ]; then
         echo "Yaourt needs to be installed."
         return
     fi
 
+    ## TODO: use args to tell what to rebuild.
     # local PKG_LIST=()
-    # if [ $# -eq 1 ]; then
+    # if [ $# -eq 0 ]; then
     #     for i in $(pacman -Qmq); do
     #         PKG_LIST=
     #     done
     # fi
     
-    # yaourt -G $(pacman -Qmq)
-    # for i in $(pacman -Qmq); do
-    #     cd "$i"
-    #     makepkg -s --nocheck --noconfirm
-    #     rm -r $(ls | grep -v "\.pkg\.tar\.xz")
-    #     cd ..
-    # done
-
-    yaourt -G ncdu xsel
-    for i in ncdu xsel; do
+    yaourt -G $(pacman -Qmq)
+    for i in $(pacman -Qmq); do
         cd "$i"
         makepkg -s --nocheck --noconfirm
         rm -r $(ls | grep -v "\.pkg\.tar\.xz")

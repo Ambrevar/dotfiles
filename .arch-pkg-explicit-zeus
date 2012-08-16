@@ -14,8 +14,8 @@ bash
 bashmount
 binutils
 bison
-bustle
 bzip2
+bzr
 calc
 catdvi
 clementine
@@ -64,6 +64,7 @@ git
 glibc
 gnu-netcat
 gnuplot
+gparted
 grep
 grub
 gsasl
@@ -155,8 +156,7 @@ tree
 unrar
 unzip
 upx
-urxvt-clipboard
-urxvt-keyboard-select
+urxvt-perls-git
 usbutils
 util-linux
 valgrind
