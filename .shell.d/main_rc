@@ -44,7 +44,7 @@ export MANPAGER="less -s"
 export MANWIDTH=80
 
 ## Time display (with ls command for example)
-export TIME_STYLE=+"| %d/%m/%Y %H:%M:%S | "
+export TIME_STYLE=+"|%Y-%m-%d %H:%M:%S|"
 
 ## System locale
 # export LC_MESSAGES=fr_FR.utf8

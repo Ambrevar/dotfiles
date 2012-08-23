@@ -69,13 +69,13 @@ layouts =
     awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
     awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral,
-    awful.layout.suit.spiral.dwindle,
+    -- awful.layout.suit.fair,
+    -- awful.layout.suit.fair.horizontal,
+    -- awful.layout.suit.spiral,
+    -- awful.layout.suit.spiral.dwindle,
     awful.layout.suit.max,
     awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier,
+    -- awful.layout.suit.magnifier,
     awful.layout.suit.floating
 }
 -- }}}
@@ -444,7 +444,7 @@ clientkeys = awful.util.table.join(
     --     end),
     -- awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
-    awful.key({ modkey, "Shift" }, "m",
+    awful.key({ modkey, "Mod1" }, "m",
         function (c)
             c.maximized_horizontal = not c.maximized_horizontal
             c.maximized_vertical   = not c.maximized_vertical

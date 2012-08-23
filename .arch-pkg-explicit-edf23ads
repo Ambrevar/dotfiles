@@ -3,7 +3,6 @@ acpi
 alsa-utils
 antiword
 archlinux-keyring
-asciidoc
 aspell-en
 aspell-fr
 atool
@@ -21,6 +20,7 @@ bzip2
 bzr
 calc
 catdvi
+cifs-utils
 cmus
 coreutils
 cpufrequtils
@@ -29,13 +29,12 @@ cronie
 cryptsetup
 ctags
 cyrus-sasl
+dash
 device-mapper
 d-feet
 dhclient
 dhcpcd
 diffutils
-docbook-xml
-docbook-xsl
 dosfstools
 dropbox
 dropbox-cli
@@ -58,6 +57,7 @@ findutils
 flashplugin
 flex
 fortune-mod
+fortune-mod-tbbt
 gawk
 gcc
 gcc-libs
@@ -69,7 +69,6 @@ git
 glibc
 gnuplot
 gparted
-gprolog
 graphicsmagick
 grep
 grub
@@ -107,6 +106,7 @@ latex2rtf
 less
 libaio
 libavc1394
+libcap-ng
 libcdaudio
 libdc1394
 libdvdcss
@@ -128,9 +128,9 @@ libstdc++5
 libsystemd
 libtool
 libusbx
+libwbclient
 libzen
 licenses
-lighttpd
 linux
 linux-lts
 logrotate
@@ -139,7 +139,6 @@ lshw
 ltrace
 luakit
 lvm2
-lxterminal
 lzo2
 m4
 make
@@ -147,6 +146,7 @@ man-db
 man-pages
 mdadm
 mediainfo
+mencoder
 mercurial
 mjpegtools
 movgrab
@@ -198,6 +198,7 @@ sdparm
 sed
 shadow
 slock
+smbclient
 soundtouch
 splint
 strace
@@ -211,9 +212,12 @@ sysstat
 systemd-tools
 sysvbanner
 sysvinit
+talloc
 tar
 task
+tcc
 tcpdump
+tdb
 texi2html
 texinfo
 texlive-genericextra
@@ -227,7 +231,7 @@ ttf-dejavu
 unrar
 unzip
 upx
-urxvt-keyboard-select
+urxvt-perls-git
 usbutils
 util-linux
 valgrind
@@ -256,11 +260,11 @@ xf86-video-ati
 xf86-video-vesa
 xfsprogs
 xorg-server
-xorg-twm
 xorg-xev
 xorg-xinit
 xorg-xmessage
 xorg-xmodmap
+xorg-xprop
 xorg-xrandr
 xorg-xrdb
 xsel

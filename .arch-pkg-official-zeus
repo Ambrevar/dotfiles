@@ -38,11 +38,11 @@ cdparanoia
 cifs-utils
 clementine
 cloog
+cmake
 cmus
 colord
 compositeproto
 coreutils
-cpufrequtils
 cracklib
 cronie
 cryptsetup
@@ -70,6 +70,7 @@ dnssec-anchors
 docbook-xml
 docbook-xsl
 dosfstools
+doxygen
 dri2proto
 dtach
 e2fsprogs
@@ -138,6 +139,7 @@ gnupg
 gnuplot
 gnutls
 gparted
+gperf
 gpgme
 gpm
 grep
@@ -352,9 +354,11 @@ lirc-utils
 logrotate
 lsof
 lua
+luadoc
 luafilesystem
 luajit
 luakit
+lualogging
 lvm2
 m4
 make
@@ -379,6 +383,7 @@ musicbrainz
 mutagen
 mutt
 nasm
+nawk
 ncdu
 ncurses
 neon
@@ -411,7 +416,9 @@ pcmciautils
 pcre
 perl
 perl-error
+perl-test-pod
 perl-xml-parser
+perl-yaml-syck
 pidgin
 pinentry
 pixman
@@ -510,6 +517,7 @@ w3m
 wget
 which
 wildmidi
+wipe
 wireless_tools
 wpa_supplicant
 wv
@@ -532,6 +540,7 @@ xfsprogs
 xineramaproto
 xkeyboard-config
 xmlrpc-c
+xmlto
 xorg-bdftopcf
 xorg-fonts-alias
 xorg-fonts-encodings

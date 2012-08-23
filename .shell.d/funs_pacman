@@ -307,7 +307,7 @@ pacman-rebuild ()
     for i in $(pacman -Qmq); do
         cd "$i"
         makepkg -s --nocheck --noconfirm
-        rm -r $(ls | grep -v "\.pkg\.tar\.xz")
+        rm -r "$(ls | grep -v '\.pkg\.tar\.xz')"
         cd ..
     done
 }

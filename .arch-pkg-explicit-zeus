@@ -107,6 +107,7 @@ mplayer2
 mtools
 mutt
 nasm
+nawk
 ncdu
 net-tools
 nmap
@@ -166,6 +167,7 @@ vlock
 w3m
 wget
 which
+wipe
 wireless_tools
 wpa_supplicant
 wv

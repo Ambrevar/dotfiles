@@ -27,8 +27,8 @@ URxvt*scrollBar: false
 URxvt.perl-ext-common  : matcher,keyboard-select,clipboard
 
 
-URxvt.keysym.M-v:   perl:clipboard:paste
-URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+URxvt.keysym.C-M-v:   perl:clipboard:paste
+URxvt.keysym.C-M-c: perl:clipboard:paste_escaped
 ! URxvt.clipboard.copycmd:  xsel -ib
 URxvt.clipboard.pastecmd: xsel -op
 

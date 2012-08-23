@@ -86,12 +86,10 @@ fi
 [ -e "/usr/bin/zathura" ] && alias zat='zathura --fork'
 
 ## Xrandr
-alias xmulti='xrandr --output VGA1 --auto --right-of $(xrandr | grep -A1 current | sed -n 2p | awk '"'"'{print $1}'"'"')'
-alias xmultioff="xrandr --output VGA1 --off"
-alias xmorphsw='xrandr --output $(xrandr | grep -A1 current | sed -n 2p | awk '"'"'{print $1}'"'"') --transform 1.24,0.16,-124,0,1.24,0,0,0.000316,1'
-alias xmorphnone='xrandr --output $(xrandr | grep -A1 current | sed -n 2p | awk '"'"'{print $1}'"'"') --transform none'
-alias xmorphzo='xrandr --output $(xrandr | grep -A1 current | sed -n 2p | awk '"'"'{print $1}'"'"') --scale 1.2x1.2'
-alias xmorphzi='xrandr --output $(xrandr | grep -A1 current | sed -n 2p | awk '"'"'@{print $1}'"'"') --scale 0.8x0.8'
+alias xmorphsw='xrandr --output $(xrandr | sed -n "/current/{n;p}" | cut -f1 -d" ") --transform 1.24,0.16,-124,0,1.24,0,0,0.000316,1'
+alias xmorphnone='xrandr --output $(xrandr | sed -n "/current/{n;p}" | cut -f1 -d" ") --transform none'
+alias xmorphzo='xrandr --output $(xrandr | sed -n "/current/{n;p}" | cut -f1 -d" ") --scale 1.2x1.2'
+alias xmorphzi='xrandr --output $(xrandr | sed -n "/current/{n;p}" | cut -f1 -d" ") --scale 0.8x0.8'
 
 ##==============================================================================
 ## Zsh power aliases
@@ -127,7 +125,8 @@ if [ -e "/usr/bin/pacman" ] ; then
 
     ## Pacman aliases
     if [ "$PACMAN_FRONTEND" = "pacman" ]; then
-        alias pc='sudo pacman -Scc'
+        alias pc='sudo pacman -Sc'
+        alias pcc='sudo pacman -Scc'
         alias pi='sudo pacman -S --needed'
         alias pqi='pacman -Qi'
         alias pql='pacman -Ql'
@@ -140,7 +139,8 @@ if [ -e "/usr/bin/pacman" ] ; then
     fi
 
     if [ "$PACMAN_FRONTEND" = "pacman-color" ]; then
-        alias pc='sudo pacman-color -Scc'
+        alias pc='sudo pacman-color -Sc'
+        alias pcc='sudo pacman-color -Scc'
         alias pi='sudo pacman -S --needed'
         alias pqi='pacman-color -Qi'
         alias pql='pacman-color -Ql'

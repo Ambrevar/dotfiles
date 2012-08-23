@@ -33,10 +33,10 @@ set continue=true
 set display_artist_sort_name=false
 set dsp.alsa.device=default
 set dsp.oss.device=
-set format_current= %a - %y. %l -%n. %t 
+set format_current= %a - %y. %l - %n. %t 
 set format_playlist= %-18%a %4y. %-25%l %3n. %t%= %d 
-set format_playlist_va= %-25%A %3n. %t (%a)%= %y %d 
-set format_title=%a - %y. %l -%n. %t 
+set format_playlist_va= %-18%a       %-25%l      %t%= %d 
+set format_title=%a - %y. %l - %n. %t 
 set format_trackwin=%4y %3n. %t%= %d [%{codec} %{bitrate} kbps]
 set format_trackwin_va=%3n. %t (%a)%= %y %d 
 set id3_default_charset=ISO-8859-1

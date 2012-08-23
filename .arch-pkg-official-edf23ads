@@ -9,7 +9,6 @@ antiword
 apr
 apr-util
 archlinux-keyring
-asciidoc
 aspell
 aspell-en
 aspell-fr
@@ -37,6 +36,7 @@ cairomm
 calc
 catdvi
 cdparanoia
+cifs-utils
 cloog
 cmus
 compositeproto
@@ -50,6 +50,7 @@ ctags
 curl
 cyrus-sasl
 damageproto
+dash
 db
 dbus
 dbus-core
@@ -64,8 +65,6 @@ diffutils
 dirmngr
 djvulibre
 dnssec-anchors
-docbook-xml
-docbook-xsl
 dosfstools
 dri2proto
 dtach
@@ -132,7 +131,6 @@ gnutls
 gparted
 gpgme
 gpm
-gprolog
 graphicsmagick
 grep
 groff
@@ -211,6 +209,7 @@ libavc1394
 libbluray
 libcaca
 libcap
+libcap-ng
 libcdaudio
 libcddb
 libcdio
@@ -300,6 +299,7 @@ libva
 libvdpau
 libvorbis
 libvpx
+libwbclient
 libwebkit
 libwmf
 libx11
@@ -332,7 +332,6 @@ libxxf86dga
 libxxf86vm
 libzen
 licenses
-lighttpd
 linux
 linux-api-headers
 linux-firmware
@@ -349,7 +348,6 @@ luafilesystem
 luajit
 luakit
 lvm2
-lxterminal
 lzo2
 m4
 make
@@ -358,6 +356,7 @@ man-pages
 mcpp
 mdadm
 mediainfo
+mencoder
 mercurial
 mesa
 mime-types
@@ -464,6 +463,7 @@ sg3_utils
 shadow
 shared-mime-info
 slock
+smbclient
 soundtouch
 speex
 splint
@@ -480,9 +480,12 @@ systemd-tools
 sysvbanner
 sysvinit
 t1lib
+talloc
 tar
 task
+tcc
 tcpdump
+tdb
 texi2html
 texinfo
 texlive-bin
@@ -510,8 +513,6 @@ videoproto
 vim
 vim-runtime
 vlock
-vte
-vte-common
 w3m
 weechat
 wget
@@ -557,13 +558,13 @@ xorg-mkfontscale
 xorg-server
 xorg-server-common
 xorg-setxkbmap
-xorg-twm
 xorg-xauth
 xorg-xev
 xorg-xinit
 xorg-xkbcomp
 xorg-xmessage
 xorg-xmodmap
+xorg-xprop
 xorg-xrandr
 xorg-xrdb
 xorg-xset

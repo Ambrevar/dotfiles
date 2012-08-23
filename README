@@ -55,8 +55,7 @@ Vicious plugin, it is quite straightforward.
 
 Emacs
 *****
-Extra deps: auctex, auto-complete, emacs-lua-mode, emacs-mediawiki,
-emacs-yasnippet.
+Extra deps: auctex, emacs-lua-mode, emacs-mediawiki, emacs-yasnippet.
 
 Some keybindings and custom colors (for 256-colors terminals). Extended file
 support (shell files, mutt mails, Arch Linux PKGBUILDs). Some customization --
@@ -123,16 +122,14 @@ name.
 
 URxvt
 *****
-Custom font and colors, no scroll bar, url-matcher and keyboard-select.
+Extra deps: Muennich's perl extensions (keyboard-select, clipboard)
+
+Custom font and colors, no scroll bar, url-matcher, clipboard, and
+keyboard-select.
 
 Vim
 ***
 I've only been a casual Vim user, so do not expect too much from it.
-
-WMFS
-****
-The last time I used WMFS, the development was in a transition from version 1.x
-to 2.x. So beware!, configuration files might be quite broken.
 
 ################################################################################
 Known issues
@@ -152,24 +149,39 @@ when launched from Ranger).
 Complete applist
 ****************
 
+aalib
 antiword
+asciidoc
 astyle
 atool
 awesome
+awk
 bashmount
 bc
+cal
 calc
 catdvi
 ccrypt
 chrpath
 cmus
+column
+comm
 cppcheck
+cut
 dash
+diff
 doxygen
 dropbox
+dtach
 dvtm
 emacs
+fbpdf
+fbv
+fdisk
 feh
+ffmpeg
+file
+fmt
 fortune
 gcolor2
 gdb
@@ -177,6 +189,9 @@ gimp
 gnumeric
 gnuplot
 gpicview
+graphicsmagick
+grep
+groff
 handbrake
 hdparm
 help2man
@@ -186,6 +201,8 @@ imagemagick
 indent
 inkscape
 irssi
+latex2html
+latex2rtf
 lrzip
 lshw
 ltrace
@@ -193,8 +210,9 @@ luakit
 mediainfo
 mencoder
 mercurial
+mkfs
 mkvtoolnix
-movgrav
+movgrab
 mplayer2
 mutt
 nasm
@@ -203,13 +221,16 @@ ngrep
 nmap
 numlockx
 octave
+od
 okular
 openshot
 openssh
 p7zip
 pari
-pdfinfo
+parted
+patch
 pidgin
+poppler
 pwgen
 pwsafe
 ranger
@@ -219,16 +240,21 @@ rtorrent
 rxvt-unicode
 scrot
 sdparm
+sed
+shred
 slock
+sort
 splint
 strace
 submarine
 sudo
 sxiv
+syslinux
 task
 tcc
 tcpdump
 texi2html
+texinfo
 texlive
 tig
 trash-cli
@@ -243,6 +269,7 @@ weechat
 wipe
 wmfs
 wv
+x264
 xclip
 xsel
 yasm

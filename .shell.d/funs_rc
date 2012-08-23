@@ -34,20 +34,18 @@ search()
 cuttail()
 {
     local nlines=${2:-10}
-    sed -n -e :a -e "1,${nlines}!{P;N;D;};N;ba" $1
-    # head $1 -n$(($(cat $1|wc -l) - $nlines))
+    sed -n -e ":begin ; 1,${nlines}!{P;N;D} ; N ; b begin" $1
 }
 
 ## Cut first n lines in file, 10 by default.
-## TODO: use sed command instead.
 cuthead()
 {
     local nlines=${2:-10}
-    tail $1 -n$(($(cat $1|wc -l) - $nlines))
+    sed -n -e "1,${nlines}!p" $1
 }
 
 ## Move filenames to lowercase.
-## Use ranger + bulkrename + vim/emacs (+ TwindleCase) for more interactivity.
+## Use ranger + bulkrename + vim/emacs (+ TwindleCase) for more flexibility.
 renamelower()
 {
     local file
@@ -86,8 +84,8 @@ renameswap()
 dirsize ()
 {
     local TEMPFILE="$(mktemp)"
-    # du -shx * .[a-zA-Z0-9_]* 2> /dev/null | \
-    du -shx * 2> /dev/null | \
+    # du -shx * 2> /dev/null | \
+    du -shx * .[a-zA-Z0-9_]* 2> /dev/null | \
 	    egrep '^ *[0-9.]*[MG]' | sort -n > "${TEMPFILE}"
     egrep '^ *[0-9.]*M' "${TEMPFILE}"
     egrep '^ *[0-9.]*G' "${TEMPFILE}"
@@ -114,12 +112,21 @@ if [ -e "/usr/bin/vim" ]; then
     }
 fi
 
-## Set file/directory owner and permissions according to umask.
-## Usage: sanitize FILE|FOLDER
+## Set file/directory owner and permissions.
+## Usage: sanitize [FOLDER]
 sanitize()
 {
-    chown -R ${UID}:${GID} "$@"
-    chmod -R $(umask -S) "$@"
+    local WORKDIR="$PWD"
+    if [ $# -eq 1 ]; then
+        WORKDIR="$1"
+    fi
+
+    local FMASK=$(umask -S | sed 's/x//g')
+    local DMASK=$(umask -S)
+
+    find "$WORKDIR" -exec chown -R ${UID}:${GID} {} \;
+    find "$WORKDIR" -type d -exec chmod ${DMASK} {} \;
+    find "$WORKDIR" -type f -exec chmod ${FMASK} {} \;
 }
 
 asciify()
@@ -617,29 +624,54 @@ formatc()
 ## files in current folder.
 bindatasearch()
 {
-    if [ $# -ne 1 ] || [ ! -f "$1" ]; then
+    if [ $# -eq 0 ] || [ ! -f "$1" ]; then
         echo "Please provide a valid single file as argument."
         return
     fi
 
-    ## TODO: add option to config WORKDIR?
-    local WORKDIR=$PWD
+    ## Must be a folder.
+    local TARGET=$PWD
+    if [ $# -eq 2 ] && [ -d "$2" ]; then
+        TARGET="$2"
+    fi
     
     ## The awk command suppresses first column, spaces and line breaks.
     local SOURCE=$(od -tx8 "$1" | awk '($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }')
 
     ## This special, not well-known syntax allows us to execute a set of
     ## functions of the result of find.  Since everything MUST be between simple
-    ## quotes, we cannot use external varaibles directly. So we pass the $SOURCE
-    ## varaible as argument. The underscore at the end allow the use of
+    ## quotes, we cannot use external variables directly. So we pass the $SOURCE
+    ## variable as argument. The underscore at the end allow the use of
     ## arguments.
     find "$WORKDIR" -type f -exec bash -c '
-          TARGET=$(od -tx8 "$1" | awk '"'"'($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }'"'"')
-          grep -q "$2" <(echo $TARGET)
+          FILEDUMP=$(od -tx8 "$1" | awk '"'"'($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }'"'"')
+          grep -q "$2" <(echo $FILEDUMP)
 
           [ $? -eq 0 ] && echo "$1"
 ' _ {} "$SOURCE" \;
 }
+
+## Xrandr
+xmulti ()
+{
+    if [ $# -ne 1 ]; then
+        echo "Wrong number of argument."
+        return
+    fi
+
+    xrandr --output "$1" --auto --right-of $(xrandr | sed -n "/current/{n;p}" | cut -f1 -d" ")
+}
+
+xmultioff ()
+{
+    if [ $# -ne 1 ]; then
+        echo "Wrong number of argument."
+        return
+    fi
+
+    xrandr --output "$1" --off
+}
+
 
 ##==============================================================================
 ## Pacman Functions
