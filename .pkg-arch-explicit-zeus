@@ -18,7 +18,6 @@ bzip2
 bzr
 calc
 catdvi
-clementine
 cmus
 coreutils
 cpufrequtils
@@ -26,10 +25,10 @@ cronie
 cryptsetup
 ctags
 cups
+cw
 cyrus-sasl
 dash
 device-mapper
-d-feet
 dhcpcd
 diffutils
 dosfstools

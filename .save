@@ -107,21 +107,20 @@ fi
 ##==============================================================================
 
 if [ -e "/usr/bin/pacman" ]; then
-	ARCH_PKG_OFFICIAL="$HOME/.arch-pkg-official"
-	ARCH_PKG_EXPLICIT="$HOME/.arch-pkg-explicit"
-	ARCH_PKG_AUR="$HOME/.arch-pkg-aur"
-	ARCH_MIRRORS="$HOME/.arch-mirrors"
+    HOST=$(hostname)
+
+    ARCH_PKG_OFFICIAL="$HOME/.pkg-arch-official"
+	ARCH_PKG_EXPLICIT="$HOME/.pkg-arch-explicit"
+	ARCH_PKG_AUR="$HOME/.pkg-arch-aur"
 
 	PKG_LOCAL='pacman -Qq | sort'
 	PKG_FOREIGN='pacman -Qmq | sort'
 	PKG_EXPLICIT='pacman -Qeq | sort'
 
-    diff <(eval "${PKG_LOCAL}") <(eval "${PKG_FOREIGN}") --new-line-format='' --unchanged-group-format='%>' >"${ARCH_PKG_OFFICIAL}-$(hostname)"
+    diff <(eval "${PKG_LOCAL}") <(eval "${PKG_FOREIGN}") --new-line-format='' --unchanged-group-format='%>' >"${ARCH_PKG_OFFICIAL}-${HOST}"
 
-    eval "${PKG_EXPLICIT}" >"${ARCH_PKG_EXPLICIT}-$(hostname)"
-    eval "${PKG_FOREIGN}" >"${ARCH_PKG_AUR}-$(hostname)"
-
-	cat /etc/pacman.conf | grep "^\[">"${ARCH_MIRRORS}-$(hostname)"
+    eval "${PKG_EXPLICIT}" >"${ARCH_PKG_EXPLICIT}-${HOST}"
+    eval "${PKG_FOREIGN}" >"${ARCH_PKG_AUR}-${HOST}"
 fi
 
 ##==============================================================================
@@ -129,13 +128,11 @@ fi
 ##==============================================================================
 FILELIST=()
 
-## Arch Linux package list
-if [ -e "/usr/bin/pacman" ]; then
-    for i in $(find . -maxdepth 1 -name '.arch*'  -exec basename {} \;)
-    do
-        FILELIST=(${FILELIST[*]} "$i")
-    done
-fi
+## Distro + TeXlive Package list
+for i in $(find . -maxdepth 1 -name '.pkg*'  -exec basename {} \;)
+do
+    FILELIST=(${FILELIST[*]} "$i")
+done
 
 ## Awesome
 for i in $(find .config/awesome \( -name "*.lua" -o -name "*.sh" \) -type f)

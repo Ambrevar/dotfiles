@@ -36,7 +36,6 @@ calc
 catdvi
 cdparanoia
 cifs-utils
-clementine
 cloog
 cmake
 cmus
@@ -57,10 +56,8 @@ db
 dbus
 dbus-core
 dbus-glib
-dconf
 desktop-file-utils
 device-mapper
-d-feet
 dhcpcd
 dialog
 diffutils
@@ -127,7 +124,6 @@ gimp
 girara-common
 girara-gtk2
 git
-glew
 glib2
 glibc
 glibmm
@@ -161,7 +157,6 @@ gtk2
 gtkmm
 gtkspell
 gtk-update-icon-cache
-gvfs
 gzip
 hdparm
 heirloom-mailx
@@ -241,10 +236,8 @@ libgl
 libglade
 libglapi
 libgme
-libgnome-keyring
 libgpg-error
 libgphoto2
-libgpod
 libgsf
 libgssglue
 libgusb
@@ -252,11 +245,9 @@ libice
 libid3tag
 libidn
 libieee1284
-libimobiledevice
 libirman
 libjpeg-turbo
 libksba
-liblastfm
 libldap
 liblqr
 liblrdf
@@ -271,7 +262,6 @@ libmp4v2
 libmpc
 libmpcdec
 libmpeg2
-libmtp
 libnice
 libnl
 libnotify
@@ -280,7 +270,6 @@ libogg
 libpcap
 libpciaccess
 libpipeline
-libplist
 libpng
 libproxy
 libpulse
@@ -294,7 +283,6 @@ libsigc++
 libsm
 libsndfile
 libsoup
-libsoup-gnome
 libspectre
 libssh2
 libsystemd
@@ -380,7 +368,6 @@ mplayer2
 mtdev
 mtools
 musicbrainz
-mutagen
 mutt
 nasm
 nawk
@@ -432,7 +419,6 @@ popt
 ppl
 ppp
 procps-ng
-protobuf
 psmisc
 pth
 pwsafe
@@ -447,10 +433,6 @@ python2-gobject2
 python2-udiskie
 python-dbus-common
 python-notify
-qca
-qca-ossl
-qjson
-qt
 randrproto
 ranger
 raptor
@@ -488,7 +470,6 @@ sysfsutils
 syslog-ng
 systemd-tools
 sysvinit
-taglib
 talloc
 tar
 task
@@ -499,12 +480,10 @@ tree
 ttf-dejavu
 tzdata
 udisks
-udisks2
 unixodbc
 unrar
 unzip
 upx
-usbmuxd
 usbutils
 util-linux
 v4l-utils
@@ -528,7 +507,6 @@ xcb-util
 xcb-util-image
 xcb-util-keysyms
 xcb-util-wm
-xdg-utils
 xextproto
 xf86dgaproto
 xf86-input-evdev
@@ -560,7 +538,6 @@ xorg-xmessage
 xorg-xprop
 xorg-xrandr
 xorg-xrdb
-xorg-xset
 xproto
 xsel
 xvidcore
