@@ -31,13 +31,13 @@ echo
 echo "==> Awesome"
 THEME_DEST="${HOME}/.config/awesome/themes/custom"
 THEME_SOURCE="/usr/share/awesome/themes/default/"
-if [ ! -e ${THEME_DEST} ]; then
-    [ -d ${THEME_SRC} ] && cp -rn ${THEME_SRC} ${THEME_DEST}
+if [ ! -e "${THEME_DEST}/background.png" ]; then
+    [ -d "${THEME_SOURCE}" ] && cp -rn ${THEME_SOURCE}/* "${THEME_DEST}"
 fi
 echo
 
 ## rtorrent
-echo "==> Awesome"
+echo "==> rtorrent"
 mkdir -p "${HOME}/.session"
 
 ## Luakit -- Fetch Adblock list.
