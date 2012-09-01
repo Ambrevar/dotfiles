@@ -26,10 +26,10 @@ _pacman_set_vars()
         return 2
     fi 
 
-    pacman_name="$(echo "$pacman_var_list" | sed -n '1p')"
-    pacman_deps="$(echo "$pacman_var_list" | sed -n '7p')"
-    pacman_optdeps="$(echo "$pacman_var_list" | sed -n '8p')"
-    pacman_size="$(echo "$pacman_var_list" | sed -n '12p')"
+    pacman_name="$(echo "$pacman_var_list" | sed -n '1{p;q}')"
+    pacman_deps="$(echo "$pacman_var_list" | sed -n '7{p;q}')"
+    pacman_optdeps="$(echo "$pacman_var_list" | sed -n '8{p;q}')"
+    pacman_size="$(echo "$pacman_var_list" | sed -n '12{p;q}')"
 }
 
 _pacman_unset_vars()

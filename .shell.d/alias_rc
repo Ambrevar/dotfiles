@@ -126,7 +126,6 @@ if [ -e "/usr/bin/pacman" ] ; then
     ## Pacman aliases
     if [ "$PACMAN_FRONTEND" = "pacman" ]; then
         alias pc='sudo pacman -Sc'
-        alias pcc='sudo pacman -Scc'
         alias pi='sudo pacman -S --needed'
         alias pqi='pacman -Qi'
         alias pql='pacman -Ql'
@@ -140,7 +139,6 @@ if [ -e "/usr/bin/pacman" ] ; then
 
     if [ "$PACMAN_FRONTEND" = "pacman-color" ]; then
         alias pc='sudo pacman-color -Sc'
-        alias pcc='sudo pacman-color -Scc'
         alias pi='sudo pacman -S --needed'
         alias pqi='pacman-color -Qi'
         alias pql='pacman-color -Ql'
@@ -160,9 +158,9 @@ fi
 
 ## TeXlive
 if [ -d "/usr/local/texlive" ]; then
-    # alias tli="sudo bash -c 'umask 022 && tlmgr install'"
+    alias tli="sudo bash -c 'umask 022 && tlmgr install'"
     alias tlu="sudo bash -c 'umask 022 && tlmgr update --self'"
-    # alias tls="tlmgr search --global"
+    alias tls="tlmgr search --global"
     alias tll="tlmgr show --list"
 fi
 

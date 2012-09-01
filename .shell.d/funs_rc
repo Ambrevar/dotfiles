@@ -659,7 +659,7 @@ xmulti ()
         return
     fi
 
-    xrandr --output "$1" --auto --right-of $(xrandr | sed -n "/current/{n;p}" | cut -f1 -d" ")
+    xrandr --output "$1" --auto --right-of $(xrandr | sed -n "/current/{n;p;q}" | cut -f1 -d" ")
 }
 
 xmultioff ()

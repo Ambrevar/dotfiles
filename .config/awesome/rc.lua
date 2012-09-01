@@ -15,7 +15,7 @@ require("beautiful")
 require("naughty")
 
 -- Widget library
-require("vicious")
+vicious = require("vicious")
 
 --------------------------------------------------------------------------------
 -- {{{ Error handling
