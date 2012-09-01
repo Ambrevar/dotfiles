@@ -48,7 +48,7 @@ URxvt.underlineURLs    : true
 
 
 !! Font
-URxvt*font       : xft:Monospace:pixelsize=14
+URxvt*font       : xft:Dejavu Sans Mono:pixelsize=14
 
 ! URxvt*boldFont   : xft:Monospace:bold:pixelsize=14
 ! URxvt*boldFont : xft:Monospace Bold:pixelsize=12
