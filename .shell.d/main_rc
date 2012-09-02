@@ -51,10 +51,10 @@ export TIME_STYLE=+"|%Y-%m-%d %H:%M:%S|"
 
 ## Default text editor
 EDITOR=nano
-if [ "" != "$(command -v vim)" ]; then
+if [ -n "$(command -v vim)" ]; then
     EDITOR=vim
 fi
-if [ "" != "$(command -v emacs)" ]; then
+if [ -n "$(command -v emacs)" ]; then
    #EDITOR=emacs
    EDITOR='emacsclient -a "" -t'
 fi

@@ -103,6 +103,31 @@ if [ -e "/usr/bin/nmap" ]; then
     }
 fi
 
+netspeed ()
+{
+    local INTERFACE="eth0"
+    if [ -n "$1" ]; then
+        INTERFACE="$1"
+    fi
+
+    if [ ! -d "/sys/class/net/${INTERFACE}" ]; then
+        echo "Error: no such interface (${INTERFACE})"
+        return
+    fi
+
+    local RX_BEFORE=$(cat /sys/class/net/${INTERFACE}/statistics/rx_bytes)
+    local TX_BEFORE=$(cat /sys/class/net/${INTERFACE}/statistics/tx_bytes)
+    sleep 1
+    local RX_AFTER=$(cat /sys/class/net/${INTERFACE}/statistics/rx_bytes)
+    local TX_AFTER=$(cat /sys/class/net/${INTERFACE}/statistics/tx_bytes)
+
+    local RX_RESULT=$(((${RX_AFTER:-0}-${RX_BEFORE:-0})/1024))
+    local TX_RESULT=$(((${TX_AFTER:-0}-${TX_BEFORE:-0})/1024))
+
+    echo "RX $RX_RESULT KiB/s"
+    echo "TX $TX_RESULT KiB/s"
+}
+
 ## Vim-only: search the vim reference manual for a keyword.
 ## Usage: :h <keyword>
 if [ -e "/usr/bin/vim" ]; then
@@ -201,7 +226,7 @@ blind-append()
     read -s DUMMY
     echo ""
 
-    if [ ! -e "$FILE" ] || [ "$STRING" = "" ]; then
+    if [ ! -e "$FILE" ] || [ -z "$STRING" ]; then
         echo "$DUMMY" >> "$FILE"
         echo "Secret appended to ${FILE} at the end."
         return
@@ -298,7 +323,7 @@ if [ -f "/usr/bin/highlight" ] ; then
             echo "******************** $i ********************"
             highlight -S c -O xterm256 <(echo $SAMPLE) -s "$i" 
             read -s DUMMY
-            if [ ! "$DUMMY" = "" ];then
+            if [ -n "$DUMMY" ]; then
                 return
             fi 
         done

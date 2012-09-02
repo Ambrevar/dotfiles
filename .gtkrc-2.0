@@ -1,5 +1,4 @@
-# DO NOT EDIT! This file will be overwritten by LXAppearance.
-# Any customization should be done in ~/.gtkrc-2.0.mine instead.
+## Deps: clearlooks, nuoveXT2, vanilla-dmz-aa
 
 gtk-theme-name="Clearlooks"
 gtk-icon-theme-name="nuoveXT2"
@@ -17,4 +16,3 @@ gtk-xft-hinting=1
 gtk-xft-hintstyle="hintfull"
 gtk-xft-rgba="rgb"
 gtk-color-scheme="tooltip_fg_color:#000000\nbase_color:#ffffff\nselected_fg_color:#ffffff\ntext_color:#1A1A1A\nbg_color:#EDECEB\ntooltip_bg_color:#F5F5B5\nselected_bg_color:#000033336666\nfg_color:#000000\n"
-include "/home/peter/.gtkrc-2.0.mine"

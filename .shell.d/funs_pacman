@@ -21,7 +21,7 @@
 _pacman_set_vars()
 {
     local pacman_var_list="$(pacman -Qi tzdata | cut -f1 -d':')"
-    if [ "$pacman_var_list" = "" ];then
+    if [ -z "$pacman_var_list"  ];then
         echo "Could not get pacman's variables."
         return 2
     fi 
