@@ -10,20 +10,23 @@ umask 027
 
 ## Path
 export PATH=.:$PATH
+export MANPATH=/usr/local/man:$MANPATH
+export INFOPATH=/usr/local/info:$INFOPATH
 
 ## TeXlive
-TEXROOT="/usr/local/texlive"
-if [ -d "${TEXROOT}" ]; then
-    TEXYEAR=$(/bin/ls -1r "${TEXROOT}" | grep -m1 "[0-9]\{4\}")
-    TEXDISTRO=$(uname | tr "[[:upper:]]" "[[:lower:]]")
-    TEXFOLDER="/usr/local/texlive/${TEXYEAR}/bin/$(uname -m)-${TEXDISTRO}/"
-    if [ -d "${TEXFOLDER}" ]; then
-        export PATH=${TEXFOLDER}:$PATH
-    fi
-    unset TEXYEAR
-    unset TEXDISTRO
-    unset TEXFOLDER
-fi
+# TEXDIR="${TEXDIR:-/usr/local/texlive}"
+# if [ -d "${TEXDIR}" ]; then
+#     TEXYEAR=$(/bin/ls -1r "${TEXDIR}" | grep -m1 "[0-9]\{4\}")
+#     TEXDISTRO=$(uname | tr "[[:upper:]]" "[[:lower:]]")
+#     TEXFOLDER="${TEXDIR}/${TEXYEAR}/bin/$(uname -m)-${TEXDISTRO}/"
+#     if [ -d "${TEXFOLDER}" ]; then
+#         export PATH=${TEXFOLDER}:$PATH
+#     fi
+#     unset TEXYEAR
+#     unset TEXDISTRO
+#     unset TEXFOLDER
+# fi
+# unset TEXDIR
 
 ## Enable color support of ls.
 if [ "$TERM" != "dumb" ]; then

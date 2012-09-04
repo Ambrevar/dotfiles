@@ -527,54 +527,54 @@ the line."
 ;; AucTeX
 ;;==============================================================================
 
-;; Activate AucTeX
-(load "auctex.el" nil t t)
-(load "preview-latex.el" nil t t)
+;; ;; Activate AucTeX
+;; (load "auctex.el" nil t t)
+;; (load "preview-latex.el" nil t t)
 
-;; Compile to PDF by default
-(setq TeX-PDF-mode t)
+;; ;; Compile to PDF by default
+;; (setq TeX-PDF-mode t)
 
-(setq TeX-view-program-selection
-      '((output-dvi "DVI Viewer")
-        (output-ps "PS Viewer")
-        (output-pdf "PDF Viewer")
-        (output-html "Web browser")))
+;; (setq TeX-view-program-selection
+;;       '((output-dvi "DVI Viewer")
+;;         (output-ps "PS Viewer")
+;;         (output-pdf "PDF Viewer")
+;;         (output-html "Web browser")))
 
-;; Zathura will crash when being forked while document is regenerated.
-(setq TeX-view-program-list
-      '(("DVI Viewer" "zathura %o")
-        ("PS Viewer" "zathura  %o")
-        ("PDF Viewer" "zathura  %o")
-        ("Web browser" "luakit -n %o")))
+;; ;; Zathura will crash when being forked while document is regenerated.
+;; (setq TeX-view-program-list
+;;       '(("DVI Viewer" "zathura %o")
+;;         ("PS Viewer" "zathura  %o")
+;;         ("PDF Viewer" "zathura  %o")
+;;         ("Web browser" "luakit -n %o")))
 
-;; Add 'Compress PDF' compilation command
-(eval-after-load "TeX"
-  '(add-to-list 'TeX-command-list
-                '("Compress" "if [ -e %s.pdf ]; then gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=%s-COMPRESSED.pdf %s.pdf && rm -rf %s.pdf && mv %s-COMPRESSED.pdf %s.pdf;fi" TeX-run-command nil t :help "Compress PDF"
-                  )
-                t )
-  )
+;; ;; Add 'Compress PDF' compilation command
+;; (eval-after-load "TeX"
+;;   '(add-to-list 'TeX-command-list
+;;                 '("Compress" "if [ -e %s.pdf ]; then gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=%s-COMPRESSED.pdf %s.pdf && rm -rf %s.pdf && mv %s-COMPRESSED.pdf %s.pdf;fi" TeX-run-command nil t :help "Compress PDF"
+;;                   )
+;;                 t )
+;;   )
 
-;; Add '--shell-escape' switch to compilation command (useful for using GnuPlot from TikZ)
-(eval-after-load "tex"
-  '(setcdr (assoc "LaTeX" TeX-command-list)
-	   '("%`%l%(mode) --shell-escape %' %t"
-	    TeX-run-TeX nil (latex-mode doctex-mode) :help "Run LaTeX")
-	  )
-  )
+;; ;; Add '--shell-escape' switch to compilation command (useful for using GnuPlot from TikZ)
+;; (eval-after-load "tex"
+;;   '(setcdr (assoc "LaTeX" TeX-command-list)
+;; 	   '("%`%l%(mode) --shell-escape %' %t"
+;; 	    TeX-run-TeX nil (latex-mode doctex-mode) :help "Run LaTeX")
+;; 	  )
+;;   )
 
-(defun my-tex-mode-hook ()
-(local-set-key (kbd "<f9>") (kbd "C-x C-s C-c C-c C-j")))
+;; (defun my-tex-mode-hook ()
+;; (local-set-key (kbd "<f9>") (kbd "C-x C-s C-c C-c C-j")))
 
-(add-hook 'TeX-mode-hook 'my-tex-mode-hook)
+;; (add-hook 'TeX-mode-hook 'my-tex-mode-hook)
 
 
-;; Theme
-(defun my-tex-font-hook ()
-  (set-face-foreground 'font-latex-sedate-face "brightred" ) 
-  (set-face-bold-p 'font-latex-sedate-face t) 
-)
-(add-hook 'TeX-mode-hook 'my-tex-font-hook)
+;; ;; Theme
+;; (defun my-tex-font-hook ()
+;;   (set-face-foreground 'font-latex-sedate-face "brightred" )
+;;   (set-face-bold-p 'font-latex-sedate-face t)
+;; )
+;; (add-hook 'TeX-mode-hook 'my-tex-font-hook)
 
 
 ;;==============================================================================

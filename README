@@ -98,7 +98,7 @@ Custom bindings, file association, tweaked a few options.
 Scripts
 *******
 
-.network: network setup. Works with wpa_supplicant. May replace any network
+.netinit: network setup. Works with wpa_supplicant. May replace any network
           manager.
 
 .homeinit: initialize a new home configuration, i.e. get needed files, create
@@ -137,10 +137,16 @@ Known issues
 
 Emacs: some colors do not work as intended.
 
+Luakit: adblock makes Luakit crash whenever easylist.txt is not found.
+adblock will not always work.
+
 Ranger: if editor is 'emacsclient -t -a""', it will not show up if emacs daemon
 is not running.
 
 Shell: some custom functions would need auto-completion.
+
+URxvt: using the paste function from Muennich's clipboard on the same terminal
+where text was copied will make xsel crash.
 
 Zathura: app will hang forever sometimes (when document is being regenerated, or
 when launched from Ranger).
@@ -150,6 +156,7 @@ Complete applist
 ****************
 
 aalib
+aircrack-ng
 antiword
 asciidoc
 astyle
@@ -175,6 +182,7 @@ dropbox
 dtach
 dvtm
 emacs
+expac
 fbpdf
 fbv
 fdisk
@@ -188,6 +196,7 @@ gdb
 gimp
 gnumeric
 gnuplot
+gparted
 gpicview
 graphicsmagick
 grep
@@ -207,6 +216,7 @@ lrzip
 lshw
 ltrace
 luakit
+lynx
 mediainfo
 mencoder
 mercurial
@@ -267,6 +277,7 @@ vlock
 w3m
 weechat
 wipe
+wireshark
 wmfs
 wv
 x264

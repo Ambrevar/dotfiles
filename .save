@@ -141,11 +141,7 @@ do
 done
 
 ## cmus
-# FILELIST=(${FILELIST[*]} "$(ls .cmus/{autosave,*.theme}) ")
 FILELIST=(${FILELIST[*]} ".cmus/autosave")
-
-## Conky
-FILELIST=(${FILELIST[*]} ".conkyrc")
 
 ## Emacs
 FILELIST=(${FILELIST[*]} ".emacs")
@@ -158,7 +154,7 @@ FILELIST=(${FILELIST[*]} ".gnupg/gpg-agent.conf")
 
 ## GTK
 FILELIST=(${FILELIST[*]} ".gtkrc-2.0")
-FILELIST=(${FILELIST[*]} ".config/gtk-3.0/settings.ini")
+# FILELIST=(${FILELIST[*]} ".config/gtk-3.0/settings.ini")
 
 ## Git
 FILELIST=(${FILELIST[*]} ".gitconfig")
@@ -166,17 +162,8 @@ FILELIST=(${FILELIST[*]} ".gitconfig")
 ## Homeinit
 FILELIST=(${FILELIST[*]} ".homeinit")
 
-## Irssi
-# FILELIST=(${FILELIST[*]} ".irssi")
-
 ## Luakit
 FILELIST=(${FILELIST[*]} ".config/luakit/")
-
-## LXTerminal
-# FILELIST=(${FILELIST[*]} ".config/lxterminal/lxterminal.conf")
-
-## MPlayer
-# FILELIST=(${FILELIST[*]} ".mplayer")
 
 ## Mutt
 FILELIST=(${FILELIST[*]} ".muttrc")
@@ -184,9 +171,6 @@ for i in $(ls -ad --indicator-style=none .mutt.d/* | grep -vi 'cache')
 do
     FILELIST=(${FILELIST[*]} "$i")
 done
-
-## Nano
-# FILELIST=(${FILELIST[*]} ".nanorc")
 
 ## Netinit
 FILELIST=(${FILELIST[*]} ".netinit")
@@ -223,24 +207,14 @@ FILELIST=(${FILELIST[*]} ".taskrc")
 #     FILELIST=(${FILELIST[*]} "$i")
 # done
 
-## Urlview
-# FILELIST=(${FILELIST[*]} ".urlview")
-
 ## Vim
 FILELIST=(${FILELIST[*]} ".vimrc")
-
-## WMFS
-# FILELIST=(${FILELIST[*]} ".config/wmfs")
 
 ## Xinit
 FILELIST=(${FILELIST[*]} ".xinitrc")
 
 ## Xresource
 FILELIST=(${FILELIST[*]} ".Xresources")
-
-## Xscreensaver
-# FILELIST=(${FILELIST[*]} ".xscreensaver")
-
 
 ##==============================================================================
 ## Archiving

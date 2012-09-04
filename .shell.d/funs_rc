@@ -724,8 +724,4 @@ if [ -d "/usr/local/texlive" ]; then
         done
     }
 
-    tls ()
-    {
-        tlmgr search --global "$@"
-    }
 fi
