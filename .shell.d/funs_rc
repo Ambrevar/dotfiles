@@ -128,6 +128,60 @@ netspeed ()
     echo "TX $TX_RESULT KiB/s"
 }
 
+## CPU usage
+##
+## A typical CPU array is (on Linux Kernel 3.0)
+##   cpu  158150 0 52354 18562746 1472 0 10198 0 0 0
+##
+## The meanings of the columns are as follows, from left to right:
+## 
+##   user: normal processes executing in user mode
+##   nice: niced processes executing in user mode
+##   system: processes executing in kernel mode
+##   idle: twiddling thumbs
+##   iowait: waiting for I/O to complete
+##   irq: servicing interrupts
+##   softirq: servicing softirqs
+##   ... (see 'man 5 proc' for further details)
+##
+## Only the first 4 values are interesting here.
+cpuusage(){
+    local cpuarray
+    local f1
+    local f2
+    local f3
+    local f4
+
+    cpuarray="$(grep 'cpu ' /proc/stat)"
+    f1=$(echo $cpuarray | cut -f3 -d' ')
+    f2=$(echo $cpuarray | cut -f4 -d' ')
+    f3=$(echo $cpuarray | cut -f5 -d' ')
+    f4=$(echo $cpuarray | cut -f6 -d' ')
+
+    local totalA=$(($f1+$f2+$f3+$f4))
+    local idleA=$f4
+
+    sleep 0.4
+
+    cpuarray="$(grep 'cpu ' /proc/stat)"
+    f1=$(echo $cpuarray | cut -f3 -d' ')
+    f2=$(echo $cpuarray | cut -f4 -d' ')
+    f3=$(echo $cpuarray | cut -f5 -d' ')
+    f4=$(echo $cpuarray | cut -f6 -d' ')
+
+    local totalB=$(($f1+$f2+$f3+$f4))
+    local idleB=$f4
+
+    local totaldiff=$((${totalB:-0}-${totalA:-0}))
+
+    if [ $totaldiff -eq 0 ]; then
+        echo 0
+    else
+        echo "$((100 - 100 * ($idleB-$idleA) / $totaldiff ))"
+    fi
+}
+
+
 ## Vim-only: search the vim reference manual for a keyword.
 ## Usage: :h <keyword>
 if [ -e "/usr/bin/vim" ]; then

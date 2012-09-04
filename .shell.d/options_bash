@@ -24,9 +24,9 @@ export FIGNORE=".o:~"
 ## To search and fill the complete name of a file (with <Esc>)
 set filec
 
-##======================================================================
+##==============================================================================
 ## History management
-##======================================================================
+##==============================================================================
 
 # Don't put duplicate lines in the history. See bash(1) for more options.
 export HISTCONTROL=ignoredups
@@ -37,9 +37,10 @@ export HISTFILESIZE=1000
 export HISTIGNORE="&:bg:fg:ll:h:ls:la:la:lk:clear:exit:history"
 export HISTTIMEFORMAT="%Y-%m-%d_%H:%M:%S_%a  "
 
-##======================================================================
+##==============================================================================
 ## Various options
-##======================================================================
+##==============================================================================
+
 set -o notify                    # Jobs notify shell about their states immediately.
 #set ignoreeof                   # To avoid accidentally quitting the shell with <Ctrl-D>.
 #shopt -u mailwarn               # Disable the shell ability to warn about incoming mail.
@@ -57,6 +58,34 @@ shopt -s hostcomplete            # Attempt hostname expansion when @ is at the b
 shopt -s no_empty_cmd_completion # No completion on an empty line.
 shopt -s nocaseglob              # Pathname expansion will be treated as case-insensitive.
 shopt -s progcomp                # To enable the programmable completion.
+
+##==============================================================================
+## Various options
+##==============================================================================
+
+complete -A setopt				set
+complete -A hostname				ssh rsh rcp telnet rlogin r ftp ping disk
+complete -A export				export printenv
+complete -A variable				export local readonly unset
+complete -A enabled				builtin
+complete -A alias 				alias unalias
+complete -A function				function
+complete -A user					su mail finger my_ps my_detail_ps
+complete -A helptopic 			help     # currently same as builtins
+complete -A shopt 				shopt
+complete -A stopped -P '%'		bg
+complete -A job -P '%'			fg jobs disown
+complete -A directory 			rmdir
+#complete -A directory -o default  cd
+complete -A command				which
+complete -A signal				kill killall
+
+# File name completion according to program functionnality
+complete -A file -X '!*.@(zip|ZIP|jar|JAR)' unzip zipinfo
+complete -A file -X '!*.@(z|Z)' uncompress
+complete -A file -X '!*.@(gz|GZ)' gunzip
+complete -A file -X '!*.@(bz2|BZ2)' bunzip2 untar
+complete -A file -X '!*.@(tar|TAR)' untar
 
 ##==============================================================================
 ## PS1 -- Full width bar with informations.

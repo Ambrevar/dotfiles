@@ -105,27 +105,42 @@ cpuwidget = widget({ type = "textbox" })
 vicious.register(cpuwidget, vicious.widgets.cpu, '<span color="#CC8F52">CPU $1%</span>')
 
 -- Net
--- TODO: get speed for all interfaces.
 netwidget = widget({ type = "textbox" })
-vicious.register(netwidget, vicious.widgets.net, '<span color="#CC9393">↓${eth0 down_kb}</span> <span color="#7F9F7F">↑${eth0 up_kb}</span>', 3)
+networks = { "eth0", "wlan0" }
+vicious.register(netwidget, vicious.widgets.net, 
+                 function (widget, args)
+                    for _,device in pairs(networks) do
+                       if tonumber(args["{".. device .." carrier}"]) > 0 then
+                          return '<span color="#CC9393">↓' .. args["{" .. device .. " down_kb}"] .. '</span> <span color="#7F9F7F">↑' .. args["{" .. device .. " up_kb}"] .. '</span>'
+                       end
+                    end
+                 end, 3)
 
 -- Battery
 batwidget = widget({ type = "textbox" })
 local batf = io.popen("ls '/sys/class/power_supply' 2>/dev/null")
 local batl = batf:read("*a")
+local batlimit = 10
 if batl ~= "" then
+   --{{ Simple version (perf friendly)
    -- vicious.register(batwidget, vicious.widgets.bat, '<span color="#73A9CD">$2%$1$3</span> | ', 60, "BAT0")
-   -- This functions changes the status color when a specific level is reached.
+   --{{ Complex version (time warning)
+   -- This functions changes the status color when batlimit is reached.
    vicious.register(batwidget, vicious.widgets.bat, 
                     function (widget, args)
-                       if   args[2] <= 10 then return '<span color="#FF0000">' .. args[2] .. '%' .. args[1] .. args[3] .. '</span>'
-                       else return '<span color="#73A9CD">' .. args[2] .. '%' .. args[1] .. args[3] .. '</span>'
+                       -- We check if time is displayed (otherwise it's 'N/A'), and if minutes are less than limit.
+                       if string.len(args[3]) == 5
+                          and tonumber(string.sub(args[3],1,2)) == 0
+                          and tonumber(string.sub(args[3],4,5)) <= batlimit
+                       then
+                          return '<span color="#FF0000">' .. args[2] .. '%' .. args[1] .. args[3] .. '</span>'
+                       else
+                          return '<span color="#73A9CD">' .. args[2] .. '%' .. args[1] .. args[3] .. '</span>'
                        end
                     end,
                     60, "BAT0")
 end
 batf:close()
-
 
 -- Volume
 volmwidget = widget({ type = "textbox" })
