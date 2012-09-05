@@ -524,11 +524,46 @@ the line."
 (yas-load-directory yas-snippet-dirs)
 
 ;;==============================================================================
-;; AucTeX
+;; TeX and LaTeX
 ;;==============================================================================
 
 (setq tex-run-command "pdftex")
+;; (setq tex-command "pdftex") ; Same as above ?
 (setq latex-run-command "pdflatex")
+
+
+
+;; (defun tex-print (&optional alt)
+;;   "Print the .dvi file made by \\[tex-region], \\[tex-buffer] or \\[tex-file]. Runs the shell command defined by `tex-dvi-print-command'. If prefix argument
+;; is provided, use the alternative command, `tex-alt-dvi-print-command'."
+;;   (interactive "P")
+;;   (let ((print-file-name-dvi (tex-append tex-print-file ".pdf"))
+;;         test-name)
+;;     (if (and (not (equal (current-buffer) tex-last-buffer-texed))
+;;              (buffer-file-name)
+;;              ;; Check that this buffer's printed file is up to date.
+;;              (file-newer-than-file-p
+;;               (setq test-name (tex-append (buffer-file-name) ".pdf"))
+;;               (buffer-file-name)))
+;;         (setq print-file-name-dvi test-name))
+;;     (if (not (file-exists-p print-file-name-dvi))
+;;         (error "No appropriate `.dvi' file could be found")
+;;       (if (tex-shell-running)
+;;           (tex-kill-job)
+;;         (tex-start-shell))
+;;       (tex-send-command
+;;        (if alt tex-alt-dvi-print-command tex-dvi-print-command)
+;;        print-file-name-dvi t))))
+
+;; (set-variable (quote tex-dvi-view-command) "zathura")
+
+;; (setq tex-dvi-view-command "(f=*; pdflatex \"${f%.dvi}.tex\" && open \"${f%.dvi}.pdf\")")
+;; (setq tex-dvi-view-command "(f=*; pdftex \"${f%.dvi}.tex\" && open \"${f%.dvi}.pdf\")")
+
+;; (defun tex-view ()
+;;   (interactive)
+;;   (tex-send-command "zathura" (tex-append tex-print-file ".pdf")))
+
 
 ;;==============================================================================
 ;; AucTeX

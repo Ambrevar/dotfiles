@@ -129,7 +129,8 @@ if batl ~= "" then
    vicious.register(batwidget, vicious.widgets.bat, 
                     function (widget, args)
                        -- We check if time is displayed (otherwise it's 'N/A'), and if minutes are less than limit.
-                       if string.len(args[3]) == 5
+                       if args[1] == "-"
+                          and string.len(args[3]) == 5
                           and tonumber(string.sub(args[3],1,2)) == 0
                           and tonumber(string.sub(args[3],4,5)) <= batlimit
                        then
@@ -319,8 +320,8 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86Mail",   function () awful.util.spawn(termcmd .. "mutt") end),
 
     -- Web browser
-    awful.key({ modkey, }, "w",       function () awful.util.spawn("luakit") end),
-    awful.key({         }, "XF86WWW", function () awful.util.spawn("luakit") end),
+    awful.key({ modkey, }, "w",       function () awful.util.spawn_with_shell("luakit 2>>/tmp/luakit.log") end),
+    awful.key({         }, "XF86WWW", function () awful.util.spawn_with_shell("luakit 2>>/tmp/luakit.log") end),
 
     -- Music player
     awful.key({ modkey,           }, "a", function () awful.util.spawn(termcmd .. "cmus") end),

@@ -3,3 +3,6 @@
 	name = Ambrevar
 [color]
 	ui = true
+[alias]
+	s = status -uno
+	c = commit -a
