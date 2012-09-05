@@ -33,6 +33,7 @@ cairomm
 calc
 ccrypt
 cdparanoia
+cdrtools
 cifs-utils
 cloog
 cmus
@@ -160,6 +161,8 @@ hunspell-fr
 hwids
 iana-etc
 icu
+id3lib
+id3v2
 ifplugd
 imagemagick
 imlib2
@@ -168,6 +171,7 @@ inetutils
 initscripts
 inkscape
 inputproto
+iotop
 iproute2
 iptables
 iputils
@@ -193,6 +197,7 @@ lcms
 lcms2
 ldns
 less
+lesspipe
 libaio
 libarchive
 libass
@@ -421,6 +426,8 @@ ppl
 ppp
 procps-ng
 psmisc
+pstotext
+psutils
 pth
 pwgen
 pwsafe
@@ -493,6 +500,7 @@ ttf-freefont
 tzdata
 udisks
 unrar
+unrtf
 unzip
 upx
 usbutils

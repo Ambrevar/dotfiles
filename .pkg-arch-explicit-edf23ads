@@ -19,6 +19,7 @@ bison
 bzip2
 calc
 ccrypt
+cdrtools
 cifs-utils
 cmus
 coreutils
@@ -83,11 +84,13 @@ htop
 hunspell-en
 hunspell-fr
 hwids
+id3v2
 ifplugd
 indent
 inetutils
 initscripts
 inkscape
+iotop
 iptables
 iputils
 isomaster
@@ -98,6 +101,7 @@ ladspa
 laptop-mode-tools
 latex2rtf
 less
+lesspipe
 libaio
 libavc1394
 libcap-ng
@@ -175,6 +179,8 @@ pkgtools
 ppp
 procps-ng
 psmisc
+pstotext
+psutils
 pwgen
 pwsafe
 python2-dbus
@@ -223,6 +229,7 @@ tree
 ttf-dejavu
 ttf-freefont
 unrar
+unrtf
 unzip
 upx
 urxvt-perls-git

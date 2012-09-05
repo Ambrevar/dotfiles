@@ -168,6 +168,7 @@ cal
 calc
 catdvi
 ccrypt
+cdrtools
 chrpath
 cmus
 column
@@ -205,9 +206,11 @@ hdparm
 help2man
 highlight
 htop
+id3v2
 imagemagick
 indent
 inkscape
+iotop
 irssi
 latex2html
 latex2rtf
@@ -240,6 +243,7 @@ parted
 patch
 pidgin
 poppler
+pstotext
 pwgen
 pwsafe
 ranger
@@ -269,6 +273,7 @@ tig
 trash-cli
 tree
 udiskie
+unrtf
 upx
 valgrind
 vim
