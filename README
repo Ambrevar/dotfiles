@@ -37,8 +37,7 @@ only. A more convenient solution:
 
 
 Some applications will need extra dependencies other than the default ones. You
-might have a look at the .arch-pkg-explicit* files to see what software I've
-been using.
+might have a look at the .pkg-* files to see what software I've been using.
 
 Final word: do not forget to read the manpages!
 

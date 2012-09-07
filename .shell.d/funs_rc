@@ -767,14 +767,23 @@ fi
 ## TeXlive
 if [ -d "/usr/local/texlive" ]; then
 
+    ## Warning: it is important to set umask properly, otherwise users might
+    ## not have authorization to use the packages.
+
+    ## TODO: It is dirty to invoke a subshell several times.
+    ## Would be better to pass one parameter, then to tokenize it.
+
     tli ()
     {
-        ## Warning: it is important to set umask properly, otherwise users might
-        ## not have authorization to use the packages.
-        ## TODO: It is dirty to invoke a subshell several times.
-        ## Would be better to pass one parameter, then to tokenize it.
         for i ; do
             sudo bash -c 'umask 022 && tlmgr install "$0"' "$i"
+        done
+    }
+
+    tlr ()
+    {
+        for i ; do
+            sudo bash -c 'umask 022 && tlmgr remove "$0"' "$i"
         done
     }
 

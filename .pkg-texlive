@@ -3,13 +3,15 @@ amsfonts
 amsmath
 beamer
 bigfoot
+collection-latex
 colortbl
 easylist
 ec
 enctex
 eso-pic
-eurosym
 etoolbox
+eukdate
+eurosym
 fancyhdr
 fix2col
 geometry
@@ -31,3 +33,4 @@ wrapfig
 xargs
 xcolor
 zapfding
+lm
