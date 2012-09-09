@@ -68,7 +68,6 @@ gnu-netcat
 gparted
 graphicsmagick
 grep
-grub
 gsasl
 gstreamer0.10-bad
 gstreamer0.10-bad-plugins
@@ -170,6 +169,7 @@ pciutils
 pcmciautils
 pdksh
 perl
+perl-digest-sha1
 perl-locale-gettext
 pidgin
 pkg-config
