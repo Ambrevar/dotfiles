@@ -103,9 +103,10 @@ if [ -e "${ARCHIVENAME}.${ARCEXT}" ]; then
 fi
 
 ##==============================================================================
-## Arch Linux packages list
+## Packages list
 ##==============================================================================
 
+## Arch Linux
 if [ -e "/usr/bin/pacman" ]; then
     HOST=$(hostname)
 
@@ -121,6 +122,16 @@ if [ -e "/usr/bin/pacman" ]; then
 
     eval "${PKG_EXPLICIT}" >"${ARCH_PKG_EXPLICIT}-${HOST}"
     eval "${PKG_FOREIGN}" >"${ARCH_PKG_AUR}-${HOST}"
+fi
+
+## TeXlive
+if type tlmgr >/dev/null 2>&1; then
+    HOST=$(hostname)
+
+    TEXLIVE_BASIC="$(tlmgr info collection-basic --list | sed -n '/^\s\+/{s/\s\+//g;p}' | sort)"
+    TEXLIVE_ALL="$(tlmgr info --only-installed | grep -v 'x86_64' | cut -d' ' -f2 | cut -f1 -d':' | sort)"
+
+    comm -3 <(echo "$TEXLIVE_BASIC") <(echo "$TEXLIVE_ALL") | sed 's/\s\+//g' >"$HOME/.pkg-texlive-${HOST}"
 fi
 
 ##==============================================================================

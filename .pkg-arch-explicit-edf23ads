@@ -20,6 +20,7 @@ bzip2
 calc
 ccrypt
 cdrtools
+cheese
 cifs-utils
 cmus
 coreutils
@@ -51,6 +52,7 @@ file
 filesystem
 finch
 findutils
+firefox
 flashplugin
 flex
 fortune-mod
@@ -64,6 +66,7 @@ gettext
 git
 glibc
 gnu-netcat
+google-talkplugin
 graphicsmagick
 grep
 gsasl

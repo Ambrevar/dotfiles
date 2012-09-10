@@ -31,9 +31,15 @@ calc
 ccrypt
 cdparanoia
 cdrtools
+cheese
 cifs-utils
 cloog
+clutter
+clutter-gst
+clutter-gtk
 cmus
+cogl
+colord
 compositeproto
 coreutils
 cracklib
@@ -49,6 +55,7 @@ db
 dbus
 dbus-core
 dbus-glib
+dconf
 desktop-file-utils
 device-mapper
 dhclient
@@ -81,6 +88,7 @@ file
 filesystem
 finch
 findutils
+firefox
 fixesproto
 flac
 flashplugin
@@ -97,6 +105,7 @@ gc
 gcc
 gcc-libs
 gcolor2
+gconf
 gd
 gdb
 gdbm
@@ -114,6 +123,8 @@ glibc
 glib-networking
 glproto
 gmp
+gnome-desktop
+gnome-video-effects
 gnu-netcat
 gnupg
 gnutls
@@ -131,10 +142,13 @@ gstreamer0.10
 gstreamer0.10-bad
 gstreamer0.10-bad-plugins
 gstreamer0.10-base
+gstreamer0.10-base-plugins
 gstreamer0.10-ffmpeg
 gstreamer0.10-good
+gstreamer0.10-good-plugins
 gstreamer0.10-python
 gtk2
+gtk3
 gtk-update-icon-cache
 gts
 gzip
@@ -170,6 +184,7 @@ jack
 jasper
 jfsutils
 json-c
+json-glib
 kbd
 kbproto
 keyutils
@@ -195,6 +210,7 @@ libavc1394
 libbluray
 libburn
 libcaca
+libcanberra
 libcap
 libcap-ng
 libcdaudio
@@ -226,12 +242,17 @@ libgl
 libglade
 libglapi
 libgme
+libgnome-keyring
 libgpg-error
+libgphoto2
 libgsf
 libgssglue
+libgusb
 libice
 libid3tag
 libidn
+libiec61883
+libieee1284
 libirman
 libisoburn
 libisofs
@@ -266,10 +287,12 @@ libraw1394
 librsvg
 libsamplerate
 libsasl
+libshout
 libsigc++
 libsm
 libsndfile
 libsoup
+libsoup-gnome
 libspectre
 libssh2
 libstdc++5
@@ -285,6 +308,7 @@ libusb-compat
 libusbx
 libva
 libvdpau
+libvisual
 libvorbis
 libvpx
 libwbclient
@@ -359,11 +383,13 @@ mtdev
 mtools
 musicbrainz
 mutt
+mx
 nasm
 nawk
 ncdu
 ncurses
 neon
+net-snmp
 nettle
 net-tools
 nmap
@@ -441,6 +467,7 @@ renderproto
 rtmpdump
 rtorrent
 run-parts
+sane
 schroedinger
 scrnsaverproto
 scrot
@@ -449,6 +476,7 @@ sdparm
 sed
 sg3_utils
 shadow
+shared-color-profiles
 shared-mime-info
 slock
 smbclient
@@ -469,6 +497,7 @@ systemd
 sysvbanner
 sysvinit
 sysvinit-tools
+taglib
 talloc
 tar
 task
@@ -498,6 +527,7 @@ vim
 vim-runtime
 vlock
 w3m
+wavpack
 wget
 which
 wildmidi
