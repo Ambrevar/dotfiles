@@ -213,6 +213,7 @@ webview.init_funcs.window_decision = function (view, w)
 end
 
 -- Adblock
--- require("adblock")
+require("adblock")
+require("adblock_chrome")
 
 -- vim: et:sw=4:ts=8:sts=4:tw=80

@@ -135,10 +135,8 @@ do
 done
 
 ## Awesome
-for i in $(find .config/awesome \( -name "*.lua" -o -name "*.sh" \) -type f)
-do
-    FILELIST=(${FILELIST[*]} "$i")
-done
+FILELIST=(${FILELIST[*]} ".config/awesome/rc.lua")
+FILELIST=(${FILELIST[*]} ".config/awesome/themes/custom/theme.lua")
 
 ## cmus
 FILELIST=(${FILELIST[*]} ".cmus/autosave")
@@ -163,7 +161,9 @@ FILELIST=(${FILELIST[*]} ".gitconfig")
 FILELIST=(${FILELIST[*]} ".homeinit")
 
 ## Luakit
-FILELIST=(${FILELIST[*]} ".config/luakit/")
+FILELIST=(${FILELIST[*]} ".config/luakit/rc.lua")
+FILELIST=(${FILELIST[*]} ".config/luakit/binds.lua")
+FILELIST=(${FILELIST[*]} ".config/luakit/globals.lua")
 
 ## Mutt
 FILELIST=(${FILELIST[*]} ".muttrc")

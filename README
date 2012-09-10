@@ -63,7 +63,7 @@ snippets). Some custom functions (duplicate line, unfill-paragraph, etc.).
 Luakit
 ******
 Some custom bindings, download location, search engines, etc.  Script+Plugin
-toggle.
+toggle. Adblock script (must be downloaded manually or from .homeinit).
 
 Mutt
 ****
@@ -135,8 +135,7 @@ Known issues
 
 Emacs: some colors do not work as intended.
 
-Luakit: adblock makes Luakit crash whenever easylist.txt is not found.
-adblock will not always work.
+Luakit: Adblock will not always block ads correctly.
 
 Ranger: if editor is 'emacsclient -t -a""', it will not show up if emacs daemon
 is not running.
@@ -168,6 +167,7 @@ calc
 catdvi
 ccrypt
 cdrtools
+centerim
 chrpath
 cmus
 column
@@ -188,6 +188,7 @@ fdisk
 feh
 ffmpeg
 file
+finch
 fmt
 fortune
 gcolor2
@@ -240,7 +241,6 @@ p7zip
 pari
 parted
 patch
-pidgin
 poppler
 pstotext
 pwgen

@@ -49,8 +49,8 @@ feh
 fftw
 file
 filesystem
+finch
 findutils
-firefox
 flashplugin
 flex
 fortune-mod
@@ -61,11 +61,9 @@ gcc-libs
 gcolor2
 gdb
 gettext
-gimp
 git
 glibc
 gnu-netcat
-gparted
 graphicsmagick
 grep
 gsasl
@@ -75,7 +73,6 @@ gstreamer0.10-ffmpeg
 gstreamer0.10-good
 gstreamer0.10-python
 gzip
-handbrake
 hdparm
 heirloom-mailx
 highlight
@@ -88,11 +85,9 @@ ifplugd
 indent
 inetutils
 initscripts
-inkscape
 iotop
 iptables
 iputils
-isomaster
 ispell
 jfsutils
 khrplatform-devel
@@ -171,7 +166,6 @@ pdksh
 perl
 perl-digest-sha1
 perl-locale-gettext
-pidgin
 pkg-config
 pkgfile
 pkgstats

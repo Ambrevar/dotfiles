@@ -1,16 +1,19 @@
 #!/bin/sh
 ################################################################################
 ## Home session initialization.
-## 2012-04-28
+## 2012-09-09
 ################################################################################
 
-## Fetch from Git repo:
+## Fetch source from Git repo:
 # cd
 # git init
 # git remote add origin https://github.com/Ambrevar/home-config.git
 # git fetch
 # git branch master origin/master
 # git checkout master
+
+################################################################################
+## The following is used as first-run setup.
 
 SOURCEDIR="${HOME}/Dropbox/Personal"
 
@@ -37,9 +40,28 @@ echo
 ## rtorrent
 echo "==> rtorrent"
 mkdir -p "${HOME}/.session"
+echo
 
 ## Luakit -- Fetch Adblock list.
+## This is handy to update lists regularly.
 echo "==> Luakit"
-mkdir -p "$XDG_DATA_HOME/luakit"
-wget 'https://easylist-downloads.adblockplus.org/easylist.txt' -O "$XDG_DATA_HOME/luakit/easylist.txt"
 
+# Update the adblock modules
+git clone https://github.com/Plaque-fcc/luakit-adblock/ "${HOME}/luakit-adblock"
+cp -fv ~/luakit-adblock/*.lua "$XDG_CONFIG_HOME/luakit"
+rm -rvf "$HOME/luakit-adblock"
+
+# Update the adblock lists
+mkdir -p "$XDG_DATA_HOME/luakit/adblock"
+wget https://easylist-downloads.adblockplus.org/easylist.txt \
+     https://easylist-downloads.adblockplus.org/easyprivacy.txt \
+     https://easylist-downloads.adblockplus.org/easylistgermany.txt \
+     http://lian.info.tm/liste_fr.txt \
+    -P "$XDG_DATA_HOME/luakit/adblock"
+# https://adblock-chinalist.googlecode.com/svn/trunk/adblock.txt # ChinaList
+# https://easylist-downloads.adblockplus.org/easylistitaly.txt
+# https://dutchadblockfilters.googlecode.com/svn/trunk/AdBlock_Dutch_hide.txt
+# http://stanev.org/abp/adblock_bg.txt # Bulgarian List
+# https://indonesianadblockrules.googlecode.com/hg/subscriptions/abpindo.txt # AB Pindo (Indonesian)
+
+echo

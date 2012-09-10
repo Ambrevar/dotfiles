@@ -1,25 +1,25 @@
 # -*- mode: snippet -*-
 # contributor : Xavier Danaux <xdanaux@gmail.com>
-# contributor : Pierre Neidhardt <ambrevar at gmail dot com> 2012-04-27
+# contributor : Pierre Neidhardt <ambrevar at gmail dot com> 2012-09-10
 # key: letter
 # group: skeleton
-# name: \documentclass{article} % Letter style
+# name: Modern Letter class
 # --
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
+\usepackage{marvosym}
+\usepackage{eurosym}
+\DeclareUnicodeCharacter{20AC}{\euro{}}
+% \usepackage[T1]{fontenc}
 % \usepackage{lmodern}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%==============================================================================
 %% Localization
 %%==============================================================================
-
-%% Each language has 2 entries.
-%% The one with an argument activates the text, the other one disables it.
-% \renewcommand{\locale}{en}
-\def\locale{${1:en}}
+%% Supported locales: en, fr.
+\def\locale{en}
 
 %%==============================================================================
 %% Personal Information
@@ -27,20 +27,20 @@
 
 \def\firstname{Pierre}
 \def\familyname{Neidhardt}
-\def\street{77 rue Bellecombe}
-\def\postcode{69006}
-\def\city{Lyon}
-\def\country{France}
-\def\phone{\en{(+33) }09 52 92 86 07}
-\def\mobile{\en{(+33) }07 61 08 55 94}
-\def\mail{ambrevar at gmail dot com}
-\def\institute{INSA Lyon}
+\def\street{}
+\def\postcode{}
+\def\city{}
+\def\country{}
+\def\mobile{\en{(+00) }00 00 00}
+\def\phone{\en{(+00) }00 00 00}
+\def\mail{}
+% \def\institute{} %% Not used.
 
 %%==============================================================================
 %% Recipient Information
 %%==============================================================================
 
-%% Recipient gender
+%% Recipient gender. Can be male, female, org.
 \def\gender{${2:male}}
 
 %% Recipient
@@ -52,71 +52,78 @@
 \def\recipientpostcode{${8:Postcode}}
 
 %%==============================================================================
+%% Subject
+%%==============================================================================
+
+\def\subject{${9:Subject}}
+
+%%==============================================================================
 %% PDF Metadata
 %%==============================================================================
 
 \def\FileAuthor{\firstname{} \familyname}
-\def\FileTitle{\firstname{} \familyname{}'s cover letter}
-\def\FileSubject{Cover letter}
-\def\FileKeyWords{\firstname{} \familyname, Cover letter}
-
-
-%%==============================================================================
-%% Aliases
-%%==============================================================================
-
-\let\latextemp\LaTeX
-\renewcommand{\LaTeX}{{\rm \latextemp}}
-
+\def\FileTitle{Letter}
+\def\FileSubject{\subject{}}
+% \def\FileKeyWords{\firstname{} \familyname, letter}
 
 %%==============================================================================
 %% General options
 %%==============================================================================
 
-\usepackage{lmodern}
 \usepackage{eukdate}
-\usepackage{lipsum}
-\usepackage{marvosym}
+% \usepackage{lipsum}
 \usepackage{ifthen}
 \usepackage[svgname]{xcolor}
 
+
+%% print if not empty
+\def\pine#1{\def\test{#1}\ifx\test\empty\relax\else #1\fi}
+%% print #2 if not empty.
+\def\pinex#1#2{\ifx#1\empty\relax\else #2\fi}
+
 %% Language
-\newcommand{\en}[1]{}
-\newcommand{\fr}[1]{}
+\def\en #1{}
+\def\fr #1{}
+
+%% If strings are equal. Syntax:
 \ifthenelse{\equal{\locale}{en}}{
-\renewcommand{\en}[1]{#1}}{}
+  \def\en #1{#1}}{}
 
 \ifthenelse{\equal{\locale}{fr}}{
-\renewcommand{\fr}[1]{#1}}{}
-
-
+  \def\fr #1{#1}}{}
 
 %% Gender commands.
-\newcommand{\male}[1]{}
-\newcommand{\female}[1]{}
+\def\male #1{}
+\def\female #1{}
+\def\org #1{}
+
 \ifthenelse{\equal{\gender}{male}}{
-\renewcommand{\male}[1]{#1}
-}{}
+  \def\male #1{#1}}{}
+
 \ifthenelse{\equal{\gender}{female}}{
-\renewcommand{\female}[1]{#1}
-}
+  \def\female #1{#1}}{}
+
+\ifthenelse{\equal{\gender}{org}}{
+  \def\org #1{#1}}{}
 
 \def\civility{%
-\en{\male{M.}\female{Ms.}}%
-\fr{\male{Monsieur}\female{Madame}}%
+  \en{\male{M.}\female{Mrs.}}%
+  \fr{\male{Monsieur}\female{Madame}}%
 }
 
 %% Greetings toggle.
-\newcommand{\greetings}[1]{}
-\ifthenelse{\equal{\gender}{}}{}
-{\renewcommand{\greetings}[1]{#1}}
+\def\greetings #1{}
+\ifthenelse{
+  \equal{\gender}{org}
+}{}{\def\greetings #1{#1}}
+
 
 %% Compilation options
 \usepackage{ifpdf}
 \ifpdf
-  \usepackage[pdftex]{graphicx}
+\usepackage[pdftex]{graphicx}
 \else
-  \usepackage[dvips]{graphicx}
+\usepackage[dvips]{graphicx}
 \fi
 
 %% Babel
@@ -126,15 +133,14 @@
 %% Day-of-week translation
 \makeatletter
 \fr{
-\renewcommand\weekday{%
-\ifcase\theeuk@date Samedi\or Dimanche\or Lundi\or
-Mardi\or Mercredi\or Jeudi\or Vendredi\fi}
+  \renewcommand\weekday{%
+    \ifcase\theeuk@date Samedi\or Dimanche\or Lundi\or
+    Mardi\or Mercredi\or Jeudi\or Vendredi\fi}
+  \newcommand\weekdaylower{%
+    \ifcase\theeuk@date samedi\or dimanche\or lundi\or
+    mardi\or mercredi\or jeudi\or vendredi\fi}
 }
-\newcommand\weekdaylower{%
-\ifcase\theeuk@date samedi\or dimanche\or lundi\or
-mardi\or mercredi\or jeudi\or vendredi\fi}
 \makeatother
-
 
 %% Layout
 \usepackage[scale=0.8]{geometry}
@@ -148,38 +154,44 @@ mardi\or mercredi\or jeudi\or vendredi\fi}
 \newlength{\mpwidth}
 \addtolength{\mpwidth}{0.4\textwidth}
 
+%% Remove page number
 \pagestyle{empty}
 
 %% Fonts
 \renewcommand{\familydefault}{\sfdefault}
 
-\let\emphtemp\emph
-\renewcommand{\emph}{{\rm\emphtemp}}
+%% \let\emphtemp\emph
+%% \renewcommand{\emph}[1]{{\rm\emphtemp{#1}}}
+
+\let\latextemp\LaTeX
+\renewcommand{\LaTeX}{{\rm \latextemp}}
+
+\let\textemp\TeX
+\renewcommand{\TeX}{{\rm \textemp}}
 
 %% PDF Metadata
 \ifpdf
-  \usepackage[]{hyperref}
-  \hypersetup{
-    pdfauthor   = \FileAuthor,
-    pdftitle    = \FileTitle,
-    pdfsubject  = \FileSubject,
-    pdfkeywords = \FileKeyWords,
-    pdfcreator  = \LaTeX,
-    pdfproducer = \LaTeX,
-    pdftex,
-    pdfborder=0,
-    breaklinks,
-    baseurl=http://,
-    pdfpagemode=None,
-    pdfstartview=XYZ,
-    pdfstartpage=1,
-    colorlinks=true,
-    urlcolor=black
-  }
+\usepackage[]{hyperref}
+\hypersetup{
+  pdfauthor   = \FileAuthor,
+  pdftitle    = \FileTitle,
+  pdfsubject  = \FileSubject,
+  %% pdfkeywords = \FileKeyWords,
+  pdfcreator  = \LaTeX,
+  pdfproducer = \LaTeX,
+  pdftex,
+  pdfborder=0,
+  breaklinks,
+  baseurl=http://,
+  pdfpagemode=None,
+  pdfstartview=XYZ,
+  pdfstartpage=1,
+  colorlinks=true,
+  urlcolor=black
+}
 \else
-  \usepackage[dvips]{hyperref}
+\usepackage[dvips]{hyperref}
 \fi
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
@@ -191,17 +203,18 @@ mardi\or mercredi\or jeudi\or vendredi\fi}
 
 \en{\hfill}
 \begin{minipage}{\mpwidth}
-%~ \en{\raggedleft}%
-%~ \fr{\raggedright}%
-{\bfseries \firstname{} \familyname}
-\vspace{0.5em}\newline
-\small\itshape%
-\street \newline
-\postcode\ \city\ -- \country{}
-\vspace{0.5em}\newline
-\Mobilefone~\mobile \newline
-\Telefon~\phone \newline
-\Letter~\href{mailto:\mail}{\mail}
+  \edef\fullname{\firstname{} \familyname{}}
+  \pinex{\fullname}{{\bfseries \fullname}
+  \vspace{0.5em}\\\\
+  }
+  \small\itshape%
+  \pinex{\street}{\street \\\\}
+  \pinex{\city}{\postcode{} \city\pinex{\country}{ -- \country{}}
+    \vspace{0.5em}\\\\
+  }
+  \pinex{\mobile}{\Mobilefone~\mobile \\\\}
+  \pinex{\phone}{\Telefon~\phone \\\\}
+  \pinex{\mail}{\Letter~\href{mailto:\mail}{\mail}}
 \end{minipage}
 \vspace{\baselineskip}
 
@@ -209,49 +222,58 @@ mardi\or mercredi\or jeudi\or vendredi\fi}
 %% Recipient particulars
 %%==============================================================================
 
-\en{}
-\fr{\hfill}
+\en{\noindent}%
+\fr{\hfill}%
 \begin{minipage}{\mpwidth}
-{\bfseries \civility{} \recipientfirstname{} \recipientfamilyname}
-\vspace{0.5em}\newline
-\recipientinstitute{}
-\vspace{0.5em}\newline
-{\small\itshape
-\recipientstreet{} \newline
-\recipientpostcode{} \recipientcity{} \newline
-}
+  \edef\recipientfullname{\recipientfirstname{} \recipientfamilyname}
+  \pinex{\fullname}{{\bfseries \recipientfullname}
+  \\\\[0.5\baselineskip]
+  }
+  \pinex{\recipientinstitute}{\recipientinstitute{}
+    \\\\[0.5\baselineskip]
+  }
+  \pinex{\recipientcity}{
+    {\small\itshape
+      \recipientstreet{} \\\\
+      \pine{\recipientpostcode} \recipientcity{} \\\\
+    }
+  }
 \end{minipage}
 
 %%==============================================================================
 %% Date
 %%==============================================================================
 
+\vfill
 \vspace{1em}
 
 \hfill
 \begin{minipage}{\mpwidth}
-\en{\today}
-\fr{\city, le \weekdaylower\ \today}
-\end{minipage}\newline%[2em]
+  \en{\today}
+  \fr{\city, le \weekdaylower\ \today}
+\end{minipage}\\\\
 
 %%==============================================================================
 %% Object
 %%==============================================================================
-% \noindent
-% \textbf{\en{Object}\fr{Objet}~:}
-% This is my object.\newline\vspace{\baselineskip}
+\pinex{\subject}{
+  \noindent
+  \textbf{\en{Object}\fr{Objet}~:}
+  \subject{}.
+  \vspace{1\baselineskip}
+}
 
 
 %%==============================================================================
 %% Content
 %%==============================================================================
 \greetings{
-\en{Dear}\fr{\male{Cher}\female{Chère}} \civility{} \recipientfamilyname,\newline
+  \en{Dear}\fr{\male{Cher}\female{Chère}} \civility{} \recipientfamilyname,
 }
 
-\lipsum[1]
-
-Thanks for your consideration; I am looking forward to hearing from you soon!
+\noindent
+Common blah.
+I thank you for your consideration; I am looking forward to hearing from you soon!
 
 %%==============================================================================
 %% Closing
@@ -260,18 +282,19 @@ Thanks for your consideration; I am looking forward to hearing from you soon!
 \vfill
 
 \en{
-Yours sincerely,
+  Best regards.
+  %% Yours sincerely,
 }
 \fr{
-%~ Cordialement,
-Veuillez agréer, \civility{}, l'expression de mes sentiments les meilleurs.
+  %% Cordialement,
+  Veuillez agréer, \civility{}, l'expression de mes sentiments les meilleurs.
 }
 
-\vspace{1em}
+\vspace{\baselineskip}
 \hfill
 \begin{minipage}{\mpwidth}
-\textbf{\firstname\ \familyname}\newline
-%\includegraphics[scale=0.75]{signature_blue}
+  \textbf{\firstname\ \familyname}\newline
+  %\includegraphics[scale=0.75]{signature_blue}
 \end{minipage}
 
 %%==============================================================================
@@ -280,9 +303,10 @@ Veuillez agréer, \civility{}, l'expression de mes sentiments les meilleurs.
 
 \vfill
 
-\noindent\em
-\fr{Ci-joint~: Curriculum Vit\ae}
-\en{Attachment: Curriculum Vit\ae}
+%% \noindent{\em
+%%   \fr{Ci-joint~: Curriculum Vitæ}
+%%   \en{Attachment: Curriculum Vit\ae}
+%% }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
