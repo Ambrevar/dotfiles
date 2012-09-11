@@ -15,9 +15,8 @@
 ## This function gets the pacman variables when necessary.
 
 ## Note: some functions uses pacman localized output. It should work in any
-## case.
+## case. You should always call _pacman_unset_vars in the end.
 
-## Note: you should always call _pacman_unset_vars in the end.
 _pacman_set_vars()
 {
     local pacman_var_list="$(pacman -Qi tzdata | cut -f1 -d':')"
@@ -243,7 +242,7 @@ pacman-deps()
         echo
         echo "Usage:"
         echo -e "  default:\tDisplay package dependencies. Output contains no double and is alphabetically sorted. It will only work for repos packages by default."
-        echo -e "  -a:\t\tUses Yaourt queries instead of repos database. It slows down query but allow displaying size of local any packages not available in repos."
+        echo -e "  -a:\t\tUses Yaourt queries instead of repos database. It slows down query but allow displaying size of any packages not available in repos."
         echo -e "  -h:\t\tShow this help."
         echo -e "  -q:\t\tUses installed packages database instead of repos database. It speeds up queries and allows displaying size of local packages not available in repos."
     }
@@ -296,7 +295,7 @@ pacman-rebuild ()
     fi
 
     ## TODO: use args to tell what to rebuild.
-    # local PKG_LIST=()
+    # local PKG_LIST
     # if [ $# -eq 0 ]; then
     #     for i in $(pacman -Qmq); do
     #         PKG_LIST=

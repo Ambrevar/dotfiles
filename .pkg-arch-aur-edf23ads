@@ -9,6 +9,7 @@ libpng12
 movgrab
 package-query
 pacman-color
+pdksh
 rxvt-unicode-patched
 submarine
 texlive-dummy

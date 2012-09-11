@@ -232,9 +232,9 @@ FILELIST=(${FILELIST[*]} ".Xresources")
 ##==============================================================================
 
 if [ "$DEBUG" = "yes" ]; then
-	tar ${ARCOPT} "$ARCHIVENAME"  -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")" --exclude-vcs
+	tar ${ARCOPT} "${ARCHIVENAME}.${ARCEXT}" -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")" --exclude-vcs
 else
-	tar ${ARCOPT} "${ARCHIVENAME}.${ARCEXT}"  -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")" --exclude-vcs >/dev/null
+	tar ${ARCOPT} "${ARCHIVENAME}.${ARCEXT}" -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")" --exclude-vcs >/dev/null
 fi
 
 ##==============================================================================

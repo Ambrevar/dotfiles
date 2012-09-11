@@ -417,7 +417,6 @@ patch
 pciutils
 pcmciautils
 pcre
-pdksh
 perl
 perl-digest-sha1
 perl-error

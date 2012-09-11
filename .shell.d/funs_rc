@@ -94,7 +94,8 @@ dirsize ()
 
 ## Network operations
 if [ -e "/usr/bin/nmap" ]; then
-    network-map() {
+    network-map() 
+    {
         echo "$1"
         for SCANIP in $( nmap -sL "$1" | grep -i "\([[:digit:]]\+\.\)\{3,\}[[:digit:]]\+" | awk '{print $5}' ); do
             sudo nmap -oX - -n -sT -T Normal -O -sR -I -F -P0 "$SCANIP"
@@ -145,7 +146,8 @@ netspeed ()
 ##   ... (see 'man 5 proc' for further details)
 ##
 ## Only the first 4 values are interesting here.
-cpuusage(){
+cpuusage()
+{
     local cpuarray
     local f1
     local f2
@@ -393,7 +395,8 @@ fi
 
 ## Extractor -- Useless when using 'atool'.
 if [ ! -e "/usr/bin/atool" ]; then
-    extract () {
+    extract () 
+    {
 	    if [ -f $1 ] ; then
 	        case $1 in
 		        *.tar.bz2)   tar xvjf $1    ;;
@@ -449,10 +452,10 @@ archive ()
     printhelp()
     {
         echo "Synopsis:"
-        echo -e "  $1 [-m METHOD] [-v] FILE"
+        echo -e "  $1 [-m METHOD] [-v] FILES|FOLDERS"
         echo
         echo "Usage:"
-        echo -e "  default:\tDisplay packages included in FILE but not installed."
+        echo -e "  default:\tCreate an archive of specified FILES and/or FOLDERS."
         echo -e "  -h:\t\tDisplay this help."
         echo -e "  -m:\t\tChoose compression method."
         echo -e "    gz\t\tgzip (default)."
@@ -507,12 +510,6 @@ archive ()
 
     shift $(($OPTIND - 1))
 
-    if [ $# -eq 0 ]; then
-        echo "Missing argument."
-        echo "Use $0 -h for help."
-        return 1
-    fi
-
     local ARCPATH
     local ARCSOURCE
     local ARCNAME
@@ -535,10 +532,13 @@ archive ()
                 tar -${ARCOPT} -cvf "$ARCNAME" "$ARCSOURCE" ${OPTION_VCS})
 
         else
-            local FILELIST=()
+            ## Note for zsh: do NOT initialize an array with "myarray=()".
+            local FILELIST
+
             for i; do
                 FILELIST=(${FILELIST[*]} "$i")
             done
+
             tar -${ARCOPT} -cvf "$ARCNAME" ${FILELIST[*]} ${OPTION_VCS}
         fi 
     fi
@@ -556,7 +556,8 @@ git-compare()
 }
 
 ## This function will clean TeX/LaTeX project folders recursively.
-texclean () {
+texclean ()
+{
     if [ -z "$1" ]; then
         WORKDIR="$PWD"
     else
