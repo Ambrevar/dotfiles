@@ -27,6 +27,7 @@ _pacman_set_vars()
 
     pacman_name="$(echo "$pacman_var_list" | sed -n '1{p;q}')"
     pacman_deps="$(echo "$pacman_var_list" | sed -n '7{p;q}')"
+    pacman_deps_none="$(pacman -Qi tzdata | sed -n '7{s/.*: //;p;q}')"
     pacman_optdeps="$(echo "$pacman_var_list" | sed -n '8{p;q}')"
     pacman_size="$(echo "$pacman_var_list" | sed -n '12{p;q}')"
 }
@@ -248,9 +249,13 @@ pacman-deps()
     }
 
     local CMD="pacman -Si"
+    local OPT_REC=0
     local SEP=": "
 
-    while getopts ":ahq" opt; do
+    ## TODO: why is OPTIND messy if we do not set it as local?
+    local OPTIND
+
+    while getopts ":ahrq" opt; do
         case $opt in
             a)
                 CMD="yaourt -Si"
@@ -258,6 +263,9 @@ pacman-deps()
             h)
                 printhelp "$0"
                 return 1
+                ;;
+            r)
+                OPT_REC=1
                 ;;
             q)
                 CMD="pacman -Qi"
@@ -283,7 +291,54 @@ pacman-deps()
     fi
 
     _pacman_set_vars
-    eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_deps" '$0 ~ filter {gsub(/[>=<][^ ]*/,"",$2) ; gsub(/ +/,"\n",$2) ; print $2}' | sort -u
+
+    if [ $OPT_REC -eq 0 ]; then
+        eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_deps" '$0 ~ filter {gsub(/[>=<][^ ]*/,"",$2) ; gsub(/ +/,"\n",$2) ; print $2}' | sort -u
+    else
+        ## TODO: needs Zsh globbing fix.
+
+        local DEPLIST
+
+        _printdeps()
+        {
+            local ARGLIST
+            echo "{$@}"
+
+            local CURLIST
+            # CURLIST="$(pacman -Qi ${CMD} $@ 2>/dev/null | awk -F $SEP -v filter=$pacman_deps '$0 ~ filter {gsub(/[>=<][^ ]*/,\" \",$2) ; print $2}' )"
+            CURLIST="$(pacman -Qi $ARGLIST 2>/dev/null | awk -F $SEP -v filter=$pacman_deps '$0 ~ filter { print $2}' )"
+
+            echo "1[$CURLIST]"
+            CURLIST=$(echo $CURLIST | sed 's/[>=<][^ ]*//g')
+            echo "2[$CURLIST]"
+
+            # for i in $CURLIST;do
+            #     echo "ARG $i"
+            # done
+
+            if [ -n "$CURLIST" ] && [ ! "$CURLIST" = "None" ]; then
+                DEPLIST=$DEPLIST$CURLIST
+
+                CURLIST=$(echo $CURLIST | sed 's/ /\n/g')
+
+                # for i; do
+                #     echo "BAM"
+                #     ARGLIST=(${ARGLIST[*]} $i)
+                # done
+                # echo "TEST {$ARGLIST}"
+                _printdeps "$CURLIST"
+            fi
+        }
+        
+        _printdeps "$@"
+
+        echo "===="
+        if [ -n "$DEPLIST" ]; then
+            echo "$DEPLIST" | sort -u
+        fi
+
+    fi
+
     _pacman_unset_vars
 }
 
