@@ -19,7 +19,7 @@ SOURCEDIR="${HOME}/Dropbox/Personal"
 
 ## Mutt
 echo "==> Mutt"
-[ ! -e ~/.mutt ] && ln -s "${SOURCEDIR}/MAILS" "${HOME}/.mutt"
+[ ! -e ~/.mutt ] && ln -s "$(realpath ${SOURCEDIR}/MAILS)" "${HOME}/.mutt"
 mkdir -p "${HOME}/.mutt.d/hcache"
 echo
 
