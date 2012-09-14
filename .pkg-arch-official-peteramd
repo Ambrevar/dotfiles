@@ -399,7 +399,6 @@ openjpeg
 openssh
 openssl
 orc
-oss
 p11-kit
 p7zip
 pacman
@@ -525,7 +524,6 @@ wget
 which
 wildmidi
 wipe
-wpa_actiond
 wpa_supplicant
 wv
 wxgtk

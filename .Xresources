@@ -14,18 +14,22 @@
 ! Xft.rgba: rgb
 
 !!------------------------------------------------------------------------------
-!!URxvt
-!!------------------------------------------------------------------------------
+!! URxvt
+!! ------------------------------------------------------------------------------
+!! url-select, clipboard and keyboard-select are provided in Muennich's perl
+!! plugins.
 
 ! URxvt*modifier: alt
 URxvt*saveLines: 5000
 URxvt*scrollBar: false
 
-!! Plugins
-!! clipboard and keyboard-select are not provided by default.
-! URxvt.perl-ext-common  : default,matcher,keyboard-select
-URxvt.perl-ext-common  : matcher,keyboard-select,clipboard
+!! URL Support
+URxvt.perl-ext:             default,url-select
+URxvt.keysym.M-u:           perl:url-select:select_next
+URxvt.url-select.launcher:  /usr/bin/luakit
+URxvt.url-select.underline: true
 
+URxvt.perl-ext-common  : keyboard-select,clipboard
 
 URxvt.keysym.C-M-v:   perl:clipboard:paste
 URxvt.keysym.C-M-c: perl:clipboard:paste_escaped
@@ -35,17 +39,6 @@ URxvt.keysym.C-M-c: perl:clipboard:paste_escaped
 !! Keyboard-Select
 URxvt.keysym.M-Escape:  perl:keyboard-select:activate
 ! URxvt.keysym.M-s:       perl:keyboard-select:search
-
-!! URL Support
-URxvt.matcher.button   : 1
-URxvt.keysym.C-Delete  : perl:matcher:last
-URxvt.keysym.M-Delete  : perl:matcher:list
-URxvt.urlLauncher      : luakit
-URxvt.underlineURLs    : true
-
-!! TODO: Does not work.
-! URxvt*keysym.M-Left:  \033[1;3D
-
 
 !! Font
 URxvt*font       : xft:Dejavu Sans Mono:pixelsize=14
