@@ -44,16 +44,6 @@ require "window"
 -- ("$XDG_CONFIG_HOME/luakit/webview.lua" or "/etc/xdg/luakit/webview.lua")
 require "webview"
 
--- set dark about:blank -- Buggy with some site.
--- webview.init_funcs.set_dark = function (view, w)
---    view:add_signal("navigation-request", function (_, uri)
---         if uri == "about:blank" then
---            view:load_string("<html><body bgcolor='#000000'></body></html>", "about:blank") -- change this
---             return true
---         end
---                                          end)
--- end
-
 -- Load users mode configuration
 -- ("$XDG_CONFIG_HOME/luakit/modes.lua" or "/etc/xdg/luakit/modes.lua")
 require "modes"
@@ -104,35 +94,27 @@ require "userscripts"
 
 -- Add bookmarks support
 require "bookmarks"
+require "bookmarks_chrome"
 
 -- Add download support
 require "downloads"
 require "downloads_chrome"
 
--- CUSTOM
--- Download folder.
-downloads.default_dir = os.getenv("HOME") .. "/temp"
--- if downloads.default_dir == nil then
---    downloads.default_dir = os.getenv("HOME")
--- end
-downloads.add_signal("download-location", function (uri, file)
-    if not file or file == "" then
-        file = (string.match(uri, "/([^/]+)$") 
-            or string.match(uri, "^%w+://(.+)") 
-            or string.gsub(uri, "/", "_")
-            or "untitled")
-    end 
-    return downloads.default_dir .. "/" .. file
-end)  
+-- Example using xdg-open for opening downloads / showing download folders
+--downloads.add_signal("open-file", function (file, mime)
+--    luakit.spawn(string.format("xdg-open %q", file))
+--    return true
+--end)
 
 -- Add vimperator-like link hinting & following
--- (depends on downloads)
 require "follow"
 
--- To use a custom character set for the follow hint labels un-comment and
--- modify the following:
---local s = follow.styles
---follow.style = s.sort(s.reverse(s.charset("asdfqwerzxcv"))) -- I'm a lefty
+-- Use a custom charater set for hint labels
+--local s = follow.label_styles
+--follow.label_maker = s.sort(s.reverse(s.charset("asdfqwerzxcv")))
+
+-- Match only hint labels
+--follow.pattern_maker = follow.pattern_styles.match_label
 
 -- Add command history
 require "cmdhist"
@@ -146,6 +128,8 @@ require "taborder"
 -- Save web history
 require "history"
 require "history_chrome"
+
+require "introspector"
 
 -- Add command completion
 require "completion"
@@ -212,8 +196,24 @@ webview.init_funcs.window_decision = function (view, w)
     end)
 end
 
+-- Download folder.
+downloads.default_dir = os.getenv("HOME") .. "/temp"
+-- if downloads.default_dir == nil then
+--    downloads.default_dir = os.getenv("HOME")
+-- end
+downloads.add_signal("download-location", function (uri, file)
+    if not file or file == "" then
+        file = (string.match(uri, "/([^/]+)$") 
+            or string.match(uri, "^%w+://(.+)") 
+            or string.gsub(uri, "/", "_")
+            or "untitled")
+    end 
+    return downloads.default_dir .. "/" .. file
+end)  
+
 -- Adblock
 require("adblock")
 require("adblock_chrome")
+
 
 -- vim: et:sw=4:ts=8:sts=4:tw=80

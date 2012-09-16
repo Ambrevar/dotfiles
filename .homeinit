@@ -64,4 +64,8 @@ wget https://easylist-downloads.adblockplus.org/easylist.txt \
 # http://stanev.org/abp/adblock_bg.txt # Bulgarian List
 # https://indonesianadblockrules.googlecode.com/hg/subscriptions/abpindo.txt # AB Pindo (Indonesian)
 
+## Bookmarks
+ln -s "${SOURCEDIR}/BOOKMARKS/bookmarks.db" "$XDG_DATA_HOME/luakit/bookmarks.db"
+
+
 echo
