@@ -16,7 +16,7 @@
 !!------------------------------------------------------------------------------
 !! URxvt
 !! ------------------------------------------------------------------------------
-!! url-select, clipboard and keyboard-select are provided in Muennich's perl
+!! url-select, clipboard and keyboard-select are provided in Muennich s perl
 !! plugins.
 
 ! URxvt*modifier: alt

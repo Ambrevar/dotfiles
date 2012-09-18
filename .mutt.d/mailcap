@@ -4,4 +4,5 @@ text/html; w3m -I %{charset} -T text/html; copiousoutput;
 image/*; sxiv %s
 applica/msword; antiword %s | less
 application/msword; antiword %s | less
+application/pdf; pdftotext %s - | less
 # application/pgp-keys; pgp -f < %s ; copiousoutput
