@@ -113,6 +113,7 @@ gc
 gcc
 gcc-libs
 gcolor2
+gconf
 gd
 gdb
 gdbm
@@ -133,9 +134,11 @@ glibmm
 glib-networking
 glproto
 gmp
+gnumeric
 gnupg
 gnuplot
 gnutls
+goffice
 gpgme
 gpm
 grep
@@ -153,6 +156,7 @@ gstreamer0.10-good
 gstreamer0.10-ugly
 gstreamer0.10-ugly-plugins
 gtk2
+gtk3
 gtkmm
 gtkspell
 gtk-update-icon-cache
@@ -399,6 +403,7 @@ openjpeg
 openssh
 openssl
 orc
+oss
 p11-kit
 p7zip
 pacman

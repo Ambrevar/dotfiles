@@ -1,0 +1,73 @@
+%% -*- mode:tex -*- %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Generic PlainTeX macro.
+%% 2012-09-20
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Hyperlink support. ('graphics-pln' required).
+\input eplain
+\beginpackages
+\usepackage{color}
+\endpackages
+
+\enablehyperlinks
+\hlopts{bwidth=0}
+\hlopts{colormodel=,color=red}
+
+%% Fonts
+\font\fonttitle = cmbx10 at 26pt
+\font\fontsubtitle = cmbx12
+\font\fontbig = cmbx10
+\font\fontauthor = cmcsc10 at 16pt
+\font\fontsc = cmcsc10
+\font\fontsection = cmbx10 at 18pt
+\font\fontscript = cmr10 at 8pt
+
+\def\high #1{{\fontscript\raise 0.45em \hbox{#1}}}
+\def\low #1{{\fontscript\lower 0.2\baselineskip \hbox{#1}}}
+\def\emph#1{{\it #1}}
+
+%% Itemize
+\catcode`| = 13
+\def|{\item {--}}
+\def\itemize#1{{\leftskip = 40 pt #1 \par}}
+
+%% Section
+\def\section#1{
+\bigskip
+\noindent
+{\fontsection #1}
+\medskip
+}
+
+\def\subsection#1{
+\vskip 20pt
+\centerline{\fontsc #1}
+\centerline{\vrule width 0.5\hsize height 0.5pt}
+\vskip 10pt
+}
+
+\def\paragraph#1{
+\bigskip
+\centerline{\vrule width 0.5\hsize height 0.5pt}
+\bigskip
+}
+
+\def\entry#1{
+{\it #1~:}}
+
+\def\bigentry#1{
+\bigskip
+{\it #1~:}}
+
+\def\question#1{
+\bigskip
+{\it #1~?}}
+
+%% Aliases
+\def\tm{{\fontscript\raise 0.45em \hbox{TM}}}
+
+\let\texbak\TeX
+\def\TeX {{\rm \texbak}}
+
+\def\unix {{\fontsc Unix}}

@@ -295,48 +295,63 @@ pacman-deps()
     if [ $OPT_REC -eq 0 ]; then
         eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_deps" '$0 ~ filter {gsub(/[>=<][^ ]*/,"",$2) ; gsub(/ +/,"\n",$2) ; print $2}' | sort -u
     else
-        ## TODO: needs Zsh globbing fix.
+        ## TODO: optimize by using one DB request only.
 
+        # echo "{$pacman_deps_none}"
+
+        ## Note: using a table is important for Zsh compatibility.
         local DEPLIST
+        DEPLIST=()
 
-        _printdeps()
+        _not-in-array()
         {
-            local ARGLIST
-            echo "{$@}"
-
-            local CURLIST
-            # CURLIST="$(pacman -Qi ${CMD} $@ 2>/dev/null | awk -F $SEP -v filter=$pacman_deps '$0 ~ filter {gsub(/[>=<][^ ]*/,\" \",$2) ; print $2}' )"
-            CURLIST="$(pacman -Qi $ARGLIST 2>/dev/null | awk -F $SEP -v filter=$pacman_deps '$0 ~ filter { print $2}' )"
-
-            echo "1[$CURLIST]"
-            CURLIST=$(echo $CURLIST | sed 's/[>=<][^ ]*//g')
-            echo "2[$CURLIST]"
-
-            # for i in $CURLIST;do
-            #     echo "ARG $i"
-            # done
-
-            if [ -n "$CURLIST" ] && [ ! "$CURLIST" = "None" ]; then
-                DEPLIST=$DEPLIST$CURLIST
-
-                CURLIST=$(echo $CURLIST | sed 's/ /\n/g')
-
-                # for i; do
-                #     echo "BAM"
-                #     ARGLIST=(${ARGLIST[*]} $i)
-                # done
-                # echo "TEST {$ARGLIST}"
-                _printdeps "$CURLIST"
+            # echo "{${DEPLIST}}"
+            if [ ${#DEPLIST} -eq 0 ]; then
+                return 0
+            else
+                local j
+                # echo "*** [$1]"
+                for j in ${DEPLIST[*]}; do
+                    if [ "$j" = "$1" ]; then
+                        # echo "FALSE"
+                        return 1
+                    fi
+                done
+                # echo "TRUE"
+                return 0
             fi
         }
-        
-        _printdeps "$@"
 
-        echo "===="
-        if [ -n "$DEPLIST" ]; then
-            echo "$DEPLIST" | sort -u
-        fi
+        _pacman-deps-rec()
+        {
 
+            # echo "### $@"
+            local SUBDEPLIST
+            SUBDEPLIST=()
+            SUBDEPLIST=($(eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_deps" '$0 ~ filter {gsub(/[>=<][^ ]*/,"",$2) ; gsub(/ +/,"\n",$2) ; print $2}') )
+
+            local i
+            for i in ${SUBDEPLIST[*]} ; do
+                # echo "[$i]"
+                if [ ! "$i" = "$pacman_deps_none" ] && _not-in-array "$i" ; then
+                    # echo "[$i] OK"
+                
+                    DEPLIST=(${DEPLIST[*]} "$i")
+                    # echo "[${DEPLIST}] ARRAY"
+                    _pacman-deps-rec "$i"
+                # else
+                #     echo "NONE"
+                fi
+            done
+        }
+
+        local i
+        for i ; do
+            _pacman-deps-rec "$@"
+        done
+
+        # hexdump -C <(echo "${DEPLIST}")
+        sed 's/ /\n/g' <(echo "${DEPLIST}") | sort -u
     fi
 
     _pacman_unset_vars

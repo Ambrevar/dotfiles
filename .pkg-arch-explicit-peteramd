@@ -56,6 +56,7 @@ flashplugin
 flex
 fortune-mod
 fortune-mod-tbbt
+fossil
 gaupol
 gawk
 gcc
@@ -67,6 +68,7 @@ ghostscript
 gimp
 git
 glibc
+gnumeric
 gnuplot
 grep
 gsfonts
