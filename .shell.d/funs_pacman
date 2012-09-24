@@ -216,7 +216,7 @@ pacman-size()
 
     _pacman_set_vars
 
-    local RESULT="$(eval "${CMD} $@" | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
+    local RESULT="$(eval "${CMD} $@" 2>/dev/null | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
 '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | eval "$SORT" | eval "$SORT_SIZE")"
 
     echo "$RESULT"
@@ -238,13 +238,14 @@ pacman-deps()
     printhelp()
     {
         echo "Synopsis:"
-        echo -e "  $1 [-a|-h|-q] PACKAGES"
+        echo -e "  $1 [-a|-h|-q] [-r] PACKAGES"
         echo -e "  Arguments MUST be set before package list."
         echo
         echo "Usage:"
         echo -e "  default:\tDisplay package dependencies. Output contains no double and is alphabetically sorted. It will only work for repos packages by default."
         echo -e "  -a:\t\tUses Yaourt queries instead of repos database. It slows down query but allow displaying size of any packages not available in repos."
         echo -e "  -h:\t\tShow this help."
+        echo -e "  -r:\t\tCall function recursively."
         echo -e "  -q:\t\tUses installed packages database instead of repos database. It speeds up queries and allows displaying size of local packages not available in repos."
     }
 
@@ -295,13 +296,8 @@ pacman-deps()
     if [ $OPT_REC -eq 0 ]; then
         eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_deps" '$0 ~ filter {gsub(/[>=<][^ ]*/,"",$2) ; gsub(/ +/,"\n",$2) ; print $2}' | sort -u
     else
-        ## TODO: optimize by using one DB request only.
-
-        # local FULLDEPLIST=$(pacman -Qi | grep "Name\|Depends" | sed -n "/${pacman_name}/{s/.*: \(.*\)/\1:/;h;n;s/${pacman_deps}.*: //;H;x;s/\n//;p}")
         local FULLDEPLIST
         FULLDEPLIST=$(pacman -Qi | grep "Name\|Depends" | sed -n "/${pacman_name}/{s/.*: \(.*\)/\1:/;h;n;s/${pacman_deps}.*: //;s/[>=<][^ ]*//g;H;x;s/\n//;p}")
-        # echo "$FULLDEPLIST"
-        # return
 
         ## Note: using a table is important for Zsh compatibility.
         local DEPLIST
@@ -309,47 +305,32 @@ pacman-deps()
 
         _not-in-array()
         {
-            # echo "{${DEPLIST}}"
             if [ ${#DEPLIST} -eq 0 ]; then
                 return 0
             else
                 local j
-                # echo "*** [$1]"
                 for j in ${DEPLIST[*]}; do
                     if [ "$j" = "$1" ]; then
-                        # echo "FALSE"
                         return 1
                     fi
                 done
-                # echo "TRUE"
                 return 0
             fi
         }
 
         _pacman-deps-rec()
         {
-
-            # echo "### $@"
             local SUBDEPLIST
             SUBDEPLIST=()
-            # SUBDEPLIST=($(eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_deps" '$0 ~ filter {gsub(/[>=<][^ ]*/,"",$2) ; gsub(/ +/,"\n",$2) ; print $2}') )
             for i ; do
-                SUBDEPLIST=(${SUBDEPLIST[*]} $(echo "$FULLDEPLIST" | grep "^$i" | cut -d':' -f2))
+                SUBDEPLIST=(${SUBDEPLIST[*]} $(echo "$FULLDEPLIST" | grep "^$i\s*:" | cut -d':' -f2))
             done
-
-            # echo "### ${SUBDEPLIST[*]}"
 
             local i
             for i in ${SUBDEPLIST[*]} ; do
-                # echo "[$i]"
                 if [ ! "$i" = "$pacman_deps_none" ] && _not-in-array "$i" ; then
-                    # echo "[$i] OK"
-                
                     DEPLIST=(${DEPLIST[*]} "$i")
-                    # echo "[${DEPLIST}] ARRAY"
                     _pacman-deps-rec "$i"
-                # else
-                #     echo "NONE"
                 fi
             done
         }
@@ -359,7 +340,6 @@ pacman-deps()
             _pacman-deps-rec "$@"
         done
 
-        # hexdump -C <(echo "${DEPLIST}")
         sed 's/ /\n/g' <(echo "${DEPLIST}") | sort -u
     fi
 

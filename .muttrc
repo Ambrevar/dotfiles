@@ -73,9 +73,9 @@ folder-hook '$my_ac_work' 'source ~/.mutt/$my_ac_work'
 folder-hook '$my_ac_university' 'source ~/.mutt/$my_ac_university'
 
 ## Switch to default account on startup
-source "~/.mutt/$my_ac_personal"
+# source "~/.mutt/$my_ac_personal"
 # source "~/.mutt/$my_ac_work"
-# source "~/.mutt/$my_ac_university"
+source "~/.mutt/$my_ac_university"
 
 ## Keys
 macro index <f2> '<sync-mailbox><enter-command>source ~/.mutt/$my_ac_personal<enter><change-folder>!<enter>'
