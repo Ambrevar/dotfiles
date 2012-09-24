@@ -297,7 +297,11 @@ pacman-deps()
     else
         ## TODO: optimize by using one DB request only.
 
-        # echo "{$pacman_deps_none}"
+        # local FULLDEPLIST=$(pacman -Qi | grep "Name\|Depends" | sed -n "/${pacman_name}/{s/.*: \(.*\)/\1:/;h;n;s/${pacman_deps}.*: //;H;x;s/\n//;p}")
+        local FULLDEPLIST
+        FULLDEPLIST=$(pacman -Qi | grep "Name\|Depends" | sed -n "/${pacman_name}/{s/.*: \(.*\)/\1:/;h;n;s/${pacman_deps}.*: //;s/[>=<][^ ]*//g;H;x;s/\n//;p}")
+        # echo "$FULLDEPLIST"
+        # return
 
         ## Note: using a table is important for Zsh compatibility.
         local DEPLIST
@@ -328,7 +332,12 @@ pacman-deps()
             # echo "### $@"
             local SUBDEPLIST
             SUBDEPLIST=()
-            SUBDEPLIST=($(eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_deps" '$0 ~ filter {gsub(/[>=<][^ ]*/,"",$2) ; gsub(/ +/,"\n",$2) ; print $2}') )
+            # SUBDEPLIST=($(eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_deps" '$0 ~ filter {gsub(/[>=<][^ ]*/,"",$2) ; gsub(/ +/,"\n",$2) ; print $2}') )
+            for i ; do
+                SUBDEPLIST=(${SUBDEPLIST[*]} $(echo "$FULLDEPLIST" | grep "^$i" | cut -d':' -f2))
+            done
+
+            # echo "### ${SUBDEPLIST[*]}"
 
             local i
             for i in ${SUBDEPLIST[*]} ; do
