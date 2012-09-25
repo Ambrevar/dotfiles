@@ -340,7 +340,7 @@ pacman-deps()
             _pacman-deps-rec "$@"
         done
 
-        sed 's/ /\n/g' <(echo "${DEPLIST}") | sort -u
+        sed 's/ /\n/g' <(echo "${DEPLIST[*]}") | sort -u
     fi
 
     _pacman_unset_vars
