@@ -50,6 +50,9 @@ set mbox_type=Maildir
 ## Headers are editable in editor.
 set edit_headers=yes
 
+## Encoding
+set send_charset="us-ascii:utf-8"
+
 ##-------------------------------------------------------------------------------
 ## Multiple accounts
 ##-------------------------------------------------------------------------------
