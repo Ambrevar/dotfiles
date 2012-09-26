@@ -501,6 +501,20 @@ pdfcompress ()
     fi
 }
 
+pdfextract ()
+{
+    if [ $# -ne 4 ]; then
+    	echo "Usage: $0 PDFFILE FIRSTPAGE LASTPAGE DESTFILE"
+	    return
+    fi
+
+    if [ ! -f "$1" ]; then
+	    echo "$1 is not a valid PDF file!"
+    fi
+
+    gs -sDEVICE=pdfwrite -dNOPAUSE -dSAFER -dSAFER -dFirstPage=$2 -dBATCH -dLastPage=$3 -sOutputFile=$4 $1
+}
+
 ## Create an archive from a single or multiples files/folders.
 archive ()
 {

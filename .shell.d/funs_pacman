@@ -297,7 +297,7 @@ pacman-deps()
         eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_deps" '$0 ~ filter {gsub(/[>=<][^ ]*/,"",$2) ; gsub(/ +/,"\n",$2) ; print $2}' | sort -u
     else
         local FULLDEPLIST
-        FULLDEPLIST=$(pacman -Qi | grep "Name\|Depends" | sed -n "/${pacman_name}/{s/.*: \(.*\)/\1:/;h;n;s/${pacman_deps}.*: //;s/[>=<][^ ]*//g;H;x;s/\n//;p}")
+        FULLDEPLIST=$(pacman -Qi | grep "${pacman_name}\|${pacman_deps}" | sed -n "/${pacman_name}/{s/.*: \(.*\)/\1:/;h;n;s/${pacman_deps}.*: //;s/[>=<][^ ]*//g;H;x;s/\n//;p}")
 
         ## Note: using a table is important for Zsh compatibility.
         local DEPLIST
