@@ -7,6 +7,8 @@ acpi
 alsa-lib
 alsa-utils
 antiword
+apr
+apr-util
 archlinux-keyring
 arch-wiki-lite
 aspell
@@ -70,9 +72,9 @@ dirmngr
 djvulibre
 dnssec-anchors
 dosfstools
+doxygen
 dri2proto
 e2fsprogs
-eject
 elfutils
 emacs-lua-mode
 emacs-nox
@@ -128,6 +130,7 @@ gimp
 girara-common
 girara-gtk2
 git
+gitg
 glib2
 glibc
 glibmm
@@ -158,6 +161,7 @@ gstreamer0.10-ugly-plugins
 gtk2
 gtk3
 gtkmm
+gtksourceview3
 gtkspell
 gtk-update-icon-cache
 gzip
@@ -204,6 +208,7 @@ lcms
 lcms2
 ldns
 less
+lesspipe
 libarchive
 libass
 libassuan
@@ -380,7 +385,6 @@ mplayer2
 mtdev
 mtools
 musicbrainz
-mutt
 namcap
 nano
 nawk
@@ -483,6 +487,7 @@ splint
 sqlite
 startup-notification
 strace
+subversion
 sudo
 sxiv
 sysfsutils
@@ -501,6 +506,7 @@ tcsh
 tdb
 texi2html
 texinfo
+tig
 tree
 ttf-dejavu
 ttf-droid
@@ -509,6 +515,7 @@ ttf-inconsolata
 ttf-liberation
 tzdata
 udisks
+unixodbc
 unrar
 unrtf
 unzip
@@ -529,6 +536,8 @@ wget
 which
 wildmidi
 wipe
+wireshark-cli
+wireshark-gtk
 wpa_supplicant
 wv
 wxgtk

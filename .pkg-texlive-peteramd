@@ -13,6 +13,7 @@ eurosym
 fancyhdr
 geometry
 graphics
+graphics-pln
 hyperref
 latex
 latex-bin

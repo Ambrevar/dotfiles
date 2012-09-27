@@ -37,6 +37,7 @@ dhcpcd
 diffutils
 djvulibre
 dosfstools
+doxygen
 dropbox
 dropbox-cli
 e2fsprogs
@@ -67,6 +68,7 @@ gettext
 ghostscript
 gimp
 git
+gitg
 glibc
 gnumeric
 gnuplot
@@ -93,6 +95,7 @@ iputils
 jfsutils
 kmod
 less
+lesspipe
 libev
 libftdi
 libirman
@@ -132,7 +135,7 @@ mpg123
 mplayer2
 msieve
 mtools
-mutt
+mutt-android-patch
 namcap
 nano
 nawk
@@ -179,7 +182,9 @@ slock
 splint
 strace
 submarine
+subversion
 sudo
+swi-prolog
 sxiv
 sysfsutils
 syslinux
@@ -194,6 +199,7 @@ tcc
 tcsh
 texi2html
 texinfo
+tig
 trash-cli
 tree
 ttf-dejavu
@@ -217,6 +223,7 @@ w3m
 wget
 which
 wipe
+wireshark-gtk
 wpa_supplicant
 wv
 xclip
