@@ -4,6 +4,9 @@
 # name: \documentclass
 # --
 \documentclass[$2]{${1:$$(yas/choose-value '("article" "report" "book" "letter"))}}
+\usepackage[utf8]{inputenc}
+\usepackage{eurosym}
+\DeclareUnicodeCharacter{20AC}{\euro{}}
 
 \begin{document}
 $0
