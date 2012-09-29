@@ -1,16 +1,16 @@
 ;;; smart-compile.el --- an interface to `compile'
 
-;; Copyright (C) 1998-2011  by Seiji Zenitani
+;; Copyright (C) 1998-2012  by Seiji Zenitani
 
 ;; Author: Seiji Zenitani <zenitani@mac.com>
-;; $Id$
+;; $Id: smart-compile.el 764 2012-07-10 15:58:08Z zenitani $
 ;; Keywords: tools, unix
 ;; Created: 1998-12-27
 ;; Compatibility: Emacs 21 or later
-;; URL(en): http://homepage.mac.com/zenitani/comp-e.html
-;; URL(jp): http://homepage.mac.com/zenitani/elisp-j.html#smart-compile
+;; URL(en): http://www.emacswiki.org/emacs/smart-compile.el
+;; URL(jp): http://th.nao.ac.jp/MEMBER/zenitani/elisp-j.html#smart-compile
 
-;; Contributors: Sakito Hisakura
+;; Contributors: Sakito Hisakura, Greg Pfell
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@
 (defgroup smart-compile nil
   "An interface to `compile'."
   :group 'processes
-  :prefix "smarct-compile")
+  :prefix "smart-compile")
 
 (defcustom smart-compile-alist '(
   (emacs-lisp-mode    . (emacs-lisp-byte-compile))
@@ -51,7 +51,9 @@
   (nxhtml-mode        . (browse-url-of-buffer))
   (html-helper-mode   . (browse-url-of-buffer))
   (octave-mode        . (run-octave))
-  ("\\.c\\'"          . "gcc -Wall -Wextra -Wshadow -lm %f -o %n -g -O0")
+  ("\\.c\\'"          . "gcc %f -Wall -Wextra -Wshadow -lm -o %n -O0 -g3")
+  ;; ("\\.c\\'"          . "gcc -O2 %f -lm -o %n")
+;;  ("\\.c\\'"          . "gcc -O2 %f -lm -o %n && ./%n")
   ("\\.[Cc]+[Pp]*\\'" . "g++ -O2 %f -lm -o %n")
   ("\\.m\\'"          . "gcc -O2 %f -lobjc -lpthread -o %n")
   ("\\.java\\'"       . "javac %f")
@@ -64,14 +66,22 @@
   ("\\.mp\\'"         . "mptopdf %f")
   ("\\.pl\\'"         . "perl -cw %f")
   ("\\.rb\\'"         . "ruby -cw %f")
-)  "List of compile commands. In argument,
-some keywords beginning with '%' will be replaced by:
+)  "Alist of filename patterns vs corresponding format control strings.
+Each element looks like (REGEXP . STRING) or (MAJOR-MODE . STRING).
+Visiting a file whose name matches REGEXP specifies STRING as the
+format control string.  Instead of REGEXP, MAJOR-MODE can also be used.
+The compilation command will be generated from STRING.
+The following %-sequences will be replaced by:
 
   %F  absolute pathname            ( /usr/local/bin/netscape.bin )
   %f  file name without directory  ( netscape.bin )
   %n  file name without extension  ( netscape )
   %e  extension of file name       ( bin )
 
+  %o  value of `smart-compile-option-string'  ( \"user-defined\" ).
+
+If the second item of the alist element is an emacs-lisp FUNCTION,
+evaluate FUNCTION instead of running a compilation command.
 "
    :type '(repeat
            (cons
@@ -90,6 +100,8 @@ some keywords beginning with '%' will be replaced by:
   ("%n" . (file-name-sans-extension
            (file-name-nondirectory (buffer-file-name))))
   ("%e" . (or (file-name-extension (buffer-file-name)) ""))
+  ("%o" . smart-compile-option-string)
+;;   ("%U" . (user-login-name))
   ))
 (put 'smart-compile-replace-alist 'risky-local-variable t)
 
@@ -98,6 +110,11 @@ some keywords beginning with '%' will be replaced by:
 
 (defcustom smart-compile-make-program "make "
   "The command by which to invoke the make program."
+  :type 'string
+  :group 'smart-compile)
+
+(defcustom smart-compile-option-string ""
+  "The option string that replaces %o.  The default is empty."
   :type 'string
   :group 'smart-compile)
 
@@ -130,7 +147,7 @@ which is defined in `smart-compile-alist'."
      ((and smart-compile-check-makefile
            (or (file-readable-p "Makefile")
                (file-readable-p "makefile")))
-      (if (y-or-n-p "Makefile is found. Try 'make'? ")
+      (if (y-or-n-p "Makefile is found.  Try 'make'? ")
           (progn
             (set (make-local-variable 'compile-command) "make ")
             (call-interactively 'compile)
@@ -189,21 +206,21 @@ which is defined in `smart-compile-alist'."
 
     ))
 
-(defun smart-compile-string (arg)
+(defun smart-compile-string (format-string)
   "Document forthcoming..."
   (if (and (boundp 'buffer-file-name)
            (stringp buffer-file-name))
       (let ((rlist smart-compile-replace-alist)
             (case-fold-search nil))
         (while rlist
-          (while (string-match (caar rlist) arg)
-            (setq arg
+          (while (string-match (caar rlist) format-string)
+            (setq format-string
                   (replace-match
-                   (eval (cdar rlist)) t nil arg)))
+                   (eval (cdar rlist)) t nil format-string)))
           (setq rlist (cdr rlist))
           )
         ))
-  arg)
+  format-string)
 
 (provide 'smart-compile)
 

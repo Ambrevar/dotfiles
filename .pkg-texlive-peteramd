@@ -1,3 +1,4 @@
+amscls
 amsmath
 babel
 beamer
@@ -5,6 +6,7 @@ bigfoot
 carlisle
 cm-super
 collection-basic
+colortbl
 ec
 eplain
 etoolbox
