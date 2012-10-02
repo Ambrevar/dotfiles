@@ -86,10 +86,10 @@ fi
 [ -e "/usr/bin/zathura" ] && alias zat='zathura --fork'
 
 ## Xrandr
-alias xmorphsw='xrandr --output $(xrandr | sed -n "/current/{n;p}" | cut -f1 -d" ") --transform 1.24,0.16,-124,0,1.24,0,0,0.000316,1'
-alias xmorphnone='xrandr --output $(xrandr | sed -n "/current/{n;p}" | cut -f1 -d" ") --transform none'
-alias xmorphzo='xrandr --output $(xrandr | sed -n "/current/{n;p}" | cut -f1 -d" ") --scale 1.2x1.2'
-alias xmorphzi='xrandr --output $(xrandr | sed -n "/current/{n;p}" | cut -f1 -d" ") --scale 0.8x0.8'
+alias xmorphnone='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --transform none'
+alias xmorphsw='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --transform 1.24,0.16,-124,0,1.24,0,0,0.000316,1'
+alias xmorphzo='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --scale 1.2x1.2'
+alias xmorphzi='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --scale 0.8x0.8'
 
 ##==============================================================================
 ## Zsh power aliases
