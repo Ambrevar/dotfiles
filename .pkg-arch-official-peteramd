@@ -168,6 +168,7 @@ gzip
 handbrake
 hdparm
 heirloom-mailx
+help2man
 hicolor-icon-theme
 highlight
 hplip
@@ -354,6 +355,7 @@ lirc-utils
 lm_sensors
 logrotate
 lrzip
+lsb-release
 lshw
 lsof
 ltrace
@@ -384,6 +386,7 @@ mpg123
 mplayer2
 mtdev
 mtools
+mumble
 musicbrainz
 namcap
 nano
@@ -425,6 +428,7 @@ pcre
 perl
 perl-digest-sha1
 perl-error
+perl-locale-gettext
 pinentry
 pixman
 pkg-config
@@ -440,6 +444,7 @@ postgresql-libs
 ppl
 ppp
 procps-ng
+protobuf
 psmisc
 pth
 pwgen
@@ -452,11 +457,11 @@ python2-cairo
 python2-dbus
 python2-distribute
 python2-gobject2
-python2-udiskie
 python-dbus-common
 python-notify
 python-pyelftools
 qpdf
+qt
 randrproto
 ranger
 raptor
@@ -514,6 +519,7 @@ ttf-freefont
 ttf-inconsolata
 ttf-liberation
 tzdata
+udiskie
 udisks
 unixodbc
 unrar
@@ -536,8 +542,6 @@ wget
 which
 wildmidi
 wipe
-wireshark-cli
-wireshark-gtk
 wpa_supplicant
 wv
 wxgtk

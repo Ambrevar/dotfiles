@@ -135,6 +135,7 @@ mpg123
 mplayer2
 msieve
 mtools
+mumble
 mutt-android-patch
 namcap
 nano
@@ -170,7 +171,6 @@ procps-ng
 psmisc
 pwgen
 python2-dbus
-python2-udiskie
 ranger
 reiserfsprogs
 rtorrent
@@ -207,6 +207,7 @@ ttf-droid
 ttf-freefont
 ttf-inconsolata
 ttf-liberation
+udiskie
 unrar
 unrtf
 unzip
@@ -223,7 +224,6 @@ w3m
 wget
 which
 wipe
-wireshark-gtk
 wpa_supplicant
 wv
 xclip
