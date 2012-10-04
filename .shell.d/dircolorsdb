@@ -1,0 +1,177 @@
+# Attribute codes:
+# 00=none 01=bold 04=underscore 05=blink 07=reverse 08=concealed
+# Text color codes:
+# 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
+# Background color codes:
+# 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
+
+# Filesystem
+MULTIHARDLINK 01;37 # regular file with more than one link
+FIFO 01;33 # pipe
+
+ # archives or compressed (bright red)
+.tar 00;31
+.tgz 00;31
+.arj 00;31
+.taz 00;31
+.lzh 00;31
+.lzma 00;31
+.tlz 00;31
+.txz 00;31
+.zip 00;31
+.z 00;31
+.Z 00;31
+.dz 00;31
+.gz 00;31
+.lz 00;31
+.xz 00;31
+.bz2 00;31
+.bz 00;31
+.tbz 00;31
+.tbz2 00;31
+.tz 00;31
+.deb 00;31
+.rpm 00;31
+.jar 00;31
+.war 00;31
+.ear 00;31
+.sar 00;31
+.rar 00;31
+.ace 00;31
+.zoo 00;31
+.cpio 00;31
+.7z 00;31
+.rz 00;31
+
+# Disc image
+.iso 04;31
+
+# image formats
+.jpg   04;33
+.jpeg  04;33
+.gif   04;33
+.bmp   04;33
+.pbm   04;33
+.pgm   04;33
+.ppm   04;33
+.tga   04;33
+.xbm   04;33
+.xpm   04;33
+.tif   04;33
+.tiff  04;33
+.png   04;33
+.svg   04;33
+.svgz  04;33
+.mng   04;33
+.pcx   04;33
+
+# image formats UPPERCASE
+.JPG   04;33
+.JPEG  04;33
+.GIF   04;33
+.BMP   04;33
+.PBM   04;33
+.PGM   04;33
+.PPM   04;33
+.TGA   04;33
+.XBM   04;33
+.XPM   04;33
+.TIF   04;33
+.TIFF  04;33
+.PNG   04;33
+.SVG   04;33
+.SVGZ  04;33
+.MNG   04;33
+.PCX   04;33
+
+# Documents
+.pdf 00;33
+.ps  00;33
+.dvi 00;33
+.0   00;33
+.1   00;33
+.2   00;33
+.3   00;33
+.4   00;33
+.5   00;33
+.6   00;33
+.7   00;33
+.8   00;33
+.9   00;33
+
+# videos
+.mov 00;35
+.mpg 00;35
+.mpeg 00;35
+.m2v 00;35
+.mkv 00;35
+.webm 00;35
+.ogm 00;35
+.mp4 00;35
+.m4v 00;35
+.mp4v 00;35
+.vob 00;35
+.qt 00;35
+.nuv 00;35
+.wmv 00;35
+.asf 00;35
+.rm 00;35
+.rmvb 00;35
+.flc 00;35
+.avi 00;35
+.fli 00;35
+.flv 00;35
+.gl 00;35
+.dl 00;35
+.xcf 00;35
+.xwd 00;35
+.yuv 00;35
+.cgm 00;35
+.emf 00;35
+
+# audio formats
+.aac   04;35
+.au    04;35
+.flac  04;35
+.mid   04;35
+.midi  04;35
+.mka   04;35
+.mp3   04;35
+.mpc   04;35
+.ogg   04;35
+.ra    04;35
+.wav   04;35
+
+# Text files
+.txt 04;37
+.log 04;37
+.tex 04;37
+.srt 04;37
+.sub 04;37
+
+# Web
+.html 04;37
+.htm  04;37
+.css  04;37
+.js   04;37
+
+# Makefile
+.mk 04;36
+.in 04;36
+
+# Prog
+.lua  00;36
+.py   00;36
+.pl   00;36
+.el   00;36
+.c    00;36
+.h    00;36
+.cpp  00;36
+.hpp  00;36
+.cc   00;36
+.hh   00;36
+.sh   00;36
+.bash 00;36
+.zsh  00;36
+.csh  00;36
+.ksh  00;36

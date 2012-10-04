@@ -38,6 +38,11 @@ class CustomApplications(DefaultApps):
 				return self.either(c,  'zathura', 'evince')
 
                         # CUSTOM
+			if f.extension == 'svg':
+				c.flags += 'd'
+				return self.either(c,  'inkscape')
+
+                        # CUSTOM
 			if f.extension == 'm2ts':
 				c.flags += 'd'
 				return self.either(c,  'mplayer2', 'mplayer', 'smplayer', 'vlc')

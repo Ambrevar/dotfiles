@@ -30,7 +30,7 @@ unset TEXDIR
 
 ## Enable color support of ls.
 if [ "$TERM" != "dumb" ]; then
-    eval "`dircolors -b`"
+    eval "`dircolors $HOME/.shell.d/dircolorsdb`"
 fi
 
 ## Terminal
