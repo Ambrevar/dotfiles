@@ -158,9 +158,6 @@ FILELIST=(${FILELIST[*]} ".emacs.d/plugins")
 FILELIST=(${FILELIST[*]} ".emacs.d/snippets")
 FILELIST=(${FILELIST[*]} ".emacs.d/abbrev_defs")
 
-## GnuPG
-FILELIST=(${FILELIST[*]} ".gnupg/gpg-agent.conf")
-
 ## GTK
 FILELIST=(${FILELIST[*]} ".gtkrc-2.0")
 # FILELIST=(${FILELIST[*]} ".config/gtk-3.0/settings.ini")
