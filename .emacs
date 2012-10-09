@@ -239,6 +239,15 @@ browse-url-browser-function 'browse-url-generic)
        auto-mode-alist)
       )
 
+;; Read pl files in prolog mode.
+;; WARNING: this extension is shared with Perl.
+(setq auto-mode-alist
+      (append
+       '(("\\.pl\\'" . prolog-mode)
+         )
+       auto-mode-alist)
+      )
+
 ;; Mutt support.
 (setq auto-mode-alist
       (append
