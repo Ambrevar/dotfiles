@@ -2,26 +2,11 @@
 ## Theme kindly inspired from 
 ## http://nongeekshandbook.blogspot.ie/2009/03/mutt-color-configuration.html
 
-## Emacs colors.
-set my_col_builtin = color75
-set my_col_comment = color242
-set my_col_constant = color105
-set my_col_doc = color28
-set my_col_function = color75
-set my_col_keyword = brightred
-set my_col_preprocessor = color99
-set my_col_string = color39
-set my_col_type = color166
-set my_col_variable = brightyellow
-set my_col_warning = color202
-set my_col_shadow = color250
-set my_col_shadow_bg = color234
-
 ## Colours for items in the index
 color index brightcyan black ~N
 color index brightred black ~O
 ## Hmm, don't like this.
-#color index brightgreen black "~N (~x byers.world)|(~x byers.x)|(~x langly.levallois123.axialys.net)|(~x the.earth.li)"
+#color index brightgreen black "~N (~x byers.world)|(~x byers.x)"
 color index brightyellow black ~F
 color index black green ~T
 color index brightred black ~D

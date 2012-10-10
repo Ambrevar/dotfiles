@@ -156,6 +156,7 @@ set date_format="%y-%m-%d %T"
 set index_format="%2C | %Z [%d] %-30.30F (%-4.4c) %s"
 
 ## Colors
+source "~/.mutt.d/colorset.sh|"
+source "~/.mutt.d/colors.ambrevar"
 #source "/usr/share/doc/mutt/samples/colors.default"
 #source "/usr/share/doc/mutt/samples/colors.linux"
-source "~/.mutt.d/colors.nongeek"
