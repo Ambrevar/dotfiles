@@ -32,7 +32,6 @@ cups
 cyrus-sasl
 dash
 device-mapper
-dhclient
 dhcpcd
 diffutils
 djvulibre
@@ -53,6 +52,7 @@ filesystem
 finch
 findutils
 firefox
+firefox-extension-video-downloadhelper
 flashplugin
 flex
 fortune-mod
@@ -72,6 +72,7 @@ gitg
 glibc
 gnumeric
 gnuplot
+google-talkplugin
 grep
 gsfonts
 gstreamer0.10-ugly-plugins
@@ -135,7 +136,6 @@ mpg123
 mplayer2
 msieve
 mtools
-mumble
 mutt-android-patch
 namcap
 nano

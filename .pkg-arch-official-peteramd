@@ -64,7 +64,6 @@ dbus-glib
 dconf
 desktop-file-utils
 device-mapper
-dhclient
 dhcpcd
 dialog
 diffutils
@@ -355,7 +354,6 @@ lirc-utils
 lm_sensors
 logrotate
 lrzip
-lsb-release
 lshw
 lsof
 ltrace
@@ -386,7 +384,6 @@ mpg123
 mplayer2
 mtdev
 mtools
-mumble
 musicbrainz
 namcap
 nano
@@ -409,6 +406,7 @@ opencore-amr
 openjpeg
 openssh
 openssl
+opus
 orc
 oss
 p11-kit
@@ -444,7 +442,6 @@ postgresql-libs
 ppl
 ppp
 procps-ng
-protobuf
 psmisc
 pth
 pwgen
@@ -461,7 +458,6 @@ python-dbus-common
 python-notify
 python-pyelftools
 qpdf
-qt
 randrproto
 ranger
 raptor
