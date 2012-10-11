@@ -125,6 +125,7 @@
     ("imho" "in my humble opinion" nil 1)
     ("imo" "in my opinion" nil 1)
     ("infos" "informations" nil 1)
+    ("jms" "jamais" nil 1)
     ("lab" "laboratory" nil 1)
     ("labo" "laboratoire" nil 1)
     ("labos" "laboratoires" nil 1)
