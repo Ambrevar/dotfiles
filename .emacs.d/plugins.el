@@ -3,39 +3,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;==============================================================================
-;; smart-compile
-;;==============================================================================
-
-;; (add-to-list 'load-path "~/.emacs.d/plugins/smart-compile")
-;; (require 'smart-compile)
-
-(defun my-c-mode-hook ()
-  ;; (local-set-key (kbd "<f9>") (kbd "C-x C-s M-x smart-compile C-j C-j"))
-  (local-set-key (kbd "<f9>") 'compile)
-  )
-
-(add-hook 'c-mode-hook 'my-c-mode-hook)
-(add-hook 'c++-mode-hook 'my-c-mode-hook)
-(add-hook 'cpp-mode-hook 'my-c-mode-hook)
-
-(require 'compile)
-(add-hook 'c-mode-hook
-          (lambda ()
-            (unless (file-exists-p "Makefile")
-              (set (make-local-variable 'compile-command)
-                   ;; emulate make's .c.o implicit pattern rule, but with
-                   ;; different defaults for the CC, CPPFLAGS, and CFLAGS
-                   ;; variables:
-                   ;; $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
-                   (let ((file (file-name-nondirectory buffer-file-name)))
-                     (format "%s -c -o %s.o %s %s %s"
-                             (or (getenv "CC") "gcc")
-                             (file-name-sans-extension file)
-                             (or (getenv "CPPFLAGS") "-DDEBUG=9")
-                             (or (getenv "CFLAGS") "-ansi -pedantic -Wall -Wextra -Wshadow -lm -g3 -O0")
-                             file))))))
-
-;;==============================================================================
 ;; Yasnippet
 ;;==============================================================================
 ;; Yasnippet is slow when loading snippets from source.
@@ -88,18 +55,6 @@
                             (define-key mediawiki-mode-map (kbd "C-c RET") 'mediawiki-open-page-at-point)
                             (define-key mediawiki-mode-map (kbd "C-c o") 'mediawiki-browse)
 ))
-
-
-;;==============================================================================
-;; HTML
-;;==============================================================================
-
-(add-hook 'html-mode-hook
-          (lambda ()
-            (turn-off-auto-fill)
-            (toggle-truncate-lines)
-))
-
 
 ;;==============================================================================
 ;; DoxyMacs

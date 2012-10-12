@@ -3,12 +3,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;==============================================================================
-;; Completion
-;;==============================================================================
-;(global-set-key (kbd "C-<tab>") 'dabbrev-expand)
-;(define-key minibuffer-local-map (kbd "C-<tab>") 'dabbrev-expand)
-
-;;==============================================================================
 ;; Automode (Mode recognition)
 ;;==============================================================================
 
@@ -179,3 +173,37 @@
 ;;   (set-face-bold-p 'font-latex-sedate-face t)
 ;; )
 ;; (add-hook 'TeX-mode-hook 'my-tex-font-hook)
+
+;;==============================================================================
+;; HTML
+;;==============================================================================
+
+(add-hook 'html-mode-hook
+          (lambda ()
+            (turn-off-auto-fill)
+            (toggle-truncate-lines)
+))
+
+;;==============================================================================
+;; C-mode
+;;==============================================================================
+(add-hook 'c-mode-hook 'my-c-mode-hook)
+(add-hook 'c++-mode-hook 'my-c-mode-hook)
+(add-hook 'cpp-mode-hook 'my-c-mode-hook)
+
+(require 'compile)
+(add-hook 'c-mode-hook
+          (lambda ()
+            (unless (file-exists-p "Makefile")
+              (set (make-local-variable 'compile-command)
+                   ;; emulate make's .c.o implicit pattern rule, but with
+                   ;; different defaults for the CC, CPPFLAGS, and CFLAGS
+                   ;; variables:
+                   ;; $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
+                   (let ((file (file-name-nondirectory buffer-file-name)))
+                     (format "%s -c -o %s.o %s %s %s"
+                             (or (getenv "CC") "gcc")
+                             (file-name-sans-extension file)
+                             (or (getenv "CPPFLAGS") "-DDEBUG=9")
+                             (or (getenv "CFLAGS") "-ansi -pedantic -Wall -Wextra -Wshadow -lm -g3 -O0")
+                             file))))))

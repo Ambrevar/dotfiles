@@ -16,6 +16,11 @@
 
 (add-hook 'minibuffer-setup-hook 'my-minibuffer-setup-hook)
 
+;;==============================================================================
+
+;; Toggle line numbers.
+(global-set-key (kbd "C-<f5>") 'linum-mode)
+
 ;; Copy/Paste to/from clipboard.
 ;; (define-key my-keys-minor-mode-map (kbd "M-p") (kbd "C-u M-! xclip <SPC> -o"))
 (define-key my-keys-minor-mode-map (kbd "C-<f6>") (kbd "M-| xsel <SPC> -p <SPC> -i"))
@@ -23,7 +28,7 @@
 (define-key my-keys-minor-mode-map (kbd "C-<f8>") (kbd "C-u M-! xsel <SPC> -o -b"))
 
 ;; Compilation
-(define-key my-keys-minor-mode-map (kbd "<f10>") 'compile)
+(define-key my-keys-minor-mode-map (kbd "C-<f9>") 'compile)
 ;; (define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
 
 ;; Window resize
@@ -36,7 +41,6 @@
 (define-key my-keys-minor-mode-map (kbd "M-a") 'beginning-of-defun)
 (define-key my-keys-minor-mode-map (kbd "M-e") 'end-of-defun)
 
-
 ;; Modern scrolling
 (global-set-key [next]
                 (lambda () (interactive)
@@ -47,6 +51,9 @@
                 (lambda () (interactive)
                   (condition-case nil (scroll-down)
                     (beginning-of-buffer (goto-char (point-min))))))
+
+;(global-set-key (kbd "C-<tab>") 'dabbrev-expand)
+;(define-key minibuffer-local-map (kbd "C-<tab>") 'dabbrev-expand)
 
 ;;==============================================================================
 ;; General
@@ -63,7 +70,6 @@
 
 ;; Line numbers
 (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
-(global-set-key (kbd "C-<f5>") 'linum-mode)
 ;; (setq linum-format "%-4d ")
 (setq linum-format "%d ")
 (global-linum-mode 1) ;; FIXME: This may generate warnings. Bug?
