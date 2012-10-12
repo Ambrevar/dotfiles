@@ -1,7 +1,56 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs config
-;; 2012-07-18
+;; 2012-10-12
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;==============================================================================
+;; Bindings
+;;==============================================================================
+
+;; We use this minor mode to store custom bindings and use them where we want.
+(defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
+
+(define-minor-mode my-keys-minor-mode
+  "A minor mode so that my key settings override annoying major modes."
+  t " my-keys" 'my-keys-minor-mode-map)
+
+(my-keys-minor-mode 1)
+
+(defun my-minibuffer-setup-hook ()
+  (my-keys-minor-mode 0))
+
+(add-hook 'minibuffer-setup-hook 'my-minibuffer-setup-hook)
+
+;; Copy/Paste to/from clipboard.
+;; (define-key my-keys-minor-mode-map (kbd "M-p") (kbd "C-u M-! xclip <SPC> -o"))
+(define-key my-keys-minor-mode-map (kbd "C-<f6>") (kbd "M-| xsel <SPC> -p <SPC> -i"))
+(define-key my-keys-minor-mode-map (kbd "C-<f7>") (kbd "C-u M-! xsel <SPC> -o"))
+(define-key my-keys-minor-mode-map (kbd "C-<f8>") (kbd "C-u M-! xsel <SPC> -o -b"))
+
+;; Compilation
+(define-key my-keys-minor-mode-map (kbd "<f10>") 'compile)
+;; (define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
+
+;; Window resize
+(define-key my-keys-minor-mode-map (kbd "C-x {") 'shrink-window-horizontally -5)
+(define-key my-keys-minor-mode-map (kbd "C-x }") 'enlarge-window-horizontally 5)
+;; (define-key my-keys-minor-mode-map (kbd "S-C-<down>") 'shrink-window)
+;; (define-key my-keys-minor-mode-map (kbd "S-C-<up>") 'enlarge-window)
+
+(define-key my-keys-minor-mode-map (kbd "M-a") 'beginning-of-defun)
+(define-key my-keys-minor-mode-map (kbd "M-e") 'end-of-defun)
+
+
+;; Modern scrolling
+(global-set-key [next]
+                (lambda () (interactive)
+                  (condition-case nil (scroll-up)
+                    (end-of-buffer (goto-char (point-max))))))
+
+(global-set-key [prior]
+                (lambda () (interactive)
+                  (condition-case nil (scroll-down)
+                    (beginning-of-buffer (goto-char (point-min))))))
 
 ;;==============================================================================
 ;; General
@@ -81,13 +130,17 @@
 ;; Man-mode
 (setenv "MANWIDTH" "80")
 
+;; Windmove mode
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings))
+
 ;; Browser
 (setq browse-url-generic-program (executable-find "luakit")
 browse-url-browser-function 'browse-url-generic)
 
-;;==============================================================================
-;; Theme
-;;==============================================================================
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; THEME
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (set-face-foreground  'font-lock-builtin-face           "color-75" )
 (set-face-bold-p      'font-lock-builtin-face           t ) 
@@ -204,6 +257,10 @@ browse-url-browser-function 'browse-url-generic)
 ;; (set-face-foreground 'success "Green1")
 ;; (set-face-bold-p 'success t)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; MODE OPTIONS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;;==============================================================================
 ;; Completion
 ;;==============================================================================
@@ -272,6 +329,60 @@ browse-url-browser-function 'browse-url-generic)
        auto-mode-alist)
       )
 
+;;==============================================================================
+;; Auto-Insert
+;;==============================================================================
+
+;; autoinsert C/C++ header
+(define-auto-insert
+  (cons "\\.\\([Hh]\\|hh\\|hpp\\)\\'" "My C / C++ header")
+  '(nil
+    "/" (make-string 79 ?*) "\n"
+    " * @file " (file-name-nondirectory buffer-file-name) "\n"
+    " * @date \n"
+    " * @brief \n"
+    " *\n"
+    " " (make-string 78 ?*) "/\n\n"
+    (let* ((noext (substring buffer-file-name 0 (match-beginning 0)))
+           (nopath (file-name-nondirectory noext))
+           (ident (concat (upcase nopath) "_H")))
+      (concat "#ifndef " ident "\n"
+              "#define " ident  " 1\n\n\n"
+              "\n\n#endif // " ident "\n"))
+    ))
+
+;; auto insert C/C++
+(define-auto-insert
+  (cons "\\.\\([Cc]\\|cc\\|cpp\\)\\'" "My C++ implementation")
+  '(nil
+    "/" (make-string 79 ?*) "\n"
+    " * @file " (file-name-nondirectory buffer-file-name) "\n"
+    " * @date \n"
+    " * @brief \n"
+    " *\n"
+    " " (make-string 78 ?*) "/\n\n"
+    (let* ((noext (substring buffer-file-name 0 (match-beginning 0)))
+           (nopath (file-name-nondirectory noext))
+           (ident (concat nopath ".h")))
+      (if (file-exists-p ident)
+          (concat "#include \"" ident "\"\n")))
+    ))
+
+;; auto insert LaTeX Article
+(define-auto-insert
+  (cons "\\.\\(tex\\)\\'" "My LaTeX implementation")
+  '(nil
+    (make-string 80 ?%) "\n"
+    "\\documentclass[11pt]{article}\n"
+    "\\usepackage[utf8]{inputenc}\n"
+    "\\usepackage[T1]{fontenc}\n"
+    "% \\usepackage{lmodern}\n"
+    (make-string 80 ?%) "\n"
+
+    "\\title{Title}\n"
+    "\\author{\\textsc{P.~Neidhardt}}\n"
+    ))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -290,6 +401,8 @@ browse-url-browser-function 'browse-url-generic)
   (let ((fill-column (point-max)))
     (fill-region (region-beginning) (region-end) nil)))
 
+;; Remove duplicate lines. (sort -u)
+;; TODO: finish it.
 (defun remove-duplicates ()
   (interactive)
   ((shell-command (echo blah)))
@@ -333,28 +446,8 @@ browse-url-browser-function 'browse-url-generic)
   ;; put the point in the lowest line and return
   (next-line arg))
 
-
-;;==============================================================================
-;; Select windows
-;;==============================================================================
-
-(defun select-next-window ()
-  "Switch to the next window"
-  (interactive)
-  (select-window (next-window)))
-
-(defun select-previous-window ()
-  "Switch to the previous window"
-  (interactive)
-  (select-window (previous-window)))
-
-(global-set-key (kbd "C-<next>") 'select-next-window)
-(global-set-key (kbd "C-<prior>")  'select-previous-window)
-;; (global-set-key (kbd "M-<up>") 'previous-buffer)
-;; (global-set-key (kbd "M-<down>") 'next-buffer)
-;; (global-set-key [?\e <left>] 'previous-buffer)
-;; (global-set-key (kbd "C-M-<right>") 'next-buffer)
-
+;; Binding.
+(define-key my-keys-minor-mode-map (kbd "C-c C-d") 'duplicate-line)
 
 ;;==============================================================================
 ;; Comment DWIM -- toggle comment line
@@ -375,117 +468,12 @@ the line."
       (comment-or-uncomment-region (line-beginning-position) (line-end-position))
     (comment-dwim arg)))
 
+;; Binding.
+;; TODO: global key ?
 (global-set-key "\M-;" 'comment-dwim-line)
 
-;;==============================================================================
-;; My Keys Minor-Mode
-;;==============================================================================
-
-(defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
-
-;; Duplicate line
-(define-key my-keys-minor-mode-map (kbd "C-d") 'duplicate-line)
-(define-key my-keys-minor-mode-map (kbd "M-a") 'beginning-of-defun)
-(define-key my-keys-minor-mode-map (kbd "M-e") 'end-of-defun)
-
-;; Copy/Paste to/from clipboard.
-;; (define-key my-keys-minor-mode-map (kbd "M-p") (kbd "C-u M-! xclip <SPC> -o"))
-(define-key my-keys-minor-mode-map (kbd "C-<f6>") (kbd "M-| xsel <SPC> -p <SPC> -i"))
-(define-key my-keys-minor-mode-map (kbd "C-<f7>") (kbd "C-u M-! xsel <SPC> -o"))
-(define-key my-keys-minor-mode-map (kbd "C-<f8>") (kbd "C-u M-! xsel <SPC> -o -b"))
-
-;; Modern scrolling
-(global-set-key [next]
-                (lambda () (interactive)
-                  (condition-case nil (scroll-up)
-                    (end-of-buffer (goto-char (point-max))))))
-
-(global-set-key [prior]
-                (lambda () (interactive)
-                  (condition-case nil (scroll-down)
-                    (beginning-of-buffer (goto-char (point-min))))))
-
-;; Compilation
-(define-key my-keys-minor-mode-map (kbd "<f10>") 'compile)
-(define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
-
-;; Window resize
-;; (define-key my-keys-minor-mode-map (kbd "S-C-<right>") 'shrink-window-horizontally)
-;; (define-key my-keys-minor-mode-map (kbd "S-C-<left>") 'enlarge-window-horizontally)
-;; (define-key my-keys-minor-mode-map (kbd "S-C-<down>") 'shrink-window)
-;; (define-key my-keys-minor-mode-map (kbd "S-C-<up>") 'enlarge-window)
-
-
-;; My-Keys options
-(define-minor-mode my-keys-minor-mode
-  "A minor mode so that my key settings override annoying major modes."
-  t " my-keys" 'my-keys-minor-mode-map)
-
-(my-keys-minor-mode 1)
-
-(defun my-minibuffer-setup-hook ()
-  (my-keys-minor-mode 0))
-
-(add-hook 'minibuffer-setup-hook 'my-minibuffer-setup-hook)
-
-;;==============================================================================
-;; Programming
-;;==============================================================================
-
-;; autoinsert C/C++ header
-(define-auto-insert
-  (cons "\\.\\([Hh]\\|hh\\|hpp\\)\\'" "My C / C++ header")
-  '(nil
-    "/" (make-string 79 ?*) "\n"
-    " * @file " (file-name-nondirectory buffer-file-name) "\n"
-    " * @date \n"
-    " * @brief \n"
-    " *\n"
-    " " (make-string 78 ?*) "/\n\n"
-    (let* ((noext (substring buffer-file-name 0 (match-beginning 0)))
-           (nopath (file-name-nondirectory noext))
-           (ident (concat (upcase nopath) "_H")))
-      (concat "#ifndef " ident "\n"
-              "#define " ident  " 1\n\n\n"
-              "\n\n#endif // " ident "\n"))
-    ))
-
-;; auto insert C/C++
-(define-auto-insert
-  (cons "\\.\\([Cc]\\|cc\\|cpp\\)\\'" "My C++ implementation")
-  '(nil
-    "/" (make-string 79 ?*) "\n"
-    " * @file " (file-name-nondirectory buffer-file-name) "\n"
-    " * @date \n"
-    " * @brief \n"
-    " *\n"
-    " " (make-string 78 ?*) "/\n\n"
-    (let* ((noext (substring buffer-file-name 0 (match-beginning 0)))
-           (nopath (file-name-nondirectory noext))
-           (ident (concat nopath ".h")))
-      (if (file-exists-p ident)
-          (concat "#include \"" ident "\"\n")))
-    ))
-
-
-;; auto insert LaTeX Article
-(define-auto-insert
-  (cons "\\.\\(tex\\)\\'" "My LaTeX implementation")
-  '(nil
-    (make-string 80 ?%) "\n"
-    "\\documentclass[11pt]{article}\n"
-    "\\usepackage[utf8]{inputenc}\n"
-    "\\usepackage[T1]{fontenc}\n"
-    "% \\usepackage{lmodern}\n"
-    (make-string 80 ?%) "\n"
-
-    "\\title{Title}\n"
-    "\\author{\\textsc{P.~Neidhardt}}\n"
-    ))
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Plugins
+;; PLUGINS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;==============================================================================
