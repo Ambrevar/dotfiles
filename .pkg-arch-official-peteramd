@@ -11,6 +11,7 @@ apr
 apr-util
 archlinux-keyring
 arch-wiki-lite
+asciidoc
 aspell
 aspell-en
 aspell-fr
@@ -29,7 +30,7 @@ babl
 bash
 bash-completion
 bc
-binutils
+binutils-multilib
 bison
 boost-libs
 bzip2
@@ -70,8 +71,9 @@ diffutils
 dirmngr
 djvulibre
 dnssec-anchors
+docbook-xml
+docbook-xsl
 dosfstools
-doxygen
 dri2proto
 e2fsprogs
 elfutils
@@ -111,8 +113,8 @@ fuse
 gaupol
 gawk
 gc
-gcc
-gcc-libs
+gcc-libs-multilib
+gcc-multilib
 gcolor2
 gconf
 gd
@@ -209,6 +211,8 @@ lcms2
 ldns
 less
 lesspipe
+lib32-gcc-libs
+lib32-glibc
 libarchive
 libass
 libassuan
@@ -427,6 +431,8 @@ perl
 perl-digest-sha1
 perl-error
 perl-locale-gettext
+perl-test-pod
+perl-yaml-syck
 pinentry
 pixman
 pkg-config
@@ -560,6 +566,7 @@ xfsprogs
 xineramaproto
 xkeyboard-config
 xmlrpc-c
+xmlto
 xorg-bdftopcf
 xorg-fonts-alias
 xorg-fonts-encodings

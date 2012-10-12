@@ -1,0 +1,137 @@
+# -*- mode: snippet -*-
+# contributor : Pierre Neidhardt <ambrevar at gmail dot com> 2012-04-27
+# key: beamer
+# group: skeleton
+# name: \documentclass{beamer} ...
+# --
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{beamer} 
+%% \documentclass[xcolor=latex,svgnames,table]{beamer} 
+\usepackage[utf8]{inputenc}
+\usepackage{eurosym}
+\DeclareUnicodeCharacter{20AC}{\euro{}}
+% \usepackage[T1]{fontenc}
+% \usepackage{lmodern}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{${1:Title}}
+\subtitle{${2:Subtitle}}
+\author{${3:\textcolor{structure.fg!60!white}{P.~Neidhardt}}}
+\institute{\textcolor{sidebarSection}{${4:Institute}}}
+
+\let\latexbak\LaTeX
+\renewcommand{\LaTeX}{{\rm \latexbak}}
+
+\let\texbak\TeX
+\renewcommand{\TeX}{{\rm \texbak}}
+
+\def\unix{\textsc{Unix}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Source code.
+\usepackage{listings}
+\lstdefinestyle{customc}{
+  % numbers=left,
+  belowcaptionskip=1\baselineskip,
+  frame=L,
+  xleftmargin=\parindent,
+  % framexleftmargin=\parindent,
+  language=C,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+  numberstyle=\ttfamily
+}
+
+\lstdefinestyle{customasm}{
+  % numbers=left,
+  belowcaptionskip=1\baselineskip,
+  frame=L,
+  xleftmargin=\parindent,
+  language=[x86masm]Assembler,
+  basicstyle=\footnotesize\ttfamily,
+  commentstyle=\itshape\color{purple!40!black},
+}
+
+\lstset{escapechar=@,style=customc}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Beamer config
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Remove navigation bar.
+\beamertemplatenavigationsymbolsempty
+
+%% Colors
+\colorlet{sidebarSection}{orange!100!black}
+\colorlet{sidebarSub}{yellow!100!black}
+
+%% Themes
+\usecolortheme{whale}
+
+%% Background
+\setbeamertemplate{background canvas}[vertical shading][top=white,bottom=white]
+
+%% Bars
+\setbeamercolor{frametitle}{bg=black, fg=white}
+\useoutertheme[height=0pt]{sidebar}
+\setbeamertemplate{sidebar canvas left}[horizontal shading][left=white!40!black,right=black]
+\setbeamercolor{author in sidebar}{fg=red}
+\setbeamercolor{section in sidebar shaded}{fg= sidebarSection}
+\setbeamercolor{subsection in sidebar shaded}{fg= sidebarSub}
+\setbeamercolor{subsection in sidebar}{fg=white}
+\setbeamercolor{title}{fg=white,bg=black}
+\setbeamertemplate{title page}[default][colsep=-4bp,rounded=true,shadow=true] 
+
+%% Blocks
+\setbeamertemplate{blocks}[rounded] [shadow=true]
+\setbeamercolor{block title}{fg=white,bg=structure.fg!80!black}
+\setbeamercolor{block body}{fg=black,bg=structure.bg}
+
+%% Footline
+\setbeamertemplate{footline}[page number]
+
+%% Lists
+%% default, triangle, circle, square, ball
+\setbeamertemplate{itemize item}[ball]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Locale
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[frenchb]{babel}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\titlepage{}
+\end{frame}
+
+
+\def\ftitle{First Title}
+\def\fsubtitle{First Subtitle}
+
+\section{\ftitle}
+\subsection{\fsubtitle}
+\frame[shrink,containsverbatim]{
+\frametitle{\ftitle}
+\framesubtitle{\fsubtitle}
+
+\begin{lstlisting}[caption=Hello world!]
+int main(int argc, char** argv)
+{
+    printf("Hello world\n");
+    return 0;
+}
+
+\end{lstlisting}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

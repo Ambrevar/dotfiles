@@ -154,9 +154,13 @@ FILELIST=(${FILELIST[*]} ".cmus/autosave")
 
 ## Emacs
 FILELIST=(${FILELIST[*]} ".emacs")
-FILELIST=(${FILELIST[*]} ".emacs.d/plugins")
-FILELIST=(${FILELIST[*]} ".emacs.d/snippets")
 FILELIST=(${FILELIST[*]} ".emacs.d/abbrev_defs")
+FILELIST=(${FILELIST[*]} ".emacs.d/functions.el")
+FILELIST=(${FILELIST[*]} ".emacs.d/main.el")
+FILELIST=(${FILELIST[*]} ".emacs.d/modes.el")
+FILELIST=(${FILELIST[*]} ".emacs.d/plugins.el")
+FILELIST=(${FILELIST[*]} ".emacs.d/snippets")
+FILELIST=(${FILELIST[*]} ".emacs.d/theme.el")
 
 ## GTK
 FILELIST=(${FILELIST[*]} ".gtkrc-2.0")

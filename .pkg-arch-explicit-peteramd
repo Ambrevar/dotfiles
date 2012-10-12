@@ -16,7 +16,6 @@ awesome
 bash
 bash-completion
 bashmount
-binutils
 bison
 bzip2
 calc
@@ -36,7 +35,6 @@ dhcpcd
 diffutils
 djvulibre
 dosfstools
-doxygen
 dropbox
 dropbox-cli
 e2fsprogs
@@ -60,8 +58,7 @@ fortune-mod-tbbt
 fossil
 gaupol
 gawk
-gcc
-gcc-libs
+gcc-multilib
 gcolor2
 gdb
 gettext

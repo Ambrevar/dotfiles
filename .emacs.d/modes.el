@@ -1,5 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; MODE OPTIONS
+;; MODES
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;==============================================================================
@@ -128,7 +128,7 @@
 (setq latex-run-command "pdflatex")
 
 ;; TODO: display in TeX/LaTeX only.
-(defun tex-view-pdf ()
+(defun tex-pdf-view ()
   (interactive)
   (shell-command
    (concat "zathura --fork " 
@@ -137,7 +137,15 @@
    )
   )
 
-(defun tex-compress-pdf ()
+;; Replace tex-view
+(define-key my-keys-minor-mode-map (kbd "C-c C-v") 'tex-pdf-view)
+;; Save automatically before compiling.
+(define-key my-keys-minor-mode-map (kbd "C-c C-f") (lambda () (interactive)
+                                                     (save-buffer)
+                                                     (tex-file)
+                                                     ))
+
+(defun tex-pdf-compress ()
   (interactive)
   (defvar file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory buffer-file-name)))
   (defvar file (replace-regexp-in-string "tex" "pdf" (file-name-nondirectory buffer-file-name)))

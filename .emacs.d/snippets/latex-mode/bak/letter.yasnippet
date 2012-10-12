@@ -1,0 +1,313 @@
+# -*- mode: snippet -*-
+# contributor : Xavier Danaux <xdanaux@gmail.com>
+# contributor : Pierre Neidhardt <ambrevar at gmail dot com> 2012-09-10
+# key: letter
+# group: skeleton
+# name: Modern Letter class
+# --
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{marvosym}
+\usepackage{eurosym}
+\DeclareUnicodeCharacter{20AC}{\euro{}}
+% \usepackage[T1]{fontenc}
+% \usepackage{lmodern}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%==============================================================================
+%% Localization
+%%==============================================================================
+%% Supported locales: en, fr.
+\def\locale{en}
+
+%%==============================================================================
+%% Personal Information
+%%==============================================================================
+
+\def\firstname{Pierre}
+\def\familyname{Neidhardt}
+\def\street{}
+\def\postcode{}
+\def\city{}
+\def\country{}
+\def\mobile{\en{(+00) }00 00 00}
+\def\phone{\en{(+00) }00 00 00}
+\def\mail{}
+% \def\institute{} %% Not used.
+
+%%==============================================================================
+%% Recipient Information
+%%==============================================================================
+
+%% Recipient gender. Can be male, female, org.
+\def\gender{${2:male}}
+
+%% Recipient
+\def\recipientfirstname{${3:Firstname}}
+\def\recipientfamilyname{${4:Familyname}}
+\def\recipientinstitute{${5:Institute}}
+\def\recipientstreet{${6:Street}}
+\def\recipientcity{${7:City}}
+\def\recipientpostcode{${8:Postcode}}
+
+%%==============================================================================
+%% Subject
+%%==============================================================================
+
+\def\subject{${9:Subject}}
+
+%%==============================================================================
+%% PDF Metadata
+%%==============================================================================
+
+\def\FileAuthor{\firstname{} \familyname}
+\def\FileTitle{Letter}
+\def\FileSubject{\subject{}}
+% \def\FileKeyWords{\firstname{} \familyname, letter}
+
+%%==============================================================================
+%% General options
+%%==============================================================================
+
+\usepackage{eukdate}
+% \usepackage{lipsum}
+\usepackage{ifthen}
+\usepackage[svgname]{xcolor}
+
+
+%% print if not empty
+\def\pine#1{\def\test{#1}\ifx\test\empty\relax\else #1\fi}
+%% print #2 if not empty.
+\def\pinex#1#2{\ifx#1\empty\relax\else #2\fi}
+
+%% Language
+\def\en #1{}
+\def\fr #1{}
+
+%% If strings are equal. Syntax:
+\ifthenelse{\equal{\locale}{en}}{
+  \def\en #1{#1}}{}
+
+\ifthenelse{\equal{\locale}{fr}}{
+  \def\fr #1{#1}}{}
+
+%% Gender commands.
+\def\male #1{}
+\def\female #1{}
+\def\org #1{}
+
+\ifthenelse{\equal{\gender}{male}}{
+  \def\male #1{#1}}{}
+
+\ifthenelse{\equal{\gender}{female}}{
+  \def\female #1{#1}}{}
+
+\ifthenelse{\equal{\gender}{org}}{
+  \def\org #1{#1}}{}
+
+\def\civility{%
+  \en{\male{M.}\female{Mrs.}}%
+  \fr{\male{Monsieur}\female{Madame}}%
+}
+
+%% Greetings toggle.
+\def\greetings #1{}
+\ifthenelse{
+  \equal{\gender}{org}
+}{}{\def\greetings #1{#1}}
+
+
+%% Compilation options
+\usepackage{ifpdf}
+\ifpdf
+\usepackage[pdftex]{graphicx}
+\else
+\usepackage[dvips]{graphicx}
+\fi
+
+%% Babel
+\fr{\usepackage[frenchb]{babel}}
+
+
+%% Day-of-week translation
+\makeatletter
+\fr{
+  \renewcommand\weekday{%
+    \ifcase\theeuk@date Samedi\or Dimanche\or Lundi\or
+    Mardi\or Mercredi\or Jeudi\or Vendredi\fi}
+  \newcommand\weekdaylower{%
+    \ifcase\theeuk@date samedi\or dimanche\or lundi\or
+    mardi\or mercredi\or jeudi\or vendredi\fi}
+}
+\makeatother
+
+%% Layout
+\usepackage[scale=0.8]{geometry}
+% \en{\setlength{\parindent}{0pt}}
+\fr{
+  \setlength{\parindent}{4ex}
+}
+\addtolength{\parskip}{6pt}
+
+%% Width of the minipage used to display parts of text on the right.
+\newlength{\mpwidth}
+\addtolength{\mpwidth}{0.4\textwidth}
+
+%% Remove page number
+\pagestyle{empty}
+
+%% Fonts
+\renewcommand{\familydefault}{\sfdefault}
+
+%% \let\emphtemp\emph
+%% \renewcommand{\emph}[1]{{\rm\emphtemp{#1}}}
+
+\let\latextemp\LaTeX
+\renewcommand{\LaTeX}{{\rm \latextemp}}
+
+\let\textemp\TeX
+\renewcommand{\TeX}{{\rm \textemp}}
+
+%% PDF Metadata
+\ifpdf
+\usepackage[]{hyperref}
+\hypersetup{
+  pdfauthor   = \FileAuthor,
+  pdftitle    = \FileTitle,
+  pdfsubject  = \FileSubject,
+  %% pdfkeywords = \FileKeyWords,
+  pdfcreator  = \LaTeX,
+  pdfproducer = \LaTeX,
+  pdftex,
+  pdfborder=0,
+  breaklinks,
+  baseurl=http://,
+  pdfpagemode=None,
+  pdfstartview=XYZ,
+  pdfstartpage=1,
+  colorlinks=true,
+  urlcolor=black
+}
+\else
+\usepackage[dvips]{hyperref}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%==============================================================================
+%% Personal particulars
+%%==============================================================================
+
+\en{\hfill}
+\begin{minipage}{\mpwidth}
+  \edef\fullname{\firstname{} \familyname{}}
+  \pinex{\fullname}{{\bfseries \fullname}
+  \vspace{0.5em}\\\\
+  }
+  \small\itshape%
+  \pinex{\street}{\street \\\\}
+  \pinex{\city}{\postcode{} \city\pinex{\country}{ -- \country{}}
+    \vspace{0.5em}\\\\
+  }
+  \pinex{\mobile}{\Mobilefone~\mobile \\\\}
+  \pinex{\phone}{\Telefon~\phone \\\\}
+  \pinex{\mail}{\Letter~\href{mailto:\mail}{\mail}}
+\end{minipage}
+\vspace{\baselineskip}
+
+%%==============================================================================
+%% Recipient particulars
+%%==============================================================================
+
+\en{\noindent}%
+\fr{\hfill}%
+\begin{minipage}{\mpwidth}
+  \edef\recipientfullname{\recipientfirstname{} \recipientfamilyname}
+  \pinex{\fullname}{{\bfseries \recipientfullname}
+  \\\\[0.5\baselineskip]
+  }
+  \pinex{\recipientinstitute}{\recipientinstitute{}
+    \\\\[0.5\baselineskip]
+  }
+  \pinex{\recipientcity}{
+    {\small\itshape
+      \recipientstreet{} \\\\
+      \pine{\recipientpostcode} \recipientcity{} \\\\
+    }
+  }
+\end{minipage}
+
+%%==============================================================================
+%% Date
+%%==============================================================================
+
+\vfill
+\vspace{1em}
+
+\hfill
+\begin{minipage}{\mpwidth}
+  \en{\today}
+  \fr{\city, le \weekdaylower\ \today}
+\end{minipage}\\\\
+
+%%==============================================================================
+%% Object
+%%==============================================================================
+\pinex{\subject}{
+  \noindent
+  \textbf{\en{Object}\fr{Objet}~:}
+  \subject{}.
+  \vspace{1\baselineskip}
+}
+
+
+%%==============================================================================
+%% Content
+%%==============================================================================
+\greetings{
+  \en{Dear}\fr{\male{Cher}\female{Chère}} \civility{} \recipientfamilyname,
+}
+
+\noindent
+Common blah.
+I thank you for your consideration; I am looking forward to hearing from you soon!
+
+%%==============================================================================
+%% Closing
+%%==============================================================================
+
+\vfill
+
+\en{
+  Best regards.
+  %% Yours sincerely,
+}
+\fr{
+  %% Cordialement,
+  Veuillez agréer, \civility{}, l'expression de mes sentiments les meilleurs.
+}
+
+\vspace{\baselineskip}
+\hfill
+\begin{minipage}{\mpwidth}
+  \textbf{\firstname\ \familyname}\newline
+  %\includegraphics[scale=0.75]{signature_blue}
+\end{minipage}
+
+%%==============================================================================
+%% P.S. & Attachment
+%%==============================================================================
+
+\vfill
+
+%% \noindent{\em
+%%   \fr{Ci-joint~: Curriculum Vitæ}
+%%   \en{Attachment: Curriculum Vit\ae}
+%% }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
