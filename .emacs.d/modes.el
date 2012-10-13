@@ -123,9 +123,12 @@
 ;; TeX and LaTeX
 ;;==============================================================================
 
-(setq tex-run-command "pdftex")
+;; Let's use pdftex.
+;; To use GnuPlot we need to allow external application to be called from TeX.
+;; WARNING: the "--shell-escape" option is a potential security issue.
+(setq tex-run-command "pdftex --shell-escape")
 ;; (setq tex-command "pdftex") ; Same as above ?
-(setq latex-run-command "pdflatex")
+(setq latex-run-command "pdflatex --shell-escape")
 
 ;; TODO: display in TeX/LaTeX only.
 (defun tex-pdf-view ()
