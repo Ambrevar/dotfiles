@@ -188,6 +188,7 @@
     ("soeur" "sœur" nil 1)
     ("soeurs" "sœurs" nil 1)
     ("ssi" "si et seulement si" nil 1)
+    ("st" "sont" nil 1)
     ("stp" "s'il te plaît" nil 1)
     ("svp" "s'il vous plaît" nil 1)
     ("teh" "the" nil 1)
