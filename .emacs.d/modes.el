@@ -167,6 +167,37 @@
    )
   )
 
+(defun tex-clean ()
+  (interactive)
+  (defvar file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory buffer-file-name)))
+  (shell-command
+   (concat "rm -f "
+           file-noext
+           ".aux "
+           file-noext
+           ".idx "
+           file-noext
+           ".ilg "
+           file-noext
+           ".ind "
+           file-noext
+           ".lof "
+           file-noext
+           ".log "
+           file-noext
+           ".nav "
+           file-noext
+           ".out "
+           file-noext
+           ".snm "
+           file-noext
+           ".tns "
+           file-noext
+           ".toc "
+           )
+   )
+  )
+
 ;; ;; Add '--shell-escape' switch to compilation command (useful for using GnuPlot from TikZ)
 ;; (eval-after-load "tex"
 ;;   '(setcdr (assoc "LaTeX" TeX-command-list)
