@@ -1,7 +1,7 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                               Author: Ambrevar                               #
-#                               Date: 2012-09-05                               #
+#                               Date: 2012-10-13                               #
 ################################################################################
 
 Synopsis
@@ -55,10 +55,22 @@ Emacs
 *****
 Extra deps: emacs-lua-mode, emacs-mediawiki, emacs-yasnippet.
 
-Some keybindings and custom colors (for 256-colors terminals). Extended file
-support (shell files, mutt mails, Arch Linux PKGBUILDs). Some customization --
-columns, kill whole line, etc. Some plugins customization too (LaTeX, Mediawiki,
-snippets). Some custom functions (duplicate line, unfill-paragraph, etc.).
+Configuration for C programming. Bindings to compile either from makefile or
+from a custom command if no makefile is found.
+
+TeX and LaTeX mode customization: no AucTeX required, PDF view, temp file clean
+function, PDF compression.
+
+Custom color theme with 256 colors.
+
+Extended file support (shell files, Mutt mails, Arch Linux PKGBUILDs).
+
+Some customization -- columns, kill whole line, etc.
+
+Some custom functions (duplicate line, unfill-paragraph, etc.).
+
+A lot of code snippets, especially for LaTeX. Contains document template, plot
+generation, pie chart generation, and others.
 
 Luakit
 ******
@@ -68,21 +80,23 @@ toggle. Adblock script (must be downloaded manually or from .homeinit).
 Mutt
 ****
 Compile options: IMAP and SMTP support.
-Extra deps: antiword, fortune, sxiv, w3m.
+Extra deps: antiword, ccrypt, fortune, sxiv, w3m.
 
 This one is not easy to get into it. I managed to get multiple accounts with
-pgp-encrypted passwords working, which means there is no plain password stored
-on the disk. As a result, I just get prompted for a main password on Mutt
-startup, then everything works out of the box.
-
-I use GPG for password management because it is a Mutt dependency anyway. It
-could also work well with ccrypt.
+encrypted passwords working, which means there is no plain password stored on
+the disk. As a result, I just get prompted for a main password on Mutt startup,
+then everything works out of the box.  I use ccrypt for password management
+because it is much more simple than gnupg.
 
 I'm using embedded IMAP and SMTP services -- you must provide the required
 compilation options.
 
 Some customization: custom index view, good Emacs integration (see .emacs),
 custom theme (matches Emacs colors), various tweaks.
+
+Thanks to the coloset.sh script, Mutt will check terminal color support and load
+colors appropriately. Therefore this configuration should work on any terminal,
+should it have 256-colors support or not.
 
 URxvt has an URL support that works also for Mutt. For other terminals, you
 might consider using the 'urlview' plugin for Mutt.
@@ -118,6 +132,15 @@ folder .shell.d/, whose files get sourced by both bash and zsh.  Bash-specific
 and zsh-specific options are in dedicated files ending with the apropriate shell
 name.
 
+TeX
+***
+
+A lot of plainTeX and LaTeX macros. Among others: pie charts, dynamic plots with
+input file file and trend.
+
+plainTeX macros are in the 'texmf' folder. LaTeX macros are all bundled into
+Emacs snippets for the sake of portability.
+
 URxvt
 *****
 Extra deps: Muennich's perl extensions (keyboard-select, clipboard)
@@ -144,9 +167,6 @@ Shell: some custom functions would need auto-completion.
 
 URxvt: using the paste function from Muennich's clipboard on the same terminal
 where text was copied will make xsel crash.
-
-Zathura: app will hang forever sometimes (when document is being regenerated, or
-when launched from Ranger -- not sure).
 
 ################################################################################
 Complete applist
