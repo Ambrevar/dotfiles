@@ -55,7 +55,8 @@ search_engines = {
     -- sourceforge = "http://sf.net/search/?words=%s",
     arch           = "http://wiki.archlinux.org/index.php?title=Special%%3ASearch&search=%s&go=Go",
     aur            = "https://aur.archlinux.org/packages.php?O=0&K=%s&do_Search=Go",
-    google         = "http://google.com/search?q=%s",
+    ctan           = "http://www.ctan.org/search/?search=%s&search_type=description",
+    g              = "http://google.com/search?q=%s",
     gm             = "https://maps.google.com/maps?q=%s",
     imdb           = "http://imdb.com/find?s=all&q=%s", -- Note that imdb is messy with spaces.
     torrent        = "http://torrentz.eu/search?f=%s",
@@ -70,7 +71,7 @@ search_engines = {
 }
 
 -- Set google as fallback search engine
-search_engines.default = search_engines.google
+search_engines.default = search_engines.g
 -- Use this instead to disable auto-searching
 --search_engines.default = "%s"
 

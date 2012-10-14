@@ -1,36 +1,35 @@
 # -*- mode: snippet -*-
-# contributor: Mads D. Kristensen <madsdk@gmail.com>
-# contributor : Song Qiang <tsiangsung@gmail.com>
-# contributor : Pierre Neidhardt <ambrevar at gmail dot com> 2012-08-22
+# contributor : Pierre Neidhardt <ambrevar at gmail dot com> 2012-10-14
 # key: article
 # group: skeleton
-# name: \documentclass{article} ...
+# name: full article template
 # --
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass[11pt]{article}
+\documentclass[10pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{eurosym}
 \DeclareUnicodeCharacter{20AC}{\euro{}}
 \DeclareUnicodeCharacter{00AB}{\og{}}
 \DeclareUnicodeCharacter{00BB}{\fg{}}
-% \usepackage[T1]{fontenc}
-% \usepackage{lmodern}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title{${1:Title}}
-\author{${2:\textsc{P.~Neidhardt}}}
+\title{Title}
+\author{\textsc{P.~Neidhardt}}
 
 %%=============================================================================
 
-\usepackage[]{amsmath,amssymb,amsfonts}
-\usepackage[]{gensymb}
-\usepackage[]{geometry}
-\usepackage[]{graphicx}
-\usepackage[]{listings}
-\usepackage[]{needspace}
-\usepackage[svgnames]{xcolor}
-\usepackage{tikz}
+\usepackage{amsmath,amssymb,amsfonts}
 \usepackage{calc}
+\usepackage{gensymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{needspace}
+\usepackage[svgnames]{xcolor}
+\usepackage{xspace}
+
+%% Load after xcolor.
+\usepackage{tikz}
 
 %% Load last.
 \usepackage[]{hyperref}
@@ -72,28 +71,29 @@
 
 \lstset{escapechar=@,style=customc}
 
-%% Misc.
-\newcommand{\fancybox}[2]{
-  \begin{figure}[h]
-    \centering
-    \caption{#1}
-    \begin{tikzpicture}
-      \node[draw,rounded corners]{#2};
-    \end{tikzpicture}
-  \end{figure}
+%% Commands
+\newcommand{\fancybox}[1]{
+  \begin{tikzpicture}
+    \node[draw,rounded corners]{#1};
+  \end{tikzpicture}
 }
 
 \newcommand{\comment}[1]{}
-% \renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
-% \renewcommand{\arraystretch}{1.5}
 
+%% Options
+% \renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
+\renewcommand{\arraystretch}{1.4}
+%% \renewcommand{\familydefault}{\sfdefault}
+
+%% Aliases
 \let\latexbak\LaTeX
-\renewcommand{\LaTeX}{{\rm \latexbak}}
+\renewcommand{\LaTeX}{\textrm{\latexbak}\xspace}
 
 \let\texbak\TeX
-\renewcommand{\TeX}{{\rm \texbak}}
+\renewcommand{\TeX}{\textrm{\texbak}\xspace}
 
-\def\unix{\textsc{Unix}}
+\def\unix{\textsc{Unix}\xspace}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
