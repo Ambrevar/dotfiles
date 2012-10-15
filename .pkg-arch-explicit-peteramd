@@ -47,7 +47,6 @@ fbv
 feh
 file
 filesystem
-finch
 findutils
 firefox
 firefox-extension-video-downloadhelper
@@ -55,7 +54,6 @@ flashplugin
 flex
 fortune-mod
 fortune-mod-tbbt
-fossil
 gaupol
 gawk
 gcc-multilib
@@ -125,13 +123,11 @@ man-db
 man-pages
 mdadm
 mediainfo
-mencoder
 mkvtoolnix-cli
 mkvtoolnix-gtk
 movgrab
 mpg123
 mplayer2
-msieve
 mtools
 mutt-android-patch
 namcap
@@ -141,7 +137,6 @@ ncdu
 netcfg
 net-tools
 ngrep
-nmap
 ntfs-3g
 ntfsprogs
 numlockx
@@ -215,7 +210,6 @@ util-linux
 valgrind
 vi
 vicious
-vim
 vlock
 w3m
 wget

@@ -66,6 +66,7 @@ wget https://easylist-downloads.adblockplus.org/easylist.txt \
 
 ## Bookmarks
 ln -s "${SOURCEDIR}/BOOKMARKS/bookmarks.db" "$XDG_DATA_HOME/luakit/bookmarks.db"
+ln -s "${SOURCEDIR}/BOOKMARKS/quickmarks" "$XDG_DATA_HOME/luakit/quickmarks"
 
 
 echo

@@ -174,7 +174,6 @@ FILELIST=(${FILELIST[*]} ".homeinit")
 
 ## Luakit
 FILELIST=(${FILELIST[*]} ".config/luakit/rc.lua")
-FILELIST=(${FILELIST[*]} ".config/luakit/binds.lua")
 FILELIST=(${FILELIST[*]} ".config/luakit/globals.lua")
 FILELIST=(${FILELIST[*]} ".luakit_bookmarks_converter.lua")
 
