@@ -15,7 +15,7 @@
 ################################################################################
 ## The following is used as first-run setup.
 
-SOURCEDIR="${HOME}/Dropbox/Personal"
+SOURCEDIR="${HOME}/personal/DataPerso"
 
 ## Mutt
 echo "==> Mutt"
@@ -25,7 +25,7 @@ echo
 
 ## Taskwarrior
 echo "==> Taskwarrior"
-[ ! -e ~/.task ] && ln -s "${SOURCEDIR}/TODO" "~/.task"
+[ ! -e ~/.task ] && ln -s "${SOURCEDIR}/TODO" "${HOME}/.task"
 echo
 
 ## Awesome
