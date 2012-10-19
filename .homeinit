@@ -15,7 +15,7 @@
 ################################################################################
 ## The following is used as first-run setup.
 
-SOURCEDIR="${HOME}/personal/DataPerso"
+SOURCEDIR="${HOME}/personal/dataperso"
 
 ## Mutt
 echo "==> Mutt"
