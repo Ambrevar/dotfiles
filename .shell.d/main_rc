@@ -9,7 +9,7 @@
 umask 027
 
 ## Path
-export PATH=.:$PATH
+# export PATH=.:$PATH
 
 ## TeXlive
 TEXDIR="${TEXDIR:-/usr/local/texlive}"

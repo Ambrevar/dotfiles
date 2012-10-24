@@ -68,9 +68,9 @@
    (font-lock-add-keywords
     mode
     '(
-      ("[^[:digit:][:space:]][[:space:]]*\\(-\\)[[:digit:]]+" 1 font-lock-constant-face)
-      ("\\(0x[[:digit:]a-fA-F]+\\)[^[:alnum:]_]" 1 font-lock-constant-face)
-      ("[^[:alnum:]_]\\([[:digit:]]*\\.?[[:digit:]]+\\)[^[:alnum:]_.]" 1 font-lock-constant-face)
+      ;; ("[^[:digit:][:space:]][[:space:]]*\\(-\\)[[:digit:]]+" 1 font-lock-constant-face)
+      ;; ("\\(0x[[:digit:]a-fA-F]+\\)[^[:alnum:]_]" 1 font-lock-constant-face)
+      ;; ("[^[:alnum:]_]\\([[:digit:]]*\\.?[[:digit:]]+\\)[^[:alnum:]_.]" 1 font-lock-constant-face)
       ("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
       ("\\<\\(TODO\\):" 1 font-lock-warning-face prepend)
       ("\\<\\(WARNING\\):" 1 font-lock-warning-face prepend)

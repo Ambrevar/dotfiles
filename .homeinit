@@ -19,13 +19,13 @@ SOURCEDIR="${HOME}/personal/dataperso"
 
 ## Mutt
 echo "==> Mutt"
-[ ! -e ~/.mutt ] && ln -s "$(realpath ${SOURCEDIR}/MAILS)" "${HOME}/.mutt"
+ln -sf "$(realpath ${SOURCEDIR}/MAILS)" "${HOME}/.mutt"
 mkdir -p "${HOME}/.mutt.d/hcache"
 echo
 
 ## Taskwarrior
 echo "==> Taskwarrior"
-[ ! -e ~/.task ] && ln -s "${SOURCEDIR}/TODO" "${HOME}/.task"
+ln -sf "${SOURCEDIR}/TODO" "${HOME}/.task"
 echo
 
 ## Awesome
@@ -65,8 +65,7 @@ wget https://easylist-downloads.adblockplus.org/easylist.txt \
 # https://indonesianadblockrules.googlecode.com/hg/subscriptions/abpindo.txt # AB Pindo (Indonesian)
 
 ## Bookmarks
-ln -s "${SOURCEDIR}/BOOKMARKS/bookmarks.db" "$XDG_DATA_HOME/luakit/bookmarks.db"
-ln -s "${SOURCEDIR}/BOOKMARKS/quickmarks" "$XDG_DATA_HOME/luakit/quickmarks"
-
+ln -sf "${SOURCEDIR}/BOOKMARKS/bookmarks.db" "$XDG_DATA_HOME/luakit/bookmarks.db"
+ln -sf "${SOURCEDIR}/BOOKMARKS/quickmarks" "$XDG_DATA_HOME/luakit/quickmarks"
 
 echo

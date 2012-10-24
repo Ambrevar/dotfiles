@@ -6,3 +6,5 @@
 [alias]
 	s = status -uno
 	c = commit -a
+[push]
+	default = simple
