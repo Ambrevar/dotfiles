@@ -249,3 +249,8 @@
                              (or (getenv "CPPFLAGS") "-DDEBUG=9")
                              (or (getenv "CFLAGS") "-ansi -pedantic -Wall -Wextra -Wshadow -lm -g3 -O0")
                              file))))))
+
+;;==============================================================================
+;; Common LISP
+;;==============================================================================
+(setq inferior-lisp-program "clisp")
