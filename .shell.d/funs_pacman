@@ -5,22 +5,19 @@
 
 ## TODO: completion does not work as is. It requires pacman arguments like -S or
 ## -Q.  There should be a way to use it.
-
 # if [ "zsh" = "$SHELL_CURRENT" ]; then
 #     compdef _pacman pacman-deps
 # if [ "bash" = "$SHELL_CURRENT" ]; then
 #     complete -o default -o nospace -F _pacman pacman-deps
 # fi
 
-## This function gets the pacman variables when necessary.
-
-## Note: some functions uses pacman localized output. It should work in any
-## case. You should always call _pacman_unset_vars in the end.
-
+## This function gets the pacman variables when necessary.  Note: some functions
+## uses pacman localized output. It should work in any case. You should always
+## call _pacman_unset_vars in the end.
 _pacman_set_vars()
 {
     local pacman_var_list="$(pacman -Qi tzdata | cut -f1 -d':')"
-    if [ -z "$pacman_var_list"  ];then
+    if [ -z "$pacman_var_list" ] ; then
         echo "Could not get pacman's variables."
         return 2
     fi 
@@ -216,15 +213,18 @@ pacman-size()
 
     _pacman_set_vars
 
+    ## We use external variable for awk to fit current locales.
     local RESULT="$(eval "${CMD} $@" 2>/dev/null | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
 '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | eval "$SORT" | eval "$SORT_SIZE")"
 
     echo "$RESULT"
 
-## Print total size.
+    ## Print total size.
     echo "$RESULT" | awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}'
 
-## One line version. ~ same performance.
+## One line version. Approximately same performance. Note the combinaion of
+## 'tee' and >(awk ...) to write the detailed list to standard output and to
+## pass it to awk.
 # eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
 #     '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | sort -u -k3 \
 # | tee >(awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}')
@@ -296,13 +296,17 @@ pacman-deps()
     if [ $OPT_REC -eq 0 ]; then
         eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_deps" '$0 ~ filter {gsub(/[>=<][^ ]*/,"",$2) ; gsub(/ +/,"\n",$2) ; print $2}' | sort -u
     else
-        local FULLDEPLIST
-        FULLDEPLIST=$(pacman -Qi | grep "${pacman_name}\|${pacman_deps}" | sed -n "/${pacman_name}/{s/.*: \(.*\)/\1:/;h;n;s/${pacman_deps}.*: //;s/[>=<][^ ]*//g;H;x;s/\n//;p}")
+        ## Recursive dependencies.
 
-        ## Note: using a table is important for Zsh compatibility.
+        ## Store the complete DB into a variable to speed up access.
+        local FULLDEPLIST
+        FULLDEPLIST=$(eval "${CMD}" | grep "${pacman_name}\|${pacman_deps}" | sed -n "/${pacman_name}/{s/.*: \(.*\)/\1:/;h;n;s/${pacman_deps}.*: //;s/[>=<][^ ]*//g;H;x;s/\n//;p}")
+
+        ## Note: using a table is important for Ksh/Zsh compatibility.
         local DEPLIST
         DEPLIST=()
 
+        ## Check if argument $1 is in DEPLIST.
         _not-in-array()
         {
             if [ ${#DEPLIST} -eq 0 ]; then
@@ -318,6 +322,10 @@ pacman-deps()
             fi
         }
 
+        ## This function calls recursively over the dependencies. It stops
+        ## whenever a package has already be handled, or when it has no
+        ## dependency. Note: 'grep | cut' is a little faster than 'sed' for
+        ## simple stuff. Since it is a loop, it is quite a performance boost.
         _pacman-deps-rec()
         {
             local SUBDEPLIST
@@ -340,6 +348,7 @@ pacman-deps()
             _pacman-deps-rec "$@"
         done
 
+        ## There might be duplicates, so we remove them with the '-u' parameter of sort.
         sed 's/ /\n/g' <(echo "${DEPLIST[*]}") | sort -u
     fi
 

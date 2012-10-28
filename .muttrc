@@ -1,23 +1,24 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Mutt Configuration
-## Date 2012-07-04
+## Date 2012-10-28
 ################################################################################
 
 ## Note on folders:
 ## These folders are assumed to exist:
-## -~/.mutt   = personal stuff (contacts, account information)
-## -~/.mutt.d = public stuff (cache, theme, mailcap)
-## Optional:
-## -~/.mutt.d/hcache = see header_cache below.
+## ~/.mutt: personal stuff (contacts, account information)
+## ~/.mutt.d: public stuff (cache, theme, mailcap)
+## ~/.mutt.d/hcache: see header_cache below.
 
 ##-------------------------------------------------------------------------------
 ## General options
 ##-------------------------------------------------------------------------------
 
 ## TODO: why doesn't the $EDITOR variable work for connection to emacs daemon?
-# set editor="emacsclient -a \"\" -t"
+## Seems like $EDITOR is internal to Mutt, whereas variable set between
+## backquotes are external.
 set editor=`echo \$EDITOR`
+# set editor="emacsclient -a \"\" -t"
 
 ## Mailcap
 set mailcap_path = ~/.mutt.d/mailcap
@@ -72,8 +73,8 @@ set my_ac_university=university
 ##
 ## CCRYPT:
 ##  ccencrypt .mutt-pwds
-# source "gpg2 -dq ~/.mutt-pwds.gpg |"
 source "ccat ~/.mutt-pwds.cpt |"
+# source "gpg2 -dq ~/.mutt-pwds.gpg |"
 
 ## Accounts list
 folder-hook '$my_ac_personal' 'source ~/.mutt/$my_ac_personal'
@@ -81,9 +82,9 @@ folder-hook '$my_ac_work' 'source ~/.mutt/$my_ac_work'
 folder-hook '$my_ac_university' 'source ~/.mutt/$my_ac_university'
 
 ## Switch to default account on startup
+source "~/.mutt/$my_ac_university"
 # source "~/.mutt/$my_ac_personal"
 # source "~/.mutt/$my_ac_work"
-source "~/.mutt/$my_ac_university"
 
 ## Keys
 macro index <f2> '<sync-mailbox><enter-command>source ~/.mutt/$my_ac_personal<enter><change-folder>!<enter>'
