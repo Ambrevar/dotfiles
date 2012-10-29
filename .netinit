@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 ################################################################################
 ## Custom network initialization script.
-## 2012-09-04
+## 2012-10-29
 ################################################################################
 ## Deps: wpa_supplicant, ccrypt
 ##
@@ -27,15 +27,15 @@ NET_INTERFACE=wlan0
 WPA_SUPPLICANT_CONF="$(ccat /etc/wpa_supplicant.conf.cpt)"
 TIMEOUT_LIMIT=500
 
-## Clean running processes if any.
-pkill dhcpcd
 pkill wpa_supplicant
 
-## In case network inteface is not up.
-ip link set ${NET_INTERFACE} up
+if [ "$OSTYPE" = "linux-gnu" ] ; then
+    ## Clean running processes if any.
+    pkill dhcpcd
 
-## Connection.
-if [ $# -eq 0 ]; then
+    ## In case network inteface is not up.
+    ip link set ${NET_INTERFACE} up
+
     # Associate if needed.
     if [ -n "$(iwconfig ${NET_INTERFACE} | grep 'Not-Associated')" ]; then
         wpa_supplicant -B -i ${NET_INTERFACE} -D wext -c <(echo "${WPA_SUPPLICANT_CONF}")
@@ -46,8 +46,27 @@ if [ $# -eq 0 ]; then
     while [ -n "$(iwconfig ${NET_INTERFACE} | grep 'off/any')" ] && [ $i -lt $TIMEOUT_LIMIT ] ; do
         i=$(($i+1))
     done
+
+    ## Get IP.
+    dhcpcd ${NET_INTERFACE}
+
+else
+## BSD
+## Same comments as for Linux.
+
+    pkill dhclient
+    pkill wpa_supplicant
+
+    ifconfig wlan0 up
+
+    if [ -n "$(ifconfig ${NET_INTERFACE} | grep 'ssid ""')" ]; then
+        wpa_supplicant -B -i ${NET_INTERFACE} -c <(echo "${WPA_SUPPLICANT_CONF}")
+    fi
+
+    i=0
+    while [ -n "$(ifconfig ${NET_INTERFACE} | grep 'ssid ""')" ] && [ $i -lt $TIMEOUT_LIMIT ] ; do
+        i=$(($i+1))
+    done
+
+    dhclient ${NET_INTERFACE}
 fi
-
-## Get IP.
-dhcpcd ${NET_INTERFACE}
-

@@ -1,7 +1,7 @@
 #!/bin/sh
 ################################################################################
 ## XINITRC
-## 2012-08-31
+## 2012-10-29
 ################################################################################
 
 ## Config (for URxvt)
@@ -9,16 +9,19 @@
 
 ## Useful tools
 numlockx on
-[ -n "$(amixer | grep PCM)" ] && amixer set PCM 80%
+
+ if [ "$OSTYPE" = "linux-gnu" ] ; then
+    [ -n "$(amixer | grep PCM)" ] && amixer set PCM 80%
+    udiskie &
+fi
 
 ##==============================================================================
 ## Launch session
 ##==============================================================================
-udiskie &
 exec awesome
 
+## Crappy desktops
 # exec startkde
-
 # exec ck-launch-session startlxde
 # exec ck-launch-session gnome-session
 

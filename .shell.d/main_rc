@@ -36,6 +36,9 @@ unset TEXDIR
 ## Enable color support of ls.
 if [ "$TERM" != "dumb" ] && [ "$OSTYPE" = "linux-gnu" ]; then
     eval "`dircolors $HOME/.shell.d/dircolorsdb`"
+elif [ "$TERM" != "dumb" ]; then
+    export LSCOLORS="Ex"
+    # export LSCOLORS="ExfxcxDxCxdxdxCxCxECEh"
 fi
 
 ## Terminal
