@@ -52,7 +52,7 @@ fi
 
 ## Manpage.
 # export MANPAGER="less -s"
-export MANPAGER="less -sNP '?f%f .?m(file %i of %m) .?ltlines %lt-%lb?L/%L. .byte %bB?s/%s. ?e(END) :?pB%pB\%..%t'"
+export MANPAGER="less -sP '?f%f .?m(file %i of %m) .?ltlines %lt-%lb?L/%L. .byte %bB?s/%s. ?e(END) :?pB%pB\%..%t'"
 export MANWIDTH=80
 
 ## Less config. -R is needed for lesspipe.
