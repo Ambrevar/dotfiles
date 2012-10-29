@@ -12,7 +12,7 @@
 ## Sourcing
 ##==============================================================================
 
-SHELL_CURRENT="$(ps | awk -v shellpid=$$ '$0 ~ shellpid {print $4}')"
+SHELL_CURRENT="$(ps -o command="" $$)"
 SHELL_DIR="$HOME/.shell.d"
 
 ## Should be sourced first.

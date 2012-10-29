@@ -7,12 +7,7 @@
 ## Sourcing
 ##==============================================================================
 
-## TODO: is it possible to unify BSD and GNU here?
-if [ "$OSTYPE" = "linux-gnu" ]; then
-    SHELL_CURRENT="$(ps -o command hp $$ )"
-else
-    SHELL_CURRENT="$(ps -o command="" $$)"
-fi
+SHELL_CURRENT="$(ps -o command="" $$)"
 SHELL_DIR="$HOME/.shell.d"
 
 ## Should be sourced first.

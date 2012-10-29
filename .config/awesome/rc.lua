@@ -3,9 +3,9 @@
 -- Date 2012-10-28
 --------------------------------------------------------------------------------
 
--- Get OS
+-- Get OS. Take care to read one line only, skipping end of line.
 local f = io.popen("uname")
-local ostype = f:read("*a")
+local ostype = f:read("*l")
 f:close()
 
 -- Standard awesome library
@@ -42,7 +42,8 @@ end
 -- Handle runtime errors after startup
 do
    local in_error = false
-   awesome.add_signal("debug::error", function (err)
+   awesome.add_signal("debug::error", 
+                      function (err)
                          -- Make sure we don't go into an endless error loop
                          if in_error then return end
                          in_error = true
@@ -51,7 +52,7 @@ do
                                           title = "Oops, an error happened!",
                                           text = err })
                          in_error = false
-                                      end)
+                      end)
 end
 
 --------------------------------------------------------------------------------
@@ -135,11 +136,11 @@ if ostype == "Linux" then
    -- If 'amixer' is not installed, status will never display.
    local volpf = io.popen("amixer | grep PCM 2>/dev/null")
    local volpl = volpf:read("*a")
+   volpf:close()
    if volpl ~= "" then
       volpwidget = widget({ type = "textbox" })
       vicious.register(volpwidget, vicious.widgets.volume, "PCM $1%", 1, "PCM")
    end
-   volpf:close()
  
    -- Battery
    local batf = io.popen("ls '/sys/class/power_supply' 2>/dev/null")
