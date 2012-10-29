@@ -19,8 +19,12 @@ if [ -d "${TEXDIR}" ]; then
     TEXFOLDER="${TEXDIR}/${TEXYEAR}/bin/${TEXDISTRO}/"
     if [ -d "${TEXFOLDER}" ]; then
         export PATH=${TEXFOLDER}:$PATH
-        export MANPATH=${TEXDIR}/${TEXYEAR}/texmf/doc/man:$MANPATH
         export INFOPATH=${TEXDIR}/${TEXYEAR}/texmf/doc/info:$INFOPATH
+        
+        ## BSD uses 'manpath' utility, so MANPATH variable may be empty.
+        if [ "$OSTYPE" = "linux-gnu" ]; then
+            export MANPATH=${TEXDIR}/${TEXYEAR}/texmf/doc/man:$MANPATH
+        fi
     fi
     unset TEXYEAR
     unset TEXDISTRO
@@ -29,27 +33,32 @@ fi
 unset TEXDIR
 
 ## Enable color support of ls.
-if [ "$TERM" != "dumb" ]; then
+if [ "$TERM" != "dumb" ] && [ "$OSTYPE" = "linux-gnu" ]; then
     eval "`dircolors $HOME/.shell.d/dircolorsdb`"
 fi
 
 ## Terminal
 ## WARNING: this is always a bad idea!
-# if [[ "$TERM" = "*rxvt*" ]]; then 
-#     export TERM="rxvt-unicode"
-# fi
+if [[ "$TERM" = *rxvt* ]]; then 
+    export TERM="rxvt-unicode-256color"
+fi
 
 ## Make 'less' more friendly for non-text input files, see lesspipe(1).
 [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
 
 ## Manpage.
 export MANPAGER="less -s"
-export MANWIDTH=80
+if [ "$OSTYPE" = "linux-gnu" ]; then
+    export MANWIDTH=80
+else
+    export MANWIDTH=75
+fi
 
 ## Less config. -R is needed for lesspipe.
 export LESS=' -R '
 
 ## Time display (with ls command for example)
+## TODO: BSD version?
 export TIME_STYLE=+"|%Y-%m-%d %H:%M:%S|"
 
 ## System locale
@@ -66,7 +75,8 @@ fi
 export EDITOR
 
 ## Internet Browser
-[ -e "/usr/bin/luakit" ] && export BROWSER="luakit"
+type luakit > /dev/null
+[ $? ] && export BROWSER="luakit"
 
 ## Title
 ## If this is an xterm set the title to user@host:dir

@@ -7,7 +7,12 @@
 ## Sourcing
 ##==============================================================================
 
-SHELL_CURRENT="$(ps | awk -v shellpid=$$ '$0 ~ shellpid {print $4}')"
+## TODO: is it possible to unify BSD and GNU here?
+if [ "$OSTYPE" = "linux-gnu" ]; then
+    SHELL_CURRENT="$(ps | awk -v shellpid=$$ '$0 ~ shellpid {print $4}')"
+else
+    SHELL_CURRENT="$(ps -c | awk -v shellpid=$$ '$0 ~ shellpid {print $5}')"
+fi
 SHELL_DIR="$HOME/.shell.d"
 
 ## Should be sourced first.

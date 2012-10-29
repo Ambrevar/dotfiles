@@ -1,0 +1,42 @@
+## -*- mode:sh -*- #
+
+PACMAN_FRONTEND='pacman'
+
+ ## Use of Pacman-Color
+if [ -e "/usr/bin/pacman-color" ]; then
+    PACMAN_FRONTEND='pacman-color'
+
+    if [ "zsh" = "$SHELL_CURRENT" ]; then
+        compdef _pacman pacman-color
+    elif [ "bash" = "$SHELL_CURRENT" ]; then
+        complete -o default -o nospace -F _pacman pacman-color
+    fi
+fi
+
+ ## Pacman aliases
+if [ "$PACMAN_FRONTEND" = "pacman" ]; then
+    alias pc='sudo pacman -Sc'
+    alias pi='sudo pacman -S --needed'
+    alias pqi='pacman -Qi'
+    alias pql='pacman -Ql'
+    alias pqo='pacman -Qo'
+    alias pqs='pacman -Qs'
+    alias pr='sudo pacman -Rs'
+    alias psi='pacman -Si'
+    alias pss='pacman -Ss'
+    alias pu='sudo pacman -Syu'
+fi
+
+if [ "$PACMAN_FRONTEND" = "pacman-color" ]; then
+    alias pc='sudo pacman-color -Sc'
+    alias pi='sudo pacman -S --needed'
+    alias pqi='pacman-color -Qi'
+    alias pql='pacman-color -Ql'
+    alias pqo='pacman-color -Qo'
+    alias pqs='pacman-color -Qs'
+    alias pr='sudo pacman-color -Rs'
+    alias psi='pacman-color -Si'
+    alias pss='pacman-color -Ss'
+    alias pu='sudo pacman-color -Syu'
+fi
+

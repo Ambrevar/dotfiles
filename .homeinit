@@ -16,6 +16,9 @@
 ## The following is used as first-run setup.
 
 SOURCEDIR="${HOME}/personal/dataperso"
+[ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
+[ -z "$XDG_DATA_HOME" ] && XDG_DATA_HOME="$HOME/.local/share"
+[ -z "$XDG_DATA_DIRS" ] && XDG_DATA_DIRS="/usr/local/share"
 
 ## Mutt
 echo "==> Mutt"
@@ -30,8 +33,8 @@ echo
 
 ## Awesome
 echo "==> Awesome"
-THEME_DEST="${HOME}/.config/awesome/themes/custom"
-THEME_SOURCE="/usr/share/awesome/themes/default/"
+THEME_DEST="${XDG_CONFIG_HOME}/awesome/themes/custom"
+THEME_SOURCE="${XDG_DATA_DIRS}/awesome/themes/default/"
 if [ ! -e "${THEME_DEST}/background.png" ]; then
     [ -d "${THEME_SOURCE}" ] && cp -rn ${THEME_SOURCE}/* "${THEME_DEST}"
 fi

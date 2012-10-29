@@ -1,7 +1,7 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Shell Config -- Alias Definitions.
-## Date 2012-07-02
+## Date 2012-10-29
 ################################################################################
 
 ##==============================================================================
@@ -13,12 +13,10 @@
 
 if [ "bash" = "$SHELL_CURRENT" ]; then
     alias ..='cd ..'
-    alias esrc='$EDITOR ~/.bashrc'
     alias ssrc='source ~/.bashrc'
 fi
 
 if [ "zsh" = "$SHELL_CURRENT" ]; then
-    alias esrc='$EDITOR ~/.zshrc'
     alias ssrc='source ~/.zshrc'
 fi
 
@@ -26,15 +24,22 @@ fi
 ##==============================================================================
 
 ## 'ls' redefinition
-alias ls='ls --color=auto -F -v'
+alias ls='ls -F'
+
+## GNU extras.
+if [ "$OSTYPE" = "linux-gnu" ]; then
+    alias ls='ls --color=auto -v --group-directories-first'
+else
+    alias ls='ls -G'
+fi
 
 ## Listing aliases.
 alias l='ls -1'
-alias la='ls -lAh --group-directories-first'   # Hidden files
-alias lc='ls -ltcrh --group-directories-first' # by change time
-alias lk='ls -lSrh --group-directories-first'  # by size
-alias ll='ls -lh --group-directories-first'    # Detailed view with human readable values.
-alias lx='ls -lXh --group-directories-first'   # sort by extension
+alias la='ls -lAh'   # Hidden files
+alias lc='ls -ltcrh' # Sort by change time
+alias lk='ls -lSrh'  # Sort by size
+alias ll='ls -lh'    # Detailed view with human readable values.
+alias lx='ls -lXh'   # Sort by extension
 
 ## Misc
 alias cp="cp -i" # confirm before overwriting something
@@ -42,22 +47,27 @@ alias xlx='xrdb -load ~/.Xresources'
 alias grep='grep --color=auto'
  
 ## Emacs
-if [ -e "/usr/bin/emacs" ]; then
+type emacs > /dev/null
+if [ $? ]; then
    alias em='emacsclient -a "" -t'
-   alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; /usr/bin/emacs --daemon"
+   alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
 fi
 
 # List desktop applications.
-alias applist='grep -r "^Name=" /usr/share/applications/* | cut -d'=' -f2| sort'
+[ -d /usr/share/applications ] && XDG_APPS=($XDG_APPS /usr/share/applications)
+[ -d /usr/local/share/applications ] && XDG_APPS=($XDG_APPS /usr/local/share/applications)
+[ ${#XDG_APPS} -ne 0 ] && alias applist='grep -R "^Name=" $XDG_APPS | cut -d'=' -f2 | sort'
 
 ## Remove executable attribute.
 alias nox='find . -type f -exec chmod a-x {} \;'
 
 ## Get your external IP.
-[ -e "/usr/bin/curl" ] && alias myip='curl ifconfig.me'
+type curl > /dev/null
+[ $? ] && alias myip='curl ifconfig.me'
 
 ## Network discovery.
-[ -e "/usr/bin/nmap" ] && alias network-discover='nmap -sP "192.168.1.*"'
+type nmap > /dev/null
+[ $? ] && alias network-discover='nmap -sP "192.168.1.*"'
 
 ## Prevents accidentally clobbering files.
 alias mkdir='mkdir -p'
@@ -71,19 +81,19 @@ alias echolibpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 
 ## Shutdown / Reboot.
 ## If you do not want to get prompted for your password, configure sudo properly.
-if [ -e "/usr/bin/dbus-send" ]; then
+if [ "$OSTYPE" = "linux-gnu" ]; then
     alias halt='sudo halt'
-    alias reboot='sudo reboot'
+else
+    alias halt='sudo halt -p'
 fi
 
 ## Start X and lock current terminal (press ENTER when back in terminal to prompt for password).
-[ -e "/usr/bin/vlock" ] && alias sx='startx & vlock'
-
-## Screensaver
-[ -e "/usr/bin/xscreensaver-command" ] && alias xss='xscreensaver-command --lock'
+type vlock > /dev/null
+[ $? ] && alias sx='startx & vlock'
 
 ## Zathura -- Fork to background.
-[ -e "/usr/bin/zathura" ] && alias zat='zathura --fork'
+type zathura > /dev/null
+[ $? ] && alias zat='zathura --fork'
 
 ## Xrandr
 alias xmorphnone='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --transform none'
@@ -108,49 +118,12 @@ alias xmorphzi='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ")
 ##==============================================================================
 ## Pacman aliases
 ##==============================================================================
-if [ -e "/usr/bin/pacman" ] ; then
+[ -e "/usr/bin/pacman" ] && . ~/.shell.d/alias_pacman
 
-    PACMAN_FRONTEND='pacman'
-
-    ## Use of Pacman-Color
-    if [ -e "/usr/bin/pacman-color" ]; then
-        PACMAN_FRONTEND='pacman-color'
-
-        if [ "zsh" = "$SHELL_CURRENT" ]; then
-            compdef _pacman pacman-color
-        elif [ "bash" = "$SHELL_CURRENT" ]; then
-            complete -o default -o nospace -F _pacman pacman-color
-        fi
-    fi
-
-    ## Pacman aliases
-    if [ "$PACMAN_FRONTEND" = "pacman" ]; then
-        alias pc='sudo pacman -Sc'
-        alias pi='sudo pacman -S --needed'
-        alias pqi='pacman -Qi'
-        alias pql='pacman -Ql'
-        alias pqo='pacman -Qo'
-        alias pqs='pacman -Qs'
-        alias pr='sudo pacman -Rs'
-        alias psi='pacman -Si'
-        alias pss='pacman -Ss'
-        alias pu='sudo pacman -Syu'
-    fi
-
-    if [ "$PACMAN_FRONTEND" = "pacman-color" ]; then
-        alias pc='sudo pacman-color -Sc'
-        alias pi='sudo pacman -S --needed'
-        alias pqi='pacman-color -Qi'
-        alias pql='pacman-color -Ql'
-        alias pqo='pacman-color -Qo'
-        alias pqs='pacman-color -Qs'
-        alias pr='sudo pacman-color -Rs'
-        alias psi='pacman-color -Si'
-        alias pss='pacman-color -Ss'
-        alias pu='sudo pacman-color -Syu'
-    fi
-
-fi
+##==============================================================================
+## FreeBSD aliases
+##==============================================================================
+[ "$(uname)" = "FreeBSD" ] && . ~/.shell.d/alias_freebsd
 
 ##==============================================================================
 ## TeXlive aliases
@@ -161,14 +134,4 @@ if [ -d "/usr/local/texlive" ]; then
     alias tlu="sudo bash -c 'umask 022 && tlmgr update --self'"
     alias tls="tlmgr search --global"
     alias tll="tlmgr show --list"
-fi
-
-##==============================================================================
-## APT aliases
-##==============================================================================
-
-if [ -e "/usr/bin/apt-get" ]; then
-    alias au='sudo apt-get update'
-    alias ac='sudo apt-get autoremove && sudo apt-get clean'
-    alias ai='sudo apt-get install'
 fi
