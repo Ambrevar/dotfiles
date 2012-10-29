@@ -11,7 +11,7 @@
 if [ "$OSTYPE" = "linux-gnu" ]; then
     SHELL_CURRENT="$(ps -o command hp $$ )"
 else
-    SHELL_CURRENT="$(ps -c | awk -v shellpid=$$ '$0 ~ shellpid {print $5}')"
+    SHELL_CURRENT="$(ps -o command="" $$)"
 fi
 SHELL_DIR="$HOME/.shell.d"
 

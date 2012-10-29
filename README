@@ -1,13 +1,13 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                               Author: Ambrevar                               #
-#                               Date: 2012-10-13                               #
+#                               Date: 2012-10-29                               #
 ################################################################################
 
 Synopsis
 ********
 This repository contains configuration files for various Unix-programs.
-Target distribution: Arch Linux (might work for most Unices as well)
+Target distribution: Arch Linux and FreeBSD (might work for most Unices as well)
 
 Generic Comments
 ****************
@@ -45,7 +45,7 @@ Final word: do not forget to read the manpages!
 
 Awesome
 *******
-Extra deps: Vicious
+Extra deps: Vicious (Linux only)
 
 Configuration is very close to the default one, which mostly fits my needs.
 Most of the work I've done is for the status bar, but since I'm using the
@@ -88,8 +88,8 @@ the disk. As a result, I just get prompted for a main password on Mutt startup,
 then everything works out of the box.  I use ccrypt for password management
 because it is much more simple than gnupg.
 
-I'm using embedded IMAP and SMTP services -- you must provide the required
-compilation options.
+I'm using embedded IMAP and SMTP services which need appropriate compilation
+options.
 
 Some customization: custom index view, good Emacs integration (see .emacs),
 custom theme (matches Emacs colors), various tweaks.
@@ -129,8 +129,8 @@ Please note that this config is mainly intended -- and tested -- for zsh. It
 should be mostly bash-compatible though.  When incompabilities have been
 encountered, it has been reported into the configuration files. Hence the shared
 folder .shell.d/, whose files get sourced by both bash and zsh.  Bash-specific
-and zsh-specific options are in dedicated files ending with the apropriate shell
-name.
+and zsh-specific options are in dedicated files ending with the appropriate
+shell name.
 
 TeX
 ***
@@ -138,12 +138,12 @@ TeX
 A lot of plainTeX and LaTeX macros. Among others: pie charts, dynamic plots with
 input file file and trend.
 
-plainTeX macros are in the 'texmf' folder. LaTeX macros are all bundled into
+plainTeX macros are in the '.texmf' folder. LaTeX macros are all bundled into
 Emacs snippets for the sake of portability.
 
 URxvt
 *****
-Extra deps: Muennich's perl extensions (keyboard-select, clipboard)
+Extra deps: Muennich's perl extensions (keyboard-select, clipboard, url-matcher)
 
 Custom font and colors, no scroll bar, url-matcher, clipboard, and
 keyboard-select.
@@ -158,7 +158,7 @@ Known issues
 
 Emacs: some colors do not work as intended.
 
-Luakit: Adblock will not always block ads correctly.
+Luakit: Adblock will not always block ads correctly. Work in progress.
 
 Ranger: if editor is 'emacsclient -t -a ""', it will not show up if emacs daemon
 is not running. This is because the "" are not properly recognized.
