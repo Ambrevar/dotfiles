@@ -27,9 +27,10 @@
 
 ;; Copy/Paste to/from clipboard.
 ;; (define-key my-keys-minor-mode-map (kbd "M-p") (kbd "C-u M-! xclip <SPC> -o"))
-(define-key my-keys-minor-mode-map (kbd "C-<f6>") (kbd "M-| xsel <SPC> -p <SPC> -i"))
-(define-key my-keys-minor-mode-map (kbd "C-<f7>") (kbd "C-u M-! xsel <SPC> -o"))
-(define-key my-keys-minor-mode-map (kbd "C-<f8>") (kbd "C-u M-! xsel <SPC> -o -b"))
+;; (define-key my-keys-minor-mode-map (kbd "C-<f6>") (kbd "M-| xsel <SPC> -p <SPC> -i"))
+(define-key my-keys-minor-mode-map (kbd "C-<f6>") (kbd "M-| xclip"))
+(define-key my-keys-minor-mode-map (kbd "C-<f7>") (kbd "C-u M-! xclip <SPC> -o"))
+(define-key my-keys-minor-mode-map (kbd "C-<f8>") (kbd "C-u M-! xclip <SPC> -o <SPC> -selection <SPC> clipboard"))
 
 ;; Compilation
 (define-key my-keys-minor-mode-map (kbd "C-<f9>") 'compile)

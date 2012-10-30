@@ -26,15 +26,18 @@ URxvt*scrollBar: false
 !! URL Support
 URxvt.perl-ext:             default,url-select
 URxvt.keysym.C-M-u:           perl:url-select:select_next
-URxvt.url-select.launcher:  /usr/bin/luakit
+URxvt.url-select.launcher:  luakit
 URxvt.url-select.underline: true
 
-URxvt.perl-ext-common  : keyboard-select,clipboard
+! URxvt.iso14755: False
+URxvt.perl-ext-common: keyboard-select,clipboard
 
-URxvt.keysym.C-M-v:   perl:clipboard:paste
-URxvt.keysym.C-M-c: perl:clipboard:paste_escaped
+URxvt.keysym.C-M-v:       perl:clipboard:paste
+URxvt.keysym.C-M-c:       perl:clipboard:paste_escaped
 ! URxvt.clipboard.copycmd:  xclip -i -selection clipboard
 ! URxvt.clipboard.pastecmd: xclip -o -selection clipboard
+! URxvt.clipboard.pastecmd: xclip -o -quiet -d localhost:0
+URxvt.clipboard.pastecmd: xclip -o -quiet
 
 !! Keyboard-Select
 URxvt.keysym.M-Escape:  perl:keyboard-select:activate
