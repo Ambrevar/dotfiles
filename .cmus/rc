@@ -1,0 +1,34 @@
+set altformat_current= %F 
+set altformat_playlist= %f%= %d 
+set altformat_title=%f
+set altformat_trackwin= %f%= %d 
+set auto_reshuffle=true
+set continue=true
+set format_current= %a - %y. %l - %n. %t 
+set format_playlist= %-18%a %4y. %-25%l %3n. %t%= %d 
+set format_playlist_va= %-18%a       %-25%l      %t%= %d 
+set format_title=%a - %y. %l - %n. %t 
+set format_trackwin=%4y %3n. %t%= %d [%{codec} %{bitrate} kbps]
+set format_trackwin_va=%3n. %t (%a)%= %y %d 
+set lib_sort=albumartist date album discnumber tracknumber title filename
+set play_library=false
+set play_sorted=false
+set repeat=false
+set repeat_current=false
+set replaygain=disabled
+set replaygain_limit=true
+set replaygain_preamp=6.000000
+set resume=true
+set set_term_title=true
+set show_hidden=false
+set show_remaining_time=false
+set shuffle=false
+set smart_artist_sort=true
+set status_display_program=
+fset 90s=date>=1990&date<2000
+fset classical=genre="Classical"
+fset missing-tag=!stream&(artist=""|album=""|title=""|tracknumber=-1|date=-1)
+fset mp3=filename="*.mp3"
+fset ogg=filename="*.ogg"
+fset ogg-or-mp3=ogg|mp3
+factivate
