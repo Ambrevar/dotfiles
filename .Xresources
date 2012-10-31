@@ -1,6 +1,6 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! Xresources
-!! 2012-08-16
+!! 2012-10-31
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 !! TODO: set up charclass.
@@ -20,25 +20,22 @@
 !! plugins.
 
 ! URxvt*modifier: alt
+! URxvt.iso14755: False
 URxvt*saveLines: 5000
 URxvt*scrollBar: false
 
 !! URL Support
-URxvt.perl-ext:             default,url-select
-URxvt.keysym.C-M-u:           perl:url-select:select_next
-URxvt.url-select.launcher:  /usr/bin/luakit
+URxvt.perl-ext:             url-select
+URxvt.keysym.C-M-u:         perl:url-select:select_next
+URxvt.url-select.launcher:  luakit
 URxvt.url-select.underline: true
 
-URxvt.perl-ext-common  : keyboard-select,clipboard
-
-URxvt.keysym.C-M-v:   perl:clipboard:paste
-URxvt.keysym.C-M-c: perl:clipboard:paste_escaped
+URxvt.perl-ext-common:      keyboard-select,clipboard
+URxvt.keysym.C-M-Escape:    perl:keyboard-select:activate
+URxvt.keysym.C-M-v:         perl:clipboard:paste
+URxvt.keysym.C-M-c:         perl:clipboard:paste_escaped
+URxvt.clipboard.pastecmd:   xclip -o -selection clipboard -quiet -d locahost:0
 ! URxvt.clipboard.copycmd:  xclip -i -selection clipboard
-! URxvt.clipboard.pastecmd: xclip -o -selection clipboard
-
-!! Keyboard-Select
-URxvt.keysym.M-Escape:  perl:keyboard-select:activate
-! URxvt.keysym.M-s:       perl:keyboard-select:search
 
 !! Font
 URxvt*font       : xft:Dejavu Sans Mono:pixelsize=14
