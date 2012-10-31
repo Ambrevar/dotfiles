@@ -43,7 +43,8 @@ fi
 
 ## Terminal
 ## WARNING: this is always a bad idea!
-if [[ "$TERM" = *rxvt* ]]; then 
+## TODO: check how to do this properly.
+if [ ! "$OSTYPE" = "linux-gnu" ] && [[ "$TERM" = *rxvt* ]]; then 
     export TERM="rxvt-unicode-256color"
 fi
 
