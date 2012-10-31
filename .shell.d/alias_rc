@@ -42,9 +42,12 @@ alias ll='ls -lh'    # Detailed view with human readable values.
 alias lx='ls -lXh'   # Sort by extension
 
 ## Misc
-alias cp="cp -i" # confirm before overwriting something
 alias xlx='xrdb -load ~/.Xresources'
 alias grep='grep --color=auto'
+
+## Bad idea because you cannot toggle '-f' option anymore.
+# alias cp="cp -i"
+
  
 ## Emacs
 type emacs > /dev/null
