@@ -51,8 +51,10 @@ fi
 [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
 
 ## Manpage.
-# export MANPAGER="less -s"
-export MANPAGER="less -sP '?f%f .?m(file %i of %m) .?ltlines %lt-%lb?L/%L. .byte %bB?s/%s. ?e(END) :?pB%pB\%..%t'"
+export MANPAGER="less -s"
+## The following options are useful for FreeBSD default 'less' command which has
+## an empty prompt. Sadly this gets messy with 'apropos'.
+# export MANPAGER="less -sP '?f%f .?m(file %i of %m) .?ltlines %lt-%lb?L/%L. .byte %bB?s/%s. ?e(END) :?pB%pB\%..%t'"
 export MANWIDTH=80
 
 ## Less config. -R is needed for lesspipe.
