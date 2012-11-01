@@ -134,7 +134,7 @@ alias xmorphzi='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ")
 
 ## TeXlive
 if [ -d "/usr/local/texlive" ]; then
-    alias tlu="sudo bash -c 'umask 022 && tlmgr update --self'"
+    alias tlu="sudo sh -c 'umask 022 && tlmgr update --self'"
     alias tls="tlmgr search --global"
     alias tll="tlmgr show --list"
 fi

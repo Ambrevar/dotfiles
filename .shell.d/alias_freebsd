@@ -1,7 +1,8 @@
 ## -*- mode:sh -*- #
 
 alias pa='sudo pkg_add -r'
-alias pd='sudo pkg_delete'
+# alias pd='sudo pkg_delete'
+alias pd='sudo pkg_deinstall -cd'
 alias pi='pkg_info -RrcdsD -l "::"'
 alias pil='pkg_info -L'
 
@@ -17,5 +18,6 @@ alias psr='pkg_search -r'
 alias pv='pkg_version -Il "<"'
 
 ## Port tree
+alias mi='sudo make install'
 alias mid='sudo make install distclean'
 alias mc='sudo make config'

@@ -343,22 +343,9 @@ globalkeys = awful.util.table.join(
    -- Screenshot
    awful.key({}, "Print", function () awful.util.spawn("scrot 'screen-%Y-%m-%d-%H%M%S.png' -e 'mkdir -p ~/temp && mv $f ~/temp/'") end),
 
-   -- Sound Volume
-   awful.key({ modkey,        }, "KP_Subtract",   function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
-   awful.key({ modkey,        }, "KP_Add",        function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
-   awful.key({ modkey,        }, "KP_Enter",      function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
-   awful.key({ modkey, "Mod1" }, "KP_Subtract",   function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end),
-   awful.key({ modkey, "Mod1" }, "KP_Add",        function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
-
-   awful.key({        }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
-   awful.key({        }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
-   awful.key({        }, "XF86AudioMute",        function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
-   awful.key({ "Mod1" }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
-   awful.key({ "Mod1" }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end),
-
    -- Touchpad
    awful.key({ }, "XF86TouchpadToggle", function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
-   awful.key({ }, "XF86Tools",           function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
+   awful.key({ }, "XF86Tools",          function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
 
    -- Mouse control
    -- Bind ''Meta4+Ctrl+m'' to move the mouse to the coordinates set above.
@@ -440,7 +427,39 @@ globalkeys = awful.util.table.join(
                                  awful.util.eval, nil,
                                  awful.util.getdir("cache") .. "/history_eval")
              end)
-                                  )
+)
+
+   -- Sound Volume
+if ostype == "Linux" then
+   globalkeys = awful.util.table.join(
+      awful.key({ modkey,        }, "KP_Subtract",   function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
+      awful.key({ modkey,        }, "KP_Add",        function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
+      awful.key({ modkey,        }, "KP_Enter",      function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
+      awful.key({ modkey, "Mod1" }, "KP_Subtract",   function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end),
+      awful.key({ modkey, "Mod1" }, "KP_Add",        function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
+
+      awful.key({        }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
+      awful.key({        }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
+      awful.key({        }, "XF86AudioMute",        function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
+      awful.key({ "Mod1" }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
+      awful.key({ "Mod1" }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end)
+      )
+elseif ostype == "FreeBSD" then
+   globalkeys = awful.util.table.join(
+      awful.key({ modkey,        }, "KP_Subtract",   function () awful.util.spawn("mixer vol -5 >/dev/null") end),
+      awful.key({ modkey,        }, "KP_Add",        function () awful.util.spawn("mixer vol +5 >/dev/null") end),
+      awful.key({ modkey,        }, "KP_Enter",      function () awful.util.spawn("mixer vol ^ >/dev/null")  end),
+      awful.key({ modkey, "Mod1" }, "KP_Subtract",   function () awful.util.spawn("mixer pcm -5 >/dev/null") end),
+      awful.key({ modkey, "Mod1" }, "KP_Add",        function () awful.util.spawn("mixer pcm +5 >/dev/null") end),
+
+      awful.key({        }, "XF86AudioRaiseVolume", function () awful.util.spawn("mixer vol -5 >/dev/null") end),
+      awful.key({        }, "XF86AudioLowerVolume", function () awful.util.spawn("mixer vol +5 >/dev/null") end),
+      awful.key({        }, "XF86AudioMute",        function () awful.util.spawn("mixer vol ^ >/dev/null")  end),
+      awful.key({ "Mod1" }, "XF86AudioRaiseVolume", function () awful.util.spawn("mixer pcm -5 >/dev/null") end),
+      awful.key({ "Mod1" }, "XF86AudioLowerVolume", function () awful.util.spawn("mixer pcm +5 >/dev/null") end)
+      )
+end
+
 
 -- Client keys
 clientkeys = awful.util.table.join(

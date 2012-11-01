@@ -1,57 +1,6 @@
-
-	amsfonts
-	bibtex
-	bibtex.amd64-freebsd
-	cm
-	collection-basic
-	collection-documentation-base
-	dvipdfm
-	dvipdfm.amd64-freebsd
-	dvipdfmx
-	dvipdfmx-def
-	dvipdfmx.amd64-freebsd
-	dvips
-	dvips.amd64-freebsd
-	enctex
-	etex
-	etex-pkg
-	glyphlist
-	gsftopk
-	gsftopk.amd64-freebsd
-	hyph-utf8
-	hyphen-base
-	ifluatex
-	ifxetex
-	kpathsea
-	kpathsea.amd64-freebsd
-	lua-alt-getopt
-	luatex
-	luatex.amd64-freebsd
-	makeindex
-	makeindex.amd64-freebsd
-	metafont
-	metafont.amd64-freebsd
-	mflogo
-	mfware
-	mfware.amd64-freebsd
-	misc
-	pdftex
-	pdftex.amd64-freebsd
-	plain
-	scheme-minimal
-	tetex
-	tetex.amd64-freebsd
-	tex
-	tex.amd64-freebsd
-	texconfig
-	texconfig.amd64-freebsd
-	texlive-common
-	texlive-docindex
-	texlive-en
-	texlive-msg-translations
-	texlive-scripts
-	texlive-scripts.amd64-freebsd
-	texlive.infra
-	texlive.infra.amd64-freebsd
-	xdvi
-	xdvi.amd64-freebsd
+collection-basic
+marvosym
+scheme-minimal
+texlive-common
+texlive-docindex
+texlive-en

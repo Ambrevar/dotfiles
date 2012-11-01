@@ -29,7 +29,7 @@ SCRIPTPATH="$(readlink -f $(dirname "$0"))"
 COMPRESSION="gz"
 ARCHIVENAME="$HOME/home-config-$(date "+%y-%m-%d-%H%M%S")"
 ARCEXT="tar.gz"
-ARCOPT="cvzf"
+ARCOPT="czf"
 
 print_help()
 {
@@ -77,15 +77,15 @@ shift $(($OPTIND - 1))
 case $COMPRESSION in
     "gz")
         ARCEXT="tar.gz"
-        ARCOPT="cvzf"
+        ARCOPT="czf"
         ;;
     "xz")
         ARCEXT="tar.xz"
-        ARCOPT="cvJf"
+        ARCOPT="cJf"
         ;;
     *)
         ARCEXT="tar.gz"
-        ARCOPT="cvzf"
+        ARCOPT="czf"
         ;;
 esac
 
@@ -134,10 +134,15 @@ fi
 if type tlmgr >/dev/null 2>&1; then
     HOST=$(hostname)
 
-    TEXLIVE_BASIC="$(tlmgr info collection-basic --list | sed -n '/^\s\+/{s/\s\+//g;p;}' | sort)"
-    TEXLIVE_ALL="$(tlmgr info --only-installed | grep -v 'x86_64' | cut -d' ' -f2 | cut -f1 -d':' | sort)"
+    # TEXLIVE_BASIC="$(tlmgr info collection-basic --list | sed -n '/^\s\+/{s/\s\+//g;p;}' | sort)"
+    TEXLIVE_BASIC="$(tlmgr info collection-basic --list | sed -n '/^	/{s/	//g;p;}' | sort)"
+    TEXLIVE_ALL="$(tlmgr info --only-installed | grep -v 'x86_64\|amd64' | cut -d' ' -f2 | cut -f1 -d':' | sort)"
 
-    comm -3 <(echo "$TEXLIVE_BASIC") <(echo "$TEXLIVE_ALL") | sed 's/\s\+//g' >"$HOME/.pkg-texlive-$(uname)-${HOST}"
+    echo $TEXLIVE_BASIC
+    echo
+    echo $TEXLIVE_ALL
+
+    comm -3 <(echo "$TEXLIVE_BASIC") <(echo "$TEXLIVE_ALL") | sed 's/	//g' >"$HOME/.pkg-texlive-$(uname)-${HOST}"
 fi
 
 ##==============================================================================
@@ -238,11 +243,13 @@ FILELIST=(${FILELIST[*]} ".Xresources")
 ## Archiving
 ##==============================================================================
 
-if [ "$DEBUG" = "yes" ]; then
-	tar ${ARCOPT} "${ARCHIVENAME}.${ARCEXT}" -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")"
-else
-	tar ${ARCOPT} "${ARCHIVENAME}.${ARCEXT}" -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")" >/dev/null
-fi
+tar ${ARCOPT} "${ARCHIVENAME}.${ARCEXT}" -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")"
+
+# if [ "$DEBUG" = "yes" ]; then
+# 	tar ${ARCOPT} "${ARCHIVENAME}.${ARCEXT}" -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")"
+# else
+# 	tar ${ARCOPT} "${ARCHIVENAME}.${ARCEXT}" -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")" >/dev/null
+# fi
 
 ##==============================================================================
 ## Cleaning
