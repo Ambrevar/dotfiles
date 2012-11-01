@@ -1,8 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 ################################################################################
 ## Home Config Backup Script
-## 2012-09-01
+## 2012-11-01
 ################################################################################
+
+## This script should be compatible with ksh, bash and zsh. Issue with sh
+## however: we use arrays. Therefore we do not comply with POSIX and use some
+## extended syntax for arrays and file input -- the <(...) syntax.
+
 ## Note for Zsh: because of the Ksh-style arrays (index starting at 0), you
 ## cannot use array index to append elements to arrays -- otherwise the
 ## KSH_ARRAYS option for zsh must be used.
@@ -24,7 +29,7 @@ SCRIPTPATH="$(readlink -f $(dirname "$0"))"
 COMPRESSION="gz"
 ARCHIVENAME="$HOME/home-config-$(date "+%y-%m-%d-%H%M%S")"
 ARCEXT="tar.gz"
-ARCOPT="cvzf"
+ARCOPT="czf"
 
 print_help()
 {
@@ -49,15 +54,12 @@ while getopts ":hm:o:" opt; do
             print_help "$0"
             exit 1
             ;;
-
         m)
             COMPRESSION="$OPTARG"
             ;;
-
         o)
 	        ARCHIVENAME="${OLDPATH}/$OPTARG"
             ;;
-
         ?) 
             print_help "$0"
             exit 1
@@ -75,17 +77,15 @@ shift $(($OPTIND - 1))
 case $COMPRESSION in
     "gz")
         ARCEXT="tar.gz"
-        ARCOPT="cvzf"
+        ARCOPT="czf"
         ;;
-
     "xz")
         ARCEXT="tar.xz"
-        ARCOPT="cvJf"
+        ARCOPT="cJf"
         ;;
-
     *)
         ARCEXT="tar.gz"
-        ARCOPT="cvzf"
+        ARCOPT="czf"
         ;;
 esac
 
@@ -106,9 +106,10 @@ fi
 ## Packages list
 ##==============================================================================
 
+HOST=$(hostname)
+
 ## Arch Linux
 if [ -e "/usr/bin/pacman" ]; then
-    HOST=$(hostname)
 
     ARCH_PKG_OFFICIAL="$HOME/.pkg-arch-official"
 	ARCH_PKG_EXPLICIT="$HOME/.pkg-arch-explicit"
@@ -124,14 +125,24 @@ if [ -e "/usr/bin/pacman" ]; then
     eval "${PKG_FOREIGN}" >"${ARCH_PKG_AUR}-${HOST}"
 fi
 
+## FreeBSD
+if [ "$(uname)" = "FreeBSD" ]; then
+        pkg_info | cut -f1 -d' ' >"$HOME/.pkg-freebsd-${HOST}"
+fi
+
 ## TeXlive
 if type tlmgr >/dev/null 2>&1; then
     HOST=$(hostname)
 
-    TEXLIVE_BASIC="$(tlmgr info collection-basic --list | sed -n '/^\s\+/{s/\s\+//g;p}' | sort)"
-    TEXLIVE_ALL="$(tlmgr info --only-installed | grep -v 'x86_64' | cut -d' ' -f2 | cut -f1 -d':' | sort)"
+    # TEXLIVE_BASIC="$(tlmgr info collection-basic --list | sed -n '/^\s\+/{s/\s\+//g;p;}' | sort)"
+    TEXLIVE_BASIC="$(tlmgr info collection-basic --list | sed -n '/^	/{s/	//g;p;}' | sort)"
+    TEXLIVE_ALL="$(tlmgr info --only-installed | grep -v 'x86_64\|amd64' | cut -d' ' -f2 | cut -f1 -d':' | sort)"
 
-    comm -3 <(echo "$TEXLIVE_BASIC") <(echo "$TEXLIVE_ALL") | sed 's/\s\+//g' >"$HOME/.pkg-texlive-${HOST}"
+    echo $TEXLIVE_BASIC
+    echo
+    echo $TEXLIVE_ALL
+
+    comm -3 <(echo "$TEXLIVE_BASIC") <(echo "$TEXLIVE_ALL") | sed 's/	//g' >"$HOME/.pkg-texlive-$(uname)-${HOST}"
 fi
 
 ##==============================================================================
@@ -150,7 +161,7 @@ FILELIST=(${FILELIST[*]} ".config/awesome/rc.lua")
 FILELIST=(${FILELIST[*]} ".config/awesome/themes/custom/theme.lua")
 
 ## cmus
-FILELIST=(${FILELIST[*]} ".cmus/autosave")
+FILELIST=(${FILELIST[*]} ".cmus/rc")
 
 ## Emacs
 FILELIST=(${FILELIST[*]} ".emacs")
@@ -175,23 +186,21 @@ FILELIST=(${FILELIST[*]} ".homeinit")
 ## Luakit
 FILELIST=(${FILELIST[*]} ".config/luakit/rc.lua")
 FILELIST=(${FILELIST[*]} ".config/luakit/globals.lua")
-FILELIST=(${FILELIST[*]} ".luakit_bookmarks_converter.lua")
 
 ## Mutt
 FILELIST=(${FILELIST[*]} ".muttrc")
-for i in $(ls -ad --indicator-style=none .mutt.d/* | grep -vi 'cache')
-do
-    FILELIST=(${FILELIST[*]} "$i")
-done
+FILELIST=(${FILELIST[*]} ".mutt.d/colors.ambrevar")
+FILELIST=(${FILELIST[*]} ".mutt.d/colorset.sh")
+FILELIST=(${FILELIST[*]} ".mutt.d/mailcap")
 
 ## Netinit
 FILELIST=(${FILELIST[*]} ".netinit")
 
 ## Ranger
-for i in $(ls -ad --indicator-style=none .config/ranger/* | grep -vi 'pycache\|bookmarks\|history\|tagged')
-do
-    FILELIST=(${FILELIST[*]} "$i")
-done
+FILELIST=(${FILELIST[*]} ".config/ranger/apps.py")
+FILELIST=(${FILELIST[*]} ".config/ranger/options.py")
+FILELIST=(${FILELIST[*]} ".config/ranger/rc.conf")
+FILELIST=(${FILELIST[*]} ".config/ranger/scope.sh")
 
 ## README
 FILELIST=(${FILELIST[*]} "README")
@@ -201,6 +210,7 @@ FILELIST=(${FILELIST[*]} ".rtorrent.rc")
 
 ## Shells
 FILELIST=(${FILELIST[*]} ".bash_profile")
+FILELIST=(${FILELIST[*]} ".bashrc")
 FILELIST=(${FILELIST[*]} ".zshrc")
 for i in $(ls -a .shell.d/*|grep -vi 'bhistory')
 do
@@ -214,10 +224,7 @@ FILELIST=(${FILELIST[*]} ".taskrc")
 # FILELIST=(${FILELIST[*]} ".terminfo/x/xterm")
 
 ## TeXlive
-# for i in $(find texmf -type f|grep -vi 'moderncv/examples\|moderncv/manual\|.bzr')
-# do
-#     FILELIST=(${FILELIST[*]} "$i")
-# done
+FILELIST=(${FILELIST[*]} ".texmf")
 
 ## Vim
 FILELIST=(${FILELIST[*]} ".vimrc")
@@ -225,18 +232,24 @@ FILELIST=(${FILELIST[*]} ".vimrc")
 ## Xinit
 FILELIST=(${FILELIST[*]} ".xinitrc")
 
+## XKB
+FILELIST=(${FILELIST[*]} ".xkb")
+
 ## Xresource
 FILELIST=(${FILELIST[*]} ".Xresources")
+
 
 ##==============================================================================
 ## Archiving
 ##==============================================================================
 
-if [ "$DEBUG" = "yes" ]; then
-	tar ${ARCOPT} "${ARCHIVENAME}.${ARCEXT}" -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")" --exclude-vcs
-else
-	tar ${ARCOPT} "${ARCHIVENAME}.${ARCEXT}" -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")" --exclude-vcs >/dev/null
-fi
+tar ${ARCOPT} "${ARCHIVENAME}.${ARCEXT}" -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")"
+
+# if [ "$DEBUG" = "yes" ]; then
+# 	tar ${ARCOPT} "${ARCHIVENAME}.${ARCEXT}" -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")"
+# else
+# 	tar ${ARCOPT} "${ARCHIVENAME}.${ARCEXT}" -C "$HOME" ${FILELIST[*]} -C "$SCRIPTPATH" "$(basename "$0")" >/dev/null
+# fi
 
 ##==============================================================================
 ## Cleaning

@@ -1,14 +1,20 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 ################################################################################
 ## Custom network initialization script.
 ## 2012-10-29
 ################################################################################
 ## Deps: wpa_supplicant, ccrypt
-##
+
+## We need to use wpa_supplicant's unencrypted config file. We store it in a
+## variable to keep it secure, but the 'wpa_supplicant' command requires a
+## file. We cannot use a pipe for that, because in that case the config would be
+## accessible unencrypted. So we need to use an internal path with a syntax like
+## <(...) which is not specified by POSIX. Ksh, bash and zsh can handle it.
+
 ## Use 'wpa_passphrase essid $PW >> /etc/wpa_supplicant.conf', where PW is a
 ## variable containing the password.  You can set PW securely by using a shell
 ## built-in like 'read -s PW'.
-##
+
 ## There is an Emacs plugin for editing crypted files directly. See 'man
 ## ccrypt'.
 

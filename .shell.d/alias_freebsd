@@ -1,30 +1,23 @@
 ## -*- mode:sh -*- #
 
 alias pa='sudo pkg_add -r'
-alias pr='sudo pkg_delete'
+# alias pd='sudo pkg_delete'
+alias pd='sudo pkg_deinstall -cd'
 alias pi='pkg_info -RrcdsD -l "::"'
 alias pil='pkg_info -L'
 
+## Origin of file
+alias piw='pkg_info -W'
+
 ## Search
 alias pis='pkg_info -Qox'
-alias pvs='pkg_version -Is'
+# alias pvs='pkg_version -Is'
 alias psr='pkg_search -r'
 
 ## Out-of-date packages.
 alias pv='pkg_version -Il "<"'
 
 ## Port tree
-alias mic='sudo make install clean'
+alias mi='sudo make install'
+alias mid='sudo make install distclean'
 alias mc='sudo make config'
-
-ms()
-{
-    find /usr/ports -iname "*$1*"
-}
-
-mcd()
-{
-    local DEST=$(find /usr/ports -iname "*$1*" | head -n1)
-    echo $DEST
-    cd "$DEST"
-}
