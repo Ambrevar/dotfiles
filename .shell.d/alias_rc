@@ -85,7 +85,7 @@ alias echolibpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 ## Shutdown / Reboot.
 ## If you do not want to get prompted for your password, configure sudo properly.
 if [ "$OSTYPE" = "linux-gnu" ]; then
-    alias halt='sudo halt'
+    alias halt='systemctl poweroff'
 else
     alias halt='sudo halt -p'
 fi
