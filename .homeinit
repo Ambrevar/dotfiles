@@ -22,13 +22,13 @@ SOURCEDIR="${HOME}/personal/dataperso"
 
 ## Mutt
 echo "==> Mutt"
-ln -sf "$(realpath ${SOURCEDIR}/MAILS)" "${HOME}/.mutt"
+ln -snf "$(realpath ${SOURCEDIR}/MAILS)" "${HOME}/.mutt"
 mkdir -p "${HOME}/.mutt.d/hcache"
 echo
 
 ## Taskwarrior
 echo "==> Taskwarrior"
-ln -sf "${SOURCEDIR}/TODO" "${HOME}/.task"
+ln -snf "${SOURCEDIR}/TODO" "${HOME}/.task"
 echo
 
 ## Awesome
