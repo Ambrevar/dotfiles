@@ -12,6 +12,7 @@ eukdate
 eurosym
 fancyhdr
 geometry
+glossaries
 graphics
 hyperref
 latex
@@ -23,12 +24,14 @@ marvosym
 microtype
 moderncv
 ms
+multirow
 needspace
 ntheorem
 numprint
 oberdiek
 pdftex-def
 pgf
+preview
 scheme-minimal
 texlive-common
 texlive-docindex
@@ -39,4 +42,6 @@ was
 wrapfig
 xargs
 xcolor
+xfor
+xindy
 xkeyval
