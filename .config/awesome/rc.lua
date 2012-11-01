@@ -429,9 +429,9 @@ globalkeys = awful.util.table.join(
              end)
 )
 
-   -- Sound Volume
+-- Sound Volume
 if ostype == "Linux" then
-   globalkeys = awful.util.table.join(
+   globalkeys = awful.util.table.join (globalkeys,
       awful.key({ modkey,        }, "KP_Subtract",   function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
       awful.key({ modkey,        }, "KP_Add",        function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
       awful.key({ modkey,        }, "KP_Enter",      function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
@@ -443,9 +443,9 @@ if ostype == "Linux" then
       awful.key({        }, "XF86AudioMute",        function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
       awful.key({ "Mod1" }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
       awful.key({ "Mod1" }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end)
-      )
+                                     )
 elseif ostype == "FreeBSD" then
-   globalkeys = awful.util.table.join(
+   globalkeys = awful.util.table.join (globalkeys,
       awful.key({ modkey,        }, "KP_Subtract",   function () awful.util.spawn("mixer vol -5 >/dev/null") end),
       awful.key({ modkey,        }, "KP_Add",        function () awful.util.spawn("mixer vol +5 >/dev/null") end),
       awful.key({ modkey,        }, "KP_Enter",      function () awful.util.spawn("mixer vol ^ >/dev/null")  end),
@@ -457,7 +457,7 @@ elseif ostype == "FreeBSD" then
       awful.key({        }, "XF86AudioMute",        function () awful.util.spawn("mixer vol ^ >/dev/null")  end),
       awful.key({ "Mod1" }, "XF86AudioRaiseVolume", function () awful.util.spawn("mixer pcm -5 >/dev/null") end),
       awful.key({ "Mod1" }, "XF86AudioLowerVolume", function () awful.util.spawn("mixer pcm +5 >/dev/null") end)
-      )
+                                     )
 end
 
 
