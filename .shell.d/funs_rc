@@ -564,10 +564,10 @@ archive ()
         echo -e "  -m:\t\tChoose compression method."
         echo -e "    gz\t\tgzip (default)."
         echo -e "    xz\t\tLZMA."
-        echo -e "  -v:\t\tInclude VCS data."
+        echo -e "  -v:\t\tExclude VCS data. (GNU tar only)."
     }
 
-    local OPTION_VCS="--exclude-vcs"
+    local OPTION_VCS=""
     local OPTION_METHOD=""
 
     while getopts ":hm:v" opt; do
@@ -580,7 +580,7 @@ archive ()
                 OPTION_METHOD="${OPTARG}"
                 ;;
             v)
-                OPTION_VCS=""
+                OPTION_VCS="--exclude-vcs"
                 ;;
             ?) 
                 printhelp "$0"
@@ -624,7 +624,7 @@ archive ()
         ARCNAME="${ARCSOURCE}-$(date +%y-%m-%d-%H%M%S).${ARCEXT}"
 
         (cd "$ARCPATH" && \
-            tar -${ARCOPT} -cvf "$ARCNAME" "$ARCSOURCE" ${OPTION_VCS})
+            tar -${ARCOPT} -cf "$ARCNAME" "$ARCSOURCE" ${OPTION_VCS})
 
     else
         ARCSOURCE="$(basename $PWD)"
@@ -633,7 +633,7 @@ archive ()
         if [ $# = 0 ];then
 
             (cd "$PWD/.." && \
-                tar -${ARCOPT} -cvf "$ARCNAME" "$ARCSOURCE" ${OPTION_VCS})
+                tar -${ARCOPT} -cf "$ARCNAME" "$ARCSOURCE" ${OPTION_VCS})
 
         else
             ## Note for zsh: do NOT initialize an array with "myarray=()".
@@ -643,7 +643,7 @@ archive ()
                 FILELIST=(${FILELIST[*]} "$i")
             done
 
-            tar -${ARCOPT} -cvf "$ARCNAME" ${FILELIST[*]} ${OPTION_VCS}
+            tar -${ARCOPT} -cf "$ARCNAME" ${FILELIST[*]} ${OPTION_VCS}
         fi 
     fi
 }
