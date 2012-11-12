@@ -183,7 +183,7 @@ cpuusage()
     fi
 }
 
-codescan ()
+charset_scan ()
 {
     IFS="
 "
@@ -199,7 +199,7 @@ codescan ()
 ## Confert all 'bad' encoding to UTF-8/LF.
 #
 ## It will fail for encoding other than ISO-8859-1 and cp1252.
-utf8conv ()
+charset_2utf8 ()
 {
     local CODING
 
@@ -670,6 +670,9 @@ texclean ()
 
     find "$WORKDIR" -type f \( \
 	    -name "*.aux" -o \
+        -name "*.glg" -o \
+        -name "*.glo" -o \
+        -name "*.gls" -o \
         -name "*.idx" -o \
         -name "*.ilg" -o \
         -name "*.ind" -o \
@@ -679,7 +682,8 @@ texclean ()
         -name "*.out" -o \
         -name "*.snm" -o \
         -name "*.tns" -o \
-        -name "*.toc" \) \
+        -name "*.toc" -o \
+        -name "*.xdy" \) \
         -print \
         -delete
 }

@@ -178,6 +178,12 @@
            file-noext
            ".aux "
            file-noext
+           ".glg"
+           file-noext
+           ".glo"
+           file-noext
+           ".gls"
+           file-noext
            ".idx "
            file-noext
            ".ilg "
@@ -197,6 +203,8 @@
            ".tns "
            file-noext
            ".toc "
+           file-noext
+           ".xdy"
            )
    )
   )
@@ -243,11 +251,11 @@
                    ;; variables:
                    ;; $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
                    (let ((file (file-name-nondirectory buffer-file-name)))
-                     (format "%s -c -o %s.o %s %s %s"
+                     (format "%s -o %s %s %s %s"
                              (or (getenv "CC") "gcc")
                              (file-name-sans-extension file)
                              (or (getenv "CPPFLAGS") "-DDEBUG=9")
-                             (or (getenv "CFLAGS") "-ansi -pedantic -Wall -Wextra -Wshadow -lm -g3 -O0")
+                             (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -lm -g3 -O0")
                              file))))))
 
 ;;==============================================================================

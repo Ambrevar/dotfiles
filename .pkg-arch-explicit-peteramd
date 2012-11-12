@@ -3,6 +3,7 @@ abs
 acpi
 alsa-utils
 antiword
+apvlv
 arch-wiki-lite
 aspell-en
 aspell-fr
@@ -22,6 +23,7 @@ calc
 ccrypt
 cdrtools
 chrpath
+clisp
 cmus
 coreutils
 cronie
@@ -32,11 +34,13 @@ cyrus-sasl
 dash
 device-mapper
 dhcpcd
+dia
 diffutils
 djvulibre
 dosfstools
 dropbox
 dropbox-cli
+dwb
 e2fsprogs
 emacs-lua-mode
 emacs-mediawiki-bzr
@@ -64,6 +68,7 @@ ghostscript
 gimp
 git
 gitg
+gitso
 glibc
 gnumeric
 gnuplot
@@ -71,6 +76,7 @@ google-talkplugin
 grep
 gsfonts
 gstreamer0.10-ugly-plugins
+guile
 gzip
 handbrake
 hdparm
@@ -83,9 +89,9 @@ hunspell-fr
 ifplugd
 indent
 inetutils
-initscripts
 inkscape
 iotop
+iproute2
 iptables
 iputils
 jfsutils
@@ -107,6 +113,9 @@ linux
 linux-firmware
 linux-lts
 linux-manpages
+linux-rt
+linux-rt-docs
+linux-rt-headers
 lirc-utils
 lm_sensors
 logrotate
@@ -129,6 +138,7 @@ movgrab
 mpg123
 mplayer2
 mtools
+mumble
 mutt-android-patch
 namcap
 nano
@@ -174,7 +184,6 @@ slock
 splint
 strace
 submarine
-subversion
 sudo
 swi-prolog
 sxiv
@@ -183,8 +192,8 @@ syslinux
 syslog-ng
 sysstat
 systemd
+systemd-sysvcompat
 sysvbanner
-sysvinit
 tar
 task
 tcc

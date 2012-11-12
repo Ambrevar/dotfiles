@@ -9,6 +9,7 @@ alsa-utils
 antiword
 apr
 apr-util
+apvlv
 archlinux-keyring
 arch-wiki-lite
 aspell
@@ -41,6 +42,7 @@ ccrypt
 cdparanoia
 cdrtools
 chrpath
+clisp
 cloog
 cmus
 colord
@@ -64,12 +66,16 @@ dconf
 desktop-file-utils
 device-mapper
 dhcpcd
+dia
 dialog
 diffutils
 dirmngr
 djvulibre
 dnssec-anchors
+docbook-xml
+docbook-xsl
 dosfstools
+dwb
 e2fsprogs
 elfutils
 emacs-lua-mode
@@ -143,6 +149,8 @@ gsettings-desktop-schemas
 gsfonts
 gsl
 gsm
+gst-plugins-base-libs
+gstreamer
 gstreamer0.10
 gstreamer0.10-base
 gstreamer0.10-ugly
@@ -153,8 +161,10 @@ gtkmm
 gtksourceview3
 gtkspell
 gtk-update-icon-cache
+guile
 gzip
 handbrake
+harfbuzz
 hdparm
 heirloom-mailx
 hicolor-icon-theme
@@ -173,7 +183,6 @@ imagemagick
 imlib2
 indent
 inetutils
-initscripts
 inkscape
 inputproto
 iotop
@@ -185,6 +194,7 @@ iso-codes
 jack
 jasper
 jfsutils
+js
 json-c
 kbd
 kbproto
@@ -202,6 +212,7 @@ lesspipe
 lib32-gcc-libs
 lib32-glibc
 libarchive
+libart-lgpl
 libass
 libassuan
 libasyncns
@@ -271,6 +282,7 @@ libsamplerate
 libsasl
 libsidplay
 libsigc++
+libsigsegv
 libsm
 libsndfile
 libsoup
@@ -290,7 +302,6 @@ libva
 libvdpau
 libvorbis
 libvpx
-libwebkit
 libwmf
 libx11
 libxau
@@ -310,6 +321,7 @@ libxinerama
 libxkbfile
 libxml2
 libxmu
+libxp
 libxpm
 libxrandr
 libxrender
@@ -332,6 +344,7 @@ lirc-utils
 lm_sensors
 logrotate
 lrzip
+lsb-release
 lshw
 lsof
 ltrace
@@ -359,6 +372,7 @@ mpg123
 mplayer2
 mtdev
 mtools
+mumble
 namcap
 nano
 nawk
@@ -372,6 +386,7 @@ net-tools
 ngrep
 nspr
 nss
+nss-myhostname
 ntfs-3g
 ntfsprogs
 numlockx
@@ -398,6 +413,8 @@ pcre
 perl
 perl-digest-sha1
 perl-error
+perl-test-pod
+perl-yaml-syck
 pinentry
 pixman
 pkg-config
@@ -412,7 +429,9 @@ popt
 postgresql-libs
 ppl
 ppp
+printproto
 procps-ng
+protobuf
 psmisc
 pth
 pwgen
@@ -422,16 +441,20 @@ pygobject-devel
 pygtk
 python
 python2
+python2-beaker
 python2-cairo
 python2-dbus
 python2-distribute
 python2-gobject2
+python2-mako
+python2-markupsafe
+python2-notify
 python-cairo
 python-dbus-common
 python-gobject
-python-notify
 python-pyelftools
 qpdf
+qt
 randrproto
 ranger
 readline
@@ -467,8 +490,8 @@ syslinux
 syslog-ng
 sysstat
 systemd
+systemd-sysvcompat
 sysvbanner
-sysvinit
 sysvinit-tools
 tar
 task
@@ -477,6 +500,7 @@ tcsh
 texi2html
 texinfo
 tig
+tightvnc
 tree
 ttf-dejavu
 ttf-droid
@@ -501,12 +525,15 @@ vicious
 videoproto
 vlock
 w3m
+webkitgtk2
 wget
 which
 wipe
 wpa_supplicant
 wv
 wxgtk
+wxpython
+x11vnc
 x264
 xcb-proto
 xcb-util
@@ -526,6 +553,7 @@ xfsprogs
 xineramaproto
 xkeyboard-config
 xmlrpc-c
+xmlto
 xorg-bdftopcf
 xorg-fonts-alias
 xorg-fonts-encodings
