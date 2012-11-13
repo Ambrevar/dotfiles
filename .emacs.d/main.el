@@ -144,3 +144,6 @@
 ;; Browser
 (setq browse-url-generic-program (executable-find "luakit")
 browse-url-browser-function 'browse-url-generic)
+
+;; Default ispell dictionnay
+(setq ispell-dictionary "fr")
