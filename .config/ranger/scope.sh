@@ -55,6 +55,13 @@ case "$extension" in
 	doc)
 		antiword "$path"
 		success && exit 5 || exit 1;;
+	rtf)
+		unrtf --text "$path"
+		success && exit 5 || exit 1;;
+	odt)
+		odt2txt "$path"
+		success && exit 5 || exit 1;;
+
 
 	# BitTorrent Files
 	torrent)

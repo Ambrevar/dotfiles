@@ -5,19 +5,26 @@
 # name: \documentclass{beamer} ...
 # --
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass{beamer} 
+\documentclass[svgnames]{beamer} 
 %% \documentclass[xcolor=latex,svgnames,table]{beamer} 
 \usepackage[utf8]{inputenc}
 \usepackage{eurosym}
 \DeclareUnicodeCharacter{20AC}{\euro{}}
-% \usepackage[T1]{fontenc}
-% \usepackage{lmodern}
+\DeclareUnicodeCharacter{00AB}{\og{}}
+\DeclareUnicodeCharacter{00BB}{\fg{}}
+\DeclareUnicodeCharacter{2264}{\leqslant}
+\DeclareUnicodeCharacter{2265}{\geqslant}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \title{${1:Title}}
 \subtitle{${2:Subtitle}}
 \author{${3:\textcolor{structure.fg!60!white}{P.~Neidhardt}}}
 \institute{\textcolor{sidebarSection}{${4:Institute}}}
+
+%%==============================================================================
+%% Aliases
+%%==============================================================================
+\usepackage{xspace}
 
 \let\latexbak\LaTeX
 \renewcommand{\LaTeX}{{\rm \latexbak}}
@@ -27,8 +34,9 @@
 
 \def\unix{\textsc{Unix}}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Source code.
+%%==============================================================================
+%% Source code
+%%==============================================================================
 \usepackage{listings}
 \lstdefinestyle{customc}{
   % numbers=left,
@@ -57,9 +65,9 @@
 
 \lstset{escapechar=@,style=customc}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%==============================================================================
 %% Beamer config
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%==============================================================================
 
 %% Remove navigation bar.
 \beamertemplatenavigationsymbolsempty
@@ -88,20 +96,30 @@
 %% Blocks
 \setbeamertemplate{blocks}[rounded] [shadow=true]
 \setbeamercolor{block title}{fg=white,bg=structure.fg!80!black}
-\setbeamercolor{block body}{fg=black,bg=structure.bg}
+\setbeamercolor{block body}{fg=black,bg=structure.bg!95!black}
+\setbeamercolor{block title alerted}{fg=white,bg=DarkRed}
+\setbeamercolor{block body alerted}{fg=black,bg=structure.bg!95!black}
+\setbeamercolor{block title example}{fg=white,bg=DarkGreen}
+\setbeamercolor{block body example}{fg=black,bg=structure.bg!95!black}
 
 %% Footline
 \setbeamertemplate{footline}[page number]
 
 %% Lists
 %% default, triangle, circle, square, ball
-\setbeamertemplate{itemize item}[ball]
+%\setbeamertemplate{itemize item}[ball]
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Auto add frametitle and framesubtitle according to section and subsection.
+%% See below to toggle the effect.
+\addtobeamertemplate{frametitle}{
+   \let\insertframetitle\insertsectionhead}{}
+\addtobeamertemplate{frametitle}{
+   \let\insertframesubtitle\insertsubsectionhead}{}
+
+%%==============================================================================
 %% Locale
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%==============================================================================
 \usepackage[frenchb]{babel}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
@@ -111,15 +129,27 @@
 \titlepage{}
 \end{frame}
 
+%% Toggle auto insertion of frametitle and framesubtitle.
+\makeatletter
+  %% \CheckCommand*\beamer@checkframetitle{\@ifnextchar\bgroup\beamer@inlineframetitle{}}
+  \renewcommand*\beamer@checkframetitle{
+    \global\let\beamer@frametitle\relax\@ifnextchar\bgroup\beamer@inlineframetitle{}
+  }
+\makeatother
 
-\def\ftitle{First Title}
-\def\fsubtitle{First Subtitle}
+%%==============================================================================
+\section{Frame}
+\subsection{Classic frame}
 
-\section{\ftitle}
-\subsection{\fsubtitle}
+\frame[]
+{
+\begin{alertblock}{Alert block}
+Boom!
+\end{alertblock}
+}
+
+\subsection{With source code}
 \frame[shrink,containsverbatim]{
-\frametitle{\ftitle}
-\framesubtitle{\fsubtitle}
 
 \begin{lstlisting}[caption=Hello world!]
 int main(int argc, char** argv)
@@ -129,7 +159,6 @@ int main(int argc, char** argv)
 }
 
 \end{lstlisting}
-
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
