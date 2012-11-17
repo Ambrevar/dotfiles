@@ -668,12 +668,12 @@ texclean ()
         WORKDIR="$1"
     fi
 
+    ## WARNING: removing .idx files is messy in a .git folder.
     find "$WORKDIR" -type f \( \
 	    -name "*.aux" -o \
         -name "*.glg" -o \
         -name "*.glo" -o \
         -name "*.gls" -o \
-        -name "*.idx" -o \
         -name "*.ilg" -o \
         -name "*.ind" -o \
         -name "*.lof" -o \

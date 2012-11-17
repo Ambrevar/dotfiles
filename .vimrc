@@ -62,8 +62,9 @@ set showmatch		" Show matching brackets.
 set smartcase		" Do smart case matching
 set smartindent
 set smarttab
-
-
+set expandtab
+set tabstop=4
+set shiftwidth=4
 " Mapleader
 let mapleader = ","
 
