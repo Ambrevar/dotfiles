@@ -58,6 +58,7 @@ search_engines = {
     ctan           = "http://www.ctan.org/search/?search=%s&search_type=description",
     g              = "http://google.com/search?q=%s",
     gm             = "https://maps.google.com/maps?q=%s",
+    gt             = "http://translate.google.com/#en/fr/%s",
     imdb           = "http://imdb.com/find?s=all&q=%s", -- Note that imdb is messy with spaces.
     torrent        = "http://torrentz.eu/search?f=%s",
     w              = "http://en.wikipedia.org/wiki/Special:Search?search=%s",
