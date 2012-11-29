@@ -45,7 +45,7 @@ echo "==> rtorrent"
 mkdir -p "${HOME}/.session"
 echo
 
-## Luakit -- Update the adblock modules
+## Luakit -- Install the adblock modules
 type luakist >/dev/null
 if [ $? ]; then
     echo "==> Luakit"
@@ -63,8 +63,22 @@ if [ $? ]; then
     echo
 fi
 
+## DWB -- Install extensions.
+type dwb >/dev/null
+if [ $? ]; then
+    echo "==> DWB"
+    dwbem -Ni adblock_subscription
+    dwbem -Ni youtube_html5
+    dwbem -u
+    echo
+fi
+
 ## Bookmarks
 echo "==> Bookmarks"
-ln -sf "${SOURCEDIR}/BOOKMARKS/bookmarks" "$XDG_DATA_HOME/$BROWSER/"
-ln -sf "${SOURCEDIR}/BOOKMARKS/quickmarks" "$XDG_DATA_HOME/$BROWSER/"
+BROWSER_DATA_DIR="$XDG_DATA_HOME/$BROWSER/"
+if [ "$BROWSER" = "dwb" ]; then
+    BROWSER_DATA_DIR="$XDG_CONFIG_HOME/$BROWSER/default/"
+fi
+ln -sf "${SOURCEDIR}/BOOKMARKS/bookmarks" "$BROWSER_DATA_DIR"
+ln -sf "${SOURCEDIR}/BOOKMARKS/quickmarks" "$BROWSER_DATA_DIR"
 echo

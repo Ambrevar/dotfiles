@@ -75,6 +75,9 @@ gnuplot
 google-talkplugin
 grep
 gsfonts
+gstreamer0.10-bad-plugins
+gstreamer0.10-base-plugins
+gstreamer0.10-good-plugins
 gstreamer0.10-ugly-plugins
 guile
 gzip
@@ -123,7 +126,6 @@ lrzip
 lshw
 ltrace
 lua
-luakit
 lvm2
 lzo2
 m4
