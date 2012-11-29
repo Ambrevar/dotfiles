@@ -50,8 +50,7 @@ alias grep='grep --color=auto'
 
  
 ## Emacs
-type emacs > /dev/null
-if [ $? ]; then
+if [ -n "$(command -v emacs)" ]; then
    alias em='emacsclient -a "" -t'
    alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
 fi
@@ -65,12 +64,10 @@ fi
 alias nox='find . -type f -exec chmod a-x {} \;'
 
 ## Get your external IP.
-type curl > /dev/null
-[ $? ] && alias myip='curl ifconfig.me'
+[ -n "$(command -v curl)" ] && alias myip='curl ifconfig.me'
 
 ## Network discovery.
-type nmap > /dev/null
-[ $? ] && alias network-discover='nmap -sP "192.168.1.*"'
+[ -n "$(command -v nmap)" ] && alias network-discover='nmap -sP "192.168.1.*"'
 
 ## Prevents accidentally clobbering files.
 alias mkdir='mkdir -p'
@@ -91,12 +88,10 @@ else
 fi
 
 ## Start X and lock current terminal (press ENTER when back in terminal to prompt for password).
-type vlock > /dev/null
-[ $? ] && alias sx='startx & vlock'
+[ -n "$(command -v vlock)" ] && alias sx='startx & vlock'
 
 ## Zathura -- Fork to background.
-type zathura > /dev/null
-[ $? ] && alias zat='zathura --fork'
+[ -n "$(command -v zathura)" ] && alias zat='zathura --fork'
 
 ## Xrandr
 alias xmorphnone='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --transform none'

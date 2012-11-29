@@ -46,8 +46,7 @@ mkdir -p "${HOME}/.session"
 echo
 
 ## Luakit -- Install the adblock modules
-type luakist >/dev/null
-if [ $? ]; then
+if [ -n "$(command -v luakit)" ]; then
     echo "==> Luakit"
     git clone https://github.com/Plaque-fcc/luakit-adblock/ "${HOME}/luakit-adblock"
     cp -fv ~/luakit-adblock/*.lua "$XDG_CONFIG_HOME/luakit"
@@ -63,13 +62,11 @@ if [ $? ]; then
     echo
 fi
 
-## DWB -- Install extensions.
-type dwb >/dev/null
-if [ $? ]; then
-    echo "==> DWB"
-    dwbem -Ni adblock_subscription
+## dwb -- Install extensions.
+if [ -n "$(command -v dwb)" ]; then
+    echo "==> dwb"
+    dwbem -Ni adblock_subscriptions
     dwbem -Ni youtube_html5
-    dwbem -u
     echo
 fi
 
