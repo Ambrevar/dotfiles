@@ -27,7 +27,7 @@ URxvt*scrollBar: false
 !! URL Support
 URxvt.perl-ext:             url-select
 URxvt.keysym.C-M-u:         perl:url-select:select_next
-URxvt.url-select.launcher:  luakit
+URxvt.url-select.launcher:  dwb
 URxvt.url-select.underline: true
 
 URxvt.perl-ext-common:      keyboard-select,clipboard

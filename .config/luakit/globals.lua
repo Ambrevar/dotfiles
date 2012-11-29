@@ -59,7 +59,7 @@ search_engines = {
     g              = "http://google.com/search?q=%s",
     gm             = "https://maps.google.com/maps?q=%s",
     gt             = "http://translate.google.com/#en/fr/%s",
-    imdb           = "http://imdb.com/find?s=all&q=%s", -- Note that imdb is messy with spaces.
+    imdb           = "http://www.imdb.com/find?s=all&q=%s",
     torrent        = "http://torrentz.eu/search?f=%s",
     w              = "http://en.wikipedia.org/wiki/Special:Search?search=%s",
     wb             = "http://en.wikibooks.org/wiki/Special:Search?search=%s",

@@ -7,6 +7,7 @@ apvlv
 arch-wiki-lite
 aspell-en
 aspell-fr
+astyle
 atool
 at-spi2-atk
 at-spi2-core
@@ -17,6 +18,7 @@ awesome
 bash
 bash-completion
 bashmount
+binutils
 bison
 bzip2
 calc
@@ -52,15 +54,13 @@ feh
 file
 filesystem
 findutils
-firefox
-firefox-extension-video-downloadhelper
 flashplugin
 flex
 fortune-mod
 fortune-mod-tbbt
-gaupol
 gawk
-gcc-multilib
+gcc
+gcc-libs
 gcolor2
 gdb
 gettext
@@ -138,7 +138,6 @@ movgrab
 mpg123
 mplayer2
 mtools
-mumble
 mutt-android-patch
 namcap
 nano
@@ -150,6 +149,7 @@ ngrep
 ntfs-3g
 ntfsprogs
 numlockx
+odt2txt
 openssh
 oss
 p7zip
@@ -185,6 +185,7 @@ splint
 strace
 submarine
 sudo
+supermeatboy
 swi-prolog
 sxiv
 sysfsutils
@@ -219,11 +220,14 @@ util-linux
 valgrind
 vi
 vicious
+vim
 vlock
 w3m
 wget
 which
 wipe
+wmname
+worldofgoo
 wpa_supplicant
 wv
 xclip

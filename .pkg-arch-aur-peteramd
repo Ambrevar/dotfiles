@@ -3,11 +3,9 @@ dropbox
 dropbox-cli
 emacs-mediawiki-bzr
 emacs-yasnippet
-firefox-extension-video-downloadhelper
 fortune-mod-tbbt
 gitso
 google-talkplugin
-libpng12
 linux-rt
 linux-rt-docs
 linux-rt-headers
@@ -17,6 +15,8 @@ package-query
 pacman-color
 rxvt-unicode-patched
 submarine
+supermeatboy
 swi-prolog
 trash-cli
+worldofgoo
 yaourt

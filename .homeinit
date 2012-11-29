@@ -45,30 +45,26 @@ echo "==> rtorrent"
 mkdir -p "${HOME}/.session"
 echo
 
-## Luakit -- Fetch Adblock list.
-## This is handy to update lists regularly.
-echo "==> Luakit"
+## Luakit -- Update the adblock modules
+type luakist >/dev/null
+if [ $? ]; then
+    echo "==> Luakit"
+    git clone https://github.com/Plaque-fcc/luakit-adblock/ "${HOME}/luakit-adblock"
+    cp -fv ~/luakit-adblock/*.lua "$XDG_CONFIG_HOME/luakit"
+    rm -rvf "$HOME/luakit-adblock"
 
-# Update the adblock modules
-git clone https://github.com/Plaque-fcc/luakit-adblock/ "${HOME}/luakit-adblock"
-cp -fv ~/luakit-adblock/*.lua "$XDG_CONFIG_HOME/luakit"
-rm -rvf "$HOME/luakit-adblock"
-
-# Update the adblock lists
-mkdir -p "$XDG_DATA_HOME/luakit/adblock"
-wget https://easylist-downloads.adblockplus.org/easylist.txt \
-     https://easylist-downloads.adblockplus.org/easyprivacy.txt \
-     https://easylist-downloads.adblockplus.org/easylistgermany.txt \
-     http://lian.info.tm/liste_fr.txt \
-    -P "$XDG_DATA_HOME/luakit/adblock"
-# https://adblock-chinalist.googlecode.com/svn/trunk/adblock.txt # ChinaList
-# https://easylist-downloads.adblockplus.org/easylistitaly.txt
-# https://dutchadblockfilters.googlecode.com/svn/trunk/AdBlock_Dutch_hide.txt
-# http://stanev.org/abp/adblock_bg.txt # Bulgarian List
-# https://indonesianadblockrules.googlecode.com/hg/subscriptions/abpindo.txt # AB Pindo (Indonesian)
+    ## Update the adblock lists
+    mkdir -p "$XDG_DATA_HOME/luakit/adblock"
+    wget https://easylist-downloads.adblockplus.org/easylist.txt \
+        https://easylist-downloads.adblockplus.org/easyprivacy.txt \
+        https://easylist-downloads.adblockplus.org/easylistgermany.txt \
+        http://lian.info.tm/liste_fr.txt \
+        -P "$XDG_DATA_HOME/luakit/adblock"
+    echo
+fi
 
 ## Bookmarks
-ln -sf "${SOURCEDIR}/BOOKMARKS/bookmarks.db" "$XDG_DATA_HOME/luakit/bookmarks.db"
-ln -sf "${SOURCEDIR}/BOOKMARKS/quickmarks" "$XDG_DATA_HOME/luakit/quickmarks"
-
+echo "==> Bookmarks"
+ln -sf "${SOURCEDIR}/BOOKMARKS/bookmarks" "$XDG_DATA_HOME/$BROWSER/"
+ln -sf "${SOURCEDIR}/BOOKMARKS/quickmarks" "$XDG_DATA_HOME/$BROWSER/"
 echo

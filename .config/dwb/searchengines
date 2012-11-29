@@ -1,0 +1,17 @@
+g              http://google.com/search?q=%s
+arch           http://wiki.archlinux.org/index.php?title=Special%%3ASearch&search=%s&go=Go
+aur            https://aur.archlinux.org/packages.php?O=0&K=%s&do_Search=Go
+ctan           http://www.ctan.org/search/?search=%s&search_type=description
+gm             https://maps.google.com/maps?q=%s
+gt             http://translate.google.com/#en/fr/%s
+imdb           http://www.imdb.com/find?q=%s&s=all
+torrent        http://torrentz.eu/search?f=%s
+w              http://en.wikipedia.org/wiki/Special:Search?search=%s
+wb             http://en.wikibooks.org/wiki/Special:Search?search=%s
+wbf            http://fr.wikibooks.org/wiki/Special:Search?search=%s
+wf             http://fr.wikipedia.org/wiki/Special:Search?search=%s
+wk             http://en.wiktionary.org/wiki/Special:Search?search=%s
+wkf            http://fr.wiktionary.org/wiki/Special:Search?search=%s
+wr             http://www.wordreference.com/enfr/%s
+yt             http://www.youtube.com/results?search_query=%s
+

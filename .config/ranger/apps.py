@@ -56,7 +56,7 @@ class CustomApplications(DefaultApps):
 			if f.extension in ('html', 'htm', 'xhtml') or f.extension == 'swf':
 				c.flags += 'd'
 				handler = self.either(c,
-						'luakit', 'uzbl', 'vimprobable', 'vimprobable2', 'jumanji',
+						'dwb', 'luakit', 'uzbl', 'vimprobable', 'vimprobable2', 'jumanji',
 						'firefox', 'seamonkey', 'iceweasel', 'opera',
 						'surf', 'midori', 'epiphany', 'konqueror')
 				# Only return if some program was found:
@@ -127,7 +127,7 @@ class CustomApplications(DefaultApps):
 
 # Forked applications
 CustomApplications.generic(
-	'luakit', 'uzbl', 'vimprobable', 'vimprobable2', 'jumanji',
+	'dwb', 'luakit', 'uzbl', 'vimprobable', 'vimprobable2', 'jumanji',
 	'firefox', 'seamonkey', 'iceweasel', 'opera',
 	'surf', 'midori', 'epiphany', 'konqueror',
 	'evince', 'zathura', 'apvlv', 'okular', 'epdfview', 'mupdf', 'llpp',

@@ -159,6 +159,10 @@ FILELIST=(${FILELIST[*]} ".config/awesome/themes/custom/theme.lua")
 ## cmus
 FILELIST=(${FILELIST[*]} ".cmus/rc")
 
+## DWB
+FILELIST=(${FILELIST[*]} ".config/dwb/searchengines")
+FILELIST=(${FILELIST[*]} ".config/dwb/settings")
+
 ## Emacs
 FILELIST=(${FILELIST[*]} ".emacs")
 FILELIST=(${FILELIST[*]} ".emacs.d/abbrev_defs")

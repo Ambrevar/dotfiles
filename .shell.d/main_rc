@@ -79,8 +79,8 @@ fi
 export EDITOR
 
 ## Internet Browser
-type luakit > /dev/null
-[ $? ] && export BROWSER="luakit"
+type dwb > /dev/null
+[ $? ] && export BROWSER="dwb"
 
 ## Title
 ## If this is an xterm set the title to user@host:dir
