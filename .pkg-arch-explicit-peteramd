@@ -16,7 +16,6 @@ autoconf
 automake
 awesome
 bash
-bash-completion
 bashmount
 binutils
 bison
@@ -36,7 +35,6 @@ cyrus-sasl
 dash
 device-mapper
 dhcpcd
-dia
 diffutils
 djvulibre
 dosfstools
@@ -233,7 +231,6 @@ worldofgoo
 wpa_supplicant
 wv
 xclip
-xcursor-vanilla-dmz-aa
 xf86-video-ati
 xf86-video-vesa
 xfsprogs

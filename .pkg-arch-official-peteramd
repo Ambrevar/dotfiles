@@ -27,7 +27,6 @@ avahi
 awesome
 babl
 bash
-bash-completion
 bc
 binutils
 bison
@@ -65,7 +64,6 @@ dconf
 desktop-file-utils
 device-mapper
 dhcpcd
-dia
 dialog
 diffutils
 dirmngr
@@ -209,7 +207,6 @@ ldns
 less
 lesspipe
 libarchive
-libart-lgpl
 libass
 libassuan
 libasyncns
@@ -553,7 +550,6 @@ xcb-util-image
 xcb-util-keysyms
 xcb-util-wm
 xclip
-xcursor-vanilla-dmz-aa
 xdg-utils
 xextproto
 xf86dgaproto
