@@ -142,3 +142,4 @@ message-delay=2
 scheme-handler=
 default-font-size=12
 enable-offline-web-application-cache=true
+hints-key-lock=250

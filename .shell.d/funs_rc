@@ -238,6 +238,17 @@ charset_2utf8 ()
     done
 }
 
+## Wget batch DL
+wget_batch ()
+{
+    if [ $# -ne 2 ]; then
+        echo "Usage: $0 <ext> <uri>"
+        return
+    fi
+
+    wget -r -l1 --no-parent -A$1 $2
+}
+
 ## Webcam
 webcam ()
 {
