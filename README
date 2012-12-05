@@ -1,7 +1,7 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                               Author: Ambrevar                               #
-#                               Date: 2012-10-29                               #
+#                               Date: 2012-12-05                               #
 ################################################################################
 
 Synopsis
@@ -51,6 +51,10 @@ Configuration is very close to the default one, which mostly fits my needs.
 Most of the work I've done is for the status bar, but since I'm using the
 Vicious plugin, it is quite straightforward.
 
+DWB
+******
+Some custom options, download location, search engines, etc.
+
 Emacs
 *****
 Extra deps: emacs-lua-mode, emacs-mediawiki, emacs-yasnippet.
@@ -71,11 +75,6 @@ Some custom functions (duplicate line, unfill-paragraph, etc.).
 
 A lot of code snippets, especially for LaTeX. Contains document template, plot
 generation, pie chart generation, and others.
-
-Luakit
-******
-Some custom bindings, download location, search engines, etc.  Script+Plugin
-toggle. Adblock script (must be downloaded manually or from .homeinit).
 
 Mutt
 ****
@@ -110,11 +109,11 @@ Custom bindings, file association, tweaked a few options.
 Scripts
 *******
 
-.netinit: network setup. Works with wpa_supplicant. May replace any network
-          manager.
-
 .homeinit: initialize a new home configuration, i.e. get needed files, create
            symlinks, etc.
+
+.netinit: network setup. Works with wpa_supplicant. May replace any network
+          manager.
 
 .save: generates a home configuration archive.
 
@@ -136,10 +135,10 @@ TeX
 ***
 
 A lot of plainTeX and LaTeX macros. Among others: pie charts, dynamic plots with
-input file file and trend.
+input file and trend.
 
 plainTeX macros are in the '.texmf' folder. LaTeX macros are all bundled into
-Emacs snippets for the sake of portability.
+Emacs snippets so that .tex documents do not rely on any external file.
 
 URxvt
 *****
