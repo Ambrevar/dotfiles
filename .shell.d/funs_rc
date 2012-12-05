@@ -1,7 +1,7 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Shell -- Functions.
-## Date 2012-08-11
+## Date 2012-12-05
 ################################################################################
 
 ## Colored man pager. 
@@ -93,7 +93,7 @@ dirsize ()
 }
 
 ## Network operations
-if [ -e "/usr/bin/nmap" ]; then
+if [ -n  "$(command -v nmap)" ]; then
     network-map() 
     {
         echo "$1"
@@ -197,8 +197,8 @@ charset_scan ()
 }
 
 ## Confert all 'bad' encoding to UTF-8/LF.
-#
-## It will fail for encoding other than ISO-8859-1 and cp1252.
+##
+## WARNING: It will fail for encoding other than ISO-8859-1 and cp1252.
 charset_2utf8 ()
 {
     local CODING
@@ -259,7 +259,7 @@ webcam ()
 
 ## Vim-only: search the vim reference manual for a keyword.
 ## Usage: :h <keyword>
-if [ -e "/usr/bin/vim" ]; then
+if [ -n "$(command -v vim)" ]; then
     :h()
     {
         vim --cmd ":silent help $@" --cmd "only";
@@ -451,7 +451,7 @@ termsupport()
 }
 
 ## Highlight themes viewer for 256-colors terminals.
-if [ -f "/usr/bin/highlight" ] ; then
+if [ -n "$(command -v highlight)" ] ; then
     hlt-viewer ()
     {
         print_help()
@@ -495,7 +495,7 @@ if [ -f "/usr/bin/highlight" ] ; then
 fi
 
 ## Extractor -- Useless when using 'atool'.
-if [ ! -e "/usr/bin/atool" ]; then
+if [ ! -n "$(command -v atool)" ]; then
     extract () 
     {
 	    if [ -f $1 ] ; then
@@ -522,7 +522,7 @@ if [ ! -e "/usr/bin/atool" ]; then
     }
 fi
 
-# Warning: use this function with caution.  It may drastically improve
+# WARNING: use this function with caution.  It may drastically improve
 # compression of some PDF files, but in some case, the output filesize will be
 # greater! You should not use it over PDF files embedding pictures as well.
 pdfcompress ()
@@ -743,11 +743,10 @@ lsofstat()
     done
 }
 
-## Format C
-## Consider indent, astyle, uncrustify.
+## Format C using 'indent'. Alternative to indent: astyle, uncrustify.
 formatc()
 {
-    if [ ! -e /usr/bin/indent ]; then
+    if [ -n "$(command -v indent)" ]; then
         echo "Please install 'indent'"
         return
     fi
@@ -845,9 +844,9 @@ bindatasearch()
     local SOURCE=$(od -tx8 "$1" | awk '($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }')
 
     ## This special, not well-known syntax allows us to execute a set of
-    ## functions of the result of find.  Since everything MUST be between simple
-    ## quotes, we cannot use external variables directly. So we pass the $SOURCE
-    ## variable as argument. The underscore at the end allow the use of
+    ## functions upon the result of find.  Since everything MUST be between
+    ## simple quotes, we cannot use external variables directly. So we pass the
+    ## $SOURCE variable as argument. The underscore at the end allows the use of
     ## arguments.
     find "$WORKDIR" -type f -exec bash -c '
           FILEDUMP=$(od -tx8 "$1" | awk '"'"'($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }'"'"')
@@ -882,7 +881,7 @@ xmultioff ()
 ## Pacman Functions
 ##==============================================================================
 
-[ -f "/usr/bin/pacman" ] && . "${SHELL_DIR}/funs_pacman"
+[ -n  "$(command -v pacman)" ] && . "${SHELL_DIR}/funs_pacman"
 
 ##==============================================================================
 ## FreeBSD Functions
@@ -897,7 +896,7 @@ xmultioff ()
 ## TeXlive
 if [ -d "/usr/local/texlive" ]; then
 
-    ## Warning: it is important to set umask properly, otherwise users might
+    ## WARNING: it is important to set umask properly, otherwise users might
     ## not have authorization to use the packages.
 
     ## TODO: It is dirty to invoke a subshell several times.
