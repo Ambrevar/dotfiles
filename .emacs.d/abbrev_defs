@@ -199,7 +199,7 @@
     ("tschuss" "tschüss" nil 1)
     ("tte" "toute" nil 1)
     ("ttes" "toutes" nil 1)
-    ("varaible" "varaible" nil 1)
+    ("varaible" "variable" nil 1)
     ("w-e" "weekend" nil 6)
     ("ya" "il y a" nil 6)
     ("yen" "il y en" nil 1)
