@@ -108,7 +108,7 @@
 
 \def\civility{%
   \en{\male{M.}\female{Mrs.}}%
-  \fr{\male{Monsieur}\female{Madame}}%
+  \fr{\male{Monsieur}\female{Madame}\org{Madame, Monsieur}}%
 }
 
 %% Greetings toggle.
@@ -204,7 +204,7 @@
 \en{\hfill}
 \begin{minipage}{\mpwidth}
   \edef\fullname{\firstname{} \familyname{}}
-  \pinex{\fullname}{{\bfseries \fullname}
+  \pinex{\fullname}{\textbf{\fullname}}
   \vspace{0.5em}\\\\
   }
   \small\itshape%
@@ -226,12 +226,8 @@
 \fr{\hfill}%
 \begin{minipage}{\mpwidth}
   \edef\recipientfullname{\recipientfirstname{} \recipientfamilyname}
-  \pinex{\fullname}{{\bfseries \recipientfullname}
-  \\\\[0.5\baselineskip]
-  }
-  \pinex{\recipientinstitute}{\recipientinstitute{}
-    \\\\[0.5\baselineskip]
-  }
+  \pinex{\recipientfullname}{\textbf{\recipientfullname}\\\\[0.5\baselineskip]}
+  \pinex{\recipientinstitute}{\recipientinstitute{}\\\\[0.5\baselineskip]}
   \pinex{\recipientcity}{
     {\small\itshape
       \recipientstreet{} \\\\
@@ -303,10 +299,11 @@ I thank you for your consideration; I am looking forward to hearing from you soo
 
 \vfill
 
-%% \noindent{\em
-%%   \fr{Ci-joint~: Curriculum Vitæ}
-%%   \en{Attachment: Curriculum Vit\ae}
-%% }
+\noindent{
+  \scriptsize
+  \emph{\fr{Pièce(s) joint(es)~:}\en{Attachment:}}
+  Curriculum Vitæ
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}

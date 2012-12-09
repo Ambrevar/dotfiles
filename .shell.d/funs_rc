@@ -522,9 +522,9 @@ if [ ! -n "$(command -v atool)" ]; then
     }
 fi
 
-# WARNING: use this function with caution.  It may drastically improve
-# compression of some PDF files, but in some case, the output filesize will be
-# greater! You should not use it over PDF files embedding pictures as well.
+## WARNING: use this function with caution.  It may drastically improve
+## compression of some PDF files, but in some case, the output filesize will be
+## greater! You should not use it over PDF files embedding pictures as well.
 pdfcompress ()
 {
     if [ $# -lt 1 -o $# -gt 2 ]; then
@@ -547,6 +547,7 @@ pdfcompress ()
     fi
 }
 
+## Extract a range of pages from a PDF.
 pdfextract ()
 {
     if [ $# -ne 4 ]; then
@@ -559,6 +560,17 @@ pdfextract ()
     fi
 
     gs -sDEVICE=pdfwrite -dNOPAUSE -dSAFER -dSAFER -dFirstPage=$2 -dBATCH -dLastPage=$3 -sOutputFile=$4 $1
+}
+
+## Resize input PDF to an A4 output PDF.
+pdfresize ()
+{
+    if [ $# -ne 2 ]; then
+        echo "Usage: $0 <input> <output>"
+        return
+    fi
+
+    gs  -q -o $2 -sDEVICE=pdfwrite -sPAPERSIZE=a4 -dFIXEDMEDIA -dPDFFitPage -dCompatibilityLevel=1.4 $1
 }
 
 ## Create an archive from a single or multiples files/folders.

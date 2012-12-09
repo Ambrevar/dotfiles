@@ -140,6 +140,7 @@
    )
   )
 
+;; TODO: for  TeX/LaTeX only.
 ;; Replace tex-view
 (define-key my-keys-minor-mode-map (kbd "C-c C-v") 'tex-pdf-view)
 ;; Save automatically before compiling.
