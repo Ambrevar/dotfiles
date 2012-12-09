@@ -238,10 +238,6 @@
 ;;==============================================================================
 ;; C-mode
 ;;==============================================================================
-(add-hook 'c-mode-hook 'my-c-mode-hook)
-(add-hook 'c++-mode-hook 'my-c-mode-hook)
-(add-hook 'cpp-mode-hook 'my-c-mode-hook)
-
 (require 'compile)
 (add-hook 'c-mode-hook
           (lambda ()
