@@ -285,3 +285,10 @@ line-err-info-list)))
 
 (define-key my-keys-minor-mode-map (kbd "<f10>")
   'flymake-display-err-message-for-current-line)
+
+;;==============================================================================
+;; GUD
+;;==============================================================================
+
+;; Set GDB to display many windows by default.
+(setq gdb-many-windows t)
