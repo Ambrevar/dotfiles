@@ -22,13 +22,13 @@ SOURCEDIR="${HOME}/personal/dataperso"
 
 ## Mutt
 echo "==> Mutt"
-ln -snf "$(realpath ${SOURCEDIR}/MAILS)" "${HOME}/.mutt"
+ln -snf "$(realpath ${SOURCEDIR}/mails)" "${HOME}/.mutt"
 mkdir -p "${HOME}/.mutt.d/hcache"
 echo
 
 ## Taskwarrior
 echo "==> Taskwarrior"
-ln -snf "${SOURCEDIR}/TODO" "${HOME}/.task"
+ln -snf "${SOURCEDIR}/todo" "${HOME}/.task"
 echo
 
 ## Awesome
@@ -76,6 +76,6 @@ BROWSER_DATA_DIR="$XDG_DATA_HOME/$BROWSER/"
 if [ "$BROWSER" = "dwb" ]; then
     BROWSER_DATA_DIR="$XDG_CONFIG_HOME/$BROWSER/default/"
 fi
-ln -sf "${SOURCEDIR}/BOOKMARKS/bookmarks" "$BROWSER_DATA_DIR"
-ln -sf "${SOURCEDIR}/BOOKMARKS/quickmarks" "$BROWSER_DATA_DIR"
+ln -sf "${SOURCEDIR}/bookmarks/bookmarks" "$BROWSER_DATA_DIR"
+ln -sf "${SOURCEDIR}/bookmarks/quickmarks" "$BROWSER_DATA_DIR"
 echo
