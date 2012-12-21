@@ -4,7 +4,6 @@ acpi
 alsa-utils
 antiword
 apvlv
-arch-wiki-lite
 aspell-en
 aspell-fr
 astyle
@@ -52,6 +51,7 @@ feh
 file
 filesystem
 findutils
+firefox
 flashplugin
 flex
 fortune-mod
@@ -65,7 +65,6 @@ gettext
 ghostscript
 gimp
 git
-gitg
 gitso
 glibc
 gnumeric
@@ -99,6 +98,9 @@ jfsutils
 kmod
 less
 lesspipe
+lib32-alsa-lib
+lib32-ati-dri
+lib32-openal
 libev
 libftdi
 libirman
@@ -114,9 +116,6 @@ linux
 linux-firmware
 linux-lts
 linux-manpages
-linux-rt
-linux-rt-docs
-linux-rt-headers
 lirc-utils
 lm_sensors
 logrotate
@@ -133,7 +132,6 @@ man-pages
 mdadm
 mediainfo
 mkvtoolnix-cli
-mkvtoolnix-gtk
 movgrab
 mpg123
 mplayer2
@@ -225,6 +223,8 @@ vlock
 w3m
 wget
 which
+wine
+wine_gecko
 wipe
 wmname
 worldofgoo

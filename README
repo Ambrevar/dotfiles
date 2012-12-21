@@ -265,6 +265,7 @@ poppler
 pstotext
 pwgen
 pwsafe
+qpdf
 ranger
 re2c
 rsync

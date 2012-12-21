@@ -23,6 +23,7 @@ latex-bin
 latexconfig
 latex-fonts
 listings
+lm
 marvosym
 microtype
 moderncv

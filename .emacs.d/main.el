@@ -147,3 +147,6 @@ browse-url-browser-function 'browse-url-generic)
 
 ;; Default ispell dictionnay
 (setq ispell-dictionary "fr")
+
+;; Use color escape sequences. Only use if needed.
+;; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
