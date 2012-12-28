@@ -46,14 +46,21 @@
 
 (require 'mediawiki)
 
-;; TODO:  make it 'customize' independant.
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(mediawiki-site-alist (quote (("Wikipedia" "http://en.wikipedia.org/w/" "Ambrevar" "" "Main Page") ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX") ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt")))))
+;; TODO: make it 'customize' independant. 
 
+;; The url-cookie timer is set to a high value because it seems that once the
+;; cookie is saved, MediaWiki fails to upload files correctly. TODO: does not
+;; work.
+(custom-set-variables
+ '(mediawiki-site-alist 
+   (quote
+    (
+     ("Wikipedia" "http://en.wikipedia.org/w/" "Ambrevar" "" "Main Page")
+     ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX")
+     ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt"))
+    ))
+ '(url-cookie-save-interval 86400)
+ )
 
 (setq mediawiki-mode-hook (lambda ()
                             (visual-line-mode 1)
