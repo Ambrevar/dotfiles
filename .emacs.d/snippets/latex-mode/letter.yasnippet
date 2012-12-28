@@ -41,15 +41,15 @@
 %%==============================================================================
 
 %% Recipient gender. Can be male, female, org.
-\def\gender{${2:male}}
+\def\gender{${1:male}}
 
 %% Recipient
-\def\recipientfirstname{${3:Firstname}}
-\def\recipientfamilyname{${4:Familyname}}
-\def\recipientinstitute{${5:Institute}}
-\def\recipientstreet{${6:Street}}
-\def\recipientcity{${7:City}}
-\def\recipientpostcode{${8:Postcode}}
+\def\recipientfirstname{${2:Firstname}}
+\def\recipientfamilyname{${3:Familyname}}
+\def\recipientinstitute{${4:Institute}}
+\def\recipientstreet{${5:Street}}
+\def\recipientcity{${6:City}}
+\def\recipientpostcode{${7:Postcode}}
 
 %%==============================================================================
 %% Subject
@@ -268,6 +268,7 @@
 }
 
 \noindent
+$0
 Common blah.
 I thank you for your consideration; I am looking forward to hearing from you soon!
 
