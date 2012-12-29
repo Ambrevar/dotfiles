@@ -6,13 +6,15 @@
 # name: Modern Letter class
 # --
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass[12pt]{article}
+\documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{marvosym}
 \usepackage{eurosym}
 \DeclareUnicodeCharacter{20AC}{\euro{}}
-% \usepackage[T1]{fontenc}
-% \usepackage{lmodern}
+\DeclareUnicodeCharacter{00AB}{\og{}}
+\DeclareUnicodeCharacter{00BB}{\fg{}}
+\DeclareUnicodeCharacter{2264}{\leqslant}
+\DeclareUnicodeCharacter{2265}{\geqslant}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%==============================================================================
@@ -82,29 +84,27 @@
 \def\pinex#1#2{\ifx#1\empty\relax\else #2\fi}
 
 %% Language
-\def\en #1{}
-\def\fr #1{}
+\def\localedef#1{
+\ifthenelse{\equal{\locale}{#1}}{
+  \expandafter\def\csname#1\endcsname ##1{##1}
+}{
+  \expandafter\def\csname#1\endcsname ##1{}}
+}
 
-%% If strings are equal. Syntax:
-\ifthenelse{\equal{\locale}{en}}{
-  \def\en #1{#1}}{}
-
-\ifthenelse{\equal{\locale}{fr}}{
-  \def\fr #1{#1}}{}
+\localedef{en}
+\localedef{fr}
 
 %% Gender commands.
-\def\male #1{}
-\def\female #1{}
-\def\org #1{}
+\def\genderdef#1{
+\ifthenelse{\equal{\gender}{#1}}{
+  \expandafter\def\csname#1\endcsname ##1{##1}
+}{
+  \expandafter\def\csname#1\endcsname ##1{}}
+}
 
-\ifthenelse{\equal{\gender}{male}}{
-  \def\male #1{#1}}{}
-
-\ifthenelse{\equal{\gender}{female}}{
-  \def\female #1{#1}}{}
-
-\ifthenelse{\equal{\gender}{org}}{
-  \def\org #1{#1}}{}
+\genderdef{male}
+\genderdef{female}
+\genderdef{org}
 
 \def\civility{%
   \en{\male{M.}\female{Mrs.}}%

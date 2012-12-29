@@ -5,7 +5,7 @@
 # name: full article template
 # --
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass[10pt]{article}
+\documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{eurosym}
 \DeclareUnicodeCharacter{20AC}{\euro{}}
@@ -85,9 +85,10 @@
 \newcommand{\comment}[1]{}
 
 %% Options
+% \usepackage{parskip}
 % \renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
 \renewcommand{\arraystretch}{1.4}
-%% \renewcommand{\familydefault}{\sfdefault}
+% \renewcommand{\familydefault}{\sfdefault}
 
 %% Aliases
 \let\latexbak\LaTeX
