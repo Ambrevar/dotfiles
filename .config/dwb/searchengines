@@ -1,7 +1,7 @@
 g              http://google.com/search?q=%s
 arch           http://wiki.archlinux.org/index.php?title=Special%%3ASearch&search=%s&go=Go
 aur            https://aur.archlinux.org/packages.php?O=0&K=%s&do_Search=Go
-ctan           http://www.ctan.org/search/?search=%s&search_type=description
+ctan           http://www.ctan.org/search?phrase=%s
 gm             https://maps.google.com/maps?q=%s
 gt             http://translate.google.com/#en/fr/%s
 imdb           http://www.imdb.com/find?q=%s&s=all
