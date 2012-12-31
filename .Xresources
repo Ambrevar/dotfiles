@@ -83,8 +83,8 @@ URxvt*font       : xft:Dejavu Sans Mono:pixelsize=14
 !! color15 = bright white 	
 
 !! Gnome style
-URxvt*background: black
-URxvt*foreground: #CCCCCC
+*background: black
+*foreground: #CCCCCC
 URxvt.color0  : #000000
 URxvt.color1  : #AA0000
 URxvt.color2  : #00AA00
