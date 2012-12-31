@@ -114,7 +114,8 @@ separator_date:set_text(" |")
 systraywidget = wibox.widget.systray()
 
 -- Clock
-clockwidget = wibox.widget.textclock({ align = "right" })
+clockwidget = wibox.widget.textbox()
+clockwidget:set_text("DATE")
 
 cpuwidget = wibox.widget.textbox()
 netwidget = wibox.widget.textbox()
