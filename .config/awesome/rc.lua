@@ -61,7 +61,7 @@ end
 --------------------------------------------------------------------------------
 -- beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 -- beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
-beautiful.init(awful.util.getdir("config") .. "/themes/custom/theme.lua")
+beautiful.init(awful.util.getdir("config") .. "/themes/default/theme.lua")
 
 -- {{{ Wallpaper
 -- if beautiful.wallpaper then
@@ -109,9 +109,6 @@ end
 separator = " | "
 separator_date = wibox.widget.textbox()
 separator_date:set_text(" |")
-
--- Systray
-systraywidget = wibox.widget.systray()
 
 -- Clock
 mytextclock = awful.widget.textclock()
@@ -254,7 +251,7 @@ for s = 1, screen.count() do
 
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
-    left_layout:add(mylauncher)
+    -- left_layout:add(mylauncher)
     left_layout:add(mytaglist[s])
     left_layout:add(mypromptbox[s])
 
@@ -484,6 +481,7 @@ clientkeys = awful.util.table.join(
    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
    awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
    awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
+   -- TODO: redraw does not work since 3.5?
    awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
    awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
 
