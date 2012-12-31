@@ -1,7 +1,7 @@
 #!/bin/sh
 ################################################################################
 ## Home session initialization.
-## 2012-09-09
+## 2012-12-31
 ################################################################################
 
 ## Fetch source from Git repo:
@@ -29,15 +29,6 @@ echo
 ## Taskwarrior
 echo "==> Taskwarrior"
 ln -snf "${SOURCEDIR}/todo" "${HOME}/.task"
-echo
-
-## Awesome
-echo "==> Awesome"
-THEME_DEST="${XDG_CONFIG_HOME}/awesome/themes/custom"
-THEME_SOURCE="${XDG_DATA_DIRS}/awesome/themes/default/"
-if [ ! -e "${THEME_DEST}/background.png" ]; then
-    [ -d "${THEME_SOURCE}" ] && cp -rn ${THEME_SOURCE}/* "${THEME_DEST}"
-fi
 echo
 
 ## rtorrent

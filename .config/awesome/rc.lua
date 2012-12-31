@@ -55,13 +55,14 @@ do
                          in_error = false
                       end)
 end
-
+                        
 --------------------------------------------------------------------------------
 -- Themes define colours, icons, and wallpapers
 --------------------------------------------------------------------------------
 -- beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 -- beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
-beautiful.init(awful.util.getdir("config") .. "/themes/default/theme.lua")
+-- beautiful.init("/home/peter/.config/awesome/themes/custom/theme.lua")
+beautiful.init(awful.util.getdir("config") .. "/themes/custom/theme.lua")
 
 -- {{{ Wallpaper
 -- if beautiful.wallpaper then
