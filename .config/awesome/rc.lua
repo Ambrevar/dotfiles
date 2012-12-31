@@ -251,23 +251,21 @@ for s = 1, screen.count() do
 
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
-    -- left_layout:add(mylauncher)
+    left_layout:add(mylayoutbox[s])
     left_layout:add(mytaglist[s])
     left_layout:add(mypromptbox[s])
 
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
-    if s == 1 then right_layout:add(wibox.widget.systray()) end
+    right_layout:add(batwidget)
+    right_layout:add(volmwidget)
+    right_layout:add(volpwidget)
+    right_layout:add(netwidget)
+    right_layout:add(cpuwidget)
+    right_layout:add(separator_date)
     right_layout:add(mytextclock)
-    right_layout:add(mylayoutbox[s])
+    if s == 1 then right_layout:add(wibox.widget.systray()) end
 
-      -- clockwidget,
-      -- separator_date,
-      -- cpuwidget,
-      -- netwidget,
-      -- volpwidget,
-      -- volmwidget,
-      -- batwidget,
 
     -- Now bring it all together (with the tasklist in the middle)
     local layout = wibox.layout.align.horizontal()
@@ -482,7 +480,7 @@ clientkeys = awful.util.table.join(
    awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
    awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
    -- TODO: redraw does not work since 3.5?
-   awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
+   -- awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
    awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
 
    
