@@ -3,7 +3,7 @@
 ## Custom network initialization script.
 ## 2012-10-29
 ################################################################################
-## Deps: wpa_supplicant, ccrypt
+## Deps: wpa_supplicant, ccrypt (optional)
 
 ## We need to use wpa_supplicant's unencrypted config file. We store it in a
 ## variable to keep it secure, but the 'wpa_supplicant' command requires a
@@ -18,11 +18,10 @@
 ## There is an Emacs plugin for editing crypted files directly. See 'man
 ## ccrypt'.
 
-type ccrypt > /dev/null
-if [ $? -ne 0 ]; then
-    echo "You need to have 'ccrypt' installed."
-    exit
-fi
+# if [ -z "$(command -v ccrypt)" ]; then
+#     echo "You need to have 'ccrypt' installed."
+#     exit
+# fi
 
 if [ $(id -u) -ne 0 ]; then
     echo "You must be root to run this script."
@@ -30,7 +29,7 @@ if [ $(id -u) -ne 0 ]; then
 fi
 
 NET_INTERFACE=wlan0
-WPA_SUPPLICANT_CONF="$(ccat /etc/wpa_supplicant.conf.cpt)"
+WPA_SUPPLICANT_CONF="$(cat /etc/wpa_supplicant.conf)"
 TIMEOUT_LIMIT=500
 
 pkill wpa_supplicant
