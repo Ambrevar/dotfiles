@@ -117,6 +117,7 @@ mytextclock = awful.widget.textclock()
 cpuwidget = wibox.widget.textbox()
 netwidget = wibox.widget.textbox()
 volmwidget = wibox.widget.textbox()
+volpwidget = wibox.widget.textbox()
 batwidget = wibox.widget.textbox()
 
 if ostype == "Linux" then
