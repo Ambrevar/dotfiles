@@ -93,9 +93,9 @@ options.
 Some customization: custom index view, good Emacs integration (see .emacs),
 custom theme (matches Emacs colors), various tweaks.
 
-Thanks to the coloset.sh script, Mutt will check terminal color support and load
-colors appropriately. Therefore this configuration should work on any terminal,
-should it have 256-colors support or not.
+Thanks to the colorset.sh script, Mutt will check terminal color support and
+load colors appropriately. Therefore this configuration should work on any
+terminal, should it have 256-colors support or not.
 
 URxvt has an URL support that works also for Mutt. For other terminals, you
 might consider using the 'urlview' plugin for Mutt.

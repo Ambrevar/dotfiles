@@ -82,8 +82,8 @@ folder-hook '$my_ac_work' 'source ~/.mutt/$my_ac_work'
 folder-hook '$my_ac_university' 'source ~/.mutt/$my_ac_university'
 
 ## Switch to default account on startup
-source "~/.mutt/$my_ac_university"
-# source "~/.mutt/$my_ac_personal"
+# source "~/.mutt/$my_ac_university"
+source "~/.mutt/$my_ac_personal"
 # source "~/.mutt/$my_ac_work"
 
 ## Keys

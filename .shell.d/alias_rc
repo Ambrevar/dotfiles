@@ -1,7 +1,7 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Shell Config -- Alias Definitions.
-## Date 2012-10-29
+## Date 2013-01-04
 ################################################################################
 
 ##==============================================================================
@@ -47,12 +47,26 @@ alias grep='grep --color=auto'
 
 ## Bad idea because you cannot toggle '-f' option anymore.
 # alias cp="cp -i"
-
  
 ## Emacs
+## For the systemd unit, write the following file:
+## /etc/systemd/system/emacs@.service
+# [Unit]
+# Description=Emacs: the extensible, self-documenting text editor
+# 
+# [Service]
+# Type=forking
+# ExecStart=/usr/bin/emacs --daemon
+# ExecStop=/usr/bin/emacsclient --eval "(progn (setq kill-emacs-hook 'nil) (kill-emacs))"
+# Restart=always
+# User=%i
+# 
+# [Install]
+# WantedBy=multi-user.target
 if [ -n "$(command -v emacs)" ]; then
    alias em='emacsclient -a "" -t'
-   alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
+   # alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
+   alias emacs-reload="sudo systemctl restart emacs@$USER"
 fi
 
 # List desktop applications.
