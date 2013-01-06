@@ -65,8 +65,8 @@ alias grep='grep --color=auto'
 # WantedBy=multi-user.target
 if [ -n "$(command -v emacs)" ]; then
    alias em='emacsclient -a "" -t'
-   # alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
-   alias emacs-reload="sudo systemctl restart emacs@$USER"
+   alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
+   # alias emacs-reload="sudo systemctl restart emacs@$USER"
 fi
 
 # List desktop applications.

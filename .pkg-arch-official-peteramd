@@ -132,6 +132,7 @@ gnumeric
 gnupg
 gnuplot
 gnutls
+gobject-introspection
 goffice
 gpgme
 gpm
@@ -198,6 +199,7 @@ kmod
 krb5
 ladspa
 lame
+latex2rtf
 lcms
 lcms2
 ldns
@@ -391,6 +393,7 @@ lsof
 ltrace
 lua
 lua51
+lua-lgi
 lvm2
 lzo2
 m4
@@ -477,13 +480,18 @@ pth
 pwgen
 pyalpm
 pygobject2-devel
+pygobject-devel
 pygtk
 python
 python2
+python2-beaker
 python2-cairo
 python2-dbus
 python2-distribute
+python2-gobject
 python2-gobject2
+python2-mako
+python2-markupsafe
 python2-notify
 python-dbus-common
 python-pyelftools

@@ -96,6 +96,7 @@ iptables
 iputils
 jfsutils
 kmod
+latex2rtf
 less
 lesspipe
 lib32-alsa-lib
@@ -171,6 +172,7 @@ procps-ng
 psmisc
 pwgen
 python2-dbus
+python2-gobject
 ranger
 reiserfsprogs
 rtorrent
@@ -184,7 +186,6 @@ strace
 submarine
 sudo
 supermeatboy
-swi-prolog
 sxiv
 sysfsutils
 syslinux

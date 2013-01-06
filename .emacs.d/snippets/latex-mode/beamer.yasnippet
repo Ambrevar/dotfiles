@@ -8,10 +8,18 @@
 \documentclass[svgnames]{beamer} 
 %% \documentclass[xcolor=latex,svgnames,table]{beamer} 
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage{eurosym}
-\DeclareUnicodeCharacter{20AC}{\euro{}}
+\usepackage{gensymb}
+\usepackage{graphicx}
+\usepackage{needspace}
+\usepackage[svgnames]{xcolor}
+\usepackage{xspace}
 \DeclareUnicodeCharacter{00AB}{\og{}}
+\DeclareUnicodeCharacter{00B0}{\degree{}}
 \DeclareUnicodeCharacter{00BB}{\fg{}}
+\DeclareUnicodeCharacter{20AC}{\euro{}}
 \DeclareUnicodeCharacter{2264}{\leqslant}
 \DeclareUnicodeCharacter{2265}{\geqslant}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -53,16 +61,6 @@
   identifierstyle=\color{blue},
   stringstyle=\color{orange},
   numberstyle=\ttfamily
-}
-
-\lstdefinestyle{customasm}{
-  % numbers=left,
-  belowcaptionskip=1\baselineskip,
-  frame=L,
-  xleftmargin=\parindent,
-  language=[x86masm]Assembler,
-  basicstyle=\footnotesize\ttfamily,
-  commentstyle=\itshape\color{purple!40!black},
 }
 
 \lstset{escapechar=@,style=customc}

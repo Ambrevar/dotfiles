@@ -4,7 +4,6 @@ babel
 beamer
 bigfoot
 carlisle
-cm-super
 collection-basic
 colortbl
 ec
@@ -36,6 +35,7 @@ oberdiek
 pdftex-def
 pgf
 scheme-minimal
+tabulary
 texinfo
 texlive-common
 texlive-docindex
