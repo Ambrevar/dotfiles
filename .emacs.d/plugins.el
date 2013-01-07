@@ -62,11 +62,12 @@
  '(url-cookie-save-interval 86400)
  )
 
-(setq mediawiki-mode-hook (lambda ()
-                            (visual-line-mode 1)
-                            (turn-off-auto-fill)
-                            (define-key mediawiki-mode-map (kbd "C-c RET") 'mediawiki-open-page-at-point)
-                            (define-key mediawiki-mode-map (kbd "C-c o") 'mediawiki-browse)
+(setq mediawiki-mode-hook
+      (lambda ()
+        (visual-line-mode 1)
+        (turn-off-auto-fill)
+        (define-key mediawiki-mode-map (kbd "C-c RET") 'mediawiki-open-page-at-point)
+        (define-key mediawiki-mode-map (kbd "C-c o") 'mediawiki-browse)
 ))
 
 ;;==============================================================================

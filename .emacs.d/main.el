@@ -32,10 +32,6 @@
 (define-key my-keys-minor-mode-map (kbd "C-<f7>") (kbd "C-u M-! xclip <SPC> -o"))
 (define-key my-keys-minor-mode-map (kbd "C-<f8>") (kbd "C-u M-! xclip <SPC> -o <SPC> -selection <SPC> clipboard"))
 
-;; Compilation
-(define-key my-keys-minor-mode-map (kbd "C-<f9>") 'compile)
-;; (define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
-
 ;; Window resize
 ;; TODO: Use more { and } to continue.
 (define-key my-keys-minor-mode-map (kbd "C-x {")  (lambda () (interactive) (shrink-window-horizontally 5)))
@@ -43,8 +39,6 @@
 ;; (define-key my-keys-minor-mode-map (kbd "S-C-<down>") 'shrink-window)
 ;; (define-key my-keys-minor-mode-map (kbd "S-C-<up>") 'enlarge-window)
 
-(define-key my-keys-minor-mode-map (kbd "M-a") 'beginning-of-defun)
-(define-key my-keys-minor-mode-map (kbd "M-e") 'end-of-defun)
 
 ;; Modern scrolling
 (global-set-key [next]

@@ -118,10 +118,10 @@
     "\\author{\\textsc{P.~Neidhardt}}\n"
     ))
 
-
 ;;==============================================================================
 ;; TeX and LaTeX
 ;;==============================================================================
+;; TODO: bug with file beginning with \input.
 
 ;; Let's use pdftex.
 ;; To use GnuPlot we need to allow external application to be called from TeX.
@@ -130,24 +130,30 @@
 ;; (setq tex-command "pdftex") ; Same as above ?
 (setq latex-run-command "pdflatex --shell-escape")
 
-;; TODO: display in TeX/LaTeX only.
 (defun tex-pdf-view ()
   (interactive)
   (shell-command
    (concat "zathura --fork " 
-           (replace-regexp-in-string "tex" "pdf" (file-name-nondirectory buffer-file-name))
+           (replace-regexp-in-string "tex" "pdf&" (file-name-nondirectory buffer-file-name))
            )
    )
+  (delete-windows-on "*Async Shell Command*")
   )
 
-;; TODO: for  TeX/LaTeX only.
-;; Replace tex-view
-(define-key my-keys-minor-mode-map (kbd "C-c C-v") 'tex-pdf-view)
-;; Save automatically before compiling.
-(define-key my-keys-minor-mode-map (kbd "C-c C-f") (lambda () (interactive)
-                                                     (save-buffer)
-                                                     (tex-file)
-                                                     ))
+;; Previously using : (define-key my-keys-minor-mode-map ...
+(add-hook
+ 'tex-mode-hook
+ (lambda ()
+   ;; Replace tex-view
+   (local-set-key (kbd "C-c C-v") 'tex-pdf-view)
+   ;; Save automatically before compiling.
+   (local-set-key
+     (kbd "C-c C-f")
+     (lambda () (interactive)
+       (save-buffer) (tex-file)
+       ))
+   )
+ )
 
 (defun tex-pdf-compress ()
   (interactive)
@@ -253,12 +259,37 @@
                              (file-name-sans-extension file)
                              (or (getenv "CPPFLAGS") "-DDEBUG=9")
                              (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -lm -g3 -O0")
-                             file))))))
+                             file))))
+
+            (local-set-key (kbd "C-<f9>") 'compile)
+            ;; (define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
+            (local-set-key (kbd "M-a") 'beginning-of-defun)
+            (local-set-key (kbd "M-e") 'end-of-defun)
+
+            )
+          )
 
 ;;==============================================================================
 ;; Common LISP
 ;;==============================================================================
 (setq inferior-lisp-program "clisp")
+
+;;==============================================================================
+;; Python
+;;==============================================================================
+
+(add-hook
+ 'python-mode-hook
+ (lambda ()
+   (defun my-compile ()
+   "Use compile to run python programs."
+   (interactive)
+   (compile (concat "python " (buffer-name)))
+   )
+   (setq compilation-scroll-output t)
+   (local-set-key "\C-c\C-c" 'my-compile) 
+   )
+)
 
 ;;==============================================================================
 ;; Flymake
@@ -272,10 +303,8 @@
 has errors and/or warnings."
   (interactive)
   (let* ((line-no             (flymake-current-line-no))
-         (line-err-info-list  (nth 0 (flymake-find-err-info flymake-err-info 
-line-no)))
-         (menu-data           (flymake-make-err-menu-data line-no 
-line-err-info-list)))
+         (line-err-info-list  (nth 0 (flymake-find-err-info flymake-err-info line-no)))
+         (menu-data           (flymake-make-err-menu-data line-no line-err-info-list)))
     (if menu-data
         (let ((messages))
           (push (concat (car menu-data) ":") messages)
@@ -292,3 +321,4 @@ line-err-info-list)))
 
 ;; Set GDB to display many windows by default.
 (setq gdb-many-windows t)
+
