@@ -180,7 +180,6 @@ variable, e.g. on the first line:
   % -*- tex-my-startcommands: \"\\def\\locale{en}\" -*-
 ")
 
-;; TODO: Support for universal argument to toggle shell escape.
 (defun tex-my-compile ()
   "Use compile to process your TeX-based document."
   (interactive)
@@ -190,10 +189,15 @@ variable, e.g. on the first line:
    (t (setq tex-my-compiler "pdftex") (message "Warning: unknown major mode. Trying pdftex."))
    )
 
+  ;; If tex-my-startcommands has some content, we make sure it is a string that loads the file.
   (if (not (string= "" tex-my-startcommands))
       (setq tex-my-startcommands (concat "\"" tex-my-startcommands "\\input\"")))
 
-  (setq tex-my-compile-command (concat tex-my-compiler " -shell-escape " " "tex-my-compiler-options " " tex-my-startcommands " " buffer-file-name))
+  ;; Support of prefix argument to toggle -shell-escape.
+  (if (equal current-prefix-arg '(4)) (setq tex-my-shell-escape "-shell-escape")
+    (setq tex-my-shell-escape ""))
+
+  (setq tex-my-compile-command (concat tex-my-compiler " "  tex-my-shell-escape " " tex-my-compiler-options " " tex-my-startcommands " " buffer-file-name))
   ;; (message tex-my-compile-command) ;; Debug only.
   (save-buffer)
   (compile tex-my-compile-command)
@@ -252,7 +256,7 @@ your document embeds raster graphics."
  'tex-mode-hook
  (lambda ()
    (dolist (key '("\C-c\C-f" "\C-c\C-b"))
-     (global-unset-key key))   
+     (local-unset-key key))   
    (local-set-key (kbd "C-c C-c") 'tex-my-compile)
    (local-set-key (kbd "C-c C-v") 'tex-pdf-view)
    )
