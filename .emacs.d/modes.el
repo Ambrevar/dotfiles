@@ -200,7 +200,12 @@ variable, e.g. on the first line:
   (setq tex-my-compile-command (concat tex-my-compiler " "  tex-my-shell-escape " " tex-my-compiler-options " " tex-my-startcommands " " buffer-file-name))
   ;; (message tex-my-compile-command) ;; Debug only.
   (save-buffer)
+  (setq compilation-scroll-output t)
   (compile tex-my-compile-command)
+
+  ;; If no user interaction for 2 seconds, hide the compilation window.
+  (sit-for 2)
+  (delete-windows-on "*compilation*")
   )
 
 ;; TODO: rewrite this function using lists and/or macros.
