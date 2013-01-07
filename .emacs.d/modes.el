@@ -121,41 +121,101 @@
 ;;==============================================================================
 ;; TeX and LaTeX
 ;;==============================================================================
-;; TODO: bug with file beginning with \input.
 
-;; Let's use pdftex.
+;; I find the default tex-mode and AucTeX quiet disappointing. I'm using custom
+;; functions for everything.
+
 ;; To use GnuPlot we need to allow external application to be called from TeX.
 ;; WARNING: the "--shell-escape" option is a potential security issue.
-(setq tex-run-command "pdftex --shell-escape")
-;; (setq tex-command "pdftex") ; Same as above ?
-(setq latex-run-command "pdflatex --shell-escape")
 
-(defun tex-pdf-view ()
+(defvar tex-my-compiler "pdftex"
+  "This is the name of the executable called upon TeX compilations.
+Examples: pdftex, pdflatex, xetex, xelatex, luatex, lualatex...")
+
+(defvar tex-my-compiler-options  "-file-line-error-style -halt-on-error"
+  "The options to the tex compiler. Options are set between the
+compiler name and the file name.
+
+Interresting options:
+
+* -file-line-error-style: change the style of error report to
+   display file name and line first.
+
+* -halt-on-error will disable interactive mode.
+
+* -interaction <mode>: like -halt-on-error, you can set the way
+   the compilers behave on errors. Possible values for <mode> are
+   'batchmode', 'errorstopmode', 'nonstopmode' and 'scrollmode'.
+
+* -shell
+
+You may use file local variable for convenience:
+
+% -*- tex-my-compiler-options: \"-shell-escape\"
+
+Note that -shell-escape can also be toggled with universal
+argument.")
+
+(defvar tex-my-startcommands  ""
+  "You can call a TeX compiler upon a string instead of a file.
+This is actually useful if you want to customize your
+compilation.
+
+If this variable is not an empty string, the mandatory \" is
+prepended and \\input\" is appended, so that the target file gets
+read; otherwise the TeX compiler would stop there.
+
+You may use it to act on the process, like the default behaviour:
+  \\nonstopmode
+which will continue the process whenever an error is
+encountered. There is an command-line argument for that on most
+compilers, that is is rarely useful.
+
+If you use a color theme, or any conditional variable inside your
+document, you may define it here:
+  \\def\\myvar{mycontent}
+
+A pratical way to use this feature is to define a file local
+variable, e.g. on the first line:
+  % -*- tex-my-startcommands: \"\\def\\locale{en}\" -*-
+")
+
+;; TODO: Support for universal argument to toggle shell escape.
+(defun tex-my-compile ()
+  "Use compile to process your TeX-based document."
   (interactive)
-  (shell-command
-   (concat "zathura --fork " 
-           (replace-regexp-in-string "tex" "pdf&" (file-name-nondirectory buffer-file-name))
-           )
+  (cond
+   ((string= "latex-mode" major-mode) (setq tex-my-compiler "pdflatex"))
+   ((string= "plain-tex-mode" major-mode) (setq tex-my-compiler "pdftex"))
+   (t (setq tex-my-compiler "pdftex") (message "Warning: unknown major mode. Trying pdftex."))
    )
-  (delete-windows-on "*Async Shell Command*")
+
+  (if (not (string= "" tex-my-startcommands))
+      (setq tex-my-startcommands (concat "\"" tex-my-startcommands "\\input\"")))
+
+  (setq tex-my-compile-command (concat tex-my-compiler " -shell-escape " " "tex-my-compiler-options " " tex-my-startcommands " " buffer-file-name))
+  ;; (message tex-my-compile-command) ;; Debug only.
+  (save-buffer)
+  (compile tex-my-compile-command)
   )
 
-;; Previously using : (define-key my-keys-minor-mode-map ...
-(add-hook
- 'tex-mode-hook
- (lambda ()
-   ;; Replace tex-view
-   (local-set-key (kbd "C-c C-v") 'tex-pdf-view)
-   ;; Save automatically before compiling.
-   (local-set-key
-     (kbd "C-c C-f")
-     (lambda () (interactive)
-       (save-buffer) (tex-file)
-       ))
+;; TODO: rewrite this function using lists and/or macros.
+(defun tex-clean ()
+  "Remove all TeX temporary files. This command should be safe,
+but there is no warranty."
+  (interactive)
+  (defvar file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory buffer-file-name)))
+  (shell-command
+   (concat "rm -f "
+           file-noext ".aux " file-noext ".glg" file-noext ".glo" file-noext ".gls" file-noext ".idx " file-noext ".ilg " file-noext ".ind " file-noext ".lof " file-noext ".log " file-noext ".nav " file-noext ".out " file-noext ".snm " file-noext ".tns " file-noext ".toc " file-noext ".xdy"
+           )
    )
- )
+  )
 
 (defun tex-pdf-compress ()
+  "PDF compressions might really strip down the PDF size. The
+compression depends on the fonts used. Do not use this command if
+your document embeds raster graphics."
   (interactive)
   (defvar file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory buffer-file-name)))
   (defvar file (replace-regexp-in-string "tex" "pdf" (file-name-nondirectory buffer-file-name)))
@@ -177,59 +237,26 @@
    )
   )
 
-(defun tex-clean ()
+(defun tex-pdf-view ()
+  "Call a PDF viewer for current buffer file."
   (interactive)
-  (defvar file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory buffer-file-name)))
   (shell-command
-   (concat "rm -f "
-           file-noext
-           ".aux "
-           file-noext
-           ".glg"
-           file-noext
-           ".glo"
-           file-noext
-           ".gls"
-           file-noext
-           ".idx "
-           file-noext
-           ".ilg "
-           file-noext
-           ".ind "
-           file-noext
-           ".lof "
-           file-noext
-           ".log "
-           file-noext
-           ".nav "
-           file-noext
-           ".out "
-           file-noext
-           ".snm "
-           file-noext
-           ".tns "
-           file-noext
-           ".toc "
-           file-noext
-           ".xdy"
+   (concat "zathura --fork " 
+           (replace-regexp-in-string "\.tex$" "\.pdf &" (file-name-nondirectory buffer-file-name))
            )
    )
+  (delete-windows-on "*Async Shell Command*")
   )
 
-;; ;; Add '--shell-escape' switch to compilation command (useful for using GnuPlot from TikZ)
-;; (eval-after-load "tex"
-;;   '(setcdr (assoc "LaTeX" TeX-command-list)
-;; 	   '("%`%l%(mode) --shell-escape %' %t"
-;; 	    TeX-run-TeX nil (latex-mode doctex-mode) :help "Run LaTeX")
-;; 	  )
-;;   )
-
-;; ;; Theme
-;; (defun my-tex-font-hook ()
-;;   (set-face-foreground 'font-latex-sedate-face "brightred" )
-;;   (set-face-bold-p 'font-latex-sedate-face t)
-;; )
-;; (add-hook 'TeX-mode-hook 'my-tex-font-hook)
+(add-hook
+ 'tex-mode-hook
+ (lambda ()
+   (dolist (key '("\C-c\C-f" "\C-c\C-b"))
+     (global-unset-key key))   
+   (local-set-key (kbd "C-c C-c") 'tex-my-compile)
+   (local-set-key (kbd "C-c C-v") 'tex-pdf-view)
+   )
+ )
 
 ;;==============================================================================
 ;; HTML
@@ -261,7 +288,7 @@
                              (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -lm -g3 -O0")
                              file))))
 
-            (local-set-key (kbd "C-<f9>") 'compile)
+            (local-set-key (kbd "C-c C-f") 'compile)
             ;; (define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
             (local-set-key (kbd "M-a") 'beginning-of-defun)
             (local-set-key (kbd "M-e") 'end-of-defun)
@@ -281,15 +308,15 @@
 (add-hook
  'python-mode-hook
  (lambda ()
-   (defun my-compile ()
-   "Use compile to run python programs."
-   (interactive)
-   (compile (concat "python " (buffer-name)))
-   )
+   (defun python-my-compile ()
+     "Use compile to run python programs."
+     (interactive)
+     (compile (concat "python " buffer-name))
+     )
    (setq compilation-scroll-output t)
-   (local-set-key "\C-c\C-c" 'my-compile) 
+   (local-set-key "\C-c\C-c" 'python-my-compile) 
    )
-)
+ )
 
 ;;==============================================================================
 ;; Flymake
