@@ -65,6 +65,7 @@ dhcpcd
 dialog
 diffutils
 dirmngr
+django
 djvulibre
 dnssec-anchors
 dosfstools
@@ -395,6 +396,7 @@ lua
 lua51
 lua-lgi
 lvm2
+lxdm
 lzo2
 m4
 make

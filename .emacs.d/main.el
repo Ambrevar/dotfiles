@@ -144,3 +144,8 @@ browse-url-browser-function 'browse-url-generic)
 
 ;; Use color escape sequences. Only use if needed.
 ;; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+
+;; Long paragraphs. Useful for quick navigation with backward-paragraph and
+;; forward-paragraph.
+(setq paragraph-start "
+")

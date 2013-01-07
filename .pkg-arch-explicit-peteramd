@@ -35,6 +35,7 @@ dash
 device-mapper
 dhcpcd
 diffutils
+django
 djvulibre
 dosfstools
 dropbox
@@ -125,6 +126,7 @@ lshw
 ltrace
 lua
 lvm2
+lxdm
 lzo2
 m4
 make
