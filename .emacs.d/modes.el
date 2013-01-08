@@ -129,7 +129,7 @@
   "This is the name of the executable called upon TeX compilations.
 Examples: pdftex, pdflatex, xetex, xelatex, luatex, lualatex...")
 
-(defvar tex-my-compiler-options "-file-line-error-style -halt-on-error"
+(defvar tex-my-compiler-options "-file-line-error-style -interaction nonstopmode"
   "The options to the tex compiler. Options are set between the
 compiler name and the file name.
 
@@ -138,7 +138,7 @@ Interresting options:
 * -file-line-error-style: change the style of error report to
    display file name and line first.
 
-* -halt-on-error: will disable interactive mode.
+* -halt-on-error: default.
 
 * -interaction <mode>: like -halt-on-error, you can set the way
    the compilers behave on errors. Possible values for <mode> are
