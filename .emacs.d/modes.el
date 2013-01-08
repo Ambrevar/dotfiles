@@ -125,14 +125,11 @@
 ;; I find the default tex-mode and AucTeX quiet disappointing. I'm using custom
 ;; functions for everything.
 
-;; To use GnuPlot we need to allow external application to be called from TeX.
-;; WARNING: the "--shell-escape" option is a potential security issue.
-
 (defvar tex-my-compiler "pdftex"
   "This is the name of the executable called upon TeX compilations.
 Examples: pdftex, pdflatex, xetex, xelatex, luatex, lualatex...")
 
-(defvar tex-my-compiler-options  "-file-line-error-style -halt-on-error"
+(defvar tex-my-compiler-options "-file-line-error-style -halt-on-error"
   "The options to the tex compiler. Options are set between the
 compiler name and the file name.
 
@@ -141,13 +138,14 @@ Interresting options:
 * -file-line-error-style: change the style of error report to
    display file name and line first.
 
-* -halt-on-error will disable interactive mode.
+* -halt-on-error: will disable interactive mode.
 
 * -interaction <mode>: like -halt-on-error, you can set the way
    the compilers behave on errors. Possible values for <mode> are
    'batchmode', 'errorstopmode', 'nonstopmode' and 'scrollmode'.
 
-* -shell
+* -shell-escape: allow the use of \write18{<external command>}
+   from within TeX documents. This is a potential security issue.
 
 You may use file local variable for convenience:
 
@@ -156,7 +154,7 @@ You may use file local variable for convenience:
 Note that -shell-escape can also be toggled with universal
 argument.")
 
-(defvar tex-my-startcommands  ""
+(defvar tex-my-startcommands ""
   "You can call a TeX compiler upon a string instead of a file.
 This is actually useful if you want to customize your
 compilation.
@@ -181,7 +179,16 @@ variable, e.g. on the first line:
 ")
 
 (defun tex-my-compile ()
-  "Use compile to process your TeX-based document."
+  "Use compile to process your TeX-based document. Use a prefix
+  argument to call the compiler along the '-shell-escape'
+  option. This will enable the use of '\write18{<external
+  command>}' from within TeX documents, which need to
+  allow external application to be called from TeX.
+
+This may be useful for some features like GnuPlot support with TikZ.
+
+WARNING: the -shell-escape option is a potential security issue."
+
   (interactive)
   (cond
    ((string= "latex-mode" major-mode) (setq tex-my-compiler "pdflatex"))

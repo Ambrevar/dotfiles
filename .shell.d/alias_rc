@@ -48,27 +48,6 @@ alias grep='grep --color=auto'
 ## Bad idea because you cannot toggle '-f' option anymore.
 # alias cp="cp -i"
  
-## Emacs
-## For the systemd unit, write the following file:
-## /etc/systemd/system/emacs@.service
-# [Unit]
-# Description=Emacs: the extensible, self-documenting text editor
-# 
-# [Service]
-# Type=forking
-# ExecStart=/usr/bin/emacs --daemon
-# ExecStop=/usr/bin/emacsclient --eval "(progn (setq kill-emacs-hook 'nil) (kill-emacs))"
-# Restart=always
-# User=%i
-# 
-# [Install]
-# WantedBy=multi-user.target
-if [ -n "$(command -v emacs)" ]; then
-   alias em='emacsclient -a "" -t'
-   alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
-   # alias emacs-reload="sudo systemctl restart emacs@$USER"
-fi
-
 # List desktop applications.
 [ -d /usr/share/applications ] && XDG_APPS=($XDG_APPS /usr/share/applications)
 [ -d /usr/local/share/applications ] && XDG_APPS=($XDG_APPS /usr/local/share/applications)
@@ -112,6 +91,29 @@ alias xmorphnone='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" 
 alias xmorphsw='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --transform 1.24,0.16,-124,0,1.24,0,0,0.000316,1'
 alias xmorphzo='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --scale 1.2x1.2'
 alias xmorphzi='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --scale 0.8x0.8'
+
+##==============================================================================
+## Emacs
+##==============================================================================
+## For the systemd unit, write the following file:
+## /etc/systemd/system/emacs@.service
+# [Unit]
+# Description=Emacs: the extensible, self-documenting text editor
+# 
+# [Service]
+# Type=forking
+# ExecStart=/usr/bin/emacs --daemon
+# ExecStop=/usr/bin/emacsclient --eval "(progn (setq kill-emacs-hook 'nil) (kill-emacs))"
+# Restart=always
+# User=%i
+# 
+# [Install]
+# WantedBy=multi-user.target
+if [ -n "$(command -v emacs)" ]; then
+   alias em='emacsclient -a "" -t'
+   alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
+   # alias emacs-reload="sudo systemctl restart emacs@$USER"
+fi
 
 ##==============================================================================
 ## Zsh power aliases
