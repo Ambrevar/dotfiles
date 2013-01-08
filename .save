@@ -138,7 +138,8 @@ if type tlmgr >/dev/null 2>&1; then
     TEXLIVE_BASIC="$(tlmgr info collection-basic --list | sed -n '/^	/{s/	//g;p;}' | sort)"
     TEXLIVE_ALL="$(tlmgr info --only-installed | grep -v 'x86_64\|amd64' | cut -d' ' -f2 | cut -f1 -d':' | sort)"
 
-    comm -3 <(echo "$TEXLIVE_BASIC") <(echo "$TEXLIVE_ALL") | sed 's/	//g' >"$HOME/.pkg-texlive-$(uname)-${HOST}"
+    comm -3 <(echo "$TEXLIVE_BASIC") <(echo "$TEXLIVE_ALL") | sed 's/	//g' | \
+        grep -vi 'collection-basic\|scheme-minimal\|texlive-common\|texlive-docindex\|texlive-en' >"$HOME/.pkg-texlive-$(uname)-${HOST}"
 fi
 
 ##==============================================================================
