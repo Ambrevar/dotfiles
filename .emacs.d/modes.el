@@ -365,3 +365,14 @@ has errors and/or warnings."
 ;; Set GDB to display many windows by default.
 (setq gdb-many-windows t)
 
+
+;;==============================================================================
+;; Ediff
+;;==============================================================================
+
+;; TODO: does not seem to work.
+;; (add-hook
+;;  'ediff-mode-hook
+;;  (lambda ()
+;;    (setq ediff-merge-split-window-function 'split-window-horizontally)
+;; ))

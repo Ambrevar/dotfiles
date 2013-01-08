@@ -2,6 +2,9 @@
 ;; THEME
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; To find the variable associated to a currently used color, place the cursor
+;; on it and call 'customize-face'.
+
 (set-face-foreground  'font-lock-builtin-face           "color-75" )
 (set-face-bold-p      'font-lock-builtin-face           t ) 
 (set-face-foreground  'font-lock-comment-delimiter-face "color-242" ) 
@@ -23,10 +26,25 @@
 (set-face-underline-p 'link              t)
 (set-face-foreground  'minibuffer-prompt "brightcyan" ) 
 (set-face-background  'region            "color-17")
+(set-face-foreground  'region            "white")
 (set-face-foreground  'error             "red")
 (set-face-bold-p      'error             t)
 (set-face-background  'shadow            "color-234" ) ;; For line numbers.
 
+;; Ediff
+(add-hook
+ 'ediff-mode-hook
+ (lambda ()
+ ;; '(ediff-current-diff-A ((t (:background "color-22" :foreground "brightwhite"))))
+ ;; '(ediff-current-diff-B ((t (:background "Yellow" :foreground "black"))))
+ ;; '(ediff-odd-diff-A ((t (:background "Grey" :foreground "black")))))
+   (set-face-background 'ediff-current-diff-A "color-22")
+   (set-face-foreground 'ediff-current-diff-A "brightwhite")
+   (set-face-background 'ediff-current-diff-B "Yellow")
+   (set-face-foreground 'ediff-current-diff-B "black")
+   (set-face-background 'ediff-odd-diff-A "Grey")
+   (set-face-foreground 'ediff-odd-diff-A "black")
+))
 
 ;; FIXME: fix C functions color.
 (font-lock-add-keywords
@@ -36,7 +54,7 @@
    ("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)
    ))
 
-;; Make emacs and mutt colors fit.
+;; Make Emacs and Mutt colors fit.
 (font-lock-add-keywords
  'mail-mode
  '(
@@ -77,7 +95,7 @@
       )))
  '( text-mode 
     sh-mode  emacs-lisp-mode lua-mode
-    c-mode 
+    c-mode python-mode
     latex-mode html-mode texinfo-mode))
 
 ;; C-mode printf highlight.

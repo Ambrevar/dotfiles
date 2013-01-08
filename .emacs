@@ -10,3 +10,6 @@
 (load "~/.emacs.d/modes.el" nil t)
 (load "~/.emacs.d/functions.el" nil t)
 (load "~/.emacs.d/plugins.el" nil t)
+
+;; End of file
+

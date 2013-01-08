@@ -9,19 +9,17 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{eurosym}
-\usepackage{gensymb}
-\usepackage{marvosym}
+\usepackage{amsmath,amssymb,amsfonts}
 \usepackage{geometry}
-\usepackage{graphicx}
-\usepackage{needspace}
-\usepackage[svgnames]{xcolor}
-\usepackage{xspace}
+\usepackage{lmodern}
+\usepackage{marvosym}
+\usepackage{textcomp}
 \DeclareUnicodeCharacter{00AB}{\og{}}
-\DeclareUnicodeCharacter{00B0}{\degree{}}
+\DeclareUnicodeCharacter{00B0}{\textdegree{}}
 \DeclareUnicodeCharacter{00BB}{\fg{}}
-\DeclareUnicodeCharacter{20AC}{\euro{}}
+\DeclareUnicodeCharacter{20AC}{\EUR{}}
+\DeclareUnicodeCharacter{2264}{\leqslant}
+\DeclareUnicodeCharacter{2265}{\geqslant}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%==============================================================================
@@ -79,11 +77,13 @@
 %% General options
 %%==============================================================================
 
-\usepackage{eukdate}
 % \usepackage{lipsum}
-\usepackage{ifthen}
 \usepackage[svgname]{xcolor}
-
+\usepackage{eukdate}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage{needspace}
+\usepackage{xspace}
 
 %% print if not empty
 \def\pine#1{\def\test{#1}\ifx\test\empty\relax\else #1\fi}

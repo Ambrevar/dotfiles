@@ -8,31 +8,55 @@
 \documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{eurosym}
-\usepackage{gensymb}
+\usepackage{amsmath,amssymb,amsfonts}
 \usepackage{geometry}
-\usepackage{graphicx}
-\usepackage{needspace}
-\usepackage[svgnames]{xcolor}
-\usepackage{xspace}
+\usepackage{lmodern}
+\usepackage{marvosym}
+\usepackage{textcomp}
 \DeclareUnicodeCharacter{00AB}{\og{}}
-\DeclareUnicodeCharacter{00B0}{\degree{}}
+\DeclareUnicodeCharacter{00B0}{\textdegree{}}
 \DeclareUnicodeCharacter{00BB}{\fg{}}
-\DeclareUnicodeCharacter{20AC}{\euro{}}
+\DeclareUnicodeCharacter{20AC}{\EUR{}}
 \DeclareUnicodeCharacter{2264}{\leqslant}
 \DeclareUnicodeCharacter{2265}{\geqslant}
 %%=============================================================================
+%% Properties
 
 \title{${1:Title}}
 \author{${2:\textsc{P.~Neidhardt}}}
 
 %%=============================================================================
-%% Various packages with configuration.
+%% Aliases
 
-% \usepackage{amsmath,amssymb,amsfonts}
-% \usepackage{calc}
+\usepackage{xspace}
+
+\let\latexbak\LaTeX
+\renewcommand{\LaTeX}{\textrm{\latexbak}\xspace}
+
+\let\texbak\TeX
+\renewcommand{\TeX}{\textrm{\texbak}\xspace}
+
+\def\unix{\textsc{Unix}\xspace}
+
+%%=============================================================================
+%% Formatting
+
 % \usepackage{parskip}
+% \setlength{\parindent}{15pt}
+
+% \renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
+\renewcommand{\arraystretch}{1.4}
+% \renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{needspace}
+
+%%==============================================================================
+%% Misc.
+
+% \usepackage{calc}
+
+%%=============================================================================
+%% Listings
 
 % \usepackage{listings}
 
@@ -56,7 +80,12 @@
 
 % \lstset{escapechar=@,style=customc}
 
+%%==============================================================================
+%% Graphics
+
 %% Load TikZ after xcolor.
+% \usepackage[svgnames]{xcolor}
+% \usepackage{graphicx}
 % \usepackage{tikz}
 
 % \newcommand{\fancybox}[1]{
@@ -64,36 +93,25 @@
 %     \node[draw,rounded corners]{#1};
 %   \end{tikzpicture}
 % }
- 
-%% Load last.
-\usepackage[]{hyperref}
+
+%%=============================================================================
+%% Babel
+
+%% Load last before 'hyperref'.
 \usepackage[frenchb]{babel}
 
-%% Href.
+%%==============================================================================
+%% Hyperref
+
+%% Load last.
+\usepackage[]{hyperref}
+
 \hypersetup{
   colorlinks=true,
   linkcolor=DarkRed,
   linktoc=page,
   urlcolor=blue,
 }
-
-%%=============================================================================
-%% Options
-
-\newcommand{\comment}[1]{}
-
-% \renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
-\renewcommand{\arraystretch}{1.4}
-% \renewcommand{\familydefault}{\sfdefault}
-
-%% Aliases
-\let\latexbak\LaTeX
-\renewcommand{\LaTeX}{\textrm{\latexbak}\xspace}
-
-\let\texbak\TeX
-\renewcommand{\TeX}{\textrm{\texbak}\xspace}
-
-\def\unix{\textsc{Unix}\xspace}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}

@@ -5,24 +5,22 @@
 # name: \documentclass{beamer} ...
 # --
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass[svgnames]{beamer} 
-%% \documentclass[xcolor=latex,svgnames,table]{beamer} 
+\documentclass[svgnames]{beamer} % xcolor=latex,table
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{geometry}
 \usepackage{lmodern}
-\usepackage{eurosym}
-\usepackage{gensymb}
-\usepackage{graphicx}
-\usepackage{needspace}
-\usepackage[svgnames]{xcolor}
-\usepackage{xspace}
+\usepackage{marvosym}
+\usepackage{textcomp}
 \DeclareUnicodeCharacter{00AB}{\og{}}
-\DeclareUnicodeCharacter{00B0}{\degree{}}
+\DeclareUnicodeCharacter{00B0}{\textdegree{}}
 \DeclareUnicodeCharacter{00BB}{\fg{}}
-\DeclareUnicodeCharacter{20AC}{\euro{}}
+\DeclareUnicodeCharacter{20AC}{\EUR{}}
 \DeclareUnicodeCharacter{2264}{\leqslant}
 \DeclareUnicodeCharacter{2265}{\geqslant}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%=============================================================================
+%% Properties
 
 \title{${1:Title}}
 \subtitle{${2:Subtitle}}
@@ -31,7 +29,7 @@
 
 %%==============================================================================
 %% Aliases
-%%==============================================================================
+
 \usepackage{xspace}
 
 \let\latexbak\LaTeX
@@ -42,32 +40,9 @@
 
 \def\unix{\textsc{Unix}}
 
-%%==============================================================================
-%% Source code
-%%==============================================================================
-\usepackage{listings}
-\lstdefinestyle{customc}{
-  % numbers=left,
-  belowcaptionskip=1\baselineskip,
-  breaklines=true,
-  frame=L,
-  xleftmargin=\parindent,
-  % framexleftmargin=\parindent,
-  language=C,
-  showstringspaces=false,
-  basicstyle=\footnotesize\ttfamily,
-  keywordstyle=\bfseries\color{green!40!black},
-  commentstyle=\itshape\color{purple!40!black},
-  identifierstyle=\color{blue},
-  stringstyle=\color{orange},
-  numberstyle=\ttfamily
-}
-
-\lstset{escapechar=@,style=customc}
 
 %%==============================================================================
 %% Beamer config
-%%==============================================================================
 
 %% Remove navigation bar.
 \beamertemplatenavigationsymbolsempty
@@ -117,8 +92,47 @@
    \let\insertframesubtitle\insertsubsectionhead}{}
 
 %%==============================================================================
-%% Locale
+%% Graphics
+
+%% Load TikZ after xcolor.
+% \usepackage[svgnames]{xcolor}
+% \usepackage{graphicx}
+% \usepackage{tikz}
+
+% \newcommand{\fancybox}[1]{
+%   \begin{tikzpicture}
+%     \node[draw,rounded corners]{#1};
+%   \end{tikzpicture}
+% }
+
+%%=============================================================================
+%% Listings
+
+% \usepackage{listings}
+
+%% Source code.
+% \lstdefinestyle{customc}{
+%   % numbers=left,
+%   belowcaptionskip=1\baselineskip,
+%   breaklines=true,
+%   frame=L,
+%   xleftmargin=\parindent,
+%   % framexleftmargin=\parindent,
+%   language=C,
+%   showstringspaces=false,
+%   basicstyle=\footnotesize\ttfamily,
+%   keywordstyle=\bfseries\color{green!40!black},
+%   commentstyle=\itshape\color{purple!40!black},
+%   identifierstyle=\color{blue},
+%   stringstyle=\color{orange},
+%   numberstyle=\ttfamily
+% }
+
+% \lstset{escapechar=@,style=customc}
+
 %%==============================================================================
+%% Babel
+
 \usepackage[frenchb]{babel}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -141,15 +155,14 @@
 \section{Frame}
 \subsection{Classic frame}
 
-\frame[]
-{
+\begin{frame}
 \begin{alertblock}{Alert block}
 Boom!
 \end{alertblock}
-}
+\end{frame}
 
 \subsection{With source code}
-\frame[shrink,containsverbatim]{
+\begin{frame}[shrink,fragile]
 
 \begin{lstlisting}[caption=Hello world!]
 int main(int argc, char** argv)
@@ -159,7 +172,7 @@ int main(int argc, char** argv)
 }
 
 \end{lstlisting}
-}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
