@@ -51,8 +51,8 @@ Configuration is very close to the default one, which mostly fits my needs.
 Most of the work I've done is for the status bar, but since I'm using the
 Vicious plugin, it is quite straightforward.
 
-DWB
-******
+dwb
+***
 Some custom options, download location, search engines, etc.
 
 Emacs
@@ -62,8 +62,9 @@ Extra deps: emacs-lua-mode, emacs-mediawiki, emacs-yasnippet.
 Configuration for C programming. Bindings to compile either from makefile or
 from a custom command if no makefile is found.
 
-TeX and LaTeX mode customization: no AucTeX required, PDF view, temp file clean
-function, PDF compression.
+TeX and LaTeX full-featured home made environment: no AucTeX required, snippets,
+dynamic compilation with various engines, dynamic configuration, proper PDF
+view, temp file clean function, PDF compression.
 
 Custom color theme with 256 colors.
 
@@ -102,7 +103,7 @@ might consider using the 'urlview' plugin for Mutt.
 
 Ranger
 ******
-Extra deps: antiword, atool, highlight, img2txt, mediainfo, pdftotext, w3m.
+Extra deps: antiword, atool, highlight, img2txt, mediainfo, odt2txt, pdftotext, unrtf, w3m.
 
 Custom bindings, file association, tweaked a few options.
 
@@ -253,6 +254,7 @@ nmap
 numlockx
 octave
 od
+odt2txt
 okular
 openshot
 openssh
