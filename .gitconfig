@@ -9,3 +9,5 @@
 	co = checkout
 [push]
 	default = simple
+[merge]
+	tool = emerge
