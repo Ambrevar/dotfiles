@@ -147,5 +147,6 @@ fi
 if [ -d "/usr/local/texlive" ]; then
     alias tlu="sudo sh -c 'umask 022 && tlmgr update --self'"
     alias tls="tlmgr search --global"
-    alias tll="tlmgr show --list"
+    alias tll="tlmgr info --only-installed"
+    alias tlf="tlmgr info --list"
 fi
