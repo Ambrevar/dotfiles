@@ -1,10 +1,11 @@
+amscls
 amsmath
 babel
 beamer
 carlisle
 ec
 eplain
-eurosym
+eukdate
 fancyhdr
 geometry
 glossaries
@@ -29,6 +30,5 @@ pgf
 tabulary
 tools
 url
-was
 xcolor
 xkeyval
