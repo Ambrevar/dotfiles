@@ -111,7 +111,7 @@ alias xmorphzi='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ")
 # WantedBy=multi-user.target
 if [ -n "$(command -v emacs)" ]; then
    alias em='emacsclient -a "" -t'
-   alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
+   alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon -q -l ~/.emacs-full"
    # alias emacs-reload="sudo systemctl restart emacs@$USER"
 fi
 
