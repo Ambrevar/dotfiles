@@ -14,6 +14,7 @@ if [ -f /bin/em ]; then
     echo "==> Emacs"
     sudo sh -c "echo '#!/bin/sh
 emacsclient -a \"\" -t \"\$@\"' > '/bin/em'; chmod 755 /bin/em"
+    echo
 fi
 
 ## Mutt
