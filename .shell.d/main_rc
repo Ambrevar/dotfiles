@@ -98,12 +98,16 @@ export EDITOR
 #esac
 
 ## SSH-Agent
+SSH_DEST_FOLDER="/tmp/ssh-agent_env"
 if [ $(ps ax -o command="" | grep -c "ssh-agent") -eq 1 ]; then
     SSH_AGENT_VARS=$(ssh-agent)
     eval $(echo ${SSH_AGENT_VARS})
-    echo ${SSH_AGENT_VARS} | sed '2q' > "$HOME/.ssh/agent_env"
+    echo ${SSH_AGENT_VARS} | sed '2q' > "$SSH_DEST_FOLDER"
+    chmod 444 "$SSH_DEST_FOLDER"
+    unset $SSH_DEST_FOLDER
     unset $SSH_AGENT_VARS
 else
-    eval $(cat "$HOME/.ssh/agent_env")
+    eval $(cat "$SSH_DEST_FOLDER")
+    unset $SSH_DEST_FOLDER
 fi
     

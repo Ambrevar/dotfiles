@@ -1,7 +1,7 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                               Author: Ambrevar                               #
-#                               Date: 2012-12-05                               #
+#                               Date: 2013-01-09                               #
 ################################################################################
 
 Synopsis
@@ -58,6 +58,8 @@ Some custom options, download location, search engines, etc.
 Emacs
 *****
 Extra deps: emacs-lua-mode, emacs-mediawiki, emacs-yasnippet.
+
+Emacs daemon is integrated flawlessly thanks to a small script. See .homeinit.
 
 Configuration for C programming. Bindings to compile either from makefile or
 from a custom command if no makefile is found.
