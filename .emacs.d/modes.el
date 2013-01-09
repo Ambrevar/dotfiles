@@ -125,6 +125,11 @@
 ;; I find the default tex-mode and AucTeX quiet disappointing. I'm using custom
 ;; functions for everything.
 
+(defvar tex-my-viewer "zathura --fork" 
+  "PDF Viewer for TeX documents. You may want to fork the viewer
+  so that it detects when the same document is launched twice,
+  and persists when Emacs gets closed.")
+
 (defvar tex-my-compiler "pdftex"
   "This is the name of the executable called upon TeX compilations.
 Examples: pdftex, pdflatex, xetex, xelatex, luatex, lualatex...")
@@ -257,7 +262,7 @@ your document embeds raster graphics."
   "Call a PDF viewer for current buffer file."
   (interactive)
   (shell-command
-   (concat "zathura --fork " 
+   (concat tex-my-viewer " "
            (replace-regexp-in-string "\.tex$" "\.pdf &" (file-name-nondirectory buffer-file-name))
            )
    )
