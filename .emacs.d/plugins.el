@@ -46,21 +46,29 @@
 
 (require 'mediawiki)
 
-;; TODO: make it 'customize' independant. 
+;; Macros.
+;; Use C-( stuff C-) to record a macro.
+;; Use 'name-last-kbd-macro' to give it a name.
+;; Use 'insert-kbd-macro' in your init file to insert the code.
+;; You can assign a key: (local-set-key (kbd "C-c a") 'my-macro)
+(fset 'ltx-template-source-to-latex
+   "\C-@\C-s>\C-m\C-w\C-@\C-s</source\C-m\C-[Od\C-[[D\C-[[D\C-wltx\C-i\C-y\C-i\C-[d\C-d")
+
+(fset 'ltx-template-source-to-usage
+      "\C-@\C-s>\C-w\C-?\C-m\C-w\C-d\C-@\C-s</source\C-m\C-[Od\C-[[D\C-[[D\C-[[D\C-wltxu\C-i\C-y\C-i\C-k\C-k")
+
+(setq mediawiki-site-alist
+      '(
+        ("Wikipedia" "http://en.wikipedia.org/w/" "Ambrevar" "" "Main Page")
+        ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX")
+        ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt"))
+      )
 
 ;; The url-cookie timer is set to a high value because it seems that once the
-;; cookie is saved, MediaWiki fails to upload files correctly. TODO: does not
-;; work.
-(custom-set-variables
- '(mediawiki-site-alist 
-   (quote
-    (
-     ("Wikipedia" "http://en.wikipedia.org/w/" "Ambrevar" "" "Main Page")
-     ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX")
-     ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt"))
-    ))
- '(url-cookie-save-interval 86400)
- )
+;; cookie has been saved, MediaWiki fails to upload files correctly.  Is
+;; 'url-do-setup' needed to make sure the url-cookie-save-interval variable is
+;; taken into account? TODO: does not work.
+(setq url-cookie-save-interval 86400)
 
 (setq mediawiki-mode-hook
       (lambda ()
@@ -68,6 +76,9 @@
         (turn-off-auto-fill)
         (define-key mediawiki-mode-map (kbd "C-c RET") 'mediawiki-open-page-at-point)
         (define-key mediawiki-mode-map (kbd "C-c o") 'mediawiki-browse)
+        ;; TODO: Bindings to not work???
+        ;; (local-set-key (kbd "C-c l L") 'ltx-template-source-to-latex)
+        ;; (local-set-key (kbd "C-c l U") 'ltx-template-source-to-usage)
 ))
 
 ;;==============================================================================
@@ -82,14 +93,4 @@
 ;;   (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
 ;;       (doxymacs-font-lock)))
 ;; (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
-
-
-;;==============================================================================
-;; Auto-Complete
-;;==============================================================================
-;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/auto-complete")
-;; (require 'auto-complete-config)
-;; (add-to-list 'ac-dictionary-directories "/usr/share/emacs/site-lisp/auto-complete/ac-dict")
-;; (ac-config-default)
-
 

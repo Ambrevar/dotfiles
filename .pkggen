@@ -13,9 +13,13 @@
 ##
 ##   git bundle create --all
 ##
-## and can list files with
+## and can list files with:
 ##
 ##   git ls-files
+##
+## Getting a .tar archive is still quiet easy with Git:
+##
+##    tar cvJf archive.tar.xz $(cd $HOME && git ls-files)
 
 ## This script should be compatible with ksh, bash and zsh. Issue with sh
 ## however: we use arrays. Therefore we do not comply with POSIX and use some
