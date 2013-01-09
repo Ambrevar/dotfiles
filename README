@@ -20,21 +20,32 @@ In case you still want to copy some files -- for quick and dirty testing purpose
 -- do not forget that most of the files are in hidden folders.  Also note that
 in some shells, the '*' joker will NOT match hidden files, that is
 
-        cp -r source-dir/* dest-dir/
+    cp -r source-dir/* dest-dir/
 
 will copy non-hidden folders only.  To match all folders, use the following
 joker instead:
 
-        cp -r source-dir/{.*,*} dest-dir/   # zsh
-        cp -r source-dir/{.??*,*} dest-dir/ # bash
+    cp -r source-dir/{.*,*} dest-dir/   # zsh
+    cp -r source-dir/{.??*,*} dest-dir/ # bash
 
 Still, the solution for bash is not perfect as it affects 3 characters files
 only. A more convenient solution:
 
-      # bash only.
-      shopt -s dotglob
-      cp -r source-dir/* dest-dir/
+    # bash only.
+    shopt -s dotglob
+    cp -r source-dir/* dest-dir/
 
+Git makes it possible to use your home folder as a git repo, thus versioning
+all files directly. To fetch source from Git repo:
+
+    cd
+    git init
+    git remote add origin https://github.com/Ambrevar/home-config.git
+    git fetch
+    git branch master origin/master
+    git checkout master
+
+################################################################################
 
 Some applications will need extra dependencies other than the default ones. You
 might have a look at the .pkg-* files to see what software I've been using.
