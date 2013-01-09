@@ -22,9 +22,10 @@ SOURCEDIR="${HOME}/personal/dataperso"
 
 ## Emacsclient launcher. Required for best emacsclient integration.  For a fully
 ## functional daemon, you should write a file like this and set 'EDITOR=em'.
-if [ ! -f /bin/em ]; then
+if [ -f /bin/em ]; then
+    echo "==> Emacs"
     sudo sh -c "echo '#!/bin/sh
-emacsclient -a \"\" -t \"\$@\"' > '/bin/em'"
+emacsclient -a \"\" -t \"\$@\"' > '/bin/em'; chmod 755 /bin/em"
 fi
 
 ## Mutt
