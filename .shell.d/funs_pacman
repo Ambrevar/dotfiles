@@ -46,7 +46,7 @@ pacman-files()
         echo -e "  $1 [-n] PACKAGES"
         echo
         echo "Usage:"
-        echo -e "  default:\tDisplay file size of PACKAGES."
+        echo -e "  default:\tDisplay size of files in PACKAGES."
         echo -e "  -h:\t\tDisplay this help."
         echo -e "  -n:\t\tSort by size."
     }
@@ -82,11 +82,7 @@ pacman-files()
         return 1
     fi
 
-    local RESULT_HUMAN="$(du -bh $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u) | eval ${OPTION_SORT})"
-    local RESULT="$(du -b $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u))"
-    echo "${RESULT_HUMAN}"
-
-    echo "$RESULT" | awk -F "[[:alpha:]]" '{TOTAL=$1+TOTAL} END {printf("Total:  %d KiB\n",TOTAL/1024)}'
+    du -bch $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u) 2>/dev/null | eval ${OPTION_SORT}
 }
 
 ## Retrieve official packages list.
@@ -222,12 +218,12 @@ pacman-size()
     ## Print total size.
     echo "$RESULT" | awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}'
 
-## One line version. Approximately same performance. Note the combinaion of
-## 'tee' and >(awk ...) to write the detailed list to standard output and to
-## pass it to awk.
-# eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
-#     '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | sort -u -k3 \
-# | tee >(awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}')
+    ## One line version. Approximately same performance. Note the combinaion of
+    ## 'tee' and >(awk ...) to write the detailed list to standard output and to
+    ## pass it to awk.
+    # eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
+    #     '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | sort -u -k3 \
+    # | tee >(awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}')
 
     _pacman_unset_vars
 }
