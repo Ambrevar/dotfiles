@@ -20,6 +20,13 @@ SOURCEDIR="${HOME}/personal/dataperso"
 [ -z "$XDG_DATA_HOME" ] && XDG_DATA_HOME="$HOME/.local/share"
 [ -z "$XDG_DATA_DIRS" ] && XDG_DATA_DIRS="/usr/local/share"
 
+## Emacsclient launcher. Required for best emacsclient integration.  For a fully
+## functional daemon, you should write a file like this and set 'EDITOR=em'.
+if [ ! -f /bin/em ]; then
+    sudo sh -c "echo '#!/bin/sh
+emacsclient -a \"\" -t \"\$@\"' > '/bin/em'"
+fi
+
 ## Mutt
 echo "==> Mutt"
 ln -snf "$(realpath ${SOURCEDIR}/mails)" "${HOME}/.mutt"
@@ -70,3 +77,4 @@ fi
 ln -sf "${SOURCEDIR}/bookmarks/bookmarks" "$BROWSER_DATA_DIR"
 ln -sf "${SOURCEDIR}/bookmarks/quickmarks" "$BROWSER_DATA_DIR"
 echo
+

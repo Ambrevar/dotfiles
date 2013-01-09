@@ -95,24 +95,10 @@ alias xmorphzi='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ")
 ##==============================================================================
 ## Emacs
 ##==============================================================================
-## For the systemd unit, write the following file:
-## /etc/systemd/system/emacs@.service
-# [Unit]
-# Description=Emacs: the extensible, self-documenting text editor
-# 
-# [Service]
-# Type=forking
-# ExecStart=/usr/bin/emacs --daemon
-# ExecStop=/usr/bin/emacsclient --eval "(progn (setq kill-emacs-hook 'nil) (kill-emacs))"
-# Restart=always
-# User=%i
-# 
-# [Install]
-# WantedBy=multi-user.target
-if [ -n "$(command -v emacs)" ]; then
-   alias em='emacsclient -a "" -t'
-   alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon -q -l ~/.emacs-full"
-   # alias emacs-reload="sudo systemctl restart emacs@$USER"
+# See .homeinit
+if [ -f /bin/em ]; then
+   alias ema='emacs -q -l ~/.emacs-light'
+   alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
 fi
 
 ##==============================================================================
@@ -125,7 +111,7 @@ fi
 #alias -g L='| less'
 
 ## Now just type the image name to launch irfanview
-#alias -s jpg='/usr/bin/gpicview'
+#alias -s jpg='/usr/bin/sxiv'
 
 # fi
 

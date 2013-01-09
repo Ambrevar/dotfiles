@@ -156,10 +156,8 @@ I've only been a casual Vim user, so do not expect too much from it.
 Known issues
 ************
 
-Emacs: some colors do not work as intended.
-
-Ranger: if editor is 'emacsclient -t -a ""', it will not show up if emacs daemon
-is not running. This is because the "" are not properly recognized.
+Emacs: some colors do not work as intended. MediaWiki fails to upload pages
+after some idle time.
 
 Shell: some custom functions would need auto-completion.
 

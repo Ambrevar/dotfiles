@@ -76,7 +76,11 @@ if [ -n "$(command -v vim)" ]; then
     EDITOR=vim
 fi
 if [ -n "$(command -v emacs)" ]; then
-   EDITOR='emacsclient -a "" -t'
+   EDITOR='emacs'
+fi
+## 'em' is a script for emacsclient. See '.homeinit'.
+if [ -f "/bin/em" ]; then
+   EDITOR='em'
 fi
 export EDITOR
 
@@ -92,3 +96,14 @@ export EDITOR
 #*)
 #    ;;
 #esac
+
+## SSH-Agent
+if [ $(ps ax -o command="" | grep -c "ssh-agent") -eq 1 ]; then
+    SSH_AGENT_VARS=$(ssh-agent)
+    eval $(echo ${SSH_AGENT_VARS})
+    echo ${SSH_AGENT_VARS} | sed '2q' > "$HOME/.ssh/agent_env"
+    unset $SSH_AGENT_VARS
+else
+    eval $(cat "$HOME/.ssh/agent_env")
+fi
+    

@@ -1,7 +1,7 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Mutt Configuration
-## Date 2012-10-28
+## Date 2013-01-09
 ################################################################################
 
 ## Note on folders:
@@ -14,10 +14,10 @@
 ## General options
 ##-------------------------------------------------------------------------------
 
-## TODO: why doesn't the $EDITOR variable work for connection to emacs daemon?
 ## Seems like $EDITOR is internal to Mutt, whereas variable set between
-## backquotes are external.
-set editor=`echo \$EDITOR`
+## backquotes are external. Mutt will use env EDITOR variable, so we do not
+## really need to set it.
+# set editor=`echo \$EDITOR`
 # set editor="emacsclient -a \"\" -t"
 
 ## Mailcap
