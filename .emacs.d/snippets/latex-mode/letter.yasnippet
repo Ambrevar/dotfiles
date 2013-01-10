@@ -10,7 +10,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb,amsfonts}
-\usepackage{geometry}
+\usepackage[scale=0.8]{geometry}
 \usepackage{lmodern}
 \usepackage{marvosym}
 \usepackage{textcomp}
@@ -25,8 +25,21 @@
 %%==============================================================================
 %% Localization
 %%==============================================================================
-%% Supported locales: en, fr.
 \def\locale{en}
+
+%% Language macros.
+\usepackage{ifthen}
+\def\localedef#1#2{
+\ifthenelse{\equal{\locale}{#1}}{
+  \usepackage[#2]{babel}
+  \expandafter\def\csname#1\endcsname ##1{##1}
+}{
+  \expandafter\def\csname#1\endcsname ##1{}}
+}
+
+%% Supported locales: en, fr.
+\localedef{en}{english}
+\localedef{fr}{frenchb}
 
 %%==============================================================================
 %% Personal Information
@@ -74,32 +87,31 @@
 % \def\FileKeyWords{\firstname{} \familyname, letter}
 
 %%==============================================================================
-%% General options
+%% Packages
 %%==============================================================================
 
 % \usepackage{lipsum}
 \usepackage[svgname]{xcolor}
 \usepackage{eukdate}
-\usepackage{graphicx}
-\usepackage{ifthen}
 \usepackage{needspace}
 \usepackage{xspace}
+
+%% Compilation options
+\usepackage{ifpdf}
+\ifpdf
+\usepackage[pdftex]{graphicx}
+\else
+\usepackage[dvips]{graphicx}
+\fi
+
+%%==============================================================================
+%% General options
+%%==============================================================================
 
 %% print if not empty
 \def\pine#1{\def\test{#1}\ifx\test\empty\relax\else #1\fi}
 %% print #2 if not empty.
 \def\pinex#1#2{\ifx#1\empty\relax\else #2\fi}
-
-%% Language
-\def\localedef#1{
-\ifthenelse{\equal{\locale}{#1}}{
-  \expandafter\def\csname#1\endcsname ##1{##1}
-}{
-  \expandafter\def\csname#1\endcsname ##1{}}
-}
-
-\localedef{en}
-\localedef{fr}
 
 %% Gender commands.
 \def\genderdef#1{
@@ -123,19 +135,6 @@
 \ifthenelse{
   \equal{\gender}{org}
 }{}{\def\greetings #1{#1}}
-
-
-%% Compilation options
-\usepackage{ifpdf}
-\ifpdf
-\usepackage[pdftex]{graphicx}
-\else
-\usepackage[dvips]{graphicx}
-\fi
-
-%% Babel
-\fr{\usepackage[frenchb]{babel}}
-
 
 %% Day-of-week translation
 \makeatletter
