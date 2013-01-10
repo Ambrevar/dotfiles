@@ -82,9 +82,18 @@ case "$mimetype" in
         # FIXME: does not work!
 		# highlight --out-format=xterm256 -s zmrok "$path" | head -n $maxln
 		success && exit 5 || exit 2;;
-	# Ascii-previews of images:
+
+    # CUSTOM
 	image/*)
-		img2txt --gamma=0.6 --width="$width" "$path" && exit 4 || exit 1;;
+  	    ## Ascii-previews of images:
+		# img2txt --gamma=0.6 --width="$width" "$path" && exit 4 || exit 1;;
+		## Use sed to remove spaces so the output fits into the narrow window
+		if have mediainfo; then
+			mediainfo "$path" | sed 's/  \+:/: /;'
+			success && exit 5
+		fi
+		exit 1;;
+
 	# Display information about media files:
 	video/* | audio/*)
 		have exiftool && exiftool "$path" && exit 5

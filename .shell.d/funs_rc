@@ -920,25 +920,19 @@ formatc()
 
 ## TeXlive
 if [ -d "/usr/local/texlive" ]; then
-
     ## WARNING: it is important to set umask properly, otherwise users might
     ## not have authorization to use the packages.
 
-    ## TODO: It is dirty to invoke a subshell several times.
-    ## Would be better to pass one parameter, then to tokenize it.
+    ## This is bad pratice to write args without double quotes, but since we
+    ## are sure there is no space in TeX Live packages, it is OK here.
 
     tli ()
     {
-        for i ; do
-            sudo sh -c 'umask 022 && tlmgr install "$0"' "$i"
-        done
+        sudo sh -c 'umask 022 && tlmgr install $0 $@' "$@" 
     }
 
     tlr ()
     {
-        for i ; do
-            sudo sh -c 'umask 022 && tlmgr remove "$0"' "$i"
-        done
+        sudo sh -c 'umask 022 && tlmgr remove $0 $@' "$@" 
     }
-
 fi
