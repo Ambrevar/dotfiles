@@ -18,10 +18,10 @@
 
 ;; Remove duplicate lines. (sort -u)
 ;; TODO: finish it.
-(defun remove-duplicates ()
-  (interactive)
-  ((shell-command (echo blah)))
-)
+;; (defun remove-duplicates ()
+;;   (interactive)
+;;   ((shell-command (echo blah)))
+;; )
 
 ;;==============================================================================
 ;; Toggle window split
