@@ -293,6 +293,10 @@ your document embeds raster graphics."
 ;; C-mode
 ;;==============================================================================
 (require 'compile)
+
+;; Identation style
+(setq c-default-style "linux" c-basic-offset 4)
+
 (add-hook 'c-mode-hook
           (lambda ()
             (unless (file-exists-p "Makefile")
@@ -310,7 +314,7 @@ your document embeds raster graphics."
                              file))))
 
             (local-set-key (kbd "C-c C-f") 'compile)
-            ;; (define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
+            ;; (global-set-key (kbd "<f12>") 'next-error)
             (local-set-key (kbd "M-a") 'beginning-of-defun)
             (local-set-key (kbd "M-e") 'end-of-defun)
 
@@ -346,22 +350,22 @@ your document embeds raster graphics."
 ;; Flymake has a bug that prevents menu from spawning in a console. We redefine
 ;; the function to spawn the error message in the mini-buffer.
 
-(defun flymake-display-err-message-for-current-line ()
-  "Display a message with errors/warnings for current line if it
-has errors and/or warnings."
-  (interactive)
-  (let* ((line-no             (flymake-current-line-no))
-         (line-err-info-list  (nth 0 (flymake-find-err-info flymake-err-info line-no)))
-         (menu-data           (flymake-make-err-menu-data line-no line-err-info-list)))
-    (if menu-data
-        (let ((messages))
-          (push (concat (car menu-data) ":") messages)
-          (dolist (error-or-warning (cadr menu-data))
-            (push (car error-or-warning) messages))
-          (message "%s" (mapconcat #'identity (reverse messages) "\n"))))))
+;; (defun flymake-display-err-message-for-current-line ()
+;;   "Display a message with errors/warnings for current line if it
+;; has errors and/or warnings."
+;;   (interactive)
+;;   (let* ((line-no             (flymake-current-line-no))
+;;          (line-err-info-list  (nth 0 (flymake-find-err-info flymake-err-info line-no)))
+;;          (menu-data           (flymake-make-err-menu-data line-no line-err-info-list)))
+;;     (if menu-data
+;;         (let ((messages))
+;;           (push (concat (car menu-data) ":") messages)
+;;           (dolist (error-or-warning (cadr menu-data))
+;;             (push (car error-or-warning) messages))
+;;           (message "%s" (mapconcat #'identity (reverse messages) "\n"))))))
 
-(define-key my-keys-minor-mode-map (kbd "<f10>")
-  'flymake-display-err-message-for-current-line)
+;; (global-set-key (kbd "<f10>")
+;;   'flymake-display-err-message-for-current-line)
 
 ;;==============================================================================
 ;; GUD
@@ -369,7 +373,6 @@ has errors and/or warnings."
 
 ;; Set GDB to display many windows by default.
 (setq gdb-many-windows t)
-
 
 ;;==============================================================================
 ;; Ediff

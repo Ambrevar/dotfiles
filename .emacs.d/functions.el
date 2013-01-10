@@ -95,7 +95,7 @@ frames with exactly two windows."
   (next-line arg))
 
 ;; Binding.
-(define-key my-keys-minor-mode-map (kbd "C-c C-d") 'duplicate-line)
+(global-set-key (kbd "C-c C-d") 'duplicate-line)
 
 ;;==============================================================================
 ;; Comment DWIM -- toggle comment line

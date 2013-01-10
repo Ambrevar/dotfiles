@@ -103,16 +103,17 @@
 
 (require 'zlc)
 (let ((map minibuffer-local-map))
-  ;;; like menu select
-  (define-key map (kbd "<down>")  'zlc-select-next-vertical)
-  (define-key map (kbd "<up>")    'zlc-select-previous-vertical)
-  (define-key map (kbd "<right>") 'zlc-select-next)
-  (define-key map (kbd "<left>")  'zlc-select-previous)
+  ;; Like Zsh menu select.  Should not use arrows directly because it overrides
+  ;; default controls like previous entry, or previous/next char.
+  (define-key map (kbd "C-<down>")  'zlc-select-next-vertical)
+  (define-key map (kbd "C-<up>")    'zlc-select-previous-vertical)
+  (define-key map (kbd "C-<right>") 'zlc-select-next)
+  (define-key map (kbd "C-<left>")  'zlc-select-previous)
 
-  ;;; reset selection
+  ;;; Reset selection.
   (define-key map (kbd "C-c") 'zlc-reset)
   )
 
-(setq zlc-select-completion-immediately t)
+;; (setq zlc-select-completion-immediately t)
 
 ;; To change style, M-x customize-face and input zlc-selected-completion-face.
