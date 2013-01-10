@@ -4,15 +4,15 @@
 ;; 2013-01-09
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(add-to-list 'load-path "~/.emacs.d/")
+;; (add-to-list 'load-path "~/.emacs.d/")
 
 ;; Main should be loaded first.
-(load "main" nil t)
+(load "~/.emacs.d/main" nil t)
 
-(load "theme" nil t)
-(load "modes" nil t)
-(load "functions" nil t)
-;; (load "plugins" nil t)
+(load "~/.emacs.d/functions" nil t)
+(load "~/.emacs.d/modes" nil t)
+(load "~/.emacs.d/plugins" nil t)
+(load "~/.emacs.d/theme" nil t)
 
 ;; End of file
 

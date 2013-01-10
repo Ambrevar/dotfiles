@@ -58,11 +58,35 @@
      ;; Use 'name-last-kbd-macro' to give it a name.
      ;; Use 'insert-kbd-macro' in your init file to insert the code.
      ;; You can assign a key: (local-set-key (kbd "C-c a") 'my-macro)
-     (fset 'ltx-template-source-to-latex
-           "\C-@\C-s>\C-m\C-w\C-@\C-s</source\C-m\C-[Od\C-[[D\C-[[D\C-wltx\C-i\C-y\C-i\C-[d\C-d")
+     (fset 'ltx-template-source-to-ltx
+           "\C-@\C-s>\C-m\C-w\C-@\C-s</source\C-m\C-[Od\C-[[D\C-[[D\C-wltx\C-i\C-y\C-i\C-[d\C-d\C-s<source\C-m\C-[Od\C-[[D")
 
-     (fset 'ltx-template-source-to-usage
-           "\C-@\C-s>\C-w\C-?\C-m\C-w\C-d\C-@\C-s</source\C-m\C-[Od\C-[[D\C-[[D\C-[[D\C-wltxu\C-i\C-y\C-i\C-k\C-k")
+     (fset 'ltx-template-source-to-ltxu
+           "\C-@\C-s>\C-w\C-?\C-m\C-w\C-d\C-@\C-s</source\C-m\C-[Od\C-[[D\C-[[D\C-[[D\C-wltxu\C-i\C-y\C-i\C-k\C-k\C-s<source\C-m\C-[Od\C-[[D")
+
+     (fset 'ltx-template-tt-to-ltx
+           "\C-s<tt\C-m\C-[Od\C-[[D\C-@\C-[Oc\C-[[C\C-w\C-@\C-s</tt\C-m\C-[Od\C-[[D\C-[[D\C-wltx\C-i\C-y\C-i\C-[d\C-d\C-s<tt\C-m\C-[Od\C-[[D")
+
+     (fset 'ltx-template-tt-to-env
+           "\C-s<tt\C-m\C-[Od\C-[[D\C-@\C-[Oc\C-[[C\C-w\C-@\C-s</tt\C-m\C-[Od\C-[[D\C-[[D\C-wltxenv\C-i\C-y\C-i\C-[d\C-d\C-s<tt\C-m\C-[Od\C-[[D")
+
+     (fset 'ltx-template-tt-to-pkg
+           "\C-s<tt\C-m\C-[Od\C-[[D\C-@\C-[Oc\C-[[C\C-w\C-@\C-s</tt\C-m\C-[Od\C-[[D\C-[[D\C-wltxpkg\C-i\C-y\C-i\C-[d\C-d\C-s<tt\C-m\C-[Od\C-[[D")
+
+     (fset 'ltx-template-tt-to-par
+           "\C-s<tt\C-m\C-[Od\C-[[D\C-@\C-[Oc\C-[[C\C-w\C-@\C-s</tt\C-m\C-[Od\C-[[D\C-[[D\C-wltxpar\C-i\C-y\C-i\C-[d\C-d\C-s<tt\C-m\C-[Od\C-[[D")
+
+     (fset 'ltx-template-code-to-ltx
+           "\C-s<code\C-m\C-[Od\C-[[D\C-@\C-[Oc\C-[[C\C-w\C-@\C-s</code\C-m\C-[Od\C-[[D\C-[[D\C-wltx\C-i\C-y\C-i\C-[d\C-d\C-s<code\C-m\C-[Od\C-[[D")
+
+     (fset 'ltx-template-code-to-pkg
+           "\C-s<code\C-m\C-[Od\C-[[D\C-@\C-[Oc\C-[[C\C-w\C-@\C-s</code\C-m\C-[Od\C-[[D\C-[[D\C-wltxpkg\C-i\C-y\C-i\C-[d\C-d\C-s<code\C-m\C-[Od\C-[[D")
+
+     (fset 'ltx-template-code-to-par
+           "\C-s<code\C-m\C-[Od\C-[[D\C-@\C-[Oc\C-[[C\C-w\C-@\C-s</code\C-m\C-[Od\C-[[D\C-[[D\C-wltxpar\C-i\C-y\C-i\C-[d\C-d\C-s<code\C-m\C-[Od\C-[[D")
+
+     (fset 'ltx-template-code-to-env
+           "\C-s<code\C-m\C-[Od\C-[[D\C-@\C-[Oc\C-[[C\C-w\C-@\C-s</code\C-m\C-[Od\C-[[D\C-[[D\C-wltxenv\C-i\C-y\C-i\C-[d\C-d\C-s<code\C-m\C-[Od\C-[[D")
 
      ;; The url-cookie timer is set to a high value because it seems that once the
      ;; cookie has been saved, MediaWiki fails to upload files correctly.  Is
@@ -107,10 +131,10 @@
     (let ((map minibuffer-local-map))
       ;; Like Zsh menu select.  Should not use arrows directly because it overrides
       ;; default controls like previous entry, or previous/next char.
-      (define-key map (kbd "C-<down>")  'zlc-select-next-vertical)
-      (define-key map (kbd "C-<up>")    'zlc-select-previous-vertical)
-      (define-key map (kbd "C-<right>") 'zlc-select-next)
-      (define-key map (kbd "C-<left>")  'zlc-select-previous)
+      (define-key map (kbd "M-<down>")  'zlc-select-next-vertical)
+      (define-key map (kbd "M-<up>")    'zlc-select-previous-vertical)
+      (define-key map (kbd "M-<right>") 'zlc-select-next)
+      (define-key map (kbd "M-<left>")  'zlc-select-previous)
 
       ;; Reset selection.
       (define-key map (kbd "C-c") 'zlc-reset)
