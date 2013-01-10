@@ -98,16 +98,16 @@ export EDITOR
 #esac
 
 ## SSH-Agent
-SSH_DEST_FOLDER="/tmp/ssh-agent_env"
+## WARNING: this is somewhat insecure. avoid using it on a mutli-user machine.
 if [ $(ps ax -o command="" | grep -c "ssh-agent") -eq 1 ]; then
     SSH_AGENT_VARS=$(ssh-agent)
-    eval $(echo ${SSH_AGENT_VARS})
-    echo ${SSH_AGENT_VARS} | sed '2q' > "$SSH_DEST_FOLDER"
-    chmod 444 "$SSH_DEST_FOLDER"
-    unset $SSH_DEST_FOLDER
+    eval $(echo "${SSH_AGENT_VARS}")
+    rm -f "/tmp/ssh-agent-env"
+    echo "${SSH_AGENT_VARS}" | sed '2q' | cut -d'=' -f2  | cut -d';' -f1 > "/tmp/ssh-agent-env"
+    chmod 444 "/tmp/ssh-agent-env"
     unset $SSH_AGENT_VARS
 else
-    eval $(cat "$SSH_DEST_FOLDER")
-    unset $SSH_DEST_FOLDER
+    SSH_AUTH_SOCK=$(sed -n '1{p;q}' "/tmp/ssh-agent-env") ; export SSH_AUTH_SOCK
+    SSH_AGENT_PID=$(sed -n '2{p;q}' "/tmp/ssh-agent-env") 2>/dev/null ; export SSH_AGENT_PID
 fi
     
