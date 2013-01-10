@@ -149,3 +149,10 @@ browse-url-browser-function 'browse-url-generic)
 ;; forward-paragraph.
 (setq paragraph-start "
 ")
+
+;; Show matching parenthesis
+(show-paren-mode 1)
+;; By default, there’s a small delay before showing a matching parenthesis. Set
+;; it to 0 to deactivate.
+(setq show-paren-delay 0)
+

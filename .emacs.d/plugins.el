@@ -76,6 +76,7 @@
         (turn-off-auto-fill)
         (define-key mediawiki-mode-map (kbd "C-c RET") 'mediawiki-open-page-at-point)
         (define-key mediawiki-mode-map (kbd "C-c o") 'mediawiki-browse)
+        (local-unset-key (kbd "M-g"))
         ;; TODO: Bindings to not work???
         ;; (local-set-key (kbd "C-c l L") 'ltx-template-source-to-latex)
         ;; (local-set-key (kbd "C-c l U") 'ltx-template-source-to-usage)
@@ -94,3 +95,24 @@
 ;;       (doxymacs-font-lock)))
 ;; (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
 
+
+;;==============================================================================
+;; Zlc
+;;==============================================================================
+;; Zsh style completion.
+
+(require 'zlc)
+(let ((map minibuffer-local-map))
+  ;;; like menu select
+  (define-key map (kbd "<down>")  'zlc-select-next-vertical)
+  (define-key map (kbd "<up>")    'zlc-select-previous-vertical)
+  (define-key map (kbd "<right>") 'zlc-select-next)
+  (define-key map (kbd "<left>")  'zlc-select-previous)
+
+  ;;; reset selection
+  (define-key map (kbd "C-c") 'zlc-reset)
+  )
+
+(setq zlc-select-completion-immediately t)
+
+;; To change style, M-x customize-face and input zlc-selected-completion-face.

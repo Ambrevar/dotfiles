@@ -46,13 +46,10 @@
    (set-face-foreground 'ediff-odd-diff-A "black")
 ))
 
-;; FIXME: fix C functions color.
-(font-lock-add-keywords
- 'c-mode
- '(
-   ("&" . font-lock-keyword-face)
-   ("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)
-   ))
+;; Show paren.
+(set-face-background 'show-paren-match-face (face-background 'default))
+(set-face-foreground 'show-paren-match-face "#def")
+(set-face-attribute 'show-paren-match-face nil :weight 'extra-bold)
 
 ;; Make Emacs and Mutt colors fit.
 (font-lock-add-keywords
@@ -98,25 +95,33 @@
     c-mode python-mode
     latex-mode html-mode texinfo-mode))
 
-;; C-mode printf highlight.
-(defvar font-lock-format-specifier-face		'font-lock-format-specifier-face
-  "Face name to use for format specifiers.")
+;; FIXME: fix C functions color.
+;; (font-lock-add-keywords
+;;  'c-mode
+;;  '(
+;;    ("&" . font-lock-keyword-face)
+;;    ("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)
+;;    ))
 
-(defface font-lock-format-specifier-face
-  '((t (:foreground "OrangeRed1")))
-  "Font Lock mode face used to highlight format specifiers."
-  :group 'font-lock-faces)
+;; C-mode printf highlight.
+;; (defvar font-lock-format-specifier-face		'font-lock-format-specifier-face
+;;   "Face name to use for format specifiers.")
+
+;; (defface font-lock-format-specifier-face
+;;   '((t (:foreground "OrangeRed1")))
+;;   "Font Lock mode face used to highlight format specifiers."
+;;   :group 'font-lock-faces)
 
 ;; FIXME: disable highlighting outside of string.
-(add-hook
- 'c-mode-common-hook
- (lambda ()
-   (font-lock-add-keywords
-    nil
-    '(("[^%]\\(%\\([[:digit:]]+\\$\\)?[-+' #0*]*\\([[:digit:]]*\\|\\*\\|\\*[[:digit:]]+\\$\\)\\(\\.\\([[:digit:]]*\\|\\*\\|\\*[[:digit:]]+\\$\\)\\)?\\([hlLjzt]\\|ll\\|hh\\)?\\([aAbdiuoxXDOUfFeEgGcCsSpn]\\|\\[\\^?.[^]]*\\]\\)\\)"
-       1 font-lock-format-specifier-face t)
-      ("\\(%%\\)" 
-       1 font-lock-format-specifier-face t)) )))
+;; (add-hook
+;;  'c-mode-common-hook
+;;  (lambda ()
+;;    (font-lock-add-keywords
+;;     nil
+;;     '(("[^%]\\(%\\([[:digit:]]+\\$\\)?[-+' #0*]*\\([[:digit:]]*\\|\\*\\|\\*[[:digit:]]+\\$\\)\\(\\.\\([[:digit:]]*\\|\\*\\|\\*[[:digit:]]+\\$\\)\\)?\\([hlLjzt]\\|ll\\|hh\\)?\\([aAbdiuoxXDOUfFeEgGcCsSpn]\\|\\[\\^?.[^]]*\\]\\)\\)"
+;;        1 font-lock-format-specifier-face t)
+;;       ("\\(%%\\)" 
+;;        1 font-lock-format-specifier-face t)) )))
 
 ;; FIXME: Does not work.
 ;; (add-hook
