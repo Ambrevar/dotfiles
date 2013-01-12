@@ -1,13 +1,14 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                               Author: Ambrevar                               #
-#                               Date: 2013-01-09                               #
+#                               Date: 2013-01-12                               #
 ################################################################################
 
 Synopsis
 ********
-This repository contains configuration files for various Unix-programs.
-Target distribution: Arch Linux and FreeBSD (might work for most Unices as well)
+
+This repository contains configuration files for various Unix-programs. Target
+distributions are Arch Linux and FreeBSD (might work for most Unices as well).
 
 Generic Comments
 ****************
@@ -148,7 +149,9 @@ shell name.
 TeX
 ***
 
-A lot of plainTeX and LaTeX macros. Among others: pie charts, dynamic plots with
+plainTeX macros, most importantly a partial UTF-8 support (taken from LaTeX).
+
+A lot of LaTeX macros. Among others: pie charts, dynamic plots with
 input file and trend.
 
 plainTeX macros are in the '.texmf' folder. LaTeX macros are all bundled into
@@ -178,8 +181,8 @@ URxvt: using the paste function from Muennich's clipboard on the same terminal
 where text was copied will make xsel crash.
 
 ################################################################################
-Complete applist
-****************
+Noteworthy apps
+***************
 
 aalib
 aircrack-ng
