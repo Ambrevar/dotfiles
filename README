@@ -41,7 +41,7 @@ all files directly. To fetch source from Git repo:
 
     cd
     git init
-    git remote add origin https://github.com/Ambrevar/home-config.git
+    git remote add origin <repo>
     git fetch
     git branch master origin/master
     git checkout master
@@ -84,9 +84,9 @@ Custom color theme with 256 colors.
 
 Extended file support (shell files, Mutt mails, Arch Linux PKGBUILDs).
 
-Some customization -- columns, kill whole line, etc.
+Some customization: columns, kill whole line, etc.
 
-Some custom functions (duplicate line, unfill-paragraph, etc.).
+Some custom functions: duplicate line, unfill-paragraph, etc.
 
 A lot of code snippets, especially for LaTeX. Contains document template, plot
 generation, pie chart generation, and others.
