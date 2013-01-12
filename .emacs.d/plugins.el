@@ -127,20 +127,20 @@
 ;;==============================================================================
 ;; Zsh style completion.
 
-(if (require 'zlc nil t)
-    (let ((map minibuffer-local-map))
-      ;; Like Zsh menu select.  Should not use arrows directly because it overrides
-      ;; default controls like previous entry, or previous/next char.
-      (define-key map (kbd "M-<down>")  'zlc-select-next-vertical)
-      (define-key map (kbd "M-<up>")    'zlc-select-previous-vertical)
-      (define-key map (kbd "M-<right>") 'zlc-select-next)
-      (define-key map (kbd "M-<left>")  'zlc-select-previous)
+;; (if (require 'zlc nil t)
+;;     (let ((map minibuffer-local-map))
+;;       ;; Like Zsh menu select.  Should not use arrows directly because it overrides
+;;       ;; default controls like previous entry, or previous/next char.
+;;       (define-key map (kbd "M-<down>")  'zlc-select-next-vertical)
+;;       (define-key map (kbd "M-<up>")    'zlc-select-previous-vertical)
+;;       (define-key map (kbd "M-<right>") 'zlc-select-next)
+;;       (define-key map (kbd "M-<left>")  'zlc-select-previous)
 
-      ;; Reset selection.
-      (define-key map (kbd "C-c") 'zlc-reset)
+;;       ;; Reset selection.
+;;       (define-key map (kbd "C-c") 'zlc-reset)
 
-      ;; (setq zlc-select-completion-immediately t)
+;;       ;; (setq zlc-select-completion-immediately t)
 
-      ;; To change style, M-x customize-face and input zlc-selected-completion-face.
-      )
-)
+;;       ;; To change style, M-x customize-face and input zlc-selected-completion-face.
+;;       )
+;; )
