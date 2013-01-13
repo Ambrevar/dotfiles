@@ -5,8 +5,13 @@
 # --
 \documentclass[$2]{${1:$$(yas/choose-value '("article" "report" "book" "letter"))}}
 \usepackage[utf8]{inputenc}
-\usepackage{eurosym}
-\DeclareUnicodeCharacter{20AC}{\euro{}}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{marvosym}
+\usepackage{textcomp}
+\DeclareUnicodeCharacter{20AC}{\EUR{}}
+\DeclareUnicodeCharacter{2264}{\leqslant}
+\DeclareUnicodeCharacter{2265}{\geqslant}
 
 \begin{document}
 $0
