@@ -7,6 +7,7 @@
 [alias]
 	c = commit -a
 	co = checkout
+	l = log --stat
 	m = mergetool
 	s = status -uno
 [push]
