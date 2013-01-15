@@ -16,12 +16,12 @@
   (let ((fill-column (point-max)))
     (fill-region (region-beginning) (region-end) nil)))
 
+
 ;; Remove duplicate lines. (sort -u)
-;; TODO: finish it.
-;; (defun remove-duplicates ()
-;;   (interactive)
-;;   ((shell-command (echo blah)))
-;; )
+(defun remove-dup ()
+  (interactive)
+  (shell-command-on-region (point) (mark) "sort -u" (buffer-name) t)
+)
 
 ;;==============================================================================
 ;; Toggle window split
