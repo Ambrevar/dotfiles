@@ -47,7 +47,6 @@ emacs-mediawiki-bzr
 emacs-nox
 emacs-yasnippet
 fakeroot
-fbv
 feh
 file
 filesystem
@@ -103,6 +102,7 @@ lesspipe
 lib32-alsa-lib
 lib32-ati-dri
 lib32-openal
+libcdio-paranoia
 libev
 libftdi
 libirman
@@ -110,7 +110,9 @@ libmediainfo
 libspectre
 libtool
 libtorrent
+libtxc_dxtn
 libusbx
+libx86
 libxdg-basedir
 libzen
 licenses
@@ -222,7 +224,6 @@ valgrind
 vi
 vicious
 vim
-vlock
 w3m
 wget
 which

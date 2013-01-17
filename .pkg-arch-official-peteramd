@@ -81,7 +81,6 @@ expat
 faac
 faad2
 fakeroot
-fbv
 feh
 ffmpeg
 fftw
@@ -251,6 +250,7 @@ libcap
 libcdaudio
 libcddb
 libcdio
+libcdio-paranoia
 libcroco
 libcups
 libdaemon
@@ -339,6 +339,7 @@ libtiff
 libtirpc
 libtool
 libtorrent
+libtxc_dxtn
 libusb-compat
 libusbx
 libva
@@ -348,6 +349,7 @@ libvorbis
 libvpx
 libwmf
 libx11
+libx86
 libxau
 libxaw
 libxcb
@@ -374,6 +376,7 @@ libxss
 libxt
 libxtst
 libxv
+libxvmc
 libxxf86dga
 libxxf86vm
 libzen
@@ -431,7 +434,6 @@ net-tools
 ngrep
 nspr
 nss
-nss-myhostname
 ntfs-3g
 ntfsprogs
 numlockx
@@ -496,6 +498,7 @@ python2-mako
 python2-markupsafe
 python2-notify
 python-dbus-common
+python-docutils
 python-pyelftools
 qpdf
 randrproto
@@ -570,7 +573,6 @@ vicious
 videoproto
 vim
 vim-runtime
-vlock
 w3m
 wavpack
 webkitgtk2
