@@ -313,11 +313,8 @@ your document embeds raster graphics."
                              (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -lm -g3 -O0")
                              file))))
 
-            (local-set-key (kbd "C-c C-f") 'compile)
+            (local-set-key (kbd "C-c C-c") 'compile)
             ;; (global-set-key (kbd "<f12>") 'next-error)
-            (local-set-key (kbd "M-a") 'beginning-of-defun)
-            (local-set-key (kbd "M-e") 'end-of-defun)
-
             )
           )
 
@@ -330,16 +327,21 @@ your document embeds raster graphics."
 ;; Python
 ;;==============================================================================
 
+(defcustom python-compiler "python"
+"Python compiler."
+:safe 'stringp)
+
 (add-hook
  'python-mode-hook
  (lambda ()
    (defun python-my-compile ()
      "Use compile to run python programs."
      (interactive)
-     (compile (concat "python " buffer-name))
+     (compile (concat python-compiler " " buffer-file-name))
      )
    (setq compilation-scroll-output t)
    (local-set-key "\C-c\C-c" 'python-my-compile) 
+   (local-set-key "\C-c\C-d" 'duplicate-line) 
    )
  )
 
