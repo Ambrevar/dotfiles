@@ -125,16 +125,18 @@
 ;; I find the default tex-mode and AucTeX quiet disappointing. I'm using custom
 ;; functions for everything.
 
-(defvar tex-my-viewer "zathura --fork" 
+(defcustom tex-my-viewer "zathura --fork" 
   "PDF Viewer for TeX documents. You may want to fork the viewer
   so that it detects when the same document is launched twice,
-  and persists when Emacs gets closed.")
+  and persists when Emacs gets closed."
+:safe 'stringp)
 
-(defvar tex-my-compiler "pdftex"
+(defcustom tex-my-compiler "pdftex"
   "This is the name of the executable called upon TeX compilations.
-Examples: pdftex, pdflatex, xetex, xelatex, luatex, lualatex...")
+Examples: pdftex, pdflatex, xetex, xelatex, luatex, lualatex..."
+:safe 'stringp)
 
-(defvar tex-my-compiler-options "-file-line-error-style -interaction nonstopmode"
+(defcustom tex-my-compiler-options "-file-line-error-style -interaction nonstopmode"
   "The options to the tex compiler. Options are set between the
 compiler name and the file name.
 
@@ -157,9 +159,10 @@ You may use file local variable for convenience:
 % -*- tex-my-compiler-options: \"-shell-escape\"
 
 Note that -shell-escape can also be toggled with universal
-argument.")
+argument."
+:safe 'stringp)
 
-(defvar tex-my-startcommands ""
+(defcustom tex-my-startcommands ""
   "You can call a TeX compiler upon a string instead of a file.
 This is actually useful if you want to customize your
 compilation.
@@ -181,7 +184,8 @@ document, you may define it here:
 A pratical way to use this feature is to define a file local
 variable, e.g. on the first line:
   % -*- tex-my-startcommands: \"\\def\\locale{en}\" -*-
-")
+"
+:safe 'stringp)
 
 (defun tex-my-compile ()
   "Use compile to process your TeX-based document. Use a prefix
@@ -225,7 +229,7 @@ WARNING: the -shell-escape option is a potential security issue."
   "Remove all TeX temporary files. This command should be safe,
 but there is no warranty."
   (interactive)
-  (defvar file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory buffer-file-name)))
+  (setq file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory buffer-file-name)))
   (shell-command
    (concat "rm -f "
            file-noext ".aux " file-noext ".glg" file-noext ".glo" file-noext ".gls" file-noext ".idx " file-noext ".ilg " file-noext ".ind " file-noext ".lof " file-noext ".log " file-noext ".nav " file-noext ".out " file-noext ".snm " file-noext ".tns " file-noext ".toc " file-noext ".xdy"
@@ -238,8 +242,8 @@ but there is no warranty."
 compression depends on the fonts used. Do not use this command if
 your document embeds raster graphics."
   (interactive)
-  (defvar file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory buffer-file-name)))
-  (defvar file (replace-regexp-in-string "tex" "pdf" (file-name-nondirectory buffer-file-name)))
+  (setq file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory buffer-file-name)))
+  (setq file (replace-regexp-in-string "tex" "pdf" (file-name-nondirectory buffer-file-name)))
   (shell-command
    (concat "if [ -e "
            file
