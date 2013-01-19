@@ -1,0 +1,143 @@
+## -*- mode:sh -*- #
+################################################################################
+## Shell -- Trancode function set.
+## Date 2013-01-19
+################################################################################
+## Tool list: ffmpeg, recode
+## Useful guide:
+# http://ffmpeg.org/trac/ffmpeg/wiki/x264EncodingGuide
+
+
+################################################################################
+## Text
+
+tc_text_scan ()
+{
+    IFS="
+"
+
+    for i in $(find . -type f -size -50M -print); do
+        echo -n "# "
+        file "$i"
+        grep -m1 "\`" "$i"
+        grep -m1 "oe" "$i"
+    done
+}
+
+## Confert all 'bad' encoding to UTF-8/LF.
+##
+## WARNING: It will fail for encoding other than ISO-8859-1 and cp1252.
+tc_text_2utf8 ()
+{
+    local CODING
+
+    IFS="
+"
+
+    for i in $(find . -type f -size -50M -print); do
+        CODING=$(file "$i")
+
+        if [ -n "$(echo $CODING | grep 'ISO-8859')" ]; then
+            echo "ISO-8859:   [$i]"
+            recode latin1..utf-8 "$i"
+
+        elif [ -n "$(echo $CODING | grep 'Non-ISO extended-ASCII')" ]; then
+            echo "cp1252:     [$i]"
+            recode cp1252..utf-8 "$i"
+
+        elif [ -n "$(echo $CODING | grep 'UTF-16 Unicode text')" ]; then
+            echo "UTF-16:     [$i]"
+            recode utf-16..utf-8 "$i"
+
+        elif [ -n "$(echo $CODING | grep 'UTF-8 Unicode (with BOM)')" ]; then
+            echo "UTF-8 BOM:  [$i]"
+            sed -i '1s/^.//' "$i"
+            ## The following commands work, but may be overkill.
+            # dd iflag=skip_bytes skip=3 if=file.srt of=temp.srt
+            # dd bs=1 skip=3 if=file.srt of=temp.srt
+            # tail -c +32 file.srt > temp.srt
+        fi
+
+        if [ -n "$(echo $CODING | grep 'CRLF')" ]; then
+            echo "CRLF:       [$i]"
+            sed -i 's/\r//g' "$i"
+        fi
+
+    done
+}
+
+################################################################################
+## Video
+
+## TODO: audio quality.
+## TODO: option to replace original file.
+## TODO: handle srt encoding.
+
+## TODO: work with -threads option.
+## TODO: crop options.
+## TODO: audio copy if AAC or OGG.
+
+## High in Handbrake:
+# b-adapt=2:rc-lookahead=50:me=umh
+
+## Mine in Handbrake:
+# ref=1:weightp=1:subq=2:rc-lookahead=10:trellis=0:8x8dct=0
+
+## Mine with details:
+# cabac=1:ref=1:deblock=1:0:0:analyse=0x1:0x111:me=hex:subme=2:psy=1:psy_rd=1.00:0.00:mixed_ref=0:me_range=16:chroma_me=1:trellis=0:8x8dct=0:cqm=0:deadzone=21,11:fast_pskip=1:chroma_qp_offset=0:threads=6:sliced_threads=0:nr=0:decimate=1:interlaced=0:bluray_compat=0:constrained_intra=0:bframes=3:b_pyramid=2:b_adapt=1:b_bias=0:direct=1:weightb=1:open_gop=0:weightp=1:keyint=240:keyint_min=24:scenecut=40:intra_refresh=0:rc_lookahead=10:rc=crf:mbtree=1:crf=20.0:qcomp=0.60:qpmin=3:qpmax=69:qpstep=4:ip_ratio=1.40:aq=1:1.00
+
+## Mine diff with default:
+# ref=1:analyse=0x1:0x111:me=hex:subme=2:trellis=0:8x8dct=0:chroma_qp_offset=0:b_adapt=1:direct=1:weightp=1:keyint=240:rc_lookahead=10
+
+
+## Best for bad quality movies.
+# me=hex
+
+## Vars
+TC_AUDIO_QUAL=192k
+TC_OUTDIR="$HOME/temp"
+
+## What to do if file exists:
+# -y overwrite
+# -n do not overwrite.
+TC_OVERWRITE=-n
+
+## quality*size ~= 1/speed
+# ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo
+TC_VIDEO_PRESET=slow
+
+## Overall quality. Logarithmic scale.
+# 18 is near perfection.
+# 22 is really good compression, while a bit more blurry than original.
+# 20 is a good compromise.
+TC_VIDEO_QUAL=20
+
+## x264 tuning (presets).
+## See x264 --fullhelp.
+# film is default.
+TC_VIDEO_TUNE="film"
+
+## x264 options.
+# me=umh is default. Possible values: hex, umh...
+TC_VIDEO_OPTS="me=umh"
+
+tc_mux()
+{
+    echo "void"
+}
+
+tc_demux()
+{
+    ffmpeg -y -i "$1" -c:a copy
+}
+
+tc_transcode()
+{
+    echo "================================================================================"
+    ffmpeg $TC_OVERWRITE -i "$1" \
+        -c:v libx264 -preset $TC_VIDEO_PRESET -crf $TC_VIDEO_QUAL -tune $TC_VIDEO_TUNE -x264opts $TC_VIDEO_OPTS \
+        -c:a libvorbis -b:a $TC_AUDIO_QUAL \
+        "${1%.*}-$(date "+%F-%H%M%S").mkv"
+
+}
+
