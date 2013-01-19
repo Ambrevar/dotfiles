@@ -47,6 +47,9 @@ case "$extension" in
 		success && exit 0 || exit 1;;
 
     # CUSTOM
+	ogg)
+		mediainfo "$path" | sed 's/  \+:/: /;'
+		success && exit 5 || exit 1;;
 	# MKV videos:
 	mkv)
 		mediainfo "$path" | sed 's/  \+:/: /;'
