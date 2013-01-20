@@ -70,14 +70,13 @@ tc_text_2utf8 ()
 ################################################################################
 ## Video
 
-## TODO: audio quality.
-## TODO: option to replace original file.
-## TODO: handle srt encoding.
-
-## TODO: Chapters
-## TODO: work with -threads option.
+## TODO: audio quality. Copy if AAC or OGG <320k.
+## TODO: chapters support. Already OK?
 ## TODO: crop options.
-## TODO: audio copy if AAC or OGG.
+## TODO: custom mapping.
+## TODO: handle srt encoding.
+## TODO: option to replace original file.
+## TODO: work with -threads option.
 
 ## Vars
 TC_AUDIO_QUAL=192k
@@ -99,13 +98,17 @@ TC_VIDEO_PRESET=slow
 TC_VIDEO_QUAL=20
 
 ## x264 tuning (presets).
+## Possible values: film, animation, grain, ...
 ## See x264 --fullhelp.
-# film is default.
-TC_VIDEO_TUNE="film"
+## No tuning by default.
+# TC_VIDEO_TUNE="-tune film"
+TC_VIDEO_TUNE=""
 
 ## x264 options.
-# me=umh is default. Possible values: hex, umh...
-TC_VIDEO_OPTS="me=umh"
+## Possible values: hex, umh...
+## me=umh is default. 
+# TC_VIDEO_OPTS="-x264opts me=hex"
+TC_VIDEO_OPTS=""
 
 tc_demux_audio()
 {
@@ -120,9 +123,12 @@ tc_audio()
 
 tc_transcode()
 {
+    ## Zsh compatibility
+    set -o shwordsplit 2>/dev/null
+
     echo "================================================================================"
     ffmpeg $TC_OVERWRITE -i "$1" \
-        -c:v libx264 -preset $TC_VIDEO_PRESET -crf $TC_VIDEO_QUAL -tune $TC_VIDEO_TUNE -x264opts $TC_VIDEO_OPTS \
+        -c:v libx264 -preset $TC_VIDEO_PRESET -crf $TC_VIDEO_QUAL $TC_VIDEO_TUNE $TC_VIDEO_OPTS \
         -c:a libvorbis -b:a $TC_AUDIO_QUAL \
         -c:s copy \
         -map 0 "${1%.*}-$(date "+%F-%H%M%S").mkv"

@@ -23,5 +23,6 @@ source "${SHELL_DIR}/options_bash"
 ## Source order should not matter.
 source "${SHELL_DIR}/alias_rc"
 source "${SHELL_DIR}/funs_rc"
+source "${SHELL_DIR}/funs_transcode"
 source "${SHELL_DIR}/funs_bash"
 source "${SHELL_DIR}/personal_rc"
