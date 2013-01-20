@@ -18,7 +18,6 @@ source "${SHELL_DIR}/options_zsh"
 source "${SHELL_DIR}/alias_rc"
 source "${SHELL_DIR}/colors_zsh"    
 source "${SHELL_DIR}/funs_rc"
-source "${SHELL_DIR}/funs_transcode"
 source "${SHELL_DIR}/keys_zsh"
 source "${SHELL_DIR}/personal_rc"
 
