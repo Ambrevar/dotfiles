@@ -215,7 +215,6 @@ dtach
 dvtm
 dwb
 emacs
-expac
 fbpdf
 fbv
 fdisk
@@ -232,11 +231,9 @@ gimp
 gnumeric
 gnuplot
 gparted
-gpicview
 graphicsmagick
 grep
 groff
-handbrake
 hdparm
 help2man
 highlight
@@ -255,7 +252,6 @@ ltrace
 luakit
 lynx
 mediainfo
-mencoder
 mercurial
 mkfs
 mkvtoolnix
@@ -281,7 +277,6 @@ patch
 poppler
 pstotext
 pwgen
-pwsafe
 qpdf
 ranger
 re2c
@@ -296,6 +291,7 @@ slock
 sort
 splint
 strace
+subdl
 submarine
 sudo
 sxiv
@@ -323,7 +319,6 @@ wmfs
 wv
 x264
 xclip
-xsel
 yasm
 zathura
 zsh
