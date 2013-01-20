@@ -121,10 +121,20 @@ tc_audio()
     ffmpeg -threads 4 $TC_OVERWRITE -i "$1" -vn -c:a libvorbis -b:a $TC_AUDIO_QUAL "${1%.*}-$(date "+%F-%H%M%S").ogg"
 }
 
+
+tc_splice()
+{
+    echo "================================================================================"
+    ffmpeg $TC_OVERWRITE -i "$1" -ss 60 -t 600 -c:v copy -c:a copy "${1%.*}-$(date "+%F-%H%M%S").${1##*.}"
+}
+
 tc_transcode()
 {
     ## Zsh compatibility
-    set -o shwordsplit 2>/dev/null
+    STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
+    if [ "$STATUS" = "off" ]; then
+        set -o shwordsplit
+    fi
 
     echo "================================================================================"
     ffmpeg $TC_OVERWRITE -i "$1" \
@@ -132,11 +142,18 @@ tc_transcode()
         -c:a libvorbis -b:a $TC_AUDIO_QUAL \
         -c:s copy \
         -map 0 "${1%.*}-$(date "+%F-%H%M%S").mkv"
+
+    ## Restore Zsh. This will not turn off shwordsplit if it was on before
+    ## calling the function.
+    if [ "$STATUS" = "off" ]; then
+        set +o shwordsplit
+    fi
+    unset STATUS
 }
 
 # tc_mux()
 # {
-#     ffmpeg -y -i "$1" -i "$2" -metadata:s:a:1 language=fre -c:v copy -c:a copy -map 0 -map 1 "final.mkv"
+#     # ffmpeg -y -i "$1" -i "$2" -metadata:s:a:1 language=fre -c:v copy -c:a copy -map 0 -map 1 "final.mkv"
 # }
 
 
