@@ -718,15 +718,15 @@ xinf()
 ## files in current folder.
 bindatasearch()
 {
-    if [ $# -eq 0 ] || [ ! -f "$1" ]; then
-        echo "Please provide a valid single file as argument."
+    if [ $# -eq 0 ] || [ $# -gt 2 ] || [ ! -f "$1" ]; then
+        echo "Usage: $0 FILE [FOLDER]"
         return
     fi
 
     ## Must be a folder.
     local TARGET=$PWD
     if [ $# -eq 2 ] && [ -d "$2" ]; then
-        target="$2"
+        TARGET="$2"
     fi
     
     ## The awk command suppresses first column, spaces and line breaks.
@@ -737,7 +737,7 @@ bindatasearch()
     ## simple quotes, we cannot use external variables directly. So we pass the
     ## $SOURCE variable as argument. The underscore at the end allows the use of
     ## arguments.
-    find "$WORKDIR" -type f -exec bash -c '
+    find "$TARGET" -type f -exec bash -c '
           FILEDUMP=$(od -tx8 "$1" | awk '"'"'($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }'"'"')
           grep -q "$2" <(echo $FILEDUMP)
 

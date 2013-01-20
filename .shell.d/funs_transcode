@@ -6,6 +6,10 @@
 
 ## Tool list: ffmpeg, recode
 
+## Support:
+# ffmpeg -codecs
+# ffmpeg -formats
+
 ## Useful guide:
 # http://ffmpeg.org/trac/ffmpeg/wiki/x264EncodingGuide
 
@@ -14,6 +18,7 @@
 
 tc_text_scan ()
 {
+    local IFS
     IFS="
 "
 
@@ -31,7 +36,7 @@ tc_text_scan ()
 tc_text_2utf8 ()
 {
     local CODING
-
+    local IFS
     IFS="
 "
 
@@ -82,6 +87,7 @@ tc_text_2utf8 ()
 TC_AUDIO_QUAL=192k
 TC_OUTDIR="$HOME/temp"
 
+## TODO: as parameter instead.
 ## What to do if file exists:
 # -y overwrite
 # -n do not overwrite.
@@ -112,7 +118,7 @@ TC_VIDEO_OPTS=""
 
 tc_demux_audio()
 {
-    ffmpeg $TC_OVERWRITE -i "$1" -c:a copy
+    ffmpeg $TC_OVERWRITE -i "$1" -vn -sn -c:a copy -map 0:1 "$2"
 }
 
 tc_audio()
@@ -124,14 +130,49 @@ tc_audio()
 
 tc_splice()
 {
-    echo "================================================================================"
-    ffmpeg $TC_OVERWRITE -i "$1" -ss 60 -t 600 -c:v copy -c:a copy -c:s copy -map 0 "${1%.*}-$(date "+%F-%H%M%S").${1##*.}"
+    ## Note: we put the time options *before* the input file so that it uses
+    ## keyframes, thus being much faster butless accurate.
+    _tc_splice()
+    {
+        echo "================================================================================"
+        ffmpeg $TC_OVERWRITE  -ss 60 -t 600 -i "$1" -c:v copy -c:a copy -c:s copy -map 0 "${1%.*}-$(date "+%F-%H%M%S").${1##*.}"
+    }
+
+    if [ $# -eq 0 ]; then
+        tc_splice .
+        return
+    fi
+
+    for i in "$@"; do
+        if [ -d "$i" ]; then
+            
+            local IFS
+            IFS="
+"
+            ## TODO: provide max-depth as option.
+            for i in $(find "$i"  \( \
+                -iname '*.mkv' -o \
+                -iname '*.mp4' -o \
+                -iname '*.avi' -o \
+                -iname '*.webm' -o \
+                -iname '*.flv' -o \
+                -iname '*.wmv' -o \
+                -iname '*.mpg' \) ); do
+                 _tc_splice $i
+            done
+
+        else
+            _tc_splice "$i"
+        fi
+
+    done
 }
 
+## TODO: splice should be a parameter for transcode.
 tc_transcode()
 {
     ## Zsh compatibility
-    STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
+    local STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
     if [ "$STATUS" = "off" ]; then
         set -o shwordsplit
     fi
@@ -143,12 +184,11 @@ tc_transcode()
         -c:s copy \
         -map 0 "${1%.*}-$(date "+%F-%H%M%S").mkv"
 
-    ## Restore Zsh. This will not turn off shwordsplit if it was on before
-    ## calling the function.
+    ## Restore Zsh previous options. This will not turn off shwordsplit if it
+    ## was on before calling the function.
     if [ "$STATUS" = "off" ]; then
         set +o shwordsplit
     fi
-    unset STATUS
 }
 
 # tc_mux()
