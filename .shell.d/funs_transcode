@@ -125,7 +125,7 @@ tc_audio()
 tc_splice()
 {
     echo "================================================================================"
-    ffmpeg $TC_OVERWRITE -i "$1" -ss 60 -t 600 -c:v copy -c:a copy "${1%.*}-$(date "+%F-%H%M%S").${1##*.}"
+    ffmpeg $TC_OVERWRITE -i "$1" -ss 60 -t 600 -c:v copy -c:a copy -c:s copy -map 0 "${1%.*}-$(date "+%F-%H%M%S").${1##*.}"
 }
 
 tc_transcode()
