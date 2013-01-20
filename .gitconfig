@@ -5,10 +5,12 @@
 [color]
 	ui = true
 [alias]
+	b = branch -va
 	c = commit -a
 	co = checkout
 	l = log --stat
 	m = mergetool
+	r = remote -v
 	s = status -uno
 [push]
 	default = simple
