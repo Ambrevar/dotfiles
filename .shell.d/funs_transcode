@@ -171,21 +171,24 @@ tc_transcode()
     shift $(($OPTIND - 1))
 
 
-    ## Zsh compatibility
-    local STATUS
-    STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
-    if [ "$STATUS" = "off" ]; then
-        set -o shwordsplit
-    fi
-
-
     if [ $# -eq 0 ]; then
         tc_transcode .
         return
     fi
 
+    local OLDIFS
+    OLDIFS=$IFS
+
+    ## Zsh compatibility
+    local STATUS
+    STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
+    [ "$STATUS" = "off" ] && set -o shwordsplit
+
     _tc_transcode()
     {
+        local IFS
+        IFS=$OLDIFS
+
         echo "================================================================================"
         ffmpeg $TC_OVERWRITE $TC_SAMPLE -i "$1" \
             -c:v libx264 -preset $TC_VIDEO_PRESET -crf $TC_VIDEO_QUAL $TC_VIDEO_TUNE $TC_VIDEO_OPTS \
@@ -195,6 +198,8 @@ tc_transcode()
     }
 
     for i in "$@"; do
+
+        ## Argument is a folder. We search for all video files in there.
         if [ -d "$i" ]; then
             
             local IFS
@@ -202,7 +207,7 @@ tc_transcode()
 "
 
             ## TODO: provide max-depth as option.
-            for i in $(find "$i"  \( \
+            for j in $(find "$i"  \( \
                 -iname '*.mkv' -o \
                 -iname '*.mp4' -o \
                 -iname '*.avi' -o \
@@ -210,22 +215,19 @@ tc_transcode()
                 -iname '*.flv' -o \
                 -iname '*.wmv' -o \
                 -iname '*.mpg' \) ); do
-                 _tc_transcode $i
+                 _tc_transcode $j
             done
 
+        ## Argument is a regular file.
         else
             _tc_transcode "$i"
         fi
 
     done
 
-
     ## Restore Zsh previous options. This will not turn off shwordsplit if it
     ## was on before calling the function.
-    if [ "$STATUS" = "off" ]; then
-        set +o shwordsplit
-    fi
-
+    [ "$STATUS" = "off" ] && set +o shwordsplit
 }
 
 # tc_mux()
