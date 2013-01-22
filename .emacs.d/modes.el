@@ -227,7 +227,7 @@ WARNING: the -shell-escape option is a potential security issue."
   (if (equal current-prefix-arg '(4)) (setq tex-my-shell-escape "-shell-escape")
     (setq tex-my-shell-escape ""))
 
-  (setq tex-my-compile-command (concat tex-my-compiler " "  tex-my-shell-escape " " tex-my-compiler-options " " tex-my-startcommands " " buffer-file-name))
+  (setq tex-my-compile-command (concat tex-my-compiler " "  tex-my-shell-escape " " tex-my-compiler-options " " tex-my-startcommands " \"" buffer-file-name "\""))
   ;; (message tex-my-compile-command) ;; Debug only.
   (save-buffer)
   (setq compilation-scroll-output t)
@@ -278,11 +278,14 @@ your document embeds raster graphics."
   )
 
 (defun tex-pdf-view ()
-  "Call a PDF viewer for current buffer file."
+  "Call a PDF viewer for current buffer file. File name should be
+properly escaped with double-quotes in case it has spaces."
   (interactive)
   (shell-command
-   (concat tex-my-viewer " "
-           (replace-regexp-in-string "\.tex$" "\.pdf &" (file-name-nondirectory buffer-file-name))
+   (concat tex-my-viewer
+           " \""
+           (replace-regexp-in-string "\.tex$" "\.pdf" (file-name-nondirectory buffer-file-name))
+           "\" &"
            )
    )
   (delete-windows-on "*Async Shell Command*")
