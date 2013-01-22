@@ -203,10 +203,10 @@ variable, e.g. on the first line:
 
 (defun tex-my-compile ()
   "Use compile to process your TeX-based document. Use a prefix
-  argument to call the compiler along the '-shell-escape'
-  option. This will enable the use of '\write18{<external
-  command>}' from within TeX documents, which need to
-  allow external application to be called from TeX.
+argument to call the compiler along the '-shell-escape'
+option. This will enable the use of '\write18{<external
+command>}' from within TeX documents, which need to allow
+external application to be called from TeX.
 
 This may be useful for some features like GnuPlot support with TikZ.
 
@@ -238,17 +238,19 @@ WARNING: the -shell-escape option is a potential security issue."
   (delete-windows-on "*compilation*")
   )
 
-;; TODO: rewrite this function using lists and/or macros.
-;; Add .synctex.gz and .synctex 
+(defcustom tex-my-extension-list '(".aux" ".glg" ".glo" ".gls" ".idx" ".ilg" ".ind" ".lof" ".log" ".nav" ".out" ".snm" ".synctex" ".synctex.gz" ".tns" ".toc" ".xdy")
+"List of known TeX exentsions. This list is used by 'tex-clean to purge all matching files."
+:safe 'listp)
+
 (defun tex-clean ()
   "Remove all TeX temporary files. This command should be safe,
 but there is no warranty."
   (interactive)
   (setq file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory buffer-file-name)))
   (shell-command
-   (concat "rm -f "
-           file-noext ".aux " file-noext ".glg" file-noext ".glo" file-noext ".gls" file-noext ".idx " file-noext ".ilg " file-noext ".ind " file-noext ".lof " file-noext ".log " file-noext ".nav " file-noext ".out " file-noext ".snm " file-noext ".tns " file-noext ".toc " file-noext ".xdy"
-           )
+   (concat "rm -f \"" file-noext 
+           (mapconcat 'identity tex-my-extension-list (concat "\" \"" file-noext))
+           "\"")
    )
   )
 
