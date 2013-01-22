@@ -125,10 +125,22 @@
 ;; I find the default tex-mode and AucTeX quiet disappointing. I'm using custom
 ;; functions for everything.
 
-(defcustom tex-my-viewer "zathura --fork" 
+;; (defcustom tex-my-viewer "zathura --fork" 
+(defcustom tex-my-viewer "zathura --fork -s -x \"emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"'\"'\"%{input}\"'\"'\")) (goto-line %{line}))'\"" 
   "PDF Viewer for TeX documents. You may want to fork the viewer
-  so that it detects when the same document is launched twice,
-  and persists when Emacs gets closed."
+so that it detects when the same document is launched twice, and
+persists when Emacs gets closed.
+
+Simple command:
+
+  zathura --fork
+
+We can use
+
+  emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"%{input}\")) (goto-line %{line}))'
+
+to reverse-search a pdf using SyncTeX. Note that the quotes and double-quotes matter and must be escaped appropriately.
+"
 :safe 'stringp)
 
 (defcustom tex-my-compiler "pdftex"
@@ -136,7 +148,7 @@
 Examples: pdftex, pdflatex, xetex, xelatex, luatex, lualatex..."
 :safe 'stringp)
 
-(defcustom tex-my-compiler-options "-file-line-error-style -interaction nonstopmode"
+(defcustom tex-my-compiler-options "-file-line-error-style -interaction nonstopmode -synctex=1"
   "The options to the tex compiler. Options are set between the
 compiler name and the file name.
 
@@ -153,6 +165,8 @@ Interresting options:
 
 * -shell-escape: allow the use of \write18{<external command>}
    from within TeX documents. This is a potential security issue.
+
+* -synctex=1: enable SyncTeX support.
 
 You may use file local variable for convenience:
 
@@ -225,6 +239,7 @@ WARNING: the -shell-escape option is a potential security issue."
   )
 
 ;; TODO: rewrite this function using lists and/or macros.
+;; Add .synctex.gz and .synctex 
 (defun tex-clean ()
   "Remove all TeX temporary files. This command should be safe,
 but there is no warranty."
