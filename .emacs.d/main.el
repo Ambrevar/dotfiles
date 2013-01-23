@@ -110,3 +110,6 @@ browse-url-browser-function 'browse-url-generic)
 (global-set-key (kbd "C-<f6>") (kbd "M-| xclip"))
 (global-set-key (kbd "C-<f7>") (kbd "C-u M-! xclip <SPC> -o"))
 (global-set-key (kbd "C-<f8>") (kbd "C-u M-! xclip <SPC> -o <SPC> -selection <SPC> clipboard"))
+
+;; query-replace-regex fix on terminals.
+(global-set-key (kbd "C-M-y") 'query-replace-regexp)
