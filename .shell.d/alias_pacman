@@ -2,7 +2,7 @@
 
 PACMAN_FRONTEND='pacman'
 
- ## Use of Pacman-Color
+## Use of pacman-color
 if [ -e "/usr/bin/pacman-color" ]; then
     PACMAN_FRONTEND='pacman-color'
 
@@ -13,30 +13,14 @@ if [ -e "/usr/bin/pacman-color" ]; then
     fi
 fi
 
- ## Pacman aliases
-if [ "$PACMAN_FRONTEND" = "pacman" ]; then
-    alias pc='sudo pacman -Sc'
-    alias pi='sudo pacman -S --needed'
-    alias pqi='pacman -Qi'
-    alias pql='pacman -Ql'
-    alias pqo='pacman -Qo'
-    alias pqs='pacman -Qs'
-    alias pr='sudo pacman -Rs'
-    alias psi='pacman -Si'
-    alias pss='pacman -Ss'
-    alias pu='sudo pacman -Syu'
-fi
-
-if [ "$PACMAN_FRONTEND" = "pacman-color" ]; then
-    alias pc='sudo pacman-color -Sc'
-    alias pi='sudo pacman -S --needed'
-    alias pqi='pacman-color -Qi'
-    alias pql='pacman-color -Ql'
-    alias pqo='pacman-color -Qo'
-    alias pqs='pacman-color -Qs'
-    alias pr='sudo pacman-color -Rs'
-    alias psi='pacman-color -Si'
-    alias pss='pacman-color -Ss'
-    alias pu='sudo pacman-color -Syu'
-fi
+alias pc='sudo $PACMAN_FRONTEND -Sc'
+alias pi='sudo $PACMAN_FRONTEND -S --needed'
+alias pqi='$PACMAN_FRONTEND -Qi'
+alias pql='$PACMAN_FRONTEND -Ql'
+alias pqo='$PACMAN_FRONTEND -Qo'
+alias pqs='$PACMAN_FRONTEND -Qs'
+alias pr='sudo $PACMAN_FRONTEND -Rs'
+alias psi='$PACMAN_FRONTEND -Si'
+alias pss='$PACMAN_FRONTEND -Ss'
+alias pu='sudo $PACMAN_FRONTEND -Syu'
 
