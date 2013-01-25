@@ -51,7 +51,7 @@
              ("Wikipedia" "http://en.wikipedia.org/w/" "Ambrevar" "" "Main Page")
              ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX")
              ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Emacs")
-             ;; ("WikEmacs" "http://wikemacs.org/wiki/" "Ambrevar" "" "Main Page")
+             ("WikEmacs" "https://wikemacs.org/wiki/" "Ambrevar" "" "Main Page")
              )
            )
 

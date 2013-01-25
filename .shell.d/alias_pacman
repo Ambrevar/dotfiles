@@ -1,5 +1,7 @@
 ## -*- mode:sh -*- #
 
+## TODO: auto-completion for aliases.
+
 PACMAN_FRONTEND='pacman'
 
 ## Use of pacman-color
