@@ -40,13 +40,15 @@ BEGIN {
     #-----ABBREVIATIONS TO BE SET IN LOWERCASE-----
     articles     = "a an the "
     conjunctions = "and but for nor or so "
+    verbs = "am is are "
+    abbrevs = "feat "
 
     # Prepositions
     # Omitted: over (=finished), under, through, before, after
-    preps = "against at between by in into of on to upon "
+    preps = "against at between by from in into of on to upon "
 
     # Build array of words to be set lowercased
-    split(articles conjunctions preps, keep_lower, " ")
+    split(articles conjunctions preps verbs abbrevs, keep_lower, " ")
 
     #-----ABBREVIATIONS TO BE SET IN SOLID CAPS-----
     # Other abbreviations - add to this list as needed
@@ -65,8 +67,11 @@ function titlecase(string,x)  {
     b = string;        # b is the rest of the string, so that (string = a b)
     compress = x;      # optional compression argument
 
-    if (compress) {    # Compress spaces or tabs if 2nd argument passed
+    # Compress spaces or tabs if 2nd argument passed. Trim prefix and suffix space.
+    if (compress) {
         gsub(/[ \t]+/, " ", b)
+        gsub(/^ /, "", b)
+        gsub(/ $/, "", b)
         if (debug) print "DIAG: Compress argument passed to function call"
     }
 
@@ -78,14 +83,15 @@ function titlecase(string,x)  {
         # pos is the position of the NEXT punctuation mark (except apostrophe)
         # after the current word. If this is the last word in b, pos will be 0.
         # match() automatically sets RLENGTH
-        pos = match(b, /[^A-Z']+/)
+        ## WARNING: is it safe to consider digits as part of a word?
+        pos = match(b, /[^A-Z0-9']+/)
+        # pos = match(b, /[^A-Z']+/)
 
         if (pos > 0)    word = substr(b, 1, pos + RLENGTH - 1)
         else            word = b
 
         # 1st char of current word
         head = substr(b, 1, 1)
-
         # tail of current word
         if (pos > 0)    tail = substr(b, 2, pos + RLENGTH - 2)
         else            tail = substr(b, 2)
@@ -169,6 +175,7 @@ function titlecase(string,x)  {
         else if (hit > 0)    a = a word
         else            a = a toupper(head) tolower(tail)
 
+
     } while (pos > 0);
 
     # Everything should be converted now.
@@ -176,7 +183,8 @@ function titlecase(string,x)  {
     # Double exception 1: Set 1st word of string in Cap case
     # Need to handle potential internal single/double quotes like
     #  "A Day in the Life" or 'On the Waterfront'
-    match(a, /[A-Za-z]/)
+    # WARNING: here we consider digits as part of a work (as in 1st, 2nd, etc.)
+    match(a, /[A-Za-z0-9]/)
     a = toupper(substr(a,1,RSTART)) substr(a,RSTART+1)
 
     # Double exception 2: Set 1st word after a colon, question mark or
@@ -195,6 +203,6 @@ function titlecase(string,x)  {
 }
 
 
-{print titlecase($0)}
+{print titlecase($0,1)}
 
 #---end of awk script---

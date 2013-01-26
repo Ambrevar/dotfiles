@@ -1,7 +1,7 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Shell -- Trancode function set.
-## Date 2013-01-19
+## Date 2013-01-27
 ################################################################################
 
 ## Tool list: ffmpeg, recode, titlecase.awk
@@ -10,8 +10,9 @@
 # ffmpeg -codecs
 # ffmpeg -formats
 
-## Useful guide:
-# http://ffmpeg.org/trac/ffmpeg/wiki/x264EncodingGuide
+## Useful guides
+## x264: http://ffmpeg.org/trac/ffmpeg/wiki/x264EncodingGuide
+## ID3 details: http://en.wikipedia.org/wiki/ID3
 
 ################################################################################
 ## Text
@@ -76,101 +77,14 @@ tc_text_2utf8 ()
 ## Audio
 
 ## For the sake of simplicity we convert everything to OGG.
-
-## ID3 details : http://en.wikipedia.org/wiki/ID3
-
 ## You can easily set output folder to current folder with TC_AUDIO_DEST=".".
 TC_AUDIO_DEST="/media/data1/Musics/"
 
-## Check for
-# MP3 CBR
-# In-tag Covers
-# Track tag with leading zeros
-tc_audio_scan()
-{
-    echo "void"
-}
+## OGG quality ranges from -1 to 10. If TC_AUDIO_QUAL is 0, bitrate will be set
+## automatically according to the source.
+TC_AUDIO_QUAL=0
 
-tc_audio_info()
-{
- 
-    local METADATA
-    METADATA=$(ffmpeg -i "$1" 2>&1 | sed -n '/Metadata/ ! d; /Metada/{b cont}; :cont ; {n;p;b cont}')
-
-    # echo "$METADATA"
-
-    _metadata_filter()
-    {
-        ## We fix some chars.
-        # ’ => '
-        # : => -
-        echo "$METADATA" | sed -n  -e "/$1/{s/.*$1[^:]* : //g ; s/’/'/g ; s/[ ]*:[ ]*/ - /g ; p; q}"
-    }
-
-    local FORMAT
-    FORMAT=$(echo "$METADATA" | sed -n '/Stream/{s/.*Audio: \([^,]*\),.*/\1/g;p;q}')
-
-    local BITRATE
-    BITRATE=$(echo "$METADATA" | sed -n '/Stream/{s/.*, \(.*\) kb\/s/\1/g;p;q}')
-
-    local COMPOSER
-    COMPOSER=$(_metadata_filter "composer")
-    local TRACK
-    TRACK=$(_metadata_filter "track")
-    local DISC
-    DISC=$(_metadata_filter "disc")
-    local DATE
-    DATE=$(_metadata_filter "date")
-    local TYER
-    TYER=$(_metadata_filter "TYER" | sed -n 's/.*\([[:digit:]]\{4\}\).*/\1/p')
-    
-    ## If DATE is not a year
-    if [ ${#DATE} -ne 4 ] && [ ${#TYER} -eq 4 ]; then
-        DATE="$TYER"
-    fi
-
-    local GENRE
-    GENRE=""
-    local ALBUM
-    ALBUM=$(_metadata_filter "album")
-    local ALBUM_ARTIST
-    ALBUM_ARTIST=$(_metadata_filter "album_artist")
-    local TITLE
-    TITLE=$(_metadata_filter "title")
-
-    echo "[$COMPOSER]"
-    echo "[$TRACK]"
-    echo "[$DISC]"
-    echo "[$DATE]"
-    echo "[$TYER]"
-    echo "[$GENRE]"
-    echo "[$ALBUM]"
-    echo "[$ALBUM_ARTIST]"
-    echo "[$TITLE]"
-    echo "[$FORMAT]"
-    echo "[$BITRATE]"
-}
-
-## TODO: move png,jpg and name $ALBUM - Cover.$EXT. if multiple png,jpg, append counter. TEST.
-## TODO: tr some chars like ´ to '. TEST.
-## TODO: remove useless tags.
-## TODO: dynamic quality. If aac or OGG, do not reencode. If FLAC or WavPack, reencode -q9. TEST.
-## TODO: if dest exist, append date.
-## TODO: case checking. handle roman numerals. Handle initials. Handle exception list.
-## TODO: extract cover from tags if checksum does not match any from current folder.
-## TODO: remove cover from tags. TEST.
-## TODO: cover resolution check. Should be > 100x100. Above <1000x1000 should give a warning.
-
-## TODO: tag parameters.
-# -a artist
-# -l album
-# -t title
-# -n track number
-# -d date
-
-## Note: we use same value for artist and album_artist.
-
-## OGG quality ranges from -1 to 10
+## OGG values.
 ## -q-1 45 kbit/s
 ## -q0  64 kbit/s
 ## -q1  80 kbit/s
@@ -183,13 +97,43 @@ tc_audio_info()
 ## -q8  256 kbit/s
 ## -q9  320 kbit/s
 ## -q10 500 kbit/s
-TC_AUDIO_QUAL=0
 
-## Genres: since this is not universal by nature, we do not put a genre in tags, except for Classical and Soundtrack.
-## TODO: use parameters.
-## Classical: -gc
-## Soundtrack: -gs
+## Artists: we use same value for artist and album_artist.
+
+## Genres: since this is not universal by nature, we do not put a genre in tags,
+## except for Classical and Soundtrack.
 TC_AUDIO_GENRE=""
+
+## Check for
+# MP3 CBR
+# In-tag Covers
+# Track tag with leading zeros
+tc_audio_scan()
+{
+    echo "void"
+}
+
+## TEST: move png,jpg and name $ALBUM - Cover.$EXT. if multiple png,jpg, append counter. TEST.
+## TEST: tr some chars like ´ to '. TEST.
+## TEST: remove useless tags. TEST.
+## TEST: dynamic quality. If aac or OGG, do not reencode. If FLAC or WavPack, reencode -q9. TEST.
+## TEST: remove cover from tags. TEST.
+## TEST: case checking. handle roman numerals. Handle initials. Handle exception list. TEST.
+## TEST: if dest exist, append date.
+
+## TODO: Empty composer field.
+## TODO: cover resolution check. Should be > 100x100. Above <1000x1000 should give a warning.
+## TODO: extract cover from tags if checksum does not match any from current folder.
+
+## TODO: tag parameters.
+# -a artist
+# -l album
+# -t title
+# -n track number
+# -d date
+# -g genre
+# -gc genre=classical
+# -gs genre=soundtrack
 
 ## This function is supposed to work on a per-album basis. Folders will not be
 ## accepted as argument. This function will work best if all tracks of a folder
@@ -204,12 +148,27 @@ tc_audio_transcode()
     METADATA=$(echo "$STREAM" | sed -n '/Metadata/ ! d; /Metada/{b cont}; :cont ; {n;p;b cont}')
     STREAM=$(echo "$STREAM" | grep "Stream")
 
+
+    local FORMAT
+    FORMAT=$(echo "$STREAM" | sed -n '/Audio:/ {s/.*Audio: \([^,]*\),.*/\1/;p}')
+    local BITRATE
+    BITRATE=$(echo "$STREAM" | sed -n '/kb\/s/ {s/.*, \(.*\) kb\/s/\1/;p}')
+
+    if [ -z "$FORMAT" ]; then
+        echo "ERROR: non-audio file."
+        return
+    fi
+
     _metadata_filter()
     {
-        ## We fix some chars.
+        ## We fix some chars with sed.
         # ’ => '
         # : => -
-        echo "$METADATA" | sed -n  -e "/\<$1\>/{s/.*$1[^:]* : //g ; s/’/'/g ; s/[ ]*:[ ]*/ - /g ; p; q}"
+        
+        ## We use the AWK script to set title case. The script contains
+        ## exceptions that can be configured.
+        awk -f "$HOME/.shell.d/titlecase.awk" \
+            <(echo "$METADATA" | sed -n  -e "/\<$1\>/{s/.*$1[^:]* : //g ; s/’/'/g ; s/[ ]*:[ ]*/ - /g ; p; q}")
     }
 
     local TITLE
@@ -242,11 +201,6 @@ tc_audio_transcode()
     if [ ${#DATE} -ne 4 ] && [ ${#TYER} -eq 4 ]; then
         DATE="$TYER"
     fi
-
-    local FORMAT
-    FORMAT=$(echo "$STREAM" | sed 's/.*Audio: \([^,]*\),.*/\1/')
-    local BITRATE
-    BITRATE=$(echo "$STREAM" | sed 's/.*, \(.*\) kb\/s/\1/')
 
     ## DEBUG only.
     # echo "[$ALBUM]"
@@ -289,58 +243,67 @@ tc_audio_transcode()
         fi
     fi
     OUTPUT_TRACK="$OUTPUT_TRACK - $TITLE"
+    ## If file exist, we append a uniq timestamp to the name.
+    [ -e "${OUTPUT_TRACK}.ogg" ] && OUTPUT_TRACK="$OUTPUT_TRACK-$(date '+%F-%H%M%S')"
 
     ## COVER
     local COVER_COUNTER
     OUTPUT_COVER="$OUTPUT/"
-    [ -n "$ALBUM" ] && OUTPUT_COVER="$OUTPUT$ALBUM - "
+    [ -n "$ALBUM" ] && OUTPUT_COVER="$OUTPUT_COVER$ALBUM - "
     for i in $(find "."  \( \
         -iname '*.png' -o \
         -iname '*.jpg' \) ); do
 
-        OUTPUT_COVER="${OUTPUT}Cover.${i##*.}"
+        OUTPUT_COVER="${OUTPUT_COVER}Cover.${i##*.}"
         COVER_COUNTER=1
 
-        while [ -e "$OUTPUT_COVER" ]; do
-            OUTPUT_COVER="${OUTPUT}Cover $COVER_COUNTER.${i##*.}"
-            COVER_COUNTER=$(($COVER_COUNTER+1))
-        done
+        ## We copy cover only if it does not already exist.
+        if [ ! "$(sha1sum $OUTPUT_COVER | cut -f1 -d' ')" = "$(sha1sum $i | cut -f1 -d' ')" ]; then
 
-        ## DEBUG only.
-        echo "cp -nv $i [$OUTPUT_COVER]"
-        # cp -nv "$i" "$OUTPUT_COVER"
+            while [ -e "$OUTPUT_COVER" ]; do
+                OUTPUT_COVER="${OUTPUT_COVER}Cover $COVER_COUNTER.${i##*.}"
+                COVER_COUNTER=$(($COVER_COUNTER+1))
+            done
+
+            ## DEBUG only.
+            # echo "cp -nv $i [$OUTPUT_COVER]"
+            cp -nv "$i" "$OUTPUT_COVER"
+            
+        fi
     done
 
+    ## TODO: test w/o qual to see default param.
     ## QUALITY
     if [ $TC_AUDIO_QUAL -eq 0 ]; then
-        [ $BITRATE -le 45 ]  && TC_AUDIO_QUAL=45
-        [ $BITRATE -gt 45 ]  && TC_AUDIO_QUAL=64
-        [ $BITRATE -gt 64 ]  && TC_AUDIO_QUAL=80
-        [ $BITRATE -gt 80 ]  && TC_AUDIO_QUAL=96
-        [ $BITRATE -gt 96 ]  && TC_AUDIO_QUAL=112
-        [ $BITRATE -gt 112 ] && TC_AUDIO_QUAL=128
-        [ $BITRATE -gt 128 ] && TC_AUDIO_QUAL=160
-        [ $BITRATE -gt 160 ] && TC_AUDIO_QUAL=192
-        [ $BITRATE -gt 192 ] && TC_AUDIO_QUAL=224
-        [ $BITRATE -gt 224 ] && TC_AUDIO_QUAL=256
-        [ $BITRATE -gt 256 ] && TC_AUDIO_QUAL=320
-        [ $BITRATE -gt 320 ] && TC_AUDIO_QUAL=500
+        [ $BITRATE -le 45 ]  && TC_AUDIO_QUAL=45k
+        [ $BITRATE -gt 45 ]  && TC_AUDIO_QUAL=64k
+        [ $BITRATE -gt 64 ]  && TC_AUDIO_QUAL=80k
+        [ $BITRATE -gt 80 ]  && TC_AUDIO_QUAL=96k
+        [ $BITRATE -gt 96 ]  && TC_AUDIO_QUAL=112k
+        [ $BITRATE -gt 112 ] && TC_AUDIO_QUAL=128k
+        [ $BITRATE -gt 128 ] && TC_AUDIO_QUAL=160k
+        [ $BITRATE -gt 160 ] && TC_AUDIO_QUAL=192k
+        [ $BITRATE -gt 192 ] && TC_AUDIO_QUAL=224k
+        [ $BITRATE -gt 224 ] && TC_AUDIO_QUAL=256k
+        [ $BITRATE -gt 256 ] && TC_AUDIO_QUAL=320k
+        [ $BITRATE -gt 320 ] && TC_AUDIO_QUAL=500k
     fi
 
     ## DEBUG only.
-    echo "FORMAT: [$FORMAT]"
-    echo "BITRATE: [$TC_AUDIO_QUAL]"
-    echo "OUTPUT: [$OUTPUT_TRACK]"
+    # echo "FORMAT: [$FORMAT]"
+    # echo "BITRATE: [$TC_AUDIO_QUAL]"
+    # echo "OUTPUT: [$OUTPUT_TRACK]"
 
-    # ffmpeg -i "$1" -c:a libvorbis -b $TC_AUDIO_QUAL \
-    #     -metadata \
-    #     title="$TITLE" \
-    #     artist="$ARTIST" \
-    #     track="$TRACK" \
-    #     date="$DATE" \
-    #     album="$ALBUM" \
-    #     album_artist="$ARTIST" \
-    #     "$OUTPUT.ogg"
+    ## TODO: set -o shwordsplit
+    ## Only reencode if not in OGG.
+    local OGG_PARAM
+    OGG_PARAM="-c:a libvorbis -b:a $TC_AUDIO_QUAL"
+    [ "$FORMAT" = "ogg" ] && OGG_PARAM=""
+
+    # ffmpeg -i "$1" $OGG_PARAM \
+    ffmpeg -i "$1" -c:a libvorbis -b:a $TC_AUDIO_QUAL -metadata \
+        title="$TITLE",artist="$ARTIST",track="$TRACK",date="$DATE",album="$ALBUM",album_artist="$ARTIST",genre="$GENRE",composer="$COMPOSER" \
+        "$OUTPUT_TRACK.ogg"
 }
 
 
@@ -389,7 +352,7 @@ tc_video_demux_audio()
 tc_video_audio2ogg()
 {
     echo "================================================================================"
-    ffmpeg -threads 4 -i "$1" -vn -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL "${1%.*}-$(date "+%F-%H%M%S").ogg"
+    ffmpeg -threads 4 -i "$1" -vn -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL "${1%.*}-$(date '+%F-%H%M%S').ogg"
 }
 
 tc_video_transcode()
@@ -470,7 +433,7 @@ EOF
             -c:v libx264 -preset $TC_VIDEO_PRESET -crf $TC_VIDEO_QUAL $TC_VIDEO_TUNE $TC_VIDEO_OPTS \
             -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL \
             -c:s copy \
-            -map 0 "${1%.*}-$(date "+%F-%H%M%S").mkv"
+            -map 0 "${1%.*}-$(date '+%F-%H%M%S').mkv"
     }
 
     for i in "$@"; do
