@@ -4,7 +4,7 @@
 ## Date 2013-01-19
 ################################################################################
 
-## Tool list: ffmpeg, recode
+## Tool list: ffmpeg, recode, mediainfo, id3.
 
 ## Support:
 # ffmpeg -codecs
@@ -73,6 +73,63 @@ tc_text_2utf8 ()
 }
 
 ################################################################################
+## Audio
+
+## TODO: Choose best tool. Check if 
+## * can delete/merge ID3v1
+## * can detect CBR
+## * can print ID3 and ID3v2 separately
+## * speed
+
+
+## ID3 details : http://en.wikipedia.org/wiki/ID3
+
+## OGG quality ranges from -1 to 10
+## -q-1 45 kbit/s
+## -q0  64 kbit/s
+## -q1  80 kbit/s
+## -q2  96 kbit/s
+## -q3  112 kbit/s
+## -q4  128 kbit/s
+## -q5  160 kbit/s
+## -q6  192 kbit/s
+## -q7  224 kbit/s
+## -q8  256 kbit/s
+## -q9  320 kbit/s
+## -q10 500 kbit/s
+TC_AUDIO_QUAL=192
+
+## You can easily set output folder to current folder with TC_AUDIO_DEST=".".
+TC_AUDIO_DEST="/media/data1/Musics/"
+
+## Genres
+## TODO: tool ?
+## mediainfo -G
+## 32 = Classical
+## 34 = Soundtrack
+
+
+tc_audio_info()
+{
+}
+
+
+
+## TODO: move png,jpg and name $ALBUM - Cover.$EXT. if multiple png,jpg, do noet rename.
+## TODO: tr some chars like ´ to '.
+## TODO: remove useless tags.
+## TODO: dynamic quality. If aac, mp3 vVBR or OGG, do not reencode. If FLAC or WavPack, reencode -q9.
+## TODO: if dest exist, append date.
+## TODO: case checking. handle roman numerals. Handle initials. Handle exception list.
+## TODO: extract cover from tags if checksum does not match any from current folder..
+## TODO: remove cover from tags: id3 -rAPIC -s 0
+
+tc_audio_transcode()
+{
+    echo "void"
+}
+
+################################################################################
 ## Video
 
 ## TODO: audio quality. Copy if AAC or OGG <320k.
@@ -84,8 +141,7 @@ tc_text_2utf8 ()
 ## TODO: work with -threads option.
 
 ## Vars
-TC_AUDIO_QUAL=192k
-TC_OUTDIR="$HOME/temp"
+TC_VIDEO_AUDIO_QUAL=192k
 
 ## quality*size ~= 1/speed
 # ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo
@@ -110,18 +166,18 @@ TC_VIDEO_TUNE=""
 # TC_VIDEO_OPTS="-x264opts me=hex"
 TC_VIDEO_OPTS=""
 
-tc_demux_audio()
+tc_video_demux_audio()
 {
-    ffmpeg $TC_OVERWRITE -i "$1" -vn -sn -c:a copy -map 0:1 "$2"
+    ffmpeg -i "$1" -vn -sn -c:a copy -map 0:1 "$2"
 }
 
-tc_audio()
+tc_video_audio2ogg()
 {
     echo "================================================================================"
-    ffmpeg -threads 4 $TC_OVERWRITE -i "$1" -vn -c:a libvorbis -b:a $TC_AUDIO_QUAL "${1%.*}-$(date "+%F-%H%M%S").ogg"
+    ffmpeg -threads 4 -i "$1" -vn -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL "${1%.*}-$(date "+%F-%H%M%S").ogg"
 }
 
-tc_transcode()
+tc_video_transcode()
 {
     _printhelp()
     {
@@ -197,7 +253,7 @@ EOF
         echo "================================================================================"
         ffmpeg $TC_OVERWRITE $TC_SAMPLE -i "$1" \
             -c:v libx264 -preset $TC_VIDEO_PRESET -crf $TC_VIDEO_QUAL $TC_VIDEO_TUNE $TC_VIDEO_OPTS \
-            -c:a libvorbis -b:a $TC_AUDIO_QUAL \
+            -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL \
             -c:s copy \
             -map 0 "${1%.*}-$(date "+%F-%H%M%S").mkv"
     }
@@ -234,11 +290,6 @@ EOF
     ## was on before calling the function.
     [ "$STATUS" = "off" ] && set +o shwordsplit
 }
-
-# tc_mux()
-# {
-#     # ffmpeg -y -i "$1" -i "$2" -metadata:s:a:1 language=fre -c:v copy -c:a copy -map 0 -map 1 "final.mkv"
-# }
 
 
 ################################################################################
