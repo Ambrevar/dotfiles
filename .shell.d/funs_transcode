@@ -4,7 +4,7 @@
 ## Date 2013-01-19
 ################################################################################
 
-## Tool list: ffmpeg, recode, mediainfo, id3.
+## Tool list: ffmpeg, recode, titlecase.awk
 
 ## Support:
 # ffmpeg -codecs
@@ -75,12 +75,7 @@ tc_text_2utf8 ()
 ################################################################################
 ## Audio
 
-## TODO: Choose best tool. Check if 
-## * can delete/merge ID3v1
-## * can detect CBR
-## * can print ID3 and ID3v2 separately
-## * speed
-
+## For the sake of simplicity we convert everything to OGG.
 
 ## ID3 details : http://en.wikipedia.org/wiki/ID3
 
@@ -103,14 +98,52 @@ TC_AUDIO_QUAL=192
 TC_AUDIO_DEST="/media/data1/Musics/"
 
 ## Genres
-## TODO: tool ?
-## mediainfo -G
-## 32 = Classical
-## 34 = Soundtrack
-
+## Classical
+## Soundtrack
+TC_AUDIO_GENRE=""
 
 tc_audio_info()
 {
+ 
+    local METADATA
+    METADATA=$(ffmpeg -i "$1" 2>&1 | sed -n '/Metadata/ ! d; /Metada/{b cont}; :cont ; {n;p;b cont}')
+
+    _metadata_filter()
+    {
+        ## We fix some chars.
+        # ’ => '
+        # : => -
+        echo "$METADATA" | sed -n  -e "/$1/{s/.*$1[^:]* : //g ; s/’/'/g ; s/[ ]*:[ ]*/ - /g ; p; q}"
+    }
+
+    local COMPOSER
+    COMPOSER=$(_metadata_filter "composer")
+    local TRACK
+    TRACK=$(_metadata_filter "track")
+    local DISC
+    DISC=$(_metadata_filter "disc")
+    local DATE
+    DATE=$(_metadata_filter "date")
+    local TYER
+    TYER=$(_metadata_filter "TYER" | sed -n 's/.*\([[:digit:]]\{4\}\).*/\1/p')
+    local GENRE
+    GENRE=$(_metadata_filter "genre")
+    local ALBUM
+    ALBUM=$(_metadata_filter "album")
+    local ALBUM_ARTIST
+    ALBUM_ARTIST=$(_metadata_filter "album_artist")
+    local TITLE
+    TITLE=$(_metadata_filter "title")
+
+    echo "[$COMPOSER]"
+    echo "[$TRACK]"
+    echo "[$DISC]"
+    echo "[$DATE]"
+    echo "[$TYER]"
+    echo "[$GENRE]"
+    echo "[$ALBUM]"
+    echo "[$ALBUM_ARTIST]"
+    echo "[$TITLE]"
 }
 
 
@@ -127,6 +160,51 @@ tc_audio_info()
 tc_audio_transcode()
 {
     echo "void"
+
+    ## We make sure we have no empty field.
+    [ -n "$ARTIST" ] && ARTIST="Unknown"
+    [ -n "$TITLE" ] && ARTIST="Unkown"
+
+    local OUTPUT
+    local OUTPUT_COVER
+    OUTPUT="$TC_AUDIO_DEST/$ARTIST"
+    if [ -n "$ALBUM" ]; then
+        [ -n "$YEAR" ] && OUTPUT="$OUTPUT/$YEAR - "
+        OUTPUT="$OUTPUT$ALBUM"
+    fi
+
+    ## Make sure directory exists.
+    mkdir -p "$OUTPUT"
+    if [ $? -ne 0 ]; then
+        echo "ERROR: could not create output folder"
+        return
+    fi
+
+    OUTPUT="$OUTPUT/$ARTIST"
+    if [ -n "$TRACK" ]; then
+        ## Make sure track number has two digits.
+        if [ $TRACK -lt 10 ]; then
+            OUTPUT="$OUTPUT - 0$TRACK"
+        else
+            OUTPUT="$OUTPUT - $TRACK" 
+        fi
+    fi
+    OUTPUT="$OUTPUT - $TITLE"
+
+    local COVER_COUNTER
+    for i in *.{png,jpg}; do
+        OUTPUT_COVER="$OUTPUT/$ALBUM - Cover.${i##*.}"
+        COVER_COUNTER=1
+
+        while [ -e "$OUTPUT_COVER" ]; do
+            OUTPUT_COVER="$OUTPUT/$ALBUM - Cover $COVER_COUNTER.${i##*.}"
+            COVER_COUNTER=$((COVER_COUNTER+1))
+        done
+
+        mv "$i" "$OUTPUT_COVER"
+    done
+
+    ffmpeg -i "$1" -c:a libvorbis -b $TC_AUDIO_QUAL "$OUTPUT.ogg"
 }
 
 ################################################################################
