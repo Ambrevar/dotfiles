@@ -78,7 +78,7 @@
   (windmove-default-keybindings))
 
 ;; Browser
-(setq browse-url-generic-program (executable-find "dwb")
+(setq browse-url-generic-program (executable-find (getenv "BROWSER"))
 browse-url-browser-function 'browse-url-generic)
 
 ;; Default ispell dictionnay
