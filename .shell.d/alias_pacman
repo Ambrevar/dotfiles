@@ -1,7 +1,5 @@
 ## -*- mode:sh -*- #
 
-## TODO: auto-completion for aliases.
-
 PACMAN_FRONTEND='pacman'
 
 ## Use of pacman-color
@@ -15,14 +13,15 @@ if [ -e "/usr/bin/pacman-color" ]; then
     fi
 fi
 
-alias pc='sudo $PACMAN_FRONTEND -Sc'
-alias pi='sudo $PACMAN_FRONTEND -S --needed'
-alias pqi='$PACMAN_FRONTEND -Qi'
-alias pql='$PACMAN_FRONTEND -Ql'
-alias pqo='$PACMAN_FRONTEND -Qo'
-alias pqs='$PACMAN_FRONTEND -Qs'
-alias pr='sudo $PACMAN_FRONTEND -Rs'
-alias psi='$PACMAN_FRONTEND -Si'
-alias pss='$PACMAN_FRONTEND -Ss'
-alias pu='sudo $PACMAN_FRONTEND -Syu'
-
+## The eval trick lets us define the alias after the variable has been expanded.
+## Bash will not auto-complete aliases.
+eval 'alias pc="sudo $PACMAN_FRONTEND -Sc"'
+eval 'alias pi="sudo $PACMAN_FRONTEND -S --needed"'
+eval 'alias pqi="$PACMAN_FRONTEND -Qi"'
+eval 'alias pql="$PACMAN_FRONTEND -Ql"'
+eval 'alias pqo="$PACMAN_FRONTEND -Qo"'
+eval 'alias pqs="$PACMAN_FRONTEND -Qs"'
+eval 'alias pr="sudo $PACMAN_FRONTEND -Rs"'
+eval 'alias psi="$PACMAN_FRONTEND -Si"'
+eval 'alias pss="$PACMAN_FRONTEND -Ss"'
+eval 'alias pu="sudo $PACMAN_FRONTEND -Syu"'
