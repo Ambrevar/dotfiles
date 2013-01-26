@@ -64,6 +64,9 @@ zstyle :compinstall filename "$HOME/.zshrc"
 ##==============================================================================
 ## Completion
 ##==============================================================================
+## Custom completion
+fpath=(~/.shell.d/completion $fpath)
+
 autoload -Uz compinit
 compinit
 

@@ -1,0 +1,53 @@
+#compdef pcc
+
+## Pacman custom completion
+
+## Let's check if pacman completion is already loaded. If not, we parse the
+## pacman completion file.
+if [ -n "$(type _pacman_action_none | grep "not found")" ]; then
+    source "/usr/share/zsh/site-functions/_pacman"    
+fi
+
+
+_pcc()
+{
+    case $words[1] in
+        pacman-deps)
+            case $words[2] in
+                -*q*)
+                    _pacman_action_query
+                    return ;;
+                -)
+                    return 1;;
+                *)
+                    _pacman_action_sync
+                    return ;;
+            esac
+            return ;;
+
+        pacman-files)
+            _pacman_action_query
+            return ;;
+        pacman-size)
+            case $words[2] in
+                -*q*)
+                    _pacman_action_query
+                    return ;;
+                -)
+                    return 1;;
+                *)
+                    _pacman_action_sync
+                    return ;;
+            esac
+            return ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+_pcc "$@"
+
+## Local Variables:
+## mode: sh
+## End:

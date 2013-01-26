@@ -3,13 +3,6 @@
 ## Pacman Functions
 ##==============================================================================
 
-## TODO: completion does not work as is. It requires pacman arguments like -S or
-## -Q.  There should be a way to use it.
-# if [ "zsh" = "$SHELL_CURRENT" ]; then
-#     compdef _pacman pacman-deps
-# if [ "bash" = "$SHELL_CURRENT" ]; then
-#     complete -o default -o nospace -F _pacman pacman-deps
-# fi
 
 ## This function gets the pacman variables when necessary.  Note: some functions
 ## uses pacman localized output. It should work in any case. You should always
@@ -85,6 +78,7 @@ EOF
 
     du -bch $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u) 2>/dev/null | eval ${OPTION_SORT}
 }
+[ "zsh" = "$SHELL_CURRENT" ] && compdef _pcc pacman-files
 
 ## Retrieve official packages list.
 pacman-official()
@@ -231,6 +225,7 @@ EOF
 
     _pacman_unset_vars
 }
+[ "zsh" = "$SHELL_CURRENT" ] && compdef _pcc pacman-size
 
 ## Print deps list.
 pacman-deps()
@@ -356,6 +351,7 @@ EOF
 
     _pacman_unset_vars
 }
+[ "zsh" = "$SHELL_CURRENT" ] && compdef _pcc pacman-deps
 
 abs-fetch ()
 {
