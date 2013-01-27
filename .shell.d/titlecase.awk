@@ -83,7 +83,7 @@ function titlecase(string,x)  {
         # pos is the position of the NEXT punctuation mark (except apostrophe)
         # after the current word. If this is the last word in b, pos will be 0.
         # match() automatically sets RLENGTH
-        ## WARNING: is it safe to consider digits as part of a word?
+        ## WARNING: we consider digits as part of a word.
         pos = match(b, /[^A-Z0-9']+/)
         # pos = match(b, /[^A-Z']+/)
 
@@ -190,7 +190,8 @@ function titlecase(string,x)  {
     # Double exception 2: Set 1st word after a colon, question mark or
     # exclamation point in title case. This kludge handles multiple colons,
     # question marks, etc. on the line. \a is the BEL or CTRL-G character.
-    done = gensub(/([:?!][^a-zA-Z]*)([a-zA-Z])/,"\\1\a\\2", "g", a)
+    ## WARNING: we also follow double quotes by a capital.
+    done = gensub(/([:?!"][^a-zA-Z]*)([a-zA-Z])/,"\\1\a\\2", "g", a)
 
     while (match(done,/\a/)) {
         beg = substr(done,1,RSTART-1)

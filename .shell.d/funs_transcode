@@ -300,7 +300,7 @@ EOF
 
     _metadata_filter()
     {
-        echo "$METADATA" | sed -n  -e "/\<$1\>/{s/.*$1[^:]* : //g ; p; q}"
+        echo "$METADATA" | grep -i "\<$1\>" | sed 's/[^:]* : //g'
     }
 
     local TITLE
@@ -335,9 +335,10 @@ EOF
 
         # ’ => '
         # : => -
+        # / => -
         
         awk -f "$HOME/.shell.d/titlecase.awk" \
-            <(echo "$@" | sed -n  -e "s/’/'/g ; s/[ ]*:[ ]*/ - /g ; p; q")
+            <(echo "$@" | sed -n  -e "s/’/'/g ; s/ *: */ - /g ; s| */ *| - |g; p; q")
     }
 
     OUTPUT_TITLE=$(eval _string_cleanser $OUTPUT_TITLE)
@@ -395,8 +396,8 @@ EOF
 
     ## Only reencode if not in OGG and if SKIP not set.
     OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
-    [ $SKIP -ne 0 ] && OGG_PARAM="" && OUTPUT_FORMAT="$FORMAT"
-    [ "$FORMAT" = "ogg" ] && OGG_PARAM=""
+    [ $SKIP -ne 0 ] && OGG_PARAM="-c:a copy" && OUTPUT_FORMAT="$FORMAT"
+    [ "$FORMAT" = "ogg" ] && OGG_PARAM="-c:a copy"
 
     ## Make sure track number has two digits for file name only.
     local OUTPUT_PADDEDTRACK
@@ -440,6 +441,7 @@ EOF
     echo
     echo "==> OUTPUT"
     echo "[$OUTPUT_FILE.$OUTPUT_FORMAT]"
+    # echo "[$OGG_PARAM]"
     echo
 
     [ $PREVIEW -ne 0 ] && return
