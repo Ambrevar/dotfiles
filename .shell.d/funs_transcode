@@ -80,11 +80,7 @@ tc_text_2utf8 ()
 ## You can easily set output folder to current folder with TC_AUDIO_DEST=".".
 TC_AUDIO_DEST="/media/data1/Musics/"
 
-## OGG quality ranges from -1 to 10. If TC_AUDIO_QUAL is 0, bitrate will be set
-## automatically according to the source.
-TC_AUDIO_QUAL=0
-
-## OGG values.
+## OGG quality ranges from -1 to 10.
 ## -q-1 45 kbit/s
 ## -q0  64 kbit/s
 ## -q1  80 kbit/s
@@ -99,11 +95,10 @@ TC_AUDIO_QUAL=0
 ## -q10 500 kbit/s
 
 ## Artists: we use same value for artist and album_artist.
+## Genres: since this is not universal by nature, we do not put a genre in tags.
+## Composer: not universal neither, we prefer ARTIST over COMPOSER, so COMPOSER will be empty.
 
-## Genres: since this is not universal by nature, we do not put a genre in tags,
-## except for Classical and Soundtrack.
-TC_AUDIO_GENRE=""
-
+## TODO: implement.
 ## Check for
 # MP3 CBR
 # In-tag Covers
@@ -113,17 +108,9 @@ tc_audio_scan()
     echo "void"
 }
 
-## TEST: move png,jpg and name $ALBUM - Cover.$EXT. if multiple png,jpg, append counter. TEST.
-## TEST: tr some chars like ´ to '. TEST.
-## TEST: remove useless tags. TEST.
-## TEST: dynamic quality. If aac or OGG, do not reencode. If FLAC or WavPack, reencode -q9. TEST.
-## TEST: remove cover from tags. TEST.
-## TEST: case checking. handle roman numerals. Handle initials. Handle exception list. TEST.
-## TEST: if dest exist, append date.
-
-## TODO: Empty composer field.
 ## TODO: cover resolution check. Should be > 100x100. Above <1000x1000 should give a warning.
 ## TODO: extract cover from tags if checksum does not match any from current folder.
+## TODO: Empty composer field.
 
 ## TODO: tag parameters.
 # -a artist
@@ -141,6 +128,125 @@ tc_audio_scan()
 ## should leave the only covers you want to keep in the working folder.
 tc_audio_transcode()
 {
+    _printhelp ()
+    {
+        cat <<EOF
+Usage: $0 [OPTIONS] FILE
+
+Options:
+  -p : preview (do not change file)
+  -s : skip encoding
+
+Tags:
+  -a : artist
+  -d : date
+  -g : genre
+  -l : album
+  -n : track number
+  -t : title
+
+You can use the following variables to refer to existing tags:
+
+  \$ALBUM
+  \$ALBUM_ARTIST
+  \$ARTIST
+  \$COMPOSER
+  \$DATE
+  \$TYER
+  \$GENRE
+  \$TRACK
+
+Default output:
+
+  \$TC_AUDIO_DEST/\$ARTIST/{{\$YEAR - }\$ALBUM/}\$ARTIST - {\$TRACK - }\$TITLE.\$OUTPUT_FORMAT
+
+Braces mean it is conditional.
+
+Examples:
+
+  Set the 'artist' tag:
+    $0 -a 'Franz Lizst' file.ogg
+
+  Set 'artist' to be 'composer', and 'title' to be preceeded by 'artist'.
+
+    $0 -a '\$COMPOSER' -t '$ARTIST - $TITLE' file.ogg
+
+IMPORTANT: you *must* use single quotes when using variables.
+
+EOF
+    }
+
+    ## OPTIONS
+    local SKIP
+    SKIP=0
+
+    local PREVIEW
+    PREVIEW=0
+
+    ## TAGS
+    local OUTPUT_ALBUM
+    OUTPUT_ALBUM='$ALBUM'
+    local OUTPUT_ARTIST
+    OUTPUT_ARTIST='$ARTIST'
+    local OUTPUT_DATE
+    OUTPUT_DATE='$DATE'
+    local OUTPUT_GENRE
+    OUTPUT_GENRE=''
+    local OUTPUT_TITLE
+    OUTPUT_TITLE='$TITLE'
+    local OUTPUT_TRACK
+    OUTPUT_TRACK='$TRACK'
+
+    ## PROPERTIES
+    local OUTPUT_FORMAT
+    OUTPUT_FORMAT="ogg"
+    local OUTPUT_BITRATE
+    local OUTPUT_FILE
+
+    local OGG_PARAM
+    OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
+
+    while getopts ":a:d:g:l:n:t:hps" opt; do
+        case $opt in
+
+            a) OUTPUT_ARTIST=$OPTARG ;;
+            d) OUTPUT_DATE=$OPTARG ;;
+            g) OUTPUT_GENRE=$OPTARG ;;
+            l) OUTPUT_ALBUM=$OPTARG ;;
+            n) OUTPUT_TRACK=$OPTARG ;;
+            t) OUTPUT_TITLE=$OPTARG ;;
+
+            h)
+                _printhelp "$0"
+                return 1
+                ;;
+            p)
+                PREVIEW=1
+                ;;
+
+            s)
+                SKIP=1
+                ;;
+
+            ?) 
+                _printhelp "$0"
+                return 1
+                ;;
+            :)
+                echo "Missing argument."
+                echo "Use $0 -h for help."
+                return 1
+                ;;
+        esac
+    done
+
+    shift $(($OPTIND - 1))
+    if [ $# -eq 0 ]; then
+        _printhelp "$0"
+        return
+    fi
+
+    ##================================================================================
     ## Get metadata.
     local METADATA
     local STREAM
@@ -173,12 +279,8 @@ tc_audio_transcode()
 
     local TITLE
     TITLE=$(_metadata_filter "title")
-    [ -z "$TITLE" ] && TITLE="Unknown"
-
     local ARTIST
     ARTIST=$(_metadata_filter "artist")
-    [ -z "$ARTIST" ] && ARTIST="Unknown"
-
     local ALBUM
     ALBUM=$(_metadata_filter "album")
     local ALBUM_ARTIST
@@ -190,41 +292,117 @@ tc_audio_transcode()
     local GENRE
     GENRE=""
 
+    ## We remove the track count if any
     local TRACK
     TRACK=$(_metadata_filter "track" | sed -e 's/^0*//' -e 's|/.*||')
-
     local DATE
     DATE=$(_metadata_filter "date")
     local TYER
     TYER=$(_metadata_filter "TYER" | sed -n 's/.*\([[:digit:]]\{4\}\).*/\1/p')
+
+
+
+    ##================================================================================
+    ## OUTPUT_* variables.
+
     ## If DATE is not a year, we use TYER if it is a year.
     if [ ${#DATE} -ne 4 ] && [ ${#TYER} -eq 4 ]; then
-        DATE="$TYER"
+        OUTPUT_DATE="$TYER"
     fi
+    
+    [ -z "$TITLE" ] && OUTPUT_TITLE="Unknown"
+    [ -z "$ARTIST" ] && OUTPUT_ARTIST="Unknown"
+
+    eval OUTPUT_ARTIST=$OUTPUT_ARTIST
+    eval OUTPUT_ALBUM=$OUTPUT_ALBUM
+    eval OUTPUT_TITLE=$OUTPUT_TITLE
+    eval OUTPUT_GENRE=$OUTPUT_GENRE
+    eval OUTPUT_TRACK=$OUTPUT_TRACK
+    eval OUTPUT_DATE=$OUTPUT_DATE
+
+    ## Only reencode if not in OGG and if SKIP not set..
+    [ $SKIP -ne 0 ] && OGG_PARAM="" && OUTPUT_FORMAT="$FORMAT"
+    [ "$FORMAT" = "ogg" ] && OGG_PARAM=""
+
+    ## TODO: test w/o qual to see default param.
+    ## QUALITY
+    eval OUTPUT_BITRATE=${BITRATE}
+    # if [ $OUTPUT_BITRATE -eq 0 ]; then
+    #     [ $BITRATE -le 45 ]  && OUTPUT_BITRATE=45k
+    #     [ $BITRATE -gt 45 ]  && OUTPUT_BITRATE=64k
+    #     [ $BITRATE -gt 64 ]  && OUTPUT_BITRATE=80k
+    #     [ $BITRATE -gt 80 ]  && OUTPUT_BITRATE=96k
+    #     [ $BITRATE -gt 96 ]  && OUTPUT_BITRATE=112k
+    #     [ $BITRATE -gt 112 ] && OUTPUT_BITRATE=128k
+    #     [ $BITRATE -gt 128 ] && OUTPUT_BITRATE=160k
+    #     [ $BITRATE -gt 160 ] && OUTPUT_BITRATE=192k
+    #     [ $BITRATE -gt 192 ] && OUTPUT_BITRATE=224k
+    #     [ $BITRATE -gt 224 ] && OUTPUT_BITRATE=256k
+    #     [ $BITRATE -gt 256 ] && OUTPUT_BITRATE=320k
+    #     [ $BITRATE -gt 320 ] && OUTPUT_BITRATE=500k
+    # fi
+
+
+    ## SET OUTPUT{,_FILE,_COVER} according to other OUTPUT_* variables.
+    local OUTPUT
+    local OUTPUT_FILE
+    OUTPUT="$TC_AUDIO_DEST/$OUTPUT_ARTIST/"
+    if [ -n "$OUTPUT_ALBUM" ]; then
+        [ -n "$OUTPUT_DATE" ] && OUTPUT="$OUTPUT$OUTPUT_DATE - "
+        OUTPUT="$OUTPUT$OUTPUT_ALBUM"
+    fi
+
+    OUTPUT_FILE="$OUTPUT/$OUTPUT_ARTIST"
+    if [ -n "$OUTPUT_TRACK" ]; then
+        ## Make sure track number has two digits.
+        if [ ${OUTPUT_TRACK} -lt 10 ]; then
+            OUTPUT_FILE="$OUTPUT_FILE - 0$OUTPUT_TRACK"
+        else
+            OUTPUT_FILE="$OUTPUT_FILE - $OUTPUT_TRACK"
+        fi
+    fi
+    OUTPUT_FILE="$OUTPUT_FILE - $OUTPUT_TITLE"
+    ## If file exist, we append a uniq timestamp to the name.
+    [ -e "${OUTPUT_FILE}.$OUTPUT_FORMAT" ] && OUTPUT_FILE="$OUTPUT_FILE-$(date '+%F-%H%M%S')"
+
+
+    ##==============================================================================
+    ## PREVIEW
+    echo "#### BEFORE"
+    echo "ALBUM          [$ALBUM]"
+    echo "ALBUM_ARTIST   [$ALBUM_ARTIST]"
+    echo "ARTIST         [$ARTIST]"
+    echo "BITRATE        [$BITRATE]"
+    echo "COMPOSER       [$COMPOSER]"
+    echo "DATE           [$DATE]"
+    echo "DISC           [$DISC]"
+    echo "FORMAT         [$FORMAT]"
+    echo "GENRE          [$GENRE]"
+    echo "TITLE          [$TITLE]"
+    echo "TRACK          [$TRACK]"
+    echo "TYER           [$TYER]"
+    echo
+    echo "#### AFTER"
+    echo "ALBUM          [$OUTPUT_ALBUM]"
+    echo "ARTIST         [$OUTPUT_ARTIST]"
+    echo "BITRATE        [$OUTPUT_BITRATE]"
+    echo "DATE           [$OUTPUT_DATE]"
+    echo "FORMAT         [$OUTPUT_FORMAT]"
+    echo "GENRE          [$OUTPUT_GENRE]"
+    echo "TITLE          [$OUTPUT_TITLE]"
+    echo "TRACK          [$OUTPUT_TRACK]"
+    echo "===="
+    echo "OUTPUT         [$OUTPUT_FILE]"
 
     ## DEBUG only.
-    # echo "[$ALBUM]"
-    # echo "[$ALBUM_ARTIST]"
-    # echo "[$ARTIST]"
-    # echo "[$BITRATE]"
-    # echo "[$COMPOSER]"
-    # echo "[$DATE]"
-    # echo "[$DISC]"
-    # echo "[$FORMAT]"
-    # echo "[$GENRE]"
-    # echo "[$TITLE]"
-    # echo "[$TRACK]"
-    # echo "[$TYER]"
+    # echo "FORMAT: [$FORMAT]"
+    # echo "BITRATE: [$TC_AUDIO_QUAL]"
+    # echo "OUTPUT: [$OUTPUT_TRACK]"
 
-    ## OUTPUT
-    local OUTPUT
-    local OUTPUT_TRACK
-    local OUTPUT_COVER
-    OUTPUT="$TC_AUDIO_DEST/$ARTIST/"
-    if [ -n "$ALBUM" ]; then
-        [ -n "$DATE" ] && OUTPUT="$OUTPUT$DATE - "
-        OUTPUT="$OUTPUT$ALBUM"
-    fi
+    [ $PREVIEW -ne 0 ] && return
+
+    ##==============================================================================
+    ## RUN PROCESS
 
     ## Make sure directory exists.
     mkdir -p "$OUTPUT"
@@ -233,20 +411,9 @@ tc_audio_transcode()
         return
     fi
 
-    OUTPUT_TRACK="$OUTPUT/$ARTIST"
-    if [ -n "$TRACK" ]; then
-        ## Make sure track number has two digits.
-        if [ ${TRACK} -lt 10 ]; then
-            OUTPUT_TRACK="$OUTPUT_TRACK - 0$TRACK"
-        else
-            OUTPUT_TRACK="$OUTPUT_TRACK - $TRACK" 
-        fi
-    fi
-    OUTPUT_TRACK="$OUTPUT_TRACK - $TITLE"
-    ## If file exist, we append a uniq timestamp to the name.
-    [ -e "${OUTPUT_TRACK}.ogg" ] && OUTPUT_TRACK="$OUTPUT_TRACK-$(date '+%F-%H%M%S')"
 
     ## COVER
+    local OUTPUT_COVER
     local COVER_COUNTER
     OUTPUT_COVER="$OUTPUT/"
     [ -n "$ALBUM" ] && OUTPUT_COVER="$OUTPUT_COVER$ALBUM - "
@@ -272,38 +439,20 @@ tc_audio_transcode()
         fi
     done
 
-    ## TODO: test w/o qual to see default param.
-    ## QUALITY
-    if [ $TC_AUDIO_QUAL -eq 0 ]; then
-        [ $BITRATE -le 45 ]  && TC_AUDIO_QUAL=45k
-        [ $BITRATE -gt 45 ]  && TC_AUDIO_QUAL=64k
-        [ $BITRATE -gt 64 ]  && TC_AUDIO_QUAL=80k
-        [ $BITRATE -gt 80 ]  && TC_AUDIO_QUAL=96k
-        [ $BITRATE -gt 96 ]  && TC_AUDIO_QUAL=112k
-        [ $BITRATE -gt 112 ] && TC_AUDIO_QUAL=128k
-        [ $BITRATE -gt 128 ] && TC_AUDIO_QUAL=160k
-        [ $BITRATE -gt 160 ] && TC_AUDIO_QUAL=192k
-        [ $BITRATE -gt 192 ] && TC_AUDIO_QUAL=224k
-        [ $BITRATE -gt 224 ] && TC_AUDIO_QUAL=256k
-        [ $BITRATE -gt 256 ] && TC_AUDIO_QUAL=320k
-        [ $BITRATE -gt 320 ] && TC_AUDIO_QUAL=500k
-    fi
+    ## Zsh compatibility. We need it otherwise word splitting of parameter like
+    ## TC_SAMPLE will not work.
+    local STATUS
+    STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
+    [ "$STATUS" = "off" ] && set -o shwordsplit
 
-    ## DEBUG only.
-    # echo "FORMAT: [$FORMAT]"
-    # echo "BITRATE: [$TC_AUDIO_QUAL]"
-    # echo "OUTPUT: [$OUTPUT_TRACK]"
+    ## TAG/RECODE
+    ffmpeg -i "$1" $OGG_PARAM -metadata \
+        title="$OUTPUT_TITLE",artist="$OUTPUT_ARTIST",track="$OUTPUT_TRACK",date="$OUTPUT_DATE",album="$OUTPUT_ALBUM",album_artist="$OUTPUT_ARTIST",genre="$OUTPUT_GENRE",composer="",TYER="",disc="" \
+        "$OUTPUT_FILE.$OUTPUT_FORMAT"
 
-    ## TODO: set -o shwordsplit
-    ## Only reencode if not in OGG.
-    local OGG_PARAM
-    OGG_PARAM="-c:a libvorbis -b:a $TC_AUDIO_QUAL"
-    [ "$FORMAT" = "ogg" ] && OGG_PARAM=""
-
-    # ffmpeg -i "$1" $OGG_PARAM \
-    ffmpeg -i "$1" -c:a libvorbis -b:a $TC_AUDIO_QUAL -metadata \
-        title="$TITLE",artist="$ARTIST",track="$TRACK",date="$DATE",album="$ALBUM",album_artist="$ARTIST",genre="$GENRE",composer="$COMPOSER" \
-        "$OUTPUT_TRACK.ogg"
+    ## Restore Zsh previous options. This will not turn off shwordsplit if it
+    ## was on before calling the function.
+    [ "$STATUS" = "off" ] && set +o shwordsplit
 }
 
 
@@ -355,6 +504,9 @@ tc_video_audio2ogg()
     ffmpeg -threads 4 -i "$1" -vn -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL "${1%.*}-$(date '+%F-%H%M%S').ogg"
 }
 
+## TODO: separate functions.
+## tc_video_batch
+## tc_video_transcode
 tc_video_transcode()
 {
     _printhelp()
