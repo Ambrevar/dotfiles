@@ -226,7 +226,7 @@ EOF
     ## These ones are not cli-options either, but this could be easily changed.
     local OUTPUT
     local OUTPUT_FILE
-    OUTPUT='$TC_AUDIO_DEST/$OUTPUT_ARTIST/${OUTPUT_ALBUM:+${OUTPUT_YEAR:+$OUTPUT_YEAR - }$OUTPUT_ALBUM/}'
+    OUTPUT='$TC_AUDIO_DEST/$OUTPUT_ARTIST/${OUTPUT_ALBUM:+${OUTPUT_DATE:+$OUTPUT_DATE - }$OUTPUT_ALBUM/}'
     OUTPUT_FILE='$OUTPUT$OUTPUT_ARTIST - ${OUTPUT_PADDEDTRACK:+$OUTPUT_PADDEDTRACK - }$OUTPUT_TITLE'
 
     while getopts ":a:b:d:g:l:n:t:hps" opt; do
@@ -374,13 +374,10 @@ EOF
         OUTPUT_DATE="$TYER_REG"
     fi
 
-    ## Only reencode if not in OGG and if SKIP not set.
-    [ $SKIP -ne 0 ] && OGG_PARAM="" && OUTPUT_FORMAT="$FORMAT"
-    [ "$FORMAT" = "ogg" ] && OGG_PARAM=""
-
     ## QUALITY
-    ## TODO: test if table is useful at all.
+    ## If bitrate argumument is not provided, we use BITRATE value.
     [ $OUTPUT_BITRATE -eq 0 ] && OUTPUT_BITRATE=${BITRATE}
+    ## TODO: test if table is useful at all.
     # if [ $OUTPUT_BITRATE -eq 0 ]; then
     #     [ $BITRATE -le 45 ]  && OUTPUT_BITRATE=45k
     #     [ $BITRATE -gt 45 ]  && OUTPUT_BITRATE=64k
@@ -395,6 +392,11 @@ EOF
     #     [ $BITRATE -gt 256 ] && OUTPUT_BITRATE=320k
     #     [ $BITRATE -gt 320 ] && OUTPUT_BITRATE=500k
     # fi
+
+    ## Only reencode if not in OGG and if SKIP not set.
+    OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
+    [ $SKIP -ne 0 ] && OGG_PARAM="" && OUTPUT_FORMAT="$FORMAT"
+    [ "$FORMAT" = "ogg" ] && OGG_PARAM=""
 
     ## Make sure track number has two digits for file name only.
     local OUTPUT_PADDEDTRACK
@@ -489,13 +491,12 @@ EOF
     unset OLDIFS
 
     ## Zsh compatibility. We need it otherwise word splitting of parameter like
-    ## TC_SAMPLE will not work.
+    ## OGG_PARAM will not work.
     local STATUS
     STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
     [ "$STATUS" = "off" ] && set -o shwordsplit
 
     ## TAG/RECODE
-    # ffmpeg -i "$1" -c:a libvorbis -b:a ${OUTPUT_BITRATE}k \
     ffmpeg -i "$1" $OGG_PARAM \
         -metadata title="$OUTPUT_TITLE" \
         -metadata artist="$OUTPUT_ARTIST" \

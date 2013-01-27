@@ -53,7 +53,7 @@ BEGIN {
     #-----ABBREVIATIONS TO BE SET IN SOLID CAPS-----
     # Other abbreviations - add to this list as needed
     other =       "AIDS ASCII CD DHTML DNA DVD FBI GNU GPL IBM IRS ISBN ISSN "
-    other = other "PHP ROM SSN TV FM BYOB MGMT DJ AC-DC JBX KLASSX "
+    other = other "PHP ROM SSN TV FM BYOB MGMT DJ AC-DC JBX RZA DMX "
 
     # build array of words to keep uppercase
     split(other, keep_upper, " ")
