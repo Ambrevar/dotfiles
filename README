@@ -1,7 +1,7 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                               Author: Ambrevar                               #
-#                               Date: 2013-01-12                               #
+#                               Date: 2013-01-27                               #
 ################################################################################
 
 Synopsis
@@ -10,8 +10,36 @@ Synopsis
 This repository contains configuration files for various Unix-programs. Target
 distributions are Arch Linux and FreeBSD (might work for most Unices as well).
 
+################################################################################
+
+Highlights
+**********
+
+* Smart audio transcoding: implemented as shell functions. It will convert, tag
+  and move the input tracks in a dynamic, yet customizable manner. It features a
+  smart title case AWK function that will print almost any audio tag the proper
+  way. It will copy cover files when found. You can preview the changes without
+  writing data. Using FFmpeg.
+
+* Video transcoding: batch conversion of any kind of video. Using FFmpeg.
+
+* Plain TeX: partial unicode support (borrowed from LaTeX).
+
+* Emacs LaTeX home-made environment, dynamic compilation, custom variable
+  support, SyncTeX working with Zathura, PDF compression, and much more.
+
+* Awesome widgets: nice functions, like dynamic network speed (it checks for
+  different interfaces), dynamic battery that will not show up if no battery is
+  detected, CPU speed.
+
+* Pacman functions: a lot of handy functions for the pacman package manager,
+  like sorting by size, dependency listing, etc.
+
+################################################################################
+
 Generic Comments
 ****************
+
 The only purpose is to be a source of inspiration. Examples are always a good
 technical support. (Especially for applications that do not provide examples in
 their documentation.)  There is no use in blind-copying the content of any file
@@ -45,8 +73,6 @@ all files directly. To fetch source from Git repo:
     git fetch
     git branch master origin/master
     git checkout master
-
-################################################################################
 
 Some applications will need extra dependencies other than the default ones. You
 might have a look at the .pkg-* files to see what software I've been using.

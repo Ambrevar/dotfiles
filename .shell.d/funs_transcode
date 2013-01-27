@@ -98,17 +98,42 @@ TC_AUDIO_DEST="/media/data1/Musics/"
 ## Genres: since this is not universal by nature, we do not put a genre in tags.
 ## Composer: not universal neither, we prefer ARTIST over COMPOSER, so COMPOSER will be empty.
 
-## TODO: implement.
-## Check for
-# MP3 CBR
-# In-tag Covers
-# Track tag with leading zeros
 tc_audio_scan()
 {
-    echo "void"
+    OLDIFS=$IFS
+    IFS="
+"
+
+    local BUFFER
+    for i in $(find "."  \( \
+        -iname '*.mp3'  -o \
+        -iname '*.flac' -o \
+        -iname '*.wv'   -o \
+        -iname '*.aac'  -o \
+        -iname '*.wav'  -o \
+        -iname '*.ape'  -o \
+        -iname '*.mpc' \) ); do
+
+        BUFFER="$(mediainfo "$i")"
+        if [ -n "$(echo "$BUFFER" | grep "Bit rate mode *: Constant")" ]; then
+            echo "$i : CBR"
+        fi
+
+        if [ -n "$(echo "$BUFFER" | grep "Cover *: Yes")" ]; then
+            echo "$i : Cover"
+        fi
+
+        if [ -n "$(echo "$BUFFER" | grep "Track name/Position *: 0+")" ]; then
+            echo "$i : Leading zeros"
+        fi
+
+    done
+
+    IFS=$OLDIFS
+    unset OLDIFS
 }
 
-
+## This will convert all tracks in current folder and subfolders.
 tc_audio_batch()
 {
 
@@ -174,7 +199,7 @@ You can use the following variables to refer to existing tags:
   \$TRACK
 
 Default output folder:
-    OUTPUT="\$TC_AUDIO_DEST/\$OUTPUT_ARTIST/\${OUTPUT_ALBUM:+\${OUTPUT_YEAR:+\$OUTPUT_YEAR - }\$OUTPUT_ALBUM/}"
+    OUTPUT="\$TC_AUDIO_DEST/\$OUTPUT_ARTIST/\${OUTPUT_ALBUM:+\${OUTPUT_DATE:+\$OUTPUT_DATE - }\$OUTPUT_ALBUM/}"
 
 Default output file:
     OUTPUT_FILE="\$OUTPUT\$OUTPUT_ARTIST - \${OUTPUT_TRACK:+\$OUTPUT_TRACK - }\$OUTPUT_TITLE.\$OUTPUT_FORMAT"
