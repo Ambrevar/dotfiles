@@ -186,14 +186,20 @@ EOF
     OUTPUT_TRACK='$TRACK'
 
     ## PROPERTIES
-    local OUTPUT_FORMAT
-    OUTPUT_FORMAT="ogg"
     local OUTPUT_BITRATE
     OUTPUT_BITRATE=0
-    local OUTPUT_FILE
 
+    ## Non-cli-option data. Modifying these imply modifications in code below.
+    local OUTPUT_FORMAT
+    OUTPUT_FORMAT="ogg"
     local OGG_PARAM
     OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
+
+    ## These ones are not cli-options either, but this could be easily changed.
+    local OUTPUT
+    local OUTPUT_FILE
+    OUTPUT='$TC_AUDIO_DEST/$OUTPUT_ARTIST/${OUTPUT_ALBUM+${OUTPUT_YEAR+$OUTPUT_YEAR - }$OUTPUT_ALBUM/}'
+    OUTPUT_FILE='$OUTPUT$OUTPUT_ARTIST - ${OUTPUT_PADDEDTRACK+$OUTPUT_PADDEDTRACK - }$OUTPUT_TITLE.$OUTPUT_FORMAT'
 
     while getopts ":a:b:d:g:l:n:t:hps" opt; do
         case $opt in
@@ -244,9 +250,11 @@ EOF
     METADATA=$(echo "$STREAM" | sed -n '/Metadata/ ! d; /Metada/{b cont}; :cont ; {n;p;b cont}')
     STREAM=$(echo "$STREAM" | grep "Stream")
 
-
+    ## We get format from extension, because codec is not reliable either.
     local FORMAT
-    FORMAT=$(echo "$STREAM" | sed -n '/Audio:/ {s/.*Audio: \([^,]*\),.*/\1/;p}')
+    FORMAT="${1##*.}"
+    local CODEC
+    CODEC=$(echo "$STREAM" | sed -n '/Audio:/ {s/.*Audio: \([^,]*\),.*/\1/;p}')
     local BITRATE
     BITRATE=$(echo "$STREAM" | sed -n '/kb\/s/ {s/.*, \(.*\) kb\/s/\1/;p}')
 
@@ -257,14 +265,7 @@ EOF
 
     _metadata_filter()
     {
-        ## We fix some chars with sed.
-        # ’ => '
-        # : => -
-        
-        ## We use the AWK script to set title case. The script contains
-        ## exceptions that can be configured.
-        awk -f "$HOME/.shell.d/titlecase.awk" \
-            <(echo "$METADATA" | sed -n  -e "/\<$1\>/{s/.*$1[^:]* : //g ; s/’/'/g ; s/[ ]*:[ ]*/ - /g ; p; q}")
+        echo "$METADATA" | sed -n  -e "/\<$1\>/{s/.*$1[^:]* : //g ; p; q}"
     }
 
     local TITLE
@@ -280,38 +281,54 @@ EOF
     local DISC
     DISC=$(_metadata_filter "disc")
     local GENRE
-    GENRE=""
+    GENRE=$(_metadata_filter "genre")
 
-    ## We remove the track count if any
     local TRACK
-    TRACK=$(_metadata_filter "track" | sed -e 's/^0*//' -e 's|/.*||')
+    TRACK=$(_metadata_filter "track")
     local DATE
     DATE=$(_metadata_filter "date")
     local TYER
-    TYER=$(_metadata_filter "TYER" | sed -n 's/.*\([[:digit:]]\{4\}\).*/\1/p')
+    TYER=$(_metadata_filter "TYER")
 
     ##================================================================================
     ## OUTPUT_* variables.
 
+    _string_cleanser()
+    {
+        ## We use the AWK script to set title case. The script contains
+        ## exceptions that can be configured.  We fix some chars with sed.
+
+        # ’ => '
+        # : => -
+        
+        awk -f "$HOME/.shell.d/titlecase.awk" \
+            <(echo "$1" | sed -n  -e "s/’/'/g ; s/[ ]*:[ ]*/ - /g ; p; q")
+    }
+
+    ## TODO: variable substitution does not work here.
+    OUTPUT_TITLE=$(eval _string_cleanser $OUTPUT_TITLE)
+    [ -z "$OUTPUT_TITLE" ] && OUTPUT_TITLE="Unknown"
+    OUTPUT_TITLE="${TITLE-Unknown}"
+
+    ## TODO: Use album artist.
+    OUTPUT_ARTIST=$(eval _string_cleanser $OUTPUT_ARTIST)
+    [ -z "$OUTPUT_ARTIST" ] && OUTPUT_ARTIST="Unknown"
+
+    OUTPUT_ALBUM=$(eval _string_cleanser $OUTPUT_ALBUM)
+    OUTPUT_GENRE=$(eval _string_cleanser $OUTPUT_GENRE)
+
+    ## We remove the track count if any
+    OUTPUT_TRACK=$(eval _string_cleanser $OUTPUT_TRACK | sed -e 's/^0*//' -e 's|/.*||')
+
+    ## FIXME: ...
     ## If DATE is not a year, we use TYER if it is a year.
+    OUTPUT_DATE=$(eval _string_cleanser $OUTPUT_DATE)
+    local TYER_REG=$(echo "$TYER" | sed -n 's/.*\([[:digit:]]\{4\}\).*/\1/p')
     if [ ${#DATE} -ne 4 ] && [ ${#TYER} -eq 4 ]; then
         OUTPUT_DATE="$TYER"
     fi
 
-    ## TODO: test
-    # [ -z "$TITLE" ] && OUTPUT_TITLE="Unknown"
-    OUTPUT_TITLE="${TITLE-Unknown}"
-    [ -z "$ARTIST" ] && OUTPUT_ARTIST="Unknown"
-
-
-    eval OUTPUT_ARTIST=$OUTPUT_ARTIST
-    eval OUTPUT_ALBUM=$OUTPUT_ALBUM
-    eval OUTPUT_TITLE=$OUTPUT_TITLE
-    eval OUTPUT_GENRE=$OUTPUT_GENRE
-    eval OUTPUT_TRACK=$OUTPUT_TRACK
-    eval OUTPUT_DATE=$OUTPUT_DATE
-
-    ## Only reencode if not in OGG and if SKIP not set..
+    ## Only reencode if not in OGG and if SKIP not set.
     [ $SKIP -ne 0 ] && OGG_PARAM="" && OUTPUT_FORMAT="$FORMAT"
     [ "$FORMAT" = "ogg" ] && OGG_PARAM=""
 
@@ -333,9 +350,6 @@ EOF
     #     [ $BITRATE -gt 320 ] && OUTPUT_BITRATE=500k
     # fi
 
-    local OUTPUT
-    local OUTPUT_FILE
-
     ## Make sure track number has two digits.
     local OUTPUT_PADDEDTRACK
     OUTPUT_PADDEDTRACK=$OUTPUT_TRACK
@@ -343,34 +357,16 @@ EOF
         [ ${OUTPUT_PADDEDTRACK} -lt 10 ] && OUTPUT_PADDEDTRACK="0$OUTPUT_PADDEDTRACK"
     fi
 
+    OUTPUT=$(eval echo $OUTPUT)
+    OUTPUT_FILE=$(eval echo $OUTPUT_FILE)
 
-    OUTPUT="$TC_AUDIO_DEST/$OUTPUT_ARTIST/${OUTPUT_ALBUM+${OUTPUT_YEAR+$OUTPUT_YEAR - }$OUTPUT_ALBUM/}"
-
-    OUTPUT_FILE="$OUTPUT$OUTPUT_ARTIST - ${OUTPUT_PADDEDTRACK+$OUTPUT_PADDEDTRACK - }$OUTPUT_TITLE.$OUTPUT_FORMAT"
-
-    # if [ -n "$OUTPUT_ALBUM" ]; then
-    #     [ -n "$OUTPUT_DATE" ] && OUTPUT="$OUTPUT$OUTPUT_DATE - "
-    #     OUTPUT="$OUTPUT$OUTPUT_ALBUM"
-    # fi
-
-    # OUTPUT_FILE="$OUTPUT/$OUTPUT_ARTIST"
-    # if [ -n "$OUTPUT_TRACK" ]; then
-    #     ## Make sure track number has two digits.
-    #     if [ ${OUTPUT_TRACK} -lt 10 ]; then
-    #         OUTPUT_FILE="$OUTPUT_FILE - 0$OUTPUT_TRACK"
-    #     else
-    #         OUTPUT_FILE="$OUTPUT_FILE - $OUTPUT_TRACK"
-    #     fi
-    # fi
-    # OUTPUT_FILE="$OUTPUT_FILE - $OUTPUT_TITLE"
-
-    ## If file exist, we append a uniq timestamp to the name.
+    ## IF file exist, we append a uniq timestamp to the name.
     [ -e "${OUTPUT_FILE}.$OUTPUT_FORMAT" ] && OUTPUT_FILE="$OUTPUT_FILE-$(date '+%F-%H%M%S')"
-
 
     ##==============================================================================
     ## PREVIEW
-    echo "#### BEFORE"
+
+    echo "==> BEFORE"
     echo "ALBUM          [$ALBUM]"
     echo "ALBUM_ARTIST   [$ALBUM_ARTIST]"
     echo "ARTIST         [$ARTIST]"
@@ -384,7 +380,7 @@ EOF
     echo "TRACK          [$TRACK]"
     echo "TYER           [$TYER]"
     echo
-    echo "#### AFTER"
+    echo "==> AFTER"
     echo "ALBUM          [$OUTPUT_ALBUM]"
     echo "ARTIST         [$OUTPUT_ARTIST]"
     echo "BITRATE        [$OUTPUT_BITRATE]"
@@ -393,8 +389,10 @@ EOF
     echo "GENRE          [$OUTPUT_GENRE]"
     echo "TITLE          [$OUTPUT_TITLE]"
     echo "TRACK          [$OUTPUT_TRACK]"
-    echo "===="
-    echo "OUTPUT         [$OUTPUT_FILE]"
+    echo
+    echo "==> OUTPUT"
+    echo "[$OUTPUT]"
+    echo "[$OUTPUT_FILE]"
 
     [ $PREVIEW -ne 0 ] && return
 
