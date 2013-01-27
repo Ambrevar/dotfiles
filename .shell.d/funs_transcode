@@ -146,10 +146,10 @@ You can use the following variables to refer to existing tags:
   \$TRACK
 
 Default output folder:
-    OUTPUT="\$TC_AUDIO_DEST/\$OUTPUT_ARTIST/\${OUTPUT_ALBUM+\${OUTPUT_YEAR+\$OUTPUT_YEAR - }\$OUTPUT_ALBUM/}"
+    OUTPUT="\$TC_AUDIO_DEST/\$OUTPUT_ARTIST/\${OUTPUT_ALBUM:+\${OUTPUT_YEAR:+\$OUTPUT_YEAR - }\$OUTPUT_ALBUM/}"
 
 Default output file:
-    OUTPUT_FILE="\$OUTPUT\$OUTPUT_ARTIST - \${OUTPUT_TRACK+\$OUTPUT_TRACK - }\$OUTPUT_TITLE.\$OUTPUT_FORMAT"
+    OUTPUT_FILE="\$OUTPUT\$OUTPUT_ARTIST - \${OUTPUT_TRACK:+\$OUTPUT_TRACK - }\$OUTPUT_TITLE.\$OUTPUT_FORMAT"
 
 Examples:
 
@@ -179,7 +179,7 @@ EOF
     local OUTPUT_DATE
     OUTPUT_DATE='$DATE'
     local OUTPUT_GENRE
-    OUTPUT_GENRE=''
+    OUTPUT_GENRE='$GENRE'
     local OUTPUT_TITLE
     OUTPUT_TITLE='$TITLE'
     local OUTPUT_TRACK
@@ -198,8 +198,8 @@ EOF
     ## These ones are not cli-options either, but this could be easily changed.
     local OUTPUT
     local OUTPUT_FILE
-    OUTPUT='$TC_AUDIO_DEST/$OUTPUT_ARTIST/${OUTPUT_ALBUM+${OUTPUT_YEAR+$OUTPUT_YEAR - }$OUTPUT_ALBUM/}'
-    OUTPUT_FILE='$OUTPUT$OUTPUT_ARTIST - ${OUTPUT_PADDEDTRACK+$OUTPUT_PADDEDTRACK - }$OUTPUT_TITLE.$OUTPUT_FORMAT'
+    OUTPUT='$TC_AUDIO_DEST/$OUTPUT_ARTIST/${OUTPUT_ALBUM:+${OUTPUT_YEAR:+$OUTPUT_YEAR - }$OUTPUT_ALBUM/}'
+    OUTPUT_FILE='$OUTPUT$OUTPUT_ARTIST - ${OUTPUT_PADDEDTRACK:+$OUTPUT_PADDEDTRACK - }$OUTPUT_TITLE.$OUTPUT_FORMAT'
 
     while getopts ":a:b:d:g:l:n:t:hps" opt; do
         case $opt in
@@ -253,6 +253,7 @@ EOF
     ## We get format from extension, because codec is not reliable either.
     local FORMAT
     FORMAT="${1##*.}"
+    ## CODEC is unused for now.
     local CODEC
     CODEC=$(echo "$STREAM" | sed -n '/Audio:/ {s/.*Audio: \([^,]*\),.*/\1/;p}')
     local BITRATE
@@ -302,22 +303,34 @@ EOF
         # : => -
         
         awk -f "$HOME/.shell.d/titlecase.awk" \
-            <(echo "$1" | sed -n  -e "s/’/'/g ; s/[ ]*:[ ]*/ - /g ; p; q")
+            <(echo "$@" | sed -n  -e "s/’/'/g ; s/[ ]*:[ ]*/ - /g ; p; q")
     }
 
-    ## TODO: variable substitution does not work here.
     OUTPUT_TITLE=$(eval _string_cleanser $OUTPUT_TITLE)
-    [ -z "$OUTPUT_TITLE" ] && OUTPUT_TITLE="Unknown"
-    OUTPUT_TITLE="${TITLE-Unknown}"
+    OUTPUT_TITLE="${OUTPUT_TITLE:-Unknown Title}"
 
-    ## TODO: Use album artist.
+    ## We use album artist if artist is empty.
     OUTPUT_ARTIST=$(eval _string_cleanser $OUTPUT_ARTIST)
-    [ -z "$OUTPUT_ARTIST" ] && OUTPUT_ARTIST="Unknown"
+    [ -z "$OUTPUT_ARTIST" ] && [ -n "$ALBUM_ARTIST" ] && OUTPUT_ARTIST="$ALBUM_ARTIST"
+    OUTPUT_ARTIST="${OUTPUT_ARTIST:-Unknown Artist}"
 
     OUTPUT_ALBUM=$(eval _string_cleanser $OUTPUT_ALBUM)
-    OUTPUT_GENRE=$(eval _string_cleanser $OUTPUT_GENRE)
+    [ -z "$OUTPUT_ALBUM" ] && echo "${#OUTPUT_ALBUM}${OUTPUT_ALBUM}"
 
-    ## We remove the track count if any
+    ## We put genre in lower case and underscore to ease matching.  If it
+    ## matches, we use the Title Case match. If it does not, we set it to empty.
+    OUTPUT_GENRE=$(eval _string_cleanser $OUTPUT_GENRE | tr '[:upper:] ' '[:lower:]_')
+    case $OUTPUT_GENRE in
+        ost) OUTPUT_GENRE="Soundtrack" ;;
+        soundtrack) OUTPUT_GENRE="Soundtrack";;
+        original_soundtrack) OUTPUT_GENRE="Soundtrack";;
+        classical) OUTPUT_GENRE="Classical";;
+        classics) OUTPUT_GENRE="Classical";;
+        classic) OUTPUT_GENRE="Classical";;
+        *) OUTPUT_GENRE="";;
+    esac
+
+    ## We remove the track count if any, we suppress leading zeros.
     OUTPUT_TRACK=$(eval _string_cleanser $OUTPUT_TRACK | sed -e 's/^0*//' -e 's|/.*||')
 
     ## FIXME: ...
@@ -350,7 +363,7 @@ EOF
     #     [ $BITRATE -gt 320 ] && OUTPUT_BITRATE=500k
     # fi
 
-    ## Make sure track number has two digits.
+    ## Make sure track number has two digits for file name only.
     local OUTPUT_PADDEDTRACK
     OUTPUT_PADDEDTRACK=$OUTPUT_TRACK
     if [ -n "$OUTPUT_PADDEDTRACK" ]; then
@@ -391,7 +404,6 @@ EOF
     echo "TRACK          [$OUTPUT_TRACK]"
     echo
     echo "==> OUTPUT"
-    echo "[$OUTPUT]"
     echo "[$OUTPUT_FILE]"
 
     [ $PREVIEW -ne 0 ] && return
@@ -429,7 +441,6 @@ EOF
 
             ## DEBUG only.
             # echo "cp -nv $i [$OUTPUT_COVER]"
-
             cp -nv "$i" "$OUTPUT_COVER"            
         fi
     done
