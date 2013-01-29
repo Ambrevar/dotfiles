@@ -33,6 +33,11 @@ class CustomApplications(DefaultApps):
 				c.flags += 'd'
 				return self.either(c,  'zathura', 'evince')
 
+                        # CUSTOM
+			if f.extension == 'chm':
+				c.flags += 'd'
+				return self.either(c,  'xchm')
+
 			if f.extension == 'ps':
 				c.flags += 'd'
 				return self.either(c,  'zathura', 'evince')
