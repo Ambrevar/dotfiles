@@ -38,6 +38,7 @@ diffutils
 django
 djvulibre
 dosfstools
+driconf
 dropbox
 dropbox-cli
 dwb
@@ -94,6 +95,7 @@ iotop
 iproute2
 iptables
 iputils
+ipython2
 jfsutils
 kmod
 latex2rtf
@@ -101,13 +103,16 @@ less
 lesspipe
 lib32-alsa-lib
 lib32-ati-dri
+lib32-mpg123
 lib32-openal
+lib32-sdl
 libcdio-paranoia
 libev
 libftdi
 libirman
 libmediainfo
 libspectre
+libstdc++5
 libtool
 libtorrent
 libtxc_dxtn
@@ -116,6 +121,7 @@ libx86
 libxdg-basedir
 libzen
 licenses
+lighttpd
 linux
 linux-firmware
 linux-lts
@@ -128,7 +134,6 @@ lshw
 ltrace
 lua
 lvm2
-lxdm
 lzo2
 m4
 make
@@ -136,8 +141,8 @@ man-db
 man-pages
 mdadm
 mediainfo
-mkvtoolnix-cli
 movgrab
+mp3info
 mpg123
 mplayer2
 mtools
@@ -147,6 +152,7 @@ nano
 nawk
 ncdu
 netcfg
+nethogs
 net-tools
 ngrep
 ntfs-3g
@@ -160,6 +166,7 @@ pacman
 pacman-color
 pacman-mirrorlist
 pam
+pandoc
 pari
 patch
 pciutils
@@ -176,7 +183,9 @@ procps-ng
 psmisc
 pwgen
 python2-dbus
+python2-flup
 python2-gobject
+python2-south
 ranger
 reiserfsprogs
 rtorrent
@@ -187,7 +196,7 @@ shadow
 slock
 splint
 strace
-submarine
+subdl
 sudo
 supermeatboy
 sxiv
@@ -224,6 +233,7 @@ valgrind
 vi
 vicious
 vim
+vorbis-tools
 w3m
 wget
 which
@@ -234,6 +244,7 @@ wmname
 worldofgoo
 wpa_supplicant
 wv
+xchm
 xclip
 xf86-video-ati
 xf86-video-vesa

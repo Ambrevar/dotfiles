@@ -29,7 +29,6 @@ bash
 bc
 binutils
 bison
-boost-libs
 bzip2
 ca-certificates
 cairo
@@ -38,6 +37,7 @@ calc
 ccrypt
 cdparanoia
 cdrtools
+chmlib
 chrpath
 clisp
 cloog
@@ -69,6 +69,7 @@ django
 djvulibre
 dnssec-anchors
 dosfstools
+driconf
 dwb
 e2fsprogs
 elfutils
@@ -122,6 +123,7 @@ gimp
 girara-common
 girara-gtk2
 git
+glew
 glib2
 glibc
 glibmm
@@ -185,6 +187,7 @@ iotop
 iproute2
 iptables
 iputils
+ipython2
 isl
 jack
 jasper
@@ -221,6 +224,7 @@ lib32-libdrm
 lib32-libgl
 lib32-libglapi
 lib32-libice
+lib32-libltdl
 lib32-libpciaccess
 lib32-libsm
 lib32-libx11
@@ -235,9 +239,12 @@ lib32-libxi
 lib32-libxrandr
 lib32-libxrender
 lib32-libxxf86vm
+lib32-mpg123
 lib32-openal
+lib32-sdl
 lib32-util-linux
 lib32-zlib
+libao
 libarchive
 libass
 libassuan
@@ -262,7 +269,6 @@ libdv
 libdvdcss
 libdvdnav
 libdvdread
-libebml
 libedit
 libegl
 libev
@@ -273,7 +279,6 @@ libfontenc
 libftdi
 libgbm
 libgcrypt
-libgee
 libgl
 libglade
 libglapi
@@ -295,7 +300,6 @@ liblqr
 liblrdf
 libltdl
 libmad
-libmatroska
 libmediainfo
 libmikmod
 libmms
@@ -332,6 +336,7 @@ libsoup
 libsoup-gnome
 libspectre
 libssh2
+libstdc++5
 libtasn1
 libthai
 libtheora
@@ -376,11 +381,11 @@ libxss
 libxt
 libxtst
 libxv
-libxvmc
 libxxf86dga
 libxxf86vm
 libzen
 licenses
+lighttpd
 linux
 linux-api-headers
 linux-firmware
@@ -399,7 +404,6 @@ lua
 lua51
 lua-lgi
 lvm2
-lxdm
 lzo2
 m4
 make
@@ -409,12 +413,13 @@ mcpp
 mdadm
 mediainfo
 mesa
+mesa-demos
 mime-types
 mjpegtools
 mkinitcpio
 mkinitcpio-busybox
-mkvtoolnix-cli
 mozilla-common
+mp3info
 mpfr
 mpg123
 mplayer2
@@ -428,6 +433,7 @@ ncdu
 ncurses
 neon
 netcfg
+nethogs
 net-snmp
 nettle
 net-tools
@@ -492,14 +498,16 @@ python2-beaker
 python2-cairo
 python2-dbus
 python2-distribute
+python2-flup
 python2-gobject
 python2-gobject2
 python2-mako
 python2-markupsafe
 python2-notify
+python2-south
 python-dbus-common
-python-docutils
 python-pyelftools
+pyxml
 qpdf
 randrproto
 ranger
@@ -531,6 +539,7 @@ splint
 sqlite
 startup-notification
 strace
+subdl
 sudo
 sxiv
 sysfsutils
@@ -573,6 +582,7 @@ vicious
 videoproto
 vim
 vim-runtime
+vorbis-tools
 w3m
 wavpack
 webkitgtk2
@@ -594,6 +604,7 @@ xcb-util
 xcb-util-image
 xcb-util-keysyms
 xcb-util-wm
+xchm
 xclip
 xextproto
 xf86dgaproto
@@ -617,6 +628,7 @@ xorg-server
 xorg-server-common
 xorg-setxkbmap
 xorg-xauth
+xorg-xdriinfo
 xorg-xev
 xorg-xinit
 xorg-xkbcomp
