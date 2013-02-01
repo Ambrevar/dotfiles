@@ -651,9 +651,14 @@ texclean ()
         -name "*.ind" -o \
         -name "*.lof" -o \
         -name "*.log" -o \
+        -name "*.maf" -o \
+        -name "*.mtc" -o \
+        -name "*.mtc?" -o \
         -name "*.nav" -o \
         -name "*.out" -o \
         -name "*.snm" -o \
+        -name "*.synctex" -o \
+        -name "*.synctex.gz" -o \
         -name "*.tns" -o \
         -name "*.toc" -o \
         -name "*.xdy" \) \
