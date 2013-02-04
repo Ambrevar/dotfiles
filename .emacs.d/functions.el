@@ -54,7 +54,7 @@ frames with exactly two windows."
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
 
-(global-set-key [(control c) (|)] 'my-toggle-window-split)
+(define-key my-keys-minor-mode-map [(control c) (|)] 'my-toggle-window-split)
 
 ;;==============================================================================
 ;; Duplicate line
@@ -95,7 +95,7 @@ frames with exactly two windows."
   (next-line arg))
 
 ;; Binding.
-(global-set-key (kbd "C-c C-d") 'duplicate-line)
+(define-key my-keys-minor-mode-map (kbd "C-c C-d") 'duplicate-line)
 
 ;;==============================================================================
 ;; Comment DWIM -- toggle comment line
@@ -117,5 +117,4 @@ the line."
     (comment-dwim arg)))
 
 ;; Binding.
-;; TODO: global key ?
-(global-set-key "\M-;" 'comment-dwim-line)
+(define-key my-keys-minor-mode-map "\M-;" 'comment-dwim-line)

@@ -1,0 +1,7 @@
+# name: else { ... }
+# key: else
+# --
+else
+{
+    $0
+}

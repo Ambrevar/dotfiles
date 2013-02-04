@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# key: gsub
+# --
+gsub ("${1:regex}" , "${2:subs}"${3:, s})

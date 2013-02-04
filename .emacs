@@ -14,5 +14,9 @@
 (load "~/.emacs.d/plugins" nil t)
 (load "~/.emacs.d/theme" nil t)
 
+;; We need to put it at the end to make sure it doesn't get itself overriden by
+;; other minor modes.
+(my-keys-minor-mode 1)
+
 ;; End of file
 

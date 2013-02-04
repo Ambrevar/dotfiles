@@ -365,7 +365,6 @@ properly escaped with double-quotes in case it has spaces."
      )
    (setq compilation-scroll-output t)
    (local-set-key "\C-c\C-c" 'python-my-compile) 
-   (local-set-key "\C-c\C-d" 'duplicate-line) 
    )
  )
 

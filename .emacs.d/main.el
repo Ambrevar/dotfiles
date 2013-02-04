@@ -2,6 +2,18 @@
 ;; MAIN
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; We use a minor mode to override global keys.To assign
+;; global keys, you need to write
+;;   (define-key my-keys-minor-mode-map (kbd "C-i") 'some-function)
+(defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
+
+(define-minor-mode my-keys-minor-mode
+  "A minor mode so that my key settings override annoying major modes."
+  t " my-keys" 'my-keys-minor-mode-map)
+
+(add-hook 'minibuffer-setup-hook (lambda () (my-keys-minor-mode 0) ) )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Make questions less annoying
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -12,22 +24,22 @@
 (setq kill-whole-line t)
 
 ;; Modern scrolling
-(global-set-key [next]
-                (lambda () (interactive)
-                  (condition-case nil (scroll-up)
-                    (end-of-buffer (goto-char (point-max))))))
+(define-key my-keys-minor-mode-map [next]
+  (lambda () (interactive)
+    (condition-case nil (scroll-up)
+      (end-of-buffer (goto-char (point-max))))))
 
-(global-set-key [prior]
-                (lambda () (interactive)
-                  (condition-case nil (scroll-down)
-                    (beginning-of-buffer (goto-char (point-min))))))
+(define-key my-keys-minor-mode-map [prior]
+  (lambda () (interactive)
+    (condition-case nil (scroll-down)
+      (beginning-of-buffer (goto-char (point-min))))))
 
 ;; Line numbers
 (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
 ;; (setq linum-format "%-4d ")
 (setq linum-format "%d ")
 (global-linum-mode 1) ;; FIXME: This may generate warnings with emacsclient. Bug?
-(global-set-key (kbd "C-<f5>") 'linum-mode) ;; Toggle line numbers.
+(define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode) ;; Toggle line numbers.
 
 ;; Indentation
 ;(setq standard-indent 4)
@@ -100,16 +112,16 @@ browse-url-browser-function 'browse-url-generic)
 
 ;; Window resize
 ;; TODO: Use more { and } to continue.
-(global-set-key (kbd "C-x {")  (lambda () (interactive) (shrink-window-horizontally 5)))
-(global-set-key (kbd "C-x }")  (lambda () (interactive) (enlarge-window-horizontally 5)))
+(define-key my-keys-minor-mode-map (kbd "C-x {")  (lambda () (interactive) (shrink-window-horizontally 5)))
+(define-key my-keys-minor-mode-map (kbd "C-x }")  (lambda () (interactive) (enlarge-window-horizontally 5)))
 ;; (define-key my-keys-minor-mode-map (kbd "S-C-<down>") 'shrink-window)
 ;; (define-key my-keys-minor-mode-map (kbd "S-C-<up>") 'enlarge-window)
 
 ;; Copy/Paste to/from clipboard.
 ;; FIXME: copying does not work.
-(global-set-key (kbd "C-<f6>") (kbd "M-| xclip"))
-(global-set-key (kbd "C-<f7>") (kbd "C-u M-! xclip <SPC> -o"))
-(global-set-key (kbd "C-<f8>") (kbd "C-u M-! xclip <SPC> -o <SPC> -selection <SPC> clipboard"))
+(define-key my-keys-minor-mode-map (kbd "C-<f6>") (kbd "M-| xclip"))
+(define-key my-keys-minor-mode-map (kbd "C-<f7>") (kbd "C-u M-! xclip <SPC> -o"))
+(define-key my-keys-minor-mode-map (kbd "C-<f8>") (kbd "C-u M-! xclip <SPC> -o <SPC> -selection <SPC> clipboard"))
 
 ;; query-replace-regex fix on terminals.
-(global-set-key (kbd "C-M-y") 'query-replace-regexp)
+(define-key my-keys-minor-mode-map (kbd "C-M-y") 'query-replace-regexp)
