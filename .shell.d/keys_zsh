@@ -59,7 +59,6 @@ if [[ $TERM = *rxvt* ]] ; then
     bindkey "\e[Z" reverse-menu-complete # Shift+Tab
 fi
 
-
 ## For rxvt.
 # bindkey "\e[7~" beginning-of-line # Home
 # bindkey "\e[8~" end-of-line # End

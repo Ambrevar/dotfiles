@@ -38,15 +38,18 @@ unsetopt beep
 ##==============================================================================
 ## Directory stack
 ##==============================================================================
+## TODO: really 20 elements ?
+## TODO: handle space in folders.
+## TODO: binding for previous/next.
 DIRSTACKSIZE=20
 
 setopt autopushd pushdsilent pushdtohome
 setopt pushdignoredups
 
 ## This revert the +/- operators.
-# setopt pushdminus
+setopt pushdminus
 
-alias dh='dirs -v'
+# alias dh='dirs -v'
 
 if [[ -f ~/.zdirs ]] && [[ ${#dirstack[*]} -eq 0 ]]; then
     dirstack=( $(< ~/.zdirs) )

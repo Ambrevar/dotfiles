@@ -80,18 +80,6 @@ renameswap()
     mv "$TEMPFILE" "$2"
 }
 
-## Finds directory sizes and lists them for the current directory.
-dirsize ()
-{
-    local TEMPFILE="$(mktemp)"
-    # du -shx * 2> /dev/null | \
-    du -shx * .[a-zA-Z0-9_]* 2> /dev/null | \
-	    egrep '^ *[0-9.]*[MG]' | sort -n > "${TEMPFILE}"
-    egrep '^ *[0-9.]*M' "${TEMPFILE}"
-    egrep '^ *[0-9.]*G' "${TEMPFILE}"
-    rm -rf "${TEMPFILE}"
-}
-
 ## Network operations
 if [ -n  "$(command -v nmap)" ]; then
     network-map() 
