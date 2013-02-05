@@ -23,13 +23,13 @@ attr
 autoconf
 automake
 avahi
-awesome
 babl
 bash
 bc
 binutils
 bison
 bzip2
+cabextract
 ca-certificates
 cairo
 cairomm
@@ -103,6 +103,7 @@ freeglut
 freetype2
 fribidi
 fuse
+fuseiso
 gawk
 gc
 gcc
@@ -136,6 +137,7 @@ gnuplot
 gnutls
 gobject-introspection
 goffice
+gparted
 gpgme
 gpm
 graphite
@@ -214,6 +216,7 @@ lib32-ati-dri
 lib32-attr
 lib32-bzip2
 lib32-expat
+lib32-flac
 lib32-fontconfig
 lib32-freetype2
 lib32-gcc-libs
@@ -225,8 +228,13 @@ lib32-libgl
 lib32-libglapi
 lib32-libice
 lib32-libltdl
+lib32-libogg
 lib32-libpciaccess
+lib32-libsamplerate
 lib32-libsm
+lib32-libsndfile
+lib32-libtxc_dxtn
+lib32-libvorbis
 lib32-libx11
 lib32-libxau
 lib32-libxcb
@@ -239,6 +247,7 @@ lib32-libxi
 lib32-libxrandr
 lib32-libxrender
 lib32-libxxf86vm
+lib32-mesa
 lib32-mpg123
 lib32-openal
 lib32-sdl
@@ -372,7 +381,6 @@ libxinerama
 libxkbfile
 libxml2
 libxmu
-libxp
 libxpm
 libxrandr
 libxrender
@@ -483,7 +491,6 @@ popt
 postgresql-libs
 ppl
 ppp
-printproto
 procps-ng
 psmisc
 pth
@@ -558,7 +565,6 @@ tcsh
 texi2html
 texinfo
 tig
-tightvnc
 tree
 ttf-dejavu
 ttf-droid
@@ -590,14 +596,12 @@ wget
 which
 wildmidi
 wine
-wine_gecko
+winetricks
 wipe
 wmname
 wpa_supplicant
 wv
 wxgtk
-wxpython
-x11vnc
 x264
 xcb-proto
 xcb-util
@@ -606,6 +610,7 @@ xcb-util-keysyms
 xcb-util-wm
 xchm
 xclip
+xdg-utils
 xextproto
 xf86dgaproto
 xf86-input-evdev
@@ -630,6 +635,7 @@ xorg-setxkbmap
 xorg-xauth
 xorg-xdriinfo
 xorg-xev
+xorg-xgamma
 xorg-xinit
 xorg-xkbcomp
 xorg-xmessage
@@ -637,6 +643,7 @@ xorg-xmodmap
 xorg-xprop
 xorg-xrandr
 xorg-xrdb
+xorg-xset
 xproto
 xsel
 xvidcore
