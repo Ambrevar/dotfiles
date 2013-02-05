@@ -59,7 +59,7 @@
       ("^Subject:" . font-lock-warning-face)
       ("^In-Reply-To:" . font-lock-builtin-face)
       ;; Mail addresses.
-      ("\\([[:alnum:]._-]+@[[:alnum:]]+.[[:alnum:]]+\\)" 1 font-lock-string-face)
+      ("\\([[:alnum:]._-]+@[[:alnum:]._-]+\.[[:alnum:]._-]+\\)" 1 font-lock-string-face)
       ;; Quote
       ("^\> *\\([^\> ]\\).*$" . font-lock-doc-face)
       ;; Quote1
@@ -72,12 +72,14 @@
       ("^\> *\> *\> *\> *\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-comment-face)
 
       ;; Signature
+      ;; TODO: does not work properly.
       ("^--.*\\(\n.*\\)*" . font-lock-comment-face)
       ))
 
 ;; General purpose. Hightlight the following:
 ;; Digits, FIXME, TODO.
-;; FIXME: Digits regex are not perfect, and may make emacs slow. Sure?
+;; TODO: Digits regex are not perfect, and may make emacs slow. Sure?
+;; TODO: map to all modes? Use minor mode like my-keys?
 (mapcar
  (lambda (mode)
    (font-lock-add-keywords
@@ -91,8 +93,8 @@
       ("\\<\\(WARNING\\):" 1 font-lock-warning-face prepend)
       )))
  '( text-mode 
-    sh-mode  emacs-lisp-mode lua-mode
-    c-mode python-mode
+    awk-mode sh-mode emacs-lisp-mode
+    c-mode lua-mode python-mode
     latex-mode html-mode texinfo-mode))
 
 ;; FIXME: fix C functions color.

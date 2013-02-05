@@ -50,7 +50,7 @@
            '(
              ("Wikipedia" "http://en.wikipedia.org/w/" "Ambrevar" "" "Main Page")
              ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX")
-             ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Emacs")
+             ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt")
              ("WikEmacs" "https://wikemacs.org/wiki/" "Ambrevar" "" "Main Page")
              )
            )
