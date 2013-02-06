@@ -1,8 +1,13 @@
 #!/bin/sh
 
+if [ -z "$(lspci|grep "VGA.*Radeon")" ]; then
+    echo "You must have a Radeon graphic adapter. Exit."
+    exit
+fi
+
 
 if [ $(id -u) -ne 0 ]; then
-    echo "You must be root to run this script."
+    echo "You must be root to run this script. Exit."
     exit
 fi
 
