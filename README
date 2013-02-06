@@ -1,7 +1,7 @@
 ################################################################################
 #                           Unix Home Configuration                            #
-#                               Author: Ambrevar                               #
-#                               Date: 2013-01-27                               #
+#                               Author: P. Neidhardt                           #
+#                               Date: 2013-02-06                               #
 ################################################################################
 
 Synopsis
@@ -156,7 +156,8 @@ Scripts
 .netinit: network setup. Works with wpa_supplicant. May replace any network
           manager.
 
-.save: generates a home configuration archive.
+.pkggen: generates lists of installed with pacman, FreeBSD's pkg and tlmgr (TeX
+         Live manager).
 
 Shell
 *****
@@ -166,11 +167,11 @@ Probably the most interesting part here. A lot of stuff: aliases, functions,
 shell options, etc.
 
 Please note that this config is mainly intended -- and tested -- for zsh. It
-should be mostly bash-compatible though.  When incompabilities have been
-encountered, it has been reported into the configuration files. Hence the shared
-folder .shell.d/, whose files get sourced by both bash and zsh.  Bash-specific
-and zsh-specific options are in dedicated files ending with the appropriate
-shell name.
+should be mostly compatible with Bourne shell though.  When incompabilities have
+been encountered, it has been reported into the configuration files. Hence the
+shared folder .shell.d/, whose files get sourced by both bash and zsh.
+Bash-specific and zsh-specific options are in dedicated files ending with the
+appropriate shell name.
 
 TeX
 ***
@@ -199,9 +200,7 @@ Known issues
 ************
 
 Emacs: some colors do not work as intended. MediaWiki fails to upload pages
-after some idle time.
-
-Shell: some custom functions would need auto-completion.
+after some idle time. xclip to clipboard or primary does not work.
 
 URxvt: using the paste function from Muennich's clipboard on the same terminal
 where text was copied will make xsel crash.
