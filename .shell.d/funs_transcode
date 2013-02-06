@@ -152,9 +152,6 @@ tc_audio_batch()
         tc_audio_transcode "$@" $i
     done
 
-    # for i in *.mp3 ; do tc_audio_transcode "$@" $i ; done
-    # tc_audio_transcode "$@" "01 James Russo - Winged.mp3"
-
     IFS=$OLDIFS
     unset OLDIFS
 }
