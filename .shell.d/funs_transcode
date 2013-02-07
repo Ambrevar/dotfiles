@@ -19,29 +19,23 @@
 
 tc_text_scan ()
 {
-    local IFS
-    IFS="
-"
-
-    for i in $(find . -type f -size -50M -print); do
+    while read -r i; do
         echo -n "# "
         file "$i"
         grep -m1 "\`" "$i"
         grep -m1 "oe" "$i"
-    done
+    done <<EOF
+$(find . -type f -size -50M -print)
+EOF
 }
 
 ## Confert all 'bad' encoding to UTF-8/LF.
-##
 ## WARNING: It will fail for encoding other than ISO-8859-1 and cp1252.
 tc_text_2utf8 ()
 {
     local CODING
-    local IFS
-    IFS="
-"
 
-    for i in $(find . -type f -size -50M -print); do
+    while read -r i; do
         CODING=$(file "$i")
 
         if [ -n "$(echo $CODING | grep 'ISO-8859')" ]; then
@@ -70,7 +64,9 @@ tc_text_2utf8 ()
             sed -i 's/\r//g' "$i"
         fi
 
-    done
+    done <<EOF
+$(find . -type f -size -50M -print)
+EOF
 }
 
 ################################################################################
@@ -100,20 +96,9 @@ TC_AUDIO_DEST="/media/data1/Musics/"
 
 tc_audio_scan()
 {
-    OLDIFS=$IFS
-    IFS="
-"
-
     local BUFFER
-    for i in $(find "."  \( \
-        -iname '*.mp3'  -o \
-        -iname '*.flac' -o \
-        -iname '*.wv'   -o \
-        -iname '*.aac'  -o \
-        -iname '*.wav'  -o \
-        -iname '*.ape'  -o \
-        -iname '*.mpc' \) ); do
 
+    while read -r i; do
         BUFFER="$(mediainfo "$i")"
         if [ -n "$(echo "$BUFFER" | grep "Bit rate mode *: Constant")" ]; then
             echo "$i : CBR"
@@ -126,34 +111,33 @@ tc_audio_scan()
         if [ -n "$(echo "$BUFFER" | grep "Track name/Position *: 0+")" ]; then
             echo "$i : Leading zeros"
         fi
-
-    done
-
-    IFS=$OLDIFS
-    unset OLDIFS
-}
-
-## This will convert all tracks in current folder and subfolders.
-tc_audio_batch()
-{
-
-    OLDIFS=$IFS
-    IFS="
-"
-
-    for i in $(find "."  \( \
+    done <<EOF
+$(find "."  \( \
         -iname '*.mp3'  -o \
         -iname '*.flac' -o \
         -iname '*.wv'   -o \
         -iname '*.aac'  -o \
         -iname '*.wav'  -o \
         -iname '*.ape'  -o \
-        -iname '*.mpc' \) ); do
-        tc_audio_transcode "$@" $i
-    done
+        -iname '*.mpc' \) )
+EOF
+}
 
-    IFS=$OLDIFS
-    unset OLDIFS
+## This will convert all tracks in current folder and subfolders.
+tc_audio_batch()
+{
+    while read -r i; do
+        tc_audio_transcode "$@" $i
+    done <<EOF
+$(find "."  \( \
+        -iname '*.mp3'  -o \
+        -iname '*.flac' -o \
+        -iname '*.wv'   -o \
+        -iname '*.aac'  -o \
+        -iname '*.wav'  -o \
+        -iname '*.ape'  -o \
+        -iname '*.mpc' \) )
+EOF
 }
 
 ## This function is supposed to work on a per-album basis. Folders will not be
@@ -165,8 +149,6 @@ tc_audio_batch()
 ## TODO: extract cover from tags if checksum does not match any from current folder.
 tc_audio_transcode()
 {
-    IFS=${OLDIFS:-$IFS}
-    
     _printhelp ()
     {
         cat <<EOF
@@ -483,13 +465,8 @@ EOF
     local OUTPUT_COVER
     local COVER_COUNTER
     local OUTPUT_COVERFILE
-    OLDIFS=$IFS
-    IFS="
-"
-    for i in $(find "."  \( \
-        -iname '*.png' -o \
-        -iname '*.jpg' \) ); do
 
+    while read -r i; do
         OUTPUT_COVER="$OUTPUT/${OUTPUT_ALBUM:+$OUTPUT_ALBUM - }Cover"
         OUTPUT_COVERFILE="$OUTPUT_COVER.${i##*.}"
         COVER_COUNTER=1
@@ -510,9 +487,9 @@ EOF
         echo "==> COVER"
         cp -nv "$i" "$OUTPUT_COVERFILE"            
         echo
-    done
-    IFS=$OLDIFS
-    unset OLDIFS
+    done <<EOF
+$(find "."  \( -iname '*.png' -o -iname '*.jpg' \) )
+EOF
 
     ## Zsh compatibility. We need it otherwise word splitting of parameter like
     ## OGG_PARAM will not work.
@@ -649,10 +626,6 @@ EOF
         return
     fi
 
-    ## The IFS trick will let us use an array of file that can have spaces. Real arrays are much better at it, but in this case the trick is not excessive, and works on all sh shells.
-    local OLDIFS
-    OLDIFS=$IFS
-
     ## Zsh compatibility. We need it otherwise word splitting of parameter like
     ## TC_SAMPLE will not work.
     local STATUS
@@ -661,9 +634,6 @@ EOF
 
     _tc_transcode()
     {
-        local IFS
-        IFS=$OLDIFS
-
         echo "================================================================================"
         ffmpeg $TC_OVERWRITE $TC_SAMPLE -i "$1" \
             -c:v libx264 -preset $TC_VIDEO_PRESET -crf $TC_VIDEO_QUAL $TC_VIDEO_TUNE $TC_VIDEO_OPTS \
@@ -677,21 +647,19 @@ EOF
         ## Argument is a folder. We search for all video files in there.
         if [ -d "$i" ]; then
             
-            local IFS
-            IFS="
-"
-
             ## TODO: provide max-depth as option.
-            for j in $(find "$i"  \( \
-                -iname '*.mkv' -o \
-                -iname '*.mp4' -o \
-                -iname '*.avi' -o \
-                -iname '*.webm' -o \
-                -iname '*.flv' -o \
-                -iname '*.wmv' -o \
-                -iname '*.mpg' \) ); do
-                 _tc_transcode $j
-            done
+            while read -r j; do
+                _tc_transcode $j
+            done <<EOF
+$(find "$i"  \( \
+ -iname '*.mkv' -o \
+ -iname '*.mp4' -o \
+ -iname '*.avi' -o \
+ -iname '*.webm' -o \
+ -iname '*.flv' -o \
+ -iname '*.wmv' -o \
+ -iname '*.mpg' \) )
+EOF
 
         ## Argument is a regular file.
         else

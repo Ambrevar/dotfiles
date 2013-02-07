@@ -409,3 +409,10 @@ properly escaped with double-quotes in case it has spaces."
 ;;  (lambda ()
 ;;    (setq ediff-merge-split-window-function 'split-window-horizontally)
 ;; ))
+
+;;==============================================================================
+;; Shell
+;;==============================================================================
+
+;; Indent comments.
+(setq sh-indent-comment t)

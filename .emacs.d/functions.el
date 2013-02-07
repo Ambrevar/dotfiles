@@ -23,6 +23,13 @@
   (shell-command-on-region (point) (mark) "sort -u" (buffer-name) t)
 )
 
+(defun dtwi () "Delete trailing whitespaces interactively"
+  (interactive)
+  (query-replace-regexp " +
+" "
+")
+)
+
 ;;==============================================================================
 ;; Toggle window split
 ;;==============================================================================
