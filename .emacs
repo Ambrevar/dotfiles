@@ -9,6 +9,7 @@
 
 (load "~/.emacs.d/functions" nil t)
 (load "~/.emacs.d/modes" nil t)
+(load "~/.emacs.d/personal" nil t)
 (load "~/.emacs.d/plugins" nil t)
 (load "~/.emacs.d/theme" nil t)
 

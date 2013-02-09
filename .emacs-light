@@ -7,9 +7,10 @@
 ;; Main should be loaded first.
 (load "~/.emacs.d/main.el" nil t)
 
-(load "~/.emacs.d/theme.el" nil t)
-(load "~/.emacs.d/modes.el" nil t)
 (load "~/.emacs.d/functions.el" nil t)
+(load "~/.emacs.d/modes.el" nil t)
+(load "~/.emacs.d/personal" nil t)
+(load "~/.emacs.d/theme.el" nil t)
 
 ;; We need to put it at the end to make sure it doesn't get itself overriden by
 ;; other minor modes.

@@ -28,6 +28,9 @@ _pcc()
         pacman-files)
             _pacman_action_query
             return ;;
+        pql)
+            _pacman_action_query
+            return ;;
         pacman-size)
             case $words[2] in
                 -*q*)

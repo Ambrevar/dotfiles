@@ -18,7 +18,6 @@ fi
 eval 'alias pc="sudo $PACMAN_FRONTEND -Sc"'
 eval 'alias pi="sudo $PACMAN_FRONTEND -S --needed"'
 eval 'alias pqi="$PACMAN_FRONTEND -Qi"'
-eval 'alias pql="$PACMAN_FRONTEND -Ql"'
 eval 'alias pqo="$PACMAN_FRONTEND -Qo"'
 eval 'alias pqs="$PACMAN_FRONTEND -Qs"'
 eval 'alias pr="sudo $PACMAN_FRONTEND -Rs"'
