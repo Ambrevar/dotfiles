@@ -1,14 +1,7 @@
 ## -*- mode:sh -*- #
 ########################################################################
 ## Shell -- Personal Definitions.
-## Date 2012-07-02
+## Date 2013-02-09
 ########################################################################
 
-if [ -e "/media/data1/Personal" ]; then
-    PERSONAL="/media/data1/Personal"
-elif [ -e "$HOME/Dropbox/Personal" ]; then
-    PERSONAL="$HOME/Dropbox/Personal"
-fi
-
-# [ -e /media/data1/TEMP ] && TEMP="/media/data1/TEMP"
-[ -e "$HOME/temp" ] && TEMP="$HOME/temp"
+[ -d "$HOME/temp" ] && TEMP="$HOME/temp"
