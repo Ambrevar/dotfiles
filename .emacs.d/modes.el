@@ -201,6 +201,9 @@ variable, e.g. on the first line:
 "
 :safe 'stringp)
 
+
+;; TODO: For now this code does not allow compiler local changes.
+;; TODO: master document support.
 (defun tex-my-compile ()
   "Use compile to process your TeX-based document. Use a prefix
 argument to call the compiler along the '-shell-escape'
