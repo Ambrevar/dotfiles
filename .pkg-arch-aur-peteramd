@@ -5,7 +5,12 @@ eduke32
 eduke32-dukeplus
 emacs-mediawiki-bzr
 emacs-yasnippet
+epsxe
+epsxe-plugin-gpu-mesagl
+epsxe-plugin-gpu-xgl2
+epsxe-plugin-spu-alsa
 fortune-mod-tbbt
+gens-gs
 google-talkplugin
 movgrab
 mutt-android-patch
@@ -13,7 +18,10 @@ package-query
 pacman-color
 pandoc
 rxvt-unicode-patched
+slowmovideo-git
 supermeatboy
 trash-cli
+wikiex
+wine-mono
 worldofgoo
 yaourt

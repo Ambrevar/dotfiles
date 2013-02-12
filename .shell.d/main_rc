@@ -11,7 +11,8 @@ umask 027
 ## Path
 ## WARNING: putting current dir '.' in PATH is mostly a bad idea!
 # export PATH=.:$PATH
-export PATH=$PATH:${HOME}/launchers/
+export PATH=$PATH:${HOME}/.launchers/
+export PATH=$PATH:${HOME}/.scripts/
 
 
 ## TeXlive
