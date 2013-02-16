@@ -589,7 +589,7 @@ EOF
     # -y overwrite
     # -n do not overwrite.
     local TC_OVERWRITE
-    TC_OVERWRITE=-n
+    TC_OVERWRITE="-n"
 
     local TC_SAMPLE
     TC_SAMPLE=""
@@ -597,14 +597,14 @@ EOF
     while getopts ":fhs" opt; do
         case $opt in
             f)
-                TC_OVERWRITE=-y
+                TC_OVERWRITE="-y"
                 ;;
             h)
                 _printhelp "$0"
                 return 1
                 ;;
             s)
-                TC_SAMPLE="-ss 60 -t 600 -i"
+                TC_SAMPLE="-ss 60 -t 600"
                 ;;
             ?) 
                 _printhelp "$0"
