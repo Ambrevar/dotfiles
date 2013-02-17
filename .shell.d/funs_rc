@@ -820,6 +820,11 @@ ltx()
     pdflatex -file-line-error-style -interaction nonstopmode -jobname="${1%.tex}" "$PREAMBLE" "$1" "$END"
 }
 
+ediff()
+{
+    emacs -q -l ~/.emacs-light --eval "(ediff \"$1\" \"$2\")"
+}
+
 ##==============================================================================
 ## Pacman functions
 ##==============================================================================
