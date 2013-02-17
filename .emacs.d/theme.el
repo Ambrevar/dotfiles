@@ -35,15 +35,26 @@
 (add-hook
  'ediff-mode-hook
  (lambda ()
- ;; '(ediff-current-diff-A ((t (:background "color-22" :foreground "brightwhite"))))
- ;; '(ediff-current-diff-B ((t (:background "Yellow" :foreground "black"))))
- ;; '(ediff-odd-diff-A ((t (:background "Grey" :foreground "black")))))
-   (set-face-background 'ediff-current-diff-A "color-22")
+   (set-face-background 'ediff-fine-diff-A "color-130")
+   (set-face-foreground 'ediff-fine-diff-A "black")
+   (set-face-background 'ediff-fine-diff-B "color-130")
+   (set-face-foreground 'ediff-fine-diff-B "black")
+
+   (set-face-background 'ediff-current-diff-A "color-52")
    (set-face-foreground 'ediff-current-diff-A "brightwhite")
-   (set-face-background 'ediff-current-diff-B "Yellow")
-   (set-face-foreground 'ediff-current-diff-B "black")
-   (set-face-background 'ediff-odd-diff-A "Grey")
-   (set-face-foreground 'ediff-odd-diff-A "black")
+   (set-face-background 'ediff-current-diff-B "color-52")
+   (set-face-foreground 'ediff-current-diff-B "brightwhite")
+
+
+   (set-face-background 'ediff-even-diff-A "color-236")
+   (set-face-foreground 'ediff-even-diff-A "white")
+   (set-face-background 'ediff-even-diff-B "color-236")
+   (set-face-foreground 'ediff-even-diff-B "white")
+
+   (set-face-background 'ediff-odd-diff-A "brightblack")
+   (set-face-foreground 'ediff-odd-diff-A "white")
+   (set-face-background 'ediff-odd-diff-B "brightblack")
+   (set-face-foreground 'ediff-odd-diff-B "white")
 ))
 
 ;; Show paren.
