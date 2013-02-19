@@ -23,12 +23,19 @@
   (shell-command-on-region (point) (mark) "sort -u" (buffer-name) t)
 )
 
-(defun dtwi () "Delete trailing whitespaces interactively"
+(defun dtwi () "Delete trailing whitespaces interactively."
   (interactive)
   (query-replace-regexp " +
 " "
 ")
 )
+
+(defun list-buffers-switch () "Same as list buffers but switch to it afterward."
+  (interactive)
+  (list-buffers)
+  (switch-to-buffer-other-window "*Buffer List*")
+)
+(define-key my-keys-minor-mode-map (kbd "C-x C-b") 'list-buffers-switch)
 
 ;;==============================================================================
 ;; Toggle window split
