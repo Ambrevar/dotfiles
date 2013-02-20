@@ -776,7 +776,7 @@ xmultioff ()
 ## Format C using 'indent'. Alternative to indent: astyle, uncrustify.
 formatc()
 {
-    if [ -n "$(command -v indent)" ]; then
+    if [ -z "$(command -v indent)" ]; then
         echo "Please install 'indent'"
         return
     fi
