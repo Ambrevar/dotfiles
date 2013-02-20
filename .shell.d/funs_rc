@@ -827,14 +827,38 @@ ediff()
 
 crun()
 {
-    if [ $# -ne 1 ]; then
-        echo "Usage: $0 FILE"
+    if [ $# -lt 1 ]; then
+        echo "Usage: $0 FILE [GCC_OPTS]"
         return
     fi
 
+    local INPUT
+    local GCC_OPTS
+    local FILE
+
+    INPUT="$1"
+
+    shift
+    GCC_OPTS="-O0 -Wall -Wextra -Wshadow -pthread"
+    if [ $# -ne 0 ]; then
+        GCC_OPTS="$@"
+    fi
+
     FILE=$(mktemp)
-    gcc -Wall -Wextra -Wshadow -Os $1 -o "$FILE"
-    echo "================================================================================"
+    echo "==> gcc \"$INPUT\" -o \"$FILE\" $GCC_OPTS"
+
+    ## Zsh compatibility. We need it otherwise word splitting of parameter like
+    ## TC_SAMPLE will not work.
+    local STATUS
+    STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
+    [ "$STATUS" = "off" ] && set -o shwordsplit
+
+    gcc "$INPUT" -o "$FILE" $GCC_OPTS
+    ## Restore Zsh previous options. This will not turn off shwordsplit if it
+    ## was on before calling the function.
+    [ "$STATUS" = "off" ] && set +o shwordsplit
+
+    echo "==> $FILE"
     "$FILE"
     rm "$FILE"
 }
