@@ -1,14 +1,15 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                             Author: P. Neidhardt                             #
-#                               Date: 2013-02-06                               #
+#                               Date: 2013-02-22                               #
 ################################################################################
 
 Synopsis
 ********
 
-This repository contains configuration files for various Unix-programs. Target
-distributions are Arch Linux and FreeBSD (might work for most Unices as well).
+This repository contains scripts configuration files for various Unix
+programs. It targets Arch Linux and FreeBSD (might work for most
+Unices as well).
 
 ################################################################################
 
@@ -21,7 +22,7 @@ Highlights
   way. It will copy cover files when found. You can preview the changes without
   writing data. Using FFmpeg.
 
-* Video transcoding: batch conversion of any kind of video. Using FFmpeg.
+* Video transcoding: batch conversion of any kind of videos. Using FFmpeg.
 
 * Plain TeX: partial unicode support (borrowed from LaTeX).
 
@@ -97,14 +98,14 @@ Emacs
 *****
 Extra deps: emacs-lua-mode, emacs-mediawiki, emacs-yasnippet.
 
-Emacs daemon is integrated flawlessly thanks to a small script. See .homeinit.
+Emacs daemon is integrated flawlessly thanks to a small script. See homeinit.
 
 Configuration for C programming. Bindings to compile either from makefile or
 from a custom command if no makefile is found.
 
 TeX and LaTeX full-featured home made environment: no AucTeX required, snippets,
 dynamic compilation with various engines, dynamic configuration, proper PDF
-view, temp file clean function, PDF compression.
+view, temp files clean function, PDF compression, SyncTeX support.
 
 Custom color theme with 256 colors.
 
@@ -143,20 +144,21 @@ might consider using the 'urlview' plugin for Mutt.
 
 Ranger
 ******
-Extra deps: antiword, atool, highlight, img2txt, mediainfo, odt2txt, pdftotext, unrtf, w3m.
+Extra deps: antiword, atool, highlight, img2txt, mediainfo, odt2txt, pdftotext,
+unrtf, w3m.
 
 Custom bindings, file association, tweaked a few options.
 
 Scripts
 *******
 
-.homeinit: initialize a new home configuration, i.e. get needed files, create
+homeinit: initialize a new home configuration, i.e. get needed files, create
            symlinks, etc.
 
-.netinit: network setup. Works with wpa_supplicant. May replace any network
+netinit: network setup. Works with wpa_supplicant. May replace any network
           manager.
 
-.pkggen: generates lists of installed with pacman, FreeBSD's pkg and tlmgr (TeX
+pkggen: generates lists of installed with pacman, FreeBSD's pkg and tlmgr (TeX
          Live manager).
 
 Shell
