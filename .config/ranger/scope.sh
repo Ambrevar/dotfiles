@@ -71,20 +71,17 @@ case "$extension" in
 
     ## CUSTOM SUPPORT
 	ogg)
-		mediainfo "$path" | sed 's/  \+:/: /;'
-		success && exit 5 || exit 1;;
+        try mediainfo "$path" && { dump | sed 's/  \+:/: /;' | trim | fmt -s -w $width; exit 4; }
+        ;;
 	mkv)
-		mediainfo "$path" | sed 's/  \+:/: /;'
-		success && exit 5 || exit 1;;
+        try mediainfo "$path" && { dump | sed 's/  \+:/: /;' | trim | fmt -s -w $width; exit 4; }
+        ;;
 	doc)
-		antiword "$path"
-		success && exit 5 || exit 1;;
+        try antiword "$path" && { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
 	rtf)
-		unrtf --text "$path"
-		success && exit 5 || exit 1;;
+        try unrtf --text "$path" && { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
 	odt)
-		odt2txt "$path"
-		success && exit 5 || exit 1;;
+        try odt2txt "$path" && { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
 esac
 
 case "$mimetype" in
