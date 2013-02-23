@@ -44,6 +44,10 @@ elif [ "$TERM" != "dumb" ]; then
     # export LSCOLORS="ExfxcxDxCxdxdxCxCxECEh"
 fi
 
+## This env variable is used by some programs (like ranger) to get terminal
+## executable name.
+export TERMCMD="urxvt"
+
 ## Terminal
 ## WARNING: this is always a bad idea!
 ## FreeBSD urxvt $TERM variable is not set properly for some reasons.
