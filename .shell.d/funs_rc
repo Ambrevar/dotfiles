@@ -781,23 +781,36 @@ formatc()
         return
     fi
 
-    local WORKDIR
-    if [ -z "$1" ]; then
-	    WORKDIR="$PWD"
-    else
-	    WORKDIR="$1"
+    _formatc_dir()
+    {
+        find "$1" -type f \
+	        -name "*.[ch]" \
+            -print \
+            -exec indent -i4 -ppi4 -bli0 -cli4 -nut {} \;
+
+        ## Remove backup files.
+        find "$1" -type f \( \
+	        -name "*.[ch]~" -o \
+	        -name "*.[ch]~[0-9]*~" \) \
+            -delete
+    }
+
+    if [ $# -eq 0 ]; then
+        echo "Working on current dir"
+        _formatc_dir "$PWD"
+        return
     fi
 
-    find "$WORKDIR" -type f \
-	    -name "*.[ch]" \
-        -print \
-        -exec indent -i4 -ppi4 -bli0 -cli4 -nut {} \;
+    for i ; do
+        echo "[$i]"
 
-    ## Remove backup files.
-    find "$WORKDIR" -type f \( \
-	    -name "*.[ch]~" -o \
-	    -name "*.[ch]~[0-9]*~" \) \
-        -delete
+        if [ -d "$i" ]; then
+            _formatc_dir "$i"
+        else
+            indent -i4 -ppi4 -bli0 -cli4 -nut "$i"
+            rm -f "$i~" "$i~[0-9]*~"
+        fi
+    done
 }
 
 ## LaTeX quick compiler. It adds the preambule -- and the \end{document} --
