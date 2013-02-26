@@ -23,7 +23,7 @@
 ;; Kill whole line
 (setq kill-whole-line t)
 
-;; Modern scrolling
+;; Alternative scrolling
 (define-key my-keys-minor-mode-map [next]
   (lambda () (interactive)
     (condition-case nil (scroll-up)
@@ -126,12 +126,6 @@
 (define-key my-keys-minor-mode-map (kbd "C-x }")  (lambda () (interactive) (enlarge-window-horizontally 5)))
 ;; (define-key my-keys-minor-mode-map (kbd "S-C-<down>") 'shrink-window)
 ;; (define-key my-keys-minor-mode-map (kbd "S-C-<up>") 'enlarge-window)
-
-;; Copy/Paste to/from clipboard.
-;; FIXME: copying does not work.
-(define-key my-keys-minor-mode-map (kbd "C-<f6>") (kbd "M-| xclip"))
-(define-key my-keys-minor-mode-map (kbd "C-<f7>") (kbd "C-u M-! xclip <SPC> -o"))
-(define-key my-keys-minor-mode-map (kbd "C-<f8>") (kbd "C-u M-! xclip <SPC> -o <SPC> -selection <SPC> clipboard"))
 
 ;; query-replace-regex fix on terminals.
 (define-key my-keys-minor-mode-map (kbd "C-M-y") 'query-replace-regexp)

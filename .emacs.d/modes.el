@@ -400,7 +400,7 @@ properly escaped with double-quotes in case it has spaces."
 ;;==============================================================================
 
 ;; Set GDB to display many windows by default.
-(setq gdb-many-windows t)
+;; (setq gdb-many-windows t)
 
 ;;==============================================================================
 ;; Ediff
