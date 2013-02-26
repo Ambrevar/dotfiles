@@ -296,7 +296,6 @@ but there is no warranty."
              (mapconcat 'identity tex-my-extension-list (concat "\" \"" file-noext))
              "\""))))
 
-;; TODO: use LISP functions.
 (defun tex-pdf-compress ()
   "PDF compressions might really strip down the PDF size. The
 compression depends on the fonts used. Do not use this command if
@@ -309,22 +308,19 @@ your document embeds raster graphics."
              buffer-file-name
            tex-my-masterfile)))
 
-    (setq file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory local-master)))
-    (setq file (replace-regexp-in-string "tex" "pdf" (file-name-nondirectory local-master)))
-    (shell-command
-     (concat "if [ -e "
-             file
-             " ]; then gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="
-             file-noext
-             "-COMPRESSED.pdf "
-             file
-             " && rm -rf "
-             file
-             " && mv "
-             file-noext
-             "-COMPRESSED.pdf "
-             file
-             " ; fi"
+    (let (
+        ;; Temp compressed file.
+        (file-temp
+         (concat (make-temp-name (concat "/tmp/" (file-name-nondirectory local-master))) ".pdf"))
+
+        ;; File name with extension.
+        (file
+         (replace-regexp-in-string "tex" "pdf" (file-name-nondirectory local-master))))
+
+      (when (and (file-exists-p file) (file-writable-p file))
+        (shell-command
+         (concat  "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=" file-temp " " file))
+        (rename-file file-temp file t)
              ))))
 
 (defun tex-pdf-view ()
@@ -349,7 +345,7 @@ properly escaped with double-quotes in case it has spaces."
  'tex-mode-hook
  (lambda ()
    (dolist (key '("\C-c\C-f" "\C-c\C-b"))
-     (local-unset-key key))   
+     (local-unset-key key))
    (local-set-key (kbd "C-c C-c") 'tex-my-compile)
    (local-set-key (kbd "C-c C-v") 'tex-pdf-view)
    ))
@@ -413,7 +409,7 @@ properly escaped with double-quotes in case it has spaces."
      (compile (concat python-compiler " " buffer-file-name))
      )
    (setq compilation-scroll-output t)
-   (local-set-key "\C-c\C-c" 'python-my-compile) 
+   (local-set-key "\C-c\C-c" 'python-my-compile)
    ))
 
 ;;==============================================================================
