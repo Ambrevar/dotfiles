@@ -108,7 +108,7 @@
     c-mode lua-mode python-mode
     latex-mode html-mode texinfo-mode))
 
-;; FIXME: fix C functions color.
+;; TODO: fix C functions color.
 ;; (font-lock-add-keywords
 ;;  'c-mode
 ;;  '(
@@ -125,7 +125,7 @@
 ;;   "Font Lock mode face used to highlight format specifiers."
 ;;   :group 'font-lock-faces)
 
-;; FIXME: disable highlighting outside of string.
+;; TODO: disable highlighting outside of string.
 ;; (add-hook
 ;;  'c-mode-common-hook
 ;;  (lambda ()
@@ -136,7 +136,7 @@
 ;;       ("\\(%%\\)" 
 ;;        1 font-lock-format-specifier-face t)) )))
 
-;; FIXME: Does not work.
+;; TODO: Does not work.
 ;; (add-hook
 ;;  'c-mode-common-hook
 ;;  (set-face-foreground 'compilation-column-number "magenta")

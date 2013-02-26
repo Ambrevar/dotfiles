@@ -38,7 +38,7 @@
 (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
 ;; (setq linum-format "%-4d ")
 (setq linum-format "%d ")
-(global-linum-mode 1) ;; FIXME: This may generate warnings with emacsclient. Bug?
+(global-linum-mode 1) ;; TODO: This may generate warnings with emacsclient. Bug?
 (define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode) ;; Toggle line numbers.
 
 ;; Indentation
@@ -90,21 +90,20 @@
   (windmove-default-keybindings))
 
 ;; Browser
-;; (setq browse-url-generic-program
-;;       (executable-find
-;;        (lambda () 
-;;          (if (getenv "BROWSERsd")
-;;              (getenv "BROWSERsd")
-;;            (format "dwb")
-;;            )
-;;       ))
-;; browse-url-browser-function 'browse-url-generic)
-
-;; (setq browse-url-generic-program (executable-find (getenv "BROWSER"))
-;; browse-url-browser-function 'browse-url-generic)
+(setq browse-url-generic-program
+      (executable-find
+       (let ((b (getenv "BROWSER")))
+         (if b b "w3m" )))
+      browse-url-browser-function 'browse-url-generic)
 
 ;; Default ispell dictionnay
-(setq ispell-dictionary "fr")
+;; (setq ispell-dictionary "fr")
+(define-key my-keys-minor-mode-map
+  (kbd "C-<f7>") 
+  (lambda () (interactive) (ispell-change-dictionary "en")))
+(define-key my-keys-minor-mode-map
+  (kbd "C-<f8>") 
+  (lambda () (interactive) (ispell-change-dictionary "fr")))
 
 ;; Use color escape sequences. Only use if needed.
 ;; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)

@@ -183,7 +183,7 @@ function titlecase(string,x)  {
     # Double exception 1: Set 1st word of string in Cap case
     # Need to handle potential internal single/double quotes like
     #  "A Day in the Life" or 'On the Waterfront'
-    # WARNING: here we consider digits as part of a work (as in 1st, 2nd, etc.)
+    ## WARNING: here we consider digits as part of a work (as in 1st, 2nd, etc.)
     match(a, /[A-Za-z0-9]/)
     a = toupper(substr(a,1,RSTART)) substr(a,RSTART+1)
 
