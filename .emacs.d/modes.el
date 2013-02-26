@@ -125,7 +125,7 @@
 ;; I find the default tex-mode and AucTeX quite disappointing. I'm using custom
 ;; functions for everything.
 
-(defcustom tex-my-viewer "zathura --fork -s -x \"emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"'\"'\"%{input}\"'\"'\")) (goto-line %{line}))'\"" 
+(defcustom tex-my-viewer "zathura --fork -s -x \"emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"'\"'\"%{input}\"'\"'\")) (goto-line %{line}))'\""
   "PDF Viewer for TeX documents. You may want to fork the viewer
 so that it detects when the same document is launched twice, and
 persists when Emacs gets closed.
@@ -242,13 +242,13 @@ WARNING: the -shell-escape option is a potential security issue."
               ((string= "plain-tex-mode" major-mode) tex-my-default-compiler)
               (t   (message "Warning: unknown major mode. Trying pdftex.") "pdftex"))
            tex-my-compiler))
-        
+
         ;; Master file
         (local-master
          (if (not tex-my-masterfile)
              buffer-file-name
            tex-my-masterfile))
-           
+
         ;; If tex-my-startcommands has some content, we make sure it is a string
         ;; that loads the file.
         (local-start-cmd
@@ -268,13 +268,13 @@ WARNING: the -shell-escape option is a potential security issue."
       (save-buffer)
       (setq compilation-scroll-output t)
       (compile local-compile-command)
-      
+
       ;; If no user interaction for 2 seconds, hide the compilation window.
       (sit-for 2)
       (delete-windows-on "*compilation*"))))
 
 
-(defcustom tex-my-extension-list '(".aux" ".glg" ".glo" ".gls" ".idx" ".ilg" ".ind" ".lof" ".log" ".nav" ".out" ".snm" ".synctex" ".synctex.gz" ".tns" ".toc" ".xdy")
+(defcustom tex-my-extension-list '("aux" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy")
 "List of known TeX exentsions. This list is used by 'tex-clean to purge all matching files."
 :safe 'listp)
 
@@ -290,11 +290,23 @@ but there is no warranty."
              buffer-file-name
            tex-my-masterfile)))
 
-    (setq file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory local-master)))
-    (shell-command
-     (concat "rm -f \"" file-noext 
-             (mapconcat 'identity tex-my-extension-list (concat "\" \"" file-noext))
-             "\""))))
+    (let (
+          ;; File name without extension.
+          (file
+           (replace-regexp-in-string "tex" "" (file-name-nondirectory local-master))))
+
+      ;; Concatate file name to list.
+      (mapcar
+       ;; Delete file if exist
+       (lambda (argfile) (interactive)
+         (when (and (file-exists-p argfile) (file-writable-p argfile))
+           (delete-file argfile)
+           (message "[%s] deleted." argfile)))
+       (mapcar
+        ;; Concat file name with extensions.
+        (lambda (arg) (interactive) (concat file arg))
+        tex-my-extension-list))
+      )))
 
 (defun tex-pdf-compress ()
   "PDF compressions might really strip down the PDF size. The
@@ -313,13 +325,13 @@ your document embeds raster graphics."
         (file-temp
          (concat (make-temp-name (concat "/tmp/" (file-name-nondirectory local-master))) ".pdf"))
 
-        ;; File name with extension.
+        ;; File name with PDF extension.
         (file
          (replace-regexp-in-string "tex" "pdf" (file-name-nondirectory local-master))))
 
       (when (and (file-exists-p file) (file-writable-p file))
         (shell-command
-         (concat  "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=" file-temp " " file))
+         (concat  "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=\"" file-temp "\" \"" file "\""))
         (rename-file file-temp file t)
              ))))
 
