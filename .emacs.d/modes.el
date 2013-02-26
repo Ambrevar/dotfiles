@@ -122,10 +122,9 @@
 ;; TeX and LaTeX
 ;;==============================================================================
 
-;; I find the default tex-mode and AucTeX quiet disappointing. I'm using custom
+;; I find the default tex-mode and AucTeX quite disappointing. I'm using custom
 ;; functions for everything.
 
-;; (defcustom tex-my-viewer "zathura --fork" 
 (defcustom tex-my-viewer "zathura --fork -s -x \"emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"'\"'\"%{input}\"'\"'\")) (goto-line %{line}))'\"" 
   "PDF Viewer for TeX documents. You may want to fork the viewer
 so that it detects when the same document is launched twice, and
@@ -139,20 +138,35 @@ We can use
 
   emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"%{input}\")) (goto-line %{line}))'
 
-to reverse-search a pdf using SyncTeX. Note that the quotes and double-quotes matter and must be escaped appropriately.
-"
+to reverse-search a pdf using SyncTeX. Note that the quotes and
+double-quotes matter and must be escaped appropriately."
 :safe 'stringp)
 
-(defcustom tex-my-compiler "pdftex"
-  "This is the name of the executable called upon TeX compilations.
-Examples: pdftex, pdflatex, xetex, xelatex, luatex, lualatex..."
+(defcustom tex-my-compiler nil
+  "[Local variable]
+
+This is the name of the executable called upon TeX compilations.
+Examples: pdftex, pdflatex, xetex, xelatex, luatex, lualatex...
+
+If value is nil, the compiler will be tex-my-default-compiler for
+TeX mode, and latex-my-default-compiler for LaTeX mode."
+:safe 'stringp)
+
+(defcustom tex-my-default-compiler "pdftex"
+  "Default compiler for TeX mode. Used if tex-my-compiler is
+empty."
+:safe 'stringp)
+
+(defcustom latex-my-default-compiler "pdflatex"
+  "Default compiler for LaTeX mode. Used if tex-my-compiler is
+empty."
 :safe 'stringp)
 
 (defcustom tex-my-compiler-options "-file-line-error-style -interaction nonstopmode -synctex=1"
   "The options to the tex compiler. Options are set between the
 compiler name and the file name.
 
-Interresting options:
+Interesting options:
 
 * -file-line-error-style: change the style of error report to
    display file name and line first.
@@ -201,8 +215,6 @@ variable, e.g. on the first line:
 "
 :safe 'stringp)
 
-
-;; TODO: For now this code does not allow compiler local changes.
 ;; TODO: master document support.
 (defun tex-my-compile ()
   "Use compile to process your TeX-based document. Use a prefix
@@ -214,37 +226,44 @@ external application to be called from TeX.
 This may be useful for some features like GnuPlot support with TikZ.
 
 WARNING: the -shell-escape option is a potential security issue."
-
   (interactive)
-  (cond
-   ((string= "latex-mode" major-mode) (setq tex-my-compiler "pdflatex"))
-   ((string= "plain-tex-mode" major-mode) (setq tex-my-compiler "pdftex"))
-   (t (setq tex-my-compiler "pdftex") (message "Warning: unknown major mode. Trying pdftex."))
-   )
+  (let (
+        ;; Set compiler to be tex-my-compiler if not empty, or a default
+        ;; compiler otherwise.
+        (local-compiler
+         (if (not tex-my-compiler)
+           (cond
+            ((string= "latex-mode" major-mode) latex-my-default-compiler)
+            ((string= "plain-tex-mode" major-mode) tex-my-default-compiler)
+            (t   (message "Warning: unknown major mode. Trying pdftex.") "pdftex"))
+           tex-my-compiler))
 
-  ;; If tex-my-startcommands has some content, we make sure it is a string that loads the file.
-  (if (not (string= "" tex-my-startcommands))
-      (setq tex-my-startcommands (concat "\"" tex-my-startcommands "\\input\"")))
+        ;; If tex-my-startcommands has some content, we make sure it is a string
+        ;; that loads the file.
+        (local-start-cmd
+         (if (not (string= "" tex-my-startcommands))
+             (concat "\"" tex-my-startcommands "\\input\"")))
 
-  ;; Support of prefix argument to toggle -shell-escape.
-  (if (equal current-prefix-arg '(4)) (setq tex-my-shell-escape "-shell-escape")
-    (setq tex-my-shell-escape ""))
+        ;; Support of prefix argument to toggle -shell-escape.
+        (local-shell-escape
+         (if (equal current-prefix-arg '(4)) "-shell-escape" "")))
 
-  (setq tex-my-compile-command (concat tex-my-compiler " "  tex-my-shell-escape " " tex-my-compiler-options " " tex-my-startcommands " \"" buffer-file-name "\""))
-  ;; (message tex-my-compile-command) ;; Debug only.
-  (save-buffer)
-  (setq compilation-scroll-output t)
-  (compile tex-my-compile-command)
+    (setq tex-my-compile-command (concat local-compiler " "  local-shell-escape " " tex-my-compiler-options " " local-start-cmd " \"" buffer-file-name "\""))
+    ;; (message tex-my-compile-command) ;; Debug only.
+    (save-buffer)
+    (setq compilation-scroll-output t)
+    (compile tex-my-compile-command)
 
-  ;; If no user interaction for 2 seconds, hide the compilation window.
-  (sit-for 2)
-  (delete-windows-on "*compilation*")
-  )
+    ;; If no user interaction for 2 seconds, hide the compilation window.
+    (sit-for 2)
+    (delete-windows-on "*compilation*")))
+
 
 (defcustom tex-my-extension-list '(".aux" ".glg" ".glo" ".gls" ".idx" ".ilg" ".ind" ".lof" ".log" ".nav" ".out" ".snm" ".synctex" ".synctex.gz" ".tns" ".toc" ".xdy")
 "List of known TeX exentsions. This list is used by 'tex-clean to purge all matching files."
 :safe 'listp)
 
+;; TODO: use LISP funcions.
 (defun tex-clean ()
   "Remove all TeX temporary files. This command should be safe,
 but there is no warranty."
@@ -253,10 +272,9 @@ but there is no warranty."
   (shell-command
    (concat "rm -f \"" file-noext 
            (mapconcat 'identity tex-my-extension-list (concat "\" \"" file-noext))
-           "\"")
-   )
-  )
+           "\"")))
 
+;; TODO: use LISP functions.
 (defun tex-pdf-compress ()
   "PDF compressions might really strip down the PDF size. The
 compression depends on the fonts used. Do not use this command if
@@ -278,9 +296,7 @@ your document embeds raster graphics."
            "-COMPRESSED.pdf "
            file
            " ; fi"
-           )
-   )
-  )
+           )))
 
 (defun tex-pdf-view ()
   "Call a PDF viewer for current buffer file. File name should be
@@ -290,11 +306,8 @@ properly escaped with double-quotes in case it has spaces."
    (concat tex-my-viewer
            " \""
            (replace-regexp-in-string "\.tex$" "\.pdf" (file-name-nondirectory buffer-file-name))
-           "\" &"
-           )
-   )
-  (delete-windows-on "*Async Shell Command*")
-  )
+           "\" &" ))
+  (delete-windows-on "*Async Shell Command*"))
 
 (add-hook
  'tex-mode-hook
@@ -303,8 +316,7 @@ properly escaped with double-quotes in case it has spaces."
      (local-unset-key key))   
    (local-set-key (kbd "C-c C-c") 'tex-my-compile)
    (local-set-key (kbd "C-c C-v") 'tex-pdf-view)
-   )
- )
+   ))
 
 ;;==============================================================================
 ;; HTML
@@ -313,8 +325,7 @@ properly escaped with double-quotes in case it has spaces."
 (add-hook 'html-mode-hook
           (lambda ()
             (turn-off-auto-fill)
-            (toggle-truncate-lines)
-))
+            (toggle-truncate-lines)))
 
 ;;==============================================================================
 ;; C-mode
@@ -342,8 +353,7 @@ properly escaped with double-quotes in case it has spaces."
 
             (local-set-key (kbd "C-c C-c") 'compile)
             ;; (global-set-key (kbd "<f12>") 'next-error)
-            )
-          )
+            ))
 
 ;;==============================================================================
 ;; Common LISP
@@ -368,8 +378,7 @@ properly escaped with double-quotes in case it has spaces."
      )
    (setq compilation-scroll-output t)
    (local-set-key "\C-c\C-c" 'python-my-compile) 
-   )
- )
+   ))
 
 ;;==============================================================================
 ;; Flymake
