@@ -152,6 +152,12 @@ If value is nil, the compiler will be tex-my-default-compiler for
 TeX mode, and latex-my-default-compiler for LaTeX mode."
 :safe 'stringp)
 
+(defcustom tex-my-masterfile nil
+  "[Local variable]
+
+The file that should be compiled."
+:safe 'stringp)
+
 (defcustom tex-my-default-compiler "pdftex"
   "Default compiler for TeX mode. Used if tex-my-compiler is
 empty."
@@ -215,7 +221,6 @@ variable, e.g. on the first line:
 "
 :safe 'stringp)
 
-;; TODO: master document support.
 (defun tex-my-compile ()
   "Use compile to process your TeX-based document. Use a prefix
 argument to call the compiler along the '-shell-escape'
@@ -232,12 +237,18 @@ WARNING: the -shell-escape option is a potential security issue."
         ;; compiler otherwise.
         (local-compiler
          (if (not tex-my-compiler)
-           (cond
-            ((string= "latex-mode" major-mode) latex-my-default-compiler)
-            ((string= "plain-tex-mode" major-mode) tex-my-default-compiler)
-            (t   (message "Warning: unknown major mode. Trying pdftex.") "pdftex"))
+             (cond
+              ((string= "latex-mode" major-mode) latex-my-default-compiler)
+              ((string= "plain-tex-mode" major-mode) tex-my-default-compiler)
+              (t   (message "Warning: unknown major mode. Trying pdftex.") "pdftex"))
            tex-my-compiler))
-
+        
+        ;; Master file
+        (local-master
+         (if (not tex-my-masterfile)
+             buffer-file-name
+           tex-my-masterfile))
+           
         ;; If tex-my-startcommands has some content, we make sure it is a string
         ;; that loads the file.
         (local-start-cmd
@@ -248,15 +259,19 @@ WARNING: the -shell-escape option is a potential security issue."
         (local-shell-escape
          (if (equal current-prefix-arg '(4)) "-shell-escape" "")))
 
-    (setq tex-my-compile-command (concat local-compiler " "  local-shell-escape " " tex-my-compiler-options " " local-start-cmd " \"" buffer-file-name "\""))
-    ;; (message tex-my-compile-command) ;; Debug only.
-    (save-buffer)
-    (setq compilation-scroll-output t)
-    (compile tex-my-compile-command)
+    (let (
+          ;; Final command
+          (local-compile-command
+           (concat local-compiler " "  local-shell-escape " " tex-my-compiler-options " " local-start-cmd " \"" local-master "\"")))
 
-    ;; If no user interaction for 2 seconds, hide the compilation window.
-    (sit-for 2)
-    (delete-windows-on "*compilation*")))
+      ;; (message tex-my-compile-command) ;; Debug only.
+      (save-buffer)
+      (setq compilation-scroll-output t)
+      (compile local-compile-command)
+      
+      ;; If no user interaction for 2 seconds, hide the compilation window.
+      (sit-for 2)
+      (delete-windows-on "*compilation*"))))
 
 
 (defcustom tex-my-extension-list '(".aux" ".glg" ".glo" ".gls" ".idx" ".ilg" ".ind" ".lof" ".log" ".nav" ".out" ".snm" ".synctex" ".synctex.gz" ".tns" ".toc" ".xdy")
@@ -268,11 +283,18 @@ WARNING: the -shell-escape option is a potential security issue."
   "Remove all TeX temporary files. This command should be safe,
 but there is no warranty."
   (interactive)
-  (setq file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory buffer-file-name)))
-  (shell-command
-   (concat "rm -f \"" file-noext 
-           (mapconcat 'identity tex-my-extension-list (concat "\" \"" file-noext))
-           "\"")))
+  (let (
+        ;; Master file.
+        (local-master
+         (if (not tex-my-masterfile)
+             buffer-file-name
+           tex-my-masterfile)))
+
+    (setq file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory local-master)))
+    (shell-command
+     (concat "rm -f \"" file-noext 
+             (mapconcat 'identity tex-my-extension-list (concat "\" \"" file-noext))
+             "\""))))
 
 ;; TODO: use LISP functions.
 (defun tex-pdf-compress ()
@@ -280,34 +302,48 @@ but there is no warranty."
 compression depends on the fonts used. Do not use this command if
 your document embeds raster graphics."
   (interactive)
-  (setq file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory buffer-file-name)))
-  (setq file (replace-regexp-in-string "tex" "pdf" (file-name-nondirectory buffer-file-name)))
-  (shell-command
-   (concat "if [ -e "
-           file
-           " ]; then gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="
-           file-noext
-           "-COMPRESSED.pdf "
-           file
-           " && rm -rf "
-           file
-           " && mv "
-           file-noext
-           "-COMPRESSED.pdf "
-           file
-           " ; fi"
-           )))
+  (let (
+        ;; Master file.
+        (local-master
+         (if (not tex-my-masterfile)
+             buffer-file-name
+           tex-my-masterfile)))
+
+    (setq file-noext (replace-regexp-in-string ".tex" "" (file-name-nondirectory local-master)))
+    (setq file (replace-regexp-in-string "tex" "pdf" (file-name-nondirectory local-master)))
+    (shell-command
+     (concat "if [ -e "
+             file
+             " ]; then gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="
+             file-noext
+             "-COMPRESSED.pdf "
+             file
+             " && rm -rf "
+             file
+             " && mv "
+             file-noext
+             "-COMPRESSED.pdf "
+             file
+             " ; fi"
+             ))))
 
 (defun tex-pdf-view ()
   "Call a PDF viewer for current buffer file. File name should be
 properly escaped with double-quotes in case it has spaces."
   (interactive)
-  (shell-command
-   (concat tex-my-viewer
-           " \""
-           (replace-regexp-in-string "\.tex$" "\.pdf" (file-name-nondirectory buffer-file-name))
-           "\" &" ))
-  (delete-windows-on "*Async Shell Command*"))
+  (let (
+        ;; Master file.
+        (local-master
+         (if (not tex-my-masterfile)
+             buffer-file-name
+           tex-my-masterfile)))
+
+    (shell-command
+     (concat tex-my-viewer
+             " \""
+             (replace-regexp-in-string "\.tex$" "\.pdf" (file-name-nondirectory local-master))
+             "\" &" ))
+    (delete-windows-on "*Async Shell Command*")))
 
 (add-hook
  'tex-mode-hook
