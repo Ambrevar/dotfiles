@@ -379,25 +379,31 @@ properly escaped with double-quotes in case it has spaces."
 ;; Identation style
 (setq c-default-style "linux" c-basic-offset 4)
 
-(add-hook 'c-mode-hook
-          (lambda ()
-            (unless (file-exists-p "Makefile")
-              (set (make-local-variable 'compile-command)
-                   ;; emulate make's .c.o implicit pattern rule, but with
-                   ;; different defaults for the CC, CPPFLAGS, and CFLAGS
-                   ;; variables:
-                   ;; $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
-                   (let ((file (file-name-nondirectory buffer-file-name)))
-                     (format "%s -o %s %s %s %s"
-                             (or (getenv "CC") "gcc")
-                             (file-name-sans-extension file)
-                             (or (getenv "CPPFLAGS") "-DDEBUG=9")
-                             (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -lm -g3 -O0")
-                             file))))
+(add-hook
+ 'c-mode-hook
+ (lambda ()
+   (unless (file-exists-p "Makefile")
+     (set (make-local-variable 'compile-command)
+          ;; emulate make's .c.o implicit pattern rule, but with
+          ;; different defaults for the CC, CPPFLAGS, and CFLAGS
+          ;; variables:
+          ;; $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
+          (let ((file (file-name-nondirectory buffer-file-name)))
+            (format "%s -o %s %s %s %s"
+                    (or (getenv "CC") "gcc")
+                    (file-name-sans-extension file)
+                    (or (getenv "CPPFLAGS") "-DDEBUG=9")
+                    (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -lm -pthread -g3 -O0")
+                    file))))
 
-            (local-set-key (kbd "C-c C-c") 'compile)
-            ;; (global-set-key (kbd "<f12>") 'next-error)
-            ))
+   (local-set-key (kbd "C-c C-c") 'compile)
+   (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
+   (local-set-key "." 'semantic-complete-self-insert)
+   (local-set-key ">" 'semantic-complete-self-insert)
+   (local-set-key (kbd "<f12>") 'next-error)))
+
+;; (defun my-c-mode-cedet-hook ()
+;; (add-hook 'c-mode-common-hook 'my-c-mode-cedet-hook)
 
 ;;==============================================================================
 ;; Common LISP

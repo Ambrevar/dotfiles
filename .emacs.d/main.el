@@ -132,19 +132,7 @@
 ;; Semantic with ghost display (allows M-n and M-p to brwose completion).
 (semantic-mode 1)
 (define-key my-keys-minor-mode-map (kbd "C-c , d") 'semantic-ia-show-summary)
-(define-key my-keys-minor-mode-map (kbd "M-TAB") 'semantic-complete-analyze-inline)
 (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-ghost) 
-
-(defun my-c-mode-cedet-hook ()
- (local-set-key "." 'semantic-complete-self-insert)
- (local-set-key ">" 'semantic-complete-self-insert))
-(add-hook 'c-mode-common-hook 'my-c-mode-cedet-hook)
 
 ;; Electric Pairs () [] {} "" etc;
 (electric-pair-mode 1)
-
-;; Buffer-mode convenience.
-(add-hook
- 'Buffer-menu-mode-hook
- (lambda () 
-   (local-set-key "RET" 'Buffer-menu-switch-other-window)))

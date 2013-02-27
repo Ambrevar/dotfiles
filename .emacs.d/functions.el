@@ -29,11 +29,15 @@
 " "
 "))
 
-(defun list-buffers-switch () "Same as list buffers but switch to it afterward."
+(defun list-buffers-switch () "Same as list-buffers but switch to it afterward."
   (interactive)
   (list-buffers)
   (switch-to-buffer-other-window "*Buffer List*"))
 (define-key my-keys-minor-mode-map (kbd "C-x C-b") 'list-buffers-switch)
+(define-key Buffer-menu-mode-map (kbd "RET")
+  (lambda () (interactive) 
+    (Buffer-menu-switch-other-window) 
+    (delete-window)))
 
 ;;==============================================================================
 ;; Toggle window split
