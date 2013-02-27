@@ -43,7 +43,7 @@
 
 ;; Indentation
 ;(setq standard-indent 4)
-(setq-default tab-width 4) 
+(setq-default tab-width 4)
 (setq-default indent-tabs-mode nil) ;; Indentation cannot insert tabs
 
 ;; Line by line scrolling
@@ -99,10 +99,10 @@
 ;; Default ispell dictionnay
 ;; (setq ispell-dictionary "fr")
 (define-key my-keys-minor-mode-map
-  (kbd "C-<f7>") 
+  (kbd "C-<f7>")
   (lambda () (interactive) (ispell-change-dictionary "en")))
 (define-key my-keys-minor-mode-map
-  (kbd "C-<f8>") 
+  (kbd "C-<f8>")
   (lambda () (interactive) (ispell-change-dictionary "fr")))
 
 ;; Use color escape sequences. Only use if needed.
@@ -121,8 +121,10 @@
 
 ;; Window resize
 ;; TODO: Use more { and } to continue.
-(define-key my-keys-minor-mode-map (kbd "C-x {")  (lambda () (interactive) (shrink-window-horizontally 5)))
-(define-key my-keys-minor-mode-map (kbd "C-x }")  (lambda () (interactive) (enlarge-window-horizontally 5)))
+(define-key my-keys-minor-mode-map (kbd "C-x {")
+  (lambda () (interactive) (shrink-window-horizontally 5)))
+(define-key my-keys-minor-mode-map (kbd "C-x }")
+  (lambda () (interactive) (enlarge-window-horizontally 5)))
 ;; (define-key my-keys-minor-mode-map (kbd "S-C-<down>") 'shrink-window)
 ;; (define-key my-keys-minor-mode-map (kbd "S-C-<up>") 'enlarge-window)
 
@@ -132,7 +134,15 @@
 ;; Semantic with ghost display (allows M-n and M-p to brwose completion).
 (semantic-mode 1)
 (define-key my-keys-minor-mode-map (kbd "C-c , d") 'semantic-ia-show-summary)
-(setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-ghost) 
+(setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-ghost)
 
 ;; Electric Pairs () [] {} "" etc;
 (electric-pair-mode 1)
+
+;; Run ranger asynchronously.
+(define-key my-keys-minor-mode-map (kbd "C-x D")
+  (lambda () (interactive) (shell-command "urxvt -e ranger &")))
+
+;; Calendar
+(setq calendar-week-start-day 1)
+(setq calendar-date-style 'iso)
