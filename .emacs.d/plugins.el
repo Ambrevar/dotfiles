@@ -147,3 +147,9 @@
 ;;       ;; To change style, M-x customize-face and input zlc-selected-completion-face.
 ;;       )
 ;; )
+
+;;==============================================================================
+;; xclip
+;;==============================================================================
+(if (require 'xclip nil t)
+    (turn-on-xclip))

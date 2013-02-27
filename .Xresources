@@ -20,7 +20,7 @@
 !! plugins.
 
 ! URxvt*modifier: alt
-! URxvt.iso14755: False
+URxvt.iso14755: False
 URxvt*saveLines: 5000
 URxvt*scrollBar: false
 
