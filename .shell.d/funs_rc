@@ -617,7 +617,7 @@ git-compare()
         return
     fi
 
-    comm -3 <(git ls-files | sort) <(find "$1" -type f | sed 's/^[^\/]*\///g' | sort)
+    comm -3 <(git ls-files | sort) <(find "$1" -type f ! -path "*.git/*" | sed 's/^[^\/]*\///g' | sort)
 }
 
 ## This function will clean TeX/LaTeX project folders recursively.
@@ -668,23 +668,30 @@ vcsclean()
     unset CHOICE
     echo "This will clean current folder from all VCS control files."
     echo -n "Proceed ? [y/N] "
-    while [ -z "$CHOICE" ];
-    do
-        read CHOICE
-    done
+    read CHOICE
 
     CHOICE=$(echo $CHOICE | tr '[:upper:]' '[:lower:]')
     if [ "$CHOICE" = "y"  ]; then
-        find "$WORKDIR" -type d \( \
-	        -name ".bzr" -o \
-	        -name ".cvs" -o \
-	        -name ".git" -o \
-	        -name ".hg" -o \
-	        -name ".svn" \) \
-            -print \
+
+        ## First clean the folders.
+        find "$WORKDIR" \( \
+            -path "*/.git/*" -o \
+            -path "*/.bzr/*" -o \
+            -path "*/.cvs/*" -o \
+            -path "*/.hg/*" -o \
+            -path "*/.svn/*" \) \
             -delete
 
-            echo "VCS files cleaned."
+            ## Remove the empty vcs folder.
+            find "$WORKDIR" -type d \( \
+	            -name ".bzr" -o \
+	            -name ".cvs" -o \
+	            -name ".git" -o \
+	            -name ".hg" -o \
+	            -name ".svn" \) \
+                -delete
+                
+                echo "VCS files cleaned."
     fi
 }
 
