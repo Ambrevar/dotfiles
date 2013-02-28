@@ -14,6 +14,9 @@
 (add-hook 'minibuffer-setup-hook (lambda () (my-keys-minor-mode 0) ) )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Default mode
+(setq default-major-mode 'text-mode)
+
 ;; Make questions less annoying
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -146,3 +149,4 @@
 ;; Calendar
 (setq calendar-week-start-day 1)
 (setq calendar-date-style 'iso)
+
