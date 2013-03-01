@@ -1,7 +1,7 @@
 #!/bin/sh
 ################################################################################
 ## Home session initialization.
-## 2013-01-09
+## 2013-03-01
 ################################################################################
 SOURCEDIR="${HOME}/personal/dataperso"
 [ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
@@ -11,24 +11,21 @@ SOURCEDIR="${HOME}/personal/dataperso"
 ## Emacsclient launcher. Required for best emacsclient integration.  For a fully
 ## functional daemon, you should write a file like this and set 'EDITOR=em'.
 if [ -f /bin/em ]; then
-    echo "==> Emacs"
+    echo "==> Emacs (press Ctrl-D to skip)"
     sudo sh -c "echo '#!/bin/sh
 emacsclient -a \"\" -t \"\$@\"' > '/bin/em'; chmod 755 /bin/em"
     echo
 fi
 
-## Mutt
 echo "==> Mutt"
 ln -snf "$(realpath ${SOURCEDIR}/mails)" "${HOME}/.mutt"
 mkdir -p "${HOME}/.mutt.d/hcache"
 echo
 
-## Taskwarrior
-echo "==> Taskwarrior"
-ln -snf "${SOURCEDIR}/todo" "${HOME}/.task"
+echo "==> TODO data"
+ln -snf "${SOURCEDIR}/todo/todo.org" "${HOME}/todo.org"
 echo
 
-## rtorrent
 echo "==> rtorrent"
 mkdir -p "${HOME}/.session"
 echo
