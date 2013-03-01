@@ -156,3 +156,12 @@
 (define-key my-keys-minor-mode-map (kbd "C-x C-b")
   (lambda () (interactive)
     (buffer-menu 1)))
+
+;; Disable prompt (but leave warning) on git symlink.
+(setq vc-follow-symlinks t)
+
+;; Org mode config
+(add-hook 'org-mode-hook 
+          (lambda () (interactive) )
+          (setq org-agenda-files '("~/task.org"))
+          (setq org-enforce-todo-dependencies t))

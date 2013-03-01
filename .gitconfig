@@ -8,6 +8,7 @@
 	b = branch -va
 	c = commit -a
 	co = checkout
+	d = diff --cached
 	l = log --stat
 	m = mergetool
 	r = remote -v

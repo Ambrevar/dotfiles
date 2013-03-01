@@ -19,4 +19,3 @@
 (my-keys-minor-mode 1)
 
 ;; End of file
-
