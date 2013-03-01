@@ -29,16 +29,6 @@
 " "
 "))
 
-(defun list-buffers-switch () "Same as list-buffers but switch to it afterward."
-  (interactive)
-  (list-buffers)
-  (switch-to-buffer-other-window "*Buffer List*"))
-(define-key my-keys-minor-mode-map (kbd "C-x C-b") 'list-buffers-switch)
-(define-key Buffer-menu-mode-map (kbd "RET")
-  (lambda () (interactive) 
-    (Buffer-menu-switch-other-window) 
-    (delete-window)))
-
 ;;==============================================================================
 ;; Toggle window split
 ;;==============================================================================
@@ -134,3 +124,48 @@ the line."
 
 ;; Binding.
 (define-key my-keys-minor-mode-map "\M-;" 'comment-dwim-line)
+
+;;==============================================================================
+;; Window resize
+;;==============================================================================
+;; Only works for 2 vertical side-by-side.
+
+(defun xor (b1 b2)
+  "Exclusive or of its two arguments."
+  (or (and b1 b2)
+      (and (not b1) (not b2))))
+
+(defun move-border-left-or-right (arg dir)
+  "General function covering move-border-left and move-border-right. If DIR is
+     t, then move left, otherwise move right."
+  (interactive)
+  (if (null arg) (setq arg 5))
+  (let ((left-edge (nth 0 (window-edges))))
+    (if (xor (= left-edge 0) dir)
+        (shrink-window arg t)
+      (enlarge-window arg t))))
+
+(defun move-border-left (arg)
+  "If this is a window with its right edge being the edge of the screen, enlarge
+     the window horizontally. If this is a window with its left edge being the edge
+     of the screen, shrink the window horizontally. Otherwise, default to enlarging
+     horizontally.
+
+     Enlarge/Shrink by ARG columns, or 5 if arg is nil."
+  (interactive "P")
+  (if (= (count-windows) 2)
+      (move-border-left-or-right arg t)))
+
+(defun move-border-right (arg)
+  "If this is a window with its right edge being the edge of the screen, shrink
+     the window horizontally. If this is a window with its left edge being the edge
+     of the screen, enlarge the window horizontally. Otherwise, default to shrinking
+     horizontally.
+
+     Enlarge/Shrink by ARG columns, or 5 if arg is nil."
+  (interactive "P")
+  (if (= (count-windows) 2)
+      (move-border-left-or-right arg nil)))
+
+(define-key my-keys-minor-mode-map (kbd "M-(") 'move-border-left)
+(define-key my-keys-minor-mode-map (kbd "M-)") 'move-border-right)

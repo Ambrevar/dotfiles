@@ -122,31 +122,37 @@
 ;; it to 0 to deactivate.
 (setq show-paren-delay 0)
 
-;; Window resize
-;; TODO: Use more { and } to continue.
-(define-key my-keys-minor-mode-map (kbd "C-x {")
-  (lambda () (interactive) (shrink-window-horizontally 5)))
-(define-key my-keys-minor-mode-map (kbd "C-x }")
-  (lambda () (interactive) (enlarge-window-horizontally 5)))
-;; (define-key my-keys-minor-mode-map (kbd "S-C-<down>") 'shrink-window)
-;; (define-key my-keys-minor-mode-map (kbd "S-C-<up>") 'enlarge-window)
-
 ;; query-replace-regex fix on terminals.
 (define-key my-keys-minor-mode-map (kbd "C-M-y") 'query-replace-regexp)
 
-;; Semantic with ghost display (allows M-n and M-p to brwose completion).
+;; Semantic with ghost display (allows M-n and M-p to browse completion).
 (semantic-mode 1)
 (define-key my-keys-minor-mode-map (kbd "C-c , d") 'semantic-ia-show-summary)
 (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-ghost)
 
-;; Electric Pairs () [] {} "" etc;
+;; Electric Pairs to auto-complete () [] {} "" etc. You can use it on regions.
 (electric-pair-mode 1)
 
 ;; Run ranger asynchronously.
 (define-key my-keys-minor-mode-map (kbd "C-x D")
-  (lambda () (interactive) (shell-command "urxvt -e ranger &")))
+  (lambda () (interactive)
+    (shell-command "urxvt -e ranger &")
+    (delete-windows-on "*Async Shell Command*")))
 
-;; Calendar
+;; Calendar ISO display.
 (setq calendar-week-start-day 1)
 (setq calendar-date-style 'iso)
 
+;; IDO (Interactively Do Thing) for finding files and buffers.
+(require 'ido)
+(ido-mode t)
+(setq ido-enable-flex-matching t)
+
+;; Quick buffer switching.
+(define-key my-keys-minor-mode-map (kbd "C-<prior>") 'previous-buffer)
+(define-key my-keys-minor-mode-map (kbd "C-<next>") 'next-buffer)
+
+;; Do not open other window for buffer menu, plus hide non-file buffers.
+(define-key my-keys-minor-mode-map (kbd "C-x C-b")
+  (lambda () (interactive)
+    (buffer-menu 1)))
