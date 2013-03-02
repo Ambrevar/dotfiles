@@ -1,0 +1,17 @@
+#!/bin/sh
+[ -z "$(command -v pacman)" ] && echo "You need pacman to run this script." && exit 1
+
+## Retrieve official packages list.
+OFFICIAL="$(mktemp)"
+FOREIGN="$(mktemp)"
+pacman -Qq | sort > "$OFFICIAL"
+pacman -Qmq | sort > "$FOREIGN"
+comm -3 "$OFFICIAL" "$FOREIGN"
+rm -f  "$OFFICIAL" "$FOREIGN"
+
+## Zsh version.
+# comm -3 <(pacman -Qq | sort) <(pacman -Qmq | sort)
+
+# Alternative 'diff' verision.
+# diff <(pacman -Qq | sort) <(pacman -Qmq | sort) --new-line-format='' --unchanged-group-format='%>'
+

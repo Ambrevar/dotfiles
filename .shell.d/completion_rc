@@ -1,0 +1,11 @@
+## -*- mode:sh -*- #
+##==============================================================================
+## Completion
+##==============================================================================
+if [ "zsh" = "$SHELL_CURRENT" ]; then
+    compdef _pcc pacman-deps
+    compdef _pcc pacman-files
+    compdef _pcc pacman-size
+    compdef _pcc pql
+    compdef _zathura zat
+fi

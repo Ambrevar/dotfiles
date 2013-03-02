@@ -1,0 +1,25 @@
+#!/bin/sh
+# This file is not supposed to be executed directly. It is a common resource file
+# for all pacman functions.
+
+if [ -z "$(command -v pacman)" ]; then
+    echo "You need to have the pacman package manager installed."
+    exit
+fi
+
+if [ -z "$(command -v makepkg)" ]; then
+    echo "You need to have makepkg (the pacman package builder) installed."
+    exit
+fi
+
+pacman_var_list="$(pacman -Qi tzdata | cut -f1 -d':')"
+if [ -z "$pacman_var_list" ]; then
+    echo "Could not get pacman's variables."
+    exit 2
+fi
+
+pacman_name="$(echo "$pacman_var_list" | sed -n '1{p;q}')"
+pacman_deps="$(echo "$pacman_var_list" | sed -n '7{p;q}')"
+pacman_deps_none="$(pacman -Qi tzdata | sed -n '7{s/.*: //;p;q}')"
+pacman_optdeps="$(echo "$pacman_var_list" | sed -n '8{p;q}')"
+pacman_size="$(echo "$pacman_var_list" | sed -n '12{p;q}')"

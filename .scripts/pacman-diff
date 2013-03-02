@@ -1,0 +1,66 @@
+#!/bin/sh
+[ -z "$(command -v pacman)" ] && echo "You need pacman to run this script." && exit 1
+
+_printhelp()
+{
+    cat <<EOF
+Usage: ${1##*/} [-m|-e] [-q] FILE
+
+Display packages listed in FILE but not installed.
+
+  -e:  Compare FILE to explicitly installed packages.
+  -h:  Display this help.
+  -m:  Compare FILE to foreign installed packages.
+  -q:  Display installed packages not included in FILE.
+EOF
+}
+
+OPTION_EXPLICIT=""
+OPTION_FOREIGN=""
+OPTION_LOCAL="-1"
+
+while getopts ":hmqe" opt; do
+    case $opt in
+        e)
+            OPTION_EXPLICIT="e"
+            ;;
+        h)
+            _printhelp "$0"
+            exit 1
+            ;;
+        m)
+            OPTION_FOREIGN="m"
+            ;;
+        q)
+            OPTION_LOCAL="-2"
+            ;;
+        ?)
+            _printhelp "$0"
+            exit 1
+            ;;
+        :)
+            echo "Missing argument."
+            _printhelp "$0"
+            exit 1
+            ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+if [ $# -eq 0 ]; then
+    echo "Missing argument."
+    echo "Use $0 -h for help."
+    exit 1
+fi
+
+PKGLIST="$(mktemp)"
+FILE="$(mktemp)"
+pacman -Qq${OPTION_FOREIGN}${OPTION_EXPLICIT} | sort > "$PKGLIST"
+sort "$@" > "$FILE"
+comm -3 ${OPTION_LOCAL} "$PKGLIST" "$FILE"
+rm -f "$PKGLIST" "$FILE"
+
+## Zsh version.
+# comm -3 ${OPTION_LOCAL} <(pacman -Qq${OPTION_FOREIGN}${OPTION_EXPLICIT} | sort) <(sort "$*")
+

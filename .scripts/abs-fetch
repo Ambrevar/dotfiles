@@ -1,0 +1,76 @@
+#!/bin/sh
+
+_printhelp ()
+{
+    cat <<EOF
+Usage: ${1##*/} [OPTIONS] PACKAGES
+
+Fetch PKGBUILDs from source tree (using ABS tree by default).
+
+  -f:  Overwrite folder if it exists.
+  -h:  Display this help.
+  -y:  Use 'yaourt' to fetch data.
+
+Noteworthy parameters:
+  \$(pacman-official)
+  \$(pacman -Qmq)
+  \$(pacman -Qq)
+EOF
+}
+
+DL_AGENT=0
+CP_AGENT="/bin/cp -rnv"
+
+while getopts ":hfy" opt; do
+    case $opt in
+        h)
+            _printhelp "$0"
+            exit 1
+            ;;
+        f)
+            CP_AGENT="/bin/cp -rfv"
+            ;;
+        y)
+            DL_AGENT=1
+            ;;
+        ?)
+            _printhelp "$0"
+            exit 1
+            ;;
+        :)
+            echo "Missing argument."
+            echo "Use $0 -h for help."
+            exit 1
+            ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+if [ $# -eq 0 ]; then
+    echo "Missing argument."
+    echo "Use $0 -h for help."
+    exit 1
+fi
+
+if [ $DL_AGENT -eq 0 ]; then
+    if [ ! -f /usr/bin/abs ]; then
+        echo "ABS needs to be installed."
+        exit
+    fi
+
+    [ ! -d "/var/abs" ] && sudo abs
+    for i; do
+        eval "$CP_AGENT" /var/abs/*/$i .
+    done
+    exit 0
+fi
+
+if [ $DL_AGENT -eq 1 ]; then
+    if [ ! -f /usr/bin/yaourt ]; then
+        echo "Yaourt needs to be installed."
+        exit
+    fi
+    yaourt -G "$@"
+    exit 0
+fi

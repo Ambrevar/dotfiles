@@ -4,7 +4,7 @@
 ## Date 2012-12-05
 ################################################################################
 
-## Colored man pager. 
+## Colored man pager.
 man()
 {
 	env \
@@ -59,7 +59,7 @@ renamelower()
 	        */*) dirname="${file%/*}" ;;
 	        *) dirname="." ;;
         esac
-        
+
         local nf=$(echo $filename | tr A-Z a-z)
         local newname="${dirname}/${nf}"
         if [ "$nf" != "$filename" ]; then
@@ -82,7 +82,7 @@ renameswap()
 
 ## Network operations
 if [ -n  "$(command -v nmap)" ]; then
-    network-map() 
+    network-map()
     {
         echo "$1"
         for SCANIP in $( nmap -sL "$1" | grep -i "\([[:digit:]]\+\.\)\{3,\}[[:digit:]]\+" | awk '{print $5}' ); do
@@ -123,7 +123,7 @@ netspeed ()
 ##   cpu  158150 0 52354 18562746 1472 0 10198 0 0 0
 ##
 ## The meanings of the columns are as follows, from left to right:
-## 
+##
 ##   user: normal processes executing in user mode
 ##   nice: niced processes executing in user mode
 ##   system: processes executing in kernel mode
@@ -232,7 +232,7 @@ EOF
         echo "Missing arguments."
         _printhelp $0
         return
-    fi 
+    fi
 
     for i; do
         sed -i \
@@ -309,7 +309,7 @@ EOF
         echo "Wrong number of arguments."
         _printhelp $0
         return
-    fi 
+    fi
 
     local FILE="$1"
     local STRING=""
@@ -327,7 +327,7 @@ EOF
         echo "$DUMMY" >> "$FILE"
         echo "Secret appended to ${FILE} at the end."
         return
-    fi 
+    fi
 
 
     if [ $# -eq 1 ]; then
@@ -399,13 +399,13 @@ every highlight's theme.  Press ENTER to display next preview. Press anything
 else then ENTER to quit.
 EOF
         }
-        
+
         if [ $# -gt 0 ]; then
             _printhelp "$0"
             return
         fi
 
-        local SAMPLE="$(cat <<EOF 
+        local SAMPLE="$(cat <<EOF
 void function(char* pointer, int &ref)
 {
   int integer=3;
@@ -423,18 +423,18 @@ EOF
         unset DUMMY
         for i in $(highlight -w | grep -v "\s\|^$"); do
             echo "******************** $i ********************"
-            highlight -S c -O xterm256 <(echo "$SAMPLE") -s "$i" 
+            highlight -S c -O xterm256 <(echo "$SAMPLE") -s "$i"
             read DUMMY
             if [ -n "$DUMMY" ]; then
                 return
-            fi 
+            fi
         done
     }
 fi
 
 ## Extractor -- Useless when using 'atool'.
 if [ ! -n "$(command -v atool)" ]; then
-    extract () 
+    extract ()
     {
 	    if [ -f $1 ] ; then
 	        case $1 in
@@ -543,7 +543,7 @@ EOF
             v)
                 OPTION_VCS="--exclude-vcs"
                 ;;
-            ?) 
+            ?)
                 _printhelp "$0"
                 return 1
                 ;;
@@ -605,7 +605,7 @@ EOF
             done
 
             tar -${ARCOPT} -cf "$ARCNAME" ${FILELIST[*]} ${OPTION_VCS}
-        fi 
+        fi
     fi
 }
 
@@ -663,7 +663,7 @@ vcsclean()
     else
 	    WORKDIR="$1"
     fi
-    
+
     local CHOICE
     unset CHOICE
     echo "This will clean current folder from all VCS control files."
@@ -690,7 +690,7 @@ vcsclean()
 	            -name ".hg" -o \
 	            -name ".svn" \) \
                 -delete
-                
+
                 echo "VCS files cleaned."
     fi
 }
@@ -699,7 +699,7 @@ vcsclean()
 lsofstat()
 {
     local LSOFOUT=$(lsof|awk '{print $1}')
-    
+
     for i in $(echo $LSOFOUT |sort -u);do
         echo -n "$i "
         echo $LSOFOUT | grep ^$i | wc -l
@@ -750,7 +750,7 @@ bindatasearch()
     ## functions upon the result of find.  Since everything MUST be between
     ## simple quotes, we cannot use external variables directly. So we pass the
     ## $SOURCE variable as argument. The underscore at the end allows the use of
-    ## arguments. Note it will not work 
+    ## arguments. Note it will not work
 #     find "$TARGET" -type f -exec sh -c '
 #           # FILEDUMP=$(od -tx8 "$1" | awk '"'"'($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }'"'"')
 #           # grep -q "$2" <(echo $FILEDUMP)
@@ -836,7 +836,7 @@ ltx()
     PREAMBLE='\documentclass[10pt,a4paper]{article}\usepackage[utf8]{inputenc}\usepackage[T1]{fontenc}\usepackage{amsmath,amssymb,amsfonts}\usepackage{geometry}\usepackage{lmodern}\usepackage{marvosym}\usepackage{textcomp}\DeclareUnicodeCharacter{20AC}{\EUR{}}\DeclareUnicodeCharacter{2264}{\leqslant}\DeclareUnicodeCharacter{2265}{\geqslant}\begin{document}\input'
 
     END='\end{document}'
-    
+
     pdflatex -file-line-error-style -interaction nonstopmode -jobname="${1%.tex}" "$PREAMBLE" "$1" "$END"
 }
 
@@ -904,13 +904,43 @@ pgex ()
 ## Pacman functions
 ##==============================================================================
 
-[ -n "$(command -v pacman)" ] && . "${SHELL_DIR}/funs_pacman"
+if [ -n "$(command -v pacman)" ]; then
+    ## Get detailed file list for the specified packages, omitting folders.
+    pql ()
+    {
+        pacman -Ql "$@" | grep -v "/$"
+    }
+fi
 
 ##==============================================================================
 ## FreeBSD functions
 ##==============================================================================
 
-[ "$(uname)" = FreeBSD ] && . "${SHELL_DIR}/funs_freebsd"
+if [ "$(uname)" = FreeBSD ]; then
+    ## TODO: useless ?
+    # mqs()
+    # {
+    #     local str="$(echo "$@" | sed -E 's/[ \t]+/\\|/g')"
+    #     (cd /usr/ports && make quicksearch name="$str")
+    # }
+
+    port-list()
+    {
+        pkg_info | cut -f1 -d' '
+    }
+
+    port-size()
+    {
+        pkg_info -Qsb "$@" | sed 's/\([^:]*\):\(.*\)/\2 KiB	\1/g'
+    }
+
+    mcd()
+    {
+        local DEST=$(pkg_search -r "$@" | head -n1 | awk '{print $2}')
+        cd "$DEST"
+    }
+
+fi
 
 ##==============================================================================
 ## TeXlive functions
@@ -926,12 +956,12 @@ if [ -d "/usr/local/texlive" ]; then
 
     tli ()
     {
-        sudo sh -c 'umask 022 && tlmgr install $0 $@' "$@" 
+        sudo sh -c 'umask 022 && tlmgr install $0 $@' "$@"
     }
 
     tlr ()
     {
-        sudo sh -c 'umask 022 && tlmgr remove $0 $@' "$@" 
+        sudo sh -c 'umask 022 && tlmgr remove $0 $@' "$@"
     }
 fi
 
