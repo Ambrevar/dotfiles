@@ -1,0 +1,380 @@
+#!/bin/sh
+
+if [ -z "$(command -v ffmpeg)" ]; then
+    echo "ffmpeg required."
+    exit
+fi
+
+if [ ! -f "${0%/*}/titlecase.awk" ]; then
+    echo "AWK titlecase script required."
+    exit
+fi
+
+################################################################################
+## User options
+################################################################################
+
+## For the sake of simplicity we convert everything to OGG.
+## You can easily set output folder to current folder with TC_AUDIO_DEST=".".
+TC_AUDIO_DEST="/media/data1/Musics/"
+
+## OGG quality ranges from -1 to 10.
+## -q-1 45 kbit/s
+## -q0  64 kbit/s
+## -q1  80 kbit/s
+## -q2  96 kbit/s
+## -q3  112 kbit/s
+## -q4  128 kbit/s
+## -q5  160 kbit/s
+## -q6  192 kbit/s
+## -q7  224 kbit/s
+## -q8  256 kbit/s
+## -q9  320 kbit/s
+## -q10 500 kbit/s
+
+## Artists: we use same value for artist and album_artist.
+## Genres: since this is not universal by nature, we do not put a genre in tags.
+## Composer: not universal neither, we prefer ARTIST over COMPOSER, so COMPOSER will be empty.
+
+################################################################################
+## End of user options
+################################################################################
+
+## This function is supposed to work on a per-album basis. Folders will not be
+## accepted as argument. This function will work best if all tracks of a folder
+## belong to the same album. Theres is no way to handle covers raliably, so you
+## should leave the only covers you want to keep in the working folder.
+
+## TODO: cover resolution check. Should be > 100x100. Above <1000x1000 should give a warning.
+## TODO: extract cover from tags if checksum does not match any from current folder.
+
+_printhelp ()
+{
+    cat <<EOF
+Usage: $1 [OPTIONS] FILE
+
+Options:
+  -p : preview (do not change file)
+  -s : skip encoding
+
+Tags:
+  -a : artist
+  -b : bitrate
+  -d : date
+  -g : genre
+  -l : album
+  -n : track number
+  -t : title
+
+You can use the following variables to refer to existing tags:
+  \$ALBUM
+  \$ALBUM_ARTIST
+  \$ARTIST
+  \$COMPOSER
+  \$DATE
+  \$TYER
+  \$GENRE
+  \$TRACK
+
+Default output folder:
+    OUTPUT="\$TC_AUDIO_DEST/\$OUTPUT_ARTIST/\${OUTPUT_ALBUM:+\${OUTPUT_DATE:+\$OUTPUT_DATE - }\$OUTPUT_ALBUM/}"
+
+Default output file:
+    OUTPUT_FILE="\$OUTPUT\$OUTPUT_ARTIST - \${OUTPUT_TRACK:+\$OUTPUT_TRACK - }\$OUTPUT_TITLE.\$OUTPUT_FORMAT"
+
+Examples:
+
+  Set the 'artist' tag and reencode:
+    $1 -a 'Franz Lizst' file.mp3
+
+  Set 'artist' to be 'composer', and 'title' to be preceeded by 'artist', do not reencode:
+    $1 -s -a '\$COMPOSER' -t '\$ARTIST - \$TITLE' file.ogg
+
+IMPORTANT: you *must* use single quotes when using variables.
+
+EOF
+}
+
+## OPTIONS
+SKIP=0
+
+PREVIEW=0
+
+## TAGS
+OUTPUT_ALBUM='$ALBUM'
+OUTPUT_ARTIST='$ARTIST'
+OUTPUT_DATE='$DATE'
+OUTPUT_GENRE='$GENRE'
+OUTPUT_TITLE='$TITLE'
+OUTPUT_TRACK='$TRACK'
+
+## PROPERTIES
+OUTPUT_BITRATE=0
+
+## Non-cli-option data. Modifying these imply modifications in code below.
+OUTPUT_FORMAT="ogg"
+OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
+
+## These ones are not cli-options either, but this could be easily changed.
+OUTPUT='$TC_AUDIO_DEST/$OUTPUT_ARTIST/${OUTPUT_ALBUM:+${OUTPUT_DATE:+$OUTPUT_DATE - }$OUTPUT_ALBUM/}'
+OUTPUT_FILE='$OUTPUT$OUTPUT_ARTIST - ${OUTPUT_PADDEDTRACK:+$OUTPUT_PADDEDTRACK - }$OUTPUT_TITLE'
+
+while getopts ":a:b:d:g:l:n:t:hps" opt; do
+    case $opt in
+
+        a) OUTPUT_ARTIST=$OPTARG ;;
+        b) OUTPUT_BITRATE=$OPTARG ;;
+        d) OUTPUT_DATE=$OPTARG ;;
+        g) OUTPUT_GENRE=$OPTARG ;;
+        l) OUTPUT_ALBUM=$OPTARG ;;
+        n) OUTPUT_TRACK=$OPTARG ;;
+        t) OUTPUT_TITLE=$OPTARG ;;
+
+        h)
+            _printhelp "$0"
+            exit 1
+            ;;
+        p)
+            PREVIEW=1
+            ;;
+
+        s)
+            SKIP=1
+            ;;
+
+        ?)
+            _printhelp "$0"
+            exit 1
+            ;;
+        :)
+            echo "Missing argument."
+            echo "Use $0 -h for help."
+            exit 1
+            ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+if [ $# -eq 0 ]; then
+    _printhelp "$0"
+    exit
+fi
+
+##================================================================================
+## Get metadata.
+STREAM=$(ffmpeg -i "$1" 2>&1)
+METADATA=$(echo "$STREAM" | sed -n '/Metadata/ ! d; /Metada/{b cont}; :cont ; {n;p;b cont}')
+STREAM=$(echo "$STREAM" | grep "Stream")
+
+if [ -z "$STREAM" ]; then
+    echo "Non-audio file."
+    exit
+fi
+
+## We get format from extension, because codec is not reliable either.
+FORMAT="${1##*.}"
+## CODEC is unused for now.
+CODEC=$(echo "$STREAM" | sed -n '/Audio:/ {s/.*Audio: \([^,]*\),.*/\1/;p}')
+BITRATE=$(echo "$STREAM" | sed -n '/kb\/s/ {s/.*, \(.*\) kb\/s/\1/;p}')
+
+if [ -z "$FORMAT" ]; then
+    echo "ERROR: non-audio file."
+    exit
+fi
+
+_metadata_filter()
+{
+    echo "$METADATA" | grep -i "\<$1\>" | sed 's/[^:]* : //g'
+}
+
+TITLE=$(_metadata_filter "title")
+ARTIST=$(_metadata_filter "artist")
+ALBUM=$(_metadata_filter "album")
+ALBUM_ARTIST=$(_metadata_filter "album_artist")
+COMPOSER=$(_metadata_filter "composer")
+DISC=$(_metadata_filter "disc")
+GENRE=$(_metadata_filter "genre")
+
+TRACK=$(_metadata_filter "track")
+DATE=$(_metadata_filter "date")
+TYER=$(_metadata_filter "TYER")
+
+##================================================================================
+## OUTPUT variables.
+
+## We use the AWK script to set title case. The script contains
+## exceptions that can be configured.  We fix some chars with sed.
+# ’ => '
+# : => -
+# / => -
+_string_cleanser()
+{
+    echo "$@" | awk -f "${0%/*}/titlecase.awk" \
+        | sed -n  -e "s/’/'/g ; s/ *: */ - /g ; s| */ *| - |g; p; q"
+}
+
+OUTPUT_TITLE=$(eval _string_cleanser $OUTPUT_TITLE)
+OUTPUT_TITLE="${OUTPUT_TITLE:-Unknown Title}"
+
+## We use album artist if artist is empty.
+OUTPUT_ARTIST=$(eval _string_cleanser $OUTPUT_ARTIST)
+[ -z "$OUTPUT_ARTIST" ] && [ -n "$ALBUM_ARTIST" ] && OUTPUT_ARTIST="$ALBUM_ARTIST"
+OUTPUT_ARTIST="${OUTPUT_ARTIST:-Unknown Artist}"
+
+OUTPUT_ALBUM=$(eval _string_cleanser $OUTPUT_ALBUM)
+[ -z "$OUTPUT_ALBUM" ] && echo "${#OUTPUT_ALBUM}${OUTPUT_ALBUM}"
+
+## We put genre in lower case and underscore to ease matching.  If it
+## matches, we use the Title Case match. If it does not, we set it to empty.
+OUTPUT_GENRE=$(eval _string_cleanser $OUTPUT_GENRE | tr '[:upper:] ' '[:lower:]_')
+case $OUTPUT_GENRE in
+    ost) OUTPUT_GENRE="Soundtrack" ;;
+    soundtrack) OUTPUT_GENRE="Soundtrack";;
+    original_soundtrack) OUTPUT_GENRE="Soundtrack";;
+    classical) OUTPUT_GENRE="Classical";;
+    classics) OUTPUT_GENRE="Classical";;
+    classic) OUTPUT_GENRE="Classical";;
+    *) OUTPUT_GENRE="";;
+esac
+
+## We remove the track count if any, we suppress leading zeros.
+OUTPUT_TRACK=$(eval _string_cleanser $OUTPUT_TRACK | sed -e 's/^0*//' -e 's|/.*||')
+
+## If DATE is not a year, we use TYER if it is a year.
+OUTPUT_DATE=$(eval _string_cleanser $OUTPUT_DATE)
+TYER_REG=$(echo "$TYER" | sed -n 's/.*\([[:digit:]]\{4\}\).*/\1/p')
+if [ ${#DATE} -ne 4 ] && [ ${#TYER_REG} -eq 4 ]; then
+    OUTPUT_DATE="$TYER_REG"
+fi
+
+## QUALITY
+## If bitrate argumument is not provided, we use BITRATE value.
+[ $OUTPUT_BITRATE -eq 0 ] && OUTPUT_BITRATE=${BITRATE}
+## TODO: test if table is useful at all.
+# if [ $OUTPUT_BITRATE -eq 0 ]; then
+#     [ $BITRATE -le 45 ]  && OUTPUT_BITRATE=45k
+#     [ $BITRATE -gt 45 ]  && OUTPUT_BITRATE=64k
+#     [ $BITRATE -gt 64 ]  && OUTPUT_BITRATE=80k
+#     [ $BITRATE -gt 80 ]  && OUTPUT_BITRATE=96k
+#     [ $BITRATE -gt 96 ]  && OUTPUT_BITRATE=112k
+#     [ $BITRATE -gt 112 ] && OUTPUT_BITRATE=128k
+#     [ $BITRATE -gt 128 ] && OUTPUT_BITRATE=160k
+#     [ $BITRATE -gt 160 ] && OUTPUT_BITRATE=192k
+#     [ $BITRATE -gt 192 ] && OUTPUT_BITRATE=224k
+#     [ $BITRATE -gt 224 ] && OUTPUT_BITRATE=256k
+#     [ $BITRATE -gt 256 ] && OUTPUT_BITRATE=320k
+#     [ $BITRATE -gt 320 ] && OUTPUT_BITRATE=500k
+# fi
+
+## Only reencode if not in OGG and if SKIP not set.
+OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
+[ $SKIP -ne 0 ] && OGG_PARAM="-c:a copy" && OUTPUT_FORMAT="$FORMAT"
+[ "$FORMAT" = "ogg" ] && OGG_PARAM="-c:a copy"
+
+## Make sure track number has two digits for file name only.
+OUTPUT_PADDEDTRACK
+OUTPUT_PADDEDTRACK=$OUTPUT_TRACK
+if [ -n "$OUTPUT_PADDEDTRACK" ]; then
+    [ ${OUTPUT_PADDEDTRACK} -lt 10 ] && OUTPUT_PADDEDTRACK="0$OUTPUT_PADDEDTRACK"
+fi
+
+OUTPUT=$(eval echo $OUTPUT)
+OUTPUT_FILE=$(eval echo $OUTPUT_FILE)
+
+## IF file exist, we append a uniq timestamp to the name.
+[ -e "${OUTPUT_FILE}.$OUTPUT_FORMAT" ] && OUTPUT_FILE="$OUTPUT_FILE-$(date '+%F-%H%M%S')"
+
+##==============================================================================
+## PREVIEW
+
+echo "==> BEFORE"
+echo "ALBUM          [$ALBUM]"
+echo "ALBUM_ARTIST   [$ALBUM_ARTIST]"
+echo "ARTIST         [$ARTIST]"
+echo "BITRATE        [$BITRATE]"
+echo "COMPOSER       [$COMPOSER]"
+echo "DATE           [$DATE]"
+echo "DISC           [$DISC]"
+echo "FORMAT         [$FORMAT]"
+echo "GENRE          [$GENRE]"
+echo "TITLE          [$TITLE]"
+echo "TRACK          [$TRACK]"
+echo "TYER           [$TYER]"
+echo
+echo "==> AFTER"
+echo "ALBUM          [$OUTPUT_ALBUM]"
+echo "ARTIST         [$OUTPUT_ARTIST]"
+echo "BITRATE        [$OUTPUT_BITRATE]"
+echo "DATE           [$OUTPUT_DATE]"
+echo "FORMAT         [$OUTPUT_FORMAT]"
+echo "GENRE          [$OUTPUT_GENRE]"
+echo "TITLE          [$OUTPUT_TITLE]"
+echo "TRACK          [$OUTPUT_TRACK]"
+echo
+echo "==> OUTPUT"
+echo "[$OUTPUT_FILE.$OUTPUT_FORMAT]"
+# echo "[$OGG_PARAM]"
+echo
+
+[ $PREVIEW -ne 0 ] && exit
+
+##==============================================================================
+## RUN PROCESS
+
+## Make sure directory exists.
+mkdir -p "$OUTPUT"
+if [ $? -ne 0 ]; then
+    echo "ERROR: could not create output folder"
+    exit
+fi
+
+## COVER
+## We copy cover only if it does not already exist.
+while read -r i; do
+    OUTPUT_COVER="$OUTPUT/${OUTPUT_ALBUM:+$OUTPUT_ALBUM - }Cover"
+    OUTPUT_COVERFILE="$OUTPUT_COVER.${i##*.}"
+    COVER_COUNTER=1
+
+    ## Same cover is already in target folder.
+    if [ -e "$OUTPUT_COVERFILE" ] && \
+        [ "$(sha1sum $OUTPUT_COVERFILE | cut -f1 -d' ')" = "$(sha1sum $i | cut -f1 -d' ')" ]; then
+        continue
+    fi
+
+    ## Different cover with same name is in target folder. We append a number.
+    while [ -e "$OUTPUT_COVERFILE" ] && \
+        [ ! "$(sha1sum $OUTPUT_COVERFILE | cut -f1 -d' ')" = "$(sha1sum $i | cut -f1 -d' ')" ]; do
+        OUTPUT_COVERFILE="${OUTPUT_COVER} $COVER_COUNTER.${i##*.}"
+        COVER_COUNTER=$(($COVER_COUNTER+1))
+    done
+
+    echo "==> COVER"
+    cp -nv "$i" "$OUTPUT_COVERFILE"
+    echo
+done <<EOF
+$(find "."  \( -iname '*.png' -o -iname '*.jpg' \) )
+EOF
+
+## Zsh compatibility. We need it otherwise word splitting of parameter like
+## OGG_PARAM will not work.
+STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
+[ "$STATUS" = "off" ] && set -o shwordsplit
+
+## TAG/RECODE
+ffmpeg -i "$1" $OGG_PARAM \
+    -metadata title="$OUTPUT_TITLE" \
+    -metadata artist="$OUTPUT_ARTIST" \
+    -metadata track="$OUTPUT_TRACK" \
+    -metadata date="$OUTPUT_DATE" \
+    -metadata album="$OUTPUT_ALBUM" \
+    -metadata album_artist="$OUTPUT_ARTIST" \
+    -metadata genre="$OUTPUT_GENRE" \
+    -metadata composer="" \
+    -metadata TYER="" \
+    -metadata disc="" \
+    "$OUTPUT_FILE.$OUTPUT_FORMAT"
+
+## Restore Zsh previous options. This will not turn off shwordsplit if it
+## was on before calling the function.
+[ "$STATUS" = "off" ] && set +o shwordsplit
+

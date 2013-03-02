@@ -1,0 +1,32 @@
+#!/bin/sh
+
+if [ -z "$(command -v mediainfo)" ]; then
+    echo "mediainfo required."
+    exit
+fi
+
+## This will check for badly encoded audio.
+while read -r i; do
+    BUFFER="$(mediainfo "$i")"
+    if [ -n "$(echo "$BUFFER" | grep "Bit rate mode *: Constant")" ]; then
+        echo "$i : CBR"
+    fi
+
+    if [ -n "$(echo "$BUFFER" | grep "Cover *: Yes")" ]; then
+        echo "$i : Cover"
+    fi
+
+    if [ -n "$(echo "$BUFFER" | grep "Track name/Position *: 0+")" ]; then
+        echo "$i : Leading zeros"
+    fi
+done <<EOF
+$(find "."  \( \
+        -iname '*.mp3'  -o \
+        -iname '*.flac' -o \
+        -iname '*.wv'   -o \
+        -iname '*.aac'  -o \
+        -iname '*.wav'  -o \
+        -iname '*.ape'  -o \
+        -iname '*.mpc' \) )
+EOF
+

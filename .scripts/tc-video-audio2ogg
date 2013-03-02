@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if [ -z "$(command -v ffmpeg)" ]; then
+    echo "ffmpeg required."
+    exit
+fi
+
+if [ $# -ne 1 ]; then
+    echo "Usage: ${0##*/} VIDEO"
+fi
+
+## TODO: getopt support for audio quality.
+TC_VIDEO_AUDIO_QUAL=192k
+
+echo "================================================================================"
+ffmpeg -i "$1" -vn -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL "${1%.*}-$(date '+%F-%H%M%S').ogg"

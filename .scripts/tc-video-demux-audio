@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ -z "$(command -v ffmpeg)" ]; then
+    echo "ffmpeg required."
+    exit
+fi
+
+if [ $# -ne 2 ]; then
+    echo "Usage: ${0##*/} VIDEO AUDIO_OUTPUT"
+fi
+
+ffmpeg -i "$1" -vn -sn -c:a copy -map 0:1 "$2"

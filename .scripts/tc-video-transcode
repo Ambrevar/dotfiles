@@ -1,0 +1,158 @@
+#!/bin/sh
+
+################################################################################
+## User options
+################################################################################
+
+## To check what fmmpeg supports:
+# ffmpeg -codecs
+# ffmpeg -formats
+
+## Useful guides
+## x264: http://ffmpeg.org/trac/ffmpeg/wiki/x264EncodingGuide
+## ID3 details: http://en.wikipedia.org/wiki/ID3
+
+TC_VIDEO_AUDIO_QUAL=192k
+
+## quality*size ~= 1/speed
+# ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo
+TC_VIDEO_PRESET=slow
+
+## Overall quality. Logarithmic scale.
+# 18 is near perfection.
+# 22 is really good compression, while a bit more blurry than the original.
+# 20 is a good compromise.
+TC_VIDEO_QUAL=20
+
+## x264 tuning (presets).
+## Possible values: film, animation, grain, ...
+## See x264 --fullhelp.
+## No tuning by default.
+# TC_VIDEO_TUNE="-tune film"
+TC_VIDEO_TUNE=""
+
+## x264 options.
+## Possible values: hex, umh...
+## me=umh is default.
+# TC_VIDEO_OPTS="-x264opts me=hex"
+TC_VIDEO_OPTS=""
+
+################################################################################
+## End of user options
+################################################################################
+
+## TODO: audio quality. Copy if AAC or OGG <320k.
+## TODO: chapters support. Already OK?
+## TODO: crop options.
+## TODO: custom mapping.
+## TODO: handle srt encoding.
+## TODO: option to replace original file.
+## TODO: workout -threads option.
+## TODO: separate functions:
+##   tc_video_batch
+##   tc_video_transcode
+
+if [ -z "$(command -v ffmpeg)" ]; then
+    echo "ffmpeg required."
+    exit
+fi
+
+_printhelp()
+{
+    cat <<EOF
+Usage: $1 [OPTIONS] FILES|FOLDERS
+
+Transcode FILES or files found in FOLDERS to .mkv with x264 and ogg. Output
+files are the same as the original, with time appended. You can customize
+encoding with the TC_* variables.
+
+  -f:  Overwrite existing file if any.
+  -h:  Display this help.
+  -s:  Sample of ten minutes.
+EOF
+}
+
+## What to do if file exists:
+# -y overwrite
+# -n do not overwrite.
+TC_OVERWRITE="-n"
+
+TC_SAMPLE=""
+
+while getopts ":fhs" opt; do
+    case $opt in
+        f)
+            TC_OVERWRITE="-y"
+            ;;
+        h)
+            _printhelp "$0"
+            exit 1
+            ;;
+        s)
+            TC_SAMPLE="-ss 60 -t 600"
+            ;;
+        ?)
+            _printhelp "$0"
+            exit 1
+            ;;
+        :)
+            echo "Missing argument."
+            echo "Use $0 -h for help."
+            exit 1
+            ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+
+if [ $# -eq 0 ]; then
+    tc_transcode .
+    exit
+fi
+
+## Zsh compatibility. We need it otherwise word splitting of parameter like
+## TC_SAMPLE will not work.
+STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
+[ "$STATUS" = "off" ] && set -o shwordsplit
+
+_tc_transcode()
+{
+    echo "================================================================================"
+    ffmpeg $TC_OVERWRITE $TC_SAMPLE -i "$1" \
+        -c:v libx264 -preset $TC_VIDEO_PRESET -crf $TC_VIDEO_QUAL $TC_VIDEO_TUNE $TC_VIDEO_OPTS \
+        -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL \
+        -c:s copy \
+        -map 0 "${1%.*}-$(date '+%F-%H%M%S').mkv"
+}
+
+for i in "$@"; do
+
+    ## Argument is a folder. We search for all video files in there.
+    if [ -d "$i" ]; then
+
+        ## TODO: provide max-depth as option.
+        while read -r j; do
+            _tc_transcode $j
+        done <<EOF
+$(find "$i"  \( \
+ -iname '*.mkv' -o \
+ -iname '*.mp4' -o \
+ -iname '*.avi' -o \
+ -iname '*.webm' -o \
+ -iname '*.flv' -o \
+ -iname '*.wmv' -o \
+ -iname '*.mpg' \) )
+EOF
+
+        ## Argument is a regular file.
+    else
+        _tc_transcode "$i"
+    fi
+
+done
+
+## Restore Zsh previous options. This will not turn off shwordsplit if it
+## was on before calling the function.
+[ "$STATUS" = "off" ] && set +o shwordsplit
+

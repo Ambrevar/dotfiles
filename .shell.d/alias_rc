@@ -4,10 +4,6 @@
 ## Date 2013-01-04
 ################################################################################
 
-##==============================================================================
-## General
-##==============================================================================
-
 ## Warning: if this does not work if you change shell without relogging, use
 ## 'source .<shell>rc' instead.
 
@@ -21,6 +17,7 @@ if [ "zsh" = "$SHELL_CURRENT" ]; then
 fi
 
 ##==============================================================================
+## General
 ##==============================================================================
 
 ## 'ls' redefinition
@@ -95,15 +92,6 @@ alias xmorphzi='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ")
 alias xres='xrandr -s $(xrandr | awk '"'"'/^ / {print $1;exit}'"'"')'
 
 ##==============================================================================
-## Emacs
-##==============================================================================
-# See .homeinit
-if [ -f /bin/em ]; then
-   alias ema='emacs -q -l ~/.emacs-light'
-   alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
-fi
-
-##==============================================================================
 ## Zsh power aliases
 ##==============================================================================
 
@@ -118,14 +106,70 @@ fi
 # fi
 
 ##==============================================================================
+## Emacs
+##==============================================================================
+# See .homeinit
+if [ -f /bin/em ]; then
+   alias ema='emacs -q -l ~/.emacs-light'
+   alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
+fi
+
+##==============================================================================
 ## Pacman aliases
 ##==============================================================================
-[ -e "/usr/bin/pacman" ] && . ~/.shell.d/alias_pacman
+if [ -e "/usr/bin/pacman" ]; then
+    PACMAN_FRONTEND='pacman'
+
+    ## Use of pacman-color
+    if [ -e "/usr/bin/pacman-color" ]; then
+        PACMAN_FRONTEND='pacman-color'
+
+        if [ "zsh" = "$SHELL_CURRENT" ]; then
+            compdef _pacman pacman-color
+        elif [ "bash" = "$SHELL_CURRENT" ]; then
+            complete -o default -o nospace -F _pacman pacman-color
+        fi
+
+        ## The eval trick lets us define the alias after the variable has been expanded.
+        ## Bash will not auto-complete aliases.
+        eval 'alias pc="sudo $PACMAN_FRONTEND -Sc"'
+        eval 'alias pi="sudo $PACMAN_FRONTEND -S --needed"'
+        eval 'alias pqi="$PACMAN_FRONTEND -Qi"'
+        eval 'alias pqo="$PACMAN_FRONTEND -Qo"'
+        eval 'alias pqs="$PACMAN_FRONTEND -Qs"'
+        eval 'alias pr="sudo $PACMAN_FRONTEND -Rs"'
+        eval 'alias psi="$PACMAN_FRONTEND -Si"'
+        eval 'alias pss="$PACMAN_FRONTEND -Ss"'
+        eval 'alias pu="sudo $PACMAN_FRONTEND -Syu"'
+    fi
+fi
 
 ##==============================================================================
 ## FreeBSD aliases
 ##==============================================================================
-[ "$(uname)" = "FreeBSD" ] && . ~/.shell.d/alias_freebsd
+if [ "$(uname)" = "FreeBSD" ]; then
+    alias pa='sudo pkg_add -r'
+    # alias pd='sudo pkg_delete'
+    alias pd='sudo pkg_deinstall -cd'
+    alias pi='pkg_info -RrcdsD -l "::"'
+    alias pil='pkg_info -L'
+
+    ## Origin of file
+    alias piw='pkg_info -W'
+
+    ## Search
+    alias pis='pkg_info -Qox'
+    # alias pvs='pkg_version -Is'
+    alias psr='pkg_search -r'
+
+    ## Out-of-date packages.
+    alias pv='pkg_version -Il "<"'
+
+    ## Port tree
+    alias mi='sudo make install'
+    alias mid='sudo make install distclean'
+    alias mc='sudo make config'
+fi
 
 ##==============================================================================
 ## TeXlive aliases

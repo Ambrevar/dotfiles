@@ -1,0 +1,10 @@
+#!/bin/sh
+
+while read -r i; do
+    echo -n "# "
+    file "$i"
+    grep -m1 "\`" "$i"
+    grep -m1 "oe" "$i"
+done <<EOF
+$(find . -type f -size -50M -print)
+EOF

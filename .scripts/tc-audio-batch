@@ -1,0 +1,31 @@
+#!/bin/sh
+
+if [ -z "$(command -v ffmpeg)" ]; then
+    echo "ffmpeg required."
+    exit
+fi
+
+if [ ! -f "$HOME/.shell.d/titlecase.awk" ]; then
+    echo "AWK titlecase script required."
+    exit
+fi
+
+if [ ! -f "${0%/*}/tc-audio-transcode" ]; then
+    echo "tc-audio-transcode script required."
+    exit
+fi
+
+## This will convert all tracks in current folder and subfolders.
+while read -r i; do
+    "${0%/*}/tc_audio_transcode" "$@" $i
+done <<EOF
+$(find "."  \( \
+        -iname '*.mp3'  -o \
+        -iname '*.flac' -o \
+        -iname '*.wv'   -o \
+        -iname '*.aac'  -o \
+        -iname '*.wav'  -o \
+        -iname '*.ape'  -o \
+        -iname '*.mpc' \) )
+EOF
+
