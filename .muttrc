@@ -8,7 +8,6 @@
 ## These folders are assumed to exist:
 ## ~/.mutt: personal stuff (contacts, account information)
 ## ~/.mutt.d: public stuff (theme, mailcap)
-## ~/.mutt.d/hcache: see header_cache below.
 
 ##------------------------------------------------------------------------------
 ## General options
@@ -28,7 +27,7 @@ alternative_order text/plain text/html
 ## Store message headers locally to speed things up.
 ## Gentoo wiki says that if a folder is specified, it is even faster.
 ## If no folder exists, the cache will be a single file.
-set header_cache = "~/.mutt.d/hcache"
+set header_cache = "~/.cache/mutt"
 
 ## Allow mutt to open new imap connection automatically.
 unset imap_passive
@@ -131,8 +130,13 @@ source $alias_file
 ## Keys
 ##------------------------------------------------------------------------------
 
-# Remap bounce-message function to "B"
+## Remap bounce-message function to "B"
 bind index B bounce-message
+
+## Fix the 'change-dir' issue with multiple accounts. When change-dir was called
+## with account A, then use switched to account B, change-dir will still point
+## to account A by default.
+macro index 'c' '<change-folder>?<change-dir><home>^K=<enter>'
 
 ## Manual fetch.
 bind index "^" imap-fetch-mail
