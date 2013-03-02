@@ -1,0 +1,35 @@
+# -*- mode:sh -*-
+## Mutt -- Personal account
+set imap_user=user@gmail.com 
+set imap_pass=$my_pw_personal
+set from=user@gmail.com
+set hostname="gmail.com"
+
+set folder = imaps://user@imap.gmail.com/
+set spoolfile = +INBOX
+set postponed = +[Google Mail]/Drafts
+unset record ## Google does it automatically, so we do not want duplicates.
+
+## Send options.
+set realname='User X'
+set smtp_url=smtps://user:$imap_pass@smtp.gmail.com
+set ssl_force_tls = yes
+unset ssl_starttls
+
+## Signatures
+## Note that fortune-mod must be installed to use fortune command.
+set signature="cat ~/.mutt/real_name && cat ~/.mutt/asciiribbon && fortune -s|"
+
+## Sidebar mailboxes separator workaround.
+mailboxes "+A-- User -----------"
+
+## Hooks
+account-hook $folder "set imap_user=user@gmail.com imap_pass=$my_pw_personal"
+
+## Gmail-specific macros
+## Prevent Gmail from deleting to 'All Mail', move it to Trash instead.
+# macro index d ";s+[Google Mail]/Trash<enter><enter>" "Move to Gmail's Trash"
+# macro pager d "s+[Google Mail]/Trash<enter><enter>" "Move to Gmail's Trash"
+## undelete messages
+# macro index u ";s+INBOX<enter><enter>" "Move to Gmail's INBOX"
+# macro pager u "s+INBOX<enter><enter>" "Move to Gmail's INBOX"
