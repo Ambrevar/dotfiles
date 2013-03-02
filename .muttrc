@@ -1,22 +1,22 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Mutt Configuration
-## Date 2013-01-09
+## Date 2013-03-02
 ################################################################################
 
 ## Note on folders:
 ## These folders are assumed to exist:
 ## ~/.mutt: personal stuff (contacts, account information)
-## ~/.mutt.d: public stuff (cache, theme, mailcap)
+## ~/.mutt.d: public stuff (theme, mailcap)
 ## ~/.mutt.d/hcache: see header_cache below.
 
-##-------------------------------------------------------------------------------
+##------------------------------------------------------------------------------
 ## General options
-##-------------------------------------------------------------------------------
+##------------------------------------------------------------------------------
 
 ## Seems like $EDITOR is internal to Mutt, whereas variable set between
-## backquotes are external. Mutt will use env EDITOR variable, so we do not
-## really need to set it.
+## backquotes are external. By default Mutt will use env EDITOR variable, so we
+## do not really need to set it.
 # set editor=`echo \$EDITOR`
 # set editor="emacsclient -a \"\" -t"
 
@@ -54,9 +54,15 @@ set edit_headers=yes
 ## Encoding
 set send_charset="us-ascii:utf-8"
 
-##-------------------------------------------------------------------------------
+## Security issue: if enter-command is available from the GUI, it is possible to
+## see the password unencrypted. We disable it for this reason. Every command
+## that the user intends to use must be bound to a key in advance, otherwise it
+## will never be accessible.
+bind index,pager ':' noop
+
+##------------------------------------------------------------------------------
 ## Multiple accounts
-##-------------------------------------------------------------------------------
+##------------------------------------------------------------------------------
 
 set my_ac_personal=personal
 set my_ac_work=work
@@ -66,30 +72,51 @@ set my_ac_university=university
 ## Store passwords as follows in .mutt-pwds:
 ##   set my_pw_account = foo
 ##
+## CCRYPT:
+##  ccencrypt .mutt-pwds
+##
 ## GNUPG: Generate a key pair with:
 ##   gpg2 --gen-key
 ## Encrypt them with:
 ##   gpg2 -e -r <user> ".mutt-pwds"
-##
-## CCRYPT:
-##  ccencrypt .mutt-pwds
 source "ccat ~/.mutt-pwds.cpt |"
 # source "gpg2 -dq ~/.mutt-pwds.gpg |"
 
-## Accounts list
-folder-hook '$my_ac_personal' 'source ~/.mutt/$my_ac_personal'
-folder-hook '$my_ac_work' 'source ~/.mutt/$my_ac_work'
-folder-hook '$my_ac_university' 'source ~/.mutt/$my_ac_university'
-
-## Switch to default account on startup
+## Last account is default.
+source "~/.mutt/$my_ac_personal"
+folder-hook $folder 'source ~/.mutt/$my_ac_personal'
+source "~/.mutt/$my_ac_work"
+folder-hook $folder 'source ~/.mutt/$my_ac_work'
 source "~/.mutt/$my_ac_university"
-# source "~/.mutt/$my_ac_personal"
-# source "~/.mutt/$my_ac_work"
+folder-hook $folder 'source ~/.mutt/$my_ac_university'
 
-## Keys
-macro index <f2> '<sync-mailbox><enter-command>source ~/.mutt/$my_ac_personal<enter><change-folder>!<enter>'
-macro index <f3> '<sync-mailbox><enter-command>source ~/.mutt/$my_ac_work<enter><change-folder>!<enter>'
-macro index <f4> '<sync-mailbox><enter-command>source ~/.mutt/$my_ac_university<enter><change-folder>!<enter>'
+##------------------------------------------------------------------------------
+## Sidebar
+##------------------------------------------------------------------------------
+
+## TODO: fix sidebar output.
+set sidebar_visible = yes
+set sidebar_sort = yes
+set sidebar_width = 50
+# set sidebar_delim='|'
+# set sidebar_folderindent = yes
+color sidebar_new yellow default
+
+## color of folders with new mail
+color sidebar_new yellow default
+
+## ctrl-n, ctrl-p to select next, prev folder
+## ctrl-o to open selected folder
+bind index,pager \CP sidebar-prev
+bind index,pager \CN sidebar-next
+bind index,pager \CO sidebar-open
+
+## Toggle sidebar visibility
+# macro index b '<enter-command>toggle sidebar_visible<enter>'
+# macro pager b '<enter-command>toggle sidebar_visible<enter>'
+## Prevent messy output
+macro index b '<enter-command>toggle sidebar_visible<enter><refresh>'
+macro pager b '<enter-command>toggle sidebar_visible<enter><redraw-screen>'
 
 ##------------------------------------------------------------------------------
 ## Aliases
@@ -104,10 +131,13 @@ source $alias_file
 ## Keys
 ##------------------------------------------------------------------------------
 
+# Remap bounce-message function to "B"
+bind index B bounce-message
+
 ## Manual fetch.
 bind index "^" imap-fetch-mail
 
-## Fix the BackSpace bug that happens on some terminals.
+## Fix the backspace wrong binding that happens on some terminals.
 #bind index,pager  previous-page
 
 ## Fix Backspace -- Shell alternative.
@@ -161,3 +191,4 @@ source "~/.mutt.d/colorset.sh|"
 source "~/.mutt.d/colors.ambrevar"
 #source "/usr/share/doc/mutt/samples/colors.default"
 #source "/usr/share/doc/mutt/samples/colors.linux"
+
