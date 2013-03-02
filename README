@@ -1,7 +1,7 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                             Author: P. Neidhardt                             #
-#                               Date: 2013-02-22                               #
+#                               Date: 2013-03-02                               #
 ################################################################################
 
 Synopsis
@@ -28,6 +28,9 @@ Highlights
 
 * Emacs LaTeX home-made environment, dynamic compilation, custom variable
   support, SyncTeX working with Zathura, PDF compression, and much more.
+
+* Mutt Sidebar with multiple account on non-local IMAP (using Mutt's IMAP
+  client).
 
 * Awesome widgets: nice functions, like dynamic network speed (it checks for
   different interfaces), dynamic battery that will not show up if no battery is
@@ -202,7 +205,7 @@ Known issues
 ************
 
 Emacs: some colors do not work as intended. MediaWiki fails to upload pages
-after some idle time. xclip to clipboard or primary does not work.
+after some idle time.
 
 URxvt: using the paste function from Muennich's clipboard on the same terminal
 where text was copied will make xsel crash.

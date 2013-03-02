@@ -161,7 +161,17 @@
 (setq vc-follow-symlinks t)
 
 ;; Org mode config
-(add-hook 'org-mode-hook 
+(add-hook 'org-mode-hook
           (lambda () (interactive) )
-          (setq org-agenda-files '("~/task.org"))
+          (setq org-agenda-files '("~/todo.org"))
           (setq org-enforce-todo-dependencies t))
+
+;; For programming languages only, so that it does not affect buffer like
+;; calendar and so on.
+(mapcar
+ (lambda (mode-hook)
+   (add-hook
+    mode-hook
+    (lambda () (interactive)
+      (setq show-trailing-whitespace t))))
+ '(prog-mode-hook lua-mode-hook))
