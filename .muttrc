@@ -94,19 +94,19 @@ folder-hook $folder 'source ~/.mutt/$my_ac_university'
 ## Sidebar
 ##------------------------------------------------------------------------------
 
-## TODO: fix sidebar output.
 set sidebar_visible = yes
-set sidebar_sort = yes
-set sidebar_width = 50
-# set sidebar_delim='|'
+set sidebar_width = 24
+set sidebar_shortpath = yes
+# set sidebar_sort = yes
+# set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%4S"
+set sidebar_delim=' '
 # set sidebar_folderindent = yes
+
+## Color of folders with new mail
 color sidebar_new yellow default
 
-## color of folders with new mail
-color sidebar_new yellow default
-
-## ctrl-n, ctrl-p to select next, prev folder
-## ctrl-o to open selected folder
+## Ctrl-n, Ctrl-p to select next, previous folder.
+## Ctrl-o to open selected folder
 bind index,pager \CP sidebar-prev
 bind index,pager \CN sidebar-next
 bind index,pager \CO sidebar-open
