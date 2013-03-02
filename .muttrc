@@ -13,51 +13,51 @@
 ## General options
 ##------------------------------------------------------------------------------
 
+## Beep on new incoming mails.
+set beep_new = "yes"
+
+## Headers are editable in editor.
+set edit_headers=yes
+
 ## Seems like $EDITOR is internal to Mutt, whereas variable set between
 ## backquotes are external. By default Mutt will use env EDITOR variable, so we
 ## do not really need to set it.
 # set editor=`echo \$EDITOR`
 # set editor="emacsclient -a \"\" -t"
 
+## Store message headers locally to speed things up. Gentoo wiki says that if a
+## folder is specified, it is even faster. If no folder exists, the cache will
+## be a single file.
+set header_cache = "~/.cache/mutt"
+
+## Tell Mutt to check all IMAP folders. This will add all of them to the
+## sidebar. Contrary to the manu 'mailboxes' way, order cannot be controlled, so
+## you should set 'sidebar_sort' to yes. This will sort the folders
+## alphabetically, ignoring punctuation.
+set imap_check_subscribed
+
+## Keep imap connection alive by polling intermittently (time in seconds).
+set imap_keepalive = 300
+
+## Allow mutt to open new imap connection automatically.
+unset imap_passive
+
 ## Mailcap
 set mailcap_path = ~/.mutt.d/mailcap
 auto_view text/html
 alternative_order text/plain text/html
 
-## Store message headers locally to speed things up.
-## Gentoo wiki says that if a folder is specified, it is even faster.
-## If no folder exists, the cache will be a single file.
-set header_cache = "~/.cache/mutt"
-
-## Allow mutt to open new imap connection automatically.
-unset imap_passive
-
-## Keep imap connection alive by polling intermittently (time in seconds).
-set imap_keepalive = 300
-
 ## How often to check for new mail (time in seconds).
 set mail_check = 60
-
-## Remove delay between mailbox switches.
-set sleep_time = 0
-
-## Beep on new incoming mails.
-set beep_new = "yes"
 
 ## Mailbox type.
 set mbox_type=Maildir
 
-## Headers are editable in editor.
-set edit_headers=yes
-
 ## Encoding
 set send_charset="us-ascii:utf-8"
 
-## Security issue: if enter-command is available from the GUI, it is possible to
-## see the password unencrypted. We disable it for this reason. Every command
-## that the user intends to use must be bound to a key in advance, otherwise it
-## will never be accessible.
-bind index,pager ':' noop
+## Remove delay between mailbox switches.
+set sleep_time = 0
 
 ##------------------------------------------------------------------------------
 ## Multiple accounts
@@ -82,12 +82,12 @@ source "ccat ~/.mutt-pwds.cpt |"
 # source "gpg2 -dq ~/.mutt-pwds.gpg |"
 
 ## Last account is default.
-source "~/.mutt/$my_ac_personal"
-folder-hook $folder 'source ~/.mutt/$my_ac_personal'
 source "~/.mutt/$my_ac_work"
 folder-hook $folder 'source ~/.mutt/$my_ac_work'
 source "~/.mutt/$my_ac_university"
 folder-hook $folder 'source ~/.mutt/$my_ac_university'
+source "~/.mutt/$my_ac_personal"
+folder-hook $folder 'source ~/.mutt/$my_ac_personal'
 
 ##------------------------------------------------------------------------------
 ## Sidebar
@@ -96,9 +96,9 @@ folder-hook $folder 'source ~/.mutt/$my_ac_university'
 set sidebar_visible = yes
 set sidebar_width = 24
 set sidebar_shortpath = yes
-# set sidebar_sort = yes
-# set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%4S"
+set sidebar_sort = yes
 set sidebar_delim=' '
+# set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%4S"
 # set sidebar_folderindent = yes
 
 ## Color of folders with new mail
@@ -130,6 +130,12 @@ source $alias_file
 ## Keys
 ##------------------------------------------------------------------------------
 
+## Security issue: if enter-command is available from the GUI, it is possible to
+## see the password unencrypted. We disable it for this reason. Every command
+## that the user intends to use must be bound to a key in advance, otherwise it
+## will never be accessible.
+bind index,pager ':' noop
+
 ## Remap bounce-message function to "B"
 bind index B bounce-message
 
@@ -145,9 +151,9 @@ bind index "^" imap-fetch-mail
 #bind index,pager  previous-page
 
 ## Fix Backspace -- Shell alternative.
-#$ infocmp > termbs.src
+##   $ infocmp > termbs.src
 ## Changed kbs=^H to kbs=\177, then:
-#$ tic -x termbs.src
+##   $ tic -x termbs.src
 
 ##------------------------------------------------------------------------------
 ## Custom headers for outgoing mail
@@ -156,12 +162,11 @@ bind index "^" imap-fetch-mail
 ## Undo any custom headers that may have been put in by the global Muttrc
 # unmy_hdr *
 
-## Remove any global From: header
-#unset use_from
+## Remove any global 'From:' header
+# unset use_from
 ## Don't append a domain to my outgoing mails
-#unset use_domain
-
-#my_hdr From: Firstname Lastname <myfirstname@mymailserver>
+# unset use_domain
+# my_hdr From: Firstname Lastname <myfirstname@mymailserver>
 
 ## Extra info.
 my_hdr X-Info: Simplicity is the ultimate sophistication.
@@ -170,7 +175,7 @@ my_hdr X-Info: Simplicity is the ultimate sophistication.
 # my_hdr X-Operating-System: `uname -s`, kernel `uname -r`
 
 ## This header only appears to MS Outlook users
-#my_hdr X-Message-Flag: WARNING!! Outlook sucks!
+# my_hdr X-Message-Flag: WARNING!! Outlook sucks!
 
 ## Custom Mail-User-Agent ID.
 set user_agent = yes
@@ -193,6 +198,6 @@ set index_format="%2C | %Z [%d] %-30.30F (%-4.4c) %s"
 ## Colors
 source "~/.mutt.d/colorset.sh|"
 source "~/.mutt.d/colors.ambrevar"
-#source "/usr/share/doc/mutt/samples/colors.default"
-#source "/usr/share/doc/mutt/samples/colors.linux"
+# source "/usr/share/doc/mutt/samples/colors.default"
+# source "/usr/share/doc/mutt/samples/colors.linux"
 
