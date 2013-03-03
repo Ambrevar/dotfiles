@@ -1,0 +1,96 @@
+#!/usr/bin/zsh
+## We need zsh because of array use here.
+
+_printhelp()
+{
+    cat <<EOF
+Usage: ${1##*/} [-m METHOD] [-v] FILES|FOLDERS
+
+Create an archive from a single or multiples files/folders.
+
+  -h:  Display this help.
+  -m:  Choose compression method.
+         * gz:  gzip (default).
+         * xz:  LZMA.
+  -v:  Exclude VCS data. (GNU tar only.)
+EOF
+}
+
+OPTION_VCS=""
+OPTION_METHOD=""
+
+while getopts ":hm:v" opt; do
+    case $opt in
+        h)
+            _printhelp "$0"
+            exit 1
+            ;;
+        m)
+            OPTION_METHOD="${OPTARG}"
+            ;;
+        v)
+            OPTION_VCS="--exclude-vcs"
+            ;;
+        ?)
+            _printhelp "$0"
+            exit 1
+            ;;
+        :)
+            echo "Missing argument."
+            _printhelp "$0"
+            exit 1
+            ;;
+    esac
+done
+
+ARCEXT=""
+ARCOPT=""
+
+case $OPTION_METHOD in
+    "gz")
+        ARCEXT="tar.gz"
+        ARCOPT="z"
+        ;;
+    "xz")
+        ARCEXT="tar.xz"
+        ARCOPT="J"
+        ;;
+    *)
+        ARCEXT="tar.gz"
+        ARCOPT="z"
+        ;;
+esac
+
+shift $(($OPTIND - 1))
+
+ARCPATH=""
+ARCSOURCE=""
+ARCNAME=""
+
+if [ $# -eq 1 ]; then
+    ARCPATH="$(dirname $(readlink -f "$1"))"
+    ARCSOURCE="$(basename $(readlink -f "$1"))"
+    ARCNAME="${ARCSOURCE}-$(date +%y-%m-%d-%H%M%S).${ARCEXT}"
+
+    (cd "$ARCPATH" && \
+        tar -${ARCOPT} -cf "$ARCNAME" "$ARCSOURCE" ${OPTION_VCS})
+
+else
+    ARCSOURCE="$(basename $PWD)"
+    ARCNAME="$(basename "$ARCSOURCE")-$(date +%y-%m-%d-%H%M%S).${ARCEXT}"
+
+    if [ $# = 0 ];then
+
+        (cd "$PWD/.." && \
+            tar -${ARCOPT} -cf "$ARCNAME" "$ARCSOURCE" ${OPTION_VCS})
+
+    else
+        ## Note for zsh: do NOT initialize an array with "myarray=()".
+
+        for i; do
+            FILELIST=(${FILELIST[*]} "$i")
+        done
+
+        tar -${ARCOPT} -cf "$ARCNAME" ${FILELIST[*]} ${OPTION_VCS}
+    fi
+fi

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+## Set file/directory owner and permissions.
+## Usage: sanitize [FOLDER]
+WORKDIR="$PWD"
+if [ $# -eq 1 ]; then
+    WORKDIR="$1"
+fi
+
+FMASK=$(umask -S | sed 's/x//g')
+DMASK=$(umask -S)
+
+find "$WORKDIR" -exec chown -R ${UID}:${GID} {} \;
+find "$WORKDIR" -type d -exec chmod ${DMASK} {} \;
+find "$WORKDIR" -type f -exec chmod ${FMASK} {} \;

@@ -112,6 +112,7 @@ alias xres='xrandr -s $(xrandr | awk '"'"'/^ / {print $1;exit}'"'"')'
 if [ -f /bin/em ]; then
    alias ema='emacs -q -l ~/.emacs-light'
    alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
+   [ -f ~/todo.org ] && alias todo='em ~/todo.org'
 fi
 
 ##==============================================================================

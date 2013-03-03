@@ -33,7 +33,7 @@
 ## Variables
 OLDPATH="$(pwd)"
 cd "$HOME"
-SCRIPTPATH="$(readlink -f $(dirname "$0"))"
+SCRIPTPATH="${0##*/}"
 HOST=$(hostname)
 
 ## Arch Linux

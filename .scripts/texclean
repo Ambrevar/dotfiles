@@ -1,0 +1,32 @@
+#!/bin/sh
+
+## This function will clean TeX/LaTeX project folders recursively.
+if [ -z "$1" ]; then
+    WORKDIR="$PWD"
+else
+    WORKDIR="$1"
+fi
+
+## WARNING: removing .idx files is messy in a .git folder.
+find "$WORKDIR" -type f \( \
+	-name "*.aux" -o \
+    -name "*.glg" -o \
+    -name "*.glo" -o \
+    -name "*.gls" -o \
+    -name "*.ilg" -o \
+    -name "*.ind" -o \
+    -name "*.lof" -o \
+    -name "*.log" -o \
+    -name "*.maf" -o \
+    -name "*.mtc" -o \
+    -name "*.mtc?" -o \
+    -name "*.nav" -o \
+    -name "*.out" -o \
+    -name "*.snm" -o \
+    -name "*.synctex" -o \
+    -name "*.synctex.gz" -o \
+    -name "*.tns" -o \
+    -name "*.toc" -o \
+    -name "*.xdy" \) \
+    -print \
+    -delete

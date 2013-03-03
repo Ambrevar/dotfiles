@@ -60,7 +60,7 @@ fi
 _printhelp()
 {
     cat <<EOF
-Usage: $1 [OPTIONS] FILES|FOLDERS
+Usage: ${1##*/} [OPTIONS] FILES|FOLDERS
 
 Transcode FILES or files found in FOLDERS to .mkv with x264 and ogg. Output
 files are the same as the original, with time appended. You can customize
@@ -97,7 +97,7 @@ while getopts ":fhs" opt; do
             ;;
         :)
             echo "Missing argument."
-            echo "Use $0 -h for help."
+            _printhelp "$0"
             exit 1
             ;;
     esac

@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if [ $# -ne 1 ]; then
+    echo "Usage: ${0##*/} FOLDER."
+    echo "Compare current git repo with FOLDER."
+    exit
+fi
+
+REPO="$(mktemp)"
+FOLDER="$(mktemp)"
+git ls-files | sort > "$REPO"
+find "$1" -type f ! -path "*.git/*" | sed 's/^[^\/]*\///g' | sort > "$FOLDER"
+rm -f "$REPO" "$FOLDER"
+
+## Zsh version.
+# comm -3 <(git ls-files | sort) <(find "$1" -type f ! -path "*.git/*" | sed 's/^[^\/]*\///g' | sort)

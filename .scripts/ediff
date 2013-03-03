@@ -1,0 +1,3 @@
+#!/bin/sh
+
+emacs -q -l ~/.emacs-light --eval "(ediff \"$1\" \"$2\")"

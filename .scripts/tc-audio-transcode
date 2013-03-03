@@ -51,7 +51,7 @@ TC_AUDIO_DEST="/media/data1/Musics/"
 _printhelp ()
 {
     cat <<EOF
-Usage: $1 [OPTIONS] FILE
+Usage: ${1##*/} [OPTIONS] FILE
 
 Options:
   -p : preview (do not change file)
@@ -85,10 +85,10 @@ Default output file:
 Examples:
 
   Set the 'artist' tag and reencode:
-    $1 -a 'Franz Lizst' file.mp3
+    ${1##*/} -a 'Franz Lizst' file.mp3
 
   Set 'artist' to be 'composer', and 'title' to be preceeded by 'artist', do not reencode:
-    $1 -s -a '\$COMPOSER' -t '\$ARTIST - \$TITLE' file.ogg
+    ${1##*/} -s -a '\$COMPOSER' -t '\$ARTIST - \$TITLE' file.ogg
 
 IMPORTANT: you *must* use single quotes when using variables.
 
@@ -148,7 +148,7 @@ while getopts ":a:b:d:g:l:n:t:hps" opt; do
             ;;
         :)
             echo "Missing argument."
-            echo "Use $0 -h for help."
+            _printhelp "$0"
             exit 1
             ;;
     esac

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+while IFS= read -r FOLDER; do
+    if [ -z "$(cd "${FOLDER%/*}" && git status -uno | grep "nothing to commit")" ]; then
+        echo "${FOLDER%/*}"
+    fi
+done <<EOF
+$(find . -type d -name ".git")
+EOF

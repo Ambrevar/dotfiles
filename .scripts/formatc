@@ -1,0 +1,38 @@
+#!/bin/sh
+
+## Format C using 'indent'. Alternative to indent: astyle, uncrustify.
+if [ -z "$(command -v indent)" ]; then
+    echo "Please install 'indent'"
+    exit
+fi
+
+_formatc_dir()
+{
+    find "$1" -type f \
+	    -name "*.[ch]" \
+        -print \
+        -exec indent -i4 -ppi4 -bli0 -cli4 -nut {} \;
+
+    ## Remove backup files.
+    find "$1" -type f \( \
+	    -name "*.[ch]~" -o \
+	    -name "*.[ch]~[0-9]*~" \) \
+        -delete
+}
+
+if [ $# -eq 0 ]; then
+    echo "Working on current dir"
+    _formatc_dir "$PWD"
+    exit
+fi
+
+for i ; do
+    echo "[$i]"
+
+    if [ -d "$i" ]; then
+        _formatc_dir "$i"
+    else
+        indent -i4 -ppi4 -bli0 -cli4 -nut "$i"
+        rm -f "$i~" "$i~[0-9]*~"
+    fi
+done

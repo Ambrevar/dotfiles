@@ -1,0 +1,36 @@
+#!/bin/sh
+
+if [ -z "$1" ]; then
+	WORKDIR="$PWD"
+else
+	WORKDIR="$1"
+fi
+
+unset CHOICE
+echo "This will clean current folder from all VCS control files."
+echo -n "Proceed ? [y/N] "
+read CHOICE
+
+CHOICE=$(echo $CHOICE | tr '[:upper:]' '[:lower:]')
+if [ "$CHOICE" = "y"  ]; then
+
+    ## First clean the folders.
+    find "$WORKDIR" \( \
+        -path "*/.git/*" -o \
+        -path "*/.bzr/*" -o \
+        -path "*/.cvs/*" -o \
+        -path "*/.hg/*" -o \
+        -path "*/.svn/*" \) \
+        -delete
+
+        ## Remove the empty vcs folder.
+        find "$WORKDIR" -type d \( \
+	        -name ".bzr" -o \
+	        -name ".cvs" -o \
+	        -name ".git" -o \
+	        -name ".hg" -o \
+	        -name ".svn" \) \
+            -delete
+
+            echo "VCS files cleaned."
+fi

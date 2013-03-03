@@ -1,0 +1,32 @@
+#!/bin/sh
+
+if [ $# -lt 1 ]; then
+    echo "Usage: ${0##*/} FILE [GCC_OPTS]"
+    exit
+fi
+
+INPUT="$1"
+
+shift
+GCC_OPTS="-O0 -Wall -Wextra -Wshadow -pthread"
+if [ $# -ne 0 ]; then
+    GCC_OPTS="$@"
+fi
+
+FILE=$(mktemp)
+echo "==> gcc \"$INPUT\" -o \"$FILE\" $GCC_OPTS"
+
+## Zsh compatibility. We need it otherwise word splitting of parameter GCC_OPTS
+## will not work.
+STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
+[ "$STATUS" = "off" ] && set -o shwordsplit
+
+gcc "$INPUT" -o "$FILE" $GCC_OPTS
+
+## Restore Zsh previous options. This will not turn off shwordsplit if it
+## was on before calling the function.
+[ "$STATUS" = "off" ] && set +o shwordsplit
+
+echo "==> $FILE"
+"$FILE"
+rm "$FILE"
