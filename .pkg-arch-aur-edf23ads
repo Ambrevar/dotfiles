@@ -1,3 +1,4 @@
+awesome-git
 bashmount
 dropbox
 dropbox-cli
@@ -6,7 +7,7 @@ emacs-yasnippet
 fortune-mod-tbbt
 google-talkplugin
 movgrab
-mutt-android-patch
+mutt-sidebar
 package-query
 pacman-color
 rxvt-unicode-patched
@@ -15,5 +16,7 @@ supermeatboy
 texlive-dummy
 trash-cli
 ttf-ms-fonts
+wikiex
+wine-1.2
 worldofgoo
 yaourt

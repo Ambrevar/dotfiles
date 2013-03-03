@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/usr/bin/env zsh
 ## We need zsh because of array use here.
 
 _printhelp()

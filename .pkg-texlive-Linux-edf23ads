@@ -2,10 +2,13 @@ amscls
 amsmath
 babel
 beamer
+bigfoot
 carlisle
 easylist
 ec
 eplain
+epstopdf
+etoolbox
 eukdate
 fancyhdr
 geometry
@@ -22,6 +25,7 @@ listings
 lm
 marvosym
 microtype
+minitoc
 moderncv
 ms
 needspace
@@ -29,9 +33,13 @@ oberdiek
 parskip
 pdftex-def
 pgf
+subfigure
+tabu
 tabulary
 tools
 url
+varwidth
+xargs
 xcolor
 xkeyval
 zapfding

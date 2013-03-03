@@ -125,12 +125,6 @@ if [ -e "/usr/bin/pacman" ]; then
     if [ -e "/usr/bin/pacman-color" ]; then
         PACMAN_FRONTEND='pacman-color'
 
-        if [ "zsh" = "$SHELL_CURRENT" ]; then
-            compdef _pacman pacman-color
-        elif [ "bash" = "$SHELL_CURRENT" ]; then
-            complete -o default -o nospace -F _pacman pacman-color
-        fi
-
         ## The eval trick lets us define the alias after the variable has been expanded.
         ## Bash will not auto-complete aliases.
         eval 'alias pc="sudo $PACMAN_FRONTEND -Sc"'
