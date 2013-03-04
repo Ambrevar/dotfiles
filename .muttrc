@@ -142,7 +142,7 @@ bind index B bounce-message
 ## Fix the 'change-dir' issue with multiple accounts. When change-dir was called
 ## with account A, then use switched to account B, change-dir will still point
 ## to account A by default.
-macro index 'c' '<change-folder>?<change-dir><home>^K=<enter>'
+# macro index 'c' '<change-folder>?<change-dir><home>^K=<enter>'
 
 ## Manual fetch.
 bind index "^" imap-fetch-mail

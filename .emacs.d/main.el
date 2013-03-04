@@ -17,13 +17,13 @@
 ;; Default mode
 (setq default-major-mode 'text-mode)
 
-;; Make questions less annoying
+;; Make questions less annoying.
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Print column number
+;; Print column number.
 (column-number-mode 1)
 
-;; Kill whole line
+;; Kill whole line including \n.
 (setq kill-whole-line t)
 
 ;; Alternative scrolling
@@ -160,14 +160,14 @@
 ;; Disable prompt (but leave warning) on git symlink.
 (setq vc-follow-symlinks t)
 
-;; Org mode config
+;; Org mode config.
 (add-hook 'org-mode-hook
           (lambda () (interactive) )
           (setq org-agenda-files '("~/todo.org"))
           (setq org-enforce-todo-dependencies t))
 
-;; For programming languages only, so that it does not affect buffer like
-;; calendar and so on.
+;; Highlight trailing whitespaces. For programming languages only, so that it
+;; does not affect buffer like calendar and so on.
 (mapcar
  (lambda (mode-hook)
    (add-hook

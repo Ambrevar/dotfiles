@@ -33,8 +33,8 @@ Highlights
   client).
 
 * Awesome widgets: nice functions, like dynamic network speed (it checks for
-  different interfaces), dynamic battery that will not show up if no battery is
-  detected, CPU speed.
+  different interfaces), CPU speed, dynamic battery that will not show up if no battery is
+  detected, and sound volume.
 
 * Pacman functions: a lot of handy functions for the pacman package manager,
   like sorting by size, dependency listing, etc.
@@ -265,7 +265,6 @@ graphicsmagick
 grep
 groff
 hdparm
-help2man
 highlight
 htop
 id3v2
