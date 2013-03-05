@@ -5,7 +5,7 @@ if [ -z "$(command -v ffmpeg)" ]; then
     exit
 fi
 
-if [ ! -f "$HOME/.shell.d/titlecase.awk" ]; then
+if [ ! -f "${0%/*}/titlecase.awk" ]; then
     echo "AWK titlecase script required."
     exit
 fi
@@ -15,17 +15,50 @@ if [ ! -f "${0%/*}/tc-audio-transcode" ]; then
     exit
 fi
 
-## This will convert all tracks in current folder and subfolders.
-while read -r i; do
-    "${0%/*}/tc_audio_transcode" "$@" $i
-done <<EOF
-$(find "."  \( \
-        -iname '*.mp3'  -o \
-        -iname '*.flac' -o \
-        -iname '*.wv'   -o \
-        -iname '*.aac'  -o \
-        -iname '*.wav'  -o \
-        -iname '*.ape'  -o \
-        -iname '*.mpc' \) )
-EOF
+if [ "$1" = "-h" ]; then
+    cat<<EOF
+Usage: ${0##*/} OPTIONS
 
+This will batch process all audio files found in current folders and subfolders with
+the tc-audio-transcode script.  All arguments are passed to tc-audio-transcode.
+For more details see
+
+  tc-audio-transcode -h
+EOF
+    exit
+fi
+
+IFS="
+"
+for i in $(find "."  \( \
+    -iname '*.mp3'  -o \
+    -iname '*.flac' -o \
+    -iname '*.wv'   -o \
+    -iname '*.aac'  -o \
+    -iname '*.wav'  -o \
+    -iname '*.ape'  -o \
+    -iname '*.mpc' \) ) ;do
+
+    echo "$i"
+    "${0%/*}/tc-audio-transcode" "$@" "$i"
+done
+unset IFS
+
+## Alternative.
+##
+## TODO: Big mystery here. The combination of while, find, and a script
+## containing a ffmpeg call seems to mess eveything up.
+
+## This will convert all tracks in current folder and subfolders.
+# while read -r i; do
+#     "${0%/*}/tc-audio-transcode" "$@" "$i"
+# done <<EOF
+# $(find "."  \( \
+#         -iname '*.mp3'  -o \
+#         -iname '*.flac' -o \
+#         -iname '*.wv'   -o \
+#         -iname '*.aac'  -o \
+#         -iname '*.wav'  -o \
+#         -iname '*.ape'  -o \
+#         -iname '*.mpc' \) )
+# EOF

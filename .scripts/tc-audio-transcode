@@ -5,7 +5,8 @@ if [ -z "$(command -v ffmpeg)" ]; then
     exit
 fi
 
-if [ ! -f "${0%/*}/titlecase.awk" ]; then
+TITLECASE_SCRIPT="${0%/*}/titlecase.awk"
+if [ ! -f "$TITLECASE_SCRIPT" ]; then
     echo "AWK titlecase script required."
     exit
 fi
@@ -34,7 +35,8 @@ TC_AUDIO_DEST="/media/data1/Musics/"
 
 ## Artists: we use same value for artist and album_artist.
 ## Genres: since this is not universal by nature, we do not put a genre in tags.
-## Composer: not universal neither, we prefer ARTIST over COMPOSER, so COMPOSER will be empty.
+## Composer: not universal neither, we prefer ARTIST over COMPOSER, so COMPOSER
+##           will be empty.
 
 ################################################################################
 ## End of user options
@@ -42,10 +44,11 @@ TC_AUDIO_DEST="/media/data1/Musics/"
 
 ## This function is supposed to work on a per-album basis. Folders will not be
 ## accepted as argument. This function will work best if all tracks of a folder
-## belong to the same album. Theres is no way to handle covers raliably, so you
+## belong to the same album. There's is no way to handle covers reliably, so you
 ## should leave the only covers you want to keep in the working folder.
 
-## TODO: cover resolution check. Should be > 100x100. Above <1000x1000 should give a warning.
+## TODO: cover resolution check. Should be > 100x100. Above 1000x1000 should
+## give a warning.
 ## TODO: extract cover from tags if checksum does not match any from current folder.
 
 _printhelp ()
@@ -85,9 +88,9 @@ Default output file:
 Examples:
 
   Set the 'artist' tag and reencode:
-    ${1##*/} -a 'Franz Lizst' file.mp3
+    ${1##*/} -a 'Franz Liszt' file.mp3
 
-  Set 'artist' to be 'composer', and 'title' to be preceeded by 'artist', do not reencode:
+  Set 'artist' to be 'composer', and 'title' to be preceded by 'artist', do not reencode:
     ${1##*/} -s -a '\$COMPOSER' -t '\$ARTIST - \$TITLE' file.ogg
 
 IMPORTANT: you *must* use single quotes when using variables.
@@ -111,11 +114,11 @@ OUTPUT_TRACK='$TRACK'
 ## PROPERTIES
 OUTPUT_BITRATE=0
 
-## Non-cli-option data. Modifying these imply modifications in code below.
+## Non-CLI-option data. Modifying these imply modifications in code below.
 OUTPUT_FORMAT="ogg"
 OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
 
-## These ones are not cli-options either, but this could be easily changed.
+## These ones are not CLI-options either, but this could be easily changed.
 OUTPUT='$TC_AUDIO_DEST/$OUTPUT_ARTIST/${OUTPUT_ALBUM:+${OUTPUT_DATE:+$OUTPUT_DATE - }$OUTPUT_ALBUM/}'
 OUTPUT_FILE='$OUTPUT$OUTPUT_ARTIST - ${OUTPUT_PADDEDTRACK:+$OUTPUT_PADDEDTRACK - }$OUTPUT_TITLE'
 
@@ -167,7 +170,7 @@ METADATA=$(echo "$STREAM" | sed -n '/Metadata/ ! d; /Metada/{b cont}; :cont ; {n
 STREAM=$(echo "$STREAM" | grep "Stream")
 
 if [ -z "$STREAM" ]; then
-    echo "Non-audio file."
+    echo "[$1] Non-audio file."
     exit
 fi
 
@@ -209,7 +212,7 @@ TYER=$(_metadata_filter "TYER")
 # / => -
 _string_cleanser()
 {
-    echo "$@" | awk -f "${0%/*}/titlecase.awk" \
+    echo "$@" | awk -f "$TITLECASE_SCRIPT" \
         | sed -n  -e "s/’/'/g ; s/ *: */ - /g ; s| */ *| - |g; p; q"
 }
 
@@ -248,7 +251,7 @@ if [ ${#DATE} -ne 4 ] && [ ${#TYER_REG} -eq 4 ]; then
 fi
 
 ## QUALITY
-## If bitrate argumument is not provided, we use BITRATE value.
+## If bitrate argument is not provided, we use BITRATE value.
 [ $OUTPUT_BITRATE -eq 0 ] && OUTPUT_BITRATE=${BITRATE}
 ## TODO: test if table is useful at all.
 # if [ $OUTPUT_BITRATE -eq 0 ]; then
@@ -272,7 +275,6 @@ OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
 [ "$FORMAT" = "ogg" ] && OGG_PARAM="-c:a copy"
 
 ## Make sure track number has two digits for file name only.
-OUTPUT_PADDEDTRACK
 OUTPUT_PADDEDTRACK=$OUTPUT_TRACK
 if [ -n "$OUTPUT_PADDEDTRACK" ]; then
     [ ${OUTPUT_PADDEDTRACK} -lt 10 ] && OUTPUT_PADDEDTRACK="0$OUTPUT_PADDEDTRACK"
@@ -281,7 +283,7 @@ fi
 OUTPUT=$(eval echo $OUTPUT)
 OUTPUT_FILE=$(eval echo $OUTPUT_FILE)
 
-## IF file exist, we append a uniq timestamp to the name.
+## IF file exist, we append a unique timestamp to the name.
 [ -e "${OUTPUT_FILE}.$OUTPUT_FORMAT" ] && OUTPUT_FILE="$OUTPUT_FILE-$(date '+%F-%H%M%S')"
 
 ##==============================================================================
@@ -324,7 +326,7 @@ echo
 ## Make sure directory exists.
 mkdir -p "$OUTPUT"
 if [ $? -ne 0 ]; then
-    echo "ERROR: could not create output folder"
+    echo "ERROR: could not create output folder [$OUTPUT]."
     exit
 fi
 
@@ -337,13 +339,13 @@ while read -r i; do
 
     ## Same cover is already in target folder.
     if [ -e "$OUTPUT_COVERFILE" ] && \
-        [ "$(sha1sum $OUTPUT_COVERFILE | cut -f1 -d' ')" = "$(sha1sum $i | cut -f1 -d' ')" ]; then
+        [ "$(sha1sum "$OUTPUT_COVERFILE" | cut -f1 -d' ')" = "$(sha1sum "$i" | cut -f1 -d' ')" ]; then
         continue
     fi
 
     ## Different cover with same name is in target folder. We append a number.
     while [ -e "$OUTPUT_COVERFILE" ] && \
-        [ ! "$(sha1sum $OUTPUT_COVERFILE | cut -f1 -d' ')" = "$(sha1sum $i | cut -f1 -d' ')" ]; do
+        [ ! "$(sha1sum "$OUTPUT_COVERFILE" | cut -f1 -d' ')" = "$(sha1sum "$i" | cut -f1 -d' ')" ]; do
         OUTPUT_COVERFILE="${OUTPUT_COVER} $COVER_COUNTER.${i##*.}"
         COVER_COUNTER=$(($COVER_COUNTER+1))
     done
