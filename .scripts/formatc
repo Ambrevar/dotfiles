@@ -2,9 +2,18 @@
 
 ## Format C using 'indent'. Alternative to indent: astyle, uncrustify.
 if [ -z "$(command -v indent)" ]; then
-    echo "Please install 'indent'"
+    echo "Please install 'indent'."
     exit
 fi
+
+if [ "$1" = "-h" ]; then
+    cat<<EOF
+Usage: ${0##*/} [FILES|FOLDERS]
+
+Format C source code using indent.
+EOF
+fi
+
 
 _formatc_dir()
 {
@@ -27,7 +36,10 @@ if [ $# -eq 0 ]; then
 fi
 
 for i ; do
-    echo "[$i]"
+    if [ ! -e "$i" ]; then
+        continue
+    fi
+
 
     if [ -d "$i" ]; then
         _formatc_dir "$i"

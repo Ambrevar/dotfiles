@@ -3,11 +3,17 @@
 ## Completion
 ##==============================================================================
 if [ "zsh" = "$SHELL_CURRENT" ]; then
+    compdef _gcc crun
+    compdef _gcc formatc
+    compdef _gs pdfcompress
+    compdef _gs pdfextract
+    compdef _gs pdfresize
     compdef _pacman pacman-color
     compdef _pcc pacman-deps
     compdef _pcc pacman-files
     compdef _pcc pacman-size
     compdef _pcc pql
+    compdef _tex ltx
     compdef _zathura zat
 elif [ "bash" = "$SHELL_CURRENT" ]; then
     complete -o default -o nospace -F _pacman pacman-color

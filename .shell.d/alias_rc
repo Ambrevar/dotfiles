@@ -91,6 +91,10 @@ alias xmorphzi='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ")
 
 alias xres='xrandr -s $(xrandr | awk '"'"'/^ / {print $1;exit}'"'"')'
 
+# Web videos DL
+alias webdl720='movgrab -f webm:1280x720'
+alias webdl1080='movgrab -f webm:1920x1080'
+
 ##==============================================================================
 ## Zsh power aliases
 ##==============================================================================
