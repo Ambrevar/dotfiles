@@ -379,24 +379,35 @@ properly escaped with double-quotes in case it has spaces."
 ;; Identation style
 (setq c-default-style "linux" c-basic-offset 4)
 
+(defcustom c-compile-ldflags nil
+"[Local variable] Custom linker flags for C compilation."
+:safe 'stringp)
+
+(defun c-compile ()
+  (interactive)
+  (progn
+    (unless (or (file-exists-p "Makefile") (file-exists-p "makefile") (file-exists-p "GNUMakefile"))
+      (set (make-local-variable 'compile-command)
+      ;; Emulate make's .c.o implicit pattern rule, but with
+      ;; different defaults for the CC, CPPFLAGS, and CFLAGS
+      ;; variables:
+      ;;   $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
+      ;; (setq compile-command
+           (let
+                ((file (file-name-nondirectory buffer-file-name)))
+              (format "%s -o %s %s %s %s %s"
+                      (or (getenv "CC") "gcc")
+                      (file-name-sans-extension file)
+                      (or (getenv "CPPFLAGS") "-DDEBUG=9")
+                      (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -g3 -O0")
+                      (or (getenv "LDFLAGS") c-compile-ldflags)
+                      file))))
+    (compile compile-command)))
+
 (add-hook
  'c-mode-hook
  (lambda ()
-   (unless (file-exists-p "Makefile")
-     (set (make-local-variable 'compile-command)
-          ;; emulate make's .c.o implicit pattern rule, but with
-          ;; different defaults for the CC, CPPFLAGS, and CFLAGS
-          ;; variables:
-          ;; $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
-          (let ((file (file-name-nondirectory buffer-file-name)))
-            (format "%s -o %s %s %s %s"
-                    (or (getenv "CC") "gcc")
-                    (file-name-sans-extension file)
-                    (or (getenv "CPPFLAGS") "-DDEBUG=9")
-                    (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -lm -pthread -g3 -O0")
-                    file))))
-
-   (local-set-key (kbd "C-c C-c") 'compile)
+   (local-set-key (kbd "C-c C-c") 'c-compile)
    (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
    (local-set-key "." 'semantic-complete-self-insert)
    (local-set-key ">" 'semantic-complete-self-insert)
@@ -478,3 +489,11 @@ properly escaped with double-quotes in case it has spaces."
 
 ;; Indent comments.
 (setq sh-indent-comment t)
+
+;;==============================================================================
+;; GLSL
+;;==============================================================================
+
+(autoload 'glsl-mode "glsl-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
+(add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
