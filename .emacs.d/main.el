@@ -60,6 +60,19 @@
 ;; end.
 ;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+;; Highlight trailing whitespaces. For programming languages only, so that it
+;; does not affect buffer like calendar and so on.
+(mapcar
+ (lambda (mode-hook)
+   (add-hook
+    mode-hook
+    (lambda () (interactive)
+      (setq show-trailing-whitespace t))))
+ '(prog-mode-hook lua-mode-hook))
+
+;; Remove whitespaces on region, or whole file.
+(define-key my-keys-minor-mode-map (kbd "C-\\") 'delete-trailing-whitespace)
+
 ;; Abbreviation support
 (setq default-abbrev-mode t)
 
@@ -166,12 +179,3 @@
           (setq org-agenda-files '("~/todo.org"))
           (setq org-enforce-todo-dependencies t))
 
-;; Highlight trailing whitespaces. For programming languages only, so that it
-;; does not affect buffer like calendar and so on.
-(mapcar
- (lambda (mode-hook)
-   (add-hook
-    mode-hook
-    (lambda () (interactive)
-      (setq show-trailing-whitespace t))))
- '(prog-mode-hook lua-mode-hook))
