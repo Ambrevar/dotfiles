@@ -15,6 +15,4 @@ if [ "zsh" = "$SHELL_CURRENT" ]; then
     compdef _pcc pql
     compdef _tex ltx
     compdef _zathura zat
-elif [ "bash" = "$SHELL_CURRENT" ]; then
-    complete -o default -o nospace -F _pacman pacman-color
 fi
