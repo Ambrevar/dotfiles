@@ -7,62 +7,30 @@
 ;;==============================================================================
 
 ;; rc files support
-(setq auto-mode-alist
-      (append
-       '(("rc\\'" . sh-mode)
-         )
-       auto-mode-alist)
-      )
+(setq auto-mode-alist (append '(("rc\\'" . sh-mode)) auto-mode-alist))
 
 ;; Shell support
 ;; We do not put 'sh' only because it could get messy. Emacs knows it anyway.
 (setq auto-mode-alist
       (append
-       '(("\\(bash\\'\\|zsh\\'\\|csh\\'\\|tcsh\\'\\|ksh\\'\\)" . sh-mode)
-         )
-       auto-mode-alist)
-      )
+       '(("\\(bash\\'\\|zsh\\'\\|csh\\'\\|tcsh\\'\\|ksh\\'\\)" . sh-mode))
+       auto-mode-alist))
 
 ;; Read Matlab files in Octave mode.
-(setq auto-mode-alist
-      (append
-       '(("\\.m\\'" . octave-mode)
-         )
-       auto-mode-alist)
-      )
+(setq auto-mode-alist (append '(("\\.m\\'" . octave-mode)) auto-mode-alist))
 
 ;; Read pl files in prolog mode.
 ;; WARNING: this extension is shared with Perl.
-(setq auto-mode-alist
-      (append
-       '(("\\.pl\\'" . prolog-mode)
-         )
-       auto-mode-alist)
-      )
+;; (setq auto-mode-alist (append '(("\\.pl\\'" . prolog-mode)) auto-mode-alist))
 
 ;; Mutt support.
-(setq auto-mode-alist
-      (append
-       '(("/tmp/mutt.*" . mail-mode)
-         )
-       auto-mode-alist)
-      )
+(setq auto-mode-alist (append '(("/tmp/mutt.*" . mail-mode)) auto-mode-alist))
 
 ;; Arch Linux PKGBUILD
-(setq auto-mode-alist
-      (append
-       '(("PKGBUILD" . sh-mode)
-         )
-       auto-mode-alist)
-      )
+(setq auto-mode-alist (append '(("PKGBUILD" . sh-mode)) auto-mode-alist))
 
-;; README
-(setq auto-mode-alist
-      (append
-       '(("README" . text-mode)
-         )
-       auto-mode-alist)
-      )
+;; README files.
+(setq auto-mode-alist (append '(("README" . text-mode)) auto-mode-alist))
 
 ;;==============================================================================
 ;; Auto-Insert
@@ -409,12 +377,9 @@ properly escaped with double-quotes in case it has spaces."
  (lambda ()
    (local-set-key (kbd "C-c C-c") 'c-compile)
    (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
-   (local-set-key "." 'semantic-complete-self-insert)
-   (local-set-key ">" 'semantic-complete-self-insert)
+   ;; (local-set-key "." 'semantic-complete-self-insert) ; This is a bit slow.
+   ;; (local-set-key ">" 'semantic-complete-self-insert)
    (local-set-key (kbd "<f12>") 'next-error)))
-
-;; (defun my-c-mode-cedet-hook ()
-;; (add-hook 'c-mode-common-hook 'my-c-mode-cedet-hook)
 
 ;;==============================================================================
 ;; Common LISP
