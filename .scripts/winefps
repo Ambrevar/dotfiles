@@ -1,0 +1,22 @@
+#!/bin/sh
+
+## Wine FPS monitor
+if [ $# -lt 1 ]; then
+    echo "Usage: ${0##*/} WIN32EXE PARAMS"
+    exit
+fi
+
+if [ -z "$(command -v osd_cat)" ]; then
+    echo "You must have osd_cat."
+    exit
+fi
+
+if [ -z "$(sed --version | grep "GNU")" ]; then
+    echo "You must have GNU sed."
+    exit
+fi
+
+WINEDEBUG=fps wine "$@" 2>&1 | tee /dev/stderr | \
+    sed -un '/^trace:fps:/{s/.* \([^ ]*\)fps/\1/;p}' | \
+    osd_cat -l1 -f  "-*-*-*-*-*-*-32-*-*-*-*-*-*-*" -O1 -c "yellow"
+

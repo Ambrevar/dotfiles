@@ -403,30 +403,6 @@ webdl ()
     movgrab -f webm:$RES "$2"
 }
 
-## Wine FPS monitor
-winefps ()
-{
-    if [ $# -ne 1 ]; then
-        echo "Usage: ${0##*/} WIN32EXE"
-        return
-    fi
-
-    if [ -z "$(command -v osd_cat)" ]; then
-        echo "You must have osd_cat."
-        return
-    fi
-
-    if [ -z "$(sed --version | grep "GNU")" ]; then
-        echo "You must have GNU sed."
-        return
-    fi
-
-    WINEDEBUG=fps wine "$1" 2>&1 | tee /dev/stderr | \
-        sed -un '/^trace:fps:/{s/.* \([^ ]*\)fps/\1/;p}' | \
-        osd_cat -l1 -f  "-*-*-*-*-*-*-32-*-*-*-*-*-*-*" -O1 -c "yellow"
-}
-
-
 ##==============================================================================
 ## Pacman functions
 ##==============================================================================
