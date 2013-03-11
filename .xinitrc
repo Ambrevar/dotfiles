@@ -21,9 +21,10 @@ fi
 exec awesome
 
 ## Crappy desktops
+# exec razor-session
 # exec startkde
-# exec ck-launch-session startlxde
-# exec ck-launch-session gnome-session
+# exec startlxde
+# exec gnome-session
 
 ##==============================================================================
 ## Wallpaper

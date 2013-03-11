@@ -1,6 +1,7 @@
 #name : type fun (args) { ... }
 # --
-${1:type} ${2:name} (${3:args})
+${1:void}
+${2:name} (${3:void})
 {
     $0
 }
