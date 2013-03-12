@@ -1,0 +1,27 @@
+#!/usr/bin/env zsh
+
+if [ -z "$(command -v 7z)" ]; then
+    echo "7z needed."
+fi
+
+
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+    cat <<EOF
+Usage: ${0##*/} FILES
+
+Extract password-protected 7z archives in one run. Password must be the same for all archives.
+
+This requires 'read -s'. It will not work for the Bourne Shell.
+EOF
+    exit
+fi
+
+BUF=""
+echo -n "Password: "
+read -s BUF
+echo ""
+
+for i ; do
+    # 7z x -p"$BUF" "$i" >/dev/null
+    7z x -p"$BUF" "$i"
+done
