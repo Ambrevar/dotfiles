@@ -1,5 +1,5 @@
 bookmark-cmd newsbeuter-bookmarks
-browser dwb
+browser "`echo $BROWSER`"
 macro a edit-flags a 
 define-filter Starred flags="a"
 highlight article "^Feed:" red default bold
