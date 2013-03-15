@@ -7,6 +7,7 @@ apvlv
 aspell-en
 aspell-fr
 astyle
+ati-dri
 atool
 at-spi2-atk
 at-spi2-core
@@ -17,13 +18,13 @@ awesome-git
 bash
 bison
 blas
+bomberclone
 bzip2
 calc
-catalyst-dkms
-catalyst-utils
 cblas
 ccrypt
 cdrtools
+chromium
 chrpath
 clisp
 cmus
@@ -37,7 +38,6 @@ dash
 device-mapper
 dhcpcd
 diffutils
-django
 djvulibre
 dosbox
 dosfstools
@@ -75,6 +75,7 @@ gimp
 git
 glfw
 glibc
+glm
 gnuplot
 google-talkplugin
 gparted
@@ -87,7 +88,6 @@ gstreamer0.10-good-plugins
 gstreamer0.10-ugly-plugins
 guile
 gzip
-handbrake
 hdparm
 heirloom-mailx
 highlight
@@ -112,7 +112,7 @@ lesspipe
 lib32-alsa-lib
 lib32-alsa-oss
 lib32-alsa-plugins
-lib32-catalyst-utils
+lib32-ati-dri
 lib32-libao
 lib32-libpulse
 lib32-libsamplerate
@@ -169,7 +169,9 @@ ncdu
 netcfg
 nethogs
 net-tools
+newsbeuter
 ngrep
+nmap
 ntfs-3g
 numlockx
 odt2txt
@@ -211,6 +213,7 @@ splint
 steam
 strace
 subdl
+subversion
 sudo
 supermeatboy
 sxiv
@@ -243,11 +246,12 @@ valgrind
 vi
 vicious
 vorbis-tools
+vsftpd
 w3m
 wget
 which
 wikiex
-wine-1.2
+wine-1.5.12
 winetricks
 wipe
 wmname
@@ -257,6 +261,7 @@ wv
 xchm
 xclip
 xdg-utils
+xf86-video-ati
 xf86-video-vesa
 xfsprogs
 xmlrpc-c
@@ -269,6 +274,7 @@ xorg-xmodmap
 xorg-xprop
 xorg-xrandr
 xorg-xrdb
+xosd
 xsel
 xz
 yaourt

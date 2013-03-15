@@ -1,0 +1,10 @@
+browser dwb
+macro a edit-flags a 
+define-filter Starred flags="a"
+highlight article "^Feed:" red default bold
+highlight article "^Title:" green default bold
+highlight article "^Author:" blue default bold
+highlight article "^Links?:" yellow default bold
+highlight article "^Date:" magenta default bold
+
+## End

@@ -65,3 +65,8 @@ ln -sf "${SOURCEDIR}/bookmarks/bookmarks" "$BROWSER_DATA_DIR"
 ln -sf "${SOURCEDIR}/bookmarks/quickmarks" "$BROWSER_DATA_DIR"
 echo
 
+## News
+echo "==> Newsbeuter"
+mkdir -p "$XDG_DATA_HOME/newsbeuter"
+ln -sf "${SOURCEDIR}/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
+echo
