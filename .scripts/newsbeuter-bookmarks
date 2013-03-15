@@ -1,0 +1,11 @@
+#!/bin/sh
+
+[ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
+
+url="$1"
+title="$2"
+description="$3"
+SEP=" "
+OUTPUT="$XDG_CONFIG_HOME/newsbeuter/news_starred"
+
+echo -e "${url}$SEP${title}$SEP${description}" >> "$OUTPUT"

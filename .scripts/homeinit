@@ -69,4 +69,5 @@ echo
 echo "==> Newsbeuter"
 mkdir -p "$XDG_DATA_HOME/newsbeuter"
 ln -sf "${SOURCEDIR}/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
+ln -sf "${SOURCEDIR}/news/news_starred" "$XDG_CONFIG_HOME/newsbeuter/"
 echo
