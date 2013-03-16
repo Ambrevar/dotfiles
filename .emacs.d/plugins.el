@@ -23,15 +23,11 @@
          (progn
            (yas/initialize)
            (yas/load-directory yas-snippet-dirs))
-       
+
        ;; New yasnippet versions.
        (progn
          (yas-global-mode 1)
-         (yas-load-directory yas-snippet-dirs))
-
-       )
-
-     ))
+         (yas-load-directory yas-snippet-dirs)) ) ))
 
 ;;==============================================================================
 ;; Lua
@@ -52,8 +48,7 @@
              ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX")
              ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt")
              ("WikEmacs" "https://wikemacs.org/wiki/" "Ambrevar" "" "Main Page")
-             )
-           )
+             ))
 
      ;; Macros.
      ;; Use C-( stuff C-) to record a macro.
@@ -107,9 +102,7 @@
              ;; TODO: Bindings to not work???
              ;; (local-set-key (kbd "C-c l L") 'ltx-template-source-to-latex)
              ;; (local-set-key (kbd "C-c l U") 'ltx-template-source-to-usage)
-             ))
-
-     ))
+             )) ))
 
 ;;==============================================================================
 ;; DoxyMacs
@@ -153,3 +146,18 @@
 ;;==============================================================================
 (if (require 'xclip nil t)
     (turn-on-xclip))
+
+;;==============================================================================
+;; Multiple-Cursors
+;;==============================================================================
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/multiple-cursors")
+(if (require 'multiple-cursors nil t)
+    (progn
+      (setq mc/list-file "~/.emacs.d/mc-lists.el")
+
+      (define-key my-keys-minor-mode-map (kbd "C-c C-a") 'mc/edit-beginnings-of-lines)
+      (define-key my-keys-minor-mode-map (kbd "C-c C-e") 'mc/edit-ends-of-lines)
+      (define-key my-keys-minor-mode-map (kbd "C-c C-r") 'mc/edit-lines)
+      (define-key my-keys-minor-mode-map (kbd "C-c C-n") 'mc/mark-next-word-like-this)
+      (define-key my-keys-minor-mode-map (kbd "C-c C-p") 'mc/mark-previous-word-like-this)
+      (define-key my-keys-minor-mode-map (kbd "C-c C-l") 'mc/mark-all-like-this-dwim)))
