@@ -1,6 +1,6 @@
 bookmark-cmd newsbeuter-bookmarks
-browser "`echo $BROWSER`"
-macro a edit-flags a 
+browser "`echo $BROWSER` %u >/dev/null 2>&1 &"
+macro a edit-flags a
 define-filter Starred flags="a"
 highlight article "^Feed:" red default bold
 highlight article "^Title:" green default bold
