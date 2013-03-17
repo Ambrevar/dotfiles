@@ -561,6 +561,7 @@ properly escaped with double-quotes in case it has spaces."
 (add-hook
  'texinfo-mode-hook
  (lambda ()
+   (setq fill-column 80)
    (setq compilation-scroll-output t)
    (local-set-key (kbd "C-c C-b") 'texinfo-my-menu-update)
    (local-set-key (kbd "C-c C-v") 'texinfo-pdf-view)
