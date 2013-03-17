@@ -26,6 +26,7 @@ while read -r FILE; do
         -name "$FILE_NOEXT.toc" -o \
         -name "$FILE_NOEXT.tp" -o \
         -name "$FILE_NOEXT.vr" \) \
+        -name "$FILE_NOEXT.vrs" \) \
         -print \
         -delete
 done <<EOF

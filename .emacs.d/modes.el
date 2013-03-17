@@ -108,7 +108,7 @@ We can use
 
 to reverse-search a pdf using SyncTeX. Note that the quotes and
 double-quotes matter and must be escaped appropriately."
-:safe 'stringp)
+  :safe 'stringp)
 
 (defcustom tex-my-compiler nil
   "[Local variable]
@@ -118,23 +118,23 @@ Examples: pdftex, pdflatex, xetex, xelatex, luatex, lualatex...
 
 If value is nil, the compiler will be tex-my-default-compiler for
 TeX mode, and latex-my-default-compiler for LaTeX mode."
-:safe 'stringp)
+  :safe 'stringp)
 
 (defcustom tex-my-masterfile nil
   "[Local variable]
 
 The file that should be compiled."
-:safe 'stringp)
+  :safe 'stringp)
 
 (defcustom tex-my-default-compiler "pdftex"
   "Default compiler for TeX mode. Used if tex-my-compiler is
 empty."
-:safe 'stringp)
+  :safe 'stringp)
 
 (defcustom latex-my-default-compiler "pdflatex"
   "Default compiler for LaTeX mode. Used if tex-my-compiler is
 empty."
-:safe 'stringp)
+  :safe 'stringp)
 
 (defcustom tex-my-compiler-options "-file-line-error-style -interaction nonstopmode -synctex=1"
   "The options to the tex compiler. Options are set between the
@@ -162,7 +162,7 @@ You may use file local variable for convenience:
 
 Note that -shell-escape can also be toggled with universal
 argument."
-:safe 'stringp)
+  :safe 'stringp)
 
 (defcustom tex-my-startcommands ""
   "You can call a TeX compiler upon a string instead of a file.
@@ -181,13 +181,8 @@ compilers, that is is rarely useful.
 
 If you use a color theme, or any conditional variable inside your
 document, you may define it here:
-  \\def\\myvar{mycontent}
-
-A pratical way to use this feature is to define a file local
-variable, e.g. on the first line:
-  % -*- tex-my-startcommands: \"\\def\\locale{en}\" -*-
-"
-:safe 'stringp)
+  \\def\\myvar{mycontent}"
+  :safe 'stringp)
 
 (defun tex-my-compile ()
   "Use compile to process your TeX-based document. Use a prefix
@@ -232,7 +227,7 @@ WARNING: the -shell-escape option is a potential security issue."
           (local-compile-command
            (concat local-compiler " "  local-shell-escape " " tex-my-compiler-options " " local-start-cmd " \"" local-master "\"")))
 
-      ;; (message tex-my-compile-command) ;; Debug only.
+      ;; (message local-compile-command) ;; Debug only.
       (save-buffer)
       (setq compilation-scroll-output t)
       (compile local-compile-command)
@@ -243,10 +238,9 @@ WARNING: the -shell-escape option is a potential security issue."
 
 
 (defcustom tex-my-extension-list '("aux" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy")
-"List of known TeX exentsions. This list is used by 'tex-clean to purge all matching files."
-:safe 'listp)
+  "List of known TeX exentsions. This list is used by 'tex-clean to purge all matching files."
+  :safe 'listp)
 
-;; TODO: use LISP funcions.
 (defun tex-clean ()
   "Remove all TeX temporary files. This command should be safe,
 but there is no warranty."
@@ -273,8 +267,7 @@ but there is no warranty."
        (mapcar
         ;; Concat file name with extensions.
         (lambda (arg) (interactive) (concat file arg))
-        tex-my-extension-list))
-      )))
+        tex-my-extension-list)))))
 
 (defun tex-pdf-compress ()
   "PDF compressions might really strip down the PDF size. The
@@ -289,19 +282,19 @@ your document embeds raster graphics."
            tex-my-masterfile)))
 
     (let (
-        ;; Temp compressed file.
-        (file-temp
-         (concat (make-temp-name (concat "/tmp/" (file-name-nondirectory local-master))) ".pdf"))
+          ;; Temp compressed file.
+          (file-temp
+           (concat (make-temp-name (concat "/tmp/" (file-name-nondirectory local-master))) ".pdf"))
 
-        ;; File name with PDF extension.
-        (file
-         (replace-regexp-in-string "tex" "pdf" (file-name-nondirectory local-master))))
+          ;; File name with PDF extension.
+          (file
+           (replace-regexp-in-string "tex" "pdf" (file-name-nondirectory local-master))))
 
       (when (and (file-exists-p file) (file-writable-p file))
         (shell-command
          (concat  "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=\"" file-temp "\" \"" file "\""))
         (rename-file file-temp file t)
-             ))))
+        ))))
 
 (defun tex-pdf-view ()
   "Call a PDF viewer for current buffer file. File name should be
@@ -327,8 +320,7 @@ properly escaped with double-quotes in case it has spaces."
    (dolist (key '("\C-c\C-f" "\C-c\C-b"))
      (local-unset-key key))
    (local-set-key (kbd "C-c C-c") 'tex-my-compile)
-   (local-set-key (kbd "C-c C-v") 'tex-pdf-view)
-   ))
+   (local-set-key (kbd "C-c C-v") 'tex-pdf-view) ))
 
 ;;==============================================================================
 ;; HTML
@@ -348,28 +340,28 @@ properly escaped with double-quotes in case it has spaces."
 (setq c-default-style "linux" c-basic-offset 4)
 
 (defcustom c-compile-ldflags nil
-"[Local variable] Custom linker flags for C compilation."
-:safe 'stringp)
+  "[Local variable] Custom linker flags for C compilation."
+  :safe 'stringp)
 
 (defun c-compile ()
   (interactive)
   (progn
     (unless (or (file-exists-p "Makefile") (file-exists-p "makefile") (file-exists-p "GNUMakefile"))
       (set (make-local-variable 'compile-command)
-      ;; Emulate make's .c.o implicit pattern rule, but with
-      ;; different defaults for the CC, CPPFLAGS, and CFLAGS
-      ;; variables:
-      ;;   $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
-      ;; (setq compile-command
+           ;; Emulate make's .c.o implicit pattern rule, but with
+           ;; different defaults for the CC, CPPFLAGS, and CFLAGS
+           ;; variables:
+           ;;   $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
+           ;; (setq compile-command
            (let
-                ((file (file-name-nondirectory buffer-file-name)))
-              (format "%s -o %s %s %s %s %s"
-                      (or (getenv "CC") "gcc")
-                      (file-name-sans-extension file)
-                      (or (getenv "CPPFLAGS") "-DDEBUG=9")
-                      (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -g3 -O0")
-                      (or (getenv "LDFLAGS") c-compile-ldflags)
-                      file))))
+               ((file (file-name-nondirectory buffer-file-name)))
+             (format "%s -o %s %s %s %s %s"
+                     (or (getenv "CC") "gcc")
+                     (file-name-sans-extension file)
+                     (or (getenv "CPPFLAGS") "-DDEBUG=9")
+                     (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -g3 -O0")
+                     (or (getenv "LDFLAGS") c-compile-ldflags)
+                     file))))
     (compile compile-command)))
 
 (add-hook
@@ -391,8 +383,8 @@ properly escaped with double-quotes in case it has spaces."
 ;;==============================================================================
 
 (defcustom python-compiler "python"
-"Python compiler."
-:safe 'stringp)
+  "Python compiler."
+  :safe 'stringp)
 
 (add-hook
  'python-mode-hook
@@ -462,3 +454,102 @@ properly escaped with double-quotes in case it has spaces."
 (autoload 'glsl-mode "glsl-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
 (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
+
+;;==============================================================================
+;; Texinfo
+;;==============================================================================
+
+(defcustom texinfo-my-viewer "zathura --fork"
+  "PDF Viewer for Texinfo documents. You may want to fork the viewer
+so that it detects when the same document is launched twice, and
+persists when Emacs gets closed."
+  :safe 'stringp)
+
+(defcustom texinfo-my-masterfile nil
+  "[Local variable]
+
+The file that should be compiled."
+  :safe 'stringp)
+
+(defun texinfo-my-compile ()
+  "Use compile to process your Texinfo document."
+  (interactive)
+  (let
+      ;; Master file
+      ( (local-master
+         (if (not texinfo-my-masterfile)
+             buffer-file-name
+           texinfo-my-masterfile)))
+
+    (let
+        ;; Final command
+        ( (local-compile-command
+           (concat  "texi2pdf -b \"" local-master "\"")))
+
+      (message local-compile-command) ;; Debug only.
+      (save-buffer)
+      (setq compilation-scroll-output t)
+      (compile local-compile-command)
+
+      ;; If no user interaction for 2 seconds, hide the compilation window.
+      (sit-for 2)
+      (delete-windows-on "*compilation*"))))
+
+
+(defcustom texinfo-my-extension-list '(".aux" ".cp" ".cps" ".fn" ".ky" ".log" ".pg" ".toc" ".tp" ".vr" ".vrs")
+  "List of known Texinfo exentsions. This list is used by 'texinfo-clean to purge all matching files."
+  :safe 'listp)
+
+(defun texinfo-clean ()
+  "Remove all Texinfo temporary files. This command should be safe,
+but there is no warranty."
+  (interactive)
+  (let
+      ;; Master file.
+      ((local-master
+        (if (not texinfo-my-masterfile)
+            buffer-file-name
+          texinfo-my-masterfile)))
+
+    (let
+        ;; File name without extension.
+        ((file
+          (replace-regexp-in-string "texi" "" (file-name-nondirectory local-master))))
+
+      ;; Concatate file name to list.
+      (mapcar
+       ;; Delete file if exist
+       (lambda (argfile) (interactive)
+         (when (and (file-exists-p argfile) (file-writable-p argfile))
+           (delete-file argfile)
+           (message "[%s] deleted." argfile)))
+       (mapcar
+        ;; Concat file name with extensions.
+        (lambda (arg) (interactive) (concat file arg))
+        texinfo-my-extension-list)))))
+
+(defun texinfo-pdf-view ()
+  "Call a PDF viewer for current buffer file. File name should be
+properly escaped with double-quotes in case it has spaces."
+  (interactive)
+  (let (
+        ;; Master file.
+        (local-master
+         (if (not texinfo-my-masterfile)
+             buffer-file-name
+           texinfo-my-masterfile)))
+
+    (shell-command
+     (concat texinfo-my-viewer
+             " \""
+             (replace-regexp-in-string "\.texi$" "\.pdf" (file-name-nondirectory local-master))
+             "\" &" ))
+    (delete-windows-on "*Async Shell Command*")))
+
+(add-hook
+ 'texinfo-mode-hook
+ (lambda ()
+   (setq compilation-scroll-output t)
+   (local-set-key (kbd "C-c C-b") (lambda (interactive) (texinfo-multiple-files-update 8)))
+   (local-set-key (kbd "C-c C-v") 'texinfo-pdf-view)
+   (local-set-key "\C-c\C-t\C-b" 'texinfo-my-compile)))

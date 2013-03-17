@@ -3,7 +3,7 @@
 
 (setq mc/cmds-to-run-for-all
       '(
-        ispell-word
+        kill-region
         ))
 
 (setq mc/cmds-to-run-once
