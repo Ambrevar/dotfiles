@@ -496,7 +496,7 @@ The file that should be compiled."
       (delete-windows-on "*compilation*"))))
 
 
-(defcustom texinfo-my-extension-list '(".aux" ".cp" ".cps" ".fn" ".ky" ".log" ".pg" ".toc" ".tp" ".vr" ".vrs")
+(defcustom texinfo-my-extension-list '("aux" "cp" "cps" "fn" "ky" "log" "pg" "toc" "tp" "vr" "vrs")
   "List of known Texinfo exentsions. This list is used by 'texinfo-clean to purge all matching files."
   :safe 'listp)
 
@@ -532,12 +532,12 @@ but there is no warranty."
   "Call a PDF viewer for current buffer file. File name should be
 properly escaped with double-quotes in case it has spaces."
   (interactive)
-  (let (
-        ;; Master file.
-        (local-master
-         (if (not texinfo-my-masterfile)
-             buffer-file-name
-           texinfo-my-masterfile)))
+  (let
+      ;; Master file.
+      ((local-master
+        (if (not texinfo-my-masterfile)
+            buffer-file-name
+          texinfo-my-masterfile)))
 
     (shell-command
      (concat texinfo-my-viewer
@@ -546,10 +546,22 @@ properly escaped with double-quotes in case it has spaces."
              "\" &" ))
     (delete-windows-on "*Async Shell Command*")))
 
+(defun texinfo-my-menu-update ()
+  "Update texinfo node menu automatically."
+  (interactive)
+  (let
+      ;; Master file.
+      ((local-master
+        (if (not texinfo-my-masterfile)
+            buffer-file-name
+          texinfo-my-masterfile)))
+
+    (texinfo-multiple-files-update local-master t 8)))
+
 (add-hook
  'texinfo-mode-hook
  (lambda ()
    (setq compilation-scroll-output t)
-   (local-set-key (kbd "C-c C-b") (lambda (interactive) (texinfo-multiple-files-update 8)))
+   (local-set-key (kbd "C-c C-b") 'texinfo-my-menu-update)
    (local-set-key (kbd "C-c C-v") 'texinfo-pdf-view)
    (local-set-key "\C-c\C-t\C-b" 'texinfo-my-compile)))

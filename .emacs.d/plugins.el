@@ -150,7 +150,7 @@
 ;;==============================================================================
 ;; Multiple-Cursors
 ;;==============================================================================
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/multiple-cursors")
+;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/multiple-cursors")
 (if (require 'multiple-cursors nil t)
     (progn
       (setq mc/list-file "~/.emacs.d/mc-lists.el")
