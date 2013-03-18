@@ -169,3 +169,16 @@ the line."
 
 (define-key my-keys-minor-mode-map (kbd "M-(") 'move-border-left)
 (define-key my-keys-minor-mode-map (kbd "M-)") 'move-border-right)
+
+;;==============================================================================
+;; Elisp eval
+;;==============================================================================
+(defun eval-and-replace ()
+  "Replace the preceding sexp with its value."
+  (interactive)
+  (backward-kill-sexp)
+  (condition-case nil
+      (prin1 (eval (read (current-kill 0)))
+             (current-buffer))
+    (error (message "Invalid expression")
+           (insert (current-kill 0)))))
