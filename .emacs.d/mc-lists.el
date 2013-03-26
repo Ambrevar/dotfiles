@@ -3,9 +3,9 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        fill-paragraph
         ))
 
 (setq mc/cmds-to-run-once
       '(
-        overwrite-mode
         ))
