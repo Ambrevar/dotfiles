@@ -1,5 +1,5 @@
 # -*- mode:sh -*-
-## Theme kindly inspired from 
+## Theme kindly inspired from
 ## http://nongeekshandbook.blogspot.ie/2009/03/mutt-color-configuration.html
 
 ## Colours for items in the index
@@ -18,9 +18,9 @@ mono index bold ~D
 ## Highlights inside the body of a message.
 
 # URLs
-color body brightgreen black "(http|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
+color body brightgreen black "(https?|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
 color body brightgreen black "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
-mono body bold "(http|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
+mono body bold "(https?|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
 mono body bold "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
 
 ## Email addresses.
@@ -65,7 +65,7 @@ color quoted7 $my_col_comment black
 ## Default color definitions
 #color hdrdefault white green
 color signature $my_col_comment black
-color indicator black cyan 
+color indicator black cyan
 color attachment $my_col_shadow $my_col_shadow_bg
 color error red black
 color message white black

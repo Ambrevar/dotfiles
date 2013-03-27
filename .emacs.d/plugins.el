@@ -161,3 +161,4 @@
       (define-key my-keys-minor-mode-map (kbd "C-c C-n") 'mc/mark-next-word-like-this)
       (define-key my-keys-minor-mode-map (kbd "C-c C-p") 'mc/mark-previous-word-like-this)
       (define-key my-keys-minor-mode-map (kbd "C-c C-l") 'mc/mark-all-like-this-dwim)))
+

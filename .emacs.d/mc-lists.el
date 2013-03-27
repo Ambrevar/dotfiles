@@ -3,7 +3,8 @@
 
 (setq mc/cmds-to-run-for-all
       '(
-        fill-paragraph
+        org-beginning-of-line
+        org-delete-char
         ))
 
 (setq mc/cmds-to-run-once
