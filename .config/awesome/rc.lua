@@ -24,7 +24,7 @@ local naughty = require("naughty")
 --naughty.notify({ preset = naughty.config.presets.critical,
 --                 title = "aze",
 --                 text = err })
-                
+
 if ostype == "Linux" then
    vicious = require("vicious")
 end
@@ -43,7 +43,7 @@ end
 -- Handle runtime errors after startup
 do
    local in_error = false
-   awesome.connect_signal("debug::error", 
+   awesome.connect_signal("debug::error",
                       function (err)
                          -- Make sure we don't go into an endless error loop
                          if in_error then return end
@@ -55,7 +55,7 @@ do
                          in_error = false
                       end)
 end
-                        
+
 --------------------------------------------------------------------------------
 -- Themes define colours, icons, and wallpapers
 --------------------------------------------------------------------------------
@@ -128,7 +128,7 @@ if ostype == "Linux" then
    -- Net
    -- CHECK: not sure if args["{".. device .." carrier}"] may have values below 0. What do values of the args table mean?
    local networks = { "eth0", "wlan0" }
-   vicious.register(netwidget, vicious.widgets.net, 
+   vicious.register(netwidget, vicious.widgets.net,
                     function (widget, args)
                        for _,device in pairs(networks) do
                           value = tonumber(args["{".. device .." carrier}"])
@@ -151,7 +151,7 @@ if ostype == "Linux" then
       volpwidget = wibox.widget.textbox()
       vicious.register(volpwidget, vicious.widgets.volume, "PCM $1%", 1, "PCM")
    end
- 
+
    -- Battery
    local batf = io.popen("ls '/sys/class/power_supply' 2>/dev/null")
    local batl = batf:read("*a")
@@ -161,7 +161,7 @@ if ostype == "Linux" then
       -- vicious.register(batwidget, vicious.widgets.bat, '<span color="#73A9CD">$2%$1$3</span> | ', 60, "BAT0")
       --{{ Complex version (time warning)
       -- This functions changes the status color when batlimit is reached.
-      vicious.register(batwidget, vicious.widgets.bat, 
+      vicious.register(batwidget, vicious.widgets.bat,
                        function (widget, args)
                           -- We check if time is displayed (otherwise it's 'N/A'), and if minutes are less than limit.
                           if args[1] == "-"
@@ -487,7 +487,7 @@ clientkeys = awful.util.table.join(
    -- awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
    awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
 
-   
+
    -- Floating clients move
    awful.key({ modkey }, "j",         function () awful.client.moveresize(  0,  20,   0,   0) end),
    awful.key({ modkey }, "k",         function () awful.client.moveresize(  0, -20,   0,   0) end),

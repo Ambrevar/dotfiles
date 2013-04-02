@@ -26,11 +26,18 @@
 ;; Mutt support.
 (setq auto-mode-alist (append '(("/tmp/mutt.*" . mail-mode)) auto-mode-alist))
 
-;; Arch Linux PKGBUILD
+;; Arch Linux PKGBUILD.
 (setq auto-mode-alist (append '(("PKGBUILD" . sh-mode)) auto-mode-alist))
 
 ;; README files.
 (setq auto-mode-alist (append '(("README" . text-mode)) auto-mode-alist))
+
+;; Lex/Flex + Yacc/Bison mode.
+(setq auto-mode-alist (append '(("\\.l\\'" . flex-mode)) auto-mode-alist))
+(setq auto-mode-alist (append '(("\\.yy?\\'" . bison-mode)) auto-mode-alist))
+
+;; Subtitles support.
+(setq auto-mode-alist (append '(("\\.srt\\'" . text-mode)) auto-mode-alist))
 
 ;;==============================================================================
 ;; Auto-Insert
