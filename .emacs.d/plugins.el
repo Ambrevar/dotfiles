@@ -148,10 +148,13 @@
     (turn-on-xclip))
 
 ;;==============================================================================
-;; Bison
+;; Bison/flex
 ;;==============================================================================
-(require 'bison-mode nil t)
-;;(autoload 'bison-mode "bison-mode.el")
+(if (require 'bison-mode nil t)
+    (add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode)))
+
+(if (require 'flex-mode nil t)
+    (add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode)))
 
 ;;==============================================================================
 ;; Multiple-Cursors

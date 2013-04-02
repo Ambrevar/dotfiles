@@ -33,8 +33,8 @@
 (setq auto-mode-alist (append '(("README" . text-mode)) auto-mode-alist))
 
 ;; Lex/Flex + Yacc/Bison mode.
-(setq auto-mode-alist (append '(("\\.l\\'" . flex-mode)) auto-mode-alist))
-(setq auto-mode-alist (append '(("\\.yy?\\'" . bison-mode)) auto-mode-alist))
+(setq auto-mode-alist (append '(("\\.l\\'" . c-mode)) auto-mode-alist))
+(setq auto-mode-alist (append '(("\\.yy?\\'" . c-mode)) auto-mode-alist))
 
 ;; Subtitles support.
 (setq auto-mode-alist (append '(("\\.srt\\'" . text-mode)) auto-mode-alist))
@@ -573,46 +573,6 @@ properly escaped with double-quotes in case it has spaces."
    (local-set-key (kbd "C-c C-b") 'texinfo-my-menu-update)
    (local-set-key (kbd "C-c C-v") 'texinfo-pdf-view)
    (local-set-key "\C-c\C-t\C-b" 'texinfo-my-compile)))
-
-
-;;==============================================================================
-;; Flex mode
-;;==============================================================================
-
-(require 'derived)
-;(require 'cc-mode)
-
-(define-derived-mode flex-mode c-mode "Flex"
-  "Major mode for editing flex files"
-
-  ;; Try to set the indentation correctly
-  (setq-default c-basic-offset 4)
-  (make-variable-buffer-local 'c-basic-offset)
-
-  (c-set-offset 'knr-argdecl-intro 0)
-  (make-variable-buffer-local 'c-offsets-alist)
-
-  ;; Remove auto and hungry anything
-  (c-toggle-auto-hungry-state -1)
-  (c-toggle-auto-state -1)
-  (c-toggle-hungry-state -1)
-
-  (use-local-map flex-mode-map)
-
-  ;; Get rid of that damn electric-brace which is not useful with flex
-  (define-key flex-mode-map "{"	'self-insert-command)
-  (define-key flex-mode-map "}"	'self-insert-command)
-
-  (define-key flex-mode-map [tab] 'flex-indent-command)
-
-  (setq comment-start "/*"
-	comment-end "*/"
-	)
-  )
-
-(defalias 'flex-indent-command 'c-indent-command)
-
-(provide 'flex-mode)
 
 ;;==============================================================================
 ;; Org mode
