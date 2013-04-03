@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
 -- Awesome configuration
--- Date 2012-10-28
+-- Date 2013-04-03
 --------------------------------------------------------------------------------
 
 -- Get OS. Take care to read one line only, skipping end of line.
@@ -189,10 +189,9 @@ mytaglist.buttons = awful.util.table.join(
    awful.button({ modkey }, 1, awful.client.movetotag),
    awful.button({ }, 3, awful.tag.viewtoggle),
    awful.button({ modkey }, 3, awful.client.toggletag),
-   awful.button({ }, 4, awful.tag.viewnext),
-   awful.button({ }, 5, awful.tag.viewprev)
+   awful.button({ }, 4, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
+   awful.button({ }, 5, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
                                          )
-
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
    awful.button({ }, 1,
@@ -200,6 +199,9 @@ mytasklist.buttons = awful.util.table.join(
                    if c == client.focus then
                       c.minimized = true
                    else
+                      -- Without this, the following
+                      -- :isvisible() makes no sense
+                      c.minimized = false
                       if not c:isvisible() then
                          awful.tag.viewonly(c:tags()[1])
                       end
@@ -281,7 +283,7 @@ for s = 1, screen.count() do
 end
 
 --------------------------------------------------------------------------------
--- CUSTOM
+-- Mouse
 --------------------------------------------------------------------------------
 
 -- Mouse control
@@ -512,7 +514,7 @@ clientkeys = awful.util.table.join(
 -- Compute the maximum number of digit we need, limited to 9
 keynumber = 0
 for s = 1, screen.count() do
-   keynumber = math.min(9, math.max(#tags[s], keynumber));
+   keynumber = math.min(9, math.max(#tags[s], keynumber))
 end
 
 -- Bind all key numbers to tags.
@@ -569,7 +571,8 @@ awful.rules.rules = {
      properties = { border_width = beautiful.border_width,
                     border_color = beautiful.border_normal,
                     size_hints_honor = false,
-                    focus = true,
+                    focus = awful.client.focus.filter,
+                    -- focus = true,
                     keys = clientkeys,
                     buttons = clientbuttons } },
 
@@ -667,3 +670,5 @@ end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+
+--- END
