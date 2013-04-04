@@ -346,7 +346,7 @@ properly escaped with double-quotes in case it has spaces."
 ;; Identation style
 (setq c-default-style "linux" c-basic-offset 4)
 
-(defcustom c-compile-ldflags nil
+(defcustom c-compile-ldflags ""
   "[Local variable] Custom linker flags for C compilation."
   :safe 'stringp)
 
@@ -378,7 +378,8 @@ properly escaped with double-quotes in case it has spaces."
    (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
    ;; (local-set-key "." 'semantic-complete-self-insert) ; This is a bit slow.
    ;; (local-set-key ">" 'semantic-complete-self-insert)
-   (local-set-key (kbd "<f12>") 'next-error)))
+   (local-set-key (kbd "<f12>") 'next-error)
+   (local-set-key (kbd "<f10>") 'previous-error)))
 
 ;;==============================================================================
 ;; Common LISP

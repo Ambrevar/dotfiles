@@ -29,12 +29,12 @@ Highlights
 * Emacs LaTeX home-made environment, dynamic compilation, custom variable
   support, SyncTeX working with Zathura, PDF compression, and much more.
 
-* Mutt Sidebar with multiple account on non-local IMAP (using Mutt's IMAP
+* Mutt Sidebar with multiple accounts on non-local IMAP (using Mutt's IMAP
   client).
 
 * Awesome widgets: nice functions, like dynamic network speed (it checks for
-  different interfaces), CPU speed, dynamic battery that will not show up if no battery is
-  detected, and sound volume.
+  different interfaces), CPU speed, dynamic battery that will not show up if no
+  battery is detected, and sound volume.
 
 * Pacman functions: a lot of handy functions for the pacman package manager,
   like sorting by size, dependency listing, etc.
