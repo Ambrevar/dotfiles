@@ -34,7 +34,7 @@
 BEGIN {
 
     #-----ABBREVIATIONS TO BE SET IN MIXEDCASE-----
-    mixed = "KlassX "
+    mixed = "KlassX Machine "
     split(mixed, keep_mixed, " ")
 
     #-----ABBREVIATIONS TO BE SET IN LOWERCASE-----
@@ -178,18 +178,18 @@ function titlecase(string,x)  {
 
     } while (pos > 0);
 
-    # Everything should be converted now.
+    ## Everything should be converted now.
 
-    # Double exception 1: Set 1st word of string in Cap case
-    # Need to handle potential internal single/double quotes like
-    #  "A Day in the Life" or 'On the Waterfront'
-    ## WARNING: here we consider digits as part of a work (as in 1st, 2nd, etc.)
+    ## Double exception 1: Set 1st word of string in capital case. Need to
+    ## handle potential internal single/double quotes like "A Day in the Life"
+    ## or 'On the Waterfront'. WARNING: here we consider digits as part of a
+    ## work (as in 1st, 2nd, etc.)
     match(a, /[A-Za-z0-9]/)
     a = toupper(substr(a,1,RSTART)) substr(a,RSTART+1)
 
-    # Double exception 2: Set 1st word after a colon, question mark or
-    # exclamation point in title case. This kludge handles multiple colons,
-    # question marks, etc. on the line. \a is the BEL or CTRL-G character.
+    ## Double exception 2: Set 1st word after a colon, question mark or
+    ## exclamation point in title case. This kludge handles multiple colons,
+    ## question marks, etc. on the line. \a is the BEL or CTRL-G character.
     ## WARNING: we also follow double quotes by a capital.
     done = gensub(/([:?!"][^a-zA-Z]*)([a-zA-Z])/,"\\1\a\\2", "g", a)
 

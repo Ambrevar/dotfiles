@@ -185,9 +185,11 @@ if [ -z "$FORMAT" ]; then
     exit
 fi
 
+## This function greps for one match only, so if several metadata are present,
+## this may not be the desired values.
 _metadata_filter()
 {
-    echo "$METADATA" | grep -i "\<$1\>" | sed 's/[^:]* : //g'
+    echo "$METADATA" | grep -im1 "\<$1\>" | sed 's/[^:]* : //g'
 }
 
 TITLE=$(_metadata_filter "title")
@@ -240,8 +242,9 @@ case $OUTPUT_GENRE in
     *) OUTPUT_GENRE="";;
 esac
 
-## We remove the track count if any, we suppress leading zeros.
-OUTPUT_TRACK=$(eval _string_cleanser $OUTPUT_TRACK | sed -e 's/^0*//' -e 's|/.*||')
+## We remove the track count if any, we suppress leading zeros, we suppress all
+## non-digit characters.
+OUTPUT_TRACK=$(eval _string_cleanser $OUTPUT_TRACK | sed -e 's/^0*//' -e 's|[^[:digit:]].*||')
 
 ## If DATE is not a year, we use TYER if it is a year.
 OUTPUT_DATE=$(eval _string_cleanser $OUTPUT_DATE)
