@@ -121,22 +121,17 @@ fi
 if [ -e "/usr/bin/pacman" ]; then
     PACMAN_FRONTEND='pacman'
 
-    ## Use of pacman-color
-    if [ -e "/usr/bin/pacman-color" ]; then
-        PACMAN_FRONTEND='pacman-color'
-
-        ## The eval trick lets us define the alias after the variable has been expanded.
-        ## Bash will not auto-complete aliases.
-        eval 'alias pc="sudo $PACMAN_FRONTEND -Sc"'
-        eval 'alias pi="sudo $PACMAN_FRONTEND -S --needed"'
-        eval 'alias pqi="$PACMAN_FRONTEND -Qi"'
-        eval 'alias pqo="$PACMAN_FRONTEND -Qo"'
-        eval 'alias pqs="$PACMAN_FRONTEND -Qs"'
-        eval 'alias pr="sudo $PACMAN_FRONTEND -Rs"'
-        eval 'alias psi="$PACMAN_FRONTEND -Si"'
-        eval 'alias pss="$PACMAN_FRONTEND -Ss"'
-        eval 'alias pu="sudo $PACMAN_FRONTEND -Syu"'
-    fi
+    ## The eval trick lets us define the alias after the variable has been expanded.
+    ## Bash will not auto-complete aliases.
+    eval 'alias pc="sudo $PACMAN_FRONTEND -Sc"'
+    eval 'alias pi="sudo $PACMAN_FRONTEND -S --needed"'
+    eval 'alias pqi="$PACMAN_FRONTEND -Qi"'
+    eval 'alias pqo="$PACMAN_FRONTEND -Qo"'
+    eval 'alias pqs="$PACMAN_FRONTEND -Qs"'
+    eval 'alias pr="sudo $PACMAN_FRONTEND -Rs"'
+    eval 'alias psi="$PACMAN_FRONTEND -Si"'
+    eval 'alias pss="$PACMAN_FRONTEND -Ss"'
+    eval 'alias pu="sudo $PACMAN_FRONTEND -Syu"'
 fi
 
 ##==============================================================================

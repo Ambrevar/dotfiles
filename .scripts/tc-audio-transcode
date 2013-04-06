@@ -366,7 +366,7 @@ STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
 [ "$STATUS" = "off" ] && set -o shwordsplit
 
 ## TAG/RECODE
-ffmpeg -i "$1" $OGG_PARAM \
+ffmpeg -i "$1" -vn -sn $OGG_PARAM \
     -metadata title="$OUTPUT_TITLE" \
     -metadata artist="$OUTPUT_ARTIST" \
     -metadata track="$OUTPUT_TRACK" \
