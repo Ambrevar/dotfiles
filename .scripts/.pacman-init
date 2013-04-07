@@ -2,6 +2,8 @@
 # This file is not supposed to be executed directly. It is a common resource file
 # for all pacman functions.
 
+# Support: pacman 4.1
+
 if [ -z "$(command -v pacman)" ]; then
     echo "You need to have the pacman package manager installed."
     exit
@@ -19,7 +21,7 @@ if [ -z "$pacman_var_list" ]; then
 fi
 
 pacman_name="$(echo "$pacman_var_list" | sed -n '1{p;q}')"
-pacman_deps="$(echo "$pacman_var_list" | sed -n '7{p;q}')"
-pacman_deps_none="$(pacman -Qi tzdata | sed -n '7{s/.*: //;p;q}')"
-pacman_optdeps="$(echo "$pacman_var_list" | sed -n '8{p;q}')"
-pacman_size="$(echo "$pacman_var_list" | sed -n '12{p;q}')"
+pacman_deps="$(echo "$pacman_var_list" | sed -n '9{p;q}')"
+pacman_deps_none="$(pacman -Qi tzdata | sed -n '9{s/.*: //;p;q}')"
+pacman_optdeps="$(echo "$pacman_var_list" | sed -n '10{p;q}')"
+pacman_size="$(echo "$pacman_var_list" | sed -n '15{p;q}')"
