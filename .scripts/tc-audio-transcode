@@ -180,6 +180,9 @@ fi
 ## Filename without extension nor path.
 FILENAME="${1%.*}"
 FILENAME="${FILENAME##*/}"
+## Folder of the file. Needed for cover.
+SOURCEFOLDER="$(realpath "$1")"
+SOURCEFOLDER="${SOURCEFOLDER%/*}"
 ## We get format from extension, because codec is not reliable either.
 FORMAT="${1##*.}"
 ## CODEC is unused for now.
@@ -235,18 +238,26 @@ OUTPUT_ARTIST="${OUTPUT_ARTIST:-Unknown Artist}"
 OUTPUT_ALBUM=$(eval _string_cleanser $OUTPUT_ALBUM)
 [ -z "$OUTPUT_ALBUM" ] && echo "${#OUTPUT_ALBUM}${OUTPUT_ALBUM}"
 
-## We put genre in lower case and underscore to ease matching.  If it
-## matches, we use the Title Case match. If it does not, we set it to empty.
-OUTPUT_GENRE=$(eval _string_cleanser $OUTPUT_GENRE | tr '[:upper:] ' '[:lower:]_')
-case $OUTPUT_GENRE in
-    ost) OUTPUT_GENRE="Soundtrack" ;;
-    soundtrack) OUTPUT_GENRE="Soundtrack";;
-    original_soundtrack) OUTPUT_GENRE="Soundtrack";;
-    classical) OUTPUT_GENRE="Classical";;
-    classics) OUTPUT_GENRE="Classical";;
-    classic) OUTPUT_GENRE="Classical";;
-    *) OUTPUT_GENRE="";;
-esac
+## If OUTPUT_GENRE is set from command-line parameters, we clease the
+## string. Otherwise we put GENRE in lower case and underscore to ease matching.
+## If it matches, we use the Title Case match. If it does not, we set it to
+## empty.
+if [ "$OUTPUT_GENRE" = '$GENRE' ]; then
+    GENRE=$(eval _string_cleanser $GENRE | tr '[:upper:] ' '[:lower:]_')
+    case $GENRE in
+        ost) OUTPUT_GENRE="Soundtrack" ;;
+        soundtrack) OUTPUT_GENRE="Soundtrack";;
+        original_soundtrack) OUTPUT_GENRE="Soundtrack";;
+        classical) OUTPUT_GENRE="Classical";;
+        classics) OUTPUT_GENRE="Classical";;
+        classic) OUTPUT_GENRE="Classical";;
+        humour) OUTPUT_GENRE="Humour";;
+        *) OUTPUT_GENRE="";;
+    esac
+else
+    OUTPUT_GENRE=$(eval _string_cleanser $OUTPUT_GENRE)
+fi
+
 
 ## We remove the track count if any, we suppress leading zeros, we suppress all
 ## non-digit characters.
@@ -339,8 +350,8 @@ if [ $? -ne 0 ]; then
     exit
 fi
 
-## COVER
-## We copy cover only if it does not already exist.
+## COVER. We copy cover only if it does not already exist. Only files found in
+## the folder where the music is located will be taken into account.
 while read -r i; do
     OUTPUT_COVER="$OUTPUT/${OUTPUT_ALBUM:+$OUTPUT_ALBUM - }Cover"
     OUTPUT_COVERFILE="$OUTPUT_COVER.${i##*.}"
@@ -359,11 +370,11 @@ while read -r i; do
         COVER_COUNTER=$(($COVER_COUNTER+1))
     done
 
-    echo "==> COVER"
+    echo "==> COVER from $SOURCEFOLDER"
     cp -nv "$i" "$OUTPUT_COVERFILE"
     echo
 done <<EOF
-$(find "."  \( -iname '*.png' -o -iname '*.jpg' \) )
+$(find "$SOURCEFOLDER" -maxdepth 1  \( -iname '*.png' -o -iname '*.jpg' \) )
 EOF
 
 ## Zsh compatibility. We need it otherwise word splitting of parameter like

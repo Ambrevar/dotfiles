@@ -1,5 +1,4 @@
-# filename: titlecase.awk
-
+#!/bin/gawk -f
 ## Original file can be found at
 ##   http://www.pement.org/awk/titlecase.awk.txt
 
@@ -31,10 +30,15 @@
 #
 #   awk -f titlecase.awk infile
 
+## TODO: merge constants (MC, UC, LC) into one array. Use only one loop for matching.
+## TODO: get constants from external file. Support: languages, themes (music), etc.
+## TODO: rethink algorithm so that it does not need to turn everything to uppercase.
+## TODO: rethink algorithm so that it does not include punctuation in 'word'.
+
 BEGIN {
 
     #-----ABBREVIATIONS TO BE SET IN MIXEDCASE-----
-    mixed = "KlassX Machine "
+    mixed = "KlassX Machine d'Acide "
     split(mixed, keep_mixed, " ")
 
     #-----ABBREVIATIONS TO BE SET IN LOWERCASE-----
@@ -47,6 +51,9 @@ BEGIN {
     # Omitted: over (=finished), under, through, before, after
     preps = "against at between by from in into of on to upon "
 
+    ## French
+    preps = preps "du "
+
     # Build array of words to be set lowercased
     split(articles conjunctions preps verbs abbrevs, keep_lower, " ")
 
@@ -57,7 +64,6 @@ BEGIN {
 
     # build array of words to keep uppercase
     split(other, keep_upper, " ")
-
 }
 
 function titlecase(string,x)  {
@@ -80,11 +86,18 @@ function titlecase(string,x)  {
     do {
         hit = 0;         # Initialize for later use
 
+        if(debug)
+        {
+            print "1a=" a
+            print "1b=" b
+            print "1word=" word
+        }
+
         # pos is the position of the NEXT punctuation mark (except apostrophe)
         # after the current word. If this is the last word in b, pos will be 0.
         # match() automatically sets RLENGTH
         ## WARNING: we consider digits as part of a word.
-        pos = match(b, /[^A-Z0-9']+/)
+        pos = match(b, /[^[:alnum:]']+/)
         # pos = match(b, /[^A-Z']+/)
 
         if (pos > 0)    word = substr(b, 1, pos + RLENGTH - 1)
@@ -99,16 +112,32 @@ function titlecase(string,x)  {
         # shorten the rest of the string
         b = substr(b, pos + RLENGTH  )
 
-        #----Words to keep mixedcase----
+        if(debug)
+        {
+            print "2a=" a
+            print "2b=" b
+            print "2word=" word
+        }
+
+        #----Words to keep mixedcase---- WARNING: since we match a substring of
+        ## 'word', we need to prepend and append the potentially discarded
+        ## values.
         for (var in keep_mixed) {
             mix = match(word, "^" toupper(keep_mixed[var]) "\\>")
             if ( mix > 0 ) {
                 hit = 1
-                word = keep_mixed[var]
+                word = substr(word, 1, RSTART-1) keep_mixed[var] substr(word, RSTART+RLENGTH)
                 if (debug)
                     print "DIAG: Match MC on [" keep_mixed[var] "] in string [" word "]";
                 break;
             }
+        }
+
+        if(debug)
+        {
+            print "3a=" a
+            print "3b=" b
+            print "3word=" word
         }
 
         #----Words to keep uppercase----
@@ -140,7 +169,7 @@ function titlecase(string,x)  {
 
         #----Words to be set in MiXed case----
         # Case 3: Names like D'Arcy or O'Reilly
-        if ( hit == 0 && match(word, /^[DO]'[A-Z]/) ) {
+        if ( hit == 0 && match(word, /^[DO]'[[:alpha:]]/) ) {
             if (debug) print "DIAG: Match on mixed case: " word
             word = substr(word,1,3) tolower(substr(word,4))
             hit = 1
@@ -183,8 +212,8 @@ function titlecase(string,x)  {
     ## Double exception 1: Set 1st word of string in capital case. Need to
     ## handle potential internal single/double quotes like "A Day in the Life"
     ## or 'On the Waterfront'. WARNING: here we consider digits as part of a
-    ## work (as in 1st, 2nd, etc.)
-    match(a, /[A-Za-z0-9]/)
+    ## word (as in 1st, 2nd, etc.)
+    match(a, /[[:alnum:]]/)
     a = toupper(substr(a,1,RSTART)) substr(a,RSTART+1)
 
     ## Double exception 2: Set 1st word after a colon, question mark or
