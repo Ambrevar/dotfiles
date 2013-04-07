@@ -67,17 +67,19 @@ Tags:
   -g : genre
   -l : album
   -n : track number
+  -r : library root folder
   -t : title
 
-You can use the following variables to refer to existing tags:
+You can use the following variables to refer to existing values:
   \$ALBUM
   \$ALBUM_ARTIST
   \$ARTIST
   \$COMPOSER
   \$DATE
-  \$TYER
+  \$FILENAME
   \$GENRE
   \$TRACK
+  \$TYER
 
 Default output folder:
     OUTPUT="\$TC_AUDIO_DEST/\$OUTPUT_ARTIST/\${OUTPUT_ALBUM:+\${OUTPUT_DATE:+\$OUTPUT_DATE - }\$OUTPUT_ALBUM/}"
@@ -122,7 +124,7 @@ OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
 OUTPUT='$TC_AUDIO_DEST/$OUTPUT_ARTIST/${OUTPUT_ALBUM:+${OUTPUT_DATE:+$OUTPUT_DATE - }$OUTPUT_ALBUM/}'
 OUTPUT_FILE='$OUTPUT$OUTPUT_ARTIST - ${OUTPUT_PADDEDTRACK:+$OUTPUT_PADDEDTRACK - }$OUTPUT_TITLE'
 
-while getopts ":a:b:d:g:l:n:t:hps" opt; do
+while getopts ":a:b:d:g:l:n:r:t:hps" opt; do
     case $opt in
 
         a) OUTPUT_ARTIST=$OPTARG ;;
@@ -131,6 +133,7 @@ while getopts ":a:b:d:g:l:n:t:hps" opt; do
         g) OUTPUT_GENRE=$OPTARG ;;
         l) OUTPUT_ALBUM=$OPTARG ;;
         n) OUTPUT_TRACK=$OPTARG ;;
+        r) TC_AUDIO_DEST=$OPTARG ;;
         t) OUTPUT_TITLE=$OPTARG ;;
 
         h)
@@ -174,6 +177,9 @@ if [ -z "$STREAM" ]; then
     exit
 fi
 
+## Filename without extension nor path.
+FILENAME="${1%.*}"
+FILENAME="${FILENAME##*/}"
 ## We get format from extension, because codec is not reliable either.
 FORMAT="${1##*.}"
 ## CODEC is unused for now.
