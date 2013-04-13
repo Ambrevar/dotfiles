@@ -4,6 +4,7 @@ acpi
 alsa-utils
 antiword
 apvlv
+arx-libertatis
 aspell-en
 aspell-fr
 astyle
@@ -14,11 +15,10 @@ at-spi2-core
 attr
 autoconf
 automake
-awesome-git
+awesome
 bash
 bison
 blas
-bomberclone
 bzip2
 calc
 cblas
@@ -41,6 +41,7 @@ diffutils
 djvulibre
 dosbox
 dosfstools
+doxygen
 driconf
 dropbox
 dropbox-cli
@@ -48,9 +49,13 @@ dwb
 e2fsprogs
 eduke32
 eduke32-dukeplus
+emacs-bison-mode
+emacs-flex-mode
 emacs-glsl-mode
 emacs-lua-mode
+emacs-make-regexp
 emacs-mediawiki-bzr
+emacs-multiple-cursors
 emacs-nox
 emacs-xclip
 emacs-yasnippet
@@ -59,7 +64,6 @@ feh
 file
 filesystem
 findutils
-firefox
 flashplugin
 flex
 fortune-mod
@@ -76,9 +80,11 @@ git
 glfw
 glibc
 glm
+gnumeric
 gnuplot
 google-talkplugin
 gparted
+graphviz
 grep
 gsfonts
 gst-libav
@@ -99,6 +105,7 @@ ifplugd
 indent
 inetutils
 inkscape
+innoextract
 iotop
 iproute2
 iptables
@@ -118,6 +125,7 @@ lib32-libpulse
 lib32-libsamplerate
 lib32-libtxc_dxtn
 lib32-libxml2
+lib32-mesa-libgl
 lib32-mpg123
 lib32-openal
 lib32-sdl
@@ -156,6 +164,7 @@ man-db
 man-pages
 mdadm
 mediainfo
+mesa-libgl
 movgrab
 mp3info
 mpg123
@@ -176,11 +185,12 @@ ntfs-3g
 numlockx
 odt2txt
 opengl-man-pages
+openmw-git
 openssh
 oss
 p7zip
+package-query
 pacman
-pacman-color
 pacman-mirrorlist
 pam
 pari
@@ -200,12 +210,12 @@ psmisc
 pwgen
 python2-dbus
 python2-gobject
+qt4
 ranger
 reiserfsprogs
 rtorrent
 rxvt-unicode-patched
 scrot
-sdlmame
 sed
 shadow
 slock
@@ -213,7 +223,6 @@ splint
 steam
 strace
 subdl
-subversion
 sudo
 supermeatboy
 sxiv
@@ -251,7 +260,7 @@ w3m
 wget
 which
 wikiex
-wine-1.5.12
+wine
 winetricks
 wipe
 wmname

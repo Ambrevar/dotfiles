@@ -1,7 +1,7 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                             Author: P. Neidhardt                             #
-#                               Date: 2013-03-02                               #
+#                               Date: 2013-04-13                               #
 ################################################################################
 
 Synopsis
@@ -99,7 +99,9 @@ Some custom options, download location, search engines, etc.
 
 Emacs
 *****
-Extra deps: emacs-lua-mode, emacs-mediawiki, emacs-yasnippet.
+Extra deps: emacs-bison-mode emacs-flex-mode emacs-glsl-mode emacs-lua-mode
+  emacs-make-regexp emacs-mediawiki-bzr emacs-multiple-cursors emacs-nox
+  emacs-xclip emacs-yasnippet
 
 Emacs daemon is integrated flawlessly thanks to a small script. See homeinit.
 
@@ -155,14 +157,25 @@ Custom bindings, file association, tweaked a few options.
 Scripts
 *******
 
+abs-*: helper scripts to compile pacman-based packages (using makepkg). With
+       these scripts you can recompile your whole system.
+
+archive: simple tar wrapper to create archive for files and folders.
+
+asciify: convert many non-ASCII characters to their nearest ASCII counterpart.
+
+ediff: diff with Emacs.
+
+formatc: wrapper for 'indent' to prettify C source code.
+
 homeinit: initialize a new home configuration, i.e. get needed files, create
-           symlinks, etc.
+          symlinks, etc.
 
 netinit: network setup. Works with wpa_supplicant. May replace any network
-          manager.
+           manager.
 
 pkggen: generates lists of installed with pacman, FreeBSD's pkg and tlmgr (TeX
-         Live manager).
+        Live manager).
 
 Shell
 *****
@@ -181,12 +194,12 @@ appropriate shell name.
 TeX
 ***
 
-plainTeX macros, most importantly a partial UTF-8 support (taken from LaTeX).
+Plain TeX macros, most importantly a partial UTF-8 support (taken from LaTeX).
 
 A lot of LaTeX macros. Among others: pie charts, dynamic plots with
 input file and trend.
 
-plainTeX macros are in the '.texmf' folder. LaTeX macros are all bundled into
+Plain TeX macros are in the '.texmf' folder. LaTeX macros are all bundled into
 Emacs snippets so that .tex documents do not rely on any external file.
 
 URxvt
@@ -204,11 +217,13 @@ I've only been a casual Vim user, so do not expect too much from it.
 Known issues
 ************
 
-Emacs: some colors do not work as intended. MediaWiki fails to upload pages
-after some idle time.
+Emacs
+  From times to times Emacs daemon will 'break' after a while: indentation and
+  colors will stop work properly. Investigation in progress.
 
-URxvt: using the paste function from Muennich's clipboard on the same terminal
-where text was copied will make xsel crash.
+URxvt
+  Using the paste function from Muennich's clipboard on the same terminal where
+  text was copied will make it crash.
 
 ################################################################################
 Noteworthy apps

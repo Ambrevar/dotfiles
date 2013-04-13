@@ -346,22 +346,6 @@ properly escaped with double-quotes in case it has spaces."
 ;; Identation style
 (setq c-default-style "linux" c-basic-offset 4)
 
-;; TODO: test this!
-;; (defun vlad-cc-style()
-;;   (c-set-style "linux")
-;;   (c-set-offset 'innamespace '0)
-;;   (c-set-offset 'inextern-lang '0)
-;;   (c-set-offset 'inline-open '0)
-;;   (c-set-offset 'label '*)
-;;   (c-set-offset 'case-label '*)
-;;   (c-set-offset 'access-label '/)
-;;   (setq c-basic-offset 4)
-;;   (setq tab-width 4)
-;;   (setq indent-tabs-mode nil)
-;; )
-
-;; (add-hook 'c++-mode-hook 'vlad-cc-style)
-
 (defcustom c-compile-ldflags ""
   "[Local variable] Custom linker flags for C compilation."
   :safe 'stringp)
@@ -396,6 +380,61 @@ properly escaped with double-quotes in case it has spaces."
    ;; (local-set-key ">" 'semantic-complete-self-insert)
    (local-set-key (kbd "<f12>") 'next-error)
    (local-set-key (kbd "<f10>") 'previous-error)))
+
+;;==============================================================================
+;; C++-mode
+;;==============================================================================
+(require 'compile)
+
+;; TODO: test this!
+;; (defun vlad-cc-style()
+;;   (c-set-style "linux")
+;;   (c-set-offset 'innamespace '0)
+;;   (c-set-offset 'inextern-lang '0)
+;;   (c-set-offset 'inline-open '0)
+;;   (c-set-offset 'label '*)
+;;   (c-set-offset 'case-label '*)
+;;   (c-set-offset 'access-label '/)
+;;   (setq c-basic-offset 4)
+;;   (setq tab-width 4)
+;;   (setq indent-tabs-mode nil)
+;; )
+
+;; (add-hook 'c++-mode-hook 'vlad-cc-style)
+
+(defcustom c++-compile-ldflags ""
+  "[Local variable] Custom linker flags for C compilation."
+  :safe 'stringp)
+
+(defun c++-compile ()
+  (interactive)
+  (progn
+    (unless (or (file-exists-p "Makefile") (file-exists-p "makefile") (file-exists-p "GNUMakefile"))
+      (set (make-local-variable 'compile-command)
+           ;; Emulate make's .c.o implicit pattern rule, but with
+           ;; different defaults for the CC, CPPFLAGS, and CFLAGS
+           ;; variables:
+           ;;   $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
+           ;; (setq compile-command
+           (let
+               ((file (file-name-nondirectory buffer-file-name)))
+             (format "%s -o %s %s %s %s %s"
+                     (or (getenv "CXX") "g++")
+                     (file-name-sans-extension file)
+                     (or (getenv "CPPFLAGS") "-DDEBUG=9")
+                     (or (getenv "CFLAGS") "-Wall -Wextra -Wshadow -g3 -O0")
+                     (or (getenv "LDFLAGS") c++-compile-ldflags)
+                     file))))
+    (compile compile-command)))
+
+(add-hook
+ 'c++-mode-hook
+ (lambda ()
+   (local-set-key (kbd "C-c C-c") 'c++-compile)
+   (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
+   (local-set-key (kbd "<f12>") 'next-error)
+   (local-set-key (kbd "<f10>") 'previous-error)))
+
 
 ;;==============================================================================
 ;; Common LISP

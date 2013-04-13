@@ -14,6 +14,9 @@ if [ -z "$(command -v makepkg)" ]; then
     exit
 fi
 
+## We use tzdata as reference for the output fields, because it is almost always
+## installed. This let's us access the entry of pacman's output independently of
+## the current locale.
 pacman_var_list="$(pacman -Qi tzdata | cut -f1 -d':')"
 if [ -z "$pacman_var_list" ]; then
     echo "Could not get pacman's variables."
@@ -25,3 +28,4 @@ pacman_deps="$(echo "$pacman_var_list" | sed -n '9{p;q}')"
 pacman_deps_none="$(pacman -Qi tzdata | sed -n '9{s/.*: //;p;q}')"
 pacman_optdeps="$(echo "$pacman_var_list" | sed -n '10{p;q}')"
 pacman_size="$(echo "$pacman_var_list" | sed -n '15{p;q}')"
+

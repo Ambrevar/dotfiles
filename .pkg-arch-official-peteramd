@@ -9,8 +9,6 @@ alsa-oss
 alsa-plugins
 alsa-utils
 antiword
-apr
-apr-util
 apvlv
 archlinux-keyring
 aspell
@@ -27,14 +25,17 @@ attr
 autoconf
 automake
 avahi
+awesome
 babl
 bash
 bc
 binutils-multilib
 bison
 blas
-bomberclone
+boost
+boost-libs
 box2d
+bullet
 bzip2
 cabextract
 ca-certificates
@@ -70,6 +71,7 @@ dbus-glib
 dconf
 desktop-file-utils
 device-mapper
+devil
 dhcpcd
 dialog
 diffutils
@@ -79,6 +81,8 @@ dkms
 dnssec-anchors
 dosbox
 dosfstools
+dotconf
+doxygen
 driconf
 dwb
 e2fsprogs
@@ -97,7 +101,6 @@ fftw
 file
 filesystem
 findutils
-firefox
 fixesproto
 flac
 flashplugin
@@ -110,6 +113,7 @@ foomatic-filters
 fortune-mod
 freealut
 freeglut
+freeimage
 freetype2
 fribidi
 fuse
@@ -125,6 +129,7 @@ gdb
 gdbm
 gdk-pixbuf2
 gegl
+gens-gs
 geoclue
 gettext
 ghostscript
@@ -134,6 +139,7 @@ gimp
 girara-common
 girara-gtk2
 git
+glamor-egl
 glew
 glfw
 glib2
@@ -143,14 +149,17 @@ glib-networking
 glm
 glu
 gmp
+gnumeric
 gnupg
 gnuplot
 gnutls
 gobject-introspection
+goffice
 gparted
 gpgme
 gpm
 graphite
+graphviz
 grep
 groff
 gsettings-desktop-schemas
@@ -174,6 +183,7 @@ gtk3
 gtkmm
 gtkspell
 gtk-update-icon-cache
+gts
 guile
 gzip
 harfbuzz
@@ -191,6 +201,7 @@ hwids
 iana-etc
 icu
 ifplugd
+ilmbase
 imagemagick
 imlib2
 indent
@@ -416,6 +427,7 @@ libvdpau
 libvisual
 libvorbis
 libvpx
+libwebp
 libwmf
 libx11
 libx86
@@ -490,6 +502,7 @@ mplayer2
 mtdev
 mtools
 musicbrainz
+mygui
 namcap
 nano
 nawk
@@ -509,9 +522,13 @@ nspr
 nss
 ntfs-3g
 numlockx
+nvidia-cg-toolkit
 odt2txt
+ogre
+ois
 openal
 opencore-amr
+openexr
 opengl-man-pages
 openjpeg
 openssh
@@ -572,8 +589,10 @@ python2-markupsafe
 python2-notify
 python-dbus-common
 python-pyelftools
+python-xdg
 pyxml
 qpdf
+qt4
 randrproto
 ranger
 raptor
@@ -590,14 +609,10 @@ schroedinger
 scrnsaverproto
 scrot
 sdl
-sdl_image
-sdlmame
 sdl_mixer
 sdl_net
 sdl_sound
-sdl_ttf
 sed
-serf
 sg3_utils
 shadow
 shared-color-profiles
@@ -605,6 +620,7 @@ shared-mime-info
 slock
 smpeg
 soundtouch
+speech-dispatcher
 speex
 splint
 sqlite
@@ -613,7 +629,6 @@ steam
 stfl
 strace
 subdl
-subversion
 sudo
 sxiv
 sysfsutils
@@ -636,7 +651,6 @@ ttf-liberation
 tzdata
 udiskie
 udisks
-unixodbc
 unrar
 unrtf
 unzip
@@ -658,6 +672,7 @@ webkitgtk2
 wget
 which
 wildmidi
+wine
 winetricks
 wipe
 wmname
@@ -722,3 +737,4 @@ zenity
 zip
 zlib
 zsh
+zziplib
