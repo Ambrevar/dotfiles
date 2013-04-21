@@ -187,7 +187,7 @@ SOURCEFOLDER="${SOURCEFOLDER%/*}"
 FORMAT="${1##*.}"
 ## CODEC is unused for now.
 CODEC=$(echo "$STREAM" | sed -n '/Audio:/ {s/.*Audio: \([^,]*\),.*/\1/;p}')
-BITRATE=$(echo "$STREAM" | sed -n '/kb\/s/ {s/.*, \(.*\) kb\/s/\1/;p}')
+BITRATE=$(echo "$METADATA" | sed -n '/Duration/ {s|.* \([[:digit:]]\+\) kb/s|\1|;p;q}')
 
 if [ -z "$FORMAT" ]; then
     echo "ERROR: non-audio file."
@@ -263,8 +263,10 @@ fi
 ## non-digit characters.
 OUTPUT_TRACK=$(eval _string_cleanser $OUTPUT_TRACK | sed -e 's/^0*//' -e 's|[^[:digit:]].*||')
 
-## If DATE is not a year, we use TYER if it is a year.
+## We extract the four-digits number from the date.
 OUTPUT_DATE=$(eval _string_cleanser $OUTPUT_DATE)
+OUTPUT_DATE=$(echo "$OUTPUT_DATE" | sed -n 's/.*\([[:digit:]]\{4\}\).*/\1/p')
+## If DATE is not a year, we use TYER if it is a year.
 TYER_REG=$(echo "$TYER" | sed -n 's/.*\([[:digit:]]\{4\}\).*/\1/p')
 if [ ${#DATE} -ne 4 ] && [ ${#TYER_REG} -eq 4 ]; then
     OUTPUT_DATE="$TYER_REG"
@@ -273,21 +275,9 @@ fi
 ## QUALITY
 ## If bitrate argument is not provided, we use BITRATE value.
 [ $OUTPUT_BITRATE -eq 0 ] && OUTPUT_BITRATE=${BITRATE}
-## TODO: test if table is useful at all.
-# if [ $OUTPUT_BITRATE -eq 0 ]; then
-#     [ $BITRATE -le 45 ]  && OUTPUT_BITRATE=45k
-#     [ $BITRATE -gt 45 ]  && OUTPUT_BITRATE=64k
-#     [ $BITRATE -gt 64 ]  && OUTPUT_BITRATE=80k
-#     [ $BITRATE -gt 80 ]  && OUTPUT_BITRATE=96k
-#     [ $BITRATE -gt 96 ]  && OUTPUT_BITRATE=112k
-#     [ $BITRATE -gt 112 ] && OUTPUT_BITRATE=128k
-#     [ $BITRATE -gt 128 ] && OUTPUT_BITRATE=160k
-#     [ $BITRATE -gt 160 ] && OUTPUT_BITRATE=192k
-#     [ $BITRATE -gt 192 ] && OUTPUT_BITRATE=224k
-#     [ $BITRATE -gt 224 ] && OUTPUT_BITRATE=256k
-#     [ $BITRATE -gt 256 ] && OUTPUT_BITRATE=320k
-#     [ $BITRATE -gt 320 ] && OUTPUT_BITRATE=500k
-# fi
+## If OUTPUT_BITRATE is beyond OGG's limit, we trim it.
+[ $OUTPUT_BITRATE -gt 500 ] && OUTPUT_BITRATE=500
+
 
 ## Only reencode if not in OGG and if SKIP not set.
 OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
@@ -383,7 +373,9 @@ STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
 [ "$STATUS" = "off" ] && set -o shwordsplit
 
 ## TAG/RECODE
+## With the -map_metadata parameter we clear all metadata.
 ffmpeg -i "$1" -vn -sn $OGG_PARAM \
+    -map_metadata -1 \
     -metadata title="$OUTPUT_TITLE" \
     -metadata artist="$OUTPUT_ARTIST" \
     -metadata track="$OUTPUT_TRACK" \
@@ -391,9 +383,6 @@ ffmpeg -i "$1" -vn -sn $OGG_PARAM \
     -metadata album="$OUTPUT_ALBUM" \
     -metadata album_artist="$OUTPUT_ARTIST" \
     -metadata genre="$OUTPUT_GENRE" \
-    -metadata composer="" \
-    -metadata TYER="" \
-    -metadata disc="" \
     "$OUTPUT_FILE.$OUTPUT_FORMAT"
 
 ## Restore Zsh previous options. This will not turn off shwordsplit if it

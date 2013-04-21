@@ -66,7 +66,7 @@ BEGIN {
     split(other, keep_upper, " ")
 }
 
-function titlecase(string,x)  {
+function titlecase(string, x)  {
 
     # Initialize variables
     a = "";            # a is/will be the string ALREADY converted
@@ -80,6 +80,14 @@ function titlecase(string,x)  {
         gsub(/ $/, "", b)
         if (debug) print "DIAG: Compress argument passed to function call"
     }
+
+    # Punctuation
+    gsub(/ +:/, ":", b)
+    gsub(/ +;/, ";", b)
+    gsub(/ +,/, ",", b)
+    gsub(/ +\./, ".", b)
+    gsub(/ +!/, "!", b)
+    gsub(/ +\?/, "?", b)
 
     b = toupper(b)     # Capitalize everything for ease of matching
 
