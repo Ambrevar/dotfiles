@@ -75,8 +75,9 @@ function titlecase(string)  {
     ## will follow English punctuation rules.
     b = gensub(/ +([,!:;?.]+) */, "\\1 ", "g", b)
 
-    ## Compress spaces or tabs. Trim prefix and suffix space.
-    gsub(/[ \t]+/, " ", b)
+    ## Compress spaces or tabs. Trim prefix and suffix space. Convert
+    ## underscores to spaces.
+    gsub(/[_ \t]+/, " ", b)
     gsub(/^ /, "", b)
     gsub(/ $/, "", b)
 

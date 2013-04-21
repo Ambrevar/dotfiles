@@ -243,7 +243,7 @@ OUTPUT_ALBUM=$(eval _string_cleanser $OUTPUT_ALBUM)
 ## If it matches, we use the Title Case match. If it does not, we set it to
 ## empty.
 if [ "$OUTPUT_GENRE" = '$GENRE' ]; then
-    GENRE=$(eval _string_cleanser $GENRE | tr '[:upper:] ' '[:lower:]_')
+    GENRE=$(_string_cleanser "$GENRE" | tr '[:upper:] ' '[:lower:]_')
     case $GENRE in
         ost) OUTPUT_GENRE="Soundtrack" ;;
         soundtrack) OUTPUT_GENRE="Soundtrack";;
@@ -257,7 +257,6 @@ if [ "$OUTPUT_GENRE" = '$GENRE' ]; then
 else
     OUTPUT_GENRE=$(eval _string_cleanser $OUTPUT_GENRE)
 fi
-
 
 ## We remove the track count if any, we suppress leading zeros, we suppress all
 ## non-digit characters.
