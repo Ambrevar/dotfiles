@@ -3,8 +3,7 @@
 
 (setq mc/cmds-to-run-for-all
       '(
-        c-electric-delete-forward
-        yas-expand
+        org-self-insert-command
         ))
 
 (setq mc/cmds-to-run-once
