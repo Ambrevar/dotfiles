@@ -121,10 +121,16 @@ macro pager b '<enter-command>toggle sidebar_visible<enter><redraw-screen>'
 ## Aliases
 ##------------------------------------------------------------------------------
 
-set alias_file = "~/.mutt/aliases"
-set sort_alias = alias
-set reverse_alias = yes
-source $alias_file
+## Mutt native support
+# set alias_file = "~/.mutt/aliases"
+# set sort_alias = alias
+# set reverse_alias = yes
+# source $alias_file
+
+## Abook
+set query_command= "abook --mutt-query '%s'"
+macro index,pager  a "<pipe-message>abook --add-email-quiet<return>" "Add this sender to Abook"
+bind editor        <Tab> complete-query
 
 ##------------------------------------------------------------------------------
 ## Keys
