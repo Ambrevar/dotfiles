@@ -16,8 +16,8 @@ fi
 ################################################################################
 
 ## For the sake of simplicity we convert everything to OGG.
-## You can easily set output folder to current folder with TC_AUDIO_DEST=".".
-TC_AUDIO_DEST="/media/data1/Musics/"
+## You can easily set output folder to current folder with OUTPUT_ROOT=".".
+OUTPUT_ROOT="/media/data1/Musics/"
 
 ## OGG quality ranges from -1 to 10.
 ## -q-1 45 kbit/s
@@ -33,8 +33,9 @@ TC_AUDIO_DEST="/media/data1/Musics/"
 ## -q9  320 kbit/s
 ## -q10 500 kbit/s
 
-## Artists: we use same value for artist and album_artist.
-## Genres: since this is not universal by nature, we do not put a genre in tags.
+## Artists:  we use same value for artist and album_artist.
+## Genres:   since this is not universal by nature, we do not put a genre in tags,
+##           except for special cases like Soundtrack.
 ## Composer: not universal neither, we prefer ARTIST over COMPOSER, so COMPOSER
 ##           will be empty.
 
@@ -57,6 +58,8 @@ _printhelp ()
 Usage: ${1##*/} [OPTIONS] FILE
 
 Options:
+  -c : capital case (only first letter in upper case)
+  -f : overwrite if file exists
   -p : preview (do not change file)
   -s : skip encoding
 
@@ -82,7 +85,7 @@ You can use the following variables to refer to existing values:
   \$TYER
 
 Default output folder:
-    OUTPUT="\$TC_AUDIO_DEST/\$OUTPUT_ARTIST/\${OUTPUT_ALBUM:+\${OUTPUT_DATE:+\$OUTPUT_DATE - }\$OUTPUT_ALBUM/}"
+    OUTPUT_FOLDER="\$OUTPUT_ROOT/\$OUTPUT_ARTIST/\${OUTPUT_ALBUM:+\${OUTPUT_DATE:+\$OUTPUT_DATE - }\$OUTPUT_ALBUM/}"
 
 Default output file:
     OUTPUT_FILE="\$OUTPUT\$OUTPUT_ARTIST - \${OUTPUT_TRACK:+\$OUTPUT_TRACK - }\$OUTPUT_TITLE.\$OUTPUT_FORMAT"
@@ -101,9 +104,10 @@ EOF
 }
 
 ## OPTIONS
-SKIP=0
-
+CAPITAL=0
+OVERWRITE=0
 PREVIEW=0
+SKIP=0
 
 ## TAGS
 OUTPUT_ALBUM='$ALBUM'
@@ -121,10 +125,10 @@ OUTPUT_FORMAT="ogg"
 OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
 
 ## These ones are not CLI-options either, but this could be easily changed.
-OUTPUT='$TC_AUDIO_DEST/$OUTPUT_ARTIST/${OUTPUT_ALBUM:+${OUTPUT_DATE:+$OUTPUT_DATE - }$OUTPUT_ALBUM/}'
-OUTPUT_FILE='$OUTPUT$OUTPUT_ARTIST - ${OUTPUT_PADDEDTRACK:+$OUTPUT_PADDEDTRACK - }$OUTPUT_TITLE'
+OUTPUT_FOLDER='$OUTPUT_ROOT/$OUTPUT_ARTIST/${OUTPUT_ALBUM:+${OUTPUT_DATE:+$OUTPUT_DATE - }$OUTPUT_ALBUM/}'
+OUTPUT_FILE='$OUTPUT_FOLDER$OUTPUT_ARTIST - ${OUTPUT_PADDEDTRACK:+$OUTPUT_PADDEDTRACK - }$OUTPUT_TITLE'
 
-while getopts ":a:b:d:g:l:n:r:t:hps" opt; do
+while getopts ":a:b:cd:fg:l:n:r:t:hps" opt; do
     case $opt in
 
         a) OUTPUT_ARTIST=$OPTARG ;;
@@ -133,13 +137,20 @@ while getopts ":a:b:d:g:l:n:r:t:hps" opt; do
         g) OUTPUT_GENRE=$OPTARG ;;
         l) OUTPUT_ALBUM=$OPTARG ;;
         n) OUTPUT_TRACK=$OPTARG ;;
-        r) TC_AUDIO_DEST=$OPTARG ;;
+        r) OUTPUT_ROOT=$OPTARG ;;
         t) OUTPUT_TITLE=$OPTARG ;;
 
         h)
             _printhelp "$0"
             exit 1
             ;;
+        c)
+            CAPITAL=1
+            ;;
+        f)
+            OVERWRITE=1
+            ;;
+
         p)
             PREVIEW=1
             ;;
@@ -169,13 +180,13 @@ fi
 ##================================================================================
 ## Get metadata.
 STREAM=$(ffmpeg -i "$1" 2>&1)
-METADATA=$(echo "$STREAM" | sed -n '/Metadata/ ! d; /Metada/{b cont}; :cont ; {n;p;b cont}')
-STREAM=$(echo "$STREAM" | grep "Stream")
 
-if [ -z "$STREAM" ]; then
+if [ -z "$(echo $STREAM | grep "Stream")" ]; then
     echo "[$1] Non-audio file."
     exit
 fi
+
+METADATA=$(echo "$STREAM" | sed -n '/Metadata/ ! d; /Metada/{b cont}; :cont ; {n;p;b cont}')
 
 ## Filename without extension nor path.
 FILENAME="${1%.*}"
@@ -186,8 +197,8 @@ SOURCEFOLDER="${SOURCEFOLDER%/*}"
 ## We get format from extension, because codec is not reliable either.
 FORMAT="${1##*.}"
 ## CODEC is unused for now.
-CODEC=$(echo "$STREAM" | sed -n '/Audio:/ {s/.*Audio: \([^,]*\),.*/\1/;p}')
-BITRATE=$(echo "$METADATA" | sed -n '/Duration/ {s|.* \([[:digit:]]\+\) kb/s|\1|;p;q}')
+CODEC=$(echo "$STREAM" | sed -n '/Stream.*Audio:/ {s/.*Audio: \([^,]*\),.*/\1/;p}')
+BITRATE=$(echo "$STREAM" | sed -n '/Duration/ {s|.* \([[:digit:]]\+\) kb/s|\1|;p;q}')
 
 if [ -z "$FORMAT" ]; then
     echo "ERROR: non-audio file."
@@ -223,20 +234,26 @@ TYER=$(_metadata_filter "TYER")
 # / => -
 _string_cleanser()
 {
-    echo "$@" | awk -f "$TITLECASE_SCRIPT" \
+    echo "$@" | awk -v capital=$CAPITAL -f "$TITLECASE_SCRIPT" \
         | sed -n  -e "s/’/'/g ; s/ *: */ - /g ; s| */ *| - |g; p; q"
 }
 
-OUTPUT_TITLE=$(eval _string_cleanser $OUTPUT_TITLE)
+if [ "$OUTPUT_TITLE" = '$TITLE' ]; then
+    OUTPUT_TITLE=$(eval _string_cleanser $OUTPUT_TITLE)
+fi
 OUTPUT_TITLE="${OUTPUT_TITLE:-Unknown Title}"
 
-## We use album artist if artist is empty.
-OUTPUT_ARTIST=$(eval _string_cleanser $OUTPUT_ARTIST)
-[ -z "$OUTPUT_ARTIST" ] && [ -n "$ALBUM_ARTIST" ] && OUTPUT_ARTIST="$ALBUM_ARTIST"
+if [ "$OUTPUT_ARTIST" = '$ARTIST' ]; then
+    ## We use album artist if artist is empty.
+    OUTPUT_ARTIST=$(eval _string_cleanser $OUTPUT_ARTIST)
+    [ -z "$OUTPUT_ARTIST" ] && [ -n "$ALBUM_ARTIST" ] && OUTPUT_ARTIST="$ALBUM_ARTIST"
+fi
 OUTPUT_ARTIST="${OUTPUT_ARTIST:-Unknown Artist}"
 
-OUTPUT_ALBUM=$(eval _string_cleanser $OUTPUT_ALBUM)
-[ -z "$OUTPUT_ALBUM" ] && echo "${#OUTPUT_ALBUM}${OUTPUT_ALBUM}"
+if [ "$OUTPUT_ALBUM" = '$ALBUM' ]; then
+    OUTPUT_ALBUM=$(eval _string_cleanser $OUTPUT_ALBUM)
+fi
+OUTPUT_ARTIST="${OUTPUT_ALBUM:-Unknown Album}"
 
 ## If OUTPUT_GENRE is set from command-line parameters, we clease the
 ## string. Otherwise we put GENRE in lower case and underscore to ease matching.
@@ -289,16 +306,23 @@ if [ -n "$OUTPUT_PADDEDTRACK" ]; then
     [ ${OUTPUT_PADDEDTRACK} -lt 10 ] && OUTPUT_PADDEDTRACK="0$OUTPUT_PADDEDTRACK"
 fi
 
-OUTPUT=$(eval echo $OUTPUT)
+OUTPUT_FOLDER=$(eval echo $OUTPUT_FOLDER)
 OUTPUT_FILE=$(eval echo $OUTPUT_FILE)
 
-## IF file exist, we append a unique timestamp to the name.
-[ -e "${OUTPUT_FILE}.$OUTPUT_FORMAT" ] && OUTPUT_FILE="$OUTPUT_FILE-$(date '+%F-%H%M%S')"
+if [ -e "${OUTPUT_FILE}.$OUTPUT_FORMAT" ]; then
+    if [ $OVERWRITE -eq 0 ]; then
+        ## If file exist, we append a unique timestamp to the name.
+        OUTPUT_FILE="$OUTPUT_FILE-$(date '+%F-%H%M%S')"
+        OUTPUT_MSG="$(tput setf 1)$(tput bold)(Warning: destination exists, appending timestamp.)$(tput sgr0)"
+    else
+        OUTPUT_MSG="$(tput setf 4)$(tput bold)(Warning: overwriting destination!)$(tput sgr0)"
+    fi
+fi
 
 ##==============================================================================
 ## PREVIEW
 
-echo "==> BEFORE"
+echo ":: BEFORE"
 echo "ALBUM          [$ALBUM]"
 echo "ALBUM_ARTIST   [$ALBUM_ARTIST]"
 echo "ARTIST         [$ARTIST]"
@@ -312,7 +336,7 @@ echo "TITLE          [$TITLE]"
 echo "TRACK          [$TRACK]"
 echo "TYER           [$TYER]"
 echo
-echo "==> AFTER"
+echo ":: AFTER"
 echo "ALBUM          [$OUTPUT_ALBUM]"
 echo "ARTIST         [$OUTPUT_ARTIST]"
 echo "BITRATE        [$OUTPUT_BITRATE]"
@@ -322,18 +346,18 @@ echo "GENRE          [$OUTPUT_GENRE]"
 echo "TITLE          [$OUTPUT_TITLE]"
 echo "TRACK          [$OUTPUT_TRACK]"
 echo
-echo "==> OUTPUT"
+echo ":: OUTPUT $OUTPUT_MSG"
 echo "[$OUTPUT_FILE.$OUTPUT_FORMAT]"
 # echo "[$OGG_PARAM]"
 echo
 
-[ $PREVIEW -ne 0 ] && exit
+[ $PREVIEW -eq 1 ] && exit
 
 ##==============================================================================
 ## RUN PROCESS
 
 ## Make sure directory exists.
-mkdir -p "$OUTPUT"
+mkdir -p "$OUTPUT_FOLDER"
 if [ $? -ne 0 ]; then
     echo "ERROR: could not create output folder [$OUTPUT]."
     exit
@@ -359,7 +383,7 @@ while read -r i; do
         COVER_COUNTER=$(($COVER_COUNTER+1))
     done
 
-    echo "==> COVER from $SOURCEFOLDER"
+    echo ":: COVER from $SOURCEFOLDER"
     cp -nv "$i" "$OUTPUT_COVERFILE"
     echo
 done <<EOF
@@ -383,6 +407,13 @@ ffmpeg -i "$1" -vn -sn $OGG_PARAM \
     -metadata album_artist="$OUTPUT_ARTIST" \
     -metadata genre="$OUTPUT_GENRE" \
     "$OUTPUT_FILE.$OUTPUT_FORMAT"
+
+echo
+
+if [ $OVERWRITE -eq 1 ]; then
+    mv -vf "$OUTPUT_FILE.$OUTPUT_FORMAT" "$1"
+    echo
+fi
 
 ## Restore Zsh previous options. This will not turn off shwordsplit if it
 ## was on before calling the function.

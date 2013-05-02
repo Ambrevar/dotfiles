@@ -50,7 +50,7 @@ BEGIN {
     constants = constants "a an the and but for nor or so am is are against at between by from in into of on to upon "
 
     ## French
-    constants = constants "un une de du le la les et mais pour ni ou à a où contre entre chez dans sur "
+    constants = constants "un une de du le la les et mais pour ni ou à a où contre entre chez dans sur que qui "
 
     ## German
     constants = constants "der die das den dem des ein eine einen eines einer von wo an am in für gegen bei aus mit nach seit zu durch ohne um "
@@ -140,7 +140,7 @@ function titlecase(string)  {
         }
 
         ## RULE 3 -- Names like D'Arcy or O'Reilly
-        if ( hit == 0 && match(word, /^[DO]'[[:alpha:]]/) ) {
+        if ( hit == 0 && capital != 1 && match(word, /^[DO]'[[:alpha:]]/) ) {
             word = substr(word,1,3) tolower(substr(word,4))
             hit = 1
             if (debug)
@@ -160,8 +160,9 @@ function titlecase(string)  {
 
         ## If one of the above rule is hit, we append the result to 'a',
         ## otherwise we capitalize it.
-        if (hit > 0) a = a word
-        else         a = a toupper(head) tolower(tail)
+        if (hit > 0 )          a = a word
+        else if (capital == 1) a = a tolower(head) tolower(tail)
+        else                   a = a toupper(head) tolower(tail)
 
     } while (pos > 0);
 

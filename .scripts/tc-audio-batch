@@ -31,15 +31,16 @@ fi
 IFS="
 "
 for i in $(find "."  \( \
-    -iname '*.mp3'  -o \
-    -iname '*.flac' -o \
-    -iname '*.wv'   -o \
     -iname '*.aac'  -o \
-    -iname '*.wav'  -o \
     -iname '*.ape'  -o \
-    -iname '*.mpc' \) ) ;do
+    -iname '*.flac' -o \
+    -iname '*.ogg'  -o \
+    -iname '*.mp3'  -o \
+    -iname '*.mpc'  -o \
+    -iname '*.wav'  -o \
+    -iname '*.wv'   \) ) ;do
 
-    echo "$i"
+    echo "$(tput setf 2)$(tput bold)==>$(tput sgr0) $i"
     "${0%/*}/tc-audio-transcode" "$@" "$i"
 done
 unset IFS
