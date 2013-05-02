@@ -253,7 +253,7 @@ OUTPUT_ARTIST="${OUTPUT_ARTIST:-Unknown Artist}"
 if [ "$OUTPUT_ALBUM" = '$ALBUM' ]; then
     OUTPUT_ALBUM=$(eval _string_cleanser $OUTPUT_ALBUM)
 fi
-OUTPUT_ARTIST="${OUTPUT_ALBUM:-Unknown Album}"
+OUTPUT_ALBUM="${OUTPUT_ALBUM:-Unknown Album}"
 
 ## If OUTPUT_GENRE is set from command-line parameters, we clease the
 ## string. Otherwise we put GENRE in lower case and underscore to ease matching.
