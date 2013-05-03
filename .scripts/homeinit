@@ -8,6 +8,9 @@ SOURCEDIR="${HOME}/personal/dataperso"
 [ -z "$XDG_DATA_HOME" ] && XDG_DATA_HOME="$HOME/.local/share"
 [ -z "$XDG_DATA_DIRS" ] && XDG_DATA_DIRS="/usr/local/share"
 
+## Temp folder
+mkdir -p temp
+
 ## Emacsclient launcher. Required for best emacsclient integration.  For a fully
 ## functional daemon, you should write a file like this and set 'EDITOR=em'.
 if [ ! -f /bin/em ]; then
@@ -18,20 +21,20 @@ emacsclient -a \"\" -t \"\$@\"' > '/bin/em'; chmod 755 /bin/em"
 fi
 
 echo "==> Abook"
-ln -snf "$(realpath ${SOURCEDIR}/contacts)" "${HOME}/.abook"
+[ -d "$SOURCEDIR" ] && ln -snf "$(realpath ${SOURCEDIR}/contacts)" "${HOME}/.abook"
 echo
 
 echo "==> Mutt"
-ln -snf "$(realpath ${SOURCEDIR}/mails)" "${HOME}/.mutt"
+[ -d "$SOURCEDIR" ] && ln -snf "$(realpath ${SOURCEDIR}/mails)" "${HOME}/.mutt"
 mkdir -p "${HOME}/.mutt.d/hcache"
 echo
 
-echo "==> TODO data"
-ln -snf "${SOURCEDIR}/todo/todo.org" "${HOME}/todo.org"
+echo "==> TODO"
+[ -d "$SOURCEDIR" ] && ln -snf "${SOURCEDIR}/todo/todo.org" "${HOME}/todo.org"
 echo
 
 echo "==> rtorrent"
-mkdir -p "${HOME}/.session"
+[ -n "$(command -v rtorrent)" ] && mkdir -p "${HOME}/.session"
 echo
 
 ## Luakit -- Install the adblock modules
@@ -61,17 +64,22 @@ fi
 
 ## Bookmarks
 echo "==> Bookmarks"
-BROWSER_DATA_DIR="$XDG_DATA_HOME/$BROWSER/"
-if [ "$BROWSER" = "dwb" ]; then
-    BROWSER_DATA_DIR="$XDG_CONFIG_HOME/$BROWSER/default/"
+if [ -z "$BROWSER" ]; then
+    echo "Variable BROWSER is not set."
+else
+    BROWSER_DATA_DIR="$XDG_DATA_HOME/$BROWSER/"
+    if [ "$BROWSER" = "dwb" ]; then
+        BROWSER_DATA_DIR="$XDG_CONFIG_HOME/$BROWSER/default/"
+    fi
+    [ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/bookmarks/bookmarks" "$BROWSER_DATA_DIR"
+    [ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/bookmarks/quickmarks" "$BROWSER_DATA_DIR"
 fi
-ln -sf "${SOURCEDIR}/bookmarks/bookmarks" "$BROWSER_DATA_DIR"
-ln -sf "${SOURCEDIR}/bookmarks/quickmarks" "$BROWSER_DATA_DIR"
 echo
 
 ## News
+if [ -n "$(command -v newsbeuter)" ]; then
 echo "==> Newsbeuter"
 mkdir -p "$XDG_DATA_HOME/newsbeuter"
-ln -sf "${SOURCEDIR}/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
-ln -sf "${SOURCEDIR}/news/news_starred" "$XDG_CONFIG_HOME/newsbeuter/"
+[ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
+[ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/news/news_starred" "$XDG_CONFIG_HOME/newsbeuter/"
 echo

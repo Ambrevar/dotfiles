@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 ################################################################################
 ## Custom network initialization script.
-## 2012-10-29
+## 2013-05-03
 ################################################################################
 ## Deps: wpa_supplicant, ccrypt (optional)
 
@@ -28,7 +28,9 @@ if [ $(id -u) -ne 0 ]; then
     exit
 fi
 
-NET_INTERFACE=wlan0
+## Note: systemd-197 introduced Predictable Network Interface Names, so we need
+## to check for the proper device dynamically.
+NET_INTERFACE=$(ls -1 /sys/class/net | grep -m1 "^wl")
 WPA_SUPPLICANT_CONF="$(cat /etc/wpa_supplicant.conf)"
 TIMEOUT_LIMIT=500
 
@@ -60,8 +62,6 @@ else
 ## Same comments as for Linux.
 
     pkill dhclient
-    pkill wpa_supplicant
-
     ifconfig wlan0 up
 
     if [ -n "$(ifconfig ${NET_INTERFACE} | grep 'ssid ""')" ]; then
