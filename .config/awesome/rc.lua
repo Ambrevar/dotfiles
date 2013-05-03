@@ -127,10 +127,15 @@ if ostype == "Linux" then
 
    -- Net
    -- CHECK: not sure if args["{".. device .." carrier}"] may have values below 0. What do values of the args table mean?
-   local networks = { "eth0", "wlan0" }
+   local proc = io.popen("ls -1 /sys/class/net")
+   local ifarray = {}
+   for line in proc:lines() do
+      table.insert (ifarray, line);
+   end
+   proc:close()
    vicious.register(netwidget, vicious.widgets.net,
                     function (widget, args)
-                       for _,device in pairs(networks) do
+                       for _,device in pairs(ifarray) do
                           value = tonumber(args["{".. device .." carrier}"])
                           if value ~= nil and value ~= 0 then
                              return separator .. '<span color="#CC9393">↓' .. args["{" .. device .. " down_kb}"] .. '</span> <span color="#7F9F7F">↑' .. args["{" .. device .. " up_kb}"] .. '</span>'
