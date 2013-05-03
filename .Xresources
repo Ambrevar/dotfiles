@@ -39,7 +39,13 @@ URxvt.clipboard.pastecmd:   xclip -o -quiet
 ! URxvt.clipboard.copycmd:  xclip -i -selection clipboard
 
 !! Font
+!! TODO: xft fonts seem to be messy with ranger image preview.
+! URxvt*font       : xft:Liberation Mono:pixelsize=14
 URxvt*font       : xft:Dejavu Sans Mono:pixelsize=14
+! URxvt*font       : -*-dejavu sans mono-*-*-*-*-*-*-*-*-*-*-iso8859-*
+! URxvt*font       : -*-dejavu sans-medium-r-*-*-14-*-*-*-*-*-*-*
+!xterm*font       : -*-dejavu sans-medium-r-*-*-14-*-*-*-*-*-*-*
+xterm*faceName:DejaVu Sans Mono:pixelsize=12
 
 ! URxvt*boldFont   : xft:Monospace:bold:pixelsize=14
 ! URxvt*boldFont : xft:Monospace Bold:pixelsize=12

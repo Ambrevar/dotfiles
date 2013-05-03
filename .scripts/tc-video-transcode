@@ -66,9 +66,10 @@ Transcode FILES or files found in FOLDERS to .mkv with x264 and ogg. Output
 files are the same as the original, with time appended. You can customize
 encoding with the TC_* variables.
 
-  -f:  Overwrite existing file if any.
-  -h:  Display this help.
-  -s:  Sample of ten minutes.
+  -f:      Overwrite existing file if any.
+  -h:      Display this help.
+  -s:      Sample of 5 minutes.
+  -S MIN:  Sample of MIN minutes.
 EOF
 }
 
@@ -79,7 +80,7 @@ TC_OVERWRITE="-n"
 
 TC_SAMPLE=""
 
-while getopts ":fhs" opt; do
+while getopts ":fhsS:" opt; do
     case $opt in
         f)
             TC_OVERWRITE="-y"
@@ -89,7 +90,10 @@ while getopts ":fhs" opt; do
             exit 1
             ;;
         s)
-            TC_SAMPLE="-ss 60 -t 600"
+            TC_SAMPLE="-ss 60 -t 360"
+            ;;
+        S)
+            TC_SAMPLE="-ss 60 -t $((60+60*$OPTARG))"
             ;;
         ?)
             _printhelp "$0"
@@ -116,14 +120,23 @@ fi
 STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
 [ "$STATUS" = "off" ] && set -o shwordsplit
 
+## WARNING: we mix down audio to 2 channels with '-ac 2'. This greatly reduce
+## file size and avoid any confusion for playback, which is often the case when
+## converting DTS to any other format because DTS has embedded channel
+## description which is not available in other formats.
 _tc_transcode()
 {
     echo "================================================================================"
     ffmpeg $TC_OVERWRITE $TC_SAMPLE -i "$1" \
         -c:v libx264 -preset $TC_VIDEO_PRESET -crf $TC_VIDEO_QUAL $TC_VIDEO_TUNE $TC_VIDEO_OPTS \
-        -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL \
+        -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL -ac 2 \
         -c:s copy \
         -map 0 "${1%.*}-$(date '+%F-%H%M%S').mkv"
+
+        # -metadata:s:a:0 title="FR (OGG Stereo)" \
+        # -metadata:s:a:1 title="EN (OGG Stereo)" \
+        # -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL \
+        # -c:a dca -b:a 500k -strict -2 \
 }
 
 for i in "$@"; do

@@ -105,7 +105,7 @@ EOF
 
 ## OPTIONS
 CAPITAL=0
-OVERWRITE=0
+OVERWRITE="-n"
 PREVIEW=0
 SKIP=0
 
@@ -148,7 +148,7 @@ while getopts ":a:b:cd:fg:l:n:r:t:hps" opt; do
             CAPITAL=1
             ;;
         f)
-            OVERWRITE=1
+            OVERWRITE="-y"
             ;;
 
         p)
@@ -310,7 +310,7 @@ OUTPUT_FOLDER=$(eval echo $OUTPUT_FOLDER)
 OUTPUT_FILE=$(eval echo $OUTPUT_FILE)
 
 if [ -e "${OUTPUT_FILE}.$OUTPUT_FORMAT" ]; then
-    if [ $OVERWRITE -eq 0 ]; then
+    if [ $OVERWRITE = "-n" ]; then
         ## If file exist, we append a unique timestamp to the name.
         OUTPUT_FILE="$OUTPUT_FILE-$(date '+%F-%H%M%S')"
         OUTPUT_MSG="$(tput setf 1)$(tput bold)(Warning: destination exists, appending timestamp.)$(tput sgr0)"
@@ -397,7 +397,7 @@ STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
 
 ## TAG/RECODE
 ## With the -map_metadata parameter we clear all metadata.
-ffmpeg -i "$1" -vn -sn $OGG_PARAM \
+ffmpeg $OVERWRITE -i "$1" -vn -sn $OGG_PARAM \
     -map_metadata -1 \
     -metadata title="$OUTPUT_TITLE" \
     -metadata artist="$OUTPUT_ARTIST" \
@@ -409,11 +409,6 @@ ffmpeg -i "$1" -vn -sn $OGG_PARAM \
     "$OUTPUT_FILE.$OUTPUT_FORMAT"
 
 echo
-
-if [ $OVERWRITE -eq 1 ]; then
-    mv -vf "$OUTPUT_FILE.$OUTPUT_FORMAT" "$1"
-    echo
-fi
 
 ## Restore Zsh previous options. This will not turn off shwordsplit if it
 ## was on before calling the function.
