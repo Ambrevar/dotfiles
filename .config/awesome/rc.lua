@@ -127,12 +127,14 @@ if ostype == "Linux" then
 
    -- Net
    -- CHECK: not sure if args["{".. device .." carrier}"] may have values below 0. What do values of the args table mean?
-   local proc = io.popen("ls -1 /sys/class/net")
+   -- Note: we must make sure note to take the loopback interface into account.
+   local proc = io.popen("ls -1 /sys/class/net | grep -v '^lo$'")
    local ifarray = {}
    for line in proc:lines() do
       table.insert (ifarray, line);
    end
    proc:close()
+
    vicious.register(netwidget, vicious.widgets.net,
                     function (widget, args)
                        for _,device in pairs(ifarray) do

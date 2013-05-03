@@ -44,13 +44,13 @@ if [ "$OSTYPE" = "linux-gnu" ] ; then
     ip link set ${NET_INTERFACE} up
 
     # Associate if needed.
-    if [ "$1" = "-f" ] || [ -n "$(iwconfig ${NET_INTERFACE} | grep 'Not-Associated')" ]; then
+    if [ "$1" = "-f" ] || [ -z "$(iw dev ${NET_INTERFACE} link | grep SSID)" ]; then
         wpa_supplicant -B -i ${NET_INTERFACE} -D wext -c <(echo "${WPA_SUPPLICANT_CONF}")
     fi
 
     ## Wait until wpa_supplicant has finished association.
     i=0
-    while [ -n "$(iwconfig ${NET_INTERFACE} | grep 'off/any')" ] && [ $i -lt $TIMEOUT_LIMIT ] ; do
+    while [ -z "$(iw dev ${NET_INTERFACE} link | grep SSID)" ] && [ $i -lt $TIMEOUT_LIMIT ] ; do
         i=$(($i+1))
     done
 

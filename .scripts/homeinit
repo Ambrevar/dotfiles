@@ -58,7 +58,7 @@ fi
 if [ -n "$(command -v dwb)" ]; then
     echo "==> dwb"
     dwbem -Ni adblock_subscriptions
-    dwbem -Ni youtube_html5
+    # dwbem -Ni youtube_html5
     echo
 fi
 
@@ -78,8 +78,9 @@ echo
 
 ## News
 if [ -n "$(command -v newsbeuter)" ]; then
-echo "==> Newsbeuter"
-mkdir -p "$XDG_DATA_HOME/newsbeuter"
-[ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
-[ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/news/news_starred" "$XDG_CONFIG_HOME/newsbeuter/"
-echo
+    echo "==> Newsbeuter"
+    mkdir -p "$XDG_DATA_HOME/newsbeuter"
+    [ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
+    [ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/news/news_starred" "$XDG_CONFIG_HOME/newsbeuter/"
+    echo
+fi
