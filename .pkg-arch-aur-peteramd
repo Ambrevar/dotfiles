@@ -1,5 +1,4 @@
 arx-libertatis
-cblas
 dropbox
 dropbox-cli
 eduke32
@@ -12,17 +11,13 @@ emacs-mediawiki-bzr
 emacs-multiple-cursors
 emacs-xclip
 emacs-yasnippet
-fortune-mod-tbbt
 google-talkplugin
-innoextract
-libimago2-svn
 movgrab
 mutt-sidebar
 openmw-git
 package-query
 rxvt-unicode-patched
 supermeatboy
-textadept-latest-stable
 trash-cli
 wikiex
 worldofgoo

@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
 -- Awesome configuration
--- Date 2013-04-03
+-- Date 2013-05-04
 --------------------------------------------------------------------------------
 
 -- Get OS. Take care to read one line only, skipping end of line.
@@ -60,8 +60,6 @@ end
 -- Themes define colours, icons, and wallpapers
 --------------------------------------------------------------------------------
 -- beautiful.init("/usr/share/awesome/themes/default/theme.lua")
--- beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
--- beautiful.init("/home/peter/.config/awesome/themes/custom/theme.lua")
 beautiful.init(awful.util.getdir("config") .. "/themes/custom/theme.lua")
 
 -- {{{ Wallpaper
@@ -492,10 +490,7 @@ clientkeys = awful.util.table.join(
    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
    awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
    awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
-   -- TODO: redraw does not work since 3.5?
-   -- awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
    awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
-
 
    -- Floating clients move
    awful.key({ modkey }, "j",         function () awful.client.moveresize(  0,  20,   0,   0) end),

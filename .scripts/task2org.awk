@@ -1,7 +1,7 @@
 #!/bin/gawk -f
-## This script convert Task Warrior pending.data file to an org-mode compatible format.
-## WARNING: unpolished work. Use at your own risk!
-## TODO: check support for multiple tags.
+
+## This script convert Task Warrior pending.data file to an org-mode compatible
+## format. WARNING: unpolished work. Use at your own risk!
 
 BEGIN {
     FS="\" "
@@ -48,7 +48,7 @@ BEGIN {
             tags=tagsep ":" a[2] ": "
         else if (a[1] ~ "^start$")
             start="TODO "
-      
+
         if (a[1] ~ "^recur$")
             recur=" " recur_array[a[2]]
 

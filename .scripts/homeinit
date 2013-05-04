@@ -29,7 +29,7 @@ echo "==> Mutt"
 mkdir -p "${HOME}/.mutt.d/hcache"
 echo
 
-echo "==> TODO"
+echo "==> To-Do"
 [ -d "$SOURCEDIR" ] && ln -snf "${SOURCEDIR}/todo/todo.org" "${HOME}/todo.org"
 echo
 

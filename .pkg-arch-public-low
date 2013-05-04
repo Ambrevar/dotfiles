@@ -6,11 +6,14 @@ flashplugin
 foomatic-db-nonfree
 git
 gpicview
+hplip
 ifplugd
 iw
+libgphoto2
 libreoffice
 linux-lts
 lxdm
+ntfs-3g
 ttf-dejavu
 vlc
 wpa_actiond
@@ -20,7 +23,4 @@ xorg-server
 xorg-xinit
 xorg-xrdb
 yaourt
-libgphoto2
-ntfs-3g
-hplip
 

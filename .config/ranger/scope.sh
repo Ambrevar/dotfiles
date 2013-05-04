@@ -87,9 +87,8 @@ esac
 case "$mimetype" in
     # Syntax highlight for text files:
     text/* | */xml)
-        try highlight --out-format=ansi "$path" && { dump | trim; exit 5; } || exit 2;;
-        # TODO: does not work!
-		# highlight --out-format=xterm256 -s zmrok "$path" | head -n $maxln
+        # try highlight --out-format=ansi "$path" && { dump | trim; exit 5; } || exit 2;;
+        try highlight --out-format=xterm256 -s clarity "$path" && { dump | trim; exit 5; } || exit 2;;
 
     # Ascii-previews of images:
     image/*)
