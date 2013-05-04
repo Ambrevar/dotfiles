@@ -104,15 +104,18 @@ export EDITOR
 #esac
 
 ## SSH-Agent
-## WARNING: this is somewhat insecure. avoid using it on a mutli-user machine.
-SSH_ENV_FILE="/tmp/ssh-agent-env"
-if [ $(ps ax -o command="" | grep -c "ssh-agent") -eq 2 ]; then
-    SSH_AGENT_VARS=$(ssh-agent)
-    eval $(echo "${SSH_AGENT_VARS}")
-    echo "${SSH_AGENT_VARS}" | sed '2q' | cut -d'=' -f2  | cut -d';' -f1 > "$SSH_ENV_FILE"
-    chmod 444 "$SSH_ENV_FILE"
-    unset $SSH_AGENT_VARS
-elif [ -f "$SSH_ENV_FILE" ]; then
-    SSH_AUTH_SOCK=$(sed -n '1{p;q}' "$SSH_ENV_FILE") ; export SSH_AUTH_SOCK
-    SSH_AGENT_PID=$(sed -n '2{p;q}' "$SSH_ENV_FILE") 2>/dev/null ; export SSH_AGENT_PID
+## WARNING: this is somewhat insecure. Avoid using it on a mutli-user machine.
+if [ -n "$(command -v ssh-agent)" ]; then
+    SSH_ENV_FILE="/tmp/ssh-agent-env"
+    if [ $(ps ax -o command="" | grep -c "ssh-agent") -eq 1 ]; then
+        SSH_AGENT_VARS=$(ssh-agent)
+        eval $(echo "${SSH_AGENT_VARS}")
+        echo "${SSH_AGENT_VARS}" | sed '2q' | cut -d'=' -f2  | cut -d';' -f1 > "$SSH_ENV_FILE"
+        chmod 444 "$SSH_ENV_FILE"
+        unset $SSH_AGENT_VARS
+    elif [ -f "$SSH_ENV_FILE" ]; then
+        SSH_AUTH_SOCK=$(sed -n '1{p;q}' "$SSH_ENV_FILE") ; export SSH_AUTH_SOCK
+        SSH_AGENT_PID=$(sed -n '2{p;q}' "$SSH_ENV_FILE") 2>/dev/null ; export SSH_AGENT_PID
+    fi
+    unset SSH_ENV_FILE
 fi

@@ -84,10 +84,14 @@ source "ccat ~/.mutt-pwds.cpt |"
 ## Last account is default.
 source "~/.mutt/$my_ac_work"
 folder-hook $folder 'source ~/.mutt/$my_ac_work'
-source "~/.mutt/$my_ac_university"
-folder-hook $folder 'source ~/.mutt/$my_ac_university'
 source "~/.mutt/$my_ac_personal"
 folder-hook $folder 'source ~/.mutt/$my_ac_personal'
+source "~/.mutt/$my_ac_university"
+folder-hook $folder 'source ~/.mutt/$my_ac_university'
+
+macro index,pager <f2> '<enter-command>source ~/.mutt/$my_ac_work<enter><change-folder>!<enter>'
+macro index,pager <f3> '<enter-command>source ~/.mutt/$my_ac_personal<enter><change-folder>!<enter>'
+macro index,pager <f4> '<enter-command>source ~/.mutt/$my_ac_university<enter><change-folder>!<enter>'
 
 ##------------------------------------------------------------------------------
 ## Sidebar
