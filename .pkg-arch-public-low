@@ -18,8 +18,10 @@ libreoffice
 linux-lts
 lxde-icon-theme
 lxdm
+network-manager-applet
 ntfs-3g
 python2-gobject2
+simple-scan
 ttf-dejavu
 vlc
 wpa_actiond
