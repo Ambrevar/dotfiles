@@ -41,13 +41,10 @@ TC_VIDEO_OPTS=""
 ## End of user options
 ################################################################################
 
-## TODO: audio quality. Copy if AAC or OGG <320k.
-## TODO: chapters support. Already OK?
-## TODO: crop options.
-## TODO: custom mapping.
-## TODO: handle srt encoding.
 ## TODO: option to replace original file.
-## TODO: workout -threads option.
+## TODO: audio quality. Copy if AAC or OGG <320k.
+## TODO: crop options.
+## TODO: handle srt encoding.
 ## TODO: separate functions:
 ##   tc_video_batch
 ##   tc_video_transcode
@@ -70,6 +67,19 @@ encoding with the TC_* variables.
   -h:      Display this help.
   -s:      Sample of 5 minutes.
   -S MIN:  Sample of MIN minutes.
+  -o OPT:  Additional options.
+
+Examples:
+
+* Exchange stream 1 an 2 by first removing them, then readding them in the
+  desired order.
+
+  ${1##*/} -o '-map -0:1 -map -0:2 -map 0:2 -map 0:1' input.mkv
+
+* Change audio stream 1 title and remove audio stream 2 title:
+
+  ${1##*/} -o '-metadata:s:a:0 title="FR: OGG Stereo" -metadata:s:a:1 title=' input.mkv
+
 EOF
 }
 
@@ -77,10 +87,10 @@ EOF
 # -y overwrite
 # -n do not overwrite.
 TC_OVERWRITE="-n"
-
 TC_SAMPLE=""
+TC_USER_OPT=""
 
-while getopts ":fhsS:" opt; do
+while getopts ":fho:sS:" opt; do
     case $opt in
         f)
             TC_OVERWRITE="-y"
@@ -89,11 +99,14 @@ while getopts ":fhsS:" opt; do
             _printhelp "$0"
             exit 1
             ;;
+        o)
+            TC_USER_OPT="$OPTARG"
+            ;;
         s)
             TC_SAMPLE="-ss 60 -t 360"
             ;;
         S)
-            TC_SAMPLE="-ss 60 -t $((60+60*$OPTARG))"
+            TC_SAMPLE="-ss 60 -t $((60*$OPTARG))"
             ;;
         ?)
             _printhelp "$0"
@@ -131,12 +144,8 @@ _tc_transcode()
         -c:v libx264 -preset $TC_VIDEO_PRESET -crf $TC_VIDEO_QUAL $TC_VIDEO_TUNE $TC_VIDEO_OPTS \
         -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL -ac 2 \
         -c:s copy \
-        -map 0 "${1%.*}-$(date '+%F-%H%M%S').mkv"
-
-        # -metadata:s:a:0 title="FR (OGG Stereo)" \
-        # -metadata:s:a:1 title="EN (OGG Stereo)" \
-        # -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL \
-        # -c:a dca -b:a 500k -strict -2 \
+        -map 0 \
+        $TC_USER_OPT "${1%.*}-$(date '+%F-%H%M%S').mkv"
 }
 
 for i in "$@"; do
@@ -158,8 +167,8 @@ $(find "$i"  \( \
  -iname '*.mpg' \) )
 EOF
 
-        ## Argument is a regular file.
     else
+        ## Argument is a regular file.
         _tc_transcode "$i"
     fi
 
