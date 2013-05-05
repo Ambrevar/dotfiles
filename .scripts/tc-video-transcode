@@ -124,7 +124,7 @@ shift $(($OPTIND - 1))
 
 
 if [ $# -eq 0 ]; then
-    tc_transcode .
+    _printhelp "$0"
     exit
 fi
 
@@ -139,7 +139,15 @@ STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
 ## description which is not available in other formats.
 _tc_transcode()
 {
-    echo "================================================================================"
+    cat<<EOF
+================================================================================
+OPTIONS:
+
+User options: $TC_USER_OPT
+Sample:       $TC_SAMPLE
+================================================================================
+EOF
+
     ffmpeg $TC_OVERWRITE $TC_SAMPLE -i "$1" \
         -c:v libx264 -preset $TC_VIDEO_PRESET -crf $TC_VIDEO_QUAL $TC_VIDEO_TUNE $TC_VIDEO_OPTS \
         -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL -ac 2 \

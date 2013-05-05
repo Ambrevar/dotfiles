@@ -17,7 +17,7 @@ fi
 
 ## For the sake of simplicity we convert everything to OGG.
 ## You can easily set output folder to current folder with OUTPUT_ROOT=".".
-OUTPUT_ROOT="/media/data1/Musics/"
+OUTPUT_ROOT="/media/data2/Musics/"
 
 ## OGG quality ranges from -1 to 10.
 ## -q-1 45 kbit/s
@@ -212,20 +212,19 @@ _metadata_filter()
     echo "$METADATA" | grep -im1 "\<$1\>" | sed 's/[^:]* : //g'
 }
 
-TITLE=$(_metadata_filter "title")
-ARTIST=$(_metadata_filter "artist")
-ALBUM=$(_metadata_filter "album")
-ALBUM_ARTIST=$(_metadata_filter "album_artist")
-COMPOSER=$(_metadata_filter "composer")
-DISC=$(_metadata_filter "disc")
-GENRE=$(_metadata_filter "genre")
+INPUT_TITLE=$(_metadata_filter "title")
+INPUT_ARTIST=$(_metadata_filter "artist")
+INPUT_ALBUM=$(_metadata_filter "album")
+INPUT_ALBUM_ARTIST=$(_metadata_filter "album_artist")
+INPUT_COMPOSER=$(_metadata_filter "composer")
+INPUT_DISC=$(_metadata_filter "disc")
+INPUT_GENRE=$(_metadata_filter "genre")
+INPUT_TRACK=$(_metadata_filter "track")
+INPUT_DATE=$(_metadata_filter "date")
+INPUT_TYER=$(_metadata_filter "TYER")
 
-TRACK=$(_metadata_filter "track")
-DATE=$(_metadata_filter "date")
-TYER=$(_metadata_filter "TYER")
-
-##================================================================================
-## OUTPUT variables.
+##==============================================================================
+## Variable cleansing.
 
 ## We use the AWK script to set title case. The script contains
 ## exceptions that can be configured.  We fix some chars with sed.
@@ -238,29 +237,35 @@ _string_cleanser()
         | sed -n  -e "s/’/'/g ; s/ *: */ - /g ; s| */ *| - |g; p; q"
 }
 
-if [ "$OUTPUT_TITLE" = '$TITLE' ]; then
-    OUTPUT_TITLE=$(eval _string_cleanser $OUTPUT_TITLE)
-fi
-OUTPUT_TITLE="${OUTPUT_TITLE:-Unknown Title}"
+TITLE=$(_string_cleanser "$INPUT_TITLE")
+ARTIST=$(_string_cleanser "$INPUT_ARTIST")
+ALBUM=$(_string_cleanser "$INPUT_ALBUM")
+COMPOSER=$(_string_cleanser "$INPUT_COMPOSER")
+DISC=$(_string_cleanser "$INPUT_DISC")
+GENRE=$(_string_cleanser "$INPUT_GENRE")
+TRACK=$(_string_cleanser "$INPUT_TRACK")
+DATE=$(_string_cleanser "$INPUT_DATE")
+TYER=$(_string_cleanser "$INPUT_TYER")
+ALBUM_ARTIST=$(_string_cleanser "$INPUT_ALBUM_ARTIST")
 
-if [ "$OUTPUT_ARTIST" = '$ARTIST' ]; then
-    ## We use album artist if artist is empty.
-    OUTPUT_ARTIST=$(eval _string_cleanser $OUTPUT_ARTIST)
-    [ -z "$OUTPUT_ARTIST" ] && [ -n "$ALBUM_ARTIST" ] && OUTPUT_ARTIST="$ALBUM_ARTIST"
-fi
-OUTPUT_ARTIST="${OUTPUT_ARTIST:-Unknown Artist}"
+##================================================================================
+## OUTPUT variables.
 
-if [ "$OUTPUT_ALBUM" = '$ALBUM' ]; then
-    OUTPUT_ALBUM=$(eval _string_cleanser $OUTPUT_ALBUM)
-fi
-OUTPUT_ALBUM="${OUTPUT_ALBUM:-Unknown Album}"
+OUTPUT_TITLE=$(eval echo ${OUTPUT_TITLE:-Unknown Title})
+OUTPUT_ALBUM=$(eval echo ${OUTPUT_ALBUM:-Unknown Album})
+
+## We use album artist if artist is empty.
+[ -z "$OUTPUT_ARTIST" ] && [ -n "$ALBUM_ARTIST" ] && OUTPUT_ARTIST="$ALBUM_ARTIST"
+OUTPUT_ARTIST=$(eval echo ${OUTPUT_ARTIST:-Unknown Artist})
 
 ## If OUTPUT_GENRE is set from command-line parameters, we clease the
 ## string. Otherwise we put GENRE in lower case and underscore to ease matching.
 ## If it matches, we use the Title Case match. If it does not, we set it to
 ## empty.
-if [ "$OUTPUT_GENRE" = '$GENRE' ]; then
-    GENRE=$(_string_cleanser "$GENRE" | tr '[:upper:] ' '[:lower:]_')
+if [ -n "$OUTPUT_GENRE" ]; then
+    OUTPUT_GENRE=$(eval _string_cleanser $OUTPUT_GENRE)
+else
+    GENRE=$(echo "$GENRE" | tr '[:upper:] ' '[:lower:]_')
     case $GENRE in
         ost) OUTPUT_GENRE="Soundtrack" ;;
         soundtrack) OUTPUT_GENRE="Soundtrack";;
@@ -271,8 +276,6 @@ if [ "$OUTPUT_GENRE" = '$GENRE' ]; then
         humour) OUTPUT_GENRE="Humour";;
         *) OUTPUT_GENRE="";;
     esac
-else
-    OUTPUT_GENRE=$(eval _string_cleanser $OUTPUT_GENRE)
 fi
 
 ## We remove the track count if any, we suppress leading zeros, we suppress all
@@ -323,18 +326,18 @@ fi
 ## PREVIEW
 
 echo ":: BEFORE"
-echo "ALBUM          [$ALBUM]"
-echo "ALBUM_ARTIST   [$ALBUM_ARTIST]"
-echo "ARTIST         [$ARTIST]"
-echo "BITRATE        [$BITRATE]"
-echo "COMPOSER       [$COMPOSER]"
-echo "DATE           [$DATE]"
-echo "DISC           [$DISC]"
-echo "FORMAT         [$FORMAT]"
-echo "GENRE          [$GENRE]"
-echo "TITLE          [$TITLE]"
-echo "TRACK          [$TRACK]"
-echo "TYER           [$TYER]"
+echo "ALBUM          [$INPUT_ALBUM]"
+echo "ALBUM_ARTIST   [$INPUT_ALBUM_ARTIST]"
+echo "ARTIST         [$INPUT_ARTIST]"
+echo "BITRATE        [$INPUT_BITRATE]"
+echo "COMPOSER       [$INPUT_COMPOSER]"
+echo "DATE           [$INPUT_DATE]"
+echo "DISC           [$INPUT_DISC]"
+echo "FORMAT         [$INPUT_FORMAT]"
+echo "GENRE          [$INPUT_GENRE]"
+echo "TITLE          [$INPUT_TITLE]"
+echo "TRACK          [$INPUT_TRACK]"
+echo "TYER           [$INPUT_TYER]"
 echo
 echo ":: AFTER"
 echo "ALBUM          [$OUTPUT_ALBUM]"
@@ -366,7 +369,8 @@ fi
 ## COVER. We copy cover only if it does not already exist. Only files found in
 ## the folder where the music is located will be taken into account.
 while read -r i; do
-    OUTPUT_COVER="$OUTPUT/${OUTPUT_ALBUM:+$OUTPUT_ALBUM - }Cover"
+    [ -z "$i" ] && break
+    OUTPUT_COVER="$OUTPUT_FOLDER/${OUTPUT_ALBUM:+$OUTPUT_ALBUM - }Cover"
     OUTPUT_COVERFILE="$OUTPUT_COVER.${i##*.}"
     COVER_COUNTER=1
 
@@ -383,7 +387,7 @@ while read -r i; do
         COVER_COUNTER=$(($COVER_COUNTER+1))
     done
 
-    echo ":: COVER from $SOURCEFOLDER"
+    echo ":: COVER [$i] from $SOURCEFOLDER"
     cp -nv "$i" "$OUTPUT_COVERFILE"
     echo
 done <<EOF

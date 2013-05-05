@@ -84,3 +84,8 @@ if [ -n "$(command -v newsbeuter)" ]; then
     [ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/news/news_starred" "$XDG_CONFIG_HOME/newsbeuter/"
     echo
 fi
+
+## Launchers
+echo "==> Launchers"
+[ -d "$SOURCEDIR" ] && ln -snf "${SOURCEDIR}/launchers" "${HOME}/.launchers"
+echo
