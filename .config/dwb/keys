@@ -166,6 +166,8 @@ reload_bookmarks=
 reload_quickmarks= 
 print_preview= 
 
+visual_mode= v
+
 [1]
 save_search_field=gs
 tab_new=ga
