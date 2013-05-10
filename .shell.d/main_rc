@@ -55,6 +55,10 @@ export TERMCMD="urxvt"
 if [ ! "$OSTYPE" = "linux-gnu" ] && [[ "$TERM" = *rxvt* ]]; then
     export TERM="rxvt-unicode-256color"
 fi
+## Most xterm-based terminals support 256 colors, so let's turn this on.
+if [ "$TERM" = "xterm" ]; then
+    export TERM="xterm-256color"
+fi
 
 ## Make 'less' more friendly for non-text input files, see lesspipe(1).
 [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
