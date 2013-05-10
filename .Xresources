@@ -1,17 +1,10 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! Xresources
-!! 2012-10-31
+!! 2013-05-10
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 !! TODO: set up charclass.
-!! TODO: check Xft options.
 !! TODO: prevent URxvt from intercepting ALT+Arrows and PageUp/Down.
-
-!! Xft options
-! Xft.hinting: true 
-! Xft.hintstyle: hintfull 
-! Xft.antialias: rgba 
-! Xft.rgba: rgb
 
 !!------------------------------------------------------------------------------
 !! URxvt
@@ -38,40 +31,40 @@ URxvt.keysym.C-M-c:         perl:clipboard:paste_escaped
 URxvt.clipboard.pastecmd:   xclip -o -quiet
 ! URxvt.clipboard.copycmd:  xclip -i -selection clipboard
 
+!!==============================================================================
 !! Font
-!! TODO: xft fonts seem to be messy with ranger image preview.
-! URxvt*font       : xft:Liberation Mono:pixelsize=14
-URxvt*font       : xft:Dejavu Sans Mono:pixelsize=14
-! URxvt*font       : -*-dejavu sans mono-*-*-*-*-*-*-*-*-*-*-iso8859-*
-! URxvt*font       : -*-dejavu sans-medium-r-*-*-14-*-*-*-*-*-*-*
-!xterm*font       : -*-dejavu sans-medium-r-*-*-14-*-*-*-*-*-*-*
-xterm*faceName:DejaVu Sans Mono:pixelsize=12
+!!==============================================================================
+!! WARNING: some Xft fonts (DejaVu, Liberation) seem to be messy with w3m image preview.
+! URxvt*font: xft:Liberation Mono:pixelsize=14
+! URxvt*font: xft:Dejavu Sans Mono:pixelsize=14
+! URxvt*font: xft:Dejavu Sans Mono:pixelsize=14:antialias=false
+! URxvt.font: xft:Bitstream Vera Sans Mono:pixelsize=14
 
-! URxvt*boldFont   : xft:Monospace:bold:pixelsize=14
-! URxvt*boldFont : xft:Monospace Bold:pixelsize=12
+!! Non-Xft version that are OK with w3m image preview.
+! URxvt*font: -*-dejavu sans mono-*-*-*-*-*-*-*-*-*-*-iso8859-*
+! URxvt*font: -*-dejavu sans-medium-r-*-*-14-*-*-*-*-*-*-*
+
+!! Xft that are OK with w3m image preview.
+! urxvt.font:              xft:terminus:pixelsize=14
+urxvt.font:              xft:Dina:pixelsize=16
+
+!! Xft options
+! Xft.antialias: false
+! Xft.antialias: rgba 
+Xft.hinting: true
+Xft.hintstyle: hintlight
+Xft.rgba: rgb
+
+!! If not patched for letter spacing, this option might help.
 ! URxvt*letterSpace: -1
-! URxvt.font     : -*-dina-medium-r-*-*-16-*-*-*-*-*-*-*
-! URxvt.font     : -misc-fixed-medium-r-normal--15-140-75-75-c-90-iso8859-1
-! URxvt.font     : xft:Bitstream Vera Sans Mono:pixelsize=14
-! URxvt.font     : xft:DejaVu Sans Mono-10
-! URxvt.font     : xft:DejaVu Sans Mono:pixelsize=12
-! URxvt.font     : xft:Monospace 10:pixelsize=12
-! URxvt.font     : xft:Monospace:pixelsize=12
-! URxvt.font     : xft:monaco:size=10
-! Xft.antialias: true
-! Xft.hinting: true
-! Xft.hintstyle: hintlight
-! Xft.rgba: rgb
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!==============================================================================
 !! Styles
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!==============================================================================
 !! Find more styles on:
 !! http://xcolors.net/
+!! http://xcolors.net/dl/derp
 !! https://bbs.archlinux.org/viewtopic.php?id=51818
-
-xterm*background: black
-xterm*foreground: #CCCCCC
 
 !! Colors list
 !! color0  = black 	
@@ -111,61 +104,31 @@ URxvt.color13 : #FF55FF
 URxvt.color14 : #55FFFF
 URxvt.color15 : #FFFFFF
 
-!! Derp style
-!! http://xcolors.net/dl/derp
-! URxvt*background: black
-! URxvt*foreground: #CCCCCC
-! URxvt.color0:   #111111
-! URxvt.color8:   #666666
-! URxvt.color1:   rgb:d3/62/65
-! URxvt.color9:   rgb:ef/81/71
-! URxvt.color2:   #aece91
-! URxvt.color10:  #cfefb3
-! URxvt.color3:   rgb:e7/e1/8c
-! URxvt.color11:  rgb:ff/f7/96
-! URxvt.color4:   #5297cf
-! URxvt.color12:  #74b8ef
-! URxvt.color5:   #963c59
-! URxvt.color13:  #b85e7b
-! URxvt.color6:   #5E7175
-! URxvt.color14:  #A3BABF
-! URxvt.color7:   #bebebe
-! URxvt.color15:  #ffffff
+!!==============================================================================
+!! Xterm
+!!==============================================================================
 
-!! Dark style
-! urxvt.color0: rgb:00/00/00
-! urxvt.color1: rgb:9e/18/28
-! urxvt.color2: rgb:5c/b2/47
-! urxvt.color3: rgb:96/8a/38
-! urxvt.color4: rgb:41/61/a0
-! urxvt.color5: rgb:9b/76/8e
-! urxvt.color6: rgb:41/91/89
-! urxvt.color7: rgb:de/de/de
-! urxvt.color8: rgb:66/66/66
-! urxvt.color9: rgb:cf/61/71
-! urxvt.color10: rgb:c5/f7/79
-! urxvt.color11: rgb:ff/f7/96
-! urxvt.color12: rgb:41/86/be
-! urxvt.color13: rgb:cf/9e/be
-! urxvt.color14: rgb:71/be/be
-! urxvt.color15: rgb:dd/dd/dd
+*VT100*translations: #override Meta <Btn1Up>: exec-formatted("dwb '%t'", PRIMARY)
+XTerm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+!xterm*font       : -*-dejavu sans-medium-r-*-*-14-*-*-*-*-*-*-*
+xterm*faceName:DejaVu Sans Mono:pixelsize=12
 
-!! Tangoesque style
-!*background: #111111
-!*foreground: #babdb6
-! *color0:  #000000
-! *color1:  #ff6565
-! *color2:  #93d44f
-! *color3:  #eab93d
-! *color4:  #204a87
-! *color5:  #ce5c00
-! *color6:  #89b6e2
-! *color7:  #cccccc
-! *color8:  #555753
-! *color9:  #ff8d8d
-! *color10: #c8e7a8
-! *color11: #ffc123
-! *color12: #3465a4
-! *color13: #f57900
-! *color14: #46a4ff
-! *color15: #ffffff
+xterm*background: black
+xterm*foreground: #CCCCCC
+xterm*color0  : #000000
+xterm*color1  : #AA0000
+xterm*color2  : #00AA00
+xterm*color3  : #AA5500
+xterm*color4  : #0000AA
+xterm*color5  : #AA00AA
+xterm*color6  : #00AAAA
+xterm*color7  : #AAAAAA
+xterm*color8  : #555555
+xterm*color9  : #FF5555
+xterm*color10 : #55FF55
+xterm*color11 : #FFFF55
+xterm*color12 : #5555FF
+xterm*color13 : #FF55FF
+xterm*color14 : #55FFFF
+xterm*color15 : #FFFFFF
+
