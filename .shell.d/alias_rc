@@ -44,7 +44,7 @@ alias grep='grep --color=auto'
 
 ## Bad idea because you cannot toggle '-f' option anymore.
 # alias cp="cp -i"
- 
+
 # List desktop applications.
 [ -d /usr/share/applications ] && XDG_APPS=($XDG_APPS /usr/share/applications)
 [ -d /usr/local/share/applications ] && XDG_APPS=($XDG_APPS /usr/local/share/applications)

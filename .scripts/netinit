@@ -9,7 +9,7 @@
 ## variable to keep it secure, but the 'wpa_supplicant' command requires a
 ## file. We cannot use a pipe for that, because in that case the config would be
 ## accessible unencrypted. So we need to use an internal path with a syntax like
-## <(...) which is not specified by POSIX. Ksh, bash and zsh can handle it.
+## <(...) which is not specified by POSIX. Ksh, bash and Zsh can handle it.
 
 ## Use 'wpa_passphrase essid $PW >> /etc/wpa_supplicant.conf', where PW is a
 ## variable containing the password.  You can set PW securely by using a shell
@@ -18,21 +18,85 @@
 ## There is an Emacs plugin for editing crypted files directly. See 'man
 ## ccrypt'.
 
-# if [ -z "$(command -v ccrypt)" ]; then
-#     echo "You need to have 'ccrypt' installed."
-#     exit
-# fi
+WSFILE=/etc/wpa_supplicant.conf
+TIMEOUT_LIMIT=500
+USE_DHCP=0
+USE_CRYPT=0
+
+_printhelp ()
+{
+    cat<<EOF
+Usage: ${1##*/} [OPTIONS]
+
+Connect to a wireless network.
+
+  -c:       Decrypt $WSFILE with ccrypt.
+  -d:       Use DHCP.
+  -h:       Show this help.
+  -t ITER:  Timeout (default: $TIMEOUT_LIMIT).
+  -w FILE:  Config file for wpa_supplicant (default: $WSFILE).
+
+EOF
+}
+
+while getopts ":cdht:w:" opt; do
+    case $opt in
+        h)
+            _printhelp "$0"
+            return 1
+            ;;
+        c)
+            USE_CRYPT=1
+            ;;
+        d)
+            USE_DHCP=1
+            ;;
+        t)
+            TIMEOUT_LIMIT=$OPTARG
+            ;;
+        w)
+            WSFILE="$OPTARG"
+            ;;
+        ?)
+            _printhelp "$0"
+            return 1
+            ;;
+        :)
+            _printhelp "$0"
+            return 1
+            ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
 
 if [ $(id -u) -ne 0 ]; then
     echo "You must be root to run this script."
     exit
 fi
 
+if [ $USE_CRYPT -eq 1 ]; then
+    if [ -z "$(command -v ccrypt)" ]; then
+        echo "You need to have 'ccrypt' installed."
+        exit
+    fi
+    WPA_SUPPLICANT_CONF="$(ccat "$WSFILE")"
+    if [ $? -ne 0 ]; then
+        echo "Failed to decrypt wpa_supplicant config from $WSFILE."
+        exit
+    fi
+else
+    WPA_SUPPLICANT_CONF="$(cat "$WSFILE")"
+    if [ $? -ne 0 ]; then
+        echo "Failed to get wpa_supplicant config from $WSFILE."
+        exit
+    fi
+fi
+
 ## Note: systemd-197 introduced Predictable Network Interface Names, so we need
 ## to check for the proper device dynamically.
+## TODO: check if it works on BSD systems.
 NET_INTERFACE=$(ls -1 /sys/class/net | grep -m1 "^wl")
-WPA_SUPPLICANT_CONF="$(cat /etc/wpa_supplicant.conf)"
-TIMEOUT_LIMIT=500
 
 pkill wpa_supplicant
 
@@ -55,7 +119,7 @@ if [ "$OSTYPE" = "linux-gnu" ] ; then
     done
 
     ## Get IP.
-    dhcpcd ${NET_INTERFACE}
+    [ $USE_DHCP -eq 1 ] && dhcpcd ${NET_INTERFACE}
 
 else
 ## BSD
@@ -73,5 +137,5 @@ else
         i=$(($i+1))
     done
 
-    dhclient ${NET_INTERFACE}
+    [ $USE_DHCP -eq 1 ] && dhclient ${NET_INTERFACE}
 fi
