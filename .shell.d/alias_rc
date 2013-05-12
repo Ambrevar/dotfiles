@@ -169,6 +169,7 @@ fi
 if [ -d "/usr/local/texlive" ]; then
     alias tlu="sudo sh -c 'umask 022 && tlmgr update --self'"
     alias tls="tlmgr search --global"
+    alias tlsf="tlmgr search --global --file"
     # alias tll="tlmgr info --only-installed"
     alias tll="comm -3 <(tlmgr info --only-installed | grep -v 'x86_64\|amd64' | cut -d' ' -f2 | cut -f1 -d':' | sort) \
         <(tlmgr info collection-basic --list | sed -n '/^	/{s/	//g;p;}' | sort) \
