@@ -65,13 +65,14 @@ encoding with the TC_* variables.
 
   -f:      Overwrite existing file if any.
   -h:      Display this help.
+  -o OPT:  Additional options.
   -s:      Sample of 5 minutes.
   -S MIN:  Sample of MIN minutes.
-  -o OPT:  Additional options.
+  -t:      Remove all "title" metadata.
 
 Examples:
 
-* Exchange stream 1 an 2 by first removing them, then readding them in the
+* Exchange stream 1 an 2 by first removing them, then reading them in the
   desired order.
 
   ${1##*/} -o '-map -0:1 -map -0:2 -map 0:2 -map 0:1' input.mkv
@@ -89,8 +90,9 @@ EOF
 TC_OVERWRITE="-n"
 TC_SAMPLE=""
 TC_USER_OPT=""
+TC_REMOVE_TITLE=0
 
-while getopts ":fho:sS:" opt; do
+while getopts ":fho:sS:t" opt; do
     case $opt in
         f)
             TC_OVERWRITE="-y"
@@ -107,6 +109,9 @@ while getopts ":fho:sS:" opt; do
             ;;
         S)
             TC_SAMPLE="-ss 60 -t $((60*$OPTARG))"
+            ;;
+        t)
+            TC_REMOVE_TITLE=1
             ;;
         ?)
             _printhelp "$0"
@@ -141,18 +146,26 @@ _tc_transcode()
 {
     cat<<EOF
 ================================================================================
-OPTIONS:
-
-User options: $TC_USER_OPT
-Sample:       $TC_SAMPLE
+User options:  ${TC_USER_OPT:-None}
+Sample:        ${TC_SAMPLE:-No}
+Clear 'Title': $TC_REMOVE_TITLE
 ================================================================================
 EOF
+
+    STREAM_TITLE=""
+    if [ $TC_REMOVE_TITLE -eq 1 ]; then
+        STREAM_NUM=$(ffmpeg -i "$1" 2>&1 | grep -c 'Stream')
+        for i in $(seq 0 $STREAM_NUM); do
+            STREAM_TITLE="${STREAM_TITLE}-metadata:s:$i title= "
+        done
+        # echo "$STREAM_NUM[$STREAM_TITLE]"
+    fi
 
     ffmpeg $TC_OVERWRITE $TC_SAMPLE -i "$1" \
         -c:v libx264 -preset $TC_VIDEO_PRESET -crf $TC_VIDEO_QUAL $TC_VIDEO_TUNE $TC_VIDEO_OPTS \
         -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL -ac 2 \
         -c:s copy \
-        -map 0 \
+        -map 0 $STREAM_TITLE \
         $TC_USER_OPT "${1%.*}-$(date '+%F-%H%M%S').mkv"
 }
 
@@ -185,4 +198,3 @@ done
 ## Restore Zsh previous options. This will not turn off shwordsplit if it
 ## was on before calling the function.
 [ "$STATUS" = "off" ] && set +o shwordsplit
-
