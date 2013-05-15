@@ -1,0 +1,10 @@
+# name: case
+# key: case
+# --
+case $1 in
+    $2)
+        $3 ;;
+    *)
+        $4 ;;
+esac
+$0

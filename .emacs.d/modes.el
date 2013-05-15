@@ -32,7 +32,7 @@
 ;; README files.
 (setq auto-mode-alist (append '(("README" . text-mode)) auto-mode-alist))
 
-;; Lex/Flex + Yacc/Bison mode.
+;; Lex/Flex + Yacc/Bison mode fallback to c-mode.
 (setq auto-mode-alist (append '(("\\.l\\'" . c-mode)) auto-mode-alist))
 (setq auto-mode-alist (append '(("\\.yy?\\'" . c-mode)) auto-mode-alist))
 

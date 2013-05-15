@@ -1,0 +1,32 @@
+#!/bin/sh
+
+RMLIST="$HOME/.cache/dwb $HOME/.cache/mutt $HOME/.cmus/*.pl $HOME/.cmus/autosave $HOME/.cmus/cache $HOME/.cmus/resume $HOME/.cmus/search-history $HOME/.config/gtk-2.0 $HOME/.config/gtk-3.0 $HOME/.config/newsbeuter/cache.db $HOME/.config/newsbeuter/history.cmdline $HOME/.config/newsbeuter/history.search $HOME/.config/ranger/bookmarks $HOME/.config/ranger/history $HOME/.config/ranger/tagged $HOME/.gtk-bookmarks $HOME/.local/share/newsbeuter $HOME/.local/share/webkit $HOME/.session/* $HOME/.zcompdump $HOME/.zdirs $HOME/.zshhistfile"
+
+echo "$RMLIST" | sed 's/ /\n/g'
+
+CHOICE="N"
+echo "==> Clean home? [y/N]"
+read CHOICE
+CHOICE="$(echo $CHOICE | tr [:lower:] [:upper:])"
+if [ "$CHOICE" != "Y" ]; then
+    echo "Nothing done."
+    exit
+fi
+
+## Compress git repo if any
+if [ -d "$HOME"]; then
+    (cd "$HOME" && git gc)
+fi
+
+## Clean trash if possible.
+if [ -z "$(command -v trash-empty)" ]; then
+    echo "==> 'trash-empty' not installed, you have to clean trash manually."
+else
+    trash-empty
+fi
+
+## Clear data.
+rm -rvf "$RMLIST"
+
+echo
+echo "==> Cleaning done."
