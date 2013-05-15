@@ -1,0 +1,51 @@
+#!/bin/sh
+
+FOLDER_LIST="/media/data1/Documents
+/media/data1/Videos
+/media/data2/GamesFiles
+/media/data2/Musics"
+OUTPUT="$HOME/personal/dataperso/index"
+DATE="$(date +%F)"
+
+_printhelp ()
+{
+    cat<<EOF
+Usage: ${1##*/} [-h]
+
+Create index of folder hierarchies. This is used as a small "backup" purpose. In case of data loss, it is still possible to get the full file list thanks to the indexes.
+
+  -h:  Show this help.
+
+EOF
+}
+
+while getopts ":dh" opt; do
+    case $opt in
+        h)
+            _printhelp "$0"
+            return 1
+            ;;
+        ?)
+            _printhelp "$0"
+            return 1
+            ;;
+        :)
+            _printhelp "$0"
+            return 1
+            ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+## Prepare output.
+mkdir -p "$OUTPUT"
+
+while read -r i; do
+    echo "$i"
+    find "$i" -type f | sort > "$OUTPUT/${i##*/}.index"
+    echo "## $DATE" >> "$OUTPUT/${i##*/}.index"
+done <<EOF
+$FOLDER_LIST
+EOF
+

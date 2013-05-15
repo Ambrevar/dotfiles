@@ -374,43 +374,6 @@ pgex ()
     ps aux | grep "$(echo "$@" | sed 's/./[&]/;q')"
 }
 
-# Web videos DL
-webdl ()
-{
-    if [ -z "$(command -v movgrab)" ]; then
-        echo "Install movgrab."
-        return
-    fi
-
-    if [ $# -ne 2 ]; then
-        echo "Usage: ${0##*/} RES URI"
-        return
-    fi
-
-    RES=""
-    case $1 in
-        1080)
-            RES=1920x1080
-            ;;
-        720)
-            RES=1280x720
-            ;;
-        *)
-            RES=640x360
-            ;;
-    esac
-
-    movgrab -f webm:$RES "$2"
-}
-
-index ()
-{
-    DATE="$(date +%F)"
-    for i ; do
-        find "$i" -type f >> "$i-$DATE.index"
-    done
-}
-
 ##==============================================================================
 ## Pacman functions
 ##==============================================================================
