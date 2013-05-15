@@ -1,9 +1,33 @@
 #!/bin/sh
 
-RMLIST="$HOME/.cache/dwb $HOME/.cache/mutt $HOME/.cmus/*.pl $HOME/.cmus/autosave $HOME/.cmus/cache $HOME/.cmus/resume $HOME/.cmus/search-history $HOME/.config/gtk-2.0 $HOME/.config/gtk-3.0 $HOME/.config/newsbeuter/cache.db $HOME/.config/newsbeuter/history.cmdline $HOME/.config/newsbeuter/history.search $HOME/.config/ranger/bookmarks $HOME/.config/ranger/history $HOME/.config/ranger/tagged $HOME/.gtk-bookmarks $HOME/.local/share/newsbeuter $HOME/.local/share/webkit $HOME/.session/* $HOME/.zcompdump $HOME/.zdirs $HOME/.zshhistfile"
+RMLIST="$HOME/.cache/dwb
+$HOME/.cache/mutt
+$HOME/.cmus/autosave
+$HOME/.cmus/cache
+$HOME/.cmus/lib.pl
+$HOME/.cmus/playlist.pl
+$HOME/.cmus/queue.pl
+$HOME/.cmus/resume
+$HOME/.cmus/search-history
+$HOME/.config/gtk-2.0
+$HOME/.config/gtk-3.0
+$HOME/.config/newsbeuter/cache.db
+$HOME/.config/newsbeuter/history.cmdline
+$HOME/.config/newsbeuter/history.search
+$HOME/.config/ranger/bookmarks
+$HOME/.config/ranger/history
+$HOME/.config/ranger/tagged
+$HOME/.gtk-bookmarks
+$HOME/.local/share/newsbeuter
+$HOME/.local/share/webkit
+$HOME/.session/*
+$HOME/.ssh
+$HOME/.zcompdump
+$HOME/.zdirs
+$HOME/.zshhistfile"
 
 echo "==> List of files to be cleaned."
-echo "$RMLIST" | sed 's/ /\n/g'
+echo "$RMLIST"
 
 CHOICE="N"
 echo
@@ -15,20 +39,29 @@ if [ "$CHOICE" != "Y" ]; then
     exit
 fi
 
-## Compress git repo if any
-if [ -d "$HOME"]; then
-    (cd "$HOME" && git gc)
-fi
+## Delete git repo if any.
+[ -d "$HOME"] && rm -rvf "$HOME/.git"
+
+## Delete Dropbox folder if any.
+[ -d "$HOME" ] && rm -rvf "$HOME/Dropbox" && rm -rvf "$HOME/.dropbox"
 
 ## Clean trash if possible.
 if [ -z "$(command -v trash-empty)" ]; then
+    echo
     echo "==> 'trash-empty' not installed, you have to clean trash manually."
 else
+    echo
+    echo "==> Emptying trash."
     trash-empty
 fi
 
 ## Clear data.
-rm -rvf "$RMLIST"
+echo
+while read -r i; do
+    rm -rvf "$i"
+done <<EOF
+$RMLIST
+EOF
 
 echo
 echo "==> Cleaning done."
