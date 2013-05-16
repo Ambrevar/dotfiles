@@ -168,6 +168,8 @@ print_preview=
 
 visual_mode= v
 
+adblock_reload_rules= 
+
 [1]
 save_search_field=gs
 tab_new=ga

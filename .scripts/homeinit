@@ -26,7 +26,7 @@ echo
 
 echo "==> Mutt"
 [ -d "$SOURCEDIR" ] && ln -snf "$(realpath ${SOURCEDIR}/mails)" "${HOME}/.mutt"
-mkdir -p "${HOME}/.mutt.d/hcache"
+mkdir -p "${HOME}/.cache/mutt/hcache"
 echo
 
 echo "==> To-Do"

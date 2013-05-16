@@ -20,6 +20,7 @@ $HOME/.config/ranger/tagged
 $HOME/.gtk-bookmarks
 $HOME/.local/share/newsbeuter
 $HOME/.local/share/webkit
+$HOME/.mutt-pwds.cpt
 $HOME/.session/*
 $HOME/.ssh
 $HOME/.zcompdump
