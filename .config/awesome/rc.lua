@@ -434,8 +434,8 @@ globalkeys = awful.util.table.join(
    awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
    -- Multi screen
-   awful.key({ modkey, "Mod1" }, "Next", function () awful.screen.focus_relative( 1) end),
-   awful.key({ modkey, "Mod1" }, "Prior", function () awful.screen.focus_relative(-1) end),
+   awful.key({ modkey, "Control" }, "Next", function () awful.screen.focus_relative( 1) end),
+   awful.key({ modkey, "Control" }, "Prior", function () awful.screen.focus_relative(-1) end),
 
 
    -- Prompt
@@ -523,36 +523,42 @@ end
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, keynumber do
-   globalkeys = awful.util.table.join(globalkeys,
-                                      awful.key({ modkey }, "#" .. i + 9,
-                                                function ()
-                                                   local screen = mouse.screen
-                                                   if tags[screen][i] then
-                                                      awful.tag.viewonly(tags[screen][i])
-                                                   end
-                                                end),
+   globalkeys = awful.util.table.join(
+      globalkeys,
 
-                                      awful.key({ modkey, "Control" }, "#" .. i + 9,
-                                                function ()
-                                                   local screen = mouse.screen
-                                                   if tags[screen][i] then
-                                                      awful.tag.viewtoggle(tags[screen][i])
-                                                   end
-                                                end),
+      awful.key({ modkey }, "#" .. i + 9,
+                function ()
+                   local screen = mouse.screen
+                   if tags[screen][i] then
+                      awful.tag.viewonly(tags[screen][i])
+                   end
+                end),
 
-                                      awful.key({ modkey, "Mod1" }, "#" .. i + 9,
-                                                function ()
-                                                   if client.focus and tags[client.focus.screen][i] then
-                                                      awful.client.movetotag(tags[client.focus.screen][i])
-                                                   end
-                                                end)
+      awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
+                function ()
+                   local screen = mouse.screen
+                   if tags[screen][i] then
+                      awful.tag.viewtoggle(tags[screen][i])
+                   end
+                end),
+
+      awful.key({ modkey, "Mod1" }, "#" .. i + 9,
+                function ()
+                   if client.focus and tags[client.focus.screen][i] then
+                      awful.client.movetotag(tags[client.focus.screen][i])
+                   end
+                end),
+
+      -- Multi screen
+      awful.key({ modkey, "Control" }, "#" .. i + 9,
+                function ()
+                   if client.focus and tags[client.focus.screen+1] and tags[client.focus.screen+1][i] then
+                      awful.client.movetotag(tags[client.focus.screen+1][i])
+                   elseif client.focus and tags[1][i] then
+                      awful.client.movetotag(tags[1][i])
+                   end
+                end)
                                      )
-   -- awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
-   --           function ()
-   --               if client.focus and tags[client.focus.screen][i] then
-   --                   awful.client.toggletag(tags[client.focus.screen][i])
-   --               end
-   --           end)
 end
 
 clientbuttons = awful.util.table.join(

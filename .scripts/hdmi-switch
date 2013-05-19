@@ -1,0 +1,42 @@
+#!/bin/sh
+
+## This script will toggle HDMI Audio (and set video properly).
+
+## To do this automatically when the cable is plugged, add the following udev
+## rule (Linux only):
+
+## $ cat /etc/udev/rules.d/hdmi.rules
+## SUBSYSTEM=="drm", ACTION=="change", RUN+="/bin/sh /usr/local/bin/hdmi-switch"
+
+udevadm settle --quiet --timeout=16
+
+HDMI_STATUS="$(cat /sys/class/drm/card0-HDMI-A-1/status)"
+ALSACONF="/etc/asound.conf"
+
+HDMICARD="$(aplay -l | awk '/HDMI/ {sub(/:/,"",$2); sub(/:/,"",$7); printf "card " $2 "\ndevice " $7 "\n"}')"
+
+[ -z "$HDMI_STATUS" ] && exit
+
+## Video
+for i in $(xrandr | awk '/^[[:alnum:]-]+ connected/ {print $1}'); do
+    xrandr --output "$i" --auto
+done
+
+## Sound
+if [ "$HDMI_STATUS" = "connected" ]; then
+    echo "pcm.!default {
+  type hw
+  $HDMICARD
+}" > "$ALSACONF"
+
+else
+    echo "pcm.!default {
+  type hw
+  card 0
+  device 0
+}" > "$ALSACONF"
+
+fi
+
+chmod 644 "${ALSACONF}"
+
