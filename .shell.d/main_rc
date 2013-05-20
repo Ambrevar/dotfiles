@@ -89,7 +89,7 @@ if [ -n "$(command -v emacs)" ]; then
    EDITOR='emacs'
 fi
 ## 'em' is a script for emacsclient. See 'homeinit'.
-if [ -f "/bin/em" ]; then
+if [ -n "$(command -v em)" ]; then
    EDITOR='em'
 fi
 export EDITOR

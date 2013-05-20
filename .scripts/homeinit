@@ -16,7 +16,7 @@ mkdir -p temp
 if [ ! -f /bin/em ]; then
     echo "==> Emacs (press Ctrl-D to skip)"
     sudo sh -c "echo '#!/bin/sh
-emacsclient -a \"\" -t \"\$@\"' > '/bin/em'; chmod 755 /bin/em"
+emacsclient -a \"\" -t \"\$@\"' > '/bin/em'; chmod 755 /usr/local/bin/em"
     echo
 fi
 
