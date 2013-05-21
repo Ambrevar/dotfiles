@@ -31,31 +31,23 @@
 ## KSH_ARRAYS option for zsh must be used.
 
 ## Variables
-OLDPATH="$(pwd)"
-cd "$HOME"
-SCRIPTPATH="${0##*/}"
-HOST=$(hostname)
+HOST="$(hostname)"
 
 ## Arch Linux
 if [ -e "/usr/bin/pacman" ]; then
-
-    ARCH_PKG_OFFICIAL="$HOME/.pkg-arch-official"
-	ARCH_PKG_EXPLICIT="$HOME/.pkg-arch-explicit"
-	ARCH_PKG_AUR="$HOME/.pkg-arch-aur"
+    ARCH_PKG_OFFICIAL="$HOME/.pkg-arch-official-${HOST}"
+	ARCH_PKG_AUR="$HOME/.pkg-arch-aur-${HOST}"
 
 	PKG_LOCAL='pacman -Qq | sort'
 	PKG_FOREIGN='pacman -Qmq | sort'
-	PKG_EXPLICIT='pacman -Qeq | sort'
 
-    comm -3 <(eval "${PKG_LOCAL}") <(eval "${PKG_FOREIGN}") >"${ARCH_PKG_OFFICIAL}-${HOST}"
-
-    eval "${PKG_EXPLICIT}" >"${ARCH_PKG_EXPLICIT}-${HOST}"
-    eval "${PKG_FOREIGN}" >"${ARCH_PKG_AUR}-${HOST}"
+    comm -3 <(eval "${PKG_LOCAL}") <(eval "${PKG_FOREIGN}") >"${ARCH_PKG_OFFICIAL}"
+    eval "${PKG_FOREIGN}" >"${ARCH_PKG_AUR}"
 fi
 
 ## FreeBSD
 if [ "$(uname)" = "FreeBSD" ]; then
-        pkg_info | cut -f1 -d' ' >"$HOME/.pkg-freebsd-${HOST}"
+    pkg_info | cut -f1 -d' ' >"$HOME/.pkg-freebsd-${HOST}"
 fi
 
 ## TeXlive

@@ -8,7 +8,10 @@
 ## $ cat /etc/udev/rules.d/hdmi.rules
 ## SUBSYSTEM=="drm", ACTION=="change", RUN+="/bin/sh /usr/local/bin/hdmi-switch"
 
-udevadm settle --quiet --timeout=16
+if [ $(id -u) -ne 0 ]; then
+    echo "You must be root to run this script."
+    exit
+fi
 
 HDMI_STATUS="$(cat /sys/class/drm/card0-HDMI-A-1/status)"
 ALSACONF="/etc/asound.conf"
@@ -16,6 +19,8 @@ ALSACONF="/etc/asound.conf"
 HDMICARD="$(aplay -l | awk '/HDMI/ {sub(/:/,"",$2); sub(/:/,"",$7); printf "card " $2 "\ndevice " $7 "\n"}')"
 
 [ -z "$HDMI_STATUS" ] && exit
+
+udevadm settle --quiet --timeout=16
 
 ## Video
 for i in $(xrandr | awk '/^[[:alnum:]-]+ connected/ {print $1}'); do
@@ -29,14 +34,8 @@ if [ "$HDMI_STATUS" = "connected" ]; then
   $HDMICARD
 }" > "$ALSACONF"
 
+    chmod 644 "${ALSACONF}"
 else
-    echo "pcm.!default {
-  type hw
-  card 0
-  device 0
-}" > "$ALSACONF"
-
+    rm -f "$ALSACONF"
 fi
-
-chmod 644 "${ALSACONF}"
 

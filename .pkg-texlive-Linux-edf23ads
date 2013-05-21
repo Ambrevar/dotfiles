@@ -33,6 +33,7 @@ oberdiek
 parskip
 pdftex-def
 pgf
+pgfplots
 subfigure
 tabu
 tabulary
