@@ -63,9 +63,10 @@ set sleep_time = 0
 ## Multiple accounts
 ##------------------------------------------------------------------------------
 
+set my_ac_dev=dev
 set my_ac_personal=personal
-set my_ac_work=work
 set my_ac_university=university
+set my_ac_work=work
 
 ## Login
 ## Store passwords as follows in .mutt-pwds:
@@ -82,16 +83,19 @@ source "ccat ~/.mutt-pwds.cpt |"
 # source "gpg2 -dq ~/.mutt-pwds.gpg |"
 
 ## Last account is default.
-source "~/.mutt/$my_ac_work"
-folder-hook $folder 'source ~/.mutt/$my_ac_work'
+source "~/.mutt/$my_ac_dev"
+folder-hook $folder 'source ~/.mutt/$my_ac_dev'
 source "~/.mutt/$my_ac_personal"
 folder-hook $folder 'source ~/.mutt/$my_ac_personal'
 source "~/.mutt/$my_ac_university"
 folder-hook $folder 'source ~/.mutt/$my_ac_university'
+source "~/.mutt/$my_ac_work"
+folder-hook $folder 'source ~/.mutt/$my_ac_work'
 
-macro index,pager <f2> '<enter-command>source ~/.mutt/$my_ac_work<enter><change-folder>!<enter>'
+macro index,pager <f2> '<enter-command>source ~/.mutt/$my_ac_dev<enter><change-folder>!<enter>'
 macro index,pager <f3> '<enter-command>source ~/.mutt/$my_ac_personal<enter><change-folder>!<enter>'
 macro index,pager <f4> '<enter-command>source ~/.mutt/$my_ac_university<enter><change-folder>!<enter>'
+macro index,pager <f5> '<enter-command>source ~/.mutt/$my_ac_work<enter><change-folder>!<enter>'
 
 ##------------------------------------------------------------------------------
 ## Sidebar
