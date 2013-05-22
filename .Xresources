@@ -12,6 +12,9 @@
 !! url-select, clipboard and keyboard-select are provided in Muennich s perl
 !! plugins.
 
+!! Plucin dir.
+URxvt.perl-lib: .config/urxvt/
+
 ! URxvt*modifier: alt
 URxvt.iso14755: False
 URxvt*saveLines: 5000

@@ -9,7 +9,9 @@ SOURCEDIR="${HOME}/personal/dataperso"
 [ -z "$XDG_DATA_DIRS" ] && XDG_DATA_DIRS="/usr/local/share"
 
 ## Temp folder
+echo "==> 'temp' folder"
 mkdir -p temp
+echo
 
 ## Emacsclient launcher. Required for best emacsclient integration.  For a fully
 ## functional daemon, you should write a file like this and set 'EDITOR=em'.
@@ -20,22 +22,32 @@ emacsclient -a \"\" -t \"\$@\"' > '/usr/local/bin/em'; chmod 755 /usr/local/bin/
     echo
 fi
 
-echo "==> Abook"
-[ -d "$SOURCEDIR" ] && ln -snf "$(realpath ${SOURCEDIR}/contacts)" "${HOME}/.abook"
-echo
+if [ -d "$SOURCEDIR" ]; then
+    echo "==> Abook"
+    # [ -d "$SOURCEDIR" ] && ln -snf "$(realpath ${SOURCEDIR}/contacts)" "${HOME}/.abook"
+    ln -snf "${SOURCEDIR}/contacts" "${HOME}/.abook"
+    echo
+fi
 
-echo "==> Mutt"
-[ -d "$SOURCEDIR" ] && ln -snf "$(realpath ${SOURCEDIR}/mails)" "${HOME}/.mutt"
-mkdir -p "${HOME}/.cache/mutt/hcache"
-echo
+if [ -n "$(command -v mutt)" ]; then
+    echo "==> Mutt"
+    # [ -d "$SOURCEDIR" ] && ln -snf "$(realpath ${SOURCEDIR}/mails)" "${HOME}/.mutt"
+    [ -d "$SOURCEDIR" ] && ln -snf "${SOURCEDIR}/mails" "${HOME}/.mutt"
+    mkdir -p "${HOME}/.cache/mutt/hcache"
+    echo
+fi
 
-echo "==> To-Do"
-[ -d "$SOURCEDIR" ] && ln -snf "${SOURCEDIR}/todo/todo.org" "${HOME}/todo.org"
-echo
+if [ -d "$SOURCEDIR" ]; then
+    echo "==> To-Do"
+    ln -snf "${SOURCEDIR}/todo/todo.org" "${HOME}/todo.org"
+    echo
+fi
 
-echo "==> rtorrent"
-[ -n "$(command -v rtorrent)" ] && mkdir -p "${HOME}/.session"
-echo
+if [ -n "$(command -v rtorrent)" ]; then
+    echo "==> rtorrent"
+    mkdir -p "${HOME}/.session"
+    echo
+fi
 
 ## Luakit -- Install the adblock modules
 if [ -n "$(command -v luakit)" ]; then
@@ -63,18 +75,20 @@ if [ -n "$(command -v dwb)" ]; then
 fi
 
 ## Bookmarks
-echo "==> Bookmarks"
-if [ -z "$BROWSER" ]; then
-    echo "Variable BROWSER is not set."
-else
-    BROWSER_DATA_DIR="$XDG_DATA_HOME/$BROWSER/"
-    if [ "$BROWSER" = "dwb" ]; then
-        BROWSER_DATA_DIR="$XDG_CONFIG_HOME/$BROWSER/default/"
+if [ -d "$SOURCEDIR" ]; then
+    echo "==> Bookmarks"
+    if [ -z "$BROWSER" ]; then
+        echo "Variable BROWSER is not set."
+    else
+        BROWSER_DATA_DIR="$XDG_DATA_HOME/$BROWSER/"
+        if [ "$BROWSER" = "dwb" ]; then
+            BROWSER_DATA_DIR="$XDG_CONFIG_HOME/$BROWSER/default/"
+        fi
+        [ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/bookmarks/bookmarks" "$BROWSER_DATA_DIR"
+        [ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/bookmarks/quickmarks" "$BROWSER_DATA_DIR"
     fi
-    [ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/bookmarks/bookmarks" "$BROWSER_DATA_DIR"
-    [ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/bookmarks/quickmarks" "$BROWSER_DATA_DIR"
+    echo
 fi
-echo
 
 ## News
 if [ -n "$(command -v newsbeuter)" ]; then
@@ -86,6 +100,8 @@ if [ -n "$(command -v newsbeuter)" ]; then
 fi
 
 ## Launchers
-echo "==> Launchers"
-[ -d "$SOURCEDIR" ] && ln -snf "${SOURCEDIR}/launchers" "${HOME}/.launchers"
-echo
+if [ -d "$SOURCEDIR" ]; then
+    echo "==> Launchers"
+    ln -snf "${SOURCEDIR}/launchers" "${HOME}/.launchers"
+    echo
+fi

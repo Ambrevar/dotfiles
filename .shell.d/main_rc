@@ -95,6 +95,7 @@ fi
 export EDITOR
 
 ## Internet Browser
+[ -n "$(command -v luakit)" ] && export BROWSER="luakit"
 [ -n "$(command -v dwb)" ] && export BROWSER="dwb"
 
 ## Title

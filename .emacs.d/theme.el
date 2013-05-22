@@ -10,12 +10,14 @@
 (set-face-underline-p 'link                        t)
 (set-face-foreground  'minibuffer-prompt           "brightcyan" )
 (set-face-background  'region                      "color-235")
-(set-face-foreground  'error                       "red")
-(set-face-bold-p      'error                       t)
 (set-face-background  'shadow                      "color-234" ) ;; For line numbers.
 (set-face-background  'isearch                     "color-17" )
 (set-face-foreground  'isearch                     nil )
 (set-face-background  'isearch-lazy-highlight-face "color-237" )
+(if (string-match "^24.*" emacs-version )
+    (progn 
+      (set-face-foreground  'error                       "red")
+      (set-face-bold-p      'error                       t)))
 
 ;; Programming
 (set-face-foreground  'font-lock-builtin-face           "color-75" )

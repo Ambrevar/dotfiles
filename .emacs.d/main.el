@@ -144,7 +144,8 @@
 (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-ghost)
 
 ;; Electric Pairs to auto-complete () [] {} "" etc. You can use it on regions.
-(electric-pair-mode 1)
+(if (string-match "^24.*" emacs-version )
+    (electric-pair-mode 1))
 
 ;; Run ranger asynchronously.
 (define-key my-keys-minor-mode-map (kbd "C-x D")

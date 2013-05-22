@@ -207,8 +207,8 @@ set user_agent = yes
 ## See 'man 3 strftime' and 'man 3 printf'.
 # set index_format="%?M?_%M_ ?%Z %2C %.13d (%-68.68F) %-68.68s %?M?_%M_&(%c/%l?"
 set date_format="%y-%m-%d %T"
-folder-hook *[sS]ent* 'set index_format="%2C | %Z [%d] %-30.30t (%-4.4c) %s"'
-folder-hook ! *[sS]ent* 'set index_format="%2C | %Z [%d] %-30.30F (%-4.4c) %s"'
+folder-hook .*[sS]ent.* 'set index_format="%2C | %Z [%d] %-30.30t (%-4.4c) %s"'
+folder-hook ! .*[sS]ent.* 'set index_format="%2C | %Z [%d] %-30.30F (%-4.4c) %s"'
 
 ## Colors
 source "~/.mutt.d/colorset.sh|"
