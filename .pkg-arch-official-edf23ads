@@ -17,6 +17,8 @@ ati-dri
 atk
 atkmm
 atool
+at-spi2-atk
+at-spi2-core
 attr
 autoconf
 automake
@@ -72,8 +74,8 @@ dosfstools
 dotconf
 e2fsprogs
 elfutils
+emacs
 emacs-lua-mode
-emacs-nox
 emelfm2
 enca
 enchant
@@ -104,6 +106,7 @@ gc
 gcc-libs-multilib
 gcc-multilib
 gcolor2
+gconf
 gd
 gdb
 gdbm
@@ -151,6 +154,7 @@ gstreamer0.10-python
 gstreamer0.10-ugly
 gstreamer0.10-ugly-plugins
 gtk2
+gtk3
 gtkmm
 gtkspell
 gtk-update-icon-cache
@@ -319,6 +323,7 @@ libnl
 libnotify
 libofa
 libogg
+libotf
 libpcap
 libpciaccess
 libpipeline
@@ -373,6 +378,7 @@ libxfont
 libxft
 libxi
 libxinerama
+libxkbcommon
 libxkbfile
 libxml2
 libxmu
@@ -408,6 +414,8 @@ lua51
 lua-lgi
 lvm2
 lzo2
+m17n-db
+m17n-lib
 m4
 make
 man-db
