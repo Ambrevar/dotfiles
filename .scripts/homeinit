@@ -24,13 +24,22 @@ if [ -n "$(command -v emacs)" ] && [ ! -f "$EMFILE" ]; then
     if [ -z "$(command -v base64)" ]; then
 	    echo ":: base64 not found."
     else
-        sudo sh -c "echo 'IyEvYmluL3NoCklTX0dSQVBISUNBTD0kKGVtYWNzIC1iYXRjaCAtUSAtLWV2YWw9JyhpZiAoZmJv
-dW5kcCAnIiciJ3Rvb2wtYmFyLW1vZGUpIChtZXNzYWdlICIxIikgKG1lc3NhZ2UgIjAiKSknIDI+
-JjEpCgppZiBbICRJU19HUkFQSElDQUwgLWVxIDEgXTsgdGhlbgogICAgZW1hY3NjbGllbnQgLWEg
-IiIgLWMgIiRAIgplbHNlCiAgICBlbWFjc2NsaWVudCAtYSAiIiAtdCAiJEAiCmZpCg==' | base64 -d > "'"'"$EMFILE"'"'"
+        sudo sh -c "echo 'IyEvYmluL3NoCmlmIFsgLXogIiRESVNQTEFZIiBdOyB0aGVuCiAgICBJU19HUkFQSElDQUw9MApl
+bHNlCiAgICBJU19HUkFQSElDQUw9JChlbWFjcyAtYmF0Y2ggLVEgLS1ldmFsPScoaWYgKGZib3Vu
+ZHAgJyInIid0b29sLWJhci1tb2RlKSAobWVzc2FnZSAiMSIpIChtZXNzYWdlICIwIikpJyAyPiYx
+KQpmaQoKaWYgWyAkSVNfR1JBUEhJQ0FMIC1lcSAxIF07IHRoZW4KICAgIGVtYWNzY2xpZW50IC1h
+ICIiIC1jICIkQCIKZWxzZQogICAgZW1hY3NjbGllbnQgLWEgIiIgLXQgIiRAIgpmaQo=
+' | base64 -d > "'"'"$EMFILE"'"'"
 chmod 755 "'"'"$EMFILE"'"'""
     fi
 fi
+
+if [ -f "$HOME/.xkb/symbols/frex" ] && [ ! -f "/usr/local/share/X11/xkb/symbols/frex" ]; then
+    echo "==> frex font (press Ctrl-D to skip)"
+   sudo sh -c 'umask 022 && mkdir -p /usr/local/share/X11/xkb/symbols && cp "$HOME/.xkb/symbols/frex" /usr/local/share/X11/xkb/symbols/'
+   echo
+fi
+
 
 if [ -d "$SOURCEDIR" ]; then
     echo "==> Abook"

@@ -334,11 +334,11 @@ globalkeys = awful.util.table.join(
    awful.key({ }, "XF86Explorer",   function () awful.util.spawn(termcmd .. "ranger") end),
    awful.key({ }, "XF86MyComputer", function () awful.util.spawn(termcmd .. "ranger") end),
 
-   -- Screen lock
-   awful.key({ modkey,  }, "s",      function () awful.util.spawn("slock") end),
-   awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn("slock") end),
-   awful.key({ }, "XF86Sleep",       function () awful.util.spawn("slock") end),
-   awful.key({ }, "XF86Standby",     function () awful.util.spawn("slock") end),
+   -- Screen lock. xlockmore is useful for LDAP login because slock does not work with it.
+   awful.key({ modkey,  }, "s",      function () awful.util.spawn_with_shell("xlock 2>/dev/null || slock") end),
+   awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn_with_shell("xlock 2>/dev/null || slock") end),
+   awful.key({ }, "XF86Sleep",       function () awful.util.spawn_with_shell("xlock 2>/dev/null || slock") end),
+   awful.key({ }, "XF86Standby",     function () awful.util.spawn_with_shell("xlock 2>/dev/null || slock") end),
 
    -- PDF Reader
    awful.key({ modkey,  }, "p", function () awful.util.spawn("zathura") end),

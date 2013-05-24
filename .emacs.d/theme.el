@@ -13,7 +13,6 @@
 (set-face-underline-p 'link                        t)
 (set-face-foreground  'minibuffer-prompt           "#00ffff" )
 (set-face-background  'region                      "#262626")
-(set-face-background  'shadow                      "#1c1c1c" ) ;; For line numbers.
 (set-face-background  'isearch                     "#00002a" )
 (set-face-foreground  'isearch                     nil )
 (set-face-background  'isearch-lazy-highlight-face "#3a3a3a" )
@@ -21,6 +20,12 @@
     (progn 
       (set-face-foreground  'error                       "red")
       (set-face-bold-p      'error                       t)))
+
+;; Line numbers. Graphic version has a gray bar separating text from line
+;; numbers, so we can leave the background black.
+(if (display-graphic-p)
+    (set-face-background  'shadow                      "black" )
+    (set-face-background  'shadow                      "#1c1c1c" ))
 
 ;; Programming
 (set-face-foreground  'font-lock-builtin-face           "#2a80d4" )

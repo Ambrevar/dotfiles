@@ -47,7 +47,7 @@
 ;; TODO: This mode is really messy. Replace it.
 (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
 ;; (setq linum-format "%-4d ")
-(setq linum-format "%d ")
+(if (display-graphic-p) (setq linum-format "%d") (setq linum-format "%d "))
 ;; (global-linum-mode 1) ;; TODO: This may generate warnings with emacsclient. Bug?
 (add-hook 'find-file-hook (lambda () (linum-mode 1)))
 (define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode) ;; Toggle line numbers.
