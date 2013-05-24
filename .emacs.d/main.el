@@ -19,8 +19,9 @@
 
 ;; For convenience.
 (setq inhibit-startup-screen t)
-(if (display-graphic-p) (tool-bar-mode -1)) ;; (toggle-tool-bar-mode-from-frame)
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (menu-bar-mode -1)
+;; (scroll-bar-mode -1)
 
 ;; Make questions less annoying.
 (defalias 'yes-or-no-p 'y-or-n-p)

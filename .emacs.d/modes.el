@@ -39,6 +39,9 @@
 ;; Subtitles support.
 (setq auto-mode-alist (append '(("\\.srt\\'" . text-mode)) auto-mode-alist))
 
+;; Git commit meessages.
+(setq auto-mode-alist (append '(("COMMIT_EDITMSG\\'" . conf-mode)) auto-mode-alist))
+
 ;;==============================================================================
 ;; Auto-Insert
 ;;==============================================================================

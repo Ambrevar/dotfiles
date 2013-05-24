@@ -9,9 +9,9 @@
 (set-face-foreground  'default                        "white" )
 (set-face-background  'default                        "black" )
 
-(set-face-foreground  'link                        "brightblue" )
+(set-face-foreground  'link                        "#0000ff" )
 (set-face-underline-p 'link                        t)
-(set-face-foreground  'minibuffer-prompt           "brightcyan" )
+(set-face-foreground  'minibuffer-prompt           "#00ffff" )
 (set-face-background  'region                      "#262626")
 (set-face-background  'shadow                      "#1c1c1c" ) ;; For line numbers.
 (set-face-background  'isearch                     "#00002a" )
@@ -31,12 +31,12 @@
 (set-face-foreground  'font-lock-doc-face               "#005500" )
 (set-face-foreground  'font-lock-function-name-face     "#2a80d4" )
 (set-face-bold-p      'font-lock-function-name-face     t )
-(set-face-foreground  'font-lock-keyword-face           "brightred" )
+(set-face-foreground  'font-lock-keyword-face           "#ff0000" )
 (set-face-bold-p      'font-lock-keyword-face           t )
 (set-face-foreground  'font-lock-preprocessor-face      "#552ad4" )
 (set-face-foreground  'font-lock-string-face            "#0080d4" )
 (set-face-foreground  'font-lock-type-face              "#aa2a00" )
-(set-face-foreground  'font-lock-variable-name-face     "brightyellow" )
+(set-face-foreground  'font-lock-variable-name-face     "#ffff00" )
 (set-face-foreground  'font-lock-warning-face           "DarkOrange" )
 
 ;; Ediff
