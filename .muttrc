@@ -19,11 +19,8 @@ set beep_new = "yes"
 ## Headers are editable in editor.
 set edit_headers=yes
 
-## Seems like $EDITOR is internal to Mutt, whereas variable set between
-## backquotes are external. By default Mutt will use env EDITOR variable, so we
-## do not really need to set it.
-# set editor=`echo \$EDITOR`
-# set editor="emacsclient -a \"\" -t"
+## Set EDITOR dynamically.
+source "~/.mutt.d/maileditor.sh|"
 
 ## Store message headers locally to speed things up. Gentoo wiki says that if a
 ## folder is specified, it is even faster. If no folder exists, the cache will
@@ -136,7 +133,9 @@ macro pager b '<enter-command>toggle sidebar_visible<enter><redraw-screen>'
 # source $alias_file
 
 ## Abook
-set query_command= "abook --mutt-query '%s'"
+## We redirect the error stream in case the config file in not compatible with
+## current abook bersion.
+set query_command= "abook --mutt-query '%s' 2>/dev/null"
 macro index,pager  a "<pipe-message>abook --add-email-quiet<return>" "Add this sender to Abook"
 bind editor        <Tab> complete-query
 

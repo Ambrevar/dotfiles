@@ -14,12 +14,22 @@ mkdir -p temp
 echo
 
 ## Emacsclient launcher. Required for best emacsclient integration.  For a fully
-## functional daemon, you should write a file like this and set 'EDITOR=em'.
-if [ ! -f /usr/local/bin/em ]; then
-    echo "==> Emacs (press Ctrl-D to skip)"
-    sudo sh -c "echo '#!/bin/sh
-emacsclient -a \"\" -t \"\$@\"' > '/usr/local/bin/em'; chmod 755 /usr/local/bin/em"
-    echo
+## functional daemon, you should write a file like this and set 'EDITOR=em'.  We
+## use base64 to encode the script so that we do not need to handle all the
+## escape sequences with quotes and so on.
+EMFILE='/usr/local/bin/em'
+if [ -n "$(command -v emacs)" ] && [ ! -f "$EMFILE" ]; then
+	echo "==> Emacs (press Ctrl-D to skip)"
+
+    if [ -z "$(command -v base64)" ]; then
+	    echo ":: base64 not found."
+    else
+        sudo sh -c "echo 'IyEvYmluL3NoCklTX0dSQVBISUNBTD0kKGVtYWNzIC1iYXRjaCAtUSAtLWV2YWw9JyhpZiAoZmJv
+dW5kcCAnIiciJ3Rvb2wtYmFyLW1vZGUpIChtZXNzYWdlICIxIikgKG1lc3NhZ2UgIjAiKSknIDI+
+JjEpCgppZiBbICRJU19HUkFQSElDQUwgLWVxIDEgXTsgdGhlbgogICAgZW1hY3NjbGllbnQgLWEg
+IiIgLWMgIiRAIgplbHNlCiAgICBlbWFjc2NsaWVudCAtYSAiIiAtdCAiJEAiCmZpCg==' | base64 -d > "'"'"$EMFILE"'"'"
+chmod 755 "'"'"$EMFILE"'"'""
+    fi
 fi
 
 if [ -d "$SOURCEDIR" ]; then

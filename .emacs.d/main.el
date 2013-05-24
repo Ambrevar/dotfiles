@@ -17,6 +17,11 @@
 ;; Default mode
 (setq default-major-mode 'text-mode)
 
+;; For convenience.
+(setq inhibit-startup-screen t)
+(if (display-graphic-p) (tool-bar-mode -1)) ;; (toggle-tool-bar-mode-from-frame)
+(menu-bar-mode -1)
+
 ;; Make questions less annoying.
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -38,11 +43,14 @@
       (beginning-of-buffer (goto-char (point-min))))))
 
 ;; Line numbers
+;; TODO: This mode is really messy. Replace it.
 (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
 ;; (setq linum-format "%-4d ")
 (setq linum-format "%d ")
-(global-linum-mode 1) ;; TODO: This may generate warnings with emacsclient. Bug?
+;; (global-linum-mode 1) ;; TODO: This may generate warnings with emacsclient. Bug?
+(add-hook 'find-file-hook (lambda () (linum-mode 1)))
 (define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode) ;; Toggle line numbers.
+
 
 ;; Indentation
 ;(setq standard-indent 4)
@@ -89,9 +97,6 @@
 ;; (setq make-backup-files t) ;; Enable backup files.
 ;; (setq version-control t) ;; Enable numbered versioning.
 (setq backup-directory-alist (quote ((".*" . "~/.emacs.d/backups/")))) ;; Save all backup file in this directory.
-
-;; Remove menu-bar
-(menu-bar-mode -1)
 
 ;; Set Fill Column
 (setq-default fill-column 80)

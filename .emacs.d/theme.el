@@ -6,33 +6,36 @@
 ;; on it and call 'customize-face'.
 
 ;; General
+(set-face-foreground  'default                        "white" )
+(set-face-background  'default                        "black" )
+
 (set-face-foreground  'link                        "brightblue" )
 (set-face-underline-p 'link                        t)
 (set-face-foreground  'minibuffer-prompt           "brightcyan" )
-(set-face-background  'region                      "color-235")
-(set-face-background  'shadow                      "color-234" ) ;; For line numbers.
-(set-face-background  'isearch                     "color-17" )
+(set-face-background  'region                      "#262626")
+(set-face-background  'shadow                      "#1c1c1c" ) ;; For line numbers.
+(set-face-background  'isearch                     "#00002a" )
 (set-face-foreground  'isearch                     nil )
-(set-face-background  'isearch-lazy-highlight-face "color-237" )
+(set-face-background  'isearch-lazy-highlight-face "#3a3a3a" )
 (if (string-match "^24.*" emacs-version )
     (progn 
       (set-face-foreground  'error                       "red")
       (set-face-bold-p      'error                       t)))
 
 ;; Programming
-(set-face-foreground  'font-lock-builtin-face           "color-75" )
+(set-face-foreground  'font-lock-builtin-face           "#2a80d4" )
 (set-face-bold-p      'font-lock-builtin-face           t )
-(set-face-foreground  'font-lock-comment-delimiter-face "color-242" )
-(set-face-foreground  'font-lock-comment-face           "color-242" )
-(set-face-foreground  'font-lock-constant-face          "color-105" )
-(set-face-foreground  'font-lock-doc-face               "color-28" )
-(set-face-foreground  'font-lock-function-name-face     "color-75" )
+(set-face-foreground  'font-lock-comment-delimiter-face "#6c6c6c" )
+(set-face-foreground  'font-lock-comment-face           "#6c6c6c" )
+(set-face-foreground  'font-lock-constant-face          "#5555d4" )
+(set-face-foreground  'font-lock-doc-face               "#005500" )
+(set-face-foreground  'font-lock-function-name-face     "#2a80d4" )
 (set-face-bold-p      'font-lock-function-name-face     t )
 (set-face-foreground  'font-lock-keyword-face           "brightred" )
 (set-face-bold-p      'font-lock-keyword-face           t )
-(set-face-foreground  'font-lock-preprocessor-face      "color-99" )
-(set-face-foreground  'font-lock-string-face            "color-39" )
-(set-face-foreground  'font-lock-type-face              "color-166" )
+(set-face-foreground  'font-lock-preprocessor-face      "#552ad4" )
+(set-face-foreground  'font-lock-string-face            "#0080d4" )
+(set-face-foreground  'font-lock-type-face              "#aa2a00" )
 (set-face-foreground  'font-lock-variable-name-face     "brightyellow" )
 (set-face-foreground  'font-lock-warning-face           "DarkOrange" )
 
@@ -40,25 +43,25 @@
 (add-hook
  'ediff-mode-hook
  (lambda ()
-   (set-face-background 'ediff-fine-diff-A "color-52")
+   (set-face-background 'ediff-fine-diff-A "#2a0000")
    (set-face-foreground 'ediff-fine-diff-A nil)
-   (set-face-background 'ediff-fine-diff-B "color-52")
+   (set-face-background 'ediff-fine-diff-B "#2a0000")
    (set-face-foreground 'ediff-fine-diff-B nil)
-   (set-face-background 'ediff-fine-diff-C "color-52")
+   (set-face-background 'ediff-fine-diff-C "#2a0000")
    (set-face-foreground 'ediff-fine-diff-C nil)
 
-   (set-face-background 'ediff-current-diff-A "color-17")
+   (set-face-background 'ediff-current-diff-A "#00002a")
    (set-face-foreground 'ediff-current-diff-A nil)
-   (set-face-background 'ediff-current-diff-B "color-17")
+   (set-face-background 'ediff-current-diff-B "#00002a")
    (set-face-foreground 'ediff-current-diff-B nil)
-   (set-face-background 'ediff-current-diff-C "color-17")
+   (set-face-background 'ediff-current-diff-C "#00002a")
    (set-face-foreground 'ediff-current-diff-C nil)
 
-   (set-face-background 'ediff-even-diff-A "color-236")
+   (set-face-background 'ediff-even-diff-A "#303030")
    (set-face-foreground 'ediff-even-diff-A nil)
-   (set-face-background 'ediff-even-diff-B "color-236")
+   (set-face-background 'ediff-even-diff-B "#303030")
    (set-face-foreground 'ediff-even-diff-B nil)
-   (set-face-background 'ediff-even-diff-C "color-236")
+   (set-face-background 'ediff-even-diff-C "#303030")
    (set-face-foreground 'ediff-even-diff-C nil)
 
    (set-face-background 'ediff-odd-diff-A "brightblack")
