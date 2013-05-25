@@ -22,6 +22,7 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (menu-bar-mode -1)
 ;; (scroll-bar-mode -1)
+(set-scroll-bar-mode 'left)
 
 ;; Make questions less annoying.
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -46,12 +47,9 @@
 ;; Line numbers
 ;; TODO: This mode is really messy. Replace it.
 (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
-;; (setq linum-format "%-4d ")
-(if (display-graphic-p) (setq linum-format "%d") (setq linum-format "%d "))
-;; (global-linum-mode 1) ;; TODO: This may generate warnings with emacsclient. Bug?
+(if (not (fboundp 'tool-bar-mode)) (setq linum-format "%d "))
 (add-hook 'find-file-hook (lambda () (linum-mode 1)))
 (define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode) ;; Toggle line numbers.
-
 
 ;; Indentation
 ;(setq standard-indent 4)
@@ -142,7 +140,7 @@
 (setq show-paren-delay 0)
 
 ;; query-replace-regex fix on terminals.
-(define-key my-keys-minor-mode-map (kbd "C-M-y") 'query-replace-regexp)
+(if (not (fboundp 'tool-bar-mode)) (define-key my-keys-minor-mode-map (kbd "C-M-y") 'query-replace-regexp))
 
 ;; Semantic with ghost display (allows M-n and M-p to browse completion).
 (semantic-mode 1)

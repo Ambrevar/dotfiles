@@ -6,10 +6,10 @@
 ;; on it and call 'customize-face'.
 
 ;; General
-(set-face-foreground  'default                        "white" )
-(set-face-background  'default                        "black" )
+(set-face-foreground  'default                     "white" )
+(set-face-background  'default                     "black" )
 
-(set-face-foreground  'link                        "#0000ff" )
+(set-face-foreground  'link                        "#00ffff" )
 (set-face-underline-p 'link                        t)
 (set-face-foreground  'minibuffer-prompt           "#00ffff" )
 (set-face-background  'region                      "#262626")
@@ -17,9 +17,12 @@
 (set-face-foreground  'isearch                     nil )
 (set-face-background  'isearch-lazy-highlight-face "#3a3a3a" )
 (if (string-match "^24.*" emacs-version )
-    (progn 
+    (progn
       (set-face-foreground  'error                       "red")
       (set-face-bold-p      'error                       t)))
+
+;; Font size
+(if (fboundp 'tool-bar-mode) (set-face-attribute 'default nil :height 100))
 
 ;; Line numbers. Graphic version has a gray bar separating text from line
 ;; numbers, so we can leave the background black.
