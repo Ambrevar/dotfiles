@@ -118,5 +118,5 @@ if [ "$OSTYPE" = "linux-gnu" ] ; then
     [ -n "$(amixer 2>/dev/null | grep PCM)" ] && amixer set PCM 80%
 
     ## External device auto-mounting.
-    [ -n "$(comand -v udiskie)" ] && udiskie &
+    [ -n "$(command -v udiskie)" ] && udiskie &
 fi
