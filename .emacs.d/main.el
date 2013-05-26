@@ -22,7 +22,7 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (menu-bar-mode -1)
 ;; (scroll-bar-mode -1)
-(set-scroll-bar-mode 'left)
+(if (fboundp 'set-scroll-bar-mode) (set-scroll-bar-mode 'left))
 
 ;; Make questions less annoying.
 (defalias 'yes-or-no-p 'y-or-n-p)
