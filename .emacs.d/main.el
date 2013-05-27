@@ -185,3 +185,6 @@
           (lambda () (interactive) )
           (setq org-agenda-files '("~/todo.org"))
           (setq org-enforce-todo-dependencies t))
+
+;; Ediff in one frame.
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)

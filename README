@@ -81,7 +81,7 @@ all files directly. To fetch source from Git repo:
 Some applications will need extra dependencies other than the default ones. You
 might have a look at the .pkg-* files to see what software I've been using.
 
-Final word: do not forget to read the manpages!
+Final word: do not forget to read the man pages!
 
 ################################################################################
 
@@ -99,11 +99,21 @@ Some custom options, download location, search engines, etc.
 
 Emacs
 *****
-Extra deps: emacs-bison-mode emacs-flex-mode emacs-glsl-mode emacs-lua-mode
-  emacs-make-regexp emacs-mediawiki-bzr emacs-multiple-cursors emacs-nox
-  emacs-xclip emacs-yasnippet
+Extra deps
+- recommended: emacs-multiple-cursors emacs-xclip emacs-yasnippet
+- optional: emacs-bison-mode emacs-flex-mode emacs-glsl-mode emacs-lua-mode
+  emacs-make-regexp emacs-mediawiki-bzr 
+
+Build options:
+  ./configure --prefix=/usr --sysconfdir=/etc --libexecdir=/usr/lib \
+    --localstatedir=/var --with-x-toolkit=lucid --with-xft \
+    --without-gconf --without-sound
 
 Emacs daemon is integrated flawlessly thanks to a small script. See homeinit.
+Because terminal and graphical clients do not behave the same way, it is
+sometimes useful to specify which version should be used. For mutt, ranger
+bulkrename, git commit message and dwb, it is required to wait for the client to
+return.
 
 Configuration for C programming. Bindings to compile either from makefile or
 from a custom command if no makefile is found.
@@ -179,17 +189,14 @@ pkggen: generates lists of installed with pacman, FreeBSD's pkg and tlmgr (TeX
 
 Shell
 *****
-Target: zsh, bash
+Target: POSIX shell, dash, zsh
 
 Probably the most interesting part here. A lot of stuff: aliases, functions,
 shell options, etc.
 
-Please note that this config is mainly intended -- and tested -- for zsh. It
-should be mostly compatible with Bourne shell though.  When incompabilities have
-been encountered, it has been reported into the configuration files. Hence the
-shared folder .shell.d/, whose files get sourced by both bash and zsh.
-Bash-specific and zsh-specific options are in dedicated files ending with the
-appropriate shell name.
+Please note that this config is mainly intended -- and tested -- for zsh.  I
+removed bash support since bash is really a scourge to shell scripting. However
+most of the script and the shell configuration are POSIX shell compatible.
 
 TeX
 ***
