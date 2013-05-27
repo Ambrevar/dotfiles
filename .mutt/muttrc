@@ -6,8 +6,9 @@
 
 ## Note on folders:
 ## These folders are assumed to exist:
-## ~/.mutt: personal stuff (contacts, account information)
-## ~/.mutt.d: public stuff (theme, mailcap)
+## ~/.mutt.d: personal stuff (contacts, account information).
+## ~/.mutt: public stuff (theme, mailcap).
+## ~/.cache/mutt: header cache.
 
 ##------------------------------------------------------------------------------
 ## General options
@@ -20,7 +21,7 @@ set beep_new = "yes"
 set edit_headers=yes
 
 ## Set EDITOR dynamically.
-source "~/.mutt.d/maileditor.sh|"
+source "~/.mutt/maileditor.sh|"
 
 ## Store message headers locally to speed things up. Gentoo wiki says that if a
 ## folder is specified, it is even faster. If no folder exists, the cache will
@@ -40,7 +41,7 @@ set imap_keepalive = 300
 unset imap_passive
 
 ## Mailcap
-set mailcap_path = ~/.mutt.d/mailcap
+set mailcap_path = ~/.mutt/mailcap
 auto_view text/html
 alternative_order text/plain text/html
 
@@ -60,39 +61,39 @@ set sleep_time = 0
 ## Multiple accounts
 ##------------------------------------------------------------------------------
 
-set my_ac_dev=dev
-set my_ac_personal=personal
-set my_ac_university=university
-set my_ac_work=work
+## accountrc should contain the following config:
 
-## Login
+## Set account names (arbitrary).
+# set my_ac_personal=personal
+# set my_ac_work=work
+#
+## Fetch passwords
+# source "ccat ~/.mutt-pwds.cpt |"
+## Or
+# source "gpg2 -dq ~/.mutt-pwds.gpg |"
+##
+## Folder hooks, one per account.
+# source "~/.mutt.d/$my_ac_personal"
+# folder-hook $folder 'source ~/.mutt.d/$my_ac_personal'
+# source "~/.mutt.d/$my_ac_work"
+# folder-hook $folder 'source ~/.mutt.d/$my_ac_work'
+##
+## Optionnaly you can add shortcuts to switch mailboxes:
+# macro index,pager <f2> '<enter-command>source ~/.mutt.d/$my_ac_personal<enter><change-folder>!<enter>'
+# macro index,pager <f3> '<enter-command>source ~/.mutt.d/$my_ac_work<enter><change-folder>!<enter>'
+
 ## Store passwords as follows in .mutt-pwds:
-##   set my_pw_account = foo
+# set my_pw_account = foo
 ##
 ## CCRYPT:
-##  ccencrypt .mutt-pwds
+## $ ccencrypt .mutt-pwds
 ##
 ## GNUPG: Generate a key pair with:
-##   gpg2 --gen-key
+## $ gpg2 --gen-key
 ## Encrypt them with:
-##   gpg2 -e -r <user> ".mutt-pwds"
-source "ccat ~/.mutt-pwds.cpt |"
-# source "gpg2 -dq ~/.mutt-pwds.gpg |"
+## $ gpg2 -e -r <user> ".mutt-pwds"
 
-## Last account is default.
-source "~/.mutt/$my_ac_dev"
-folder-hook $folder 'source ~/.mutt/$my_ac_dev'
-source "~/.mutt/$my_ac_personal"
-folder-hook $folder 'source ~/.mutt/$my_ac_personal'
-source "~/.mutt/$my_ac_university"
-folder-hook $folder 'source ~/.mutt/$my_ac_university'
-source "~/.mutt/$my_ac_work"
-folder-hook $folder 'source ~/.mutt/$my_ac_work'
-
-macro index,pager <f2> '<enter-command>source ~/.mutt/$my_ac_dev<enter><change-folder>!<enter>'
-macro index,pager <f3> '<enter-command>source ~/.mutt/$my_ac_personal<enter><change-folder>!<enter>'
-macro index,pager <f4> '<enter-command>source ~/.mutt/$my_ac_university<enter><change-folder>!<enter>'
-macro index,pager <f5> '<enter-command>source ~/.mutt/$my_ac_work<enter><change-folder>!<enter>'
+source "~/.mutt.d/accountrc"
 
 ##------------------------------------------------------------------------------
 ## Sidebar
@@ -127,7 +128,7 @@ macro pager b '<enter-command>toggle sidebar_visible<enter><redraw-screen>'
 ##------------------------------------------------------------------------------
 
 ## Mutt native support
-# set alias_file = "~/.mutt/aliases"
+# set alias_file = "~/.mutt.d/aliases"
 # set sort_alias = alias
 # set reverse_alias = yes
 # source $alias_file
@@ -210,8 +211,8 @@ folder-hook .*[sS]ent.* 'set index_format="%2C | %Z [%d] %-30.30t (%-4.4c) %s"'
 folder-hook ! .*[sS]ent.* 'set index_format="%2C | %Z [%d] %-30.30F (%-4.4c) %s"'
 
 ## Colors
-source "~/.mutt.d/colorset.sh|"
-source "~/.mutt.d/colors.ambrevar"
+source "~/.mutt/colorset.sh|"
+source "~/.mutt/colors.ambrevar"
 # source "/usr/share/doc/mutt/samples/colors.default"
 # source "/usr/share/doc/mutt/samples/colors.linux"
 
