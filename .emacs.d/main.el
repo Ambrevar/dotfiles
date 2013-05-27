@@ -183,7 +183,3 @@
           (lambda () (interactive) )
           (setq org-agenda-files '("~/todo.org"))
           (setq org-enforce-todo-dependencies t))
-
-
-;; Tell grep-find to skip VCS folders.
-(grep-apply-setting 'grep-find-command "find . -name \"*.svn\" -prune -o -type f -print0 | \"xargs\" -0 -e grep -nH -e ")

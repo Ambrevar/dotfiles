@@ -3,9 +3,10 @@
 
 (setq mc/cmds-to-run-for-all
       '(
-        org-self-insert-command
+        c-electric-semi&comma
         ))
 
 (setq mc/cmds-to-run-once
       '(
+        semantic-complete-analyze-inline
         ))
