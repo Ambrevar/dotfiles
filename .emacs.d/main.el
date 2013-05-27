@@ -145,7 +145,9 @@
 ;; Semantic with ghost display (allows M-n and M-p to browse completion).
 (semantic-mode 1)
 (define-key my-keys-minor-mode-map (kbd "C-c , d") 'semantic-ia-show-summary)
-(setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-ghost)
+;; (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-ghost)
+(setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-tooltip)
+;; (setq semanticdb-find-default-throttle '(project unloaded system recursive))
 
 ;; Electric Pairs to auto-complete () [] {} "" etc. You can use it on regions.
 (if (string-match "^24.*" emacs-version )
