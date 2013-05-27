@@ -81,7 +81,7 @@ GIT_EDITOR="$EDITOR"
 ## 'em' is a script for emacsclient. See 'homeinit'.
 if [ -n "$(command -v em)" ]; then
    EDITOR='em'
-   GIT_EDITOR='emacsclient -a "" -t'
+   GIT_EDITOR='emc'
 fi
 export EDITOR
 export GIT_EDITOR

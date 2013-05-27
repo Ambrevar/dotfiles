@@ -8,6 +8,6 @@
 
 if [ "$EDITOR" = "em" ]; then
     cat <<EOF
-set editor="emacsclient -a \"\" -t"
+set editor="emc"
 EOF
 fi
