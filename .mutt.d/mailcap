@@ -1,8 +1,14 @@
 # $Id$
 
+# text/html; dwb -- %s
 text/html; w3m -I %{charset} -T text/html; copiousoutput;
-image/*; sxiv %s
-applica/msword; antiword %s | less
-application/msword; antiword %s | less
-application/pdf; pdftotext %s - | less
+
+image/*; sxiv -- %s
+
+application/pdf; zathura --fork -- %s
+# application/pdf; pdftotext -- %s - | less
+
+applica/msword; antiword -- %s | less
+application/msword; antiword -- %s | less
+
 # application/pgp-keys; pgp -f < %s ; copiousoutput
