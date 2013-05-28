@@ -113,6 +113,9 @@ fi
 ## Numlock
 numlockx on
 
+## Keymap. Only useful on multi-user environment.
+# setxkbmap frex
+
 if [ "$OSTYPE" = "linux-gnu" ] ; then
     ## Set sound volume.
     [ -n "$(amixer 2>/dev/null | grep PCM)" ] && amixer set PCM 80%
