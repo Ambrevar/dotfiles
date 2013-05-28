@@ -54,8 +54,7 @@ fi
 
 if [ -n "$(command -v mutt)" ]; then
     echo "==> Mutt"
-    # [ -d "$SOURCEDIR" ] && ln -snf "$(realpath ${SOURCEDIR}/mails)" "${HOME}/.mutt"
-    [ -d "$SOURCEDIR" ] && ln -snf "${SOURCEDIR}/mails" "${HOME}/.mutt"
+    [ -d "$SOURCEDIR" ] && ln -snf "${SOURCEDIR}/mails" "${HOME}/.mutt.d"
     mkdir -p "${HOME}/.cache/mutt/hcache"
     echo
 fi
