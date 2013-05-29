@@ -3,11 +3,15 @@
 
 (setq mc/cmds-to-run-for-all
       '(
-        c-electric-delete-forward
         c-electric-semi&comma
         kill-region
+        c-electric-delete-forward
+        dabbrev-expand
+        repeat
+        yas/expand
         ))
 
 (setq mc/cmds-to-run-once
       '(
+        c-compile
         ))

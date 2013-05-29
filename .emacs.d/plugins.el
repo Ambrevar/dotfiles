@@ -167,7 +167,7 @@
       (define-key my-keys-minor-mode-map (kbd "C-c C-a") 'mc/edit-beginnings-of-lines)
       (define-key my-keys-minor-mode-map (kbd "C-c C-e") 'mc/edit-ends-of-lines)
       (define-key my-keys-minor-mode-map (kbd "C-c C-r") 'mc/edit-lines)
-      (define-key my-keys-minor-mode-map (kbd "C-c C-n") 'mc/mark-next-word-like-this)
-      (define-key my-keys-minor-mode-map (kbd "C-c C-p") 'mc/mark-previous-word-like-this)
+      (define-key my-keys-minor-mode-map (kbd "C-c C-n") 'mc/mark-next-like-this)
+      (define-key my-keys-minor-mode-map (kbd "C-c C-p") 'mc/mark-previous-like-this)
       (define-key my-keys-minor-mode-map (kbd "C-c C-l") 'mc/mark-all-like-this-dwim)))
 

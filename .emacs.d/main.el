@@ -68,7 +68,8 @@
 ;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Highlight trailing whitespaces. For programming languages only, so that it
-;; does not affect buffer like calendar and so on.
+;; does not affect buffer like calendar and so on. There is no prog-mode-hook on
+;; Emacs<24.
 (mapcar
  (lambda (mode-hook)
    (add-hook
@@ -146,7 +147,7 @@
 (semantic-mode 1)
 (define-key my-keys-minor-mode-map (kbd "C-c , d") 'semantic-ia-show-summary)
 ;; (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-ghost)
-(setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-tooltip)
+;; (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-tooltip)
 ;; (setq semanticdb-find-default-throttle '(project unloaded system recursive))
 
 ;; Electric Pairs to auto-complete () [] {} "" etc. You can use it on regions.
