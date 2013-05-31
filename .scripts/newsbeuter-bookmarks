@@ -1,5 +1,7 @@
 #!/bin/sh
 
+## This script is used by newsbeuter to store starred item.
+
 [ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
 
 url="$1"

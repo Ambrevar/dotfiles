@@ -8,12 +8,12 @@ fi
 INPUT="$1"
 
 shift
-GCC_OPTS="-O0 -Wall -Wextra -Wshadow -pthread"
+GCC_OPTS="-O0 -Wall -Wextra -Wshadow -pthread -lm"
 if [ $# -ne 0 ]; then
     GCC_OPTS="$@"
 fi
 
-FILE=$(mktemp)
+FILE="$(mktemp)"
 echo "==> gcc \"$INPUT\" -o \"$FILE\" $GCC_OPTS"
 
 ## Zsh compatibility. We need it otherwise word splitting of parameter GCC_OPTS

@@ -1,87 +1,21 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                             Author: P. Neidhardt                             #
-#                               Date: 2013-04-13                               #
+#                               Date: 2013-05-31                               #
 ################################################################################
 
-Synopsis
-********
+Description
+***********
 
-This repository contains scripts configuration files for various Unix
-programs. It targets Arch Linux and FreeBSD (might work for most
-Unices as well).
+This repository contains scripts configuration files for various Unix programs.
+It targets Arch Linux and FreeBSD, but since these are "fundamental" Unix
+distributions, it might work for most other Unices as well. I tried hard to
+maintain universality: it should work anywhere (whatever the versions of the
+programs are) with as few modifications as possible.
 
-################################################################################
-
-Highlights
-**********
-
-* Smart audio transcoding: implemented as shell functions. It will convert, tag
-  and move the input tracks in a dynamic, yet customizable manner. It features a
-  smart title case AWK function that will print almost any audio tag the proper
-  way. It will copy cover files when found. You can preview the changes without
-  writing data. Using FFmpeg.
-
-* Video transcoding: batch conversion of any kind of videos. Using FFmpeg.
-
-* Plain TeX: partial unicode support (borrowed from LaTeX).
-
-* Emacs LaTeX home-made environment, dynamic compilation, custom variable
-  support, SyncTeX working with Zathura, PDF compression, and much more.
-
-* Mutt Sidebar with multiple accounts on non-local IMAP (using Mutt's IMAP
-  client).
-
-* Awesome widgets: nice functions, like dynamic network speed (it checks for
-  different interfaces), CPU speed, dynamic battery that will not show up if no
-  battery is detected, and sound volume.
-
-* Pacman functions: a lot of handy functions for the pacman package manager,
-  like sorting by size, dependency listing, etc.
-
-################################################################################
-
-Generic Comments
-****************
-
-The only purpose is to be a source of inspiration. Examples are always a good
-technical support. (Especially for applications that do not provide examples in
-their documentation.)  There is no use in blind-copying the content of any file
-into your personal home folder. At best it might break things.
-
-In case you still want to copy some files -- for quick and dirty testing purpose
--- do not forget that most of the files are in hidden folders.  Also note that
-in some shells, the '*' joker will NOT match hidden files, that is
-
-    cp -r source-dir/* dest-dir/
-
-will copy non-hidden folders only.  To match all folders, use the following
-joker instead:
-
-    cp -r source-dir/{.*,*} dest-dir/   # zsh
-    cp -r source-dir/{.??*,*} dest-dir/ # bash
-
-Still, the solution for bash is not perfect as it affects 3 characters files
-only. A more convenient solution:
-
-    # bash only.
-    shopt -s dotglob
-    cp -r source-dir/* dest-dir/
-
-Git makes it possible to use your home folder as a git repo, thus versioning
-all files directly. To fetch source from Git repo:
-
-    cd
-    git init
-    git remote add origin <repo>
-    git fetch
-    git branch master origin/master
-    git checkout master
-
-Some applications will need extra dependencies other than the default ones. You
-might have a look at the .pkg-* files to see what software I've been using.
-
-Final word: do not forget to read the man pages!
+Most interesting parts include advanced configuration for Emacs, Mutt, and some
+interesting shell scripts like a video transcoding wrapper and a smart audio
+organizer using FFmpeg.
 
 ################################################################################
 
@@ -90,19 +24,24 @@ Awesome
 Extra deps: Vicious (Linux only)
 
 Configuration is very close to the default one, which mostly fits my needs.
-Most of the work I've done is for the status bar, but since I'm using the
+Most of the work I've done is for the status bar:  dynamic network speed (it
+checks for different interfaces), CPU speed, dynamic battery that will not show
+up if no battery is detected, and sound volume. But since I'm using the
 Vicious plugin, it is quite straightforward.
+
+This configuration is for now very version-sensitive, so you should make sure to
+use latest build.
 
 dwb
 ***
-Some custom options, download location, search engines, etc.
+Some custom options, download location, search engines, plugins, etc.
 
 Emacs
 *****
 Extra deps
 - recommended: emacs-multiple-cursors emacs-xclip emacs-yasnippet
 - optional: emacs-bison-mode emacs-flex-mode emacs-glsl-mode emacs-lua-mode
-  emacs-make-regexp emacs-mediawiki-bzr 
+  emacs-make-regexp emacs-mediawiki-bzr
 
 Build options:
   ./configure --prefix=/usr --sysconfdir=/etc --libexecdir=/usr/lib \
@@ -122,11 +61,11 @@ TeX and LaTeX full-featured home made environment: no AucTeX required, snippets,
 dynamic compilation with various engines, dynamic configuration, proper PDF
 view, temp files clean function, PDF compression, SyncTeX support.
 
-Custom color theme with 256 colors.
+Custom theme with 256 colors, works for both text and graphical Emacs.
 
 Extended file support (shell files, Mutt mails, Arch Linux PKGBUILDs).
 
-Some customization: columns, kill whole line, etc.
+Some customization: columns, kill whole line, org-mode, semantic, etc.
 
 Some custom functions: duplicate line, unfill-paragraph, etc.
 
@@ -136,6 +75,7 @@ generation, pie chart generation, and others.
 Mutt
 ****
 Compile options: IMAP and SMTP support.
+Patch: sidebar.
 Extra deps: antiword, ccrypt, fortune, sxiv, w3m.
 
 This one is not easy to get into it. I managed to get multiple accounts with
@@ -167,6 +107,10 @@ Custom bindings, file association, tweaked a few options.
 Scripts
 *******
 
+Probably the most interesting part here.
+
+*clean: remove junk files from TeX projects, home folder, etc.
+
 abs-*: helper scripts to compile pacman-based packages (using makepkg). With
        these scripts you can recompile your whole system.
 
@@ -174,29 +118,45 @@ archive: simple tar wrapper to create archive for files and folders.
 
 asciify: convert many non-ASCII characters to their nearest ASCII counterpart.
 
+crun: quick way to execute C files.
+
 ediff: diff with Emacs.
 
 formatc: wrapper for 'indent' to prettify C source code.
 
 homeinit: initialize a new home configuration, i.e. get needed files, create
-          symlinks, etc.
+  symlinks, etc.
 
 netinit: network setup. Works with wpa_supplicant. May replace any network
-           manager.
+  manager.
 
-pkggen: generates lists of installed with pacman, FreeBSD's pkg and tlmgr (TeX
-        Live manager).
+pacman-*: a lot of handy functions for the pacman package manager,
+  like sorting by size, dependency listing, etc.
+
+pdf*: PDF manipulation, e.g. extract pages, compress, resize to A4.
+
+pkggen: generate lists of installed with pacman, FreeBSD's pkg and tlmgr (TeX
+  Live manager).
+
+tc-audio-*: smart audio transcoding implemented as shell functions. It will
+  convert, tag and move the input tracks in a dynamic, yet customizable
+  manner. It features a smart title case AWK function that will print almost any
+  audio tag the proper way. It will copy cover files when found. You can preview
+  the changes without writing data. Using FFmpeg.
+
+tc-video-*: batch conversion of any kind of videos. Using FFmpeg.
 
 Shell
 *****
 Target: POSIX shell, dash, zsh
 
-Probably the most interesting part here. A lot of stuff: aliases, functions,
-shell options, etc.
+A lot of stuff: aliases, functions, shell options, etc.
 
 Please note that this config is mainly intended -- and tested -- for zsh.  I
-removed bash support since bash is really a scourge to shell scripting. However
-most of the script and the shell configuration are POSIX shell compatible.
+removed bash support since it is really a scourge to shell scripting. However
+most of the script and the shell configuration are POSIX shell compatible
+(tested with dash). When some advanced features were required (like arrays),
+I've set the shabang accordingly.
 
 TeX
 ***
@@ -221,16 +181,72 @@ Vim
 I've only been a casual Vim user, so do not expect too much from it.
 
 ################################################################################
+
+Usage
+*****
+
+The only purpose is to be a source of inspiration. Examples are always a good
+technical support. (Especially for applications that do not provide examples in
+their documentation.)  There is no use in blind-copying the content of any file
+into your personal home folder. At best it might break things.
+
+In case you still want to copy some files -- for quick and dirty testing purpose
+-- do not forget that most of the files are in hidden folders.  Also note that
+in some shells, the '*' joker will NOT match hidden files, that is
+
+    cp -r source-dir/* dest-dir/
+
+will copy non-hidden folders only.  To match all folders, use the following
+joker instead:
+
+    cp -r source-dir/{.*,*} dest-dir/   # zsh
+    cp -r source-dir/{.??*,*} dest-dir/ # bash
+
+Still, the solution for bash is not perfect as it affects 3 characters files
+only. A more convenient solution:
+
+    # bash only.
+    shopt -s dotglob
+    cp -r source-dir/* dest-dir/
+
+Versioning
+**********
+
+Git makes it possible to use your home folder as a git repo, thus versioning
+all files directly. To fetch source from Git repo:
+
+    cd
+    git init
+    git remote add origin <repo>
+    git fetch
+    git branch master origin/master
+    git checkout master
+
+Some applications will need extra dependencies other than the default ones. You
+might have a look at the .pkg-* files to see what software I've been using.
+
+################################################################################
 Known issues
 ************
 
 Emacs
-  From times to times Emacs daemon will 'break' after a while: indentation and
-  colors will stop work properly. Investigation in progress.
+
+* From time to time Emacs daemon will 'break' after a while: indentation and
+  colors will stop work properly. Investigation in progress. On graphical
+  client, this does not seem to happen, but the server seems to crash randomly
+  (black/white screen when calling a new client).
+
+* When linenum is on in very large files (5000+ lines), beginning-of-buffer is
+  extremly slow when called from a shortcut, but not when called from the
+  command mini-buffer.
 
 URxvt
-  Using the paste function from Muennich's clipboard on the same terminal where
+
+* Using the paste function from Muennich's clipboard on the same terminal where
   text was copied will make it crash.
+
+* There is a bug with Xft anti-aliased font that prevent w3m image preview from
+  working (too bad for ranger).
 
 ################################################################################
 Noteworthy apps
@@ -311,6 +327,7 @@ movgrab
 mplayer2
 mutt
 nasm
+nawk
 ncdu
 nethogs
 newsbeuter
@@ -376,5 +393,6 @@ x264
 xclip
 xlockmore
 yasm
+youtube-dl
 zathura
 zsh

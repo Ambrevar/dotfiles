@@ -2,6 +2,31 @@
 ;; MAIN
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Folders.
+
+(setq emacs-cache-folder "~/.cache/emacs/")
+(if
+    (not (file-directory-p emacs-cache-folder))
+    (make-directory emacs-cache-folder))
+
+;; Remember last cursor position
+(require 'saveplace)
+(setq save-place-file (concat emacs-cache-folder "saveplace"))
+(setq-default save-place t)
+
+;; Disable autosave features
+;; TODO: folder is still created and filled with dummy files?
+(setq auto-save-default nil)
+
+;; Place Backup Files in Specific Directory
+;; TODO: use cache variable.
+(setq backup-directory-alist
+      (quote ((".*" . "~/.cache/emacs/backups/"))))
+;; (setq backup-inhibited t) ;; Disable backup files.
+;; (setq make-backup-files t) ;; Enable backup files.
+;; (setq version-control t) ;; Enable numbered versioning.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We use a minor mode to override global keys.To assign
 ;; global keys, you need to write
 ;;   (define-key my-keys-minor-mode-map (kbd "C-i") 'some-function)
@@ -84,20 +109,6 @@
 ;; Abbreviation support
 (setq default-abbrev-mode t)
 
-;; Remember last cursor position
-(require 'saveplace)
-(setq save-place-file "~/.emacs.d/saveplace")
-(setq-default save-place t)
-
-;; Disable autosave features
-(setq auto-save-default nil)
-
-;; Place Backup Files in Specific Directory
-;; (setq backup-inhibited t) ;; Disable backup files.
-;; (setq make-backup-files t) ;; Enable backup files.
-;; (setq version-control t) ;; Enable numbered versioning.
-(setq backup-directory-alist (quote ((".*" . "~/.emacs.d/backups/")))) ;; Save all backup file in this directory.
-
 ;; Set Fill Column
 (setq-default fill-column 80)
 ;; (auto-fill-mode 1) ;; Will not work because it gets overridden by major modes.
@@ -143,8 +154,10 @@
 ;; query-replace-regex fix on terminals.
 (if (not (fboundp 'tool-bar-mode)) (define-key my-keys-minor-mode-map (kbd "C-M-y") 'query-replace-regexp))
 
-;; Semantic with ghost display (allows M-n and M-p to browse completion).
+;; Semantic options.
 (semantic-mode 1)
+(setq semanticdb-default-save-directory (concat emacs-cache-folder "semantic"))
+;; Semantic with ghost display (allows M-n and M-p to browse completion).
 (define-key my-keys-minor-mode-map (kbd "C-c , d") 'semantic-ia-show-summary)
 ;; (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-ghost)
 ;; (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-tooltip)
