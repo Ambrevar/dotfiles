@@ -77,6 +77,9 @@ else
     alias halt='sudo halt -p'
 fi
 
+## TODO file.
+alias todo='$EDITOR ~/todo.org'
+
 ## Start X and lock current terminal (press ENTER when back in terminal to prompt for password).
 [ -n "$(command -v vlock)" ] && alias sx='startx & vlock'
 

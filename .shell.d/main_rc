@@ -4,6 +4,18 @@
 ## Date 2013-05-24
 ################################################################################
 
+## Terminal
+## WARNING: this is always a bad idea!
+## FreeBSD urxvt $TERM variable is not set properly for some reasons.
+## TODO: check how to do this properly.
+if [ ! "$OSTYPE" = "linux-gnu" ] && [[ "$TERM" = *rxvt* ]]; then
+    export TERM="rxvt-unicode-256color"
+fi
+## Most xterm-based terminals support 256 colors, so let's turn this on.
+if [ "$TERM" = "xterm" ]; then
+    export TERM="xterm-256color"
+fi
+
 ## Enable color support of ls.
 if [ "$TERM" != "dumb" ] && [ "$OSTYPE" = "linux-gnu" ]; then
     eval "`dircolors $HOME/.shell.d/dircolorsdb`"

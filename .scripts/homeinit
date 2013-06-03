@@ -3,7 +3,7 @@
 ## Home session initialization.
 ## 2013-03-01
 ################################################################################
-SOURCEDIR="${HOME}/personal/dataperso"
+SOURCEDIR="$HOME/personal/dataperso"
 [ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
 [ -z "$XDG_DATA_HOME" ] && XDG_DATA_HOME="$HOME/.local/share"
 [ -z "$XDG_DATA_DIRS" ] && XDG_DATA_DIRS="/usr/local/share"
@@ -45,36 +45,35 @@ if [ -f "$HOME/.xkb/symbols/frex" ] && [ ! -f "/usr/share/X11/xkb/symbols/frex" 
 fi
 
 
-if [ -d "$SOURCEDIR" ]; then
+if [ -d "$SOURCEDIR/contacts" ]; then
     echo "==> Abook"
-    # [ -d "$SOURCEDIR" ] && ln -snf "$(realpath ${SOURCEDIR}/contacts)" "${HOME}/.abook"
-    ln -snf "${SOURCEDIR}/contacts" "${HOME}/.abook"
+    ln -snf "$SOURCEDIR/contacts" "$HOME/.abook"
     echo
 fi
 
 if [ -n "$(command -v mutt)" ]; then
     echo "==> Mutt"
-    [ -d "$SOURCEDIR" ] && ln -snf "${SOURCEDIR}/mails" "${HOME}/.mutt.d"
-    mkdir -p "${HOME}/.cache/mutt/hcache"
+    [ -d "$SOURCEDIR" ] && ln -snf "$SOURCEDIR/mails" "$HOME/.mutt.d"
+    mkdir -p "$HOME/.cache/mutt/hcache"
     echo
 fi
 
 if [ -d "$SOURCEDIR" ]; then
     echo "==> To-Do"
-    ln -snf "${SOURCEDIR}/todo/todo.org" "${HOME}/todo.org"
+    ln -snf "$SOURCEDIR/todo/todo.org" "$HOME/todo.org"
     echo
 fi
 
 if [ -n "$(command -v rtorrent)" ]; then
     echo "==> rtorrent"
-    mkdir -p "${HOME}/.session"
+    mkdir -p "$HOME/.session"
     echo
 fi
 
 ## Luakit -- Install the adblock modules
 if [ -n "$(command -v luakit)" ]; then
     echo "==> Luakit"
-    git clone https://github.com/Plaque-fcc/luakit-adblock/ "${HOME}/luakit-adblock"
+    git clone https://github.com/Plaque-fcc/luakit-adblock/ "$HOME/luakit-adblock"
     cp -fv ~/luakit-adblock/*.lua "$XDG_CONFIG_HOME/luakit"
     rm -rvf "$HOME/luakit-adblock"
 
@@ -106,8 +105,8 @@ if [ -d "$SOURCEDIR" ]; then
         if [ "$BROWSER" = "dwb" ]; then
             BROWSER_DATA_DIR="$XDG_CONFIG_HOME/$BROWSER/default/"
         fi
-        [ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/bookmarks/bookmarks" "$BROWSER_DATA_DIR"
-        [ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/bookmarks/quickmarks" "$BROWSER_DATA_DIR"
+        [ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/bookmarks/bookmarks" "$BROWSER_DATA_DIR"
+        [ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/bookmarks/quickmarks" "$BROWSER_DATA_DIR"
     fi
     echo
 fi
@@ -116,14 +115,14 @@ fi
 if [ -n "$(command -v newsbeuter)" ]; then
     echo "==> Newsbeuter"
     mkdir -p "$XDG_DATA_HOME/newsbeuter"
-    [ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
-    [ -d "$SOURCEDIR" ] && ln -sf "${SOURCEDIR}/news/news_starred" "$XDG_CONFIG_HOME/newsbeuter/"
+    [ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
+    [ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/news/news_starred" "$XDG_CONFIG_HOME/newsbeuter/"
     echo
 fi
 
 ## Launchers
 if [ -d "$SOURCEDIR" ]; then
     echo "==> Launchers"
-    ln -snf "${SOURCEDIR}/launchers" "${HOME}/.launchers"
+    ln -snf "$SOURCEDIR/launchers" "$HOME/.launchers"
     echo
 fi

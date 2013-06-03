@@ -1,7 +1,12 @@
 #!/bin/sh
 
 if [ -z "$(command -v ffmpeg)" ]; then
-    echo "ffmpeg required."
+    echo "ffmpeg required for transcoding."
+    exit
+fi
+
+if [ -z "$(command -v realpath)" ]; then
+    echo "realpath required to get input file folder."
     exit
 fi
 

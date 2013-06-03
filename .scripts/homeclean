@@ -1,6 +1,7 @@
 #!/bin/sh
 
 RMLIST="$HOME/.cache/dwb
+$HOME/.cache/emacs
 $HOME/.cache/mutt
 $HOME/.cmus/autosave
 $HOME/.cmus/cache

@@ -15,13 +15,18 @@
 (setq-default save-place t)
 
 ;; Disable autosave features
-;; TODO: folder is still created and filled with dummy files?
+;; TODO: does not work?
 (setq auto-save-default nil)
+(setq auto-save-list-file-name nil)
+;; (setq auto-save-file-name-transforms
+;;       '((".*" ,temporary-file-directory t)))
 
 ;; Place Backup Files in Specific Directory
 ;; TODO: use cache variable.
 (setq backup-directory-alist
       (quote ((".*" . "~/.cache/emacs/backups/"))))
+      ;; `(quote ((".*" . ,(concat emacs-cache-folder "backups/")))))
+       ;; '((".*" . (concat emacs-cache-folder "backups/"))))
 ;; (setq backup-inhibited t) ;; Disable backup files.
 ;; (setq make-backup-files t) ;; Enable backup files.
 ;; (setq version-control t) ;; Enable numbered versioning.
