@@ -161,7 +161,7 @@
 
 ;; Semantic options.
 (semantic-mode 1)
-(setq semanticdb-default-save-directory (concat emacs-cache-folder "semantic"))
+(setq semanticdb-default-save-directory (concat emacs-cache-folder "semanticdb"))
 ;; Semantic with ghost display (allows M-n and M-p to browse completion).
 (define-key my-keys-minor-mode-map (kbd "C-c , d") 'semantic-ia-show-summary)
 ;; (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-ghost)
