@@ -15,11 +15,8 @@
 (setq-default save-place t)
 
 ;; Disable autosave features
-;; TODO: does not work?
 (setq auto-save-default nil)
-(setq auto-save-list-file-name nil)
-;; (setq auto-save-file-name-transforms
-;;       '((".*" ,temporary-file-directory t)))
+(setq auto-save-list-file-prefix nil)
 
 ;; Place Backup Files in Specific Directory
 ;; TODO: use cache variable.
