@@ -66,35 +66,42 @@ frames with exactly two windows."
 ;; Duplicate line
 ;;==============================================================================
 (defun duplicate-line (arg)
-  "Duplicate current line, leaving point in lower line."
+  "Duplicate current line, leaving point in lower line. Also works when
+auto-fill-mode is on."
   (interactive "*p")
 
-  ;; save the point for undo
+  ;; Save the point for undo.
   (setq buffer-undo-list (cons (point) buffer-undo-list))
 
-  ;; local variables for start and end of line
-  (let ((bol (save-excursion (beginning-of-line) (point)))
+  ;; Local variables for start and end of line.
+  (let ((auto-fill-p (symbol-value 'auto-fill-function))
+        (bol (save-excursion (beginning-of-line) (point)))
         eol)
+    ;; Don't use forward-line for this, because you would have
+    ;; to check whether you are at the end of the buffer.
     (save-excursion
+      (end-of-line) (setq eol (point))
 
-      ;; don't use forward-line for this, because you would have
-      ;; to check whether you are at the end of the buffer
-      (end-of-line)
-      (setq eol (point))
-
-      ;; store the line and disable the recording of undo information
+      ;; Store the line and disable the recording of undo information.
       (let ((line (buffer-substring bol eol))
             (buffer-undo-list t)
             (count arg))
-        ;; insert the line arg times
+        ;; Disable auto-fill-mode before calling 'newline', other wise it might
+        ;; break the line.
+        (auto-fill-mode -1)
+        ;; Insert the line arg times.
         (while (> count 0)
-          (newline)         ;; because there is no newline in 'line'
+          ;; Because there is no newline in 'line'.
+          (newline)
           (insert line)
           (setq count (1- count)))
         )
 
       ;; create the undo information
-      (setq buffer-undo-list (cons (cons eol (point)) buffer-undo-list)))
+      (setq buffer-undo-list (cons (cons eol (point)) buffer-undo-list))
+
+      ;; Restore auto-fill-mode if necessary.
+      (if auto-fill-p (auto-fill-mode)))
     ) ; end-of-let
 
   ;; put the point in the lowest line and return
