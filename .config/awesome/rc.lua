@@ -588,12 +588,10 @@ awful.rules.rules = {
      properties = { floating = true } },
    { rule = { class = "mplayer2" },
      properties = { floating = true } },
-
    { rule = { class = "pinentry" },
      properties = { floating = true } },
-
-   { rule = { class = "Gimp" },
-     properties = { floating = false } },
+   { rule = { class = "Steam" },
+     properties = { floating = true } },
 
    -- Flash workaround. Does not work?
    { rule = { instance = "plugin-container" },
@@ -608,6 +606,9 @@ awful.rules.rules = {
      properties = { tag = tags[1][6] } },
    { rule = { name = "mutt"},
      properties = { tag = tags[1][7] } },
+
+   -- { rule = { class = "Gimp" },
+   --   properties = { floating = false } },
 
    -- Emacs Speedbar
    { rule = { name = "Speedbar 1.0"},
