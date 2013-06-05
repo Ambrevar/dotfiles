@@ -245,3 +245,11 @@
   (other-window 1))
 ;; Set GUD to display many windows by default.
 (setq gdb-many-windows t)
+
+;; Support for dwb edit.
+(add-hook
+ 'find-file-hook
+ (lambda ()
+   (if (string-match "edit*" (buffer-name))
+       (auto-fill-mode -1))))
+
