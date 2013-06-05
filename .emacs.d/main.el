@@ -19,14 +19,13 @@
 (setq auto-save-list-file-prefix nil)
 
 ;; Place Backup Files in Specific Directory
-;; TODO: use cache variable.
 (setq backup-directory-alist
-      (quote ((".*" . "~/.cache/emacs/backups/"))))
-      ;; `(quote ((".*" . ,(concat emacs-cache-folder "backups/")))))
-       ;; '((".*" . (concat emacs-cache-folder "backups/"))))
-;; (setq backup-inhibited t) ;; Disable backup files.
-;; (setq make-backup-files t) ;; Enable backup files.
-;; (setq version-control t) ;; Enable numbered versioning.
+       `((".*" . ,(concat emacs-cache-folder "backups/"))))
+
+;; Other options.
+; (setq backup-inhibited t) ;; Disable backup files.
+; (setq make-backup-files t) ;; Enable backup files.
+; (setq version-control t) ;; Enable numbered versioning.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We use a minor mode to override global keys.To assign
