@@ -297,7 +297,6 @@ gaupol
 gcolor2
 gdb
 gimp
-gnumeric
 gnuplot
 gparted
 graphicsmagick
@@ -323,7 +322,6 @@ mediainfo
 mercurial
 mkfs
 mkvtoolnix
-movgrab
 mplayer2
 mutt
 nasm
@@ -340,7 +338,6 @@ odt2txt
 okular
 openshot
 openssh
-oss
 p7zip
 pari
 parted
@@ -348,7 +345,6 @@ patch
 poppler
 pstotext
 pwgen
-qpdf
 ranger
 re2c
 rsync
