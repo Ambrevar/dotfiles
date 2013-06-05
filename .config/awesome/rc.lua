@@ -609,6 +609,10 @@ awful.rules.rules = {
    { rule = { name = "mutt"},
      properties = { tag = tags[1][7] } },
 
+   -- Emacs Speedbar
+   { rule = { name = "Speedbar 1.0"},
+     properties = { width = 20 },
+     callback = function( c ) awful.tag.setmwfact(0.15) end },
 }
 
 --------------------------------------------------------------------------------
