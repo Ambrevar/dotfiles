@@ -14,8 +14,8 @@
 	m = mergetool
 	r = remote -v
 	s = status -uno
-# [push]
-# 	default = simple
+[push]
+	default = current
 
 ## Ediff merge tool.
 ## See:
