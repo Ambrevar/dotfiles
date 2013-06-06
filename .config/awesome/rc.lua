@@ -602,17 +602,19 @@ awful.rules.rules = {
 
    -- Only works for terminal with WM_COMMAND property?
    -- Does not work with LXTerminal.
-   { rule = { name = "cmus"},
+   { rule = { name = "cmus" },
      properties = { tag = tags[1][6] } },
-   { rule = { name = "mutt"},
+   { rule = { name = "mutt" },
      properties = { tag = tags[1][7] } },
 
    -- { rule = { class = "Gimp" },
    --   properties = { floating = false } },
 
-   -- Emacs Speedbar
-   { rule = { name = "Speedbar 1.0"},
-     properties = { width = 20 },
+   -- Emacs Speedbar. This does not work when Speedbar is first launched,
+   -- because its frame is called "emacs...", not speedbar. It only works when
+   -- 'speedbar' command is issued thereafter. Use 'C-x z z' after the first
+   -- speedbar call to automate this.
+   { rule = { name = "Speedbar 1.0" },
      callback = function( c ) awful.tag.setmwfact(0.15) end },
 }
 

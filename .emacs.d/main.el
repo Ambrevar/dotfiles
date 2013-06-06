@@ -78,8 +78,9 @@
 (define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode) ;; Toggle line numbers.
 
 ;; Indentation
-;(setq standard-indent 4)
 (setq-default tab-width 4)
+(setq-default standard-indent 4)
+(setq-default c-basic-offset 4)
 (setq-default indent-tabs-mode nil) ;; Indentation cannot insert tabs
 
 ;; Line by line scrolling
