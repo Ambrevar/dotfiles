@@ -160,6 +160,12 @@
 (setq semanticdb-default-save-directory (concat emacs-cache-folder "semanticdb"))
 ;; Semantic with ghost display (allows M-n and M-p to browse completion).
 (define-key my-keys-minor-mode-map (kbd "C-c , d") 'semantic-ia-show-summary)
+(define-key my-keys-minor-mode-map (kbd "C-, d") 'semantic-ia-show-summary)
+(define-key my-keys-minor-mode-map (kbd "C-, g") 'semantic-symref-symbol)
+(define-key my-keys-minor-mode-map (kbd "C-, G") 'semantic-symref)
+(define-key my-keys-minor-mode-map (kbd "C-, j") 'semantic-complete-jump-local)
+(define-key my-keys-minor-mode-map (kbd "C-, J") 'semantic-complete-jump)
+(define-key my-keys-minor-mode-map (kbd "C-, l") 'semantic-analyze-possible-completions)
 ;; (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-ghost)
 ;; (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-tooltip)
 ;; (setq semanticdb-find-default-throttle '(project unloaded system recursive))
@@ -197,50 +203,54 @@
 
 ;; Org mode config.
 (add-hook 'org-mode-hook
-          (lambda () (interactive) )
+          (lambda () (interactive)
           (setq org-agenda-files '("~/todo.org"))
-          (setq org-enforce-todo-dependencies t))
+          (setq org-enforce-todo-dependencies t)))
 
 ;; Ediff in one frame.
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
-;; Change GUD many-windows layout.
-(defun gdb-setup-windows ()
-  "Layout the window pattern for `gdb-many-windows'."
-  (gdb-display-locals-buffer)
-  (gdb-display-stack-buffer)
-  (delete-other-windows)
-  (gdb-display-breakpoints-buffer)
-  (delete-other-windows)
-  (switch-to-buffer
-   (if gud-last-last-frame
-       (gud-find-file (car gud-last-last-frame))
-     (if gdb-main-file
-         (gud-find-file gdb-main-file)
-       ;; Put buffer list in window if we
-       ;; can't find a source file.
-       (list-buffers-noselect))))
-  (setq gdb-source-window (selected-window))
-  (split-window-horizontally)
-  (other-window 1)
-  (split-window nil ( / ( * (window-height) 3) 4))
-  (split-window nil ( / (window-height) 3))
-  (gdb-set-window-buffer (gdb-locals-buffer-name))
-  (other-window 1)
-  (pop-to-buffer gud-comint-buffer)
-  (when gdb-use-separate-io-buffer
-    (split-window-horizontally)
-    (other-window 1)
-    (gdb-set-window-buffer
-     (gdb-get-buffer-create 'gdb-inferior-io)))
-  (other-window 1)
-  (gdb-set-window-buffer (gdb-stack-buffer-name))
-  (split-window-horizontally)
-  (other-window 1)
-  (gdb-set-window-buffer (gdb-breakpoints-buffer-name))
-  (other-window 1))
 ;; Set GUD to display many windows by default.
+;; (setq gdb-show-main t)
 (setq gdb-many-windows t)
+;; Change GUD many-windows layout.
+(add-hook
+ 'gud-mode-hook
+ (lambda () (interactive)
+   (defun gdb-setup-windows ()
+     "Layout the window pattern for `gdb-many-windows'."
+     (gdb-display-locals-buffer)
+     (gdb-display-stack-buffer)
+     (delete-other-windows)
+     (gdb-display-breakpoints-buffer)
+     (delete-other-windows)
+     (switch-to-buffer
+      (if gud-last-last-frame
+          (gud-find-file (car gud-last-last-frame))
+        (if gdb-main-file
+            (gud-find-file gdb-main-file)
+          ;; Put buffer list in window if we
+          ;; can't find a source file.
+          (list-buffers-noselect))))
+     (setq gdb-source-window (selected-window))
+     (split-window-horizontally)
+     (other-window 1)
+     (split-window nil ( / ( * (window-height) 3) 4))
+     (split-window nil ( / (window-height) 3))
+     (gdb-set-window-buffer (gdb-locals-buffer-name))
+     (other-window 1)
+     (pop-to-buffer gud-comint-buffer)
+     (when gdb-use-separate-io-buffer
+       (split-window-horizontally)
+       (other-window 1)
+       (gdb-set-window-buffer
+        (gdb-get-buffer-create 'gdb-inferior-io)))
+     (other-window 1)
+     (gdb-set-window-buffer (gdb-stack-buffer-name))
+     (split-window-horizontally)
+     (other-window 1)
+     (gdb-set-window-buffer (gdb-breakpoints-buffer-name))
+     (other-window 1))))
 
 ;; Support for dwb edit.
 (add-hook
