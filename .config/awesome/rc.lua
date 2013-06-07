@@ -592,6 +592,9 @@ awful.rules.rules = {
      properties = { floating = true } },
    { rule = { class = "Steam" },
      properties = { floating = true } },
+   { rule = { name = "QEMU" },
+     properties = { floating = true } },
+
 
    -- Flash workaround. Does not work?
    { rule = { instance = "plugin-container" },
