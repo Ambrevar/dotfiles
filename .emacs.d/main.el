@@ -260,3 +260,9 @@
    (if (string-match "edit*" (buffer-name))
        (auto-fill-mode -1))))
 
+
+;; Speedbar options.
+(add-hook
+ 'speedbar-mode-hook
+ (lambda ()
+   (speedbar-toggle-updates)))
