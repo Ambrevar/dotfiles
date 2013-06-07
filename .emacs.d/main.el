@@ -7,7 +7,7 @@
 (setq emacs-cache-folder "~/.cache/emacs/")
 (if
     (not (file-directory-p emacs-cache-folder))
-    (make-directory emacs-cache-folder))
+    (make-directory emacs-cache-folder t))
 
 ;; Remember last cursor position
 (require 'saveplace)
@@ -248,3 +248,9 @@
    (if (string-match "edit*" (buffer-name))
        (auto-fill-mode -1))))
 
+
+;; Speedbar options.
+(add-hook
+ 'speedbar-mode-hook
+ (lambda ()
+   (speedbar-toggle-updates)))
