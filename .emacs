@@ -4,9 +4,9 @@
 ;; 2013-01-09
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; We use a minor mode to override global keys.To assign
-;; global keys, you need to write
+;; We use a minor mode to override global keys. To assign global keys, you need
+;; to write:
+;;
 ;;   (define-key my-keys-minor-mode-map (kbd "C-i") 'some-function)
 (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
 
