@@ -28,18 +28,6 @@
 ; (setq version-control t) ;; Enable numbered versioning.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; We use a minor mode to override global keys.To assign
-;; global keys, you need to write
-;;   (define-key my-keys-minor-mode-map (kbd "C-i") 'some-function)
-(defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
-
-(define-minor-mode my-keys-minor-mode
-  "A minor mode so that my key settings override annoying major modes."
-  t " my-keys" 'my-keys-minor-mode-map)
-
-(add-hook 'minibuffer-setup-hook (lambda () (my-keys-minor-mode 0) ) )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Default mode
 (setq default-major-mode 'text-mode)
 
