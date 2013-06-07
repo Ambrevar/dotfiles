@@ -7,7 +7,7 @@
 (setq emacs-cache-folder "~/.cache/emacs/")
 (if
     (not (file-directory-p emacs-cache-folder))
-    (make-directory emacs-cache-folder))
+    (make-directory emacs-cache-folder t))
 
 ;; Remember last cursor position
 (require 'saveplace)
