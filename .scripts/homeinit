@@ -33,7 +33,7 @@ ICIiIC1uYyAiJEAiCmVsc2UKICAgIGVtYWNzY2xpZW50IC1hICIiIC10ICIkQCIKZmkK
 ' | base64 -d > "'"'"$EMFILE"'"'" && chmod 755 "'"'"$EMFILE"'"'""
 
         sudo sh -c "umask 022 && echo 'IyEvYmluL3NoCmVtYWNzY2xpZW50IC1hICIiIC10ICIkQCIK
-' | base64 -d > "'"'"$EMCFILE"'"'" && chmod 755 "'"'"$EMFILE"'"'""
+' | base64 -d > "'"'"$EMCFILE"'"'" && chmod 755 "'"'"$EMCFILE"'"'""
 
     fi
 fi

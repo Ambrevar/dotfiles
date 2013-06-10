@@ -92,8 +92,10 @@ case "$mimetype" in
 
     # Ascii-previews of images:
     image/*)
-        img2txt --gamma=0.6 --width="$width" "$path" && exit 4 || exit 1;;
-		## Alternative light preview.
+        # img2txt --gamma=0.6 --width="$width" "$path" && exit 4 || exit 1;;
+        exiftool "$path" && exit 5
+        # # Use sed to remove spaces so the output fits into the narrow window
+        try mediainfo "$path" && { dump | trim | sed 's/  \+:/: /;';  exit 5; } || exit 1;;
 		# if have mediainfo; then
 		# 	mediainfo "$path" | sed 's/  \+:/: /;'
 		# 	success && exit 5
