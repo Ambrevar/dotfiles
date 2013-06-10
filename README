@@ -231,12 +231,7 @@ Known issues
 
 Emacs
 
-* From time to time Emacs daemon will 'break' after a while: indentation and
-  colors will stop work properly. Investigation in progress. On graphical
-  client, this does not seem to happen, but the server seems to crash randomly
-  (black/white screen when calling a new client).
-
-* When linenum is on in very large files (5000+ lines), beginning-of-buffer is
+* When linum is on in very large files (5000+ lines), beginning-of-buffer is
   extremly slow when called from a shortcut, but not when called from the
   command mini-buffer.
 
