@@ -458,7 +458,7 @@ properly escaped with double-quotes in case it has spaces."
    (defun python-my-compile ()
      "Use compile to run python programs."
      (interactive)
-     (compile (concat python-compiler " " buffer-file-name))
+     (compile (concat python-compiler " \"" buffer-file-name "\""))
      )
    (setq compilation-scroll-output t)
    (local-set-key "\C-c\C-c" 'python-my-compile)
