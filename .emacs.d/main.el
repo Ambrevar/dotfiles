@@ -173,10 +173,13 @@
 (setq calendar-week-start-day 1)
 (setq calendar-date-style 'iso)
 
-;; IDO (Interactively Do Thing) for finding files and buffers.
+;; IDO (Interactively Do Thing) for finding files and buffers. Incompatible with
+;; FFAP.
 (require 'ido)
 (ido-mode t)
 (setq ido-enable-flex-matching t)
+;; All file finding operation defaults to what is at point. Incompatible with
+;; IDO.  (ffap-bindings)
 
 ;; Quick buffer switching.
 (define-key my-keys-minor-mode-map (kbd "C-<prior>") 'previous-buffer)
@@ -248,9 +251,9 @@
    (if (string-match "edit*" (buffer-name))
        (auto-fill-mode -1))))
 
-
 ;; Speedbar options.
 (add-hook
  'speedbar-mode-hook
  (lambda ()
    (speedbar-toggle-updates)))
+
