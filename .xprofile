@@ -16,6 +16,7 @@ numlockx on
 
 ## Keymap. Only useful on multi-user environment.
 # setxkbmap frex
+xmodmap ~/.xmodmap
 
 if [ "$OSTYPE" = "linux-gnu" ] ; then
     ## Set sound volume.
