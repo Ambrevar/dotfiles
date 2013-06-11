@@ -2,10 +2,6 @@
 ;; FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;==============================================================================
-;; Unfill paragraph
-;;==============================================================================
-
 (defun unfill-paragraph ()
   (interactive)
   (let ((fill-column (point-max)))
@@ -16,12 +12,10 @@
   (let ((fill-column (point-max)))
     (fill-region (region-beginning) (region-end) nil)))
 
-
-;; Remove duplicate lines. (sort -u)
-(defun remove-dup ()
+(defun sort-lines-unique ()
+"Remove duplicate lines using shell command `sort -u'"
   (interactive)
-  (shell-command-on-region (point) (mark) "sort -u" (buffer-name) t)
-)
+  (shell-command-on-region (point) (mark) "sort -u" (buffer-name) t))
 
 (defun dtwi () "Delete trailing whitespaces interactively."
   (interactive)
@@ -29,10 +23,7 @@
 " "
 "))
 
-;;==============================================================================
-;; Toggle window split
-;;==============================================================================
-(defun my-toggle-window-split ()
+(defun toggle-window-split ()
   "Vertical split shows more of each line, horizontal split shows
 more lines. This code toggles between them. It only works for
 frames with exactly two windows."
@@ -60,82 +51,48 @@ frames with exactly two windows."
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
 
-(define-key my-keys-minor-mode-map [(control c) (|)] 'my-toggle-window-split)
+(define-key my-keys-minor-mode-map [(control c) (|)] 'toggle-window-split)
 
-;;==============================================================================
-;; Duplicate line
-;;==============================================================================
-(defun duplicate-line (arg)
-  "Duplicate current line, leaving point in lower line. Also works when
-auto-fill-mode is on."
-  (interactive "*p")
+(defun duplicate (arg)
+  "Duplicates the current line or region ARG times.
+If there's no region, the current line will be duplicated. However, if
+there's a region, all lines that region covers will be duplicated."
+  (interactive "p")
+  (let (beg
+        end
+        (origin (point))
+        (auto-fill-p (symbol-value 'auto-fill-function)))
+    (if (and mark-active (> (point) (mark)))
+        (exchange-point-and-mark))
+    (setq beg (line-beginning-position))
+    (if mark-active
+        (exchange-point-and-mark))
+    (setq end (line-end-position))
+    (let ((region (buffer-substring-no-properties beg end)))
+      (auto-fill-mode -1)
+      (dotimes (i arg)
+        (goto-char end)
+        (newline)
+        (insert region)
+        (setq end (point)))
+      (if auto-fill-p (auto-fill-mode))
+      (goto-char (+ origin (* (length region) arg) arg)))))
 
-  ;; Save the point for undo.
-  (setq buffer-undo-list (cons (point) buffer-undo-list))
+(define-key my-keys-minor-mode-map (kbd "C-c C-d") 'duplicate)
 
-  ;; Local variables for start and end of line.
-  (let ((auto-fill-p (symbol-value 'auto-fill-function))
-        (bol (save-excursion (beginning-of-line) (point)))
-        eol)
-    ;; Don't use forward-line for this, because you would have
-    ;; to check whether you are at the end of the buffer.
-    (save-excursion
-      (end-of-line) (setq eol (point))
+(defun comment-or-uncomment-current-line-or-region ()
+  "Comments or uncomments current current line or whole lines in region."
+  (interactive)
+  (save-excursion
+    (let (min max)
+      (if (region-active-p)
+          (setq min (region-beginning) max (region-end))
+        (setq min (point) max (point)))
+      (comment-or-uncomment-region
+       (progn (goto-char min) (line-beginning-position))
+       (progn (goto-char max) (line-end-position))))))
 
-      ;; Store the line and disable the recording of undo information.
-      (let ((line (buffer-substring bol eol))
-            (buffer-undo-list t)
-            (count arg))
-        ;; Disable auto-fill-mode before calling 'newline', other wise it might
-        ;; break the line.
-        (auto-fill-mode -1)
-        ;; Insert the line arg times.
-        (while (> count 0)
-          ;; Because there is no newline in 'line'.
-          (newline)
-          (insert line)
-          (setq count (1- count)))
-        )
-
-      ;; create the undo information
-      (setq buffer-undo-list (cons (cons eol (point)) buffer-undo-list))
-
-      ;; Restore auto-fill-mode if necessary.
-      (if auto-fill-p (auto-fill-mode)))
-    ) ; end-of-let
-
-  ;; put the point in the lowest line and return
-  (next-line arg))
-
-;; Binding.
-(define-key my-keys-minor-mode-map (kbd "C-c C-d") 'duplicate-line)
-
-;;==============================================================================
-;; Comment DWIM -- toggle comment line
-;;==============================================================================
-
-;; Original idea from
-;; http://www.opensubscriber.com/message/emacs-devel@gnu.org/10971693.html
-(defun comment-dwim-line (&optional arg)
-  "Replacement for the comment-dwim command. If no region is
-selected and current line is not blank and we are not at the end
-of the line, then comment current line.  Replaces default
-behaviour of comment-dwim, when it inserts comment at the end of
-the line."
-  (interactive "*P")
-  (comment-normalize-vars)
-  ;; (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
-  (if (and (not (region-active-p)) )
-      (comment-or-uncomment-region (line-beginning-position) (line-end-position))
-    (comment-dwim arg)))
-
-;; Binding.
-(define-key my-keys-minor-mode-map "\M-;" 'comment-dwim-line)
-
-;;==============================================================================
-;; Window resize
-;;==============================================================================
-;; Only works for 2 vertical side-by-side.
+(define-key my-keys-minor-mode-map "\M-;" 'comment-or-uncomment-current-line-or-region)
 
 (defun xor (b1 b2)
   "Exclusive or of its two arguments."
@@ -143,8 +100,9 @@ the line."
       (and (not b1) (not b2))))
 
 (defun move-border-left-or-right (arg dir)
-  "General function covering move-border-left and move-border-right. If DIR is
-     t, then move left, otherwise move right."
+  "General function covering move-border-left and
+move-border-right. If DIR is t, then move left, otherwise move
+right."
   (interactive)
   (if (null arg) (setq arg 5))
   (let ((left-edge (nth 0 (window-edges))))
@@ -153,23 +111,23 @@ the line."
       (enlarge-window arg t))))
 
 (defun move-border-left (arg)
-  "If this is a window with its right edge being the edge of the screen, enlarge
-     the window horizontally. If this is a window with its left edge being the edge
-     of the screen, shrink the window horizontally. Otherwise, default to enlarging
-     horizontally.
+  "If this is a window with its right edge being the edge of the
+screen, enlarge the window horizontally. If this is a window with
+its left edge being the edge of the screen, shrink the window
+horizontally. Otherwise, default to enlarging horizontally.
 
-     Enlarge/Shrink by ARG columns, or 5 if arg is nil."
+Enlarge/Shrink by ARG columns, or 5 if arg is nil."
   (interactive "P")
   (if (= (count-windows) 2)
       (move-border-left-or-right arg t)))
 
 (defun move-border-right (arg)
-  "If this is a window with its right edge being the edge of the screen, shrink
-     the window horizontally. If this is a window with its left edge being the edge
-     of the screen, enlarge the window horizontally. Otherwise, default to shrinking
-     horizontally.
+  "If this is a window with its right edge being the edge of the
+screen, shrink the window horizontally. If this is a window with
+its left edge being the edge of the screen, enlarge the window
+horizontally. Otherwise, default to shrinking horizontally.
 
-     Enlarge/Shrink by ARG columns, or 5 if arg is nil."
+Enlarge/Shrink by ARG columns, or 5 if arg is nil."
   (interactive "P")
   (if (= (count-windows) 2)
       (move-border-left-or-right arg nil)))
@@ -177,11 +135,8 @@ the line."
 (define-key my-keys-minor-mode-map (kbd "M-(") 'move-border-left)
 (define-key my-keys-minor-mode-map (kbd "M-)") 'move-border-right)
 
-;;==============================================================================
-;; Elisp eval
-;;==============================================================================
 (defun eval-and-replace ()
-  "Replace the preceding sexp with its value."
+  "Replace the last sexp with its value."
   (interactive)
   (backward-kill-sexp)
   (condition-case nil
@@ -189,3 +144,63 @@ the line."
              (current-buffer))
     (error (message "Invalid expression")
            (insert (current-kill 0)))))
+
+(defun swap-windows ()
+  "If you have 2 windows, it swaps them."
+  (interactive)
+  (cond ((/= (count-windows) 2)
+         (message "You need exactly 2 windows to do this."))
+        (t
+         (let* ((w1 (first (window-list)))
+                (w2 (second (window-list)))
+                (b1 (window-buffer w1))
+                (b2 (window-buffer w2))
+                (s1 (window-start w1))
+                (s2 (window-start w2)))
+           (set-window-buffer w1 b2)
+           (set-window-buffer w2 b1)
+           (set-window-start w1 s2)
+           (set-window-start w2 s1))))
+  (other-window 1))
+
+(define-key my-keys-minor-mode-map (kbd "C-c s") 'swap-windows)
+
+(defun rename-buffer-and-file ()
+  "Renames current buffer and file it is visiting."
+  (interactive)
+  (let ((name (buffer-name))
+        (filename (buffer-file-name)))
+    (if (not (and filename (file-exists-p filename)))
+        (error "Buffer '%s' is not visiting a file!" name)
+      (let ((new-name (read-file-name "New name: " filename)))
+        (cond ((get-buffer new-name)
+               (error "A buffer named '%s' already exists!" new-name))
+              (t
+               (rename-file filename new-name 1)
+               (rename-buffer new-name)
+               (set-visited-file-name new-name)
+               (set-buffer-modified-p nil)
+               (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
+
+(define-key my-keys-minor-mode-map (kbd "C-x C-w") 'rename-buffer-and-file)
+
+(defun kill-all-buffers ()
+  "Kill all buffers, leaving *scratch* only."
+  (interactive)
+  (mapc
+   (lambda (x)
+     (kill-buffer x))
+   (buffer-list))
+  (delete-other-windows))
+
+(defun sanitize ()
+  "Untabifies, indents and deletes trailing whitespace from buffer or region."
+  (interactive)
+  (save-excursion
+    (unless (region-active-p)
+      (mark-whole-buffer))
+    (untabify (region-beginning) (region-end))
+    (indent-region (region-beginning) (region-end))
+    (save-restriction
+      (narrow-to-region (region-beginning) (region-end))
+      (delete-trailing-whitespace))))
