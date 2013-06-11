@@ -45,7 +45,7 @@ Extra deps
 
 Build options:
   ./configure --prefix=/usr --sysconfdir=/etc --libexecdir=/usr/lib \
-    --localstatedir=/var --with-x-toolkit=lucid --with-xft \
+    --localstatedir=/var --with-x-toolkit=gtk2 --with-xft \
     --without-gconf --without-sound
 
 Emacs daemon is integrated flawlessly thanks to a small script. See homeinit.
