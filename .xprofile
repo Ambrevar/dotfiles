@@ -14,8 +14,8 @@
 ## Numlock
 numlockx on
 
-## Keymap. Only useful on multi-user environment.
-# setxkbmap frex
+## Keymap. Only useful on multi-user environment where users have different keymaps.
+setxkbmap us intl
 xmodmap ~/.xmodmap
 
 if [ "$OSTYPE" = "linux-gnu" ] ; then

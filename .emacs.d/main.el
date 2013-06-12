@@ -2,8 +2,7 @@
 ;; MAIN
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Folders.
-
+;; Cache folder is everything we do not want to track.
 (setq emacs-cache-folder "~/.cache/emacs/")
 (if
     (not (file-directory-p emacs-cache-folder))
@@ -30,6 +29,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Default mode
 (setq default-major-mode 'text-mode)
+
+;; Disable suspend key since it is useless on emacs server
+(global-unset-key (kbd "C-z"))
+(global-unset-key (kbd "C-x C-z"))
 
 ;; For convenience.
 (setq inhibit-startup-screen t)
@@ -256,4 +259,8 @@
  'speedbar-mode-hook
  (lambda ()
    (speedbar-toggle-updates)))
+
+;; Compilation error report.
+(define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
+(define-key my-keys-minor-mode-map (kbd "<f11>") 'previous-error)
 

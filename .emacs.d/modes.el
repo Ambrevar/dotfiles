@@ -381,8 +381,7 @@ properly escaped with double-quotes in case it has spaces."
    (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
    ;; (local-set-key "." 'semantic-complete-self-insert) ; This is a bit slow.
    ;; (local-set-key ">" 'semantic-complete-self-insert)
-   (local-set-key (kbd "<f12>") 'next-error)
-   (local-set-key (kbd "<f10>") 'previous-error)))
+   ))
 
 ;;==============================================================================
 ;; C++-mode
@@ -434,10 +433,7 @@ properly escaped with double-quotes in case it has spaces."
  'c++-mode-hook
  (lambda ()
    (local-set-key (kbd "C-c C-c") 'c++-compile)
-   (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
-   (local-set-key (kbd "<f12>") 'next-error)
-   (local-set-key (kbd "<f10>") 'previous-error)))
-
+   (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)))
 
 ;;==============================================================================
 ;; Common LISP
