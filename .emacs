@@ -27,14 +27,19 @@ Example: to assign some-function to C-i, use
     (not (file-directory-p emacs-cache-folder))
     (make-directory emacs-cache-folder t))
 
-;; Local plugin folder for quick install.
+;; Local plugin folder for quick install. All files in this folder will be
+;; accessible to Emacs config.
 (add-to-list 'load-path "~/.emacs.d/plugins")
 
 
 (load "~/.emacs.d/functions" nil t)
 (load "~/.emacs.d/main" nil t)
-(load "~/.emacs.d/modes" nil t)
-(load "~/.emacs.d/plugins" nil t)
+(load "~/.emacsmd/mode-c.el" nil t)
+(load "~/.emacsmd/mode-mediawiki.el" nil t)
+(load "~/.emacsmd/mode-python.el" nil t)
+(load "~/.emacsmd/mode-tex.el" nil t)
+(load "~/.emacsmd/mode-texinfo.el" nil t)
+(load "~/.emacsmd/mode-yasnippet.el" nil t)
 (load "~/.emacs.d/personal" nil t)
 (load "~/.emacs.d/theme" nil t)
 
