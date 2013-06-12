@@ -34,12 +34,12 @@ Example: to assign some-function to C-i, use
 
 (load "~/.emacs.d/functions" nil t)
 (load "~/.emacs.d/main" nil t)
-(load "~/.emacsmd/mode-c.el" nil t)
-(load "~/.emacsmd/mode-mediawiki.el" nil t)
-(load "~/.emacsmd/mode-python.el" nil t)
-(load "~/.emacsmd/mode-tex.el" nil t)
-(load "~/.emacsmd/mode-texinfo.el" nil t)
-(load "~/.emacsmd/mode-yasnippet.el" nil t)
+(load "~/.emacs.d/mode-c.el" nil t)
+(load "~/.emacs.d/mode-mediawiki.el" nil t)
+(load "~/.emacs.d/mode-python.el" nil t)
+(load "~/.emacs.d/mode-tex.el" nil t)
+(load "~/.emacs.d/mode-texinfo.el" nil t)
+(load "~/.emacs.d/mode-yasnippet.el" nil t)
 (load "~/.emacs.d/personal" nil t)
 (load "~/.emacs.d/theme" nil t)
 
