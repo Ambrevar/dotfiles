@@ -2,12 +2,6 @@
 ;; MAIN
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Cache folder is everything we do not want to track.
-(setq emacs-cache-folder "~/.cache/emacs/")
-(if
-    (not (file-directory-p emacs-cache-folder))
-    (make-directory emacs-cache-folder t))
-
 ;; Remember last cursor position
 (require 'saveplace)
 (setq save-place-file (concat emacs-cache-folder "saveplace"))
@@ -21,16 +15,15 @@
 (setq backup-directory-alist
        `((".*" . ,(concat emacs-cache-folder "backups/"))))
 
-;; Other options.
+;; Other backup options.
 ; (setq backup-inhibited t) ;; Disable backup files.
 ; (setq make-backup-files t) ;; Enable backup files.
 ; (setq version-control t) ;; Enable numbered versioning.
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Default mode
 (setq default-major-mode 'text-mode)
 
-;; Disable suspend key since it is useless on emacs server
+;; Disable suspend key since it is useless on emacs server.
 (global-unset-key (kbd "C-z"))
 (global-unset-key (kbd "C-x C-z"))
 
@@ -38,8 +31,10 @@
 (setq inhibit-startup-screen t)
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (menu-bar-mode -1)
-;; (scroll-bar-mode -1)
-(if (fboundp 'set-scroll-bar-mode) (set-scroll-bar-mode 'left))
+(when (fboundp 'set-scroll-bar-mode)
+  ;; (scroll-bar-mode -1)
+  (set-scroll-bar-mode 'left)
+  (define-key my-keys-minor-mode-map (kbd "C-<f6>") 'toggle-scroll-bar))
 
 ;; Make questions less annoying.
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -150,7 +145,6 @@
 ;; Semantic options.
 (semantic-mode 1)
 (setq semanticdb-default-save-directory (concat emacs-cache-folder "semanticdb"))
-;; Semantic with ghost display (allows M-n and M-p to browse completion).
 (define-key my-keys-minor-mode-map (kbd "C-c , d") 'semantic-ia-show-summary)
 (define-key my-keys-minor-mode-map (kbd "C-, d") 'semantic-ia-show-summary)
 (define-key my-keys-minor-mode-map (kbd "C-, g") 'semantic-symref-symbol)
@@ -158,6 +152,8 @@
 (define-key my-keys-minor-mode-map (kbd "C-, j") 'semantic-complete-jump-local)
 (define-key my-keys-minor-mode-map (kbd "C-, J") 'semantic-complete-jump)
 (define-key my-keys-minor-mode-map (kbd "C-, l") 'semantic-analyze-possible-completions)
+
+;; Semantic with ghost display (allows M-n and M-p to browse completion).
 ;; (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-ghost)
 ;; (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-tooltip)
 ;; (setq semanticdb-find-default-throttle '(project unloaded system recursive))

@@ -1,7 +1,7 @@
 ;; -*- mode:emacs-lisp -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs config
-;; 2013-06-11
+;; 2013-06-12
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar my-keys-minor-mode-map (make-keymap)
@@ -21,14 +21,21 @@ Example: to assign some-function to C-i, use
   t " my-keys" 'my-keys-minor-mode-map)
 (add-hook 'minibuffer-setup-hook (lambda () (my-keys-minor-mode 0) ) )
 
-;; Main should be loaded first.
-(load "~/.emacs.d/main" nil t)
+;; Cache folder is everything we do not want to track.
+(setq emacs-cache-folder "~/.cache/emacs/")
+(if
+    (not (file-directory-p emacs-cache-folder))
+    (make-directory emacs-cache-folder t))
+
+;; Local plugin folder for quick install.
 (add-to-list 'load-path "~/.emacs.d/plugins")
 
+
 (load "~/.emacs.d/functions" nil t)
+(load "~/.emacs.d/main" nil t)
 (load "~/.emacs.d/modes" nil t)
-(load "~/.emacs.d/personal" nil t)
 (load "~/.emacs.d/plugins" nil t)
+(load "~/.emacs.d/personal" nil t)
 (load "~/.emacs.d/theme" nil t)
 
 ;; We need to put it at the end to make sure it doesn't get overriden by other

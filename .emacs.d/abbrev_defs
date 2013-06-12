@@ -73,6 +73,7 @@
     ("btw" "by the way" nil 1)
     ("ca" "ça" nil 1)
     ("cad" "c'est-à-dire" nil 1)
+    ("cest" "c'est" nil 1)
     ("chai" "je sais" nil 1)
     ("chq" "chaque" nil 1)
     ("chui" "je suis" nil 1)
