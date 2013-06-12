@@ -1,0 +1,91 @@
+//------------------------------------------------------------------------------
+// XKB Custom us keyboard
+// 2013-06-12
+//------------------------------------------------------------------------------
+
+// Installation: copy this file to '/usr/{local/,}share/X11/xkb/symbols'. You
+// can use it by selecting the "usex" layout from Xorg configuration file, or by
+// using the following command:
+//   $ setxkbmap usex
+// This keyboard is based on Xorg's "us intl" with some improvements.
+
+// TODO: direct à, dead acute, swap control and Caps Lock.
+
+// ┌─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┲━━━━━━━━━┓
+// │ ~ ~ │ ! ¡ │ @ ˝ │ # ¯ │ $ £ │ % ¸ │ ^ ^ │ & ̛ │ * ˛ │ ( ˘ │ ) ° │ _ ̣ │ + ÷ ┃ ⌫ Back  ┃
+// │ ` ` │ 1 ¹ │ 2 ² │ 3 ³ │ 4 ¤ │ 5 € │ 6 ¼ │ 7 ½ │ 8 ¾ │ 9 ‘ │ 0 ’ │ - ¥ │ = × ┃  space  ┃
+// ┢━━━━━┷━┱───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┺━┳━━━━━━━┫
+// ┃       ┃ A Æ │ Z Â │ E ¢ │ R Ê │ T Þ │ Y Ÿ │ U Û │ I Î │ O Œ │ P Ô │ ¨ ˚ │ £ Ø ┃ Enter ┃
+// ┃Tab ↹  ┃ a æ │ z â │ e € │ r ê │ t þ │ y ÿ │ u û │ i î │ o œ │ p ô │ ^ ~ │ $ ø ┃   ⏎   ┃
+// ┣━━━━━━━┻┱────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┺┓      ┃
+// ┃        ┃ Q Ä │ S „ │ D Ë │ F ‚ │ G ¥ │ H Ð │ J Ü │ K Ï │ L Ŀ │ M Ö │ % Ù │ µ ̄ ┃      ┃
+// ┃Maj ⇬   ┃ q ä │ s ß │ d ë │ f ‘ │ g ’ │ h ð │ j ü │ k ï │ l ŀ │ m ö │ ù ' │ * ` ┃      ┃
+// ┣━━━━━━━┳┹────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┲┷━━━━━┻━━━━━━┫
+// ┃       ┃ > ≥ │ W “ │ X ” │ C ® │ V ← │ B ↑ │ N → │ ? … │ . . │ / ∕ │ § − ┃             ┃
+// ┃Shift ⇧┃ < ≤ │ w « │ x » │ c © │ v ⍽ │ b ↓ │ n ¬ │ , ¿ │ ; × │ : ÷ │ ! ¡ ┃Shift ⇧      ┃
+// ┣━━━━━━━╋━━━━━┷━┳━━━┷━━━┱─┴─────┴─────┴─────┴─────┴─────┴───┲━┷━━━━━╈━━━━━┻━┳━━━━━━━┳━━━┛
+// ┃       ┃       ┃       ┃ ␣         Espace fine insécable ⍽ ┃       ┃       ┃       ┃
+// ┃Ctrl   ┃Meta   ┃Alt    ┃ ␣ Espace       Espace insécable ⍽ ┃AltGr ⇮┃Menu   ┃Ctrl   ┃
+// ┗━━━━━━━┻━━━━━━━┻━━━━━━━┹───────────────────────────────────┺━━━━━━━┻━━━━━━━┻━━━━━━━┛
+
+
+partial alphanumeric_keys
+xkb_symbols "basic" {
+
+    name[Group1]= "English international with dead keys extended";
+
+    // Alphanumeric section
+    key <TLDE> { [ grave,       asciitilde, dead_grave, dead_tilde ] };
+    key <AE01> { [	   1,     exclam, onesuperior, exclamdown ] };
+    key <AE02> { [	   2,         at,   twosuperior, dead_doubleacute ] };
+    key <AE03> { [	   3, numbersign, threesuperior,      dead_macron ] };
+    key <AE04> { [	   4,     dollar,      currency,         sterling ] };
+    key <AE05> { [	   5,    percent,      EuroSign,     dead_cedilla ] };
+    key <AE06> { [    6, dead_circumflex,    onequarter,      asciicircum ] };
+    key <AE07> { [	   7,  ampersand,       onehalf,	dead_horn ] };
+    key <AE08> { [	   8,   asterisk, threequarters,      dead_ogonek ] };
+    key <AE09> { [	   9,  parenleft, leftsinglequotemark, dead_breve ] };
+    key <AE10> { [	   0, parenright, rightsinglequotemark, dead_abovering ] };
+    key <AE11> { [     minus, underscore,           yen,    dead_belowdot ] };
+    key <AE12> { [     equal,       plus,      multiply,         division ] };
+
+    key <AD01> { [	   q,          Q,    adiaeresis,       Adiaeresis ] };
+    key <AD02> { [	   w,          W,         aring,            Aring ] };
+    key <AD03> { [	   e,          E,        eacute,           Eacute ] };
+    key <AD04> { [	   r,          R,    registered,       registered ] };
+    key <AD05> { [	   t,          T,         thorn,            THORN ] };
+    key <AD06> { [	   y,          Y,    udiaeresis,       Udiaeresis ] };
+    key <AD07> { [	   u,          U,        uacute,           Uacute ] };
+    key <AD08> { [	   i,          I,        iacute,           Iacute ] };
+    key <AD09> { [	   o,          O,        oacute,           Oacute ] };
+    key <AD10> { [	   p,          P,    odiaeresis,       Odiaeresis ] };
+    key <AD11> { [ bracketleft,  braceleft,  guillemotleft, leftdoublequotemark ] };
+    key <AD12> { [bracketright, braceright, guillemotright, rightdoublequotemark ] };
+
+    key <AC01> { [	   a,          A,        aacute,           Aacute ] };
+    key <AC02> { [	   s,          S,        ssharp,          section ] };
+    key <AC03> { [	   d,          D,           eth,              ETH ] };
+    key <AC04> { [	   f,          F,             f,                F ] };
+    key <AC05> { [	   g,          G,             g,                G ] };
+    key <AC06> { [	   h,          H,             h,                H ] };
+    key <AC07> { [	   j,          J,             j,                J ] };
+    key <AC08> { [	   k,          K,            oe,               OE ] };
+
+    key <AC09> { [	   l,          L,        oslash,         Ooblique ] };
+    key <AC10> { [ semicolon,      colon,     paragraph,           degree ] };
+    key <AC11> { [ apostrophe,        quotedbl, dead_acute, dead_diaeresis  ] };
+
+    key <AB01> { [	   z,          Z,            ae,               AE ] };
+    key <AB02> { [	   x,          X,             x,                X ] };
+    key <AB03> { [	   c,          C,     copyright,             cent ] };
+    key <AB04> { [	   v,          V,             v,                V ] };
+    key <AB05> { [	   b,          B,             b,                B ] };
+    key <AB06> { [	   n,          N,        ntilde,           Ntilde ] };
+    key <AB07> { [	   m,          M,            mu,               mu ] };
+    key <AB08> { [     comma,       less,      ccedilla,         Ccedilla ] };
+    key <AB09> { [    period,    greater, dead_abovedot,       dead_caron ] };
+    key <AB10> { [     slash,   question,  questiondown,        dead_hook ] };
+    key <BKSL> { [ backslash,        bar,       notsign,        brokenbar ] };
+
+    include "level3(ralt_switch)"
+};

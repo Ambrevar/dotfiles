@@ -1,7 +1,7 @@
 #!/bin/sh
 ################################################################################
 ## Home session initialization.
-## 2013-03-01
+## 2013-06-13
 ################################################################################
 SOURCEDIR="$HOME/personal/dataperso"
 [ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
@@ -30,19 +30,25 @@ bHNlCiAgICBJU19HUkFQSElDQUw9JChlbWFjcyAtYmF0Y2ggLVEgLS1ldmFsPScoaWYgKGZib3Vu
 ZHAgJyInIid0b29sLWJhci1tb2RlKSAobWVzc2FnZSAiMSIpIChtZXNzYWdlICIwIikpJyAyPiYx
 KQpmaQoKaWYgWyAkSVNfR1JBUEhJQ0FMIC1lcSAxIF07IHRoZW4KICAgIGVtYWNzY2xpZW50IC1h
 ICIiIC1uYyAiJEAiCmVsc2UKICAgIGVtYWNzY2xpZW50IC1hICIiIC10ICIkQCIKZmkK
-' | base64 -d > "'"'"$EMFILE"'"'" && chmod 755 "'"'"$EMFILE"'"'""
+' | base64 -d > $EMFILE && chmod 755 $EMFILE"
 
         sudo sh -c "umask 022 && echo 'IyEvYmluL3NoCmVtYWNzY2xpZW50IC1hICIiIC10ICIkQCIK
-' | base64 -d > "'"'"$EMCFILE"'"'" && chmod 755 "'"'"$EMCFILE"'"'""
+' | base64 -d > $EMCFILE && chmod 755 $EMCFILE"
 
     fi
 fi
 
-if [ -f "$HOME/.xkb/symbols/frex" ] && [ ! -f "/usr/share/X11/xkb/symbols/frex" ]; then
-    echo "==> frex font (press Ctrl-D to skip)"
-    sudo sh -c 'umask 022 && mkdir -p /usr/share/X11/xkb/symbols && cp "$HOME/.xkb/symbols/frex" /usr/share/X11/xkb/symbols/ && chmod 644 /usr/share/X11/xkb/symbols/frex'
-    echo
-fi
+
+installkeymap ()
+{
+    if [ -f "$HOME/.xkb/symbols/$1" ] && [ ! -f "/usr/share/X11/xkb/symbols/$1" ]; then
+        echo "==> '$1' font (press Ctrl-D to skip)"
+        sudo sh -c "install -m644 $HOME/.xkb/symbols/$1 /usr/share/X11/xkb/symbols/"
+        echo
+    fi
+}
+installkeymap frex
+installkeymap usex
 
 
 if [ -d "$SOURCEDIR/contacts" ]; then
