@@ -14,6 +14,8 @@
     (progn
      (setq yas-snippet-dirs "~/.emacs.d/snippets" )
 
+     (set-face-background 'yas/field-highlight-face "#1a1a1a")
+
      (if (fboundp 'yas/initialize)
          ;; Old yasnippet versions.
          (progn
