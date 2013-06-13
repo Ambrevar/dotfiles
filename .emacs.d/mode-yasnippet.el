@@ -10,19 +10,16 @@
 
 ;; Next follows a traditional, yet not-optimized configuration for Yasnippet.
 ;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/yas")
-(if (require 'yasnippet nil t)
+(when (require 'yasnippet nil t)
+  (setq yas-snippet-dirs "~/.emacs.d/snippets" )
+  (if (fboundp 'yas/initialize)
+      ;; Old yasnippet versions.
+      (progn
+        (yas/initialize)
+        (set-face-background 'yas/field-highlight-face "#1a1a1a")
+        (yas/load-directory yas-snippet-dirs))
+
+    ;; New yasnippet versions.
     (progn
-     (setq yas-snippet-dirs "~/.emacs.d/snippets" )
-
-     (set-face-background 'yas/field-highlight-face "#1a1a1a")
-
-     (if (fboundp 'yas/initialize)
-         ;; Old yasnippet versions.
-         (progn
-           (yas/initialize)
-           (yas/load-directory yas-snippet-dirs))
-
-       ;; New yasnippet versions.
-       (progn
-         (yas-global-mode 1)
-         (yas-load-directory yas-snippet-dirs)) ) ))
+      (yas-global-mode 1)
+      (yas-load-directory yas-snippet-dirs)) ) ))
