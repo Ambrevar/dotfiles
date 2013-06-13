@@ -94,7 +94,7 @@ if [ -n "$(command -v luakit)" ]; then
 fi
 
 ## dwb -- Install extensions.
-if [ -n "$(command -v dwb)" ]; then
+if [ -n "$(command -v dwb)" ] && [ ! -f "$XDG_DATA_HOME/dwb/extensions/adblock_subscriptions" ] ; then
     echo "==> dwb"
     dwbem -Ni adblock_subscriptions
     # dwbem -Ni youtube_html5

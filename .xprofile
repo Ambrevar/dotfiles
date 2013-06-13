@@ -15,7 +15,7 @@
 numlockx on
 
 ## Keymap. Only useful on multi-user environment where users have different keymaps.
-setxkbmap us intl
+setxkbmap usex
 xmodmap ~/.xmodmap
 
 if [ "$OSTYPE" = "linux-gnu" ] ; then
