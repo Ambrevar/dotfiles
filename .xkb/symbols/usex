@@ -9,8 +9,7 @@
 //   $ setxkbmap usex
 // This keyboard is based on Xorg's "us intl" with some improvements.
 
-// TODO: direct nbsp, <>=, swap control and Caps Lock.
-//  ≤ ≥ ↓ ↑ ← → 
+// TODO: direct nbsp, swap control and Caps Lock, ≤ ≥ ↓ ↑ ← → 
 
 // ┌─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┲━━━━━━━━━┓
 // │ ~ ~ │ ! ¡ │ @ ˝ │ # ¯ │ $ ¤ │ % ¢ │ ^ ^ │ & ½ │ * ˛ │ ( ˘ │ ) ° │ _ ⋅ │ + ÷ ┃ ⌫ Back  ┃
