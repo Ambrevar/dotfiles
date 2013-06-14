@@ -22,4 +22,4 @@
     ;; New yasnippet versions.
     (progn
       (yas-global-mode 1)
-      (yas-load-directory yas-snippet-dirs)) ) ))
+      (yas-load-directory yas-snippet-dirs)) ) )
