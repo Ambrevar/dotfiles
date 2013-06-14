@@ -157,7 +157,6 @@
     ("mm" "même" nil 16)
     ("mmt" "moment" nil 16)
     ("mnt" "maintenant" nil 2)
-    ("ms" "mais" nil 4)
     ("nb" "nombre" nil 0)
     ("nbs" "nombres" nil 0)
     ("nchai" "je ne sais" nil 1)
