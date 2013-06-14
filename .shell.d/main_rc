@@ -24,10 +24,6 @@ elif [ "$TERM" != "dumb" ]; then
     # export LSCOLORS="ExfxcxDxCxdxdxCxCxECEh"
 fi
 
-## This env variable is used by some programs (like ranger) to get terminal
-## executable name.
-export TERMCMD="urxvt"
-
 ## Title
 ## If this is an xterm set the title to user@host:dir
 #case "$TERM" in

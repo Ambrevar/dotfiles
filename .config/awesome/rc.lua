@@ -317,7 +317,7 @@ end
 -- Note that some laptop will not work when pressing Super+Fn.
 -- Therefore we only use Fn and Mod1+Fn.
 --------------------------------------------------------------------------------
-term = "urxvt"
+term = os.getenv("TERMCMD") or "urxvt"
 termcmd = term .. " -e "
 
 globalkeys = awful.util.table.join(
@@ -329,8 +329,11 @@ globalkeys = awful.util.table.join(
    awful.key({ modkey,  }, "b",     function () awful.util.spawn(termcmd .. "calc") end),
    awful.key({ }, "XF86Calculator", function () awful.util.spawn(termcmd .. "calc") end),
 
-   -- File browser
-   awful.key({ modkey,  }, "e",     function () awful.util.spawn(termcmd .. "ranger") end),
+   -- Editor
+   awful.key({ modkey,  }, "e",     function () awful.util.spawn(os.getenv("EDITOR")) end),
+
+   -- Directory browser
+   awful.key({ modkey,  }, "d",     function () awful.util.spawn(termcmd .. "ranger") end),
    awful.key({ }, "XF86Explorer",   function () awful.util.spawn(termcmd .. "ranger") end),
    awful.key({ }, "XF86MyComputer", function () awful.util.spawn(termcmd .. "ranger") end),
 
