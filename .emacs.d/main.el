@@ -98,18 +98,15 @@
 ;; TODO: This mode is really messy. Replace it.
 (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
 (add-hook 'find-file-hook (lambda () (linum-mode 1)))
-(define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode) ;; Toggle line numbers.
-(defun my-frame-config (frame)
-  "Custom behaviours for new frames."
-  (with-selected-frame frame
-    (if window-system
-        (setq linum-format "%d")
-      (setq linum-format "%d "))))
-
-;; Run for initial frame.
-(my-frame-config (selected-frame))
-;; Add to hook for subsequent frames.
-(add-hook 'after-make-frame-functions 'my-frame-config)
+(define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode)
+;; Setup fringe space for initial frame.
+(if window-system (setq linum-format "%d") (setq linum-format "%d "))
+;; Setup fringe space for subsequent frame.
+(add-hook
+ 'after-make-frame-functions
+ (lambda (frame)
+   (with-selected-frame frame
+     (if window-system (setq linum-format "%d") (setq linum-format "%d ")))))
 
 ;; Indentation
 (setq-default tab-width 4)
