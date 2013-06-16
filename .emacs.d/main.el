@@ -282,7 +282,7 @@
        (split-window-horizontally)
        (other-window 1)
        (gdb-set-window-buffer
-        (gdb-get-buffer-create 'gdb-inferior-io))))
+        (gdb-get-buffer-create 'gdb-inferior-io)))
      (other-window 1)
      (gdb-set-window-buffer (gdb-stack-buffer-name))
      (split-window-horizontally)
