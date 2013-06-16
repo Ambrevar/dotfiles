@@ -14,9 +14,12 @@
 ## Numlock
 numlockx on
 
-## Keymap. Only useful on multi-user environment where users have different keymaps.
-setxkbmap usex
-xmodmap ~/.xmodmap
+## Keymap. Only useful on multi-user environment where users have different
+## keymaps.
+if [ "$(setxkbmap -v 7 | awk '/^layout/ {print $2}')" != "usex" ]; then
+    setxkbmap usex
+fi
+# xmodmap ~/.xmodmap
 
 if [ "$OSTYPE" = "linux-gnu" ] ; then
     ## Set sound volume.
