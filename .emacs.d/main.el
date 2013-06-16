@@ -251,11 +251,15 @@
  (lambda () (interactive)
    (defun gdb-setup-windows ()
      "Layout the window pattern for `gdb-many-windows'."
+     (setq gdb-source-window (selected-window))
      (gdb-display-locals-buffer)
+     (delete-other-windows)
      (gdb-display-stack-buffer)
      (delete-other-windows)
      (gdb-display-breakpoints-buffer)
      (delete-other-windows)
+
+     ;; TODO: this does not behave the same on Emacs 23 and 24
      (switch-to-buffer
       (if gud-last-last-frame
           (gud-find-file (car gud-last-last-frame))
@@ -264,19 +268,21 @@
           ;; Put buffer list in window if we
           ;; can't find a source file.
           (list-buffers-noselect))))
-     (setq gdb-source-window (selected-window))
+
      (split-window-horizontally)
      (other-window 1)
      (split-window nil ( / ( * (window-height) 3) 4))
      (split-window nil ( / (window-height) 3))
      (gdb-set-window-buffer (gdb-locals-buffer-name))
      (other-window 1)
-     (pop-to-buffer gud-comint-buffer)
-     (when gdb-use-separate-io-buffer
+     (gdb-set-window-buffer gud-comint-buffer)
+     (when (and
+            (boundp 'gdb-use-separate-io-buffer)
+            gdb-use-separate-io-buffer)
        (split-window-horizontally)
        (other-window 1)
        (gdb-set-window-buffer
-        (gdb-get-buffer-create 'gdb-inferior-io)))
+        (gdb-get-buffer-create 'gdb-inferior-io))))
      (other-window 1)
      (gdb-set-window-buffer (gdb-stack-buffer-name))
      (split-window-horizontally)
@@ -284,7 +290,7 @@
      (gdb-set-window-buffer (gdb-breakpoints-buffer-name))
      (other-window 1))))
 
-;; Remocve auto-fill in dwb edit because wikis and forums do not like it.
+;; Remove auto-fill in dwb edit because wikis and forums do not like it.
 (add-hook
  'find-file-hook
  (lambda ()
@@ -302,10 +308,11 @@
 (define-key my-keys-minor-mode-map (kbd "<f11>") 'previous-error)
 
 ;; Just because XML is ugly.
-(add-hook 'html-mode-hook
-          (lambda ()
-            (turn-off-auto-fill)
-            (toggle-truncate-lines)))
+(add-hook
+ 'html-mode-hook
+ (lambda ()
+   (turn-off-auto-fill)
+   (toggle-truncate-lines)))
 
 ;; Common LISP
 (setq inferior-lisp-program "clisp")
@@ -385,3 +392,8 @@ has errors and/or warnings."
       (define-key my-keys-minor-mode-map (kbd "C-c C-p") 'mc/mark-previous-like-this)
       (define-key my-keys-minor-mode-map (kbd "C-c C-l") 'mc/mark-all-like-this-dwim)))
 
+
+;; Let Emacs auto-load/save sessions.
+(desktop-save-mode 1)
+(setq history-length 250)
+(add-to-list 'desktop-globals-to-save 'compile-command)
