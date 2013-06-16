@@ -1,31 +1,30 @@
 //------------------------------------------------------------------------------
 // XKB Custom us keyboard
-// 2013-06-12
+// 2013-06-16
 //------------------------------------------------------------------------------
 
 // Installation: copy this file to '/usr/{local/,}share/X11/xkb/symbols'. You
 // can use it by selecting the "usex" layout from Xorg configuration file, or by
 // using the following command:
 //   $ setxkbmap usex
-// This keyboard is based on Xorg's "us intl" with some improvements.
-
-// TODO: direct nbsp, swap control and Caps Lock, ≤ ≥ ↓ ↑ ← → 
+// This keyboard layout is based on Xorg's "us intl".
+// We set Caps Lock to act as Left Control
 
 // ┌─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┲━━━━━━━━━┓
 // │ ~ ~ │ ! ¡ │ @ ˝ │ # ¯ │ $ ¤ │ % ¢ │ ^ ^ │ & ½ │ * ˛ │ ( ˘ │ ) ° │ _ ⋅ │ + ÷ ┃ ⌫ Back  ┃
 // │ ` ` │ 1 ¹ │ 2 ² │ 3 ³ │ 4 £ │ 5 € │ 6 ¼ │ 7 ½ │ 8 ¾ │ 9 ‘ │ 0 ’ │ - ¥ │ = × ┃  space  ┃
 // ┢━━━━━┷━┱───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┺━┳━━━━━━━┫
-// ┃       ┃ Q Ä │ W È │ E É │ R ® │ T Þ │ Y Ü │ U Ù │ I Í │ O Ó │ P Ö │ { “ │ } ” ┃ Enter ┃
-// ┃Tab ↹  ┃ q ä │ w è │ e é │ r ® │ t þ │ y ü │ u ù │ i í │ o ó │ p ö │ [ « │ ] » ┃   ⏎   ┃
+// ┃       ┃ Q À │ W È │ E É │ R ® │ T Ù │ Y Ü │ U Ú │ I Í │ O Ó │ P Ö │ { “ │ } ” ┃ Enter ┃
+// ┃Tab ↹  ┃ q à │ w è │ e é │ r ® │ t ù │ y ü │ u ú │ i í │ o ó │ p ö │ [ « │ ] » ┃   ⏎   ┃
 // ┣━━━━━━━┻┱────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┺┓      ┃
-// ┃        ┃ A À │ S § │ D Â │ F Ê │ G Î │ H Ô │ J Û │ K Œ │ L Ø │ : ° │ " ¨ │ | ¦ ┃      ┃
-// ┃Maj ⇬   ┃ a à │ s ß │ d â │ f ê │ g î │ h ô │ j û │ k œ │ l ø │ ; ¶ │ ' ´ │ \ ¬ ┃      ┃
+// ┃        ┃ A Á │ S § │ D Â │ F Ê │ G Î │ H Ô │ J Û │ K Œ │ L Æ │ : ° │ " ¨ │ | ¦ ┃      ┃
+// ┃Ctrl    ┃ a á │ s ß │ d â │ f ê │ g î │ h ô │ j û │ k œ │ l æ │ ; ¶ │ ' ´ │ \ ¬ ┃      ┃
 // ┣━━━━━━━┳┹────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┲┷━━━━━┻━━━━━━┫
-// ┃       ┃ > ¦ │ Z Æ │ X X │ C ™ │ V V │ B B │ N Ñ │ M µ │ < Ç │ > ± │ ? ¿ ┃             ┃
-// ┃Shift ⇧┃ < | │ z æ │ x x │ c © │ v v │ b b │ n ñ │ m µ │ , ç │ . ≠ │ / … ┃Shift ⇧      ┃
+// ┃       ┃ > ≥ │ Z Ä │ X Ë │ C ™ │ V Ï │ B B │ N Ñ │ M µ │ < Ç │ > ± │ ? ¿ ┃             ┃
+// ┃Shift ⇧┃ < ≤ │ z ä │ x ë │ c © │ v ï │ b b │ n ñ │ m µ │ , ç │ . ≠ │ / … ┃Shift ⇧      ┃
 // ┣━━━━━━━╋━━━━━┷━┳━━━┷━━━┱─┴─────┴─────┴─────┴─────┴─────┴───┲━┷━━━━━╈━━━━━┻━┳━━━━━━━┳━━━┛
-// ┃       ┃       ┃       ┃ ␣                               ␣ ┃       ┃       ┃       ┃
-// ┃Ctrl   ┃Meta   ┃Alt    ┃ ␣ Space                         ␣ ┃AltGr ⇮┃Menu   ┃Ctrl   ┃
+// ┃Caps   ┃       ┃       ┃ ␣            Non-breaking space ⍽ ┃       ┃       ┃       ┃
+// ┃Lock ⇬ ┃Meta   ┃Alt    ┃ ␣ Space                         ␣ ┃AltGr ⇮┃Menu   ┃Ctrl   ┃
 // ┗━━━━━━━┻━━━━━━━┻━━━━━━━┹───────────────────────────────────┺━━━━━━━┻━━━━━━━┻━━━━━━━┛
 
 partial alphanumeric_keys
@@ -48,20 +47,20 @@ xkb_symbols "basic" {
     key <AE11> { [ minus, underscore,      yen,                  0x10022C5        ] };
     key <AE12> { [ equal, plus,            multiply,             division         ] };
 
-    key <AD01> { [ q,            Q,          adiaeresis,     Adiaeresis           ] };
+    key <AD01> { [ q,            Q,          agrave,         Agrave               ] };
     key <AD02> { [ w,            W,          egrave,         Egrave               ] };
     key <AD03> { [ e,            E,          eacute,         Eacute               ] };
     key <AD04> { [ r,            R,          registered,     registered           ] };
-    key <AD05> { [ t,            T,          thorn,          THORN                ] };
+    key <AD05> { [ t,            T,          ugrave,         Ugrave               ] };
     key <AD06> { [ y,            Y,          udiaeresis,     Udiaeresis           ] };
-    key <AD07> { [ u,            U,          ugrave,         Ugrave               ] };
+    key <AD07> { [ u,            U,          uacute,         Uacute               ] };
     key <AD08> { [ i,            I,          iacute,         Iacute               ] };
     key <AD09> { [ o,            O,          oacute,         Oacute               ] };
     key <AD10> { [ p,            P,          odiaeresis,     Odiaeresis           ] };
     key <AD11> { [ bracketleft,  braceleft,  guillemotleft,  leftdoublequotemark  ] };
     key <AD12> { [ bracketright, braceright, guillemotright, rightdoublequotemark ] };
 
-    key <AC01> { [ a,          A,        agrave,      Agrave         ] };
+    key <AC01> { [ a,          A,        aacute,      Aacute         ] };
     key <AC02> { [ s,          S,        ssharp,      section        ] };
     key <AC03> { [ d,          D,        acircumflex, Acircumflex    ] };
     key <AC04> { [ f,          F,        ecircumflex, Ecircumflex    ] };
@@ -69,21 +68,27 @@ xkb_symbols "basic" {
     key <AC06> { [ h,          H,        ocircumflex, Ocircumflex    ] };
     key <AC07> { [ j,          J,        ucircumflex, Ucircumflex    ] };
     key <AC08> { [ k,          K,        oe,          OE             ] };
-    key <AC09> { [ l,          L,        oslash,      Ooblique       ] };
+    key <AC09> { [ l,          L,        ae,      AE       ] };
     key <AC10> { [ semicolon,  colon,    paragraph,   degree         ] };
     key <AC11> { [ apostrophe, quotedbl, dead_acute,  dead_diaeresis ] };
 
-    key <AB01> { [ z,         Z,        ae,        AE           ] };
- 	key <AB02> { [ x,         X,        x,         X            ] };
- 	key <AB03> { [ c,         C,        copyright, trademark    ] };
- 	key <AB04> { [ v,         V,        v,         V            ] };
- 	key <AB05> { [ b,         B,        b,         B            ] };
- 	key <AB06> { [ n,         N,        ntilde,    Ntilde       ] };
- 	key <AB07> { [ m,         M,        mu,        mu           ] };
- 	key <AB08> { [ comma,     less,     ccedilla,  Ccedilla     ] };
- 	key <AB09> { [ period,    greater,  notequal,  plusminus    ] };
- 	key <AB10> { [ slash,     question, 0x1002026, questiondown ] };
- 	key <BKSL> { [ backslash, bar,      notsign,   brokenbar    ] };
+    key <AB01> { [ z,         Z,        adiaeresis, Adiaeresis   ] };
+    key <AB02> { [ x,         X,        ediaeresis, Ediaeresis   ] };
+    key <AB03> { [ c,         C,        copyright,  trademark    ] };
+    key <AB04> { [ v,         V,        idiaeresis, Idiaeresis   ] };
+    key <AB05> { [ b,         B,        b,          B            ] };
+    key <AB06> { [ n,         N,        ntilde,     Ntilde       ] };
+    key <AB07> { [ m,         M,        mu,         mu           ] };
+    key <AB08> { [ comma,     less,     ccedilla,   Ccedilla     ] };
+    key <AB09> { [ period,    greater,  notequal,   plusminus    ] };
+    key <AB10> { [ slash,     question, 0x1002026,  questiondown ] };
+    key <BKSL> { [ backslash, bar,      notsign,    brokenbar    ] };
+                                                                                                                                             
+    key <SPCE> { [ spce, space,   space,         nobreakspace     ] };
+    key <LSGT> { [ less, greater, lessthanequal, greaterthanequal ] };
+
+    key <CAPS> { [ Control_L ] };
+    key <LCTL> { [ Caps_Lock ] };
 
     include "level3(ralt_switch)"
 };
