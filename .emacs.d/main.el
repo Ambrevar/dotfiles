@@ -406,4 +406,8 @@ has errors and/or warnings."
 ;; Let Emacs auto-load/save sessions.
 (desktop-save-mode 1)
 (setq history-length 250)
+(setq desktop-dirname (concat emacs-cache-folder "desktop"))
+(if (not (file-directory-p desktop-dirname))
+    (make-directory desktop-dirname t))
+(setq desktop-path `(,desktop-dirname))
 (add-to-list 'desktop-globals-to-save 'compile-command)
