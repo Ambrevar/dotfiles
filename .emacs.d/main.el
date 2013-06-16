@@ -236,10 +236,13 @@
 (setq vc-follow-symlinks t)
 
 ;; Org mode config.
-(add-hook 'org-mode-hook
-          (lambda () (interactive)
-          (setq org-agenda-files '("~/todo.org"))
-          (setq org-enforce-todo-dependencies t)))
+;; Move annoying babel folder. This move does not seem to work properly.
+(setq org-babel-temporary-directory (concat emacs-cache-folder "babel"))
+(add-hook
+ 'org-mode-hook
+ (lambda () (interactive)
+   (setq org-agenda-files '("~/todo.org"))
+   (setq org-enforce-todo-dependencies t)))
 ;; Set PDF association in Org-mode (was Evince by default).
 (eval-after-load "org"
   '(progn
