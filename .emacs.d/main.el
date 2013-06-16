@@ -97,9 +97,19 @@
 ;; Line numbers
 ;; TODO: This mode is really messy. Replace it.
 (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
-(if (not (fboundp 'tool-bar-mode)) (setq linum-format "%d "))
 (add-hook 'find-file-hook (lambda () (linum-mode 1)))
 (define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode) ;; Toggle line numbers.
+(defun my-frame-config (frame)
+  "Custom behaviours for new frames."
+  (with-selected-frame frame
+    (if window-system
+        (setq linum-format "%d")
+      (setq linum-format "%d "))))
+
+;; Run for initial frame.
+(my-frame-config (selected-frame))
+;; Add to hook for subsequent frames.
+(add-hook 'after-make-frame-functions 'my-frame-config)
 
 ;; Indentation
 (setq-default tab-width 4)
