@@ -99,14 +99,9 @@
 (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
 (add-hook 'find-file-hook (lambda () (linum-mode 1)))
 (define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode)
-;; Setup fringe space for initial frame.
-(if (display-graphic-p) (setq linum-format "%d") (setq linum-format "%d "))
-;; Setup fringe space for subsequent frame.
 (add-hook
- 'after-make-frame-functions
- (lambda (frame)
-   (with-selected-frame frame
-     (if (display-graphic-p) (setq linum-format "%d") (setq linum-format "%d ")))))
+ 'linum-before-numbering-hook
+ (lambda () (if (display-graphic-p) (setq linum-format "%d") (setq linum-format "%d "))))
 
 ;; Indentation
 (setq-default tab-width 4)
