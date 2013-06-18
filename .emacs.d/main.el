@@ -40,16 +40,16 @@
 
 ;;==============================================================================
 
-;; Remember last cursor position
+;; Remember last cursor position.
 (require 'saveplace)
 (setq save-place-file (concat emacs-cache-folder "saveplace"))
 (setq-default save-place t)
 
-;; Disable autosave features
+;; Disable autosave features.
 (setq auto-save-default nil)
 (setq auto-save-list-file-prefix nil)
 
-;; Place Backup Files in Specific Directory
+;; Place backup files in specific directory.
 (setq backup-directory-alist
        `((".*" . ,(concat emacs-cache-folder "backups/"))))
 
@@ -61,7 +61,7 @@
 ;; Default mode
 (setq default-major-mode 'text-mode)
 
-;; Disable suspend key since it is useless on emacs server.
+;; Disable suspend key since it is useless on Emacs server.
 (global-unset-key (kbd "C-z"))
 (global-unset-key (kbd "C-x C-z"))
 
@@ -95,7 +95,7 @@
       (beginning-of-buffer (goto-char (point-min))))))
 
 ;; Line numbers
-;; TODO: This mode is really messy. Replace it.
+;; TODO: This mode is slow on  big files when using beginning-of-buffer binding.
 (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
 (add-hook 'find-file-hook (lambda () (linum-mode 1)))
 (define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode)
@@ -112,7 +112,7 @@
 ;; Line by line scrolling
 (setq scroll-step 1)
 
-;; Highlight selections -- not activated by default on old emacs.
+;; Highlight selections -- not activated by default on old Emacs.
 (transient-mark-mode 1)
 
 ;; No trailing whitespace
@@ -141,14 +141,14 @@
 (setq-default fill-column 80)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
-;; Man-mode
+;; Set  man pages to display on a 80 character wide window.
 (setenv "MANWIDTH" "80")
 
-;; Windmove mode
+;; Windmove mode: easy window switching with Shift+arrows.
 (when (fboundp 'windmove-default-keybindings)
   (windmove-default-keybindings))
 
-;; Browser
+;; Make Emacs use environment browser, or w3m if BROWSER is not set.
 (setq browse-url-generic-program
       (executable-find
        (let ((b (getenv "BROWSER")))
@@ -216,7 +216,8 @@
 (ido-mode t)
 (setq ido-enable-flex-matching t)
 ;; All file finding operation defaults to what is at point. Incompatible with
-;; IDO.  (ffap-bindings)
+;; IDO.
+;; (ffap-bindings)
 
 ;; Quick buffer switching.
 (define-key my-keys-minor-mode-map (kbd "C-<prior>") 'previous-buffer)
@@ -264,14 +265,13 @@
      (gdb-display-breakpoints-buffer)
      (delete-other-windows)
 
-     ;; TODO: this does not behave the same on Emacs 23 and 24
+     ;; TODO: this does not behave the same on Emacs 23 and 24.
      (switch-to-buffer
       (if gud-last-last-frame
           (gud-find-file (car gud-last-last-frame))
         (if gdb-main-file
             (gud-find-file gdb-main-file)
-          ;; Put buffer list in window if we
-          ;; can't find a source file.
+          ;; Put buffer list in window if we can't find a source file.
           (list-buffers-noselect))))
 
      (split-window-horizontally)
@@ -396,7 +396,6 @@ has errors and/or warnings."
       (define-key my-keys-minor-mode-map (kbd "C-c C-n") 'mc/mark-next-like-this)
       (define-key my-keys-minor-mode-map (kbd "C-c C-p") 'mc/mark-previous-like-this)
       (define-key my-keys-minor-mode-map (kbd "C-c C-l") 'mc/mark-all-like-this-dwim)))
-
 
 ;; Let Emacs auto-load/save sessions.
 (when (boundp 'server-running-p)
