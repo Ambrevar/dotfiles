@@ -68,7 +68,7 @@ xkb_symbols "basic" {
     key <AC06> { [ h,          H,        ocircumflex, Ocircumflex    ] };
     key <AC07> { [ j,          J,        ucircumflex, Ucircumflex    ] };
     key <AC08> { [ k,          K,        oe,          OE             ] };
-    key <AC09> { [ l,          L,        ae,      AE       ] };
+    key <AC09> { [ l,          L,        ae,          AE             ] };
     key <AC10> { [ semicolon,  colon,    paragraph,   degree         ] };
     key <AC11> { [ apostrophe, quotedbl, dead_acute,  dead_diaeresis ] };
 
@@ -83,7 +83,7 @@ xkb_symbols "basic" {
     key <AB09> { [ period,    greater,  notequal,   plusminus    ] };
     key <AB10> { [ slash,     question, 0x1002026,  questiondown ] };
     key <BKSL> { [ backslash, bar,      notsign,    brokenbar    ] };
-                                                                                                                                             
+
     key <SPCE> { [ spce, space,   space,         nobreakspace     ] };
     key <LSGT> { [ less, greater, lessthanequal, greaterthanequal ] };
 
