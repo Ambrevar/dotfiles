@@ -1,5 +1,4 @@
-#!/usr/bin/env zsh
-## We need zsh because of array use here.
+#!/bin/sh
 
 _printhelp()
 {
@@ -18,7 +17,6 @@ EOF
 
 OPTION_VCS=""
 OPTION_METHOD=""
-
 while getopts ":hm:v" opt; do
     case $opt in
         h)
@@ -43,9 +41,8 @@ while getopts ":hm:v" opt; do
     esac
 done
 
-ARCEXT=""
-ARCOPT=""
-
+ARCEXT="tar.gz"
+ARCOPT="z"
 case $OPTION_METHOD in
     "gz")
         ARCEXT="tar.gz"
@@ -55,42 +52,30 @@ case $OPTION_METHOD in
         ARCEXT="tar.xz"
         ARCOPT="J"
         ;;
-    *)
-        ARCEXT="tar.gz"
-        ARCOPT="z"
-        ;;
 esac
 
 shift $(($OPTIND - 1))
 
-ARCPATH=""
-ARCSOURCE=""
-ARCNAME=""
+case $# in
+    1)
+        FULLPATH="$(realpath "$1")"
+        OUTPUT="${FULLPATH}-$(date +%F-%H%M%S).${ARCEXT}"
 
-if [ $# -eq 1 ]; then
-    ARCPATH="$(dirname $(readlink -f "$1"))"
-    ARCSOURCE="$(basename $(readlink -f "$1"))"
-    ARCNAME="${ARCSOURCE}-$(date +%y-%m-%d-%H%M%S).${ARCEXT}"
+        (cd "${FULLPATH}/.." && \
+            tar -${ARCOPT} -cf ${OPTION_VCS} "$OUTPUT" "${FULLPATH##*/}" )
+        ;;
 
-    (cd "$ARCPATH" && \
-        tar -${ARCOPT} -cf "$ARCNAME" "$ARCSOURCE" ${OPTION_VCS})
+    0)
+        FULLPATH="$PWD"
+        OUTPUT="${FULLPATH}-$(date +%F-%H%M%S).${ARCEXT}"
+        (cd "${FULLPATH}/.." && \
+            tar -${ARCOPT} -cf ${OPTION_VCS} "$OUTPUT" "${FULLPATH##*/}" )
+        ;;
 
-else
-    ARCSOURCE="$(basename $PWD)"
-    ARCNAME="$(basename "$ARCSOURCE")-$(date +%y-%m-%d-%H%M%S).${ARCEXT}"
+    *)
+        FULLPATH="$PWD"
+        OUTPUT="${FULLPATH}/${FULLPATH##*/}-$(date +%F-%H%M%S).${ARCEXT}"
 
-    if [ $# = 0 ];then
-
-        (cd "$PWD/.." && \
-            tar -${ARCOPT} -cf "$ARCNAME" "$ARCSOURCE" ${OPTION_VCS})
-
-    else
-        ## Note for zsh: do NOT initialize an array with "myarray=()".
-
-        for i; do
-            FILELIST=(${FILELIST[*]} "$i")
-        done
-
-        tar -${ARCOPT} -cf "$ARCNAME" ${FILELIST[*]} ${OPTION_VCS}
-    fi
-fi
+        tar -${ARCOPT} -cf ${OPTION_VCS} "$OUTPUT" "$@"
+        ;;
+esac
