@@ -124,7 +124,6 @@ if [ -e "/usr/bin/pacman" ]; then
     PACMAN_FRONTEND='pacman'
 
     ## The eval trick lets us define the alias after the variable has been expanded.
-    ## Bash will not auto-complete aliases.
     eval 'alias pc="sudo $PACMAN_FRONTEND -Sc"'
     eval 'alias pi="sudo $PACMAN_FRONTEND -S --needed"'
     eval 'alias pqi="$PACMAN_FRONTEND -Qi"'
