@@ -71,36 +71,29 @@ case "$extension" in
 
     ## CUSTOM SUPPORT
 	ogg)
-        try mediainfo "$path" && { dump | sed 's/  \+:/: /;' | trim | fmt -s -w $width; exit 4; }
-        ;;
+        try mediainfo "$path" && { dump | sed 's/  \+:/: /;' | trim | fmt -s -w $width; exit 4; } ;;
 	mkv)
-        try mediainfo "$path" && { dump | sed 's/  \+:/: /;' | trim | fmt -s -w $width; exit 4; }
-        ;;
+        try mediainfo "$path" && { dump | sed 's/  \+:/: /;' | trim | fmt -s -w $width; exit 4; } ;;
 	doc)
         try antiword "$path" && { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
 	rtf)
         try unrtf --text "$path" && { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
 	odt)
         try odt2txt "$path" && { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
+	tga)
+        try mediainfo "$path" && { dump | trim | sed 's/  \+:/: /;';  exit 5; } || exit 1;;
 esac
 
 case "$mimetype" in
     # Syntax highlight for text files:
     text/* | */xml)
-        # try highlight --out-format=ansi "$path" && { dump | trim; exit 5; } || exit 2;;
         try highlight --out-format=xterm256 -s clarity "$path" && { dump | trim; exit 5; } || exit 2;;
 
     # Ascii-previews of images:
     image/*)
-        # img2txt --gamma=0.6 --width="$width" "$path" && exit 4 || exit 1;;
         exiftool "$path" && exit 5
         # # Use sed to remove spaces so the output fits into the narrow window
         try mediainfo "$path" && { dump | trim | sed 's/  \+:/: /;';  exit 5; } || exit 1;;
-		# if have mediainfo; then
-		# 	mediainfo "$path" | sed 's/  \+:/: /;'
-		# 	success && exit 5
-		# fi
-		# exit 1;;
 
     # Display information about media files:
     video/* | audio/*)
