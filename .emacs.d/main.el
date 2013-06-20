@@ -32,6 +32,11 @@
 (setq auto-mode-alist (append '(("\\.l\\'" . c-mode)) auto-mode-alist))
 (setq auto-mode-alist (append '(("\\.yy?\\'" . c-mode)) auto-mode-alist))
 
+;; GLSL fallback to C mode.
+(add-to-list 'auto-mode-alist '("\\.vert\\'" . c-mode))
+(add-to-list 'auto-mode-alist '("\\.frag\\'" . c-mode))
+(add-to-list 'auto-mode-alist '("\\.glsl\\'" . c-mode))
+
 ;; Subtitles support.
 (setq auto-mode-alist (append '(("\\.srt\\'" . text-mode)) auto-mode-alist))
 
@@ -353,8 +358,10 @@ has errors and/or warnings."
 
 ;; GLSL support.
 (autoload 'glsl-mode "glsl-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
-(add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
+(when (boundp 'glsl-mode)
+  (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
+  (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
+  (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode)))
 
 ;; Lua
 (setq auto-mode-alist (cons '("\.lua$" . lua-mode) auto-mode-alist))
@@ -407,3 +414,22 @@ has errors and/or warnings."
   (setq desktop-path `(,desktop-dirname))
   (add-to-list 'desktop-globals-to-save 'compile-command))
 
+(defadvice pop-to-buffer (before cancel-other-window first)
+  (ad-set-arg 1 nil))
+
+(ad-activate 'pop-to-buffer)
+
+;; Toggle window dedication
+(defun toggle-window-dedicated ()
+  "Toggle whether the current active window is dedicated or not"
+  (interactive)
+  (message
+   (if (let (window (get-buffer-window (current-buffer)))
+         (set-window-dedicated-p window 
+                                 (not (window-dedicated-p window))))
+       "Window '%s' is dedicated"
+     "Window '%s' is normal")
+   (current-buffer)))
+
+;; Press [pause] key in each window you want to "freeze"
+(global-set-key [pause] 'toggle-window-dedicated)

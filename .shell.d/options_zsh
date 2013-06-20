@@ -65,6 +65,7 @@ zstyle :compinstall filename "$HOME/.zshrc"
 ## Completion
 ##==============================================================================
 ## Custom completion
+## TODO: this is quite slow. Why?
 fpath=(~/.shell.d/completion $fpath)
 
 autoload -Uz compinit
