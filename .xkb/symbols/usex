@@ -39,7 +39,7 @@ xkb_symbols "basic" {
     key <AE03> { [ 3,     numbersign,      threesuperior,        dead_macron      ] };
     key <AE04> { [ 4,     dollar,          sterling,             currency         ] };
     key <AE05> { [ 5,     percent,         EuroSign,             cent             ] };
-    key <AE06> { [ 6,     dead_circumflex, onequarter,           asciicircum      ] };
+    key <AE06> { [ 6,     asciicircum,     onequarter,           dead_circumflex  ] };
     key <AE07> { [ 7,     ampersand,       onehalf,              onehalf          ] };
     key <AE08> { [ 8,     asterisk,        threequarters,        dead_ogonek      ] };
     key <AE09> { [ 9,     parenleft,       leftsinglequotemark,  dead_breve       ] };
