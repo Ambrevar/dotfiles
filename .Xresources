@@ -9,10 +9,10 @@
 !!------------------------------------------------------------------------------
 !! URxvt
 !! ------------------------------------------------------------------------------
-!! url-select, clipboard and keyboard-select are provided in Muennich s perl
+!! url-select, clipboard and keyboard-select are provided in Muennich's perl
 !! plugins.
 
-!! Plucin dir.
+!! Plugin dir.
 URxvt.perl-lib: .config/urxvt/
 
 ! URxvt*modifier: alt
