@@ -1,0 +1,44 @@
+# name: int loadfile (const char * path, char ** buffer_ptr)
+# key: loadfile
+# --
+unsigned long loadfile (const char * path, char ** buffer_ptr)
+{
+#define MAX_FILESIZE 1073741824 /* One gigabyte */
+
+    /* Handle variable. */
+    char* buffer;
+
+    FILE* file = fopen(path, "rb");
+    if (file == NULL)
+    {
+        perror(path);
+        return 0;
+    }
+
+    fseek(file, 0, SEEK_END);
+    unsigned long length = ftell(file);
+    /* fprintf (stdout, "Note: file %s is %u bytes long.\n", path, length); */
+
+    if (length > MAX_FILESIZE)
+    {
+        fprintf (stderr, "%s size %u is bigger than %d bytes.\n", path, length, MAX_FILESIZE);
+        fclose(file);
+        return 0;
+    }
+
+    fseek(file, 0, SEEK_SET);
+    buffer = (char*)malloc(length + 1);
+    if (buffer == NULL)
+    {
+        perror("malloc");
+        fclose(file);
+        return 0;
+    }
+
+    fread(buffer, 1, length, file);
+    buffer[length] = '\0';
+    fclose(file);
+
+    *buffer_ptr = buffer;
+    return length;
+}
