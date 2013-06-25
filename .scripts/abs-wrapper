@@ -147,6 +147,7 @@ abs_buildmissing ()
     while read -r p; do
         abs_pkgbuild $p
         abs_build $p
+        abs_install $p
     done <<EOF
     ${DEPLIST}
 EOF
@@ -167,6 +168,16 @@ abs_clean ()
     (cd "$1" && \
         echo "Removing src/ and pkg/ folders." && \
         rm -rf "src" "pkg")
+}
+
+abs_install ()
+{
+    sudo sh -c '
+        (cd "$0" && pacman '$PACMAN_OPT' --noconfirm -U *.pkg.tar.xz)
+        for i; do
+            (cd "$i" && pacman '$PACMAN_OPT' --noconfirm -U *.pkg.tar.xz)
+        done
+' "$@"
 }
 
 for i ; do
@@ -197,10 +208,5 @@ done
 ## Install packages. We put the install part outside the loop so that we prompt
 ## for password one time only.
 if $OPT_INSTALL; then
-    sudo sh -c '
-        (cd "$0" && pacman '$PACMAN_OPT' --noconfirm -U *.pkg.tar.xz)
-        for i; do
-            (cd "$i" && pacman '$PACMAN_OPT' --noconfirm -U *.pkg.tar.xz)
-        done
-' "$@"
+    abs_install "$@"
 fi
