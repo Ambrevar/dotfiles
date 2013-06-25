@@ -397,8 +397,8 @@ has errors and/or warnings."
 (if (require 'multiple-cursors nil t)
     (progn
       (setq mc/list-file "~/.emacs.d/mc-lists.el")
-      (define-key my-keys-minor-mode-map (kbd "C-c C-a") 'mc/edit-beginnings-of-lines)
-      (define-key my-keys-minor-mode-map (kbd "C-c C-e") 'mc/edit-ends-of-lines)
+      ;; (define-key my-keys-minor-mode-map (kbd "C-c C-a") 'mc/edit-beginnings-of-lines)
+      ;; (define-key my-keys-minor-mode-map (kbd "C-c C-e") 'mc/edit-ends-of-lines)
       (define-key my-keys-minor-mode-map (kbd "C-c C-r") 'mc/edit-lines)
       (define-key my-keys-minor-mode-map (kbd "C-c C-n") 'mc/mark-next-like-this)
       (define-key my-keys-minor-mode-map (kbd "C-c C-p") 'mc/mark-previous-like-this)
