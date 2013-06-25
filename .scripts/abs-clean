@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ $# -eq 0 ]; then
-    echo "Please give build folders as argument with .pkg.tar.xz in them."
+    echo "Please give as argument build folders with .pkg.tar.xz in them."
     exit 1
 fi
 

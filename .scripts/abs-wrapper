@@ -1,0 +1,122 @@
+#!/bin/sh
+
+UPSTREAM_SOURCE="srcdir"
+
+_printhelp ()
+{
+    cat <<EOF
+Usage: ${1##*/} [OPTIONS] PACKAGES
+
+Default operation is to fetch source code for provided packages. Other
+operations include:
+  * Cleaning specified folder from build data.
+  * Installing packages.
+The script first look for exising folder containing a PKGBUILD file. If they are
+not to be found, it will fetch the PKGBUILD from ABS-tree or yaourt, depending
+on what is available.
+
+  -c:  Clean source folders from temp file (keep upstream source and built package).
+  -f:  Force operation (overwrite, rebuild).
+  -h:  Display this help.
+  -i:  Install package (build if needed).
+
+Example:
+  ${1##*/} -afic \$(pacman -Qmq)
+    Rebuild, install
+  \$(pacman -Qsq <search-string>)
+EOF
+}
+
+CP_OPT=""
+MAKEPKT_OPT=""
+
+OPT_CLEAN=0
+OPT_FORCE=0
+OPT_INSTALL=0
+
+while getopts ":hfy" opt; do
+    case $opt in
+        c)
+            MAKEPKG_OPT="$MAKEPKG_OPT -c";;
+            OPT_CLEAN=1 ;;
+        f)
+            CP_OPT="$CP_OPT -f"
+            MAKEPKG_OPT="$MAKEPKG_OPT -f"
+            OPT_FORCE=1;;
+        h)
+            _printhelp "$0"
+            exit 1 ;;
+        i)
+            OPT_INSTALL=1 ;;
+        ?)
+            _printhelp "$0"
+            exit 1 ;;
+        :)
+            echo "Missing argument."
+            _printhelp "$0"
+            exit 1 ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+if [ $# -eq 0 ]; then
+    echo "Missing argument."
+    _printhelp "$0"
+    exit 1
+fi
+
+if [ -z "$(command -v makepkg)"  ]; then
+    echo "You need makepkg to run this script."
+    exit 1
+fi
+
+HAS_ABS=0
+HAS_YAOURT=0
+[ -n "$(command -v abs)" ] && HAS_ABS=1
+[ -n "$(command -v yaourt)" ] && HAS_YAOURT=1
+
+if [ $HAS_ABS -eq 0 ] && [ $HAS_YAOURT -eq 0 ]; then
+    echo "Please install either an ABS-tree or yaourt."
+    exit 1
+fi
+
+################################################################################
+
+## TODO: check if force works with yaourt.
+abs-fetch ()
+{
+    pacman -Si $i >/dev/null 2>&1
+    if [ $? -eq 0] && [ $HAS_ABS -eq 1 ]; then
+        [ ! -d "/var/abs" ] && sudo abs
+        cp -rvn $CP_OPT /var/abs/*/$i .
+        (cd "$i" && SRCDEST="$UPSTREAM_SOURCE" makepkg -o)
+    else
+        yaourt -G "$i"
+        (cd "$i" && SRCDEST="$UPSTREAM_SOURCE" makepkg -o)
+    fi
+}
+
+## TODO: add option to not download. Useful when cleaning only.
+for i ; do
+    if [ ! -f "$i/PKGBUILD" ] || [ $OPT_FORCE -eq 1 ]; then
+        abs-fetch "$i"
+    fi
+    if [ $OPT_INSTALL -eq 1 ]; then
+        (cd "$i" && \
+            mkdir -p "srcpkg" && \
+            SRCDEST="$UPSTREAM_SOURCE" makepkg -rs $MAKEPKG_OPT --nocheck --noconfirm)
+    fi
+
+    if [ $OPT_CLEAN ]; then
+        (cd "$i" && rm -rvf "src" "pkg")
+    fi
+done
+
+if [ $OPT_INSTALL -eq 1 ]; then
+    sudo sh -c '
+        for i in; do
+            (cd "$i" && pacman --noconfirm -U *.pkg.tar.xz)
+        done
+' "$@"
+fi

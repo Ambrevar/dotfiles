@@ -10,13 +10,13 @@ echo "[$0]"
 
         if [ "$CHOICE" = "y" ]; then
             for i in *; do
-                (cd "$i" && pacman --noconfirm -U *.pkg.tar.xz)
+                echo "$i"
             done
         fi
     else
-        (cd "$0" && pacman --noconfirm -U *.pkg.tar.xz)
+        echo "$0"
         for i; do
-            (cd "$i" && pacman --noconfirm -U *.pkg.tar.xz)
+            echo "$i"
         done
     fi
 ' "$@"
