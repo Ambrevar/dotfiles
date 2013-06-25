@@ -9,50 +9,63 @@ _printhelp ()
     cat <<EOF
 Usage: ${1##*/} [OPTIONS] PACKAGES
 
-Default operation is to fetch source code for provided packages. Other
-operations include:
-  * Cleaning specified folder from build data.
-  * Installing packages.
+This script can perform multiple operations:
+  1. Fetch PKGBUILD.
+  2. Fetch source code.
+  3. Build package.
+  4. Installing package.
+  5. Cleaning folder from build data.
+Default operation is to fetch PKGBUILD for provided packages.
 
-The script first look for exising folder containing a PKGBUILD file. If they are
-not to be found, it will fetch the PKGBUILD from ABS-tree or yaourt, depending
-on what is available.
+Operations or hierarchically dependant and check for existing data. E.g. if a
+PKGBUILD is already there and you want to install the package, then it will
+fetch source code first, then build and finally install.
 
-Operations are cumulative, e.g. specifying the install operation while the
-source folders are not available will automatically fetch the source code.
+It will fetch the PKGBUILD from the ABS-tree or yaourt, depending on what is
+available.
 
 Options:
 
+  -b:  Build.
   -c:  Clean source folders from temp file (keep upstream source and built package).
-  -f:  Force operation (overwrite, rebuild).
+  -f:  Force operation (overwrite, rebuild, reinstall).
   -h:  Display this help.
-  -i:  Install package (build if needed).
+  -i:  Install package.
+  -s:  Fetch source code.
 
 Example:
-  ${1##*/} -cfi \$(pacman -Qmq)
-    Rebuild, install and clean build folder for all foreign installed packages.
+  ${1##*/} -icf \$(pacman -Qmq)
+    Force fetching PKGBUILD and source code, force building, install and clean build folder for all foreign installed packages.
 EOF
 }
 
 MAKEPKT_OPT=""
+PACMAN_OPT="--needed"
 
+OPT_BUILD=0
 OPT_CLEAN=0
 OPT_FORCE=0
 OPT_INSTALL=0
+OPT_SOURCE=0
 
-while getopts ":cfhi" opt; do
+while getopts ":bcfhis" opt; do
     case $opt in
+        b)
+            OPT_BUILD=1 ;;
         c)
             MAKEPKG_OPT="$MAKEPKG_OPT -c"
             OPT_CLEAN=1 ;;
         f)
             MAKEPKG_OPT="$MAKEPKG_OPT -f"
+            PACMAN_OPT=""
             OPT_FORCE=1;;
         h)
             _printhelp "$0"
             exit 1 ;;
         i)
             OPT_INSTALL=1 ;;
+        s)
+            OPT_SOURCE=1 ;;
         ?)
             _printhelp "$0"
             exit 1 ;;
@@ -93,7 +106,7 @@ fi
 
 ################################################################################
 
-absfetch ()
+abs_pkgbuild ()
 {
     pacman -Si $i >/dev/null 2>&1
     if [ $? -eq 0 ] && [ $HAS_ABS -eq 1 ] && [ -d "$ABSROOT" ]; then
@@ -102,35 +115,61 @@ absfetch ()
         yaourt -G "$i" --noconfirm
     fi
 
-    ## Return because $i does not exist.
-    [ ! -d "$i" ] && return
+}
 
+abs_source ()
+{
     (cd "$i" && \
         mkdir -p "$UPSTREAM_SOURCE" && \
         SRCDEST="$UPSTREAM_SOURCE" makepkg -o)
 }
 
+abs_build ()
+{
+    (cd "$i" && \
+        mkdir -p "$UPSTREAM_SOURCE" && \
+        SRCDEST="$UPSTREAM_SOURCE" makepkg -rs $MAKEPKG_OPT --nocheck --noconfirm)
+}
+
+abs_clean ()
+{
+    (cd "$i" && \
+        echo "Removing src/ and pkg/ folders." && \
+        rm -rf "src" "pkg")
+}
+
 for i ; do
+    ## Fetch PKGBUILD.
     if [ ! -f "$i/PKGBUILD" ] || [ $OPT_FORCE -eq 1 ]; then
-        absfetch "$i"
-    fi
-    if [ $OPT_INSTALL -eq 1 ]; then
-        (cd "$i" && \
-            mkdir -p "$UPSTREAM_SOURCE" && \
-            SRCDEST="$UPSTREAM_SOURCE" makepkg -rs $MAKEPKG_OPT --nocheck --noconfirm)
+        abs_fetch "$i"
     fi
 
+    ## Skip because $i does not exist.
+    [ ! -d "$i" ] && continue
+
+    ## Fetch source code.
+    if [ $OPT_SOURCE -eq 1 ]; then
+        abs_source "$i"
+    fi
+
+    ## Build.
+    if [ $OPT_BUILD -eq 1 ]; then
+        abs_build "$i"
+    fi
+
+    ## Clean build folder.
     if [ $OPT_CLEAN -eq 1 ]; then
-        (cd "$i" && echo "Removing src/ and pkg/ folders." && rm -rf "src" "pkg")
+        abs_clean "$i"
     fi
 done
 
+## Install packages. We put the install part outside the loop so that we prompt
+## for password one time only.
 if [ $OPT_INSTALL -eq 1 ]; then
-    echo "$@"
     sudo sh -c '
-        (cd "$0" && pacman --noconfirm -U *.pkg.tar.xz)
+        (cd "$0" && pacman '$PACMAN_OPT' --noconfirm -U *.pkg.tar.xz)
         for i; do
-            (cd "$i" && pacman --noconfirm -U *.pkg.tar.xz)
+            (cd "$i" && pacman '$PACMAN_OPT' --noconfirm -U *.pkg.tar.xz)
         done
 ' "$@"
 fi
