@@ -118,31 +118,53 @@ fi
 
 abs_pkgbuild ()
 {
-    pacman -Si $i >/dev/null 2>&1
+    pacman -Si $1 >/dev/null 2>&1
     if [ $? -eq 0 ] && $HAS_ABS && [ -d "$ABSROOT" ]; then
-        cp -r /var/abs/*/$i .
+        cp -r /var/abs/*/$1 .
     else
-        yaourt -G "$i" --noconfirm
+        yaourt -G "$1" --noconfirm
     fi
 }
 
 abs_source ()
 {
-    (cd "$i" && \
+    (cd "$1" && \
         mkdir -p "$UPSTREAM_SOURCE" && \
         SRCDEST="$UPSTREAM_SOURCE" makepkg -o)
 }
 
+## TODO: unused function. Add 'build all deps from source' parameter?
+abs_builddeps ()
+{
+    DEPLIST=$(awk -F"'" '/^(make)?depends *= *\(/,/\)/ {for (n=2 ; n<NF; n++) res=res $n " "} END {gsub(/ +/, " ", res); print res}' PKGBUILD)
+    (cd .. && abs-wrapper $DEPLIST)
+}
+
+abs_buildmissing ()
+{
+    DEPLIST="$(makepkg -s 2>&1 | awk -F: '/target not found/ {print $3}')"
+    cd ..
+    while read -r p; do
+        abs_pkgbuild $p
+        abs_build $p
+    done <<EOF
+    ${DEPLIST}
+EOF
+    cd $1
+}
+
 abs_build ()
 {
-    (cd "$i" && \
+    (cd "$1" && \
         mkdir -p "$UPSTREAM_SOURCE" && \
-        SRCDEST="$UPSTREAM_SOURCE" makepkg -rs $MAKEPKG_OPT --nocheck --noconfirm)
+        (makepkg -s || \
+        if [ $? -ne 0 ]; then abs_buildmissing $1; fi ) && \
+        SRCDEST="$UPSTREAM_SOURCE" makepkg -r $MAKEPKG_OPT --nocheck --noconfirm)
 }
 
 abs_clean ()
 {
-    (cd "$i" && \
+    (cd "$1" && \
         echo "Removing src/ and pkg/ folders." && \
         rm -rf "src" "pkg")
 }
