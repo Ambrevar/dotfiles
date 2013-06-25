@@ -1,6 +1,14 @@
 #!/bin/sh
 
-## This function will clean TeX/LaTeX project folders recursively.
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+    cat <<EOF
+Usage: ${0##*/} [FOLDER]
+
+Clean TeX/LaTeX project folders recursively.
+EOF
+    exit
+fi
+
 if [ -z "$1" ]; then
     WORKDIR="$PWD"
 else

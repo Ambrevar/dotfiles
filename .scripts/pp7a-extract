@@ -2,6 +2,7 @@
 
 if [ -z "$(command -v 7z)" ]; then
     echo "7z needed."
+    exit
 fi
 
 

@@ -6,13 +6,13 @@ Usage: ${0##*/} PDFFILE [DESTFILE]
 
 WARNING: use this function with caution.  It may drastically improve compression
 of some PDF files, but in some case, the output filesize will be greater! You
-should not use it over PDF files embedding pictures as well.
+should not use it over PDF files embedding raster graphics as well.
 EOF
      exit
 fi
 
 if [ ! -f "$1" ]; then
-    echo "$1 is not a valid PDF file!"
+    echo "$1 is not a valid file."
 fi
 INPUTFILE="$1"
 
@@ -21,6 +21,5 @@ if [ -z "$2" ]; then
     rm -rf "${INPUTFILE}"
     mv "${INPUTFILE%%.*}-COMPRESSED.pdf" "${INPUTFILE}"
 else
-    OUTPUTFILE="$2"
-    gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="${OUTPUTFILE}" "${INPUTFILE}"
+    gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="$2" "${INPUTFILE}"
 fi

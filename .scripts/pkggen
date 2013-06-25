@@ -3,11 +3,11 @@
 ## Package List Generator
 ## 2013-01-09
 ################################################################################
-## This script used to save the file list. of my home config. However this is
+## This script used to save the file list of my home config. However this is
 ## quiet cumbersome to maintain, especially in sync with a VCS. Since VCS can do
 ## the same job much more easily, I do not feel the need anymore to use this
-## script for backup purpose. Still it remains useful to create package lists
-## for pacman, FreeBSD, TeX Live, and so on.
+## script for backup purpose. Still it remains useful to create lists of system
+## packages and TeX Live.
 
 ## Git can create a bundle with:
 ##
@@ -22,13 +22,7 @@
 ##    tar cvJf archive.tar.xz $(cd $HOME && git ls-files)
 
 ## This script should be compatible with ksh, bash and zsh. Issue with sh
-## however: we use arrays. Therefore we do not comply with POSIX and use some
-## extended syntax for file input -- the <(...) syntax.  We used to write the
-## file list in an array which is not support by POSIX neither.
-
-## Note for zsh: because of the Ksh-style arrays (index starting at 0), you
-## cannot use array index to append elements to arrays -- otherwise the
-## KSH_ARRAYS option for zsh must be used.
+## however: we use the <(...) syntax.
 
 ## Variables
 HOST="$(hostname)"

@@ -2,7 +2,11 @@
 
 ## Wine FPS monitor
 if [ $# -lt 1 ]; then
-    echo "Usage: ${0##*/} WIN32EXE PARAMS"
+    cat<<EOF
+Usage: ${0##*/} WIN32EXE PARAMS"
+
+Run Wine application while displaying FPS onscreen.
+EOF
     exit
 fi
 

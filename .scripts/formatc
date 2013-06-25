@@ -1,19 +1,19 @@
 #!/bin/sh
 
-## Format C using 'indent'. Alternative to indent: astyle, uncrustify.
-if [ -z "$(command -v indent)" ]; then
-    echo "Please install 'indent'."
-    exit
-fi
-
 if [ "$1" = "-h" ]; then
     cat<<EOF
 Usage: ${0##*/} [FILES|FOLDERS]
 
-Format C source code using indent.
+Format C source code using 'indent'.
+
+Alternative to indent: astyle, uncrustify.
 EOF
 fi
 
+if [ -z "$(command -v indent)" ]; then
+    echo "Please install 'indent'."
+    exit
+fi
 
 _formatc_dir()
 {

@@ -1,10 +1,13 @@
 #!/bin/sh
 
 if [ $# -ne 1 ]; then
-    echo "Usage: ${0##*/} FILE"
+    cat<<EOF
+Usage: ${0##*/} FILE"
 
-    echo "LaTeX quick compiler. It adds the preambule -- and the
-        \end{document} -- automatically."
+LaTeX quick compiler. It adds the preambule -- and the \end{document} --
+automatically.
+
+EOF
     exit
 fi
 

@@ -1,7 +1,15 @@
 #!/bin/sh
 
-## Set file/directory owner and permissions.
-## Usage: sanitize [FOLDER]
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+    cat <<EOF
+Usage: ${0##*/} [FOLDER]
+
+Set file/directory owner and permissions according to current umask for current
+used.
+EOF
+    exit
+fi
+
 WORKDIR="$PWD"
 if [ $# -eq 1 ]; then
     WORKDIR="$1"

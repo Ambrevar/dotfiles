@@ -1,16 +1,18 @@
 #!/bin/sh
 
-## This function will clean Texinfo project folders recursively.
-if [ -z "$1" ]; then
-    WORKDIR="$PWD"
-else
-    WORKDIR="$1"
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+    cat <<EOF
+Usage: ${0##*/} [FOLDER]
+
+Clean Texinfo project folders recursively.
+EOF
+    exit
 fi
 
 ## First we need to get the name of a .texi file, and then we can remove
 ## associated extensions in current folder. We proceed this way so that we do
 ## not remove incidentally files matching these extensions even if they are not
-## linked to a TeX file in any manner.
+## linked to a texinfo file in any manner.
 while read -r FILE; do
     FILE_NOEXT="${FILE##*/}"
     FILE_NOEXT="${FILE_NOEXT%.*}"

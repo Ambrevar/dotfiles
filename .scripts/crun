@@ -1,7 +1,11 @@
 #!/bin/sh
 
 if [ $# -lt 1 ]; then
-    echo "Usage: ${0##*/} FILE [GCC_OPTS]"
+    cat<<EOF
+Usage: ${0##*/} FILE [GCC_OPTS]
+
+Simulate a C interpreter by compiling, executing and removing file in one run.
+EOF
     exit
 fi
 

@@ -14,9 +14,13 @@ Display package size. Output contains no double and is alphabetically sorted. A
 grand total is printed at the end. It will only work for repos packages by
 default.
 
-  -h:  Show this help.
-  -n:  Output is sorted by size.
-  -q:  Uses installed packages database instead of repos database. It speeds up queries and allows displaying size of local packages not available in repos.
+  -h: Show this help.
+  -n: Output is sorted by size.
+
+  -q: Uses installed packages database instead of repos database. It speeds up
+      queries and allows displaying size of local packages not available in
+      repos.
+
 EOF
 }
 

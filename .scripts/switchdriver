@@ -12,7 +12,7 @@ if [ $(id -u) -ne 0 ]; then
 fi
 
 
-if [ $(pacman -Qi catalyst-utils 2>/dev/null|wc -l) -ge 2 ]; then
+if [ $(pacman -Qi catalyst-utils 2>/dev/null |wc -l) -ge 2 ]; then
     pacman -Rdd --noconfirm catalyst-utils catalyst-dkms lib32-catalyst-utils
     rm -f "/etc/X11/xorg.conf"
     pacman -S --noconfirm ati-dri lib32-ati-dri  xf86-video-ati
