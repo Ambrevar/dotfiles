@@ -35,37 +35,47 @@ Options:
 
 Example:
   ${1##*/} -icf \$(pacman -Qmq)
-    Force fetching PKGBUILD and source code, force building, install and clean build folder for all foreign installed packages.
+
+     For all foreign installed packages, force fetch PKGBUILD, fetch source code
+     if not available, build if not already build, force installing and clean
+     build folder.
+
+  ${1##*/} -sbicf nawk ncdu
+
+     For all foreign installed packages, fetch PKGBUILD and source code if not
+     available, force build if not already build, force installing and clean
+     build folder.
+
 EOF
 }
 
 MAKEPKT_OPT=""
 PACMAN_OPT="--needed"
 
-OPT_BUILD=0
-OPT_CLEAN=0
-OPT_FORCE=0
-OPT_INSTALL=0
-OPT_SOURCE=0
+OPT_BUILD=false
+OPT_CLEAN=false
+OPT_FORCE=false
+OPT_INSTALL=false
+OPT_SOURCE=false
 
 while getopts ":bcfhis" opt; do
     case $opt in
         b)
-            OPT_BUILD=1 ;;
+            OPT_BUILD=true ;;
         c)
             MAKEPKG_OPT="$MAKEPKG_OPT -c"
-            OPT_CLEAN=1 ;;
+            OPT_CLEAN=true ;;
         f)
             MAKEPKG_OPT="$MAKEPKG_OPT -f"
             PACMAN_OPT=""
-            OPT_FORCE=1;;
+            OPT_FORCE=true ;;
         h)
             _printhelp "$0"
             exit 1 ;;
         i)
-            OPT_INSTALL=1 ;;
+            OPT_INSTALL=true ;;
         s)
-            OPT_SOURCE=1 ;;
+            OPT_SOURCE=true ;;
         ?)
             _printhelp "$0"
             exit 1 ;;
@@ -89,17 +99,17 @@ if [ -z "$(command -v makepkg)"  ]; then
     exit 1
 fi
 
-HAS_ABS=0
-HAS_YAOURT=0
-[ -n "$(command -v abs)" ] && HAS_ABS=1
-[ -n "$(command -v yaourt)" ] && HAS_YAOURT=1
+HAS_ABS=false
+HAS_YAOURT=false
+[ -n "$(command -v abs)" ] && HAS_ABS=true
+[ -n "$(command -v yaourt)" ] && HAS_YAOURT=true
 
-if [ $HAS_ABS -eq 0 ] && [ $HAS_YAOURT -eq 0 ]; then
+if ! $HAS_ABS && ! $HAS_YAOURT; then
     echo "Please install either an ABS-tree or yaourt."
     exit 1
 fi
 
-if [ $HAS_ABS -eq 1 ] && [ -f "/etc/abs.conf" ]; then
+if $HAS_ABS && [ -f "/etc/abs.conf" ]; then
     . "/etc/abs.conf"
     [ "$ABSROOT" = "" ] && ABSROOT="/var/abs/"
 fi
@@ -109,12 +119,11 @@ fi
 abs_pkgbuild ()
 {
     pacman -Si $i >/dev/null 2>&1
-    if [ $? -eq 0 ] && [ $HAS_ABS -eq 1 ] && [ -d "$ABSROOT" ]; then
+    if [ $? -eq 0 ] && $HAS_ABS && [ -d "$ABSROOT" ]; then
         cp -r /var/abs/*/$i .
     else
         yaourt -G "$i" --noconfirm
     fi
-
 }
 
 abs_source ()
@@ -140,32 +149,32 @@ abs_clean ()
 
 for i ; do
     ## Fetch PKGBUILD.
-    if [ ! -f "$i/PKGBUILD" ] || [ $OPT_FORCE -eq 1 ]; then
-        abs_fetch "$i"
+    if [ ! -f "$i/PKGBUILD" ] || $OPT_FORCE; then
+        abs_pkgbuild "$i"
     fi
 
     ## Skip because $i does not exist.
     [ ! -d "$i" ] && continue
 
     ## Fetch source code.
-    if [ $OPT_SOURCE -eq 1 ]; then
+    if $OPT_SOURCE; then
         abs_source "$i"
     fi
 
     ## Build.
-    if [ $OPT_BUILD -eq 1 ]; then
+    if $OPT_BUILD || ($OPT_INSTALL && [ ! -f $i/*.pkg.tar.xz ]); then
         abs_build "$i"
     fi
 
     ## Clean build folder.
-    if [ $OPT_CLEAN -eq 1 ]; then
+    if $OPT_CLEAN; then
         abs_clean "$i"
     fi
 done
 
 ## Install packages. We put the install part outside the loop so that we prompt
 ## for password one time only.
-if [ $OPT_INSTALL -eq 1 ]; then
+if $OPT_INSTALL; then
     sudo sh -c '
         (cd "$0" && pacman '$PACMAN_OPT' --noconfirm -U *.pkg.tar.xz)
         for i; do
