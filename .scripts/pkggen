@@ -26,11 +26,12 @@
 
 ## Variables
 HOST="$(hostname)"
+PKG_ROOT="$(HOME)/.pkg"
 
 ## Arch Linux
 if [ -e "/usr/bin/pacman" ]; then
-    ARCH_PKG_OFFICIAL="$HOME/.pkg-arch-official-${HOST}"
-	ARCH_PKG_AUR="$HOME/.pkg-arch-aur-${HOST}"
+    ARCH_PKG_OFFICIAL="$PKG_ROOT/arch-official-${HOST}"
+	ARCH_PKG_AUR="$PKG_ROOT/arch-aur-${HOST}"
 
 	PKG_LOCAL='pacman -Qq | sort'
 	PKG_FOREIGN='pacman -Qmq | sort'
@@ -41,7 +42,7 @@ fi
 
 ## FreeBSD
 if [ "$(uname)" = "FreeBSD" ]; then
-    pkg_info | cut -f1 -d' ' >"$HOME/.pkg-freebsd-${HOST}"
+    pkg_info | cut -f1 -d' ' >"$PKG_ROOT/freebsd-${HOST}"
 fi
 
 ## TeXlive
@@ -53,7 +54,7 @@ if type tlmgr >/dev/null 2>&1; then
     TEXLIVE_ALL="$(tlmgr info --only-installed | grep -v 'x86_64\|amd64' | cut -d' ' -f2 | cut -f1 -d':' | sort)"
 
     comm -3 <(echo "$TEXLIVE_BASIC") <(echo "$TEXLIVE_ALL") | sed 's/	//g' | \
-        grep -vi 'collection-basic\|scheme-minimal\|texlive-common\|texlive-docindex\|texlive-en' >"$HOME/.pkg-texlive-$(uname)-${HOST}"
+        grep -vi 'collection-basic\|scheme-minimal\|texlive-common\|texlive-docindex\|texlive-en' >"$PKG_ROOT/texlive-$(uname)-${HOST}"
 fi
 
 ## Cleaning
