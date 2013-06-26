@@ -1,3 +1,4 @@
+brainfuck-git
 dropbox
 dropbox-cli
 dwb-git
@@ -8,16 +9,14 @@ emacs-mediawiki-bzr
 emacs-multiple-cursors
 emacs-xclip
 emacs-yasnippet
-google-talkplugin
+ioquake3-git
 lib32-sdl_mixer
 lib32-smpeg
-linux-firmware-git
 mutt-sidebar
+openmw-git
 package-query
-streetsofrageremake
-supermeatboy
-texlive-dummy
+sdl2
 trash-cli
 wikiex
-worldofgoo
 yaourt
+zenity-gtk2
