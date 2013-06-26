@@ -6,15 +6,16 @@
 (add-to-list 'auto-mode-alist '("\\.dot\\'" . graphviz-dot-mode))
 
 
+(setq graphviz-dot-preview-extension "pdf")
+(defcustom graphviz-dot-view-extension "pdf"
+  "Graphviz format for external view."
+  :safe 'stringp)
+(setq graphviz-dot-view-command "zathura --fork %s")
+
 ;; Override original stupid function.
 (add-hook
  'graphviz-dot-mode-hook
  (lambda ()
-   (setq graphviz-dot-view-command "zathura --fork %s")
-   (setq graphviz-dot-preview-extension "pdf")
-   (defcustom graphviz-dot-view-extension "pdf"
-     "Graphviz format for external view."
-     :safe 'stringp)
    (defun graphviz-dot-view ()
      "Runs an external viewer. This creates an external process every time it
 is executed. If `graphviz-dot-save-before-view' is set, the current
