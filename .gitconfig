@@ -28,9 +28,11 @@
 	tool = ediff
 
 [tig]
-    line-graphics = "utf8"
+    line-graphics = "utf-8"
     author-width = 12
     show-author = "abbreviated"
+    show-date = "short"
+    show-id = true
     line-number-interval = 1
 [tig "bind"]
      main = C !git checkout %(commit)
