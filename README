@@ -275,7 +275,6 @@ cut
 dash
 diff
 doxygen
-dropbox
 dtach
 dvtm
 dwb
@@ -313,8 +312,8 @@ latex2rtf
 lrzip
 lshw
 ltrace
+lua
 luakit
-lynx
 mediainfo
 mercurial
 mkfs
