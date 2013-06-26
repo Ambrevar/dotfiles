@@ -1,0 +1,16 @@
+.Xauthority
+.abook
+.cache
+.dbus
+.fontconfig
+.local/share/Trash
+.local/share/Icons
+.local/share/applications/wine*
+.local/share/webkit
+.mtab.fuseiso
+.mutt.*
+.texlive*
+.wine
+.zdirs
+.zshistfile
+temp
