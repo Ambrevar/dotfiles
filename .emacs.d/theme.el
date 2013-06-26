@@ -8,7 +8,10 @@
 ;; General
 (set-face-foreground  'default                     "white" )
 (set-face-background  'default                     "black" )
-(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono"))
+;; Font size
+(if (fboundp 'tool-bar-mode)
+    (set-face-attribute 'default nil :height 100)
+    (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-13")))
 
 (set-face-foreground  'link                        "#00ffff" )
 (set-face-underline-p 'link                        t)
@@ -22,8 +25,6 @@
       (set-face-foreground  'error                       "red")
       (set-face-bold-p      'error                       t)))
 
-;; Font size
-(if (fboundp 'tool-bar-mode) (set-face-attribute 'default nil :height 100))
 
 ;; Line numbers. Graphic version has a gray bar separating text from line
 ;; numbers, so we can leave the background black.

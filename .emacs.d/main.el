@@ -503,3 +503,4 @@ has errors and/or warnings."
    (local-set-key (kbd "C-c a") 'dired-toggle-hidden)
    (local-set-key (kbd "C-c h") 'dired-toggle-humansize)
    (local-set-key (kbd "b") 'dired-up-directory)))
+
