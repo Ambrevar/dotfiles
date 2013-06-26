@@ -8,6 +8,7 @@
 ;; General
 (set-face-foreground  'default                     "white" )
 (set-face-background  'default                     "black" )
+(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono"))
 
 (set-face-foreground  'link                        "#00ffff" )
 (set-face-underline-p 'link                        t)
