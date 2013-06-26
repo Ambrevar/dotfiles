@@ -36,6 +36,7 @@
     line-number-interval = 1
 [tig "bind"]
      main = C !git checkout %(commit)
+     main = ^D !git diff %(prompt) %(commit)
 [tig "color"]
      date = yellow default
      date = yellow default
