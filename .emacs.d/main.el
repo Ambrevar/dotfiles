@@ -220,6 +220,7 @@
 (require 'ido)
 (ido-mode t)
 (setq ido-enable-flex-matching t)
+(setq ido-save-directory-list-file (concat emacs-cache-folder "ido.last"))
 ;; All file finding operation defaults to what is at point. Incompatible with
 ;; IDO.
 ;; (ffap-bindings)
@@ -396,12 +397,12 @@ has errors and/or warnings."
 ;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/multiple-cursors")
 (if (require 'multiple-cursors nil t)
     (progn
-      (setq mc/list-file "~/.emacs.d/mc-lists.el")
+      (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
       ;; (define-key my-keys-minor-mode-map (kbd "C-c C-a") 'mc/edit-beginnings-of-lines)
       ;; (define-key my-keys-minor-mode-map (kbd "C-c C-e") 'mc/edit-ends-of-lines)
       (define-key my-keys-minor-mode-map (kbd "C-c C-r") 'mc/edit-lines)
       (define-key my-keys-minor-mode-map (kbd "C-c C-n") 'mc/mark-next-like-this)
-      (define-key my-keys-minor-mode-map (kbd "C-c C-p") 'mc/mark-previous-like-this)
+      ;; (define-key my-keys-minor-mode-map (kbd "C-c C-p") 'mc/mark-previous-like-this)
       (define-key my-keys-minor-mode-map (kbd "C-c C-l") 'mc/mark-all-like-this-dwim)))
 
 ;; Let Emacs auto-load/save sessions.
@@ -504,3 +505,5 @@ has errors and/or warnings."
    (local-set-key (kbd "C-c h") 'dired-toggle-humansize)
    (local-set-key (kbd "b") 'dired-up-directory)))
 
+;; Eshell
+(setq eshell-directory-name (concat emacs-cache-folder "eshell"))
