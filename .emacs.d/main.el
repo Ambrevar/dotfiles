@@ -82,8 +82,11 @@
 ;; Make questions less annoying.
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Print column number.
+;; Print column number in mode line.
 (column-number-mode 1)
+
+;; Print buffer size in mode line.
+(size-indication-mode 1)
 
 ;; Kill whole line including \n.
 (setq kill-whole-line t)
@@ -503,6 +506,8 @@ has errors and/or warnings."
  (lambda ()
    (local-set-key (kbd "C-c a") 'dired-toggle-hidden)
    (local-set-key (kbd "C-c h") 'dired-toggle-humansize)
+   ;; (local-set-key (kbd "<left>") 'dired-up-directory)
+   ;; (local-set-key (kbd "<right>") 'dired-find-file)
    (local-set-key (kbd "b") 'dired-up-directory)))
 
 ;; Eshell

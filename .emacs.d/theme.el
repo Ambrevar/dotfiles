@@ -10,8 +10,10 @@
 (set-face-background  'default                     "black" )
 ;; Font size
 (if (fboundp 'tool-bar-mode)
-    (set-face-attribute 'default nil :height 100)
-    (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-13")))
+    ;; (set-face-attribute 'default nil :height 100)
+    (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-10")))
+(set-face-background 'modeline "white")
+;; (set-face-foreground 'modeline "#000000")
 
 (set-face-foreground  'link                        "#00ffff" )
 (set-face-underline-p 'link                        t)
