@@ -12,8 +12,9 @@
 (if (fboundp 'tool-bar-mode)
     ;; (set-face-attribute 'default nil :height 100)
     (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-10")))
-(set-face-background 'modeline "white")
-;; (set-face-foreground 'modeline "#000000")
+(if (string-match "^23.*" emacs-version )
+    (set-face-background 'modeline "white")
+  (set-face-background 'mode-line "white"))
 
 (set-face-foreground  'link                        "#00ffff" )
 (set-face-underline-p 'link                        t)
