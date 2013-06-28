@@ -443,6 +443,7 @@ has errors and/or warnings."
 (if (string-match "^gnu.*" (prin1-to-string system-type))
     (setq dired-listing-switches "--group-directories-first -lh")
   (setq dired-listing-switches "-lh"))
+(setq wdired-allow-to-change-permissions t)
 
 (defvar dired-showing-hidden nil "If dired is displaying hidden files or not.")
 (defvar dired-showing-humansize t "If dired is displaying humansize or not.")
