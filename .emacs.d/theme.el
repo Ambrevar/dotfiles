@@ -23,7 +23,7 @@
 (set-face-background  'isearch                     "#00002a" )
 (set-face-foreground  'isearch                     nil )
 (set-face-background  'isearch-lazy-highlight-face "#3a3a3a" )
-(if (string-match "^24.*" emacs-version )
+(if (>= emacs-major-version 24)
     (progn
       (set-face-foreground  'error                       "red")
       (set-face-bold-p      'error                       t)))

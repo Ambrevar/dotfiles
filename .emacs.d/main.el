@@ -205,7 +205,7 @@
 ;; (setq semanticdb-find-default-throttle '(project unloaded system recursive))
 
 ;; Electric Pairs to auto-complete () [] {} "" etc. You can use it on regions.
-(if (string-match "^24.*" emacs-version )
+(if (>= emacs-major-version 24)
     (electric-pair-mode 1))
 
 ;; Run ranger asynchronously.
