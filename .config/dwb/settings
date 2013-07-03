@@ -159,3 +159,4 @@ maximum-tabs=0
 cookie-expiration=0
 tab-width=150
 hint-offset-left=0
+block-insecure-content=false

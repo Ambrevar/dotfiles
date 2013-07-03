@@ -12,7 +12,7 @@ then it shall return the name of FILE in the current directory,
 suitable for creation"
   (let ((root (expand-file-name "/"))) ; the win32 builds should translate this correctly
     (expand-file-name file
-		      (loop 
+		      (loop
 			for d = default-directory then (expand-file-name ".." d)
 			if (file-exists-p (expand-file-name file d))
 			return d
