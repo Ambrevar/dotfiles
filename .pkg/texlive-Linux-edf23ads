@@ -21,9 +21,12 @@ latex
 latex-bin
 latexconfig
 latex-fonts
+layouts
+lipsum
 listings
 lm
 marvosym
+metalogo
 microtype
 minitoc
 moderncv
@@ -34,9 +37,11 @@ parskip
 pdftex-def
 pgf
 pgfplots
+preprint
 subfigure
+synctex
 tabu
-tabulary
+texinfo
 tools
 url
 varwidth

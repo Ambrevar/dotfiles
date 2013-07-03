@@ -259,6 +259,7 @@ awesome
 awk
 bashmount
 bc
+cabextract
 cal
 calc
 catdvi
@@ -274,7 +275,9 @@ cppcheck
 cut
 dash
 diff
+dosbox
 doxygen
+driconf
 dtach
 dvtm
 dwb
@@ -298,6 +301,7 @@ graphicsmagick
 graphviz
 grep
 groff
+guile
 hdparm
 highlight
 htop
@@ -310,6 +314,7 @@ irssi
 latex2html
 latex2rtf
 lrzip
+lsb-release
 lshw
 ltrace
 lua
@@ -348,6 +353,7 @@ rsync
 rtorrent
 rxvt-unicode
 scrot
+sdlmame
 sdparm
 sed
 shred
@@ -372,10 +378,12 @@ trash-cli
 tree
 udiskie
 unrtf
+unshield
 upx
 valgrind
 vim
 vlock
+vsftpd
 w3m
 weechat
 wipe
@@ -383,9 +391,12 @@ wireshark
 wmfs
 wv
 x264
+xchm
 xclip
 xlockmore
+xosd
 yasm
 youtube-dl
 zathura
 zsh
+
