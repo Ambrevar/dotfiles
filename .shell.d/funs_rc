@@ -297,8 +297,13 @@ lsofstat()
 ## Executable info
 xinf()
 {
-    if [ $# -ne 1 ]; then
+    if [ $# -ne 1 ] || [ -z "$(command -v "$1")" ]; then
         echo "Give an executable in PATH as parameter."
+        return
+    fi
+
+    if [ -n "$(type $1 | awk 'NR == 1 && $0 ~ "alias" {print $0} {exit}')" ]; then
+        type "$1"
         return
     fi
 

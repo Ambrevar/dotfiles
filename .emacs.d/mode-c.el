@@ -1,40 +1,72 @@
 ;;==============================================================================
-;; C-mode
+;; C/C++
 ;;==============================================================================
 (require 'compile)
+(require 'cl) ; If you don't have it already
+
+(defun* get-closest-pathname (&optional (file "Makefile"))
+  "Determine the pathname of the first instance of FILE starting
+from the current directory towards root.  This may not do the
+correct thing in presence of links. If it does not find FILE,
+then it shall return the name of FILE in the current directory,
+suitable for creation"
+  (let ((root (expand-file-name "/"))) ; the win32 builds should translate this correctly
+    (expand-file-name file
+		      (loop 
+			for d = default-directory then (expand-file-name ".." d)
+			if (file-exists-p (expand-file-name file d))
+			return d
+			if (equal d root)
+			return nil))))
+
+
+(defcustom mode-cc-ldlibs "-lm -pthread"
+  "[Local variable] Custom linker flags for C/C++ linkage."
+  :safe 'stringp)
+
+(defcustom mode-cc-ldgflags ""
+  "[Local variable] Custom linker libs for C/C++ linkage."
+  :safe 'stringp)
+
+
+(defun mode-cc-compile ()
+  (interactive)
+  (if (get-closest-pathname)
+      (set (make-local-variable 'compile-command) (format "make -k -f %s" (get-closest-pathname)))
+    (set (make-local-variable 'compile-command)
+         ;; Emulate make's .c.o implicit pattern rule, but with
+         ;; different defaults for the CC, CPPFLAGS, and CFLAGS
+         ;; variables:
+         ;;   $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
+         ;; (setq compile-command
+         (let
+             ((is-cpp (= major-mode "c++-mode"))
+              (file (file-name-nondirectory buffer-file-name)))
+           (format "%s -o %s %s %s %s"
+                   (if is-cpp
+                       (or (getenv "CPP") "g++")
+                     (or (getenv "CC") "gcc"))
+                   (file-name-sans-extension file)
+                   (if is-cpp
+                       (or (getenv "CPPFLAGS") "-Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0")
+                     (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0"))
+                   (or (getenv "LDFLAGS") mode-cc-ldflags)
+                   (or (getenv "LDLIBS") mode-cc-ldlibs)
+                   file))))
+  (compile compile-command))
+
+
+;;==============================================================================
+;; C-mode
+;;==============================================================================
 
 ;; Identation style
 (setq c-default-style "linux" c-basic-offset 4)
 
-(defcustom c-compile-ldflags ""
-  "[Local variable] Custom linker flags for C compilation."
-  :safe 'stringp)
-
-(defun c-compile ()
-  (interactive)
-  (progn
-    (unless (or (file-exists-p "Makefile") (file-exists-p "makefile") (file-exists-p "GNUMakefile"))
-      (set (make-local-variable 'compile-command)
-           ;; Emulate make's .c.o implicit pattern rule, but with
-           ;; different defaults for the CC, CPPFLAGS, and CFLAGS
-           ;; variables:
-           ;;   $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
-           ;; (setq compile-command
-           (let
-               ((file (file-name-nondirectory buffer-file-name)))
-             (format "%s -o %s %s %s %s %s"
-                     (or (getenv "CC") "gcc")
-                     (file-name-sans-extension file)
-                     (or (getenv "CPPFLAGS") "-DDEBUG=9")
-                     (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -g3 -O0")
-                     (or (getenv "LDFLAGS") c-compile-ldflags)
-                     file))))
-    (compile compile-command)))
-
 (add-hook
  'c-mode-hook
  (lambda ()
-   (local-set-key (kbd "C-c C-c") 'c-compile)
+   (local-set-key (kbd "C-c C-c") 'mode-cc-compile)
    (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
    (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1)))
    ;; (local-set-key "." 'semantic-complete-self-insert) ; This is a bit slow.
@@ -62,35 +94,11 @@
 
 ;; (add-hook 'c++-mode-hook 'vlad-cc-style)
 
-(defcustom c++-compile-ldflags ""
-  "[Local variable] Custom linker flags for C compilation."
-  :safe 'stringp)
-
-(defun c++-compile ()
-  (interactive)
-  (progn
-    (unless (or (file-exists-p "Makefile") (file-exists-p "makefile") (file-exists-p "GNUMakefile"))
-      (set (make-local-variable 'compile-command)
-           ;; Emulate make's .c.o implicit pattern rule, but with
-           ;; different defaults for the CC, CPPFLAGS, and CFLAGS
-           ;; variables:
-           ;;   $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
-           ;; (setq compile-command
-           (let
-               ((file (file-name-nondirectory buffer-file-name)))
-             (format "%s -o %s %s %s %s %s"
-                     (or (getenv "CXX") "g++")
-                     (file-name-sans-extension file)
-                     (or (getenv "CPPFLAGS") "-DDEBUG=9")
-                     (or (getenv "CFLAGS") "-Wall -Wextra -Wshadow -g3 -O0")
-                     (or (getenv "LDFLAGS") c++-compile-ldflags)
-                     file))))
-    (compile compile-command)))
-
 (add-hook
  'c++-mode-hook
  (lambda ()
-   (local-set-key (kbd "C-c C-c") 'c++-compile)
+   (local-set-key (kbd "C-c C-c") 'mode-cc-compile)
+   (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1)))
    (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)))
 
 ;; autoinsert C/C++ header
