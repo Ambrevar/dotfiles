@@ -66,7 +66,7 @@ suitable for creation"
 (add-hook
  'c-mode-hook
  (lambda ()
-   (local-set-key (kbd "C-c C-c") 'mode-cc-compile)
+   (local-set-key (kbd "<f10>") 'mode-cc-compile)
    (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
    (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1)))
    ;; (local-set-key "." 'semantic-complete-self-insert) ; This is a bit slow.
@@ -97,7 +97,7 @@ suitable for creation"
 (add-hook
  'c++-mode-hook
  (lambda ()
-   (local-set-key (kbd "C-c C-c") 'mode-cc-compile)
+   (local-set-key (kbd "<f10>") 'mode-cc-compile)
    (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1)))
    (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)))
 

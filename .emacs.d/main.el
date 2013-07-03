@@ -69,14 +69,15 @@
 ;; Disable suspend key since it is useless on Emacs server.
 (global-unset-key (kbd "C-z"))
 (global-unset-key (kbd "C-x C-z"))
+(global-unset-key (kbd "<f10>"))
 
 ;; For convenience.
 (setq inhibit-startup-screen t)
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (menu-bar-mode -1)
 (when (fboundp 'set-scroll-bar-mode)
-  ;; (scroll-bar-mode -1)
   (set-scroll-bar-mode 'left)
+  (scroll-bar-mode -1)
   (define-key my-keys-minor-mode-map (kbd "C-<f6>") 'toggle-scroll-bar))
 
 ;; Make questions less annoying.
@@ -317,9 +318,9 @@
  (lambda ()
    (speedbar-toggle-updates)))
 
-;; Compilation error report.
-(define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
+;; Compilation .
 (define-key my-keys-minor-mode-map (kbd "<f11>") 'previous-error)
+(define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
 
 ;; Just because XML is ugly.
 (add-hook
@@ -347,7 +348,7 @@ has errors and/or warnings."
             (push (car error-or-warning) messages))
           (message "%s" (mapconcat #'identity (reverse messages) "\n"))))))
 
-(global-set-key (kbd "<f10>")
+(define-key my-keys-minor-mode-map (kbd "C-<f10>")
   'flymake-display-err-message-for-current-line)
 
 ;; Ediff split horizontally by default.

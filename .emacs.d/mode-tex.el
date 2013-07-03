@@ -231,5 +231,5 @@ properly escaped with double-quotes in case it has spaces."
  (lambda ()
    (dolist (key '("\C-c\C-f" "\C-c\C-b"))
      (local-unset-key key))
-   (local-set-key (kbd "C-c C-c") 'tex-my-compile)
-   (local-set-key (kbd "C-c C-v") 'tex-pdf-view) ))
+   (local-set-key (kbd "<f10>") 'tex-my-compile)
+   (local-set-key (kbd "<f9>") 'tex-pdf-view) ))
