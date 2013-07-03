@@ -204,3 +204,12 @@ Enlarge/Shrink by ARG columns, or 5 if arg is nil."
     (save-restriction
       (narrow-to-region (region-beginning) (region-end))
       (delete-trailing-whitespace))))
+
+(defun shell-last-command ()
+  "Run last shell command."
+  (interactive)
+  (let ((last (car shell-command-history)))
+    (if last
+        (shell-command last)
+      (message "Shell command history is empty."))))
+(define-key my-keys-minor-mode-map (kbd "C-M-!") 'shell-last-command)
