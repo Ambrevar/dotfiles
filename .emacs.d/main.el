@@ -402,13 +402,10 @@ has errors and/or warnings."
 (if (require 'multiple-cursors nil t)
     (progn
       (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
-      ;; (define-key my-keys-minor-mode-map (kbd "C-c C-a") 'mc/edit-beginnings-of-lines)
-      ;; (define-key my-keys-minor-mode-map (kbd "C-c C-e") 'mc/edit-ends-of-lines)
       (global-unset-key (kbd "C-<down-mouse-1>"))
       (define-key my-keys-minor-mode-map (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
       (define-key my-keys-minor-mode-map (kbd "C-c C-r") 'mc/edit-lines)
-      (define-key my-keys-minor-mode-map (kbd "C-c C-n") 'mc/mark-next-like-this)
-      ;; (define-key my-keys-minor-mode-map (kbd "C-c C-p") 'mc/mark-previous-like-this)
+      (define-key my-keys-minor-mode-map (kbd "C-c C-m") 'mc/mark-more-like-this-extended)
       (define-key my-keys-minor-mode-map (kbd "C-c C-l") 'mc/mark-all-like-this-dwim)))
 
 ;; Let Emacs auto-load/save sessions.
