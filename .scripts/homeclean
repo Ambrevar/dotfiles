@@ -3,6 +3,7 @@
 RMLIST="$HOME/.cache/dwb
 $HOME/.cache/emacs
 $HOME/.cache/mutt
+$HOME/.cache/rtorrent
 $HOME/.cmus/autosave
 $HOME/.cmus/cache
 $HOME/.cmus/lib.pl
@@ -12,18 +13,15 @@ $HOME/.cmus/resume
 $HOME/.cmus/search-history
 $HOME/.config/gtk-2.0
 $HOME/.config/gtk-3.0
-$HOME/.config/newsbeuter/cache.db
-$HOME/.config/newsbeuter/history.cmdline
-$HOME/.config/newsbeuter/history.search
 $HOME/.config/ranger/bookmarks
 $HOME/.config/ranger/history
 $HOME/.config/ranger/tagged
 $HOME/.gtk-bookmarks
 $HOME/.local/share/newsbeuter
 $HOME/.local/share/webkit
-$HOME/.mutt-pwds.cpt
-$HOME/.session/*
+$HOME/.mutt.pwds.cpt
 $HOME/.ssh
+$HOME/.w3m
 $HOME/.zcompdump
 $HOME/.zdirs
 $HOME/.zshhistfile"
@@ -42,15 +40,26 @@ if [ "$CHOICE" != "Y" ]; then
 fi
 
 ## Delete git repo if any.
-[ -d "$HOME"] && rm -rvf "$HOME/.git"
+if [ -d "$HOME/.git" ]; then
+    echo
+    echo "==> Cleaning git repo."
+    rm -rf "$HOME/.git"
+fi
 
 ## Delete Dropbox folder if any.
-[ -d "$HOME" ] && rm -rvf "$HOME/Dropbox" && rm -rvf "$HOME/.dropbox"
+if [ -d "$HOME/Dropbox" ] || [ -d "$HOME/.dropbox" ]; then
+    echo
+    echo "==> Cleaning Dropbox folder."
+    rm -rvf "$HOME/Dropbox"
+    rm -rvf "$HOME/.dropbox"
+fi
 
 ## Clean trash if possible.
 if [ -z "$(command -v trash-empty)" ]; then
     echo
-    echo "==> 'trash-empty' not installed, you have to clean trash manually."
+    echo "==> Emptying trash."
+    echo ":: 'trash-empty' not installed, you have to clean trash manually."
+    rm -rvf "$HOME/.local/share/Trash"
 else
     echo
     echo "==> Emptying trash."

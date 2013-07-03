@@ -9,6 +9,4 @@ highlight article "^Author:" blue default bold
 highlight article "^Links?:" yellow default bold
 highlight article "^Date:" magenta default bold
 
-cache-file "~/.cache/newsbeuter/cache.db"
-
 ## End

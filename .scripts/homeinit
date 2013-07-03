@@ -10,7 +10,7 @@ SOURCEDIR="$HOME/personal/dataperso"
 
 ## Temp folder
 echo "==> 'temp' folder"
-mkdir -p temp
+mkdir -p "$HOME/temp"
 echo
 
 ## Emacsclient launcher. Required for best emacsclient integration.  For a fully
@@ -65,7 +65,7 @@ if [ -n "$(command -v mutt)" ]; then
     echo
 fi
 
-if [ -d "$SOURCEDIR" ]; then
+if [ -d "$SOURCEDIR/todo" ]; then
     echo "==> To-Do"
     ln -snf "$SOURCEDIR/todo/todo.org" "$HOME/todo.org"
     echo
@@ -73,7 +73,9 @@ fi
 
 if [ -n "$(command -v rtorrent)" ]; then
     echo "==> rtorrent"
-    mkdir -p "$HOME/.session"
+    mkdir -p "$HOME/.cache/rtorrent"
+    ## TODO: the mkdir with the awk command does not get expanded properly. Why?
+    # mkdir -p "$(awk -F'=' '/^session *= */{gsub(/^ +| +$/,"",$2); gsub(/~/,"$HOME",$2); res=$2} END {printf res}' ~/.rtorrent.rc)"
     echo
 fi
 
