@@ -1,9 +1,12 @@
+;; This configuration is in a seperate file so that we can choose to load it or
+;;not.
+
 ;;==============================================================================
-;; Yasnippet
+;;Yasnippet
 ;;==============================================================================
-;; Yasnippet is slow when loading snippets from source.
-;; Generate a bundle instead: yas/compile-bundle
-;; Besides you can convert the generated file to bytecode.
+;;Yasnippet is slow when loading snippets from source.  Generate a bundle
+;;instead: yas/compile-bundle Besides you can convert the generated file to
+;;bytecode.
 
 ;; (add-to-list 'load-path "~/.emacs.d/plugins")
 ;; (require 'yasnippet-bundle)

@@ -21,8 +21,9 @@ Example: to assign some-function to C-i, use
   t " my-keys" 'my-keys-minor-mode-map)
 (add-hook 'minibuffer-setup-hook (lambda () (my-keys-minor-mode 0) ) )
 
-;; Cache folder is everything we do not want to track.
-(setq emacs-cache-folder "~/.cache/emacs/")
+(defvar emacs-cache-folder "~/.cache/emacs/"
+  "Cache folder is everything we do not want to track along with
+  the configuration files.")
 (if (not (file-directory-p emacs-cache-folder))
     (make-directory emacs-cache-folder t))
 
@@ -33,14 +34,14 @@ Example: to assign some-function to C-i, use
 
 (load "~/.emacs.d/functions" nil t)
 (load "~/.emacs.d/main" nil t)
-(load "~/.emacs.d/mode-c.el" nil t)
+(load "~/.emacs.d/mode-cc.el" nil t)
 (load "~/.emacs.d/mode-dot.el" nil t)
 (load "~/.emacs.d/mode-mediawiki.el" nil t)
 (load "~/.emacs.d/mode-python.el" nil t)
 (load "~/.emacs.d/mode-tex.el" nil t)
 (load "~/.emacs.d/mode-texinfo.el" nil t)
-;; (load "~/.emacs.d/mode-yasnippet.el" nil t)
 (load "~/.emacs.d/personal" nil t)
+;; (load "~/.emacs.d/snippets.el" nil t)
 (load "~/.emacs.d/theme" nil t)
 
 ;; We need to put it at the end to make sure it doesn't get overriden by other
