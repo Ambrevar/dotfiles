@@ -123,7 +123,6 @@ girara-gtk2
 git
 glamor-egl
 glew
-glib
 glib2
 glibc
 glibmm
@@ -152,7 +151,6 @@ gstreamer0.10-ffmpeg
 gstreamer0.10-good
 gstreamer0.10-ugly
 gstreamer0.10-ugly-plugins
-gtk
 gtk2
 gtkmm
 gtkspell
@@ -217,11 +215,9 @@ lib32-fontconfig
 lib32-freetype2
 lib32-gcc-libs
 lib32-gettext
-lib32-glib
 lib32-glib2
 lib32-glibc
 lib32-glu
-lib32-gtk
 lib32-libdrm
 lib32-libffi
 lib32-libgcrypt
@@ -246,7 +242,6 @@ lib32-libxi
 lib32-libxml2
 lib32-libxrandr
 lib32-libxrender
-lib32-libxt
 lib32-libxxf86vm
 lib32-llvm-amdgpu-lib-snapshot
 lib32-mesa
@@ -475,7 +470,6 @@ patch
 pciutils
 pcmciautils
 pcre
-pcsxr
 pdf2svg
 perl
 perl-digest-sha1

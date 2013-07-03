@@ -12,17 +12,9 @@ emacs-mediawiki-bzr
 emacs-multiple-cursors-git
 emacs-xclip
 emacs-yasnippet-git
-epsxe
-epsxe-plugin-gpu-mesagl
-epsxe-plugin-gpu-soft
-epsxe-plugin-gpu-xgl2
-epsxe-plugin-padjoy
-epsxe-plugin-spu-alsa
-epsxe-plugin-spu-peops-alsa
 ioquake3-git
 lib32-sdl_mixer
 lib32-smpeg
-lib-compat
 mutt-sidebar
 package-query
 sdl2
