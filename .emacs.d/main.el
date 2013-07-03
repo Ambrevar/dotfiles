@@ -513,3 +513,6 @@ has errors and/or warnings."
 
 ;; Eshell
 (setq eshell-directory-name (concat emacs-cache-folder "eshell"))
+
+;; Bookmark file to cache folder
+(setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
