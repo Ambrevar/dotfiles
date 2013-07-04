@@ -2,8 +2,9 @@
 ;; Python
 ;;==============================================================================
 
-(defcustom python-compiler ""
-  "Python compiler."
+(defcustom python-interpreter nil
+  "Python interpreter. If value is nil, the shabang will be
+checked, and if no shabang is present, `python' will be used."
   :safe 'stringp)
 
 (defun python-version ()
@@ -17,21 +18,21 @@ shebang. System `python' is assumed by default."
        ((string-match "python3" firstline) "python3")
        (t "python")))))
 
-(defun python-compile ()
+(defun python-set-interpreter ()
   "Use compile to run python programs."
   (interactive)
-  (let ((py-compiler
-         (if (equal python-compiler "")
-             (python-version)
-           python-compiler)))
-    (save-buffer)
-    (compile (concat py-compiler " '" buffer-file-name "'"))))
+  (let ((py-interpreter
+         (if python-interpreter
+             python-interpreter
+           (python-version))))
+    (set (make-local-variable 'compile-command)
+         (concat py-interpreter " " buffer-file-name))))
 
 (add-hook
  'python-mode-hook
  (lambda ()
    (set (make-local-variable 'compilation-scroll-output) t)
-   (local-set-key (kbd "<f10>") 'python-compile)) t)
+   (python-set-interpreter)))
 
 ;; Doc lookup. Requires the python.info file to be installed. See
 ;; https://bitbucket.org/jonwaltman/pydoc-info/.

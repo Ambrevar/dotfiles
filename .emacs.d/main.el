@@ -69,7 +69,6 @@
 ;; Disable suspend key since it is useless on Emacs server.
 (global-unset-key (kbd "C-z"))
 (global-unset-key (kbd "C-x C-z"))
-(global-unset-key (kbd "<f10>"))
 
 ;; For convenience.
 (setq inhibit-startup-screen t)
@@ -319,6 +318,14 @@
    (speedbar-toggle-updates)))
 
 ;; Compilation .
+(setq compilation-hide-window nil)
+(define-key my-keys-minor-mode-map (kbd "<f10>")
+  (lambda () (interactive)
+    (save-buffer)
+    (compile compile-command)
+    (when compilation-hide-window
+      (sit-for 2)
+      (delete-windows-on "*compilation*"))))
 (define-key my-keys-minor-mode-map (kbd "<f11>") 'previous-error)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
 
@@ -516,3 +523,6 @@ has errors and/or warnings."
 
 ;; Bookmark file to cache folder
 (setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
+
+;; Code browsing
+(define-key my-keys-minor-mode-map (kbd "C-M-e") (lambda () (interactive) (beginning-of-defun -1)))

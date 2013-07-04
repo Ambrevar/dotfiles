@@ -11,14 +11,14 @@ correct thing in presence of links. If it does not find FILE,
 then it shall return the name of FILE in the current directory,
 suitable for creation"
   (let ((root (expand-file-name "/"))) ; the win32 builds should translate this correctly
-    (expand-file-name file
-		      (loop
-			for d = default-directory then (expand-file-name ".." d)
-			if (file-exists-p (expand-file-name file d))
-			return d
-			if (equal d root)
-			return nil))))
-
+    (expand-file-name
+     file
+     (loop
+      for d = default-directory then (expand-file-name ".." d)
+      if (file-exists-p (expand-file-name file d))
+      return d
+      if (equal d root)
+      return nil))))
 
 (defcustom mode-cc-ldlibs "-lm -pthread"
   "[Local variable] Custom linker flags for C/C++ linkage."
@@ -28,17 +28,14 @@ suitable for creation"
   "[Local variable] Custom linker libs for C/C++ linkage."
   :safe 'stringp)
 
-
-(defun mode-cc-compile ()
+(defun cc-set-compiler ()
+  "Set C/C++ compile command to be nearest Makefile found in
+parent folders. If no Makefile is found, then a configurable
+command line is provided."
   (interactive)
   (if (get-closest-pathname)
       (set (make-local-variable 'compile-command) (format "make -k -f %s" (get-closest-pathname)))
     (set (make-local-variable 'compile-command)
-         ;; Emulate make's .c.o implicit pattern rule, but with
-         ;; different defaults for the CC, CPPFLAGS, and CFLAGS
-         ;; variables:
-         ;;   $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
-         ;; (setq compile-command
          (let
              ((is-cpp (= major-mode "c++-mode"))
               (file (file-name-nondirectory buffer-file-name)))
@@ -52,9 +49,7 @@ suitable for creation"
                      (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0"))
                    (or (getenv "LDFLAGS") mode-cc-ldflags)
                    (or (getenv "LDLIBS") mode-cc-ldlibs)
-                   file))))
-  (compile compile-command))
-
+                   file)))))
 
 ;;==============================================================================
 ;; C-mode
@@ -66,7 +61,7 @@ suitable for creation"
 (add-hook
  'c-mode-hook
  (lambda ()
-   (local-set-key (kbd "<f10>") 'mode-cc-compile)
+   (cc-set-compiler)
    (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
    (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1)))
    ;; (local-set-key "." 'semantic-complete-self-insert) ; This is a bit slow.
@@ -97,7 +92,7 @@ suitable for creation"
 (add-hook
  'c++-mode-hook
  (lambda ()
-   (local-set-key (kbd "<f10>") 'mode-cc-compile)
+   (cc-set-compiler)
    (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1)))
    (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)))
 

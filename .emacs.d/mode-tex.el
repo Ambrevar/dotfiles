@@ -32,7 +32,7 @@ If value is nil, the compiler will be tex-my-default-compiler for
 TeX mode, and latex-my-default-compiler for LaTeX mode."
   :safe 'stringp)
 
-(defcustom tex-my-masterfile nil
+(defcustom masterfile nil
   "[Local variable]
 
 The file that should be compiled."
@@ -96,7 +96,7 @@ document, you may define it here:
   \\def\\myvar{mycontent}"
   :safe 'stringp)
 
-(defun tex-my-compile ()
+(defun tex-set-compiler ()
   "Use compile to process your TeX-based document. Use a prefix
 argument to call the compiler along the '-shell-escape'
 option. This will enable the use of '\write18{<external
@@ -120,9 +120,9 @@ WARNING: the -shell-escape option is a potential security issue."
 
         ;; Master file
         (local-master
-         (if (not tex-my-masterfile)
+         (if (not masterfile)
              buffer-file-name
-           tex-my-masterfile))
+           masterfile))
 
         ;; If tex-my-startcommands has some content, we make sure it is a string
         ;; that loads the file.
@@ -134,22 +134,11 @@ WARNING: the -shell-escape option is a potential security issue."
         (local-shell-escape
          (if (equal current-prefix-arg '(4)) "-shell-escape" "")))
 
-    (let (
-          ;; Final command
-          (local-compile-command
-           (concat local-compiler " "  local-shell-escape " " tex-my-compiler-options " " local-start-cmd " \"" local-master "\"")))
+    (set (make-local-variable 'compile-command)
+         (concat local-compiler " "  local-shell-escape " " tex-my-compiler-options " " local-start-cmd " \"" local-master "\""))))
 
-      ;; (message local-compile-command) ;; Debug only.
-      (save-buffer)
-      (setq compilation-scroll-output t)
-      (compile local-compile-command)
-
-      ;; If no user interaction for 2 seconds, hide the compilation window.
-      (sit-for 2)
-      (delete-windows-on "*compilation*"))))
-
-
-(defcustom tex-my-extension-list '("aux" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy")
+(defcustom tex-my-extension-list
+  '("aux" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy")
   "List of known TeX exentsions. This list is used by 'tex-clean to purge all matching files."
   :safe 'listp)
 
@@ -160,9 +149,9 @@ but there is no warranty."
   (let (
         ;; Master file.
         (local-master
-         (if (not tex-my-masterfile)
+         (if (not masterfile)
              buffer-file-name
-           tex-my-masterfile)))
+           masterfile)))
 
     (let (
           ;; File name without extension.
@@ -189,9 +178,9 @@ your document embeds raster graphics."
   (let (
         ;; Master file.
         (local-master
-         (if (not tex-my-masterfile)
+         (if (not masterfile)
              buffer-file-name
-           tex-my-masterfile)))
+           masterfile)))
 
     (let (
           ;; Temp compressed file.
@@ -215,9 +204,9 @@ properly escaped with double-quotes in case it has spaces."
   (let (
         ;; Master file.
         (local-master
-         (if (not tex-my-masterfile)
+         (if (not masterfile)
              buffer-file-name
-           tex-my-masterfile)))
+           masterfile)))
 
     (shell-command
      (concat tex-my-viewer
@@ -231,5 +220,7 @@ properly escaped with double-quotes in case it has spaces."
  (lambda ()
    (dolist (key '("\C-c\C-f" "\C-c\C-b"))
      (local-unset-key key))
-   (local-set-key (kbd "<f10>") 'tex-my-compile)
+   (tex-set-compiler)
+   (set (make-local-variable 'compilation-scroll-output) t)
+   (set (make-local-variable 'compilation-hide-window) t)
    (local-set-key (kbd "<f9>") 'tex-pdf-view) ))
