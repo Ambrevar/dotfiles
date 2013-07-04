@@ -1,31 +1,31 @@
 # -*- mode:conf -*-
 [user]
-	email = ambrevar@gmail.com
-	name = Pierre Neidhardt
+    email = ambrevar@gmail.com
+    name = Pierre Neidhardt
 [color]
-	ui = true
+    ui = true
 [alias]
-	b = branch -vva
-	c = commit -a
-	co = checkout
-	d = diff --cached
-	l = log --stat
+    b = branch -vva
+    c = commit -a
+    co = checkout
+    d = diff --cached
+    l = log --stat
     lol =  log --graph --decorate --pretty=oneline --abbrev-commit
-	m = mergetool
-	r = remote -v
-	s = status -uno
+    m = mergetool
+    r = remote -v
+    s = status -uno
 [push]
-	default = current
+    default = current
 
 ## Ediff merge tool.
 ## See:
 ##   http://kerneltrap.org/mailarchive/git/2007/7/1/250424
 ##   http://stackoverflow.com/questions/1817370/using-ediff-as-git-mergetool
 [mergetool.ediff]
-    cmd = emacs -q -l ~/.emacs-light --eval \" (progn (defun ediff-write-merge-buffer () (let ((file ediff-merge-store-file)) (set-buffer ediff-buffer-C) (write-region (point-min) (point-max) file) (message \\\"Merge buffer saved in: %s\\\" file) (set-buffer-modified-p nil) (sit-for 1))) (setq ediff-quit-hook 'kill-emacs ediff-quit-merge-hook 'ediff-write-merge-buffer) (ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" nil \\\"$MERGED\\\"))\" 
+    cmd = emacs -q -l ~/.emacs-light --eval \" (progn (defun ediff-write-merge-buffer () (let ((file ediff-merge-store-file)) (set-buffer ediff-buffer-C) (write-region (point-min) (point-max) file) (message \\\"Merge buffer saved in: %s\\\" file) (set-buffer-modified-p nil) (sit-for 1))) (setq ediff-quit-hook 'kill-emacs ediff-quit-merge-hook 'ediff-write-merge-buffer) (ediff-merge-files-with-ancestor \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" nil \\\"$MERGED\\\"))\"
 
 [merge]
-	tool = ediff
+    tool = ediff
 
 [tig]
     line-graphics = "utf-8"
