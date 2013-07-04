@@ -91,3 +91,7 @@ if [ -n "$(command -v ssh-agent)" ]; then
     fi
     unset SSH_ENV_FILE
 fi
+
+## Wine DLL override. This removes the annoying messages for Mono and Gecko.
+export WINEDLLOVERRIDES="mscoree,mshtml="
+
