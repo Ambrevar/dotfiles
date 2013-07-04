@@ -6,23 +6,25 @@
   "Python compiler."
   :safe 'stringp)
 
-(defun is-python3-p () "Check whether we're running Python 2 or
-3. Python is assumed by default."
+(defun python-version ()
+  "Returns whether we're running Python 2 or 3 according to the
+shebang. System `python' is assumed by default."
   (let ((firstline (car (split-string (buffer-string) "\n" t))))
-    (let ((firstword (car (split-string firstline nil t))))
-      (let ((version  (if (string-match "/bin/env" firstword)
-                          (car (cdr (split-string firstline nil t)))
-                        firstword)))
-        (if (string-match "python2" version) nil t)))))
+    (if (not (string-match "^#!" firstline))
+        "python"
+      (cond
+       ((string-match "python2" firstline) "python2")
+       ((string-match "python3" firstline) "python3")
+       (t "python")))))
 
 (defun python-compile ()
   "Use compile to run python programs."
   (interactive)
   (let ((py-compiler
          (if (equal python-compiler "")
-             (if (is-python3-p)
-                 "python3" "python2")
+             (python-version)
            python-compiler)))
+    (save-buffer)
     (compile (concat py-compiler " '" buffer-file-name "'"))))
 
 (add-hook
