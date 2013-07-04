@@ -1,24 +1,23 @@
 ################################################################################
 #                           Unix Home Configuration                            #
 #                             Author: P. Neidhardt                             #
-#                               Date: 2013-05-31                               #
+#                               Date: 2013-07-04                               #
 ################################################################################
 
 Description
 ***********
 
-This repository contains scripts configuration files for various Unix programs.
-It targets Arch Linux and FreeBSD, but since these are "fundamental" Unix
-distributions, it might work for most other Unices as well. I tried hard to
+This repository contains scripts and configuration files for various Unix
+programs.  It targets Arch Linux and FreeBSD, but since these are "fundamental"
+Unix distributions, it might work for most other Unices as well. I tried hard to
 maintain universality: it should work anywhere (whatever the versions of the
-programs are) with as few modifications as possible.
+programs are installed) with as few modifications as possible.
 
 Most interesting parts include advanced configuration for Emacs, Mutt, and some
 interesting shell scripts like a video transcoding wrapper and a smart audio
 organizer using FFmpeg.
 
 ################################################################################
-
 Awesome
 *******
 Extra deps: Vicious (Linux only)
@@ -111,8 +110,8 @@ Probably the most interesting part here.
 
 *clean: remove junk files from TeX projects, home folder, etc.
 
-abs-*: helper scripts to compile pacman-based packages (using makepkg). With
-       these scripts you can recompile your whole system.
+abs-wrapper: helper script to compile pacman-based packages (using
+  makepkg). Using this you can recompile the whole system.
 
 archive: simple tar wrapper to create archive for files and folders.
 
@@ -130,8 +129,8 @@ homeinit: initialize a new home configuration, i.e. get needed files, create
 netinit: network setup. Works with wpa_supplicant. May replace any network
   manager.
 
-pacman-*: a lot of handy functions for the pacman package manager,
-  like sorting by size, dependency listing, etc.
+pacman-*: a lot of handy functions for the pacman package manager, like sorting
+  by size with grand total, file listing with size, etc.
 
 pdf*: PDF manipulation, e.g. extract pages, compress, resize to A4.
 
@@ -154,9 +153,8 @@ A lot of stuff: aliases, functions, shell options, etc.
 
 Please note that this config is mainly intended -- and tested -- for zsh.  I
 removed bash support since it is really a scourge to shell scripting. However
-most of the script and the shell configuration are POSIX shell compatible
-(tested with dash). When some advanced features were required (like arrays),
-I've set the shabang accordingly.
+most of the scripts and the shell configuration are POSIX shell compatible
+(tested with dash).
 
 TeX
 ***
@@ -181,7 +179,6 @@ Vim
 I've only been a casual Vim user, so do not expect too much from it.
 
 ################################################################################
-
 Usage
 *****
 
@@ -238,7 +235,7 @@ Emacs
 URxvt
 
 * Using the paste function from Muennich's clipboard on the same terminal where
-  text was copied will make it crash.
+  text was copied will make it hang (and crash).
 
 * There is a bug with Xft anti-aliased font that prevent w3m image preview from
   working (too bad for ranger).
