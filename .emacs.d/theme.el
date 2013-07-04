@@ -163,3 +163,15 @@
 ;;  'c-mode-common-hook
 ;;  (set-face-foreground 'compilation-column-number "magenta")
 ;; )
+
+;; Man pages
+;; TODO: man mode does not get colored because the hook does not exist.
+;; (make-face 'man-bold-face)
+;; (make-face 'man-underline-face)
+;; (set-face-foreground 'man-bold-face "red")
+;; (set-face-foreground 'man-underline-face "green")
+;; (add-hook
+;;  'man-mode-hook
+;;  (lambda ()
+;;    (set (make-local-variable 'bold) 'man-bold-face)
+;;    (set (make-local-variable 'underline) 'man-underline-face)))
