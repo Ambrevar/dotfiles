@@ -35,7 +35,13 @@ unsigned long loadfile (const char * path, char ** buffer_ptr)
         return 0;
     }
 
-    fread(buffer, 1, length, file);
+
+    if(fread(buffer, 1, length, file) == 0)
+    {
+        fclose(file);
+        return 0;
+    }
+
     buffer[length] = '\0';
     fclose(file);
 
