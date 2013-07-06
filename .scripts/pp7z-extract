@@ -27,16 +27,16 @@ PASS=''
 INPUTPATH="$PWD"
 OUTPUTPATH="$PWD"
 
-while getopts ":dhops" opt; do
+while getopts ":hi:o:fp" opt; do
     case $opt in
         h) _printhelp "$0"
             return 1 ;;
-        i) INPUTPATH="$optarg" ;;
-        o) OUTPUTPATH="$optarg" ;;
-        f) OPT_DELAFTER=true;;
+        i) INPUTPATH="$OPTARG" ;;
+        o) OUTPUTPATH="$OPTARG" ;;
+        f) OPT_DELAFTER=true ;;
         p)
             echo -n "Password: "
-            read -s PASS
+            read -s PASS ;;
         ?)
             _printhelp "$0"
             return 1
@@ -67,13 +67,13 @@ while read -r FILE; do
 	echo "Decompressing $FILE"
 
     ## We remove SOURCEFOLDER from the FILE path.
-	DESTFOLDER="$(echo "$FILE" | sed "s|$SOURCEPATH||g")"
+	DESTFOLDER="$(echo "$FILE" | sed "s|$INPUTPATH||")"
 	DESTFOLDER="$(echo "${DESTFOLDER%/*}")"
 
-    mkdir -p "$DESTPATH/$DESTFOLDER"
-	7z x -p"$PASS" "$FILE" -o"$DESTPATH/$DESTFOLDER" -y
+    mkdir -p "$OUTPUTPATH/$DESTFOLDER"
+	7z x -p"$PASS" "$FILE" -o"$OUTPUTPATH/$DESTFOLDER" -y
 
 	[ $? -eq 0 ] && $OPT_DELAFTER && rm -v "$FILE"
 done <<EOF
-$(find "$SOURCEPATH" -type f)
+$(find "$INPUTPATH" -type f)
 EOF
