@@ -51,6 +51,16 @@ command line is provided."
                    (or (getenv "LDLIBS") mode-cc-ldlibs)
                    file)))))
 
+(defun cc-clean ()
+  "Find Makefile and call the `clean' rule. If no Makefile is
+found, no action is taken. The previous `compile' command is then
+restored."
+  (interactive)
+  (when (get-closest-pathname)
+    (let ((compile-command-backup compile-command))
+      (compile (format "make -k -f %s clean" (get-closest-pathname)))
+      (setq compile-command compile-command-backup))))
+
 ;;==============================================================================
 ;; C-mode
 ;;==============================================================================
@@ -62,6 +72,7 @@ command line is provided."
  'c-mode-hook
  (lambda ()
    (cc-set-compiler)
+   (local-set-key (kbd "<f9>") 'cc-clean)
    (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
    (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1)))
    ;; (local-set-key "." 'semantic-complete-self-insert) ; This is a bit slow.
@@ -93,6 +104,7 @@ command line is provided."
  'c++-mode-hook
  (lambda ()
    (cc-set-compiler)
+   (local-set-key (kbd "<f9>") 'cc-clean)
    (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1)))
    (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)))
 
