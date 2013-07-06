@@ -1,28 +1,79 @@
 #!/usr/bin/env zsh
 
+_printhelp ()
+{
+    cat<<EOF
+Usage: ${1##*/} [-p] [-f] [-i INPUTPATH] [-o OUTPUTPATH]
+
+Extract password-protected 7z archives in one run. 7z archives are found in all
+subfolders.
+
+If password is provided, it will be used on all archives. Password will not show
+up on screen. This requires a shell with 'read -s' support. It will not work for
+the Bourne Shell.
+
+Synopsis.
+
+  -i:  Specify input folder (default to PWD).
+  -f:  Remove archive if extraction was succesful.
+  -o:  Specify ouput folder (default to PWD).
+  -p:  Ask for password.
+
+EOF
+}
+
+OPT_DELAFTER=false
+PASS=''
+INPUTPATH="$PWD"
+OUTPUTPATH="$PWD"
+
+while getopts ":dhops" opt; do
+    case $opt in
+        h) _printhelp "$0"
+            return 1 ;;
+        i) INPUTPATH="$optarg" ;;
+        o) OUTPUTPATH="$optarg" ;;
+        f) OPT_DELAFTER=true;;
+        p)
+            echo -n "Password: "
+            read -s PASS
+        ?)
+            _printhelp "$0"
+            return 1
+            ;;
+        :)
+            _printhelp "$0"
+            return 1
+            ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+if [ $# -ne 0 ]; then
+    _printhelp "$0"
+    return 1
+fi
+
 if [ -z "$(command -v 7z)" ]; then
     echo "7z needed."
     exit
 fi
 
+while read -r FILE; do
+    [ -z "$(file "$FILE" | grep '7-zip')" ] && continue
 
-if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-    cat <<EOF
-Usage: ${0##*/} FILES
+    echo "================================================================================"
+	echo "Decompressing $FILE"
 
-Extract password-protected 7z archives in one run. Password must be the same for all archives.
+    ## We remove SOURCEFOLDER from the FILE path.
+	DESTFOLDER="$(echo "$FILE" | sed "s|$SOURCEPATH||g")"
+	DESTFOLDER="$(echo "${DESTFOLDER%/*}")"
 
-This requires 'read -s'. It will not work for the Bourne Shell.
+    mkdir -p "$DESTPATH/$DESTFOLDER"
+	7z x -p"$PASS" "$FILE" -o"$DESTPATH/$DESTFOLDER" -y
+
+	[ $? -eq 0 ] && $OPT_DELAFTER && rm -v "$FILE"
+done <<EOF
+$(find "$SOURCEPATH" -type f)
 EOF
-    exit
-fi
-
-BUF=""
-echo -n "Password: "
-read -s BUF
-echo ""
-
-for i ; do
-    # 7z x -p"$BUF" "$i" >/dev/null
-    7z x -p"$BUF" "$i"
-done
