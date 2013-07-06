@@ -278,7 +278,10 @@ driconf
 dtach
 dvtm
 dwb
+ecryptfs
+ecryptfs-simple
 emacs
+encfs
 fbpdf
 fbv
 fdisk
