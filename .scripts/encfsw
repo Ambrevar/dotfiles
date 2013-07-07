@@ -13,5 +13,6 @@ if [ -w "$(command -v encfs)" ]; then
     exit
 fi
 
-[ $# -ne 2 ] && 2="${1}_dc"
-encfs "$(realpath "$1")" "$(realpath "$2")"
+MOUNTPOINT="$2"
+[ $# -ne 2 ]; MOUNTPOINT="${1}_dc"
+encfs "$(realpath "$1")" "$(realpath "$MOUNTPOINT")"
