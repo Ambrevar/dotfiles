@@ -1,11 +1,11 @@
 # $Id$
 
-# text/html; dwb -- %s
-text/html; w3m -I %{charset} -T text/html; copiousoutput;
+# text/html; w3m -I %{charset} -T text/html; copiousoutput;
+text/html; dwb %s; nametemplate=%s.html
 
 image/*; sxiv -- %s
 
-application/pdf; zathura --fork -- %s
+application/pdf; zathura -- %s
 # application/pdf; pdftotext -- %s - | less
 
 applica/msword; antiword -- %s | less
