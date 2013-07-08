@@ -16,12 +16,12 @@ unsigned long loadfile (const char * path, char ** buffer_ptr)
     }
 
     fseek(file, 0, SEEK_END);
-    unsigned long length = ftell(file);
+    long length = ftell(file);
     /* fprintf (stdout, "Note: file %s is %u bytes long.\n", path, length); */
 
     if (length > MAX_FILESIZE)
     {
-        fprintf (stderr, "%s size %u is bigger than %d bytes.\n", path, length, MAX_FILESIZE);
+        fprintf (stderr, "%s size %ld is bigger than %d bytes.\n", path, length, MAX_FILESIZE);
         fclose(file);
         return 0;
     }
