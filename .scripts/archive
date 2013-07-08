@@ -1,5 +1,7 @@
 #!/bin/sh
 
+## TODO: support for passing files as argument.
+
 _printhelp()
 {
     cat <<EOF
