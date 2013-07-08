@@ -17,6 +17,7 @@ EOF
 
 OPTION_VCS=""
 OPTION_METHOD=""
+OPTIONS="--owner=root --group=root --numeric-owner"
 while getopts ":hm:v" opt; do
     case $opt in
         h)
@@ -62,20 +63,20 @@ case $# in
         OUTPUT="${FULLPATH}-$(date +%F-%H%M%S).${ARCEXT}"
 
         (cd "${FULLPATH}/.." && \
-            tar -${ARCOPT} -cf ${OPTION_VCS} "$OUTPUT" "${FULLPATH##*/}" )
+            tar ${OPTION_VCS} ${OPTIONS} -${ARCOPT} -cf "$OUTPUT" "${FULLPATH##*/}" )
         ;;
 
     0)
         FULLPATH="$PWD"
         OUTPUT="${FULLPATH}-$(date +%F-%H%M%S).${ARCEXT}"
         (cd "${FULLPATH}/.." && \
-            tar -${ARCOPT} -cf ${OPTION_VCS} "$OUTPUT" "${FULLPATH##*/}" )
+            tar ${OPTION_VCS} ${OPTIONS} -${ARCOPT} -cf "$OUTPUT" "${FULLPATH##*/}" )
         ;;
 
     *)
         FULLPATH="$PWD"
         OUTPUT="${FULLPATH}/${FULLPATH##*/}-$(date +%F-%H%M%S).${ARCEXT}"
 
-        tar -${ARCOPT} -cf ${OPTION_VCS} "$OUTPUT" "$@"
+        tar ${OPTION_VCS} ${OPTIONS} -${ARCOPT} -cf "$OUTPUT" "$@"
         ;;
 esac
