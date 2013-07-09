@@ -97,7 +97,6 @@ restored."
 ;;   (setq tab-width 4)
 ;;   (setq indent-tabs-mode nil)
 ;; )
-
 ;; (add-hook 'c++-mode-hook 'vlad-cc-style)
 
 (add-hook
@@ -123,8 +122,7 @@ restored."
            (ident (concat (upcase nopath) "_H")))
       (concat "#ifndef " ident "\n"
               "#define " ident  " 1\n\n\n"
-              "\n\n#endif // " ident "\n"))
-    ))
+              "\n\n#endif // " ident "\n"))))
 
 ;; auto insert C/C++
 (define-auto-insert
@@ -140,8 +138,7 @@ restored."
            (nopath (file-name-nondirectory noext))
            (ident (concat nopath ".h")))
       (if (file-exists-p ident)
-          (concat "#include \"" ident "\"\n")))
-    ))
+          (concat "#include \"" ident "\"\n")))))
 
 ;;==============================================================================
 ;; Qt semantic support

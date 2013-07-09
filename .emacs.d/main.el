@@ -2,49 +2,6 @@
 ;; MAIN
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; rc files support
-(setq auto-mode-alist (append '(("rc\\'" . sh-mode)) auto-mode-alist))
-
-;; Shell support
-;; We do not put 'sh' only because it could get messy. Emacs knows it anyway.
-(setq auto-mode-alist
-      (append
-       '(("\\(bash\\'\\|zsh\\'\\|csh\\'\\|tcsh\\'\\|ksh\\'\\)" . sh-mode))
-       auto-mode-alist))
-
-;; Read Matlab files in Octave mode.
-(setq auto-mode-alist (append '(("\\.m\\'" . octave-mode)) auto-mode-alist))
-
-;; Read pl files in prolog mode.
-;; WARNING: this extension is shared with Perl.
-;; (setq auto-mode-alist (append '(("\\.pl\\'" . prolog-mode)) auto-mode-alist))
-
-;; Mutt support.
-(setq auto-mode-alist (append '(("/tmp/mutt.*" . mail-mode)) auto-mode-alist))
-
-;; Arch Linux PKGBUILD.
-(setq auto-mode-alist (append '(("PKGBUILD" . sh-mode)) auto-mode-alist))
-
-;; README files.
-(setq auto-mode-alist (append '(("README" . text-mode)) auto-mode-alist))
-
-;; Lex/Flex + Yacc/Bison mode fallback to c-mode.
-(setq auto-mode-alist (append '(("\\.l\\'" . c-mode)) auto-mode-alist))
-(setq auto-mode-alist (append '(("\\.yy?\\'" . c-mode)) auto-mode-alist))
-
-;; GLSL fallback to C mode.
-(add-to-list 'auto-mode-alist '("\\.vert\\'" . c-mode))
-(add-to-list 'auto-mode-alist '("\\.frag\\'" . c-mode))
-(add-to-list 'auto-mode-alist '("\\.glsl\\'" . c-mode))
-
-;; Subtitles support.
-(setq auto-mode-alist (append '(("\\.srt\\'" . text-mode)) auto-mode-alist))
-
-;; Git commit meessages.
-(setq auto-mode-alist (append '(("COMMIT_EDITMSG\\'" . conf-mode)) auto-mode-alist))
-
-;;==============================================================================
-
 ;; Remember last cursor position.
 (require 'saveplace)
 (setq save-place-file (concat emacs-cache-folder "saveplace"))
@@ -328,6 +285,8 @@
       (delete-windows-on "*compilation*"))))
 (define-key my-keys-minor-mode-map (kbd "<f11>") 'previous-error)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
+;; Code browsing
+(define-key my-keys-minor-mode-map (kbd "C-M-e") (lambda () (interactive) (beginning-of-defun -1)))
 
 ;; Just because XML is ugly.
 (add-hook
@@ -367,8 +326,16 @@ has errors and/or warnings."
 
 ;; Shell allow comment indenation.
 (setq sh-indent-comment t)
+;; Eshell
+(setq eshell-directory-name (concat emacs-cache-folder "eshell"))
+;; We do not put 'sh' only because it could get messy. Emacs knows it anyway.
+(add-to-list 'auto-mode-alist '("\\(bash\\'\\|zsh\\'\\|csh\\'\\|tcsh\\'\\|ksh\\'\\)" . sh-mode))
+(add-to-list 'auto-mode-alist '("rc\\'" . sh-mode))
 
-;; GLSL support.
+;; GLSL fallback to C mode.
+(add-to-list 'auto-mode-alist '("\\.vert\\'" . c-mode))
+(add-to-list 'auto-mode-alist '("\\.frag\\'" . c-mode))
+(add-to-list 'auto-mode-alist '("\\.glsl\\'" . c-mode))
 (autoload 'glsl-mode "glsl-mode" nil t)
 (when (boundp 'glsl-mode)
   (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
@@ -376,7 +343,7 @@ has errors and/or warnings."
   (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode)))
 
 ;; Lua
-(setq auto-mode-alist (cons '("\.lua$" . lua-mode) auto-mode-alist))
+(add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
 (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
 
 ;; Zlc - Zsh style completion.
@@ -398,7 +365,9 @@ has errors and/or warnings."
 (if (require 'xclip nil t)
     (turn-on-xclip))
 
-;; Bison/flex
+;; Bison/flex -- Fallback to c-mode.
+(add-to-list 'auto-mode-alist '("\\.yy?\\'" . c-mode)))
+(add-to-list 'auto-mode-alist '("\\.l\\'" . c-mode)))
 (if (require 'bison-mode nil t)
     (add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode)))
 (if (require 'flex-mode nil t)
@@ -518,11 +487,23 @@ has errors and/or warnings."
    ;; (local-set-key (kbd "<right>") 'dired-find-file)
    (local-set-key (kbd "b") 'dired-up-directory)))
 
-;; Eshell
-(setq eshell-directory-name (concat emacs-cache-folder "eshell"))
-
 ;; Bookmark file to cache folder
 (setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
 
-;; Code browsing
-(define-key my-keys-minor-mode-map (kbd "C-M-e") (lambda () (interactive) (beginning-of-defun -1)))
+;; Read Matlab files in Octave mode.
+(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+
+;; Mutt support.
+(add-to-list 'auto-mode-alist '("/tmp/mutt.*" . mail-mode))
+
+;; Arch Linux PKGBUILD.
+(add-to-list 'auto-mode-alist '("PKGBUILD" . sh-mode))
+
+;; README files.
+(add-to-list 'auto-mode-alist '("README" . text-mode))
+
+;; Subtitles support.
+(add-to-list 'auto-mode-alist '("\\.srt\\'" . text-mode))
+
+;; Git commit meessages.
+(add-to-list 'auto-mode-alist '("COMMIT_EDITMSG\\'" . conf-mode))
