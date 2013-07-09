@@ -23,17 +23,16 @@
 (set-face-background  'isearch                     "#00002a" )
 (set-face-foreground  'isearch                     nil )
 (set-face-background  'isearch-lazy-highlight-face "#3a3a3a" )
-(if (>= emacs-major-version 24)
-    (progn
+(when (>= emacs-major-version 24)
       (set-face-foreground  'error                       "red")
-      (set-face-bold-p      'error                       t)))
+      (set-face-bold-p      'error                       t))
 
 
 ;; Line numbers. Graphic version has a gray bar separating text from line
 ;; numbers, so we can leave the background black.
 (if (display-graphic-p)
     (set-face-background  'shadow                      "black" )
-    (set-face-background  'shadow                      "#1c1c1c" ))
+  (set-face-background  'shadow                      "#1c1c1c" ))
 
 ;; Programming
 (set-face-foreground  'font-lock-builtin-face           "#2a80d4" )
@@ -85,7 +84,7 @@
    (set-face-foreground 'ediff-odd-diff-C nil)))
 
 ;; Show paren.
-(when (boundp 'show-paren-match-face)
+(when (boundp 'show-paren-delay)
   (set-face-background 'show-paren-match-face (face-background 'default))
   (set-face-foreground 'show-paren-match-face "#def")
   (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))

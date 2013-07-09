@@ -2,9 +2,10 @@
 ;; C/C++
 ;;==============================================================================
 (require 'compile)
-(require 'cl) ; If you don't have it already
 
-(defun* get-closest-pathname (&optional (file "Makefile"))
+;; Maybe we do not need common lisp for this. TODO: remove it when sure.
+(require 'cl) ; If you don't have it already
+(defun* get-closest-pathname-cl (&optional (file "Makefile"))
   "Determine the pathname of the first instance of FILE starting
 from the current directory towards root.  This may not do the
 correct thing in presence of links. If it does not find FILE,
@@ -20,11 +21,26 @@ suitable for creation"
       if (equal d root)
       return nil))))
 
+(defun get-closest-pathname (&optional file)
+  "Determine the pathname of the first instance of FILE starting
+from the current directory towards root.  This may not do the
+correct thing in presence of links. If it does not find FILE,
+then it shall return the name of FILE in the current directory,
+suitable for creation"
+  (let ((current-dir default-directory) (looping t) (makefile (or file "Makefile")))
+    (while (progn
+             (if (file-exists-p (expand-file-name makefile current-dir))
+                 (setq looping nil)
+               (setq current-dir (expand-file-name ".." current-dir)))
+             (and looping (not (equal current-dir "/")))))
+    (if (equal current-dir "/") nil (expand-file-name makefile current-dir))))
+
+
 (defcustom mode-cc-ldlibs "-lm -pthread"
   "[Local variable] Custom linker flags for C/C++ linkage."
   :safe 'stringp)
 
-(defcustom mode-cc-ldgflags ""
+(defcustom mode-cc-ldflags ""
   "[Local variable] Custom linker libs for C/C++ linkage."
   :safe 'stringp)
 
@@ -37,19 +53,19 @@ command line is provided."
       (set (make-local-variable 'compile-command) (format "make -k -f %s" (get-closest-pathname)))
     (set (make-local-variable 'compile-command)
          (let
-             ((is-cpp (= major-mode "c++-mode"))
+             ((is-cpp (equal major-mode "c++-mode"))
               (file (file-name-nondirectory buffer-file-name)))
-           (format "%s -o %s %s %s %s"
+           (format "%s %s -o %s %s %s %s"
                    (if is-cpp
                        (or (getenv "CPP") "g++")
                      (or (getenv "CC") "gcc"))
+                   file
                    (file-name-sans-extension file)
                    (if is-cpp
                        (or (getenv "CPPFLAGS") "-Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0")
                      (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0"))
                    (or (getenv "LDFLAGS") mode-cc-ldflags)
-                   (or (getenv "LDLIBS") mode-cc-ldlibs)
-                   file)))))
+                   (or (getenv "LDLIBS") mode-cc-ldlibs))))))
 
 (defun cc-clean ()
   "Find Makefile and call the `clean' rule. If no Makefile is
