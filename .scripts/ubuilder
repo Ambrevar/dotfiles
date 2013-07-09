@@ -5,7 +5,15 @@ if [ $# -ne 1 ] || [ "$1" = "-h" ]; then
 Usage: ${0##*/} PKGBUILD
 
 Convert an Arch Linux PKGBUILD to a univesral standalone bash script. (The
-infamous 'bash' is assumed because PKGBUILD are bash scripts.)
+infamous 'bash' is assumed because PKGBUILD are bash scripts.)  The resulting
+script tries to resemble makepkg build process when it makes sense. There is no
+dependency resolution because we cannot guess the package names of the target
+system.
+
+Differences with makepkg
+* Parameters are not the same.
+* The output may differ.
+* The fakeroot environment lies directly in \$pkgdir, not in \$pkgdir/\$pkgname.
 
 EOF
     exit
@@ -47,121 +55,135 @@ fi
 cat "$1" | sed -e 's|--prefix=/usr|--prefix=/usr/local|g' \
      -e 's|PREFIX=/usr|PREFIX=/usr/local|g' >> "$UBUILD"
 
-echo '
-################################################################################
-
-_ROOT="$(realpath "$0")"
-_ROOT="${_ROOT%/*}"
-srcdir=src
-pkgdir=pkg
-init()
-{
-    mkdir -p "$_ROOT/$srcdir"
-    mkdir -p "$_ROOT/$pkgdir"
-
-    srcdir="$(realpath "$srcdir")"
-    pkgdir="$(realpath "$pkgdir")"
-}
-
-fetch()
-{
-    for i in $source; do
-        echo "[$i]"
-        if [ $(echo $i | grep -c "/") -ne 0 ]; then
-            FILE="${i##*/}"
-
-            ## TODO: add support for DLAGENT
-            wget "$OPT_FORCE" "$i" -O "$FILE"
-	        case "$FILE" in
-		        *.tar.bz2|*.tbz2) CODEC="j";;
-		        *.tar.gz|*.tgz)   CODEC="z";;
-		        *.tar.xz|*.txz)   CODEC="J";;
-		        *)  echo "[$1]: unrecognized file compression"
-                    return 1;;
-	        esac
-
-            ## TODO: checksum support.
-            tar xvzf "$FILE" -C "$srcdir"
-        fi
-    done
-}
-
-cleanse ()
-{
-    (cd "$pkgdir" && \
-        find . -type f -executable -exec strip -s {} \; \
-        )
-}
-
-clean ()
-{
-rm -r "$srcdir" "$pkgdir"
-}
-
-
-compress()
-{
-    tar cvJf "$pkgname-$pkgver.tar.xz" -C "$pkgdir" usr/ --owner=root --group=root
-}
-
-_printhelp ()
-{
-    cat <<EOE
-Usage: ${1##*/} [OPTIONS]
-
-This script can perform multiple operations:
-  1. Fetch source code.
-  2. Build.
-  3. Create package.
-  4. Clean folder from build data.
-Default operation is to fetch source code if required.
-
-Options:
-
-  -b:  Build.
-  -c:  Clean source folders from temp file (keep upstream source and built package).
-  -f:  Force operation (overwrite, rebuild, reinstall).
-  -h:  Display this help.
-  -p:  Create package.
-
-EOE
-}
-
-OPT_FORCE="nc"
-OPT_BUILD=false
-OPT_PACKAGE=false
-OPT_CLEAN=false
-
-while getopts ":bcfhp" opt; do
-    case $opt in
-        b)
-            OPT_BUILD=true ;;
-        c)
-            OPT_CLEAN=true ;;
-        f)
-            OPT_FORCE="" ;;
-        h)
-            _printhelp "$0"
-            exit 1 ;;
-        p)
-            OPT_PACKAGE="" ;;
-        ?)
-            _printhelp "$0"
-            exit 1 ;;
-        :)
-            echo "Missing argument."
-            _printhelp "$0"
-            exit 1 ;;
-    esac
-done
-shift $(($OPTIND - 1))
-
-init
-fetch
-
-if $OPT_BUILD; then (cd "$srcdir" && build); fi
-if $OPT_PACKAGE; then (cd "$srcdir" && package) && cleanse && compress; fi
-if $OPT_CLEAN; then clean; fi
-' >> "$UBUILD"
+echo 'IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKCl9ST09UPSIkKHJlYWxwYXRoICIkMCIpIgpfUk9PVD0i
+JHtfUk9PVCUvKn0iCnNyY2Rpcj1zcmMKcGtnZGlyPXBrZwoKRExBR0VOVFM9KCdmdHA6Oi91c3Iv
+YmluL2N1cmwgLWZDIC0gLS1mdHAtcGFzdiAtLXJldHJ5IDMgLS1yZXRyeS1kZWxheSAzIC1vICVv
+ICV1JwogICAgICAgICAgJ2h0dHA6Oi91c3IvYmluL2N1cmwgLWZMQyAtIC0tcmV0cnkgMyAtLXJl
+dHJ5LWRlbGF5IDMgLW8gJW8gJXUnCiAgICAgICAgICAnaHR0cHM6Oi91c3IvYmluL2N1cmwgLWZM
+QyAtIC0tcmV0cnkgMyAtLXJldHJ5LWRlbGF5IDMgLW8gJW8gJXUnCiAgICAgICAgICAncnN5bmM6
+Oi91c3IvYmluL3JzeW5jIC16ICV1ICVvJwogICAgICAgICAgJ3NjcDo6L3Vzci9iaW4vc2NwIC1D
+ICV1ICVvJykKCklOREVOVD0nICAgICcKbXNnICgpCnsKICAgIGVjaG8gIiQodHB1dCBib2xkKSQo
+dHB1dCBzZXRmIDIpPT0+JCh0cHV0IHNldGYgNykgJDEiCiAgICBzaGlmdCAxCiAgICBmb3IgaTsg
+ZG8KICAgICAgICBlY2hvICIke0lOREVOVH0kaSIKICAgIGRvbmUKICAgIGVjaG8gLW4gIiQodHB1
+dCBzZ3IwKSIKfQoKbXNnMiAoKQp7CiAgICBlY2hvICIkKHRwdXQgYm9sZCkkKHRwdXQgc2V0ZiAx
+KSAgLT4kKHRwdXQgc2V0ZiA3KSAkMSIKICAgIHNoaWZ0IDEKICAgIGZvciBpOyBkbwogICAgICAg
+IGVjaG8gIiR7SU5ERU5UfSRpIgogICAgZG9uZQogICAgZWNobyAtbiAiJCh0cHV0IHNncjApIgp9
+Cgp3YXJuaW5nICgpCnsKICAgIGVjaG8gIiQodHB1dCBib2xkKSQodHB1dCBzZXRmIDYpPT0+IFdB
+Uk5JTkc6JCh0cHV0IHNldGYgNykgJDEiCiAgICBzaGlmdCAxCiAgICBmb3IgaTsgZG8KICAgICAg
+ICBlY2hvICIke0lOREVOVH0kaSIKICAgIGRvbmUKICAgIGVjaG8gLW4gIiQodHB1dCBzZ3IwKSIK
+fQoKZXJyb3IgKCkKewogICAgZWNobyAiJCh0cHV0IGJvbGQpJCh0cHV0IHNldGYgNCk9PT4gRVJS
+T1I6JCh0cHV0IHNldGYgNykgJDEiCiAgICBzaGlmdCAxCiAgICBmb3IgaTsgZG8KICAgICAgICBl
+Y2hvICIke0lOREVOVH0kaSIKICAgIGRvbmUKICAgIGVjaG8gLW4gIiQodHB1dCBzZ3IwKSIKfQoK
+X2luaXQoKQp7CiAgICBta2RpciAtcCAiJF9ST09ULyRzcmNkaXIiCiAgICBta2RpciAtcCAiJF9S
+T09ULyRwa2dkaXIiCgogICAgc3JjZGlyPSIkKHJlYWxwYXRoICIkc3JjZGlyIikiCiAgICBwa2dk
+aXI9IiQocmVhbHBhdGggIiRwa2dkaXIiKSIKfQoKX2xpc3RkZXBzKCkKewogICAgbXNnICIkcGtn
+bmFtZSAkcGtndmVyLSRwa2dyZWwiCiAgICBtc2cgIlJ1bnRpbWUgZGVwZW5kZW5jaWVzIgogICAg
+cHJpbnRmIC0tICclc1xuJyAiJHtkZXBlbmRzW0BdfSIKICAgIG1zZyAiQnVpbGR0aW1lIGRlcGVu
+ZGVuY2llcyIKICAgIHByaW50ZiAtLSAnJXNcbicgIiR7bWFrZWRlcGVuZHNbQF19IgogICAgbXNn
+ICJPcHRpb25hbCBkZXBlbmRlbmNpZXMiCiAgICBwcmludGYgLS0gJyVzXG4nICIke29wdGRlcGVu
+ZHNbQF19Igp9CgpfZmV0Y2goKQp7CiAgICBtc2cgIlJldHJpZXZpbmcgc291cmNlcy4uLiIKCiAg
+ICBmb3IgaSBpbiAkKHNlcSAwICQoKCR7I3NvdXJjZVsqXX0gLTEpKSk7IGRvCiAgICAgICAgVVJJ
+PSIke3NvdXJjZVskaV19IgogICAgICAgIGlmIFsgJChlY2hvICIkVVJJIiB8IGdyZXAgLWMgIi8i
+KSAtbmUgMCBdOyB0aGVuCiAgICAgICAgICAgIEZJTEU9IiR7VVJJIyMqL30iCgogICAgICAgICAg
+ICAjIyBUT0RPOiBhZGQgc3VwcG9ydCBmb3IgRExBR0VOVAogICAgICAgICAgICBtc2cyICJEb3du
+bG9hZGluZyAkRklMRS4uLiIKICAgICAgICAgICAgd2dldCAiJE9QVF9GT1JDRSIgIiRVUkkiIC1P
+ICIkRklMRSIKCiAgICAgICAgICAgICMjIFN0cmFuZ2VseSBlbm91Z2gsIHdnZXQgd2lsbCBub3Qg
+cmV0dXJuIDAgb24gc3VjY2Vzcy4gT24gZXJyb3IsIGl0CiAgICAgICAgICAgICMjIHdpbGwgc3Rp
+bGwgY3JlYXRlIGEgMC1ieXRlIGZpbGUuCiAgICAgICAgICAgIGlmIFsgJChkdSAtc2IgIiRGSUxF
+IiB8IGF3ayAne3ByaW50ICQxfScpIC1lcSAwIF07IHRoZW4KICAgICAgICAgICAgICAgIGVycm9y
+ICJGYWlsdXJlIHdoaWxlIGRvd25sb2FkaW5nICRGSUxFIiAiQWJvcnRpbmcuLi4iCiAgICAgICAg
+ICAgICAgICBleGl0IDEKICAgICAgICAgICAgZmkKCiAgICAgICAgZmkKICAgIGRvbmUKfQoKX2No
+ZWNrc3VtICgpCnsKICAgIGlmICRPUFRfQ0hFQ0tTS0lQOyB0aGVuCiAgICAgICAgd2FybmluZyAi
+U2tpcHBpbmcgdmVyaWZpY2F0aW9uIG9mIHNvdXJjZSBmaWxlIGNoZWNrc3Vtcy4iCiAgICAgICAg
+cmV0dXJuCiAgICBmaQoKICAgIFJFU1VMVD10cnVlCgogICAgY2FzZSAkeyNzb3VyY2VbKl19IGlu
+CiAgICAgICAgJHsjbWQ1c3Vtc1sqXX0pCiAgICAgICAgICAgIENIRUNLU1VNTUVSPW1kNXN1bTs7
+CiAgICAgICAgJHsjc2hhMXN1bXNbKl19KQogICAgICAgICAgICBDSEVDS1NVTU1FUj1zaGExc3Vt
+OzsKICAgICAgICAkeyNzaGEyNTZzdW1zWypdfSkKICAgICAgICAgICAgQ0hFQ0tTVU1NRVI9c2hh
+MjU2c3VtOzsKICAgICAgICAkeyNzaGEzODRzdW1zWypdfSkKICAgICAgICAgICAgQ0hFQ0tTVU1N
+RVI9c2hhMzg0c3VtOzsKICAgICAgICAkeyNzaGE1MTJzdW1zWypdfSkKICAgICAgICAgICAgQ0hF
+Q0tTVU1NRVI9c2hhNTEyc3VtOzsKICAgICAgICAqKQogICAgICAgICAgICBlcnJvciAiSW50ZWdy
+aXR5IGNoZWNrcyBhcmUgZWl0aGVyIG1pc3Npbmcgb3IgZGlmZmVyIGluIHNpemUuIgogICAgICAg
+ICAgICBleGl0IDE7OwogICAgZXNhYwoKICAgIG1zZyAiVmFsaWRhdGluZyBzb3VyY2UgZmlsZXMg
+d2l0aCAke0NIRUNLU1VNTUVSfXMuLi4iCgogICAgZm9yIGkgaW4gJChzZXEgMCAkKCgkeyNzb3Vy
+Y2VbKl19IC0xKSkpOyBkbwogICAgICAgIEZJTEU9IiR7c291cmNlWyRpXSMjKi99IgogICAgICAg
+IENIRUNLU1VNPSIkKCRDSEVDS1NVTU1FUiAiJEZJTEUiIHwgY3V0IC1mMSAtZCcgJykiCgogICAg
+ICAgIGVjaG8gLW4gIiRJTkRFTlQkRklMRSAuLi4gIgoKICAgICAgICAjIyBOb3RlOiBoZXJlIHdl
+IHRha2UgY2FyZSB0byBjb250cm9sIGV4cGFuc2lvbiBhdCB0aGUgcmlnaHQgdGltZS4KICAgICAg
+ICBldmFsIHRlc3QgJyRDSEVDS1NVTScgPSAnJHsnJHtDSEVDS1NVTU1FUn0nc1skaV19JwogICAg
+ICAgIGlmIFsgJD8gLWVxIDAgXTsgdGhlbgogICAgICAgICAgICBlY2hvICJQYXNzZWQiCiAgICAg
+ICAgZWxzZQogICAgICAgICAgICBldmFsIHRlc3QgJyR7JyR7Q0hFQ0tTVU1NRVJ9J3NbJGldfScg
+PSAnU0tJUCcKICAgICAgICAgICAgaWYgWyAkPyAtZXEgMCBdOyB0aGVuCiAgICAgICAgICAgICAg
+ICBlY2hvICJTa2lwcGVkIgogICAgICAgICAgICBlbHNlCiAgICAgICAgICAgICAgICBlY2hvICJG
+QUlMRUQiCiAgICAgICAgICAgICAgICBSRVNVTFQ9ZmFsc2UKICAgICAgICAgICAgZmkKICAgICAg
+ICBmaQoKCiAgICBkb25lCgogICAgaWYgISAkUkVTVUxUOyB0aGVuCiAgICAgICAgZXJyb3IgIk9u
+ZSBvciBtb3JlIGZpbGVzIGRpZCBub3QgcGFzcyB0aGUgdmFsaWRpdHkgY2hlY2shIgogICAgICAg
+IGV4aXQgMQogICAgZmkKfQoKX2V4dHJhY3QgKCkKewogICAgbXNnICJFeHRyYWN0aW5nIHNvdXJj
+ZXMuLi4iCiAgICBmb3IgaSBpbiAkKHNlcSAwICQoKCR7I3NvdXJjZVsqXX0gLTEpKSk7IGRvCiAg
+ICAgICAgRklMRT0iJHtzb3VyY2VbJGldIyMqL30iCgkgICAgY2FzZSAiJEZJTEUiIGluCgkJICAg
+ICoudGFyLmJ6MnwqLnRiejIpCiAgICAgICAgICAgICAgICBtc2cyICJFeHRyYWN0aW5nICRGSUxF
+IHdpdGggdGFyIgogICAgICAgICAgICAgICAgdGFyIHhqZiAiJEZJTEUiIC1DICIkc3JjZGlyIjs7
+CgkJICAgICoudGFyLmd6fCoudGd6KQogICAgICAgICAgICAgICAgbXNnMiAiRXh0cmFjdGluZyAk
+RklMRSB3aXRoIGJzZHRhZCIKICAgICAgICAgICAgICAgIHRhciB4emYgIiRGSUxFIiAtQyAiJHNy
+Y2RpciI7OwoJCSAgICAqLnRhci54enwqLnR4eikKICAgICAgICAgICAgICAgIG1zZzIgIkV4dHJh
+Y3RpbmcgJEZJTEUgd2l0aCBic2R0YWQiCiAgICAgICAgICAgICAgICB0YXIgeEpmICIkRklMRSIg
+LUMgIiRzcmNkaXIiOzsKICAgICAgICAgICAgKikKICAgICAgICAgICAgICAgIGxuIC1ycyAiJEZJ
+TEUiICIkc3JjZGlyIjs7CgkgICAgZXNhYwogICAgZG9uZQp9CgpfYnVpbGRob29rKCkKewogICAg
+bXNnICJTdGFydGluZyBidWlsZCgpLi4uIgogICAgKGNkICIkc3JjZGlyIiAmJiBidWlsZCkKfQoK
+X2NsZWFuc2UgKCkKewogICAgIyMgVE9ETzogaW1wbGVtZW50IFB1cmdpbmcgdW53YW50ZWQgZmls
+ZXMuLi4KICAgICMgUFVSR0VfVEFSR0VUUz0odXNyL3ssc2hhcmV9L2luZm8vZGlyIC5wYWNrbGlz
+dCAqLnBvZCkKCiAgICBtc2cgIlRpZHlpbmcgaW5zdGFsbC4uLiIKICAgIChjZCAiJHBrZ2RpciIg
+JiYgXAogICAgICAgIG1zZzIgIkNvbXByZXNzaW5nIG1hbiBhbmQgaW5mbyBwYWdlcy4uLiIgJiYg
+XAogICAgICAgIGZpbmQgLiAtdHlwZSBmIC1pbmFtZSAnKi5bMC05XScgLWV4ZWMgZ3ppcCB7fSBc
+OyAmJiBcCiAgICAgICAgbXNnMiAiU3RyaXBwaW5nIHVubmVlZGVkIHN5bWJvbHMgZnJvbSBiaW5h
+cmllcyBhbmQgbGlicmFyaWVzLi4uIiAmJiBcCiAgICAgICAgZmluZCAuIC10eXBlIGYgLWV4ZWN1
+dGFibGUgLWV4ZWMgc3RyaXAgLXMge30gXDsgXAogICAgICAgICkKfQoKX2NvbXByZXNzKCkKewog
+ICAgbXNnICJDcmVhdGluZyBwYWNrYWdlIFwiJHBrZ25hbWVcIi4uLiIKCiAgICBVTklOUz0iJHBr
+Z25hbWUtJHBrZ3Zlci0kcGtncmVsLXVuaW5zdGFsbC5zaCIKICAgIG1zZzIgIkdlbmVyYXRpbmcg
+JFVOSU5TLi4uIgogICAgZWNobyAnIyEvYmluL3NoJyA+ICIkVU5JTlMiCiAgICAoY2QgIiRwa2dk
+aXIiICYmIFwKICAgICAgICBmaW5kICogLXR5cGUgZiAtZXhlYyBlY2hvICJybSAvInt9IFw7ID4+
+ICIuLi8uLi8kVU5JTlMiICYmIFwKICAgICAgICBmaW5kICogLXR5cGUgZCAtZXhlYyBlY2hvICJy
+bWRpciAvInt9IFw7ID4+ICIuLi8uLi8kVU5JTlMiCiAgICApCiAgICBjaG1vZCAreCAiJFVOSU5T
+IgoKICAgIG1zZzIgIkNvbXByZXNzaW5nIHBhY2thZ2UuLi4iCiAgICAoY2QgIiRwa2dkaXIiICYm
+IHRhciAtLW93bmVyPXJvb3QgLS1ncm91cD1yb290IC0tbnVtZXJpYy1vd25lciAtY0pmICIuLi8k
+cGtnbmFtZS0kcGtndmVyLSRwa2dyZWwudGFyLnh6IiAqKQp9CgpfcGFja2FnZWhvb2soKQp7CiAg
+ICBpZiAkT1BUX05PQ0xPQkJFUiAmJiBbICQobHMgLWExICIkcGtnZGlyIiB8IHdjIC1sKSAtbmUg
+MiBdOyB0aGVuCiAgICAgICAgZXJyb3IgIkEgcGFja2FnZSBoYXMgYWxyZWFkeSBiZWVuIGJ1aWx0
+LiAodXNlIC1mIHRvIG92ZXJ3cml0ZSkiCiAgICAgICAgZXhpdCAxCiAgICBmaQoKICAgIHJtIC1y
+ZiAiJHBrZ2RpciIKCiAgICBtc2cgIlN0YXJ0aW5nIHBhY2thZ2UoKS4uLiIKICAgIChjZCAiJHNy
+Y2RpciIgJiYgcGFja2FnZSkKICAgIF9jbGVhbnNlCiAgICBfY29tcHJlc3MKfQoKX2NsZWFuICgp
+CnsKICAgIG1zZyAiQ2xlYW5pbmcgdXAuLi4iCiAgICBybSAtciAiJHNyY2RpciIgIiRwa2dkaXIi
+Cn0KCl9pbnN0YWxsKCkKewogICAgbXNnICJJbnN0YWxsaW5nIHBhY2thZ2UgJHBrZ25hbWUuLi4i
+CiAgICAjIyBUT0RPOiBmaXggcGVybWl0aW9ucy4KICAgICMgc3VkbyB0YXIgeGYgIiRwa2duYW1l
+LSRwa2d2ZXItJHBrZ3JlbC50YXIueHoiIC1DICIvIgp9CgpfcHJpbnRoZWxwICgpCnsKICAgIGNh
+dCA8PEVPRQpVc2FnZTogJHsxIyMqL30gW09QVElPTlNdCgpQb3J0IGJ1aWxkZXIgZm9yICRwa2du
+YW1lICRwa2d2ZXIuCgpUaGlzIHNjcmlwdCBjYW4gcGVyZm9ybSBtdWx0aXBsZSBvcGVyYXRpb25z
+OgogIDEuIEZldGNoIHNvdXJjZSBjb2RlLgogIDIuIEJ1aWxkLgogIDMuIENyZWF0ZSBwYWNrYWdl
+LgogIDQuIENsZWFuIGZvbGRlciBmcm9tIGJ1aWxkIGRhdGEuCkRlZmF1bHQgb3BlcmF0aW9uIGlz
+IHRvIGZldGNoIHNvdXJjZSBjb2RlIGlmIHJlcXVpcmVkLgoKT3B0aW9uczoKCiAgLWI6ICBCdWls
+ZC4KICAtYzogIENsZWFuIHNvdXJjZSBmb2xkZXJzIGZyb20gdGVtcCBmaWxlIChrZWVwIHVwc3Ry
+ZWFtIHNvdXJjZSBhbmQgYnVpbHQgcGFja2FnZSkuCiAgLWQ6ICBMaXN0IGRlcGVuZGVuY2llcyBh
+bmQgZXhpdC4KICAtZjogIEZvcmNlIG9wZXJhdGlvbiAob3ZlcndyaXRlLCByZWJ1aWxkLCByZWlu
+c3RhbGwpLgogIC1oOiAgRGlzcGxheSB0aGlzIGhlbHAuCiAgLWk6ICBJbnN0YWxsLgogIC1SOiAg
+Q3JlYXRlIHBhY2thZ2UuCiAgLXM6ICBTa2lwIGludGVncml0eSBjaGVja3MuCgpFT0UKfQoKT1BU
+X0ZPUkNFPSJuYyIKT1BUX05PQ0xPQkJFUj10cnVlCgpPUFRfQlVJTEQ9ZmFsc2UKT1BUX1BBQ0tB
+R0U9ZmFsc2UKT1BUX0lOU1RBTEw9ZmFsc2UKT1BUX0NMRUFOPWZhbHNlCk9QVF9DSEVDS1NLSVA9
+ZmFsc2UKCndoaWxlIGdldG9wdHMgIjpiY2RmaGlScyIgb3B0OyBkbwogICAgY2FzZSAkb3B0IGlu
+CiAgICAgICAgYikKICAgICAgICAgICAgT1BUX0JVSUxEPXRydWUgOzsKICAgICAgICBjKQogICAg
+ICAgICAgICBPUFRfQ0xFQU49dHJ1ZSA7OwogICAgICAgIGQpCiAgICAgICAgICAgIF9saXN0ZGVw
+cwogICAgICAgICAgICBleGl0OzsKICAgICAgICBmKQogICAgICAgICAgICBPUFRfRk9SQ0U9IiIK
+ICAgICAgICAgICAgT1BUX05PQ0xPQkJFUj1mYWxzZSA7OwogICAgICAgIGgpCiAgICAgICAgICAg
+IF9wcmludGhlbHAgIiQwIgogICAgICAgICAgICBleGl0IDEgOzsKICAgICAgICBpKQogICAgICAg
+ICAgICBPUFRfSU5TVEFMTD10cnVlIDs7CiAgICAgICAgUikKICAgICAgICAgICAgT1BUX1BBQ0tB
+R0U9dHJ1ZSA7OwogICAgICAgIHMpCiAgICAgICAgICAgIE9QVF9DSEVDS1NLSVA9dHJ1ZSA7Owog
+ICAgICAgID8pCiAgICAgICAgICAgIF9wcmludGhlbHAgIiQwIgogICAgICAgICAgICBleGl0IDEg
+OzsKICAgICAgICA6KQogICAgICAgICAgICBlY2hvICJNaXNzaW5nIGFyZ3VtZW50LiIKICAgICAg
+ICAgICAgX3ByaW50aGVscCAiJDAiCiAgICAgICAgICAgIGV4aXQgMSA7OwogICAgZXNhYwpkb25l
+CnNoaWZ0ICQoKCRPUFRJTkQgLSAxKSkKCm1zZyAiTWFraW5nIHBhY2thZ2U6ICRwa2duYW1lICRw
+a2d2ZXItJHBrZ3JlbCAoJChkYXRlKSkiCgpfaW5pdApfZmV0Y2gKX2V4dHJhY3QKX2NoZWNrc3Vt
+CgppZiAkT1BUX0JVSUxEOyB0aGVuIF9idWlsZGhvb2s7IGZpCmlmICRPUFRfUEFDS0FHRTsgdGhl
+biBfcGFja2FnZWhvb2s7IGZpCmlmICRPUFRfSU5TVEFMTDsgdGhlbiBfaW5zdGFsbDsgZmkKaWYg
+JE9QVF9DTEVBTjsgdGhlbiBfY2xlYW47IGZpCgptc2cgIkZpbmlzaGVkIG1ha2luZzogJHBrZ25h
+bWUgJHtwa2d2ZXJ9LSRwa2dyZWwgJChkYXRlKSIK' | base64 -d >> "$UBUILD"
 
 chmod +x "$UBUILD"
