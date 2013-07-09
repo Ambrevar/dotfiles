@@ -85,9 +85,10 @@
    (set-face-foreground 'ediff-odd-diff-C nil)))
 
 ;; Show paren.
-(set-face-background 'show-paren-match-face (face-background 'default))
-(set-face-foreground 'show-paren-match-face "#def")
-(set-face-attribute 'show-paren-match-face nil :weight 'extra-bold)
+(when (boundp 'show-paren-match-face)
+  (set-face-background 'show-paren-match-face (face-background 'default))
+  (set-face-foreground 'show-paren-match-face "#def")
+  (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))
 
 ;; Make Emacs and Mutt colors fit.
 (font-lock-add-keywords

@@ -146,14 +146,15 @@ restored."
 
 ;; Qt base directory, meaning the directory where the 'Qt' directory can be found.
 ;; Adapt accordingly.
-(setq qt4-base-dir "/usr/include/qt4")
-(setq qt4-gui-dir (concat qt4-base-dir "/QtGui"))
-(semantic-add-system-include qt4-base-dir 'c++-mode)
-(semantic-add-system-include qt4-gui-dir 'c++-mode)
-(add-to-list 'auto-mode-alist (cons qt4-base-dir 'c++-mode))
-(add-hook
- 'c++-mode-hook
- (lambda ()
-   (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig.h"))
-   (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig-large.h"))
-   (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qglobal.h"))))
+(when (fboundp 'semantic-add-system-include)
+  (setq qt4-base-dir "/usr/include/qt4")
+  (setq qt4-gui-dir (concat qt4-base-dir "/QtGui"))
+  (semantic-add-system-include qt4-base-dir 'c++-mode)
+  (semantic-add-system-include qt4-gui-dir 'c++-mode)
+  (add-to-list 'auto-mode-alist (cons qt4-base-dir 'c++-mode))
+  (add-hook
+   'c++-mode-hook
+   (lambda ()
+     (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig.h"))
+     (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig-large.h"))
+     (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qglobal.h")))))

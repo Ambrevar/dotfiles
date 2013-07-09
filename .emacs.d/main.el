@@ -13,7 +13,7 @@
 
 ;; Place backup files in specific directory.
 (setq backup-directory-alist
-       `((".*" . ,(concat emacs-cache-folder "backups/"))))
+      `((".*" . ,(concat emacs-cache-folder "backups/"))))
 
 ;; Other backup options.
 ; (setq backup-inhibited t) ;; Disable backup files.
@@ -366,8 +366,8 @@ has errors and/or warnings."
     (turn-on-xclip))
 
 ;; Bison/flex -- Fallback to c-mode.
-(add-to-list 'auto-mode-alist '("\\.yy?\\'" . c-mode)))
-(add-to-list 'auto-mode-alist '("\\.l\\'" . c-mode)))
+(add-to-list 'auto-mode-alist '("\\.yy?\\'" . c-mode))
+(add-to-list 'auto-mode-alist '("\\.l\\'" . c-mode))
 (if (require 'bison-mode nil t)
     (add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode)))
 (if (require 'flex-mode nil t)
