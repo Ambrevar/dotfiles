@@ -7,7 +7,8 @@ _printhelp()
     cat <<EOF
 Usage: ${1##*/} [-m METHOD] [-v] FILES|FOLDERS
 
-Create an archive from a single or multiples files/folders.
+Create an archive from a single or multiples files/folders. The archive is
+created without owner/group information.
 
   -h:  Display this help.
   -m:  Choose compression method.
@@ -59,26 +60,42 @@ esac
 
 shift $(($OPTIND - 1))
 
-case $# in
-    1)
-        FULLPATH="$(realpath "$1")"
-        OUTPUT="${FULLPATH}-$(date +%F-%H%M%S).${ARCEXT}"
+## Case 1: no argument, we archive current folder to parent folder.
+if [ $# -eq 0 ]; then
+    FULLPATH="$PWD"
+    OUTPUT="${FULLPATH}-$(date +%F-%H%M%S).${ARCEXT}"
+    (cd "${FULLPATH}/.." && \
+        echo "tar ${OPTION_VCS} ${OPTIONS} -${ARCOPT} -cf '$OUTPUT' '${FULLPATH##*/}'" && \
+        tar ${OPTION_VCS} ${OPTIONS} -${ARCOPT} -cf "$OUTPUT" "${FULLPATH##*/}" )
+    exit
+fi
 
-        (cd "${FULLPATH}/.." && \
-            tar ${OPTION_VCS} ${OPTIONS} -${ARCOPT} -cf "$OUTPUT" "${FULLPATH##*/}" )
-        ;;
+## Case 2: files and folders are passed as arguments. Each of them will be at
+## the archive root. Archive is produced in current folder if it is not directly
+## part of the archive.
+OUTPATH="$PWD"
+if [ $# -eq 1 ]; then
+    REALPATH="$(realpath "$1")"
+    OUTFILE="${REALPATH##*/}-$(date +%F-%H%M%S).${ARCEXT}"
+else
+    OUTFILE="${PWD##*/}-$(date +%F-%H%M%S).${ARCEXT}"
+fi
 
-    0)
-        FULLPATH="$PWD"
-        OUTPUT="${FULLPATH}-$(date +%F-%H%M%S).${ARCEXT}"
-        (cd "${FULLPATH}/.." && \
-            tar ${OPTION_VCS} ${OPTIONS} -${ARCOPT} -cf "$OUTPUT" "${FULLPATH##*/}" )
-        ;;
+for i; do
+    REALPATH="$(realpath "$i")"
 
-    *)
-        FULLPATH="$PWD"
-        OUTPUT="${FULLPATH}/${FULLPATH##*/}-$(date +%F-%H%M%S).${ARCEXT}"
+    # Check if one if the argument is current folder. We need to make sure the
+    # archive is not created in an input folder, otherwise it will include itself.
+    if [ "$REALPATH" = "$(realpath "$PWD")" ]; then
+        OUTPATH="$(realpath "$PWD/..")"
+        echo "Creating archive in [$OUTPATH]."
+    fi
 
-        tar ${OPTION_VCS} ${OPTIONS} -${ARCOPT} -cf "$OUTPUT" "$@"
-        ;;
-esac
+    DIRNAME="${REALPATH%/*}"
+    BASENAME="${REALPATH##*/}"
+    INPUTARGS="$INPUTARGS -C '$DIRNAME' '$BASENAME'"
+done
+
+echo "tar ${OPTION_VCS} ${OPTIONS} -${ARCOPT} -cf '$OUTPATH/$OUTFILE' ${INPUTARGS}"
+eval "tar ${OPTION_VCS} ${OPTIONS} -${ARCOPT} -cf '$OUTPATH/$OUTFILE' ${INPUTARGS}"
+
