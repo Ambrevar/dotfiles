@@ -13,31 +13,6 @@ echo "==> 'temp' folder"
 mkdir -p "$HOME/temp"
 echo
 
-## Emacsclient launcher. Required for best emacsclient integration.  For a fully
-## functional daemon, you should write a file like this and set 'EDITOR=em'.  We
-## use base64 to encode the script so that we do not need to handle all the
-## escape sequences with quotes and so on.
-EMFILE='/usr/local/bin/em'
-EMCFILE='/usr/local/bin/emc'
-if [ -n "$(command -v emacs)" ] && [ ! -f "$EMFILE" ] || [ ! -f "$EMCFILE" ]; then
-	echo "==> Emacs (press Ctrl-D to skip)"
-
-    if [ -z "$(command -v base64)" ]; then
-	    echo ":: base64 not found."
-    else
-        sudo sh -c "umask 022 && echo 'IyEvYmluL3NoCmlmIFsgLXogIiRESVNQTEFZIiBdOyB0aGVuCiAgICBJU19HUkFQSElDQUw9MApl
-bHNlCiAgICBJU19HUkFQSElDQUw9JChlbWFjcyAtYmF0Y2ggLVEgLS1ldmFsPScoaWYgKGZib3Vu
-ZHAgJyInIid0b29sLWJhci1tb2RlKSAobWVzc2FnZSAiMSIpIChtZXNzYWdlICIwIikpJyAyPiYx
-KQpmaQoKaWYgWyAkSVNfR1JBUEhJQ0FMIC1lcSAxIF07IHRoZW4KICAgIGVtYWNzY2xpZW50IC1h
-ICIiIC1uYyAiJEAiCmVsc2UKICAgIGVtYWNzY2xpZW50IC1hICIiIC10ICIkQCIKZmkK
-' | base64 -d > $EMFILE && chmod 755 $EMFILE"
-
-        sudo sh -c "umask 022 && echo 'IyEvYmluL3NoCmVtYWNzY2xpZW50IC1hICIiIC10ICIkQCIK
-' | base64 -d > $EMCFILE && chmod 755 $EMCFILE"
-
-    fi
-fi
-
 ## Advanced keymaps. They need to be in X11 shared dir to be loaded.
 installkeymap ()
 {

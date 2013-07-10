@@ -111,9 +111,8 @@ alias xres='xrandr -s $(xrandr | awk '"'"'/^ / {print $1;exit}'"'"')'
 ##==============================================================================
 ## Emacs
 ##==============================================================================
-# See .homeinit
+## 'em' is a wrapper script for emacsclient.
 if [ -n "$(command -v em)" ]; then
-   alias ema='emacs -q -l ~/.emacs.d/init-light.el'
    alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
 fi
 

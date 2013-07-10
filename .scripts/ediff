@@ -1,3 +1,3 @@
 #!/bin/sh
 
-emacs -q -l ~/.emacs.d/init-light.el --eval "(ediff \"$1\" \"$2\")"
+ema --eval "(ediff \"$1\" \"$2\")"
