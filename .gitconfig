@@ -6,7 +6,8 @@
     ui = true
 [alias]
     b = branch -vva
-    c = commit -a
+    c = commit
+    ca = commit -a
     co = checkout
     d = diff --cached
     l = log --stat
