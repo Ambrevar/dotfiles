@@ -201,7 +201,6 @@ _tidying ()
         find * -type f \( -name '.packlist' -o -name '*.pod' \) -delete
             rm -f "usr/share/info/dir" "usr/info/dir"
     fi
-
     if $TIDY_docs; then
         msg2 "Compressing man and info pages..."
         find * -type f -name '*.[0-9]' -exec gzip {} \;
@@ -210,6 +209,9 @@ _tidying ()
         msg2 "Stripping unneeded symbols from binaries and libraries..."
         find * -type f -executable -exec strip -s {} \;
     fi
+
+    ## We make sure folder permissions are world accessible.
+    find * -type d -exec chmod o+rx {} \;
 }
 
 _compress()
@@ -226,7 +228,7 @@ _compress()
     chmod +x "$UNINS"
 
     msg2 "Compressing package..."
-    (cd "$pkgdir" && tar --owner=root --group=root --numeric-owner -cJf "../$pkgname-$pkgver-$pkgrel.tar.xz" *)
+    (cd "$pkgdir" && tar --owner=root --group=root -cJf "../$pkgname-$pkgver-$pkgrel-$(uname -m).tar.xz" *)
 }
 
 _packagehook()
@@ -242,7 +244,7 @@ _packagehook()
     (cd "$srcdir" && package)
 
     msg "Tidying install..."
-    (cd "$pkgdir" && _tidying)
+    (cd "$pkgdir" && umask 022 && _tidying)
 
     _compress
 }
