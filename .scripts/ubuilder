@@ -52,8 +52,7 @@ fi
 ################################################################################
 ' > "$UBUILD"
 
-cat "$1" | sed -e 's|--prefix=/usr|--prefix=/usr/local|g' \
-     -e 's|PREFIX=/usr|PREFIX=/usr/local|g' >> "$UBUILD"
+cat "$1" | sed -e 's|/usr|/usr/local|g' >> "$UBUILD"
 
 cat  "$(realpath "$0").in" >> "$UBUILD"
 

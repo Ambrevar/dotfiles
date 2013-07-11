@@ -76,8 +76,7 @@ _fetch()
 {
     msg "Retrieving sources..."
 
-    for i in $(seq 0 $((${#source[*]} -1))); do
-        URI="${source[$i]}"
+    for URI in "${#source[@]}"; do
         if [ $(echo "$URI" | grep -c "/") -ne 0 ]; then
             FILE="${URI##*/}"
 
@@ -123,8 +122,16 @@ _checksum ()
 
     msg "Validating source files with ${CHECKSUMMER}s..."
 
-    for i in $(seq 0 $((${#source[*]} -1))); do
+    ## Here we need to use a numeric index to browse arrays to make sure we get
+    ## same index for both arrays.
+    ## WARNING: this will only work in bash because indexing start at 0.
+    for i in $(seq 0 $((${#source[@]} -1))); do
         FILE="${source[$i]##*/}"
+        if [ ! -f "$FILE" ]; then
+            error "$FILE was not found in the build directory and is not a URL."
+            exit
+        fi
+
         CHECKSUM="$($CHECKSUMMER "$FILE" | cut -f1 -d' ')"
 
         echo -n "$INDENT$FILE ... "
@@ -155,20 +162,20 @@ _checksum ()
 _extract ()
 {
     msg "Extracting sources..."
-    for i in $(seq 0 $((${#source[*]} -1))); do
-        FILE="${source[$i]##*/}"
+    for FILE in "${source[@]}"; do
+        FILE="${FILE##*/}"
 	    case "$FILE" in
 		    *.tar.bz2|*.tbz2)
                 msg2 "Extracting $FILE with tar"
                 tar xjf "$FILE" -C "$srcdir";;
 		    *.tar.gz|*.tgz)
-                msg2 "Extracting $FILE with bsdtad"
+                msg2 "Extracting $FILE with tar"
                 tar xzf "$FILE" -C "$srcdir";;
 		    *.tar.xz|*.txz)
-                msg2 "Extracting $FILE with bsdtad"
+                msg2 "Extracting $FILE with tar"
                 tar xJf "$FILE" -C "$srcdir";;
             *)
-                ln -rs "$FILE" "$srcdir";;
+                ln -rs "$FILE" "$srcdir" 2>/dev/null;;
 	    esac
     done
 }
@@ -179,18 +186,30 @@ _buildhook()
     (cd "$srcdir" && build)
 }
 
-_cleanse ()
+_tidying ()
 {
-    ## TODO: implement Purging unwanted files...
-    # PURGE_TARGETS=(usr/{,share}/info/dir .packlist *.pod)
+    for i in "${options[@]}"; do
+        if [ "$(echo $i | sed 's/\(.\).*/\1/')" = "!" ]; then
+            eval TIDY_$(echo $i | sed 's/^!//')=false
+        else
+            eval TIDY_$i=true
+        fi
+    done
 
-    msg "Tidying install..."
-    (cd "$pkgdir" && \
-        msg2 "Compressing man and info pages..." && \
-        find . -type f -iname '*.[0-9]' -exec gzip {} \; && \
-        msg2 "Stripping unneeded symbols from binaries and libraries..." && \
-        find . -type f -executable -exec strip -s {} \; \
-        )
+    if $TIDY_purge; then
+        msg2 "Purging unwanted files..."
+        find * -type f \( -name '.packlist' -o -name '*.pod' \) -delete
+            rm -f "usr/share/info/dir" "usr/info/dir"
+    fi
+
+    if $TIDY_docs; then
+        msg2 "Compressing man and info pages..."
+        find * -type f -name '*.[0-9]' -exec gzip {} \;
+    fi
+    if $TIDY_strip; then
+        msg2 "Stripping unneeded symbols from binaries and libraries..."
+        find * -type f -executable -exec strip -s {} \;
+    fi
 }
 
 _compress()
@@ -201,8 +220,8 @@ _compress()
     msg2 "Generating $UNINS..."
     echo '#!/bin/sh' > "$UNINS"
     (cd "$pkgdir" && \
-        find * -type f -exec echo "rm /"{} \; >> "../../$UNINS" && \
-        find * -type d -exec echo "rmdir /"{} \; >> "../../$UNINS"
+        find * -type f -exec echo "rm /"{} \; >> "../$UNINS" && \
+        find * -type d -exec echo "rmdir /"{} \; >> "../$UNINS"
     )
     chmod +x "$UNINS"
 
@@ -221,7 +240,10 @@ _packagehook()
 
     msg "Starting package()..."
     (cd "$srcdir" && package)
-    _cleanse
+
+    msg "Tidying install..."
+    (cd "$pkgdir" && _tidying)
+
     _compress
 }
 
@@ -275,6 +297,21 @@ OPT_INSTALL=false
 OPT_CLEAN=false
 OPT_CHECKSKIP=false
 
+#-- strip:     Strip symbols from binaries/libraries
+#-- docs:      Save doc directories specified by DOC_DIRS
+#-- libtool:   Leave libtool (.la) files in packages
+#-- emptydirs: Leave empty directories in packages
+#-- zipman:    Compress manual (man and info) pages in MAN_DIRS with gzip
+#-- purge:     Remove files specified by PURGE_TARGETS
+#-- upx:       Compress binary executable files using UPX
+TIDY_strip=true
+TIDY_docs=true
+TIDY_libtool=true
+TIDY_emptydirs=true
+TIDY_zipman=true
+TIDY_purge=true
+TIDY_upx=false
+
 while getopts ":bcdfhiRs" opt; do
     case $opt in
         b)
@@ -319,4 +356,4 @@ if $OPT_PACKAGE; then _packagehook; fi
 if $OPT_INSTALL; then _install; fi
 if $OPT_CLEAN; then _clean; fi
 
-msg "Finished making: $pkgname ${pkgver}-$pkgrel $(date)"
+msg "Finished making: $pkgname ${pkgver}-$pkgrel ($(date))"
