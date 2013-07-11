@@ -368,6 +368,9 @@ globalkeys = awful.util.table.join(
    -- Screenshot
    awful.key({}, "Print", function () awful.util.spawn("scrot 'screen-%Y-%m-%d-%H%M%S.png' -e 'mkdir -p ~/temp && mv $f ~/temp/'") end),
 
+   -- Screenshot
+   awful.key({ modkey }, "t", function () awful.util.spawn("todo") end),
+
    -- Touchpad
    awful.key({ }, "XF86TouchpadToggle", function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
    awful.key({ }, "XF86Tools",          function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
@@ -493,7 +496,7 @@ clientkeys = awful.util.table.join(
    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
    awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
    awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
-   awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
+   -- awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
 
    -- Floating clients move
    awful.key({ modkey }, "j",         function () awful.client.moveresize(  0,  20,   0,   0) end),
