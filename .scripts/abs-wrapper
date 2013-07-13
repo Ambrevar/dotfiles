@@ -27,7 +27,8 @@ available.
 Options:
 
   -b:  Build.
-  -c:  Clean source folders from temp file (keep upstream source and built package).
+  -c:  Clean source folders from temp file (keep upstream source and package folder).
+  -C:  Clean source folders from archives.
   -f:  Force operation (overwrite, rebuild, reinstall).
   -h:  Display this help.
   -i:  Install package.
@@ -54,17 +55,20 @@ PACMAN_OPT="--needed"
 
 OPT_BUILD=false
 OPT_CLEAN=false
+OPT_MRPROPER=false
 OPT_FORCE=false
 OPT_INSTALL=false
 OPT_SOURCE=false
 
-while getopts ":bcfhis" opt; do
+while getopts ":bcCfhis" opt; do
     case $opt in
         b)
             OPT_BUILD=true ;;
         c)
             MAKEPKG_OPT="$MAKEPKG_OPT -c"
             OPT_CLEAN=true ;;
+        C)
+            OPT_MRPROPER=true ;;
         f)
             MAKEPKG_OPT="$MAKEPKG_OPT -f"
             PACMAN_OPT=""
@@ -170,6 +174,14 @@ abs_clean ()
         rm -rf "src" "pkg")
 }
 
+
+abs_mrproper ()
+{
+    (cd "$1" && \
+        echo "Removing archives." && \
+        rm -v *.tar.gz *.tar.xz *.tar.bz *.tar.bz2 *.tgz *.txz *.tbz *.tbz2 2>/dev/null)
+}
+
 abs_install ()
 {
     sudo sh -c '
@@ -181,6 +193,8 @@ abs_install ()
 }
 
 for i ; do
+    echo "==> Processing $i."
+
     ## Fetch PKGBUILD.
     if [ ! -f "$i/PKGBUILD" ] || $OPT_FORCE; then
         abs_pkgbuild "$i"
@@ -202,6 +216,11 @@ for i ; do
     ## Clean build folder.
     if $OPT_CLEAN; then
         abs_clean "$i"
+    fi
+
+    ## Remove archives.
+    if $OPT_MRPROPER; then
+        abs_mrproper "$i"
     fi
 done
 
