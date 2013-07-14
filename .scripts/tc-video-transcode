@@ -63,6 +63,7 @@ Transcode FILES or files found in FOLDERS to .mkv with x264 and ogg. Output
 files are the same as the original, with time appended. You can customize
 encoding with the TC_* variables.
 
+  -c:      Copy streams (no reencoding).
   -f:      Overwrite existing file if any.
   -h:      Display this help.
   -o OPT:  Additional options.
@@ -90,38 +91,39 @@ EOF
 TC_OVERWRITE="-n"
 TC_SAMPLE=""
 TC_USER_OPT=""
-TC_REMOVE_TITLE=0
+TC_REMOVE_TITLE=false
+TC_VIDEO_CODEC="libx264"
+TC_AUDIO_CODEC="libvorbis"
+TC_VIDEO_OPT="-c:v libx264 -preset $TC_VIDEO_PRESET -crf $TC_VIDEO_QUAL $TC_VIDEO_TUNE $TC_VIDEO_OPTS"
+TC_AUDIO_OPT="-c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL -ac 2"
 
-while getopts ":fho:sS:t" opt; do
+while getopts ":cfho:sS:t" opt; do
     case $opt in
+        c)
+            TC_VIDEO_OPT=""
+            TC_AUDIO_OPT=""
+            TC_VIDEO_CODEC="copy"
+            TC_AUDIO_CODEC="copy" ;;
         f)
-            TC_OVERWRITE="-y"
-            ;;
+            TC_OVERWRITE="-y" ;;
         h)
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
         o)
-            TC_USER_OPT="$OPTARG"
-            ;;
+            TC_USER_OPT="$OPTARG" ;;
         s)
-            TC_SAMPLE="-ss 60 -t 360"
-            ;;
+            TC_SAMPLE="-ss 60 -t 360" ;;
         S)
-            TC_SAMPLE="-ss 60 -t $((60*$OPTARG))"
-            ;;
+            TC_SAMPLE="-ss 60 -t $((60*$OPTARG))" ;;
         t)
-            TC_REMOVE_TITLE=1
-            ;;
+            TC_REMOVE_TITLE=true ;;
         ?)
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
         :)
             echo "Missing argument."
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
     esac
 done
 
@@ -153,20 +155,19 @@ Clear 'Title': $TC_REMOVE_TITLE
 EOF
 
     STREAM_TITLE=""
-    if [ $TC_REMOVE_TITLE -eq 1 ]; then
+    if $TC_REMOVE_TITLE; then
         STREAM_NUM=$(ffmpeg -i "$1" 2>&1 | grep -c 'Stream')
         for i in $(seq 0 $STREAM_NUM); do
             STREAM_TITLE="${STREAM_TITLE}-metadata:s:$i title= "
         done
-        # echo "$STREAM_NUM[$STREAM_TITLE]"
     fi
 
-    ffmpeg $TC_OVERWRITE $TC_SAMPLE -i "$1" \
-        -c:v libx264 -preset $TC_VIDEO_PRESET -crf $TC_VIDEO_QUAL $TC_VIDEO_TUNE $TC_VIDEO_OPTS \
-        -c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL -ac 2 \
+    ffmpeg $TC_OVERWRITE -i "$1" \
+        -c:v $TC_VIDEO_CODEC $TC_VIDEO_OPT \
+        -c:a $TC_AUDIO_CODEC $TC_AUDIO_OPT \
         -c:s copy \
         -map 0 $STREAM_TITLE \
-        $TC_USER_OPT "${1%.*}-$(date '+%F-%H%M%S').mkv"
+        $TC_SAMPLE $TC_USER_OPT "${1%.*}-$(date '+%F-%H%M%S').mkv"
 }
 
 for i in "$@"; do
