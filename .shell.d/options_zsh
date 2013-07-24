@@ -28,6 +28,9 @@ setopt autocd # When only dirname is entered, then auto cd to it.
 ## Usually not needed if pc speaker is off.
 unsetopt beep
 
+## Turn of ^s so it does not freeze output.
+unsetopt flowcontrol
+
 ##==============================================================================
 ## VCS
 ##==============================================================================
