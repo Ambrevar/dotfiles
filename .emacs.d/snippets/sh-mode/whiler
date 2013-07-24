@@ -1,0 +1,7 @@
+# name: while read -r i
+# key: whiler
+# --
+while read -r i; do
+    $0
+done<<EOF
+EOF
