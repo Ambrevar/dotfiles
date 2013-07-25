@@ -324,13 +324,29 @@ has errors and/or warnings."
  (lambda ()
    (setq ediff-merge-split-window-function 'split-window-horizontally)))
 
-;; Shell allow comment indenation.
-(setq sh-indent-comment t)
 ;; Eshell
 (setq eshell-directory-name (concat emacs-cache-folder "eshell"))
+;; TODO: this breaks eshell completion and history.
+;; (setq eshell-prompt-function
+;;       (lambda nil
+;;         (let ((path (abbreviate-file-name (eshell/pwd))))
+;;           (concat ".-(" path ")"
+;;                   (make-string (- (window-body-width) 5 (length path)) ?-)
+;;                   "\n`--"
+;;                   (if (= (user-uid) 0) "# " "> ")))))
+(add-hook
+ 'eshell-mode-hook
+ (lambda ()
+   (nconc eshell-visual-commands
+          '("abook" "cmus" "htop" "mutt" "ncdu" "newsbeuter" "ranger" "rtorrent" "task" "tig"))))
+
+
+;; Shell allow comment indenation.
+(setq sh-indent-comment t)
 ;; We do not put 'sh' only because it could get messy. Emacs knows it anyway.
 (add-to-list 'auto-mode-alist '("\\(bash\\'\\|zsh\\'\\|csh\\'\\|tcsh\\'\\|ksh\\'\\)" . sh-mode))
 (add-to-list 'auto-mode-alist '("rc\\'" . sh-mode))
+
 
 ;; GLSL fallback to C mode.
 (add-to-list 'auto-mode-alist '("\\.vert\\'" . c-mode))
@@ -485,6 +501,7 @@ has errors and/or warnings."
    (local-set-key (kbd "C-c h") 'dired-toggle-humansize)
    ;; (local-set-key (kbd "<left>") 'dired-up-directory)
    ;; (local-set-key (kbd "<right>") 'dired-find-file)
+   (local-set-key (kbd "<backspace>") 'dired-up-directory)
    (local-set-key (kbd "b") 'dired-up-directory)))
 
 ;; Bookmark file to cache folder

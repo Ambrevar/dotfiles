@@ -51,6 +51,13 @@
 (set-face-foreground  'font-lock-variable-name-face     "#ffff00" )
 (set-face-foreground  'font-lock-warning-face           "DarkOrange" )
 
+;; Eshell
+(add-hook
+ 'eshell-mode-hook
+ (lambda ()
+   (set-face-foreground 'eshell-prompt "#008b8b")))
+
+
 ;; Ediff
 (add-hook
  'ediff-mode-hook
