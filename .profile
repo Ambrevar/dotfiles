@@ -16,7 +16,7 @@ DUMMY=${DUMMY}:res
 addpath()
 {
     [ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
-    if [ -z "$PATHVAR" ]; then
+    if [ -z "$(eval echo \$$PATHVAR)" ]; then
         eval export $PATHVAR="$1"
     elif [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
         eval export $PATHVAR="\$$PATHVAR:$1"
