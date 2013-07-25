@@ -10,11 +10,21 @@
 ## Result for 027 is: rwxr-x---
 umask 027
 
+DUMMY=${DUMMY}:res
+
 ## Path
-## WARNING: putting current dir '.' in PATH is mostly a bad idea!
-# export PATH=.:$PATH
-export PATH=$PATH:${HOME}/.launchers/
-export PATH=$PATH:${HOME}/.scripts/
+addpath()
+{
+    [ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
+    if [ -z "$PATHVAR" ]; then
+        eval export $PATHVAR="$1"
+    elif [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
+        eval export $PATHVAR="\$$PATHVAR:$1"
+    fi
+}
+
+addpath "${HOME}/.launchers/"
+addpath "${HOME}/.scripts/"
 
 ## TeXlive
 TEXDIR="${TEXDIR:-/usr/local/texlive}"
@@ -23,12 +33,12 @@ if [ -d "${TEXDIR}" ]; then
     TEXDISTRO=$(uname -m)-$(uname | tr "[[:upper:]]" "[[:lower:]]")
     TEXFOLDER="${TEXDIR}/${TEXYEAR}/bin/${TEXDISTRO}/"
     if [ -d "${TEXFOLDER}" ]; then
-        export PATH=${TEXFOLDER}:$PATH
-        export INFOPATH=${TEXDIR}/${TEXYEAR}/texmf/doc/info:$INFOPATH
+        addpath $TEXFOLDER
+        addpath ${TEXDIR}/${TEXYEAR}/texmf/doc/info INFOPATH
 
         ## BSD uses 'manpath' utility, so MANPATH variable may be empty.
         if [ "$OSTYPE" = "linux-gnu" ]; then
-            export MANPATH=${TEXDIR}/${TEXYEAR}/texmf/doc/man:$MANPATH
+            addpath ${TEXDIR}/${TEXYEAR}/texmf/doc/man MANPATH
         fi
     fi
     unset TEXYEAR
