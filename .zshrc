@@ -10,8 +10,11 @@
 SHELL_CURRENT="$(ps -o command="" $$)"
 SHELL_DIR="$HOME/.shell.d"
 
+## .profile is sourced automatically when X is started, but we need to source it
+## manually to TTY.
+[ -z "$DISPLAY" ] && [ -f "$HOME/.profile" ] && . "$HOME/.profile"
+
 ## Should be sourced first.
-[ -f "$HOME/.profile" ] && . "$HOME/.profile"
 [ -f "${SHELL_DIR}/main_rc" ] && . "${SHELL_DIR}/main_rc"
 [ -f "${SHELL_DIR}/options_zsh" ] && . "${SHELL_DIR}/options_zsh"
 

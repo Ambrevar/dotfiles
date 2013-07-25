@@ -5,8 +5,9 @@
 ################################################################################
 ## This file is sourced by some DM and should not contain any desktop execution.
 
-## Env vars and general config.
-[ -f "$HOME/.profile" ] && . "$HOME/.profile"
+## Env vars and general config. The .profile file should be automatically
+## sourced by the login manager.
+# [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
 ## X config (for URxvt, etc.)
 [ -f "${HOME}/.Xresources" ] && xrdb -merge "${HOME}/.Xresources"

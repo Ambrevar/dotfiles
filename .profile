@@ -10,15 +10,13 @@
 ## Result for 027 is: rwxr-x---
 umask 027
 
-DUMMY=${DUMMY}:res
-
 ## Path
 addpath()
 {
     [ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
-    if [ -z "$(eval echo \$$PATHVAR)" ]; then
-        eval export $PATHVAR="$1"
-    elif [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
+    ## Note that it is important for MANPATH to have an empty entry to keep
+    ## searching in the default db path.
+    if [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
         eval export $PATHVAR="\$$PATHVAR:$1"
     fi
 }
