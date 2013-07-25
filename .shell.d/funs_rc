@@ -407,6 +407,24 @@ clonecd ()
     # dd if=$DRIVE of='$1.iso' bs=2048 count=$(isosize -d 2048 $DRIVE) conv=sync,notrunc
 }
 
+browse ()
+{
+    # Compatible with ranger 1.4.2 through 1.6.*
+    #
+    # Automatically change the directory in bash after closing ranger
+    #
+    # This is a shell wrapper script to automatically change the directory to the
+    # last visited one after ranger quits. To undo the effect of this function, you
+    # can type "cd -" to return to the original directory.
+
+    tempfile="$(mktemp)"
+    /usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+    if [ -f "$tempfile" ] && [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
+        cd -- "$(cat "$tempfile")"
+    fi
+    rm -f -- "$tempfile"
+}
+
 ##==============================================================================
 ## Pacman functions
 ##==============================================================================
