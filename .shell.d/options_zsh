@@ -1,13 +1,16 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Zsh specific options
-## Date 2011-11-19
+## Date 2013-07-26
 ################################################################################
+
+ZCACHE=~/.cache/zsh/
+[ ! -e "$ZCACHE" ] && mkdir -p "$ZCACHE"
 
 ##==============================================================================
 ## History options
 ##==============================================================================
-HISTFILE=~/.zshistfile
+HISTFILE="$ZCACHE/history"
 HISTSIZE=1000
 SAVEHIST=1000
 setopt hist_ignore_all_dups
@@ -35,14 +38,16 @@ unsetopt flowcontrol
 ## VCS
 ##==============================================================================
 ## TODO: to be continued...
-# autoload -Uz vcs_info zstyle ':vcs_info:*' enable git hg svn
+# autoload -Uz vcs_info zstyle ':vcs_info:*' enable git hg
 # autoload -Uz vcs_info
 
 ##==============================================================================
 ## Directory stack
 ##==============================================================================
 
-DIRSTACKFILE=~/.zdirs
+## We use expanded path for DIRSTACKFILE since we need to locate it for the
+## zshcd script.
+DIRSTACKFILE="$HOME/.cache/zsh/dirs"
 if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
   dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
   [[ -d $dirstack[1] ]] && cd $dirstack[1]
@@ -62,7 +67,7 @@ setopt pushdminus
 ##==============================================================================
 ## ???
 ##==============================================================================
-zstyle :compinstall filename "$HOME/.zshrc"
+# zstyle :compinstall filename "$HOME/.zshrc"
 
 ##==============================================================================
 ## Completion
@@ -72,7 +77,8 @@ zstyle :compinstall filename "$HOME/.zshrc"
 fpath=(~/.shell.d/completion $fpath)
 
 autoload -Uz compinit
-compinit
+# compinit
+compinit -d "$ZCACHE/compdump"
 
 zstyle ':completion:*' menu select
 zstyle ':completion:*:descriptions' format '%U%B%d%b%u'

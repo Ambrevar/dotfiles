@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+    cat <<EOF
+Usage: ${0##*/} STRING FILES
+
+Prepend STRING to FILES. STRING may not contain pipes ('|').
+EOF
+    exit
+fi
+
+VAR="$1"
+shift
+
+sed -ni '1{s|^|'$VAR'\n|;h};1!H;${x;p}' "$@"

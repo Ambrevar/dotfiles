@@ -1,0 +1,35 @@
+#!/bin/sh
+## Start zsh in directory specified as first argument.
+
+## Default files.
+ZDIRS="$HOME/.cache/zsh/dirs"
+SHELL_DIR="$HOME/.shell.d"
+
+## Fetch file location dynamically.
+if [ ! -f "$ZDIRS" ]; then
+    if [ ! -f ~/.zshrc ]; then
+        echo '~/.zshrc not found. Exiting.'
+        exit
+    fi
+        
+    SHELL_DIR_GREP="$(grep "SHELL_DIR=" ~/.zshrc | cut -f2 -d=)"
+    [ -n "$SHELL_DIR_GREP" ] && SHELL_DIR="$(eval echo "$SHELL_DIR_GREP")"
+    ZDIRS_GREP="$(grep -rm1 'DIRSTACKFILE=' "$SHELL_DIR" | cut -f2 -d=)"
+    [ -n "$ZDIRS_GREP" ] && ZDIRS="$(eval echo "$ZDIRS_GREP")"
+fi
+
+if [ ! -f "$ZDIRS" ]; then
+    echo 'DIRSTACKFILE not found. Exiting.'
+fi
+
+if [ ! -d "$1" ]; then
+    zsh
+else
+    if [ -n "$(grep "$1" "$ZCACHE")" ]; then
+        BUF="$(grep -v "$1" "$ZCACHE")"
+        echo "$BUF"
+        echo "$BUF" > "$ZCACHE"
+    fi
+    prepend "$1" "$ZCACHE"
+    zsh
+fi
