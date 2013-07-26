@@ -1,7 +1,0 @@
-alias la ls -ahl
-alias ll ls -hl
-alias lc ls -lrc
-alias lk ls -lSrh
-alias lx ls -lXh
-alias lx ls -lXh
-alias mkdir mkdir -p
