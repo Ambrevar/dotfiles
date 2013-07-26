@@ -326,6 +326,7 @@ has errors and/or warnings."
 
 ;; Eshell
 (setq eshell-directory-name (concat emacs-cache-folder "eshell"))
+(setq eshell-aliases-file (concat user-emacs-directory "eshell-alias"))
 ;; TODO: this breaks eshell completion and history.
 ;; (setq eshell-prompt-function
 ;;       (lambda nil
