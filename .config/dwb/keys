@@ -171,6 +171,11 @@ visual_mode= v
 
 adblock_reload_rules= 
 
+tabgrep= 
+jump= '
+mark= `
+repeat= .
+
 [1]
 save_search_field=gs
 tab_new=ga
