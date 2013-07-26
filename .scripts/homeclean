@@ -4,6 +4,7 @@ RMLIST="$HOME/.cache/dwb
 $HOME/.cache/emacs
 $HOME/.cache/mutt
 $HOME/.cache/rtorrent
+$HOME/.cache/zsh
 $HOME/.cmus/autosave
 $HOME/.cmus/cache
 $HOME/.cmus/lib.pl
@@ -16,15 +17,18 @@ $HOME/.config/gtk-3.0
 $HOME/.config/ranger/bookmarks
 $HOME/.config/ranger/history
 $HOME/.config/ranger/tagged
+$HOME/.fehbg
 $HOME/.gtk-bookmarks
+$HOME/.lesshst
 $HOME/.local/share/newsbeuter
 $HOME/.local/share/webkit
+$HOME/.mtap.fuseiso
 $HOME/.mutt.pwds.cpt
+$HOME/.pulse-cookie
 $HOME/.ssh
+$HOME/.viminfo
 $HOME/.w3m
-$HOME/.zcompdump
-$HOME/.zdirs
-$HOME/.zshhistfile"
+$HOME/.zcompdump"
 
 echo "==> List of files to be cleaned."
 echo "$RMLIST"
