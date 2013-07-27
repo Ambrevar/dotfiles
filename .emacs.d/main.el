@@ -119,6 +119,7 @@
        (let ((b (getenv "BROWSER")))
          (if b b "w3m" )))
       browse-url-browser-function 'browse-url-generic)
+(define-key my-keys-minor-mode-map (kbd "C-M-u") 'browse-url)
 
 ;; Default ispell dictionnay
 ;; (setq ispell-dictionary "fr")
