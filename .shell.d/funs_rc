@@ -411,7 +411,7 @@ browse ()
 {
     # Compatible with ranger 1.4.2 through 1.6.*
     #
-    # Automatically change the directory in bash after closing ranger
+    # Automatically change the directory in bash after closing ranger.
     #
     # This is a shell wrapper script to automatically change the directory to the
     # last visited one after ranger quits. To undo the effect of this function, you

@@ -1,5 +1,5 @@
 #!/bin/sh
-## Start zsh in directory specified as first argument.
+## Start zsh in the directory specified as first argument.
 
 if [ ! -d "$1" ]; then
     zsh
@@ -10,36 +10,27 @@ fi
 ZDIRS="$HOME/.cache/zsh/dirs"
 
 ## Fetch file location dynamically.
-if [ ! -f "$ZDIRS" ]; then
-    if [ ! -f ~/.zshrc ]; then
-        echo '~/.zshrc not found. Exiting.'
-        exit
-    fi
-        
-    SHELL_DIR="$HOME/.shell.d"
-    if [ ! -d "$SHELL_DIR" ]; then
-        SHELL_DIR_GREP="$(grep "SHELL_DIR=" ~/.zshrc | cut -f2 -d=)"
-        [ -n "$SHELL_DIR_GREP" ] && SHELL_DIR="$(eval echo "$SHELL_DIR_GREP")"
-    fi
-    if [ ! -d "$SHELL_DIR" ]; then
-        echo 'DIRSTACKFILE and SHELL_DIR not found. Exiting.'
-        exit
-    fi
-    ZDIRS_GREP="$(grep -rm1 'DIRSTACKFILE=' "$SHELL_DIR" | cut -f2 -d=)"
-    [ -n "$ZDIRS_GREP" ] && ZDIRS="$(eval echo "$ZDIRS_GREP")"
+if [ ! -f ~/.zshrc ]; then
+    echo '~/.zshrc not found. Exiting.'
+    exit
 fi
+SHELL_DIR_GREP="$(grep "SHELL_DIR=" ~/.zshrc | cut -f2 -d=)"
+[ -n "$SHELL_DIR_GREP" ] && SHELL_DIR="$(eval echo "$SHELL_DIR_GREP")"
+if [ ! -d "$SHELL_DIR" ]; then
+    echo 'SHELL_DIR not found. Could not search for DIRSTACKFILE. Exiting.'
+    exit
+fi
+
+ZDIRS_GREP="$(grep -rm1 'DIRSTACKFILE=' "$SHELL_DIR" | cut -f2 -d=)"
+[ -n "$ZDIRS_GREP" ] && ZDIRS="$(eval echo "$ZDIRS_GREP")"
 
 if [ ! -f "$ZDIRS" ]; then
     echo 'DIRSTACKFILE not found. Exiting.'
     exit
 fi
 
-if [ -n "$(grep "$1" "$ZDIRS")" ]; then
-    BUF="$(grep -v "$1" "$ZDIRS")"
-    echo "$BUF"
-    echo "$BUF" > "$ZDIRS"
-fi
+BUF="$(realpath "$1")
+$(grep -v "$1" "$ZDIRS")"
+echo "$BUF" > "$ZDIRS"
 
-prepend "$1" "$ZDIRS"
 zsh
-

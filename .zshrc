@@ -10,6 +10,9 @@
 SHELL_CURRENT="$(ps -o command="" $$)"
 SHELL_DIR="$HOME/.shell.d"
 
+## Need to be expanded for external scripts to fetch zsh hook file location.
+HOOK_FILE="$HOME/.shell.d/hook"
+
 ## .profile is sourced automatically when X is started, but we need to source it
 ## manually to TTY.
 [ -z "$DISPLAY" ] && [ -f "$HOME/.profile" ] && . "$HOME/.profile"
@@ -26,4 +29,4 @@ SHELL_DIR="$HOME/.shell.d"
 [ -f "${SHELL_DIR}/keys_zsh" ] && . "${SHELL_DIR}/keys_zsh"
 
 ## Should be sourced last
-[ -f "${SHELL_DIR}/hook" ] && . "${SHELL_DIR}/hook"
+[ -f "$HOOK_FILE" ] && . "$HOOK_FILE"

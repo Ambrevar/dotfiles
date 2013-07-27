@@ -1,0 +1,28 @@
+#!/bin/sh
+
+## Start terminal, invoke Zsh and launch browser automatically.
+
+## It is important to invoke the terminal from here, and not run the terminal
+## over this script, otherwise cleaning line will not run when window is killed.
+
+if [ ! -f ~/.zshrc ]; then
+    echo '~/.zshrc not found. Exiting.'
+    exit
+fi
+
+HOOK_FILE_GREP="$(grep "HOOK_FILE=" ~/.zshrc | cut -f2 -d=)"
+[ -n "$HOOK_FILE_GREP" ] && HOOK_FILE="$(eval echo "$HOOK_FILE_GREP")"
+if [ -z "$HOOK_FILE" ]; then
+    echo 'HOOK_FILE variable could not be set. Exiting.'
+    exit
+fi
+if [ -z "$TERMCMD" ]; then
+    echo 'TERMCMD not set. Exiting.'
+    exit
+fi
+
+[ -f "$HOOK_FILE" ] && sed -ni '/###ZSHBROWSER/!p' "$HOOK_FILE"
+echo 'browse ###ZSHBROWSER' >> "$HOOK_FILE"
+$TERMCMD -e zsh
+[ -f "$HOOK_FILE" ] && sed -ni '/###ZSHBROWSER/!p' "$HOOK_FILE"
+[ $(du "$HOOK_FILE" | cut -f1) -eq 0 ] && rm "$HOOK_FILE"
