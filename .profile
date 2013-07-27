@@ -10,19 +10,28 @@
 ## Result for 027 is: rwxr-x---
 umask 027
 
-## Path
-addpath()
+## Note that it is important for MANPATH to have an empty entry to keep
+## searching in the default db path. Same for INFOPATH, which should have an
+## empty entry at the end, otherwise Emacs will not use standard locations. For
+## security (and bad programming assumptions) you should always append entries
+## to PATH, not prepend them.
+appendpath()
 {
     [ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
-    ## Note that it is important for MANPATH to have an empty entry to keep
-    ## searching in the default db path.
     if [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
         eval export $PATHVAR="\$$PATHVAR:$1"
     fi
 }
+prependpath()
+{
+    [ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
+    if [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
+        eval export $PATHVAR="$1:\$$PATHVAR"
+    fi
+}
 
-addpath "${HOME}/.launchers/"
-addpath "${HOME}/.scripts/"
+appendpath "${HOME}/.launchers/"
+appendpath "${HOME}/.scripts/"
 
 ## TeXlive
 TEXDIR="${TEXDIR:-/usr/local/texlive}"
@@ -31,12 +40,12 @@ if [ -d "${TEXDIR}" ]; then
     TEXDISTRO=$(uname -m)-$(uname | tr "[[:upper:]]" "[[:lower:]]")
     TEXFOLDER="${TEXDIR}/${TEXYEAR}/bin/${TEXDISTRO}/"
     if [ -d "${TEXFOLDER}" ]; then
-        addpath $TEXFOLDER
-        addpath ${TEXDIR}/${TEXYEAR}/texmf/doc/info INFOPATH
+        appendpath $TEXFOLDER
+        prependpath ${TEXDIR}/${TEXYEAR}/texmf/doc/info INFOPATH
 
         ## BSD uses 'manpath' utility, so MANPATH variable may be empty.
         if [ "$OSTYPE" = "linux-gnu" ]; then
-            addpath ${TEXDIR}/${TEXYEAR}/texmf/doc/man MANPATH
+            prependpath ${TEXDIR}/${TEXYEAR}/texmf/doc/man MANPATH
         fi
     fi
     unset TEXYEAR
