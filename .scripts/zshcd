@@ -14,6 +14,12 @@ if [ ! -f ~/.zshrc ]; then
     echo '~/.zshrc not found. Exiting.'
     exit
 fi
+if [ ! -f "$(command -v realpath)" ]; then
+    echo "`realpath' not found. Exiting."
+    exit
+fi
+
+
 SHELL_DIR_GREP="$(grep "SHELL_DIR=" ~/.zshrc | cut -f2 -d=)"
 [ -n "$SHELL_DIR_GREP" ] && SHELL_DIR="$(eval echo "$SHELL_DIR_GREP")"
 if [ ! -d "$SHELL_DIR" ]; then
@@ -29,6 +35,7 @@ if [ ! -f "$ZDIRS" ]; then
     exit
 fi
 
+## Prepend argument to zsh dirstack.
 BUF="$(realpath "$1")
 $(grep -v "$1" "$ZDIRS")"
 echo "$BUF" > "$ZDIRS"

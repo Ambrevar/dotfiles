@@ -21,8 +21,13 @@ if [ -z "$TERMCMD" ]; then
     exit
 fi
 
+## We use a comment as a marker to identify the `browse' command. We need to
+## make sure the `browse' command has no duplicate, and that it is removed when
+## the process finishes.
 [ -f "$HOOK_FILE" ] && sed -ni '/###ZSHBROWSER/!p' "$HOOK_FILE"
 echo 'browse ###ZSHBROWSER' >> "$HOOK_FILE"
 $TERMCMD -e zsh
 [ -f "$HOOK_FILE" ] && sed -ni '/###ZSHBROWSER/!p' "$HOOK_FILE"
+
+## Remove hook file if empty.
 [ $(du "$HOOK_FILE" | cut -f1) -eq 0 ] && rm "$HOOK_FILE"
