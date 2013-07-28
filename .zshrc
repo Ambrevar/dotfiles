@@ -30,3 +30,8 @@ HOOK_FILE="$HOME/.shell.d/hook"
 
 ## Should be sourced last
 [ -f "$HOOK_FILE" ] && . "$HOOK_FILE"
+
+## Browser autostart. See .scripts/browser-autostart
+if [ -n "$BROWSER_AUTOSTART" ]; then
+    browse
+fi

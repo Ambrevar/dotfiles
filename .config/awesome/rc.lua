@@ -333,9 +333,9 @@ globalkeys = awful.util.table.join(
    awful.key({ modkey,  }, "e",     function () awful.util.spawn(os.getenv("EDITOR")) end),
 
    -- Directory browser
-   awful.key({ modkey,  }, "d",     function () awful.util.spawn("zshbrowser") end),
-   awful.key({ }, "XF86Explorer",   function () awful.util.spawn(termcmd .. "ranger") end),
-   awful.key({ }, "XF86MyComputer", function () awful.util.spawn(termcmd .. "ranger") end),
+   awful.key({ modkey,  }, "d",     function () awful.util.spawn("browser-autostart") end),
+   awful.key({ }, "XF86Explorer",   function () awful.util.spawn("browser-autostart") end),
+   awful.key({ }, "XF86MyComputer", function () awful.util.spawn("browser-autostart") end),
 
    -- Screen lock. xlockmore is useful for LDAP login because slock does not work with it.
    awful.key({ modkey,  }, "s",      function () awful.util.spawn_with_shell("xlock 2>/dev/null || slock") end),

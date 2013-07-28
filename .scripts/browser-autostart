@@ -1,0 +1,11 @@
+#!/bin/sh
+
+## Toggle shell browser autostart and launch terminal.
+
+if [ -z "$TERMCMD" ]; then
+    echo 'TERMCMD not set. Exiting.'
+    exit
+fi
+
+export BROWSER_AUTOSTART=true
+$TERMCMD
