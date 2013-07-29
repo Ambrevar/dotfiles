@@ -11,6 +11,7 @@
 ## Launch session
 ##==============================================================================
 exec awesome
+# exec openbox-session
 
 ## Crappy desktops
 # exec razor-session

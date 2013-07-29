@@ -62,7 +62,7 @@
              (define-key mediawiki-mode-map (kbd "C-c o") 'mediawiki-browse)
              (local-unset-key (kbd "M-g"))
              (local-set-key (kbd "C-c C-d") 'duplicate-line)
-             ;; TODO: Bindings to not work???
+             ;; TODO: Bindings do not work???
              ;; (local-set-key (kbd "C-c l L") 'ltx-template-source-to-latex)
              ;; (local-set-key (kbd "C-c l U") 'ltx-template-source-to-usage)
              )) ))
