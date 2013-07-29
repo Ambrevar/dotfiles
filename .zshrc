@@ -17,21 +17,22 @@ HOOK_FILE="$HOME/.shell.d/hook"
 ## manually to TTY.
 [ -z "$DISPLAY" ] && [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
-## Should be sourced first.
-[ -f "${SHELL_DIR}/main_rc" ] && . "${SHELL_DIR}/main_rc"
-[ -f "${SHELL_DIR}/options_zsh" ] && . "${SHELL_DIR}/options_zsh"
+loadrc()
+{
+    for i; do
+        [ -f "${SHELL_DIR}/$i" ] && . "${SHELL_DIR}/$i"
+    done
+}
+
+## main and options should be sourced first.
+loadrc main_rc options_zsh
 
 ## Source order should not matter.
-[ -f "${SHELL_DIR}/alias_rc" ] && . "${SHELL_DIR}/alias_rc"
-[ -f "${SHELL_DIR}/colors_zsh" ] && . "${SHELL_DIR}/colors_zsh"
-[ -f "${SHELL_DIR}/completion_rc" ] && . "${SHELL_DIR}/completion_rc"
-[ -f "${SHELL_DIR}/funs_rc" ] && . "${SHELL_DIR}/funs_rc"
-[ -f "${SHELL_DIR}/keys_zsh" ] && . "${SHELL_DIR}/keys_zsh"
+loadrc keys_zsh
+loadrc alias_rc colors_rc completion_rc funs_rc
 
 ## Should be sourced last
-[ -f "$HOOK_FILE" ] && . "$HOOK_FILE"
+loadrc hook
 
 ## Browser autostart. See .scripts/browser-autostart
-if [ -n "$BROWSER_AUTOSTART" ]; then
-    browse
-fi
+[ -n "$BROWSER_AUTOSTART" ] && browse

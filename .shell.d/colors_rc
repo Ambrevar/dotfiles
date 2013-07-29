@@ -3,11 +3,14 @@
 ## Colors for universal support
 ##==============================================================================
 
-ColorReset='\e[0m'
+Color_Reset='\e[0m'
 
 ## Style
-ColorBold='\e[1m'
-ColorUnderline='\e[4m'
+Color_Bold='\e[1m'
+Color_Underline='\e[4m'
+Color_Blink='\e[5m'
+Color_Reverse='\e[7m'
+Color_Concealed='\e[8m'
 
 ## Foreground Regular
 FR_Black='\e[30m'
