@@ -2,8 +2,14 @@
 ;; THEME
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; I tried to group colors with some consistency:
+;; * doc, here-doc, comments, strings
+;; * variables, types, constants
+;; * preprocessor, functions, keywords, builtins
+;; * search highlight, search lazy
+
 ;; To find the variable associated to a currently used color, place the cursor
-;; on it and call 'customize-face'.
+;; on it and call 'describe-face'.
 
 ;; General
 (set-face-foreground  'default                     "white" )
@@ -19,14 +25,15 @@
 (set-face-foreground  'link                        "#00ffff" )
 (set-face-underline-p 'link                        t)
 (set-face-foreground  'minibuffer-prompt           "#00ffff" )
-(set-face-background  'region                      "#262626")
-(set-face-background  'isearch                     "#00002a" )
-(set-face-foreground  'isearch                     nil )
-(set-face-background  'isearch-lazy-highlight-face "#3a3a3a" )
+(set-face-background  'region                      "#191970")
+;; (set-face-background  'isearch                     "#8b0000" )
+(set-face-background  'isearch                     "#8b0000" )
+(set-face-foreground  'isearch                     "white" )
+(set-face-background  'isearch-lazy-highlight-face "#8b4500" )
+(set-face-foreground  'isearch-lazy-highlight-face "white" )
 (when (>= emacs-major-version 24)
       (set-face-foreground  'error                       "red")
       (set-face-bold-p      'error                       t))
-
 
 ;; Line numbers. Graphic version has a gray bar separating text from line
 ;; numbers, so we can leave the background black.
@@ -35,21 +42,28 @@
   (set-face-background  'shadow                      "#1c1c1c" ))
 
 ;; Programming
-(set-face-foreground  'font-lock-builtin-face           "#2a80d4" )
+(set-face-foreground  'font-lock-builtin-face           "#d2691e" )
 (set-face-bold-p      'font-lock-builtin-face           t )
-(set-face-foreground  'font-lock-comment-delimiter-face "#6c6c6c" )
-(set-face-foreground  'font-lock-comment-face           "#6c6c6c" )
-(set-face-foreground  'font-lock-constant-face          "#5555d4" )
-(set-face-foreground  'font-lock-doc-face               "#005500" )
-(set-face-foreground  'font-lock-function-name-face     "#2a80d4" )
+(set-face-foreground  'font-lock-comment-delimiter-face "#008b8b" )
+(set-face-foreground  'font-lock-comment-face           "#008b8b" )
+(set-face-foreground  'font-lock-constant-face          "#d2691e" )
+(set-face-foreground  'font-lock-doc-face               "#00bfff" )
+(set-face-foreground  'font-lock-function-name-face     "#1e90ff" )
 (set-face-bold-p      'font-lock-function-name-face     t )
-(set-face-foreground  'font-lock-keyword-face           "#ff0000" )
+(set-face-foreground  'font-lock-keyword-face           "#3cb371" )
 (set-face-bold-p      'font-lock-keyword-face           t )
-(set-face-foreground  'font-lock-preprocessor-face      "#552ad4" )
+(set-face-foreground  'font-lock-preprocessor-face      "#9400d3" )
 (set-face-foreground  'font-lock-string-face            "#0080d4" )
 (set-face-foreground  'font-lock-type-face              "#aa2a00" )
 (set-face-foreground  'font-lock-variable-name-face     "#ffff00" )
 (set-face-foreground  'font-lock-warning-face           "DarkOrange" )
+
+;; Sh-mode
+(add-hook
+ 'sh-mode-hook
+ (lambda ()
+   (set-face-foreground 'sh-heredoc "#00bfff")
+   (set-face-bold-p 'sh-heredoc nil)))
 
 ;; Eshell
 (add-hook
@@ -57,6 +71,20 @@
  (lambda ()
    (set-face-foreground 'eshell-prompt "#008b8b")))
 
+(add-hook
+ 'compilation-mode-hook
+ (lambda ()
+   (set-face-foreground 'compilation-column-number "cyan")
+   (set-face-foreground 'compilation-line-number "cyan")
+   (set-face-foreground 'compilation-error "red")
+   (set-face-foreground 'compilation-info "green")
+))
+
+;; C additional keywords.
+(font-lock-add-keywords
+ 'c-mode
+ '(("&" . font-lock-keyword-face)
+   ("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)))
 
 ;; Ediff
 (add-hook
@@ -137,23 +165,13 @@
 ;; ("\\(0x[[:digit:]a-fA-F]+\\)[^[:alnum:]_]" 1 font-lock-constant-face)
 ;; ("[^[:alnum:]_]\\([[:digit:]]*\\.?[[:digit:]]+\\)[^[:alnum:]_.]" 1 font-lock-constant-face)
 
-;; C '&' address as keyword.
-(font-lock-add-keywords
- 'c-mode
- '(("&" . font-lock-keyword-face)
-   ("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)))
-
-
-
 ;; C-mode printf highlight.
 ;; (defvar font-lock-format-specifier-face		'font-lock-format-specifier-face
 ;;   "Face name to use for format specifiers.")
-
 ;; (defface font-lock-format-specifier-face
 ;;   '((t (:foreground "OrangeRed1")))
 ;;   "Font Lock mode face used to highlight format specifiers."
 ;;   :group 'font-lock-faces)
-
 ;; TODO: disable highlighting outside of string.
 ;; (add-hook
 ;;  'c-mode-common-hook
@@ -164,12 +182,6 @@
 ;;        1 font-lock-format-specifier-face t)
 ;;       ("\\(%%\\)"
 ;;        1 font-lock-format-specifier-face t)) )))
-
-;; TODO: Does not work.
-;; (add-hook
-;;  'c-mode-common-hook
-;;  (set-face-foreground 'compilation-column-number "magenta")
-;; )
 
 ;; Man pages
 ;; TODO: man mode does not get colored because the hook does not exist.
