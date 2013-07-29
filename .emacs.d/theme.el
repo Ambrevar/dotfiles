@@ -130,12 +130,13 @@
  '(
       ("^From:" . font-lock-preprocessor-face)
       ("^Subject:" . font-lock-warning-face)
+      ("^Reply-To:" . font-lock-type-face)
       ("^In-Reply-To:" . font-lock-builtin-face)
       ;; Mail addresses.
       ("\\([[:alnum:]._-]+@[[:alnum:]._-]+\.[[:alnum:]._-]+\\)" 1 font-lock-string-face)
       ;; Quote
       ("^\> *\\([^\> ]\\).*$" . font-lock-doc-face)
-      ;; Quote1
+      ;; Quote+
       ("^\> *\> *\\([^\> ]\\).*$" . font-lock-constant-face)
       ("^\> *\> *\> *\\([^\> ]\\).*$" . font-lock-type-face)
       ("^\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-variable-name-face)

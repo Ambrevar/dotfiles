@@ -25,18 +25,19 @@ mono body bold "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
 
 ## Email addresses.
 # color body brightgreen black "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
-color body $my_col_string black "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+color body $my_address black "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
 #mono body bold "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
 
 ## Header
-color header $my_col_preprocessor black "^from:"
-color header $my_col_function black "^to:"
-color header $my_col_keyword black "^cc:"
-color header $my_col_keyword black "^bcc:"
-color header yellow black "^date:"
+color header $my_from black "^from:"
+color header $my_to black "^to:"
+color header $my_cc black "^cc:"
+color header $my_bcc black "^bcc:"
+color header $my_replyto black "^reply-to:"
+color header $my_inreplyto black "^in-reply-to:"
+color header $my_date black "^date:"
 color header yellow black "^newsgroups:"
-color header $my_col_keyword black "^reply-to:"
-color header $my_col_warning black "^subject:"
+color header $my_subject black "^subject:"
 color header red black "^x-spam-rule:"
 color header green black "^x-mailer:"
 color header yellow black "^message-id:"
@@ -44,33 +45,32 @@ color header yellow black "^Organization:"
 color header yellow black "^Organisation:"
 color header yellow black "^User-Agent:"
 color header yellow black "^message-id: .*pine"
-color header $my_col_string black "^X-Fnord:"
-color header $my_col_string black "^X-WebTV-Stationery:"
-color header $my_col_string black "^X-Message-Flag:"
-color header $my_col_string black "^X-Spam-Status:"
-color header $my_col_string black "^X-SpamProbe:"
+color header $my_x black "^X-Fnord:"
+color header $my_x black "^X-WebTV-Stationery:"
+color header $my_x black "^X-Message-Flag:"
+color header $my_x black "^X-Spam-Status:"
+color header $my_x black "^X-SpamProbe:"
 color header red black "^X-SpamProbe: SPAM"
 
 ## Coloring quoted text - coloring the first 7 levels:
-color quoted $my_col_doc black
-color quoted1 $my_col_constant black
-color quoted2 $my_col_type black
-color quoted3 $my_col_variable black
-color quoted4 $my_col_comment black
-color quoted5 $my_col_comment black
-color quoted6 $my_col_comment black
-color quoted7 $my_col_comment black
-
+color quoted $my_quote0 black
+color quoted1 $my_quote1 black
+color quoted2 $my_quote2 black
+color quoted3 $my_quote3 black
+color quoted4 $my_quote4 black
+color quoted5 $my_quote5 black
+color quoted6 $my_quote6 black
+color quoted7 $my_quote7 black
 
 ## Default color definitions
 #color hdrdefault white green
-color signature $my_col_comment black
-color indicator black cyan
-color attachment $my_col_shadow $my_col_shadow_bg
+color signature $my_sig black
+color indicator $my_indicator $my_indicator_bg
+color attachment $my_attach $my_attach_bg
 color error red black
 color message white black
 color search brightwhite magenta
-color status $my_col_status_fg $my_col_status_bg
+color status $my_status $my_status_bg
 color tree brightblue black
 color normal white black
 color tilde green black
