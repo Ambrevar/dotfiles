@@ -9,7 +9,7 @@
 !!------------------------------------------------------------------------------
 !! URxvt
 !! ------------------------------------------------------------------------------
-!! url-select, clipboard and keyboard-select are provided in Muennich's perl
+!! url-select, clipboard and keyboard-select are provided in Muennich perl
 !! plugins.
 
 !! Plugin dir.
@@ -87,25 +87,25 @@ Xft.rgba: rgb
 !! color14 = bright cyan 	
 !! color15 = bright white 	
 
-!! Gnome style
+!! Almost natural colors
 URxvt.background: black
-URxvt.foreground: #CCCCCC
-URxvt.color0  : #000000
-URxvt.color1  : #AA0000
-URxvt.color2  : #00AA00
-URxvt.color3  : #AA5500
-URxvt.color4  : #0000AA
-URxvt.color5  : #AA00AA
-URxvt.color6  : #00AAAA
-URxvt.color7  : #AAAAAA
-URxvt.color8  : #555555
-URxvt.color9  : #FF5555
-URxvt.color10 : #55FF55
-URxvt.color11 : #FFFF55
-URxvt.color12 : #5555FF
-URxvt.color13 : #FF55FF
-URxvt.color14 : #55FFFF
-URxvt.color15 : #FFFFFF
+URxvt.foreground: white
+URxvt.color0  : black
+URxvt.color1  : #8b0000
+URxvt.color2  : #228b22
+URxvt.color3  : #cdcd00
+URxvt.color4  : blue
+URxvt.color5  : #8b008b
+URxvt.color6  : #00bfff
+URxvt.color7  : #f5f5f5
+URxvt.color8  : #696969
+URxvt.color9  : red
+URxvt.color10 : green
+URxvt.color11 : yellow
+URxvt.color12 : #1e90ff
+URxvt.color13 : magenta
+URxvt.color14 : cyan
+URxvt.color15 : white
 
 !!==============================================================================
 !! Xterm

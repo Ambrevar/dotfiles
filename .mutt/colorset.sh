@@ -1,6 +1,6 @@
 #!/bin/sh
 if [ $(tput colors) -eq 256 ]; then
-    ## Emacs colors.
+    ## 256 colors
     cat <<EOF
 set my_col_builtin = color75
 set my_col_comment = color242
@@ -15,9 +15,11 @@ set my_col_variable = brightyellow
 set my_col_warning = color202
 set my_col_shadow = color250
 set my_col_shadow_bg = color234
+set my_col_status_fg = brightwhite
+set my_col_status_bg = color242
 EOF
 else
-    ## 8/16 colors.
+    ## 8/16 colors
     cat <<EOF
 set my_col_builtin = brightblue
 set my_col_comment = white
@@ -32,5 +34,7 @@ set my_col_variable = brightyellow
 set my_col_warning = yellow
 set my_col_shadow = brightwhite
 set my_col_shadow_bg = brightblack
+set my_col_status_fg = yellow
+set my_col_status_bg = blue
 EOF
 fi

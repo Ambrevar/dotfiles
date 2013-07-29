@@ -70,7 +70,7 @@ color attachment $my_col_shadow $my_col_shadow_bg
 color error red black
 color message white black
 color search brightwhite magenta
-color status brightyellow blue
+color status $my_col_status_fg $my_col_status_bg
 color tree brightblue black
 color normal white black
 color tilde green black
