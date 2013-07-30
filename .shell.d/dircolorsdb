@@ -40,8 +40,8 @@ MULTIHARDLINK 1;37 # regular file with more than one link
 .zoo   91
 
 ## Disc image
-.img 4;31
-.iso 4;31
+.img 4;91
+.iso 4;91
 
 # Image formats (underlined yellow)
 .bmp   4;33

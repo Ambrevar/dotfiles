@@ -100,7 +100,7 @@ alias xres='xrandr -s $(xrandr | awk '"'"'/^ / {print $1;exit}'"'"')'
 #alias -g G='| grep -'
 #alias -g L='| less'
 
-## Now just type the image name to launch irfanview
+## Now just type the image name to launch your image preview
 #alias -s jpg='/usr/bin/sxiv'
 
 # fi
@@ -108,7 +108,6 @@ alias xres='xrandr -s $(xrandr | awk '"'"'/^ / {print $1;exit}'"'"')'
 ##==============================================================================
 ## Emacs
 ##==============================================================================
-## 'em' is a wrapper script for emacsclient.
 if [ -n "$(command -v em)" ]; then
    alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
 fi
