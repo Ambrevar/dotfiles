@@ -26,7 +26,6 @@
 (set-face-underline-p 'link                        t)
 (set-face-foreground  'minibuffer-prompt           "#00ffff" )
 (set-face-background  'region                      "#191970")
-;; (set-face-background  'isearch                     "#8b0000" )
 (set-face-background  'isearch                     "#8b0000" )
 (set-face-foreground  'isearch                     "white" )
 (set-face-background  'isearch-lazy-highlight-face "#8b4500" )
@@ -145,7 +144,7 @@
       ("^\> *\> *\> *\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-comment-face)
       ("^\> *\> *\> *\> *\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-comment-face)
       ;; Signature
-      ;; TODO: does not work properly.
+      ;; TODO: mail signature face does not work properly.
       ("^--.*\\(\n.*\\)*" . font-lock-comment-face)))
 
 ;; Key notes highlighting. We need to apply it to the mode hook since

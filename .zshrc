@@ -1,6 +1,6 @@
 ################################################################################
 ## Shell Config -- Master File
-## Date 2012-08-11
+## Date 2013-07-29
 ################################################################################
 
 ##==============================================================================
@@ -9,9 +9,6 @@
 
 SHELL_CURRENT="$(ps -o command="" $$)"
 SHELL_DIR="$HOME/.shell.d"
-
-## Need to be expanded for external scripts to fetch zsh hook file location.
-HOOK_FILE="$HOME/.shell.d/hook"
 
 ## .profile is sourced automatically when X is started, but we need to source it
 ## manually to TTY.
