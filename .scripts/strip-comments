@@ -1,0 +1,32 @@
+#!/usr/bin/awk -f
+
+## Default to C block comments. You can change the comment delimiters from
+## command line. The delims are regexes. For instance call this script with
+##
+##   awk -v COMMENT_OPEN="#" -v COMMENT_CLOSE="$" -f <this-script> <files>
+##
+## to use shell comment delimiters.
+
+BEGIN {
+    ## Since COMMENT_* are regexes, we need to escape some sequences.
+    if(COMMENT_OPEN == "")
+        COMMENT_OPEN="/\\*"
+    if(COMMENT_CLOSE == "")
+        COMMENT_CLOSE="\\*/"
+}
+
+{
+    while (match ($0, COMMENT_OPEN))
+    { 
+        before = substr ($0, 1, RSTART-1)
+        $0 = substr($0, RSTART)
+        printf(before)
+
+        ## Reach line where first COMMENT_CLOSE is found.
+        while (! match($0, COMMENT_CLOSE) )
+            getline
+
+        $0 = substr($0, RSTART + length(COMMENT_CLOSE) -1)
+    }
+    print
+}
