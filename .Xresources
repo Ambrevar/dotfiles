@@ -53,7 +53,7 @@ urxvt.font:              xft:Dina:pixelsize=16
 
 !! Xft options
 ! Xft.antialias: false
-! Xft.antialias: rgba 
+! Xft.antialias: rgba
 Xft.hinting: true
 Xft.hintstyle: hintlight
 Xft.rgba: rgb
@@ -69,25 +69,9 @@ Xft.rgba: rgb
 !! http://xcolors.net/dl/derp
 !! https://bbs.archlinux.org/viewtopic.php?id=51818
 
-!! Colors list
-!! color0  = black 	
-!! color1  = red 	        
-!! color2  = green 	
-!! color3  = yellow 	
-!! color4  = blue 	        
-!! color5  = magenta 	
-!! color6  = cyan 	        
-!! color7  = white 	
-!! color8  = bright black 	
-!! color9  = bright red 	
-!! color10 = bright green 	
-!! color11 = bright yellow 
-!! color12 = bright blue 	
-!! color13 = bright magenta
-!! color14 = bright cyan 	
-!! color15 = bright white 	
-
-!! Almost natural colors
+!! Color order is as listed in .shell.d/colors_rc. Bright values are all
+!! canonical colors except for blue and black which are not bright enough on a
+!! black background.
 URxvt.background: black
 URxvt.foreground: white
 URxvt.color0  : black
@@ -134,4 +118,3 @@ xterm*color12 : #5555FF
 xterm*color13 : #FF55FF
 xterm*color14 : #55FFFF
 xterm*color15 : #FFFFFF
-
