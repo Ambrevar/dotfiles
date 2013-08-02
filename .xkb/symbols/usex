@@ -43,7 +43,7 @@ xkb_symbols "basic" {
     key <AE07> { [ 7,     ampersand,       onehalf,              onehalf          ] };
     key <AE08> { [ 8,     asterisk,        threequarters,        dead_ogonek      ] };
     key <AE09> { [ 9,     parenleft,       leftsinglequotemark,  dead_breve       ] };
-    key <AE10> { [ 0,     parenright,      rightsinglequotemark, dead_abovering   ] };
+    key <AE10> { [ 0,     parenright,      rightsinglequotemark, paragraph        ] };
     key <AE11> { [ minus, underscore,      yen,                  0x10022C5        ] };
     key <AE12> { [ equal, plus,            multiply,             division         ] };
 
@@ -69,7 +69,7 @@ xkb_symbols "basic" {
     key <AC07> { [ j,          J,        ucircumflex, Ucircumflex    ] };
     key <AC08> { [ k,          K,        oe,          OE             ] };
     key <AC09> { [ l,          L,        ae,          AE             ] };
-    key <AC10> { [ semicolon,  colon,    paragraph,   degree         ] };
+    key <AC10> { [ semicolon,  colon,    degree,      dead_abovering ] };
     key <AC11> { [ apostrophe, quotedbl, dead_acute,  dead_diaeresis ] };
 
     key <AB01> { [ z,         Z,        adiaeresis, Adiaeresis   ] };
