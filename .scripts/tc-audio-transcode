@@ -4,15 +4,10 @@
 ## User options
 
 ## You can easily set output folder to current folder with OUTPUT_ROOT=".".
-[ -z "$OUTPUT_ROOT" ] && OUTPUT_ROOT="$HOME/musics/"
+[ -z "$OUTPUT_ROOT" ] && OUTPUT_ROOT="$HOME/musics"
 
 ## End of user options
 ################################################################################
-
-if [ ! -d "$OUTPUT_ROOT" ]; then
-    echo "Output folder '$OUTPUT_ROOT' does not exist."
-    exit
-fi
 
 if [ -z "$(command -v ffmpeg)" ]; then
     echo "ffmpeg required for transcoding."
@@ -21,6 +16,12 @@ fi
 
 if [ -z "$(command -v realpath)" ]; then
     echo "realpath required to get input file folder."
+    exit
+fi
+
+OUTPUT_ROOT="$(realpath "$OUTPUT_ROOT")"
+if [ ! -d "$OUTPUT_ROOT" ]; then
+    echo "Output folder '$OUTPUT_ROOT' does not exist."
     exit
 fi
 
@@ -340,7 +341,8 @@ if [ -e "$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT" ]; then
         OUTPUT_FILE="$OUTPUT_FILE-$(date '+%F-%H%M%S')"
         OUTPUT_MSG="$(tput setf 1)$(tput bold)(Warning: destination exists, appending timestamp.)$(tput sgr0)"
     else
-        if  [ "$INPUT_FOLDER/$INPUT_FILE" = "$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT" ]; then
+        ## WARNING: here it is important that no folder are suffixed by slashes.
+        if  [ "$INPUT_FOLDER/$INPUT_FILE.$INPUT_EXT" = "$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT" ]; then
             OUTPUT_FILE_ORIGINAL="$OUTPUT_FILE"
             OUTPUT_FILE="$OUTPUT_FILE-$(date '+%F-%H%M%S')"
         fi
