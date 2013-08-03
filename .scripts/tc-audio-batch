@@ -17,11 +17,11 @@ fi
 
 if [ "$1" = "-h" ]; then
     cat<<EOF
-Usage: ${0##*/} OPTIONS
+Usage: ${0##*/} [OPTIONS]
 
-This will batch process all audio files found in current folders and subfolders with
-the tc-audio-transcode script.  All arguments are passed to tc-audio-transcode.
-For more details see
+This will batch process all audio files found in current folders and subfolders
+with the tc-audio-transcode script.  All arguments are passed to
+tc-audio-transcode.  For more details see
 
   tc-audio-transcode -h
 EOF
@@ -38,7 +38,7 @@ for i in $(find "."  \( \
     -iname '*.mp3'  -o \
     -iname '*.mpc'  -o \
     -iname '*.wav'  -o \
-    -iname '*.wv'   \) ) ;do
+    -iname '*.wv'   \) | sort -n) ; do
 
     echo "$(tput setf 2)$(tput bold)==>$(tput sgr0) $i"
     "${0%/*}/tc-audio-transcode" "$@" "$i"

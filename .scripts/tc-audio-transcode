@@ -1,5 +1,19 @@
 #!/bin/sh
 
+################################################################################
+## User options
+
+## You can easily set output folder to current folder with OUTPUT_ROOT=".".
+[ -z "$OUTPUT_ROOT" ] && OUTPUT_ROOT="$HOME/musics/"
+
+## End of user options
+################################################################################
+
+if [ ! -d "$OUTPUT_ROOT" ]; then
+    echo "Output folder '$OUTPUT_ROOT' does not exist."
+    exit
+fi
+
 if [ -z "$(command -v ffmpeg)" ]; then
     echo "ffmpeg required for transcoding."
     exit
@@ -16,14 +30,8 @@ if [ ! -f "$TITLECASE_SCRIPT" ]; then
     exit
 fi
 
-################################################################################
-## User options
-################################################################################
 
 ## For the sake of simplicity we convert everything to OGG.
-## You can easily set output folder to current folder with OUTPUT_ROOT=".".
-OUTPUT_ROOT="/media/data2/Musics/"
-
 ## OGG quality ranges from -1 to 10.
 ## -q-1 45 kbit/s
 ## -q0  64 kbit/s
@@ -44,14 +52,10 @@ OUTPUT_ROOT="/media/data2/Musics/"
 ## Composer: not universal neither, we prefer ARTIST over COMPOSER, so COMPOSER
 ##           will be empty.
 
-################################################################################
-## End of user options
-################################################################################
-
-## This function is supposed to work on a per-album basis. Folders will not be
+## This script is supposed to work on a per-album basis. Folders will not be
 ## accepted as argument. This function will work best if all tracks of a folder
 ## belong to the same album. There's is no way to handle covers reliably, so you
-## should leave the only covers you want to keep in the working folder.
+## should remove the undesired covers from the working folder.
 
 ## TODO: cover resolution check. Should be > 100x100. Above 1000x1000 should
 ## give a warning.
@@ -59,7 +63,7 @@ OUTPUT_ROOT="/media/data2/Musics/"
 
 _printhelp ()
 {
-    cat <<EOF
+    cat <<EOF | less
 Usage: ${1##*/} [OPTIONS] FILE
 
 Options:
@@ -93,7 +97,7 @@ Default output folder:
     OUTPUT_FOLDER="\$OUTPUT_ROOT/\$OUTPUT_ARTIST/\${OUTPUT_ALBUM:+\${OUTPUT_DATE:+\$OUTPUT_DATE - }\$OUTPUT_ALBUM/}"
 
 Default output file:
-    OUTPUT_FILE="\$OUTPUT\$OUTPUT_ARTIST - \${OUTPUT_TRACK:+\$OUTPUT_TRACK - }\$OUTPUT_TITLE.\$OUTPUT_FORMAT"
+    OUTPUT_FILE="\$OUTPUT\$OUTPUT_ARTIST - \${OUTPUT_TRACK:+\$OUTPUT_TRACK - }\$OUTPUT_TITLE.\$OUTPUT_EXT"
 
 Examples:
 
@@ -103,8 +107,10 @@ Examples:
   Set 'artist' to be 'composer', and 'title' to be preceded by 'artist', do not reencode:
     ${1##*/} -s -a '\$COMPOSER' -t '\$ARTIST - \$TITLE' file.ogg
 
-IMPORTANT: you *must* use single quotes when using variables.
-
+IMPORTANT: you *must* use single quotes when using variables. Also note that the
+string parameters are all evaluated using 'eval', which means that some
+characters may need escaping with '\'. Since parenthesis '()' are often used, a
+backslash is prepended before eval is called.
 EOF
 }
 
@@ -112,7 +118,7 @@ EOF
 CAPITAL=0
 OVERWRITE="-n"
 PREVIEW=0
-SKIP=0
+SKIP=false
 
 ## TAGS
 OUTPUT_ALBUM='$ALBUM'
@@ -126,12 +132,12 @@ OUTPUT_TRACK='$TRACK'
 OUTPUT_BITRATE=0
 
 ## Non-CLI-option data. Modifying these imply modifications in code below.
-OUTPUT_FORMAT="ogg"
+OUTPUT_EXT="ogg"
 OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
 
 ## These ones are not CLI-options either, but this could be easily changed.
-OUTPUT_FOLDER='$OUTPUT_ROOT/$OUTPUT_ARTIST/${OUTPUT_ALBUM:+${OUTPUT_DATE:+$OUTPUT_DATE - }$OUTPUT_ALBUM/}'
-OUTPUT_FILE='$OUTPUT_FOLDER$OUTPUT_ARTIST - ${OUTPUT_PADDEDTRACK:+$OUTPUT_PADDEDTRACK - }$OUTPUT_TITLE'
+OUTPUT_FOLDER='$OUTPUT_ROOT/$OUTPUT_ARTIST${OUTPUT_ALBUM:+/${OUTPUT_DATE:+$OUTPUT_DATE - }$OUTPUT_ALBUM}'
+OUTPUT_FILE='$OUTPUT_ARTIST - ${OUTPUT_PADDEDTRACK:+$OUTPUT_PADDEDTRACK - }$OUTPUT_TITLE'
 
 while getopts ":a:b:cd:fg:l:n:r:t:hps" opt; do
     case $opt in
@@ -161,7 +167,7 @@ while getopts ":a:b:cd:fg:l:n:r:t:hps" opt; do
             ;;
 
         s)
-            SKIP=1
+            SKIP=true
             ;;
 
         ?)
@@ -194,18 +200,18 @@ fi
 METADATA=$(echo "$STREAM" | sed -n '/Metadata/ ! d; /Metada/{b cont}; :cont ; {n;p;b cont}')
 
 ## Filename without extension nor path.
-FILENAME="${1%.*}"
-FILENAME="${FILENAME##*/}"
+INPUT_FILE="${1%.*}"
+INPUT_FILE="${INPUT_FILE##*/}"
 ## Folder of the file. Needed for cover.
-SOURCEFOLDER="$(realpath "$1")"
-SOURCEFOLDER="${SOURCEFOLDER%/*}"
-## We get format from extension, because codec is not reliable either.
-FORMAT="${1##*.}"
-## CODEC is unused for now.
-CODEC=$(echo "$STREAM" | sed -n '/Stream.*Audio:/ {s/.*Audio: \([^,]*\),.*/\1/;p}')
+INPUT_FOLDER="$(realpath "$1")"
+INPUT_FOLDER="${INPUT_FOLDER%/*}"
+INPUT_EXT="${1##*.}"
 BITRATE=$(echo "$STREAM" | sed -n '/Duration/ {s|.* \([[:digit:]]\+\) kb/s|\1|;p;q}')
+## CODEC is unused for now.
+# CODEC=$(echo "$STREAM" | sed -n '/Stream.*Audio:/ {s/.*Audio: \([^,]*\),.*/\1/;p}')
 
-if [ -z "$FORMAT" ]; then
+## We get audio format from extension, because codec is not reliable either.
+if [ -z "$INPUT_EXT" ]; then
     echo "ERROR: non-audio file."
     exit
 fi
@@ -242,6 +248,7 @@ _string_cleanser()
         | sed -n  -e "s/’/'/g ; s/ *: */ - /g ; s| */ *| - |g; p; q"
 }
 
+## These are the user-accessible variables.
 TITLE=$(_string_cleanser "$INPUT_TITLE")
 ARTIST=$(_string_cleanser "$INPUT_ARTIST")
 ALBUM=$(_string_cleanser "$INPUT_ALBUM")
@@ -256,20 +263,24 @@ ALBUM_ARTIST=$(_string_cleanser "$INPUT_ALBUM_ARTIST")
 ##================================================================================
 ## OUTPUT variables.
 
-OUTPUT_TITLE=$(eval echo ${OUTPUT_TITLE:-Unknown Title})
-OUTPUT_ALBUM=$(eval echo ${OUTPUT_ALBUM:-Unknown Album})
+## In this part we prepend backslashes to parenthese when there is an 'eval'
+## call to prevent parsing error.
+
+OUTPUT_TITLE=$(eval echo $(echo ${OUTPUT_TITLE:-Unknown Title} | sed 's/[()]/\\&/g'))
+OUTPUT_ALBUM=$(eval echo $(echo ${OUTPUT_ALBUM:-Unknown Album} | sed 's/[()]/\\&/g'))
 
 ## We use album artist if artist is empty.
 [ -z "$OUTPUT_ARTIST" ] && [ -n "$ALBUM_ARTIST" ] && OUTPUT_ARTIST="$ALBUM_ARTIST"
-OUTPUT_ARTIST=$(eval echo ${OUTPUT_ARTIST:-Unknown Artist})
+OUTPUT_ARTIST=$(eval echo $(echo ${OUTPUT_ARTIST:-Unknown Artist} | sed 's/[()]/\\&/g'))
 
 ## If OUTPUT_GENRE is set from command-line parameters, we clease the
 ## string. Otherwise we put GENRE in lower case and underscore to ease matching.
 ## If it matches, we use the Title Case match. If it does not, we set it to
 ## empty.
 if [ -n "$OUTPUT_GENRE" ]; then
-    OUTPUT_GENRE=$(eval _string_cleanser $OUTPUT_GENRE)
+    OUTPUT_GENRE=$(eval _string_cleanser $(echo $OUTPUT_GENRE | sed 's/[()]/\\&/g'))
 else
+    ## We also convert space to underscore.
     GENRE=$(echo "$GENRE" | tr '[:upper:] ' '[:lower:]_')
     case $GENRE in
         ost) OUTPUT_GENRE="Soundtrack" ;;
@@ -285,10 +296,10 @@ fi
 
 ## We remove the track count if any, we suppress leading zeros, we suppress all
 ## non-digit characters.
-OUTPUT_TRACK=$(eval _string_cleanser $OUTPUT_TRACK | sed -e 's/^0*//' -e 's|[^[:digit:]].*||')
+OUTPUT_TRACK=$(eval _string_cleanser $(echo $OUTPUT_TRACK | sed 's/[()]/\\&/g') | sed -e 's/^0*//' -e 's|[^[:digit:]].*||')
 
 ## We extract the four-digits number from the date.
-OUTPUT_DATE=$(eval _string_cleanser $OUTPUT_DATE)
+OUTPUT_DATE=$(eval _string_cleanser $(echo $OUTPUT_DATE | sed 's/[()]/\\&/g'))
 OUTPUT_DATE=$(echo "$OUTPUT_DATE" | sed -n 's/.*\([[:digit:]]\{4\}\).*/\1/p')
 ## If DATE is not a year, we use TYER if it is a year.
 TYER_REG=$(echo "$TYER" | sed -n 's/.*\([[:digit:]]\{4\}\).*/\1/p')
@@ -305,8 +316,11 @@ fi
 
 ## Only reencode if not in OGG and if SKIP not set.
 OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
-[ $SKIP -ne 0 ] && OGG_PARAM="-c:a copy" && OUTPUT_FORMAT="$FORMAT"
-[ "$FORMAT" = "ogg" ] && OGG_PARAM="-c:a copy"
+if $SKIP; then
+    OGG_PARAM="-c:a copy"
+    OUTPUT_EXT="$INPUT_EXT"
+fi
+[ "$INPUT_EXT" = "ogg" ] && OGG_PARAM="-c:a copy"
 
 ## Make sure track number has two digits for file name only.
 OUTPUT_PADDEDTRACK=$OUTPUT_TRACK
@@ -316,13 +330,18 @@ fi
 
 OUTPUT_FOLDER=$(eval echo $OUTPUT_FOLDER)
 OUTPUT_FILE=$(eval echo $OUTPUT_FILE)
+unset OUTPUT_FILE_ORIGINAL
 
-if [ -e "${OUTPUT_FILE}.$OUTPUT_FORMAT" ]; then
+if [ -e "$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT" ]; then
     if [ $OVERWRITE = "-n" ]; then
         ## If file exist, we append a unique timestamp to the name.
         OUTPUT_FILE="$OUTPUT_FILE-$(date '+%F-%H%M%S')"
         OUTPUT_MSG="$(tput setf 1)$(tput bold)(Warning: destination exists, appending timestamp.)$(tput sgr0)"
     else
+        if  [ "$INPUT_FOLDER/$INPUT_FILE" = "$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT" ]; then
+            OUTPUT_FILE_ORIGINAL="$OUTPUT_FILE"
+            OUTPUT_FILE="$OUTPUT_FILE-$(date '+%F-%H%M%S')"
+        fi
         OUTPUT_MSG="$(tput setf 4)$(tput bold)(Warning: overwriting destination!)$(tput sgr0)"
     fi
 fi
@@ -330,34 +349,29 @@ fi
 ##==============================================================================
 ## PREVIEW
 
-echo ":: BEFORE"
-echo "ALBUM          [$INPUT_ALBUM]"
-echo "ALBUM_ARTIST   [$INPUT_ALBUM_ARTIST]"
-echo "ARTIST         [$INPUT_ARTIST]"
-echo "BITRATE        [$INPUT_BITRATE]"
-echo "COMPOSER       [$INPUT_COMPOSER]"
-echo "DATE           [$INPUT_DATE]"
-echo "DISC           [$INPUT_DISC]"
-echo "FORMAT         [$INPUT_FORMAT]"
-echo "GENRE          [$INPUT_GENRE]"
-echo "TITLE          [$INPUT_TITLE]"
-echo "TRACK          [$INPUT_TRACK]"
-echo "TYER           [$INPUT_TYER]"
-echo
-echo ":: AFTER"
-echo "ALBUM          [$OUTPUT_ALBUM]"
-echo "ARTIST         [$OUTPUT_ARTIST]"
-echo "BITRATE        [$OUTPUT_BITRATE]"
-echo "DATE           [$OUTPUT_DATE]"
-echo "FORMAT         [$OUTPUT_FORMAT]"
-echo "GENRE          [$OUTPUT_GENRE]"
-echo "TITLE          [$OUTPUT_TITLE]"
-echo "TRACK          [$OUTPUT_TRACK]"
-echo
-echo ":: OUTPUT $OUTPUT_MSG"
-echo "[$OUTPUT_FILE.$OUTPUT_FORMAT]"
-# echo "[$OGG_PARAM]"
-echo
+HALF="$((($(tput cols)-1)/2))"
+INPUT_WIDTH=$(($HALF-15))
+INPUT_WIDTH="%-$INPUT_WIDTH.${INPUT_WIDTH}s"
+OUTPUT_WIDTH=$(($HALF-10))
+OUTPUT_WIDTH="%-$OUTPUT_WIDTH.${OUTPUT_WIDTH}s"
+cat <<EOF
+:: INTPUT     $(printf "$INPUT_WIDTH" "") | :: OUTPUT
+ARTIST:       $(printf "$INPUT_WIDTH" "[$INPUT_ARTIST]") | ARTIST:  $(printf "$OUTPUT_WIDTH" "[$OUTPUT_ARTIST]")
+ALBUM:        $(printf "$INPUT_WIDTH" "[$INPUT_ALBUM]") | ALBUM:   $(printf "$OUTPUT_WIDTH" "[$OUTPUT_ALBUM]")
+TRACK:        $(printf "$INPUT_WIDTH" "[$INPUT_TRACK]") | TRACK:   $(printf "$OUTPUT_WIDTH" "[$OUTPUT_TRACK]")
+TITLE:        $(printf "$INPUT_WIDTH" "[$INPUT_TITLE]") | TITLE:   $(printf "$OUTPUT_WIDTH" "[$OUTPUT_TITLE]")
+DATE:         $(printf "$INPUT_WIDTH" "[$INPUT_DATE]") | DATE:    $(printf "$OUTPUT_WIDTH" "[$OUTPUT_DATE]")
+GENRE:        $(printf "$INPUT_WIDTH" "[$INPUT_GENRE]") | GENRE:   $(printf "$OUTPUT_WIDTH" "[$OUTPUT_GENRE]")
+EXT:          $(printf "$INPUT_WIDTH" "[$INPUT_EXT]") | EXT:     $(printf "$OUTPUT_WIDTH" "[$OUTPUT_EXT]")
+BITRATE:      $(printf "$INPUT_WIDTH" "[$INPUT_BITRATE]") | BITRATE: $(printf "$OUTPUT_WIDTH" "[$OUTPUT_BITRATE]")
+ALBUM_ARTIST: $(printf "$INPUT_WIDTH" "[$INPUT_ALBUM_ARTIST]") |
+COMPOSER:     $(printf "$INPUT_WIDTH" "[$INPUT_COMPOSER]") |
+DISC:         $(printf "$INPUT_WIDTH" "[$INPUT_DISC]") |
+TYER:         $(printf "$INPUT_WIDTH" "[$INPUT_TYER]") |
+
+:: OUTPUT $OUTPUT_MSG
+[$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT]
+EOF
 
 [ $PREVIEW -eq 1 ] && exit
 
@@ -392,11 +406,11 @@ while read -r i; do
         COVER_COUNTER=$(($COVER_COUNTER+1))
     done
 
-    echo ":: COVER [$i] from $SOURCEFOLDER"
+    echo ":: COVER [$i] from $INPUT_FOLDER"
     cp -nv "$i" "$OUTPUT_COVERFILE"
     echo
 done <<EOF
-$(find "$SOURCEFOLDER" -maxdepth 1  \( -iname '*.png' -o -iname '*.jpg' \) )
+$(find "$INPUT_FOLDER" -maxdepth 1  \( -iname '*.png' -o -iname '*.jpg' \) )
 EOF
 
 ## Zsh compatibility. We need it otherwise word splitting of parameter like
@@ -415,11 +429,14 @@ ffmpeg $OVERWRITE -i "$1" -vn -sn $OGG_PARAM \
     -metadata album="$OUTPUT_ALBUM" \
     -metadata album_artist="$OUTPUT_ARTIST" \
     -metadata genre="$OUTPUT_GENRE" \
-    "$OUTPUT_FILE.$OUTPUT_FORMAT"
+    "$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT"
 
+## If we are overwriting inplace.
+if [ -n "$OUTPUT_FILE_ORIGINAL" ]; then
+    mv -f "$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT" "$OUTPUT_FOLDER/$OUTPUT_FILE_ORIGINAL.$OUTPUT_EXT"
+fi
 echo
 
 ## Restore Zsh previous options. This will not turn off shwordsplit if it
 ## was on before calling the function.
 [ "$STATUS" = "off" ] && set +o shwordsplit
-
