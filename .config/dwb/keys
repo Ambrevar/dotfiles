@@ -176,6 +176,8 @@ jump= '
 mark= `
 repeat= .
 
+entry_delete_active=Control d
+
 [1]
 save_search_field=gs
 tab_new=ga
