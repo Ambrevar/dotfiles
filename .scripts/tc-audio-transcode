@@ -193,7 +193,7 @@ fi
 STREAM=$(ffmpeg -i "$1" 2>&1)
 
 if [ -z "$(echo $STREAM | grep "Stream")" ]; then
-    echo "[$1] Non-audio file."
+    echo "ERROR: Non-audio file [$1]."
     exit
 fi
 
@@ -206,13 +206,14 @@ INPUT_FILE="${INPUT_FILE##*/}"
 INPUT_FOLDER="$(realpath "$1")"
 INPUT_FOLDER="${INPUT_FOLDER%/*}"
 INPUT_EXT="${1##*.}"
-BITRATE=$(echo "$STREAM" | sed -n '/Duration/ {s|.* \([[:digit:]]\+\) kb/s|\1|;p;q}')
+INPUT_BITRATE=$(echo "$STREAM" | sed -n '/Duration/ {s|.* \([[:digit:]]\+\) kb/s|\1|;p;q}')
 ## CODEC is unused for now.
 # CODEC=$(echo "$STREAM" | sed -n '/Stream.*Audio:/ {s/.*Audio: \([^,]*\),.*/\1/;p}')
 
-## We get audio format from extension, because codec is not reliable either.
-if [ -z "$INPUT_EXT" ]; then
-    echo "ERROR: non-audio file."
+## Extension needs to be set in case we skip encoding so that ffmpeg will not be
+## disturbed by unappropriate extension.
+if $SKIP &&[ -z "$INPUT_EXT" ]; then
+    echo "ERROR: Extension missing [$1]."
     exit
 fi
 
@@ -308,19 +309,20 @@ if [ ${#DATE} -ne 4 ] && [ ${#TYER_REG} -eq 4 ]; then
 fi
 
 ## QUALITY
-## If bitrate argument is not provided, we use BITRATE value.
-[ $OUTPUT_BITRATE -eq 0 ] && OUTPUT_BITRATE=${BITRATE}
+## If bitrate argument is not provided, we use INPUT_BITRATE value.
+[ $OUTPUT_BITRATE -eq 0 ] && OUTPUT_BITRATE=${INPUT_BITRATE}
 ## If OUTPUT_BITRATE is beyond OGG's limit, we trim it.
 [ $OUTPUT_BITRATE -gt 500 ] && OUTPUT_BITRATE=500
 
 
 ## Only reencode if not in OGG and if SKIP not set.
 OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
+INPUT_EXT_LOW="$(echo $INPUT_EXT | tr [:upper:] [:lower:])"
 if $SKIP; then
     OGG_PARAM="-c:a copy"
-    OUTPUT_EXT="$INPUT_EXT"
+    OUTPUT_EXT="$INPUT_EXT_LOW"
 fi
-[ "$INPUT_EXT" = "ogg" ] && OGG_PARAM="-c:a copy"
+[ "$INPUT_EXT_LOW" = "ogg" ] && OGG_PARAM="-c:a copy"
 
 ## Make sure track number has two digits for file name only.
 OUTPUT_PADDEDTRACK=$OUTPUT_TRACK

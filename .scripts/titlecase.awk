@@ -1,11 +1,10 @@
 #!/bin/gawk -f
 ## This script is inspired by
 ##   http://www.pement.org/awk/titlecase.awk.txt
-
 ##
 ## function: titlecase("CHANGE TO TITLE CASE") --> "Change to Title Case"
 ##
-## Other Features:
+## Features:
 ##
 ##   titlecase() will compress whitespace if a second parameter is passed.  It
 ##   is sufficient to use a positive number: titlecase(string,1)
@@ -178,7 +177,7 @@ function titlecase(string)  {
     ## Double exception 2: Set 1st word after a some punctuation marks in title
     ## case. This kludge handles multiple colons, question marks, etc. on the
     ## line. \a is the BEL or CTRL-G character.
-    result = gensub(/([:?!"-][^[:alnum:]]*)([a-zA-Z])/, "\\1\a\\2", "g", a)
+    result = gensub(/([:{}\[\]?!"()-][^[:alnum:]]*)([a-zA-Z])/, "\\1\a\\2", "g", a)
     while (match(result, /\a/)) {
         beg = substr(result, 1, RSTART-1)
         cap = toupper(substr(result, RSTART+1, 1))
