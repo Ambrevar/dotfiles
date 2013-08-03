@@ -96,25 +96,26 @@ URxvt.color15 : white
 !!==============================================================================
 
 *VT100*translations: #override Meta <Btn1Up>: exec-formatted("dwb '%t'", PRIMARY)
-XTerm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
-!xterm*font       : -*-dejavu sans-medium-r-*-*-14-*-*-*-*-*-*-*
-xterm*faceName:DejaVu Sans Mono:pixelsize=12
+! XTerm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+! xterm.font:              xft:Dina:pixelsize=18
+! xterm*font       : -*-dejavu sans-medium-r-*-*-14-*-*-*-*-*-*-*
+xterm*faceName:DejaVu Sans Mono:pixelsize=14
 
 xterm*background: black
-xterm*foreground: #CCCCCC
-xterm*color0  : #000000
-xterm*color1  : #AA0000
-xterm*color2  : #00AA00
-xterm*color3  : #AA5500
-xterm*color4  : #0000AA
-xterm*color5  : #AA00AA
-xterm*color6  : #00AAAA
-xterm*color7  : #AAAAAA
-xterm*color8  : #555555
-xterm*color9  : #FF5555
-xterm*color10 : #55FF55
-xterm*color11 : #FFFF55
-xterm*color12 : #5555FF
-xterm*color13 : #FF55FF
-xterm*color14 : #55FFFF
-xterm*color15 : #FFFFFF
+xterm*foreground: white
+xterm*color0  : black
+xterm*color1  : #8b0000
+xterm*color2  : #228b22
+xterm*color3  : #cdcd00
+xterm*color4  : blue
+xterm*color5  : #8b008b
+xterm*color6  : #00bfff
+xterm*color7  : #f5f5f5
+xterm*color8  : #696969
+xterm*color9  : red
+xterm*color10 : green
+xterm*color11 : yellow
+xterm*color12 : #1e90ff
+xterm*color13 : magenta
+xterm*color14 : cyan
+xterm*color15 : white
