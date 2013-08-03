@@ -351,25 +351,25 @@ fi
 ##==============================================================================
 ## PREVIEW
 
-HALF="$((($(tput cols)-1)/2))"
-INPUT_WIDTH=$(($HALF-15))
-INPUT_WIDTH="%-$INPUT_WIDTH.${INPUT_WIDTH}s"
-OUTPUT_WIDTH=$(($HALF-10))
-OUTPUT_WIDTH="%-$OUTPUT_WIDTH.${OUTPUT_WIDTH}s"
+ATTR_WIDTH="%-13.13s" # Length of longest attribute +2
+## INPUT_WIDTH = COLUNMS - ATTR_WIDTH -2 (for |))
+INPUT_WIDTH=$((($(tput cols)-15)/2))
+INPUT_WIDTH="%$INPUT_WIDTH.${INPUT_WIDTH}s"
+echo $INPUT_WIDTH
 cat <<EOF
-:: INTPUT     $(printf "$INPUT_WIDTH" "") | :: OUTPUT
-ARTIST:       $(printf "$INPUT_WIDTH" "[$INPUT_ARTIST]") | ARTIST:  $(printf "$OUTPUT_WIDTH" "[$OUTPUT_ARTIST]")
-ALBUM:        $(printf "$INPUT_WIDTH" "[$INPUT_ALBUM]") | ALBUM:   $(printf "$OUTPUT_WIDTH" "[$OUTPUT_ALBUM]")
-TRACK:        $(printf "$INPUT_WIDTH" "[$INPUT_TRACK]") | TRACK:   $(printf "$OUTPUT_WIDTH" "[$OUTPUT_TRACK]")
-TITLE:        $(printf "$INPUT_WIDTH" "[$INPUT_TITLE]") | TITLE:   $(printf "$OUTPUT_WIDTH" "[$OUTPUT_TITLE]")
-DATE:         $(printf "$INPUT_WIDTH" "[$INPUT_DATE]") | DATE:    $(printf "$OUTPUT_WIDTH" "[$OUTPUT_DATE]")
-GENRE:        $(printf "$INPUT_WIDTH" "[$INPUT_GENRE]") | GENRE:   $(printf "$OUTPUT_WIDTH" "[$OUTPUT_GENRE]")
-EXT:          $(printf "$INPUT_WIDTH" "[$INPUT_EXT]") | EXT:     $(printf "$OUTPUT_WIDTH" "[$OUTPUT_EXT]")
-BITRATE:      $(printf "$INPUT_WIDTH" "[$INPUT_BITRATE]") | BITRATE: $(printf "$OUTPUT_WIDTH" "[$OUTPUT_BITRATE]")
-ALBUM_ARTIST: $(printf "$INPUT_WIDTH" "[$INPUT_ALBUM_ARTIST]") |
-COMPOSER:     $(printf "$INPUT_WIDTH" "[$INPUT_COMPOSER]") |
-DISC:         $(printf "$INPUT_WIDTH" "[$INPUT_DISC]") |
-TYER:         $(printf "$INPUT_WIDTH" "[$INPUT_TYER]") |
+$(printf "$INPUT_WIDTH" ":: INTPUT ::") | $(printf "$ATTR_WIDTH" "")| :: OUTPUT ::
+$(printf "$INPUT_WIDTH" "[$INPUT_ARTIST]") | $(printf "$ATTR_WIDTH" "Artist")| [$OUTPUT_ARTIST]
+$(printf "$INPUT_WIDTH" "[$INPUT_ALBUM]") | $(printf "$ATTR_WIDTH" "Album")| [$OUTPUT_ALBUM]
+$(printf "$INPUT_WIDTH" "[$INPUT_TRACK]") | $(printf "$ATTR_WIDTH" "Track")| [$OUTPUT_TRACK]
+$(printf "$INPUT_WIDTH" "[$INPUT_TITLE]") | $(printf "$ATTR_WIDTH" "Title")| [$OUTPUT_TITLE]
+$(printf "$INPUT_WIDTH" "[$INPUT_DATE]") | $(printf "$ATTR_WIDTH" "Date")| [$OUTPUT_DATE]
+$(printf "$INPUT_WIDTH" "[$INPUT_GENRE]") | $(printf "$ATTR_WIDTH" "Genre")| [$OUTPUT_GENRE]
+$(printf "$INPUT_WIDTH" "[$INPUT_EXT]") | $(printf "$ATTR_WIDTH" "Ext")| [$OUTPUT_EXT]
+$(printf "$INPUT_WIDTH" "[$INPUT_BITRATE]") | $(printf "$ATTR_WIDTH" "Bitrate")| [$OUTPUT_BITRATE]
+$(printf "$INPUT_WIDTH" "[$INPUT_ALBUMARTIST]") | $(printf "$ATTR_WIDTH" "Albumartist")|
+$(printf "$INPUT_WIDTH" "[$INPUT_COMPOSER]") | $(printf "$ATTR_WIDTH" "Composer")|
+$(printf "$INPUT_WIDTH" "[$INPUT_DISC]") | $(printf "$ATTR_WIDTH" "Disc")|
+$(printf "$INPUT_WIDTH" "[$INPUT_TYER]") | $(printf "$ATTR_WIDTH" "Tyer")|
 
 :: OUTPUT $OUTPUT_MSG
 [$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT]
