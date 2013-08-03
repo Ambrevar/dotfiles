@@ -7,7 +7,7 @@
 .lesshst
 .local/share/Trash
 .local/share/icons
-.local/share/dwb
+.local/share/dwb/extensions
 .local/share/newsbeuter
 .local/share/mime/*
 .local/share/applications/wine*
