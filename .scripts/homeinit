@@ -75,6 +75,7 @@ fi
 if [ -n "$(command -v dwb)" ] && [ ! -f "$XDG_DATA_HOME/dwb/extensions/adblock_subscriptions" ] ; then
     echo "==> dwb"
     dwbem -Ni adblock_subscriptions
+    dwbem -Ni navtools
     # dwbem -Ni youtube_html5
     echo
 fi
