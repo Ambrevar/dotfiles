@@ -32,4 +32,4 @@ loadrc alias_rc colors_rc completion_rc funs_rc
 loadrc hook
 
 ## Browser autostart. See .scripts/browser-autostart
-[ -n "$BROWSER_AUTOSTART" ] && browse
+[ -n "$BROWSER_AUTOSTART" ] && unset BROWSER_AUTOSTART && browse
