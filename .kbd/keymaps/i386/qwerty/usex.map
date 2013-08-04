@@ -1,0 +1,78 @@
+# -*- mode:conf -*-
+################################################################################
+## US qwerty extended keymap
+## See layout in /.xkb/symbols/usex
+################################################################################
+## Use showkey in a TTY to get the keycode.
+
+# TODO:
+# C-_
+# Shift-<arrows>
+# M-;
+# AltGr-e
+# AltGr-o
+# Shift AltGr-é
+# Shift AltGr-à
+# Shift AltGr-ç
+
+# Keymaps
+# us: keymaps 0-2,4-6,8-9,12
+# fr-latin1: keymaps 0-2,4,6,8,12
+# 0. none
+# 1. Shift
+# 2. AltGr
+# 3. Shift+AltGr
+# 4. Control
+# 5. Shift+Control
+# 6. AltGr+Control
+# 7. Shift+AltGr+Control
+# 8. Alt
+# 9. Shift+Alt
+# 10. AltGr+Alt
+# 11. Shift+AltGr+Alt
+# 12. Control+Alt
+# 13. Shift+Control+Alt
+# 14. AltGr+Control+Alt
+# 15. Shift+AltGr+Control+Alt
+keymaps 0-2,4-6,8-9,12
+
+## Columns
+# 0 = none
+# 1 = Shift
+# 2 = AltGr
+# 3 = Shift+AltGr
+# 4 = Alt
+# 5 = Alt+Shift
+# ...
+# modifier      weight
+# 
+# Shift         1
+# AltGr         2
+# Control       4
+# Alt           8
+# ShiftL        16
+# ShiftR        32
+# CtrlL         64
+# CtrlR         128
+# CapsShift     256
+
+
+## TODO: Needed for emacs?
+alt_is_meta
+include "qwerty-layout"
+include "linux-with-alt-and-altgr"
+# include "compose.latin1"
+# include "euro2.map"
+strings as usual
+
+# string F13 = "\033[[d"
+# string F14 = "\033[0d"
+   
+keycode  58 = Control
+keycode  29 = Caps_Lock
+
+# Left and right super
+keycode 125 = Decr_Console
+keycode 126 = Incr_Console
+# Menu
+keycode 127 = Last_Console

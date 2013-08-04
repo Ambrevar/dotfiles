@@ -88,6 +88,9 @@ _transcode ###FILELIST
 ## To dump audio to an ogg file:
 ##  -vn -c:a libvorbis -b:a 192k
 ##
+## Add a delay to audio (assuming stream 0 is video and stream 1 is audio)
+##  -i "$1" -itsoffset 0.300 -i "$1" -map 0:0 -map 1:1
+##
 ## To check what fmmpeg supports:
 ##   $ ffmpeg -codecs
 ##   $ ffmpeg -formats
