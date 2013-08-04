@@ -5,16 +5,6 @@
 ################################################################################
 ## Use showkey in a TTY to get the keycode.
 
-# TODO:
-# C-_
-# Shift-<arrows>
-# M-;
-# AltGr-e
-# AltGr-o
-# Shift AltGr-é
-# Shift AltGr-à
-# Shift AltGr-ç
-
 # Keymaps
 # us: keymaps 0-2,4-6,8-9,12
 # fr-latin1: keymaps 0-2,4,6,8,12
@@ -57,7 +47,7 @@ keymaps 0-2,4-6,8-9,12
 # CapsShift     256
 
 
-## TODO: Needed for emacs?
+## May be needed for emacs
 alt_is_meta
 include "qwerty-layout"
 include "linux-with-alt-and-altgr"

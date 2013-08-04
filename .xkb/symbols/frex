@@ -116,7 +116,7 @@ xkb_symbols "basic" {
 // * We use our own reimplementation of pc104. The user needs to specify the new
 //   geometry explicitely, either in Xorg config or with setxkbmap.
 //
-// TODO: if the next section is put before the alphabetical section, it messes up. Why?
+// TODO: if the next section is put before the alphabetical section, it gets messed up. Why?
 
 partial modifier_keys
 xkb_symbols "ralt_switch" {

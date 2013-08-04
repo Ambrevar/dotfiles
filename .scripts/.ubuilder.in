@@ -258,7 +258,7 @@ _clean ()
 _install()
 {
     msg "Installing package $pkgname..."
-    ## TODO: fix permitions.
+    ## TODO: make sure permissions are fixed.
     # sudo tar xf "$pkgname-$pkgver-$pkgrel.tar.xz" -C "/"
 }
 

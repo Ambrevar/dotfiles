@@ -1,15 +1,16 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Shell configuration
-## Date 2013-05-24
+## Date 2013-08-04
 ################################################################################
 
 ## Terminal
-## WARNING: this is always a bad idea!
+## WARNING: this is often a bad idea!
 ## FreeBSD urxvt $TERM variable is not set properly for some reasons.
-## TODO: check how to do this properly.
-if [ ! "$OSTYPE" = "linux-gnu" ] && [[ "$TERM" = *rxvt* ]]; then
-    export TERM="rxvt-unicode-256color"
+if [ ! "$OSTYPE" = "linux-gnu" ]; then
+    case "$TERM" in
+        *rxvt*) export TERM="rxvt-unicode-256color";;
+    esac
 fi
 ## Most xterm-based terminals support 256 colors, so let's turn this on.
 if [ "$TERM" = "xterm" ]; then
