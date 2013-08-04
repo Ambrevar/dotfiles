@@ -87,11 +87,11 @@ if [ -d "$SOURCEDIR" ]; then
         echo "Variable BROWSER is not set."
     else
         BROWSER_DATA_DIR="$XDG_DATA_HOME/$BROWSER/"
-        if [ "$BROWSER" = "dwb" ]; then
-            BROWSER_DATA_DIR="$XDG_CONFIG_HOME/$BROWSER/default/"
-        fi
+        [ "$BROWSER" = "dwb" ] && BROWSER_DATA_DIR="$XDG_CONFIG_HOME/$BROWSER/default/"
+
         [ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/bookmarks/bookmarks" "$BROWSER_DATA_DIR"
         [ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/bookmarks/quickmarks" "$BROWSER_DATA_DIR"
+        [ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/bookmarks/cookies.allow" "$BROWSER_DATA_DIR"
     fi
     echo
 fi
