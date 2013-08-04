@@ -1,53 +1,9 @@
 #!/bin/sh
 
-################################################################################
-## User options
-################################################################################
-
-## To check what fmmpeg supports:
-# ffmpeg -codecs
-# ffmpeg -formats
-
-## Useful guides
-## x264: http://ffmpeg.org/trac/ffmpeg/wiki/x264EncodingGuide
-## ID3 details: http://en.wikipedia.org/wiki/ID3
-
-TC_VIDEO_AUDIO_QUAL=192k
-
-## quality*size ~= 1/speed
-# ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo
-TC_VIDEO_PRESET=slow
-
-## Overall quality. Logarithmic scale.
-# 18 is near perfection.
-# 22 is really good compression, while a bit more blurry than the original.
-# 20 is a good compromise.
-TC_VIDEO_QUAL=20
-
-## x264 tuning (presets).
-## Possible values: film, animation, grain, ...
-## See x264 --fullhelp.
-## No tuning by default.
-# TC_VIDEO_TUNE="-tune film"
-TC_VIDEO_TUNE=""
-
-## x264 options.
-## Possible values: hex, umh...
-## me=umh is default.
-# TC_VIDEO_OPTS="-x264opts me=hex"
-TC_VIDEO_OPTS=""
-
-################################################################################
-## End of user options
-################################################################################
-
 ## TODO: option to replace original file.
 ## TODO: audio quality. Copy if AAC or OGG <320k.
 ## TODO: crop options.
 ## TODO: handle srt encoding.
-## TODO: separate functions:
-##   tc_video_batch
-##   tc_video_transcode
 
 if [ -z "$(command -v ffmpeg)" ]; then
     echo "ffmpeg required."
@@ -85,17 +41,23 @@ Examples:
 EOF
 }
 
-## What to do if file exists:
-# -y overwrite
-# -n do not overwrite.
-TC_OVERWRITE="-n"
 TC_SAMPLE=""
 TC_USER_OPT=""
 TC_REMOVE_TITLE=false
 TC_VIDEO_CODEC="libx264"
 TC_AUDIO_CODEC="libvorbis"
-TC_VIDEO_OPT="-c:v libx264 -preset $TC_VIDEO_PRESET -crf $TC_VIDEO_QUAL $TC_VIDEO_TUNE $TC_VIDEO_OPTS"
-TC_AUDIO_OPT="-c:a libvorbis -b:a $TC_VIDEO_AUDIO_QUAL -ac 2"
+TC_VIDEO_OPT="-preset slow -crf 20"
+
+## What to do if file exists:
+# -y overwrite
+# -n do not overwrite.
+TC_OVERWRITE="-n"
+
+## WARNING: we mix down audio to 2 channels with '-ac 2'. This greatly reduce
+## file size and avoid any confusion for playback, which is often the case when
+## converting DTS to any other format because DTS has embedded channel
+## description which is not available in other formats.
+TC_AUDIO_OPT="-b:a 192k -ac 2"
 
 while getopts ":cfho:sS:t" opt; do
     case $opt in
@@ -140,10 +102,6 @@ fi
 STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
 [ "$STATUS" = "off" ] && set -o shwordsplit
 
-## WARNING: we mix down audio to 2 channels with '-ac 2'. This greatly reduce
-## file size and avoid any confusion for playback, which is often the case when
-## converting DTS to any other format because DTS has embedded channel
-## description which is not available in other formats.
 _tc_transcode()
 {
     cat<<EOF

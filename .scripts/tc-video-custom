@@ -1,0 +1,46 @@
+#!/bin/sh
+
+_printhelp()
+{
+    cat <<EOF
+Usage: ${1##*/} [FILES]
+
+Create a 'tc-video' script in current folder. The script provides a FFmpeg call
+command with some useful options and instructive help.
+
+FILES realpath will be included into the script.
+
+This script is meant to be easily editable to fit the user needs.
+
+EOF
+}
+
+if [ "$1" = "-h" ]; then
+   _printhelp "$0"
+    exit
+fi
+
+if [ -z "$(command -v realpath)" ]; then
+    echo "realpath required."
+    exit
+fi
+
+
+for i ; do
+    REAL="$(realpath "$i")"
+    FILELIST="${FILELIST:+$FILELIST }'$REAL'"
+    FILELINES="${FILELINES:+$FILELINES
+}$REAL"
+done
+
+SCRIPT_PATH="${0%/*}"
+SCRIPT_NAME="${0##*/}"
+OUTPUT_NAME="tc-video"
+if [ -f "$SCRIPT_PATH/.$SCRIPT_NAME.in" ]; then
+    cp -i "$SCRIPT_PATH/.$SCRIPT_NAME.in" "$OUTPUT_NAME"
+    sed -i 's|###FILELIST|'"$FILELIST"'|' "$OUTPUT_NAME"
+    sed -i 's|###FILELINES|'"$FILELINES"'|' "$OUTPUT_NAME"
+    chmod +x "$OUTPUT_NAME"
+else
+    echo ".$SCRIPT_NAME.in not found!"
+fi

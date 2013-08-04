@@ -1,0 +1,122 @@
+#!/bin/sh
+
+if [ -z "$(command -v ffmpeg)" ]; then
+    echo "ffmpeg required."
+    exit
+fi
+
+_transcode ()
+{
+    ## Zsh compatibility. We need it otherwise word splitting of parameter like
+    ## TC_SAMPLE will not work.
+    STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
+    [ "$STATUS" = "off" ] && set -o shwordsplit
+
+    ffmpeg -i "$@" \
+        -c:v libx264 -preset slow -crf 20 \
+        -c:a libvorbis -b:a 192k -ac 2 \
+        -c:s copy \
+        -map 0 \
+        $TC_SAMPLE \
+        "${1%.*}-$(date '+%F-%H%M%S').mkv"
+
+    ## Restore Zsh previous options. This will not turn off shwordsplit if it
+    ## was on before calling the function.
+    [ "$STATUS" = "off" ] && set +o shwordsplit
+}
+
+
+_printhelp()
+{
+    cat <<EOF
+Usage: ${1##*/} [-f] [FILES]
+
+Transcode FILES using custom FFmpeg command.  By default FFmpeg will only encode
+a sample for preview purpose. Use the '-f' flag to process the complete file.
+Edit this file to fit your needs and learn more about FFmpeg.
+
+EOF
+}
+
+TC_SAMPLE="-ss 60 -t 360"
+while getopts ":hf" opt; do
+    case $opt in
+        h)
+            _printhelp "$0"
+            exit 1 ;;
+        f)
+            TC_SAMPLE="" ;;
+        ?)
+            _printhelp "$0"
+            exit 1 ;;
+        :)
+            echo "Missing argument."
+            _printhelp "$0"
+            exit 1 ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+## Choose to process all files in one batch
+_transcode ###FILELIST
+
+## Or one after another.
+# while read -r i; do
+#     _transcode "$i"
+# done<<EOF
+# ###FILELINES
+# EOF
+
+################################################################################
+## Help
+##
+## Intersting options:
+##
+## Exchange stream 1 an 2 by first removing them, then reading them in the
+## desired order.
+##
+##  -map -0:1 -map -0:2 -map 0:2 -map 0:1
+##
+## Change audio stream 1 title and remove audio stream 2 title:
+##
+##  -metadata:s:a:0 title="FR: OGG Stereo" -metadata:s:a:1 title=""
+##
+## Demux audio:
+##  -vn -sn -c:a copy -map 0:1
+##
+## To dump audio to an ogg file:
+##  -vn -c:a libvorbis -b:a 192k
+##
+## To check what fmmpeg supports:
+##   $ ffmpeg -codecs
+##   $ ffmpeg -formats
+##
+## Useful guides:
+##   x264: http://ffmpeg.org/trac/ffmpeg/wiki/x264EncodingGuide
+##   ID3 details: http://en.wikipedia.org/wiki/ID3
+##
+## Presets:
+##   quality*size ~= 1/speed
+##   ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo
+##
+## x264 overall quality (-crf) is a logarithmic scale.
+##   18 is near perfection.
+##   22 is really good compression, while a bit more blurry than the original.
+##   20 is a good compromise.
+##
+## x264 tuning (-tune <preset>).
+##   Possible values: film, animation, grain, ...
+##   See x264 --fullhelp.
+##   No tuning by default.
+##
+## x264 options (-x264opts me=<value>).
+## Possible values: hex, umh...
+## me=umh is default.
+##
+## WARNING: you should consider mixing down audio to 2 channels with '-ac
+## 2'. This greatly reduce file size and avoid any confusion for playback, which
+## is often the case when converting DTS to any other format because DTS has
+## embedded channel description which is not available in other formats.
+##
+################################################################################

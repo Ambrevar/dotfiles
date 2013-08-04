@@ -54,6 +54,6 @@ fi
 
 cat "$1" | sed -e 's|/usr|/usr/local|g' >> "$UBUILD"
 
-cat  "$(realpath "$0").in" >> "$UBUILD"
+cat  "${0%/*}/.${0##*/}.in" >> "$UBUILD"
 
 chmod +x "$UBUILD"
