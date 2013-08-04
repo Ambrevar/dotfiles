@@ -64,14 +64,11 @@ _transcode ###FILELIST
 ## Or one after another.
 # while read -r i; do
 #     _transcode "$i"
-# done<<EOF
-# ###FILELINES
-# EOF
+# done<<FILELINES
+# FILELINES
 
 ################################################################################
-## Help
-##
-## Intersting options:
+## USE CASES
 ##
 ## Exchange stream 1 an 2 by first removing them, then reading them in the
 ## desired order.
@@ -85,21 +82,32 @@ _transcode ###FILELIST
 ## Demux audio:
 ##  -vn -sn -c:a copy -map 0:1
 ##
-## To dump audio to an ogg file:
+## Dump audio to an ogg file:
 ##  -vn -c:a libvorbis -b:a 192k
 ##
 ## Add a delay to audio (assuming stream 0 is video and stream 1 is audio)
 ##  -i "$1" -itsoffset 0.300 -i "$1" -map 0:0 -map 1:1
 ##
-## To check what fmmpeg supports:
-##   $ ffmpeg -codecs
-##   $ ffmpeg -formats
+## Concatenate files:
+##  -filter_complex '[0:0] [0:1] [1:0] [1:1] concat=n=2:v=1:a=1 [v] [a]' -map '[v]' -map '[a]'
+## See
+## https://trac.ffmpeg.org/wiki/How%20to%20concatenate%20(join,%20merge)%20media%20files
+## for more details
+################################################################################
+
+################################################################################
+## SOUND
 ##
-## Useful guides:
-##   x264: http://ffmpeg.org/trac/ffmpeg/wiki/x264EncodingGuide
-##   ID3 details: http://en.wikipedia.org/wiki/ID3
+## You should consider mixing down audio to 2 channels with '-ac
+## 2'. This greatly reduce file size and avoid any confusion for playback, which
+## is often the case when converting DTS to any other format because DTS has
+## embedded channel description which is not available in other formats.
+################################################################################
+
+################################################################################
+## X264 OPTIONS
 ##
-## Presets:
+## x264 presets (-preset <preset>).
 ##   quality*size ~= 1/speed
 ##   ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo
 ##
@@ -117,9 +125,26 @@ _transcode ###FILELIST
 ## Possible values: hex, umh...
 ## me=umh is default.
 ##
-## WARNING: you should consider mixing down audio to 2 channels with '-ac
-## 2'. This greatly reduce file size and avoid any confusion for playback, which
-## is often the case when converting DTS to any other format because DTS has
-## embedded channel description which is not available in other formats.
 ##
+################################################################################
+
+################################################################################
+## FALLACIOUS INPUT
+##
+## In general, FFmpeg is not so good at copying fallacious streams. Specifying
+## video and audio encoding helps.
+##
+## "Can't write packet with unknown timestamp"
+## => Put '-fflags genpts' before the input command.
+################################################################################
+
+################################################################################
+## MISC
+## To check what fmmpeg supports:
+##   $ ffmpeg -codecs
+##   $ ffmpeg -formats
+##
+## Useful guides:
+##   x264: http://ffmpeg.org/trac/ffmpeg/wiki/x264EncodingGuide
+##   ID3 details: http://en.wikipedia.org/wiki/ID3
 ################################################################################

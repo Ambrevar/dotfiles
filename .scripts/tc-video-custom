@@ -29,8 +29,6 @@ fi
 for i ; do
     REAL="$(realpath "$i")"
     FILELIST="${FILELIST:+$FILELIST }'$REAL'"
-    FILELINES="${FILELINES:+$FILELINES
-}$REAL"
 done
 
 SCRIPT_PATH="${0%/*}"
@@ -38,8 +36,14 @@ SCRIPT_NAME="${0##*/}"
 OUTPUT_NAME="tc-video"
 if [ -f "$SCRIPT_PATH/.$SCRIPT_NAME.in" ]; then
     cp -i "$SCRIPT_PATH/.$SCRIPT_NAME.in" "$OUTPUT_NAME"
+    # echo "$FILELIST"
+    # echo "$FILELINES"
     sed -i 's|###FILELIST|'"$FILELIST"'|' "$OUTPUT_NAME"
-    sed -i 's|###FILELINES|'"$FILELINES"'|' "$OUTPUT_NAME"
+    for i ; do
+        REAL="$(realpath "$i")"
+        sed -i "s|# FILELINES|# $REAL\n# FILELINES|" "$OUTPUT_NAME"
+    done
+    sed -i "s|###FILELINES||" "$OUTPUT_NAME"
     chmod +x "$OUTPUT_NAME"
 else
     echo ".$SCRIPT_NAME.in not found!"
