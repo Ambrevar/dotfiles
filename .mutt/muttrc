@@ -199,16 +199,13 @@ set user_agent = yes
 ## Themes
 ##------------------------------------------------------------------------------
 
-## TODO: Use these variables to get dynamic column size.
-# set my_col_from = `echo $((30 * ($COLUMNS-34) / 100))`
-# set my_col_subject = `echo $((70 * ($COLUMNS-34) / 100))`
-
 ## Index format
+## We use my_col_* to get dynamic column size.
 ## See 'man 3 strftime' and 'man 3 printf'.
 # set index_format="%?M?_%M_ ?%Z %2C %.13d (%-68.68F) %-68.68s %?M?_%M_&(%c/%l?"
 set date_format="%y-%m-%d %T"
-folder-hook .*[sS]ent.* 'set index_format="%2C | %Z [%d] %-30.30t (%-4.4c) %s"'
-folder-hook ! .*[sS]ent.* 'set index_format="%2C | %Z [%d] %-30.30F (%-4.4c) %s"'
+folder-hook .*[sS]ent.* 'set my_col_from = `echo $((30 * ($(tput cols)-35-24) / 100))`; set my_col_subject = `echo $((70 * ($(tput cols)-35-24) / 100))`; set index_format="%2C | %Z [%d] %-30.30t (%-4.4c) %s"'
+folder-hook ! .*[sS]ent.* 'set my_col_from = `echo $((30 * ($(tput cols)-35-24) / 100))`; set my_col_subject = `echo $((70 * ($(tput cols)-35-24) / 100))`; set index_format="%2C | %Z [%d] %-$my_col_from.${my_col_from}F (%-4.4c) %-$my_col_subject.${my_col_subject}s"'
 
 ## Colors
 source "~/.mutt/colorset.sh|"
