@@ -37,7 +37,7 @@ fi
 
 ## Prepend argument to zsh dirstack.
 BUF="$(realpath "$1")
-$(grep -v "$1" "$ZDIRS")"
+$(grep -v "$(realpath "$1")" "$ZDIRS")"
 echo "$BUF" > "$ZDIRS"
 
 zsh
