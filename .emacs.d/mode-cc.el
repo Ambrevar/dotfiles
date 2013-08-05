@@ -35,11 +35,11 @@ command line is provided."
       (set (make-local-variable 'compile-command) (format "make -k -f %s" (get-closest-pathname)))
     (set (make-local-variable 'compile-command)
          (let
-             ((is-cpp (equal major-mode "c++-mode"))
+             ((is-cpp (equal (symbol-name major-mode) "c++-mode"))
               (file (file-name-nondirectory buffer-file-name)))
            (format "%s %s -o %s %s %s %s"
                    (if is-cpp
-                       (or (getenv "CPP") "g++")
+                       (or (getenv "CXX") "g++")
                      (or (getenv "CC") "gcc"))
                    file
                    (file-name-sans-extension file)
