@@ -42,11 +42,6 @@ Extra deps
 - optional: emacs-bison-mode emacs-flex-mode emacs-glsl-mode emacs-lua-mode
   emacs-make-regexp emacs-mediawiki-bzr
 
-Build options:
-  ./configure --prefix=/usr --sysconfdir=/etc --libexecdir=/usr/lib \
-    --localstatedir=/var --with-x-toolkit=gtk2 --with-xft \
-    --without-gconf --without-sound
-
 Emacs daemon is integrated flawlessly thanks to a small script. See homeinit.
 Because terminal and graphical clients do not behave the same way, it is
 sometimes useful to specify which version should be used. For mutt, ranger
