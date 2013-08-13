@@ -73,26 +73,27 @@ _transcode ###FILELIST
 ## Exchange stream 1 an 2 by first removing them, then reading them in the
 ## desired order.
 ##
-##  -map -0:1 -map -0:2 -map 0:2 -map 0:1
+##   -map -0:1 -map -0:2 -map 0:2 -map 0:1
 ##
 ## Change audio stream 1 title and remove audio stream 2 title:
 ##
-##  -metadata:s:a:0 title="FR: OGG Stereo" -metadata:s:a:1 title=""
+##   -metadata:s:a:0 title="FR: OGG Stereo" -metadata:s:a:1 title=""
 ##
 ## Demux audio:
-##  -vn -sn -c:a copy -map 0:1
+##   -vn -sn -c:a copy -map 0:1
 ##
 ## Dump audio to an ogg file:
-##  -vn -c:a libvorbis -b:a 192k
+##   -vn -c:a libvorbis -b:a 192k
 ##
 ## Add a delay to audio (assuming stream 0 is video and stream 1 is audio)
-##  -i "$1" -itsoffset 0.300 -i "$1" -map 0:0 -map 1:1
+##   -i "$1" -itsoffset 0.300 -i "$1" -map 0:0 -map 1:1
 ##
-## Concatenate files:
-##  -filter_complex '[0:0] [0:1] [1:0] [1:1] concat=n=2:v=1:a=1 [v] [a]' -map '[v]' -map '[a]'
-## See
+## Concatenate files. See
 ## https://trac.ffmpeg.org/wiki/How%20to%20concatenate%20(join,%20merge)%20media%20files
 ## for more details
+##
+##   -filter_complex '[0:0] [0:1] [1:0] [1:1] concat=n=2:v=1:a=1 [v] [a]' -map '[v]' -map '[a]'
+##
 ################################################################################
 
 ################################################################################
@@ -108,8 +109,10 @@ _transcode ###FILELIST
 ## X264 OPTIONS
 ##
 ## x264 presets (-preset <preset>).
-##   quality*size ~= 1/speed
+##   preset ~= speed and quality*size ~= 1/speed
 ##   ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow, placebo
+##   Recommended values: faster -- slow
+##   slow is approx. two times slower than fast, and reduces the size by approx. 10%.
 ##
 ## x264 overall quality (-crf) is a logarithmic scale.
 ##   18 is near perfection.
@@ -122,20 +125,18 @@ _transcode ###FILELIST
 ##   No tuning by default.
 ##
 ## x264 options (-x264opts me=<value>).
-## Possible values: hex, umh...
-## me=umh is default.
-##
-##
+##   Possible values: hex, umh...
+##   me=umh is default.
 ################################################################################
 
 ################################################################################
 ## FALLACIOUS INPUT
 ##
-## In general, FFmpeg is not so good at copying fallacious streams. Specifying
-## video and audio encoding helps.
+## In general, FFmpeg is not so good at copying fallacious streams. Reecoding
+## video and audio streams helps a lot.
 ##
 ## "Can't write packet with unknown timestamp"
-## => Put '-fflags genpts' before the input command.
+##   Put '-fflags genpts' before the input command.
 ################################################################################
 
 ################################################################################
