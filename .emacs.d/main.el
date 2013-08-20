@@ -521,8 +521,9 @@ has errors and/or warnings."
  (lambda ()
    (local-set-key (kbd "C-c a") 'dired-toggle-hidden)
    (local-set-key (kbd "C-c h") 'dired-toggle-humansize)
-   ;; (local-set-key (kbd "<left>") 'dired-up-directory)
-   ;; (local-set-key (kbd "<right>") 'dired-find-file)
+   (local-set-key (kbd "<left>") 'dired-up-directory)
+   (local-set-key (kbd "<right>") 'dired-find-file)
+   (local-set-key (kbd "<space>") 'dired-mark)
    (local-set-key (kbd "<backspace>") 'dired-up-directory)
    (local-set-key (kbd "b") 'dired-up-directory)))
 

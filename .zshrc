@@ -28,8 +28,5 @@ loadrc main_rc options_zsh
 loadrc keys_zsh
 loadrc alias_rc colors_rc completion_rc funs_rc
 
-## Should be sourced last
-loadrc hook
-
 ## Browser autostart. See .scripts/browser-autostart
 [ -n "$BROWSER_AUTOSTART" ] && unset BROWSER_AUTOSTART && browse
