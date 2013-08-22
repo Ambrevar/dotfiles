@@ -2,7 +2,7 @@
 
 if [ $# -ne 4 ]; then
     cat<<EOF
-Usage: ${0##*/} PDFFILE FIRSTPAGE LASTPAGE DESTFILE"
+Usage: ${0##*/} PDFFILE FIRSTPAGE LASTPAGE DESTFILE
 
 Extract a range of pages from a PDF.
 EOF

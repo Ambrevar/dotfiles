@@ -112,3 +112,5 @@ fi
 ## Wine DLL override. This removes the annoying messages for Mono and Gecko.
 export WINEDLLOVERRIDES="mscoree,mshtml="
 
+## Hook. Should be sourced last
+[ -f ~/.profile_hook ] && . ~/.profile_hook
