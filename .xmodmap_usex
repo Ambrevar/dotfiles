@@ -188,7 +188,6 @@ keycode 194 = XF86Launch7 NoSymbol XF86Launch7
 keycode 195 = XF86Launch8 NoSymbol XF86Launch8
 keycode 196 = XF86Launch9 NoSymbol XF86Launch9
 keycode 197 =
-keycode 198 = XF86AudioMicMute NoSymbol XF86AudioMicMute
 keycode 199 = XF86TouchpadToggle NoSymbol XF86TouchpadToggle
 keycode 200 = XF86TouchpadOn NoSymbol XF86TouchpadOn
 keycode 201 = XF86TouchpadOff NoSymbol XF86TouchpadOff
