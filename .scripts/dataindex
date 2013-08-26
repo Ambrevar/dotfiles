@@ -1,51 +1,55 @@
 #!/bin/sh
 
-FOLDER_LIST="/media/data1/Documents
-/media/data1/Videos
-/media/data2/GamesFiles
-/media/data2/Musics"
-OUTPUT="$HOME/personal/dataperso/index"
-DATE="$(date +%F)"
+DATE=
 
 _printhelp ()
 {
     cat<<EOF
-Usage: ${1##*/} [-h]
+Usage: ${1##*/} [-f]
 
-Create index of folder hierarchies. This is used as a small "backup" purpose. In case of data loss, it is still possible to get the full file list thanks to the indexes.
+Create index of folder hierarchies. This is used as a small "backup" purpose. In
+case of data loss, it is still possible to get the full file list thanks to the
+indexes.
 
-  -h:  Show this help.
-
+ -f: overwrite if output exists
 EOF
 }
 
-while getopts ":dh" opt; do
+OPT_NOCLOBBER=true
+while getopts ":dfh" opt; do
     case $opt in
         h)
             _printhelp "$0"
-            return 1
+            exit 0
+            ;;
+        f)
+            OPT_NOCLOBBER=false
             ;;
         ?)
             _printhelp "$0"
-            return 1
+            exit 1
             ;;
         :)
             _printhelp "$0"
-            return 1
+            exit 1
             ;;
     esac
 done
 
 shift $(($OPTIND - 1))
 
-## Prepare output.
-mkdir -p "$OUTPUT"
+if [ $# -eq 0 ]; then
+    _printhelp "$0"
+    exit 1
+fi
 
-while read -r i; do
-    echo "$i"
-    find "$i" -type f | sort > "$OUTPUT/${i##*/}.index"
-    echo "## $DATE" >> "$OUTPUT/${i##*/}.index"
-done <<EOF
-$FOLDER_LIST
-EOF
+for i ; do
+    i="$(realpath "$i")"
+    [ ! -d "$i" ] && continue
+    OUTPUT="${i##*/}.index"
+    [ -e "$OUTPUT" ] && $OPT_NOCLOBBER && OUTPUT="${i##*/}-$(date +%F-%T).index"
+    echo "$OUTPUT"
+    find "$i" -type f | sort > "$OUTPUT"
+    echo "## $(date +%F)" >> "$OUTPUT"
+done
 

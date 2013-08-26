@@ -23,15 +23,20 @@ $HOME/.lesshst
 $HOME/.local/share/newsbeuter
 $HOME/.local/share/webkit
 $HOME/.mtap.fuseiso
-$HOME/.mutt.pwds.cpt
 $HOME/.pulse-cookie
-$HOME/.ssh
 $HOME/.viminfo
 $HOME/.w3m
 $HOME/.zcompdump"
 
-echo "==> List of files to be cleaned."
+RMLIST_CRITICAL="
+$HOME/.mutt.pwds.cpt
+$HOME/.ssh"
+
+echo "==> List of files to be removed."
 echo "$RMLIST"
+echo
+echo "==> List of files to be wiped."
+echo "$RMLIST_CRITICAL"
 
 CHOICE="N"
 echo
@@ -59,23 +64,29 @@ if [ -d "$HOME/Dropbox" ] || [ -d "$HOME/.dropbox" ]; then
 fi
 
 ## Clean trash if possible.
+echo
+echo "==> Emptying trash."
 if [ -z "$(command -v trash-empty)" ]; then
-    echo
-    echo "==> Emptying trash."
     echo ":: 'trash-empty' not installed, you have to clean trash manually."
     rm -rvf "$HOME/.local/share/Trash"
 else
-    echo
-    echo "==> Emptying trash."
     trash-empty
 fi
 
-## Clear data.
+## Remove data.
 echo
 while read -r i; do
     rm -rvf "$i"
 done <<EOF
 $RMLIST
+EOF
+
+## Wipe data
+echo
+while read -r i; do
+    shred -zuv "$i"
+done <<EOF
+$RMLIST_CRITICAL
 EOF
 
 echo
