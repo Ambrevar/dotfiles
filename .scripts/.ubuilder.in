@@ -76,7 +76,7 @@ _fetch()
 {
     msg "Retrieving sources..."
 
-    for URI in "${#source[@]}"; do
+    for URI in "${source[@]}"; do
         if [ $(echo "$URI" | grep -c "/") -ne 0 ]; then
             FILE="${URI##*/}"
 

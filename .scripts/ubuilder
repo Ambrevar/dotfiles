@@ -15,6 +15,10 @@ Differences with makepkg
 * The output may differ.
 * The fakeroot environment lies directly in \$pkgdir, not in \$pkgdir/\$pkgname.
 
+Options:
+
+ -l:  install in usr/local/ instead of usr/
+
 EOF
     exit
 fi
@@ -52,8 +56,11 @@ fi
 ################################################################################
 ' > "$UBUILD"
 
-cat "$1" | sed -e 's|/usr|/usr/local|g' >> "$UBUILD"
+if [ "$1" = "-l" ]; then
+    cat "$2" | sed -e 's|/usr|/usr/local|g' >> "$UBUILD"
+else
+    cat "$1" >> "$UBUILD"
+fi
 
 cat  "${0%/*}/.${0##*/}.in" >> "$UBUILD"
-
 chmod +x "$UBUILD"
