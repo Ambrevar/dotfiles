@@ -98,6 +98,9 @@ URxvt.color15 : white
 ! xterm*font       : -*-dejavu sans-medium-r-*-*-14-*-*-*-*-*-*-*
 xterm*faceName:DejaVu Sans Mono:pixelsize=14
 
+!! Make Meta-* bindings work.
+*VT100.eightBitInput: false
+
 xterm*background: black
 xterm*foreground: white
 xterm*color0  : black
@@ -116,3 +119,4 @@ xterm*color12 : #1e90ff
 xterm*color13 : magenta
 xterm*color14 : cyan
 xterm*color15 : white
+
