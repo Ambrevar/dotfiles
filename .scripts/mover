@@ -1,0 +1,41 @@
+#!/bin/sh
+
+if [ "$1" = "-h" ] || [ $# -lt 2 ]; then
+    cat <<EOF
+${0##*/} FOLDERS DEST
+
+Move FOLDERS into DEST. Does not overwrite by default. Empty folders are ignored.
+
+Options:
+  -f: overwrite destination.
+EOF
+    exit
+fi
+
+OPT_OVERWRITE=false
+if [ "$1" = "-f" ]; then
+    OPT_OVERWRITE=true
+    shift
+fi
+
+for i; do
+    ARGLIST="${ARGLIST:+$ARGLIST\n}$i"
+done
+FOLDERS="$(echo $ARGLIST | head -n-1)"
+DEST="$(echo $ARGLIST | tail -n1)"
+
+while read -r FOLDER; do
+    while read -r FILE; do
+        DESTFILE="$DEST/$FILE"
+        if [ ! -e "$DESTFILE" ] || $OPT_OVERWRITE; then
+            mkdir -p "$(dirname "$DESTFILE")"
+            mv -v "$FOLDER/../$FILE" "$DESTFILE"
+        fi
+
+    ## We switch to FOLDER so that 'find' strips the parent dirs from the path.
+    done <<EOF
+$(cd "$FOLDER/.." && find "$(basename ${FOLDER})" -type f)
+EOF
+done <<EOF
+$(echo "$FOLDERS")
+EOF
