@@ -34,3 +34,6 @@ fi
 ## This env variable is used by some programs (like ranger and awesome) to get
 ## terminal executable name.
 export TERMCMD="urxvt"
+
+## Hook. Should be sourced last
+[ -f ~/.xprofile_hook ] && . ~/.xprofile_hook

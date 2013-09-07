@@ -89,7 +89,7 @@ alias xmorphsw='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ")
 alias xmorphzo='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --scale 1.2x1.2'
 alias xmorphzi='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --scale 0.8x0.8'
 
-alias xres='xrandr -s $(xrandr | awk '"'"'/^ / {print $1;exit}'"'"')'
+alias xres='xrandr --output $(xrandr | awk '"'"'NR==2 {print $1;exit}'"'"') --auto && xrandr -s $(xrandr | awk '"'"'/^ / {print $1;exit}'"'"')'
 
 ##==============================================================================
 ## Zsh power aliases
