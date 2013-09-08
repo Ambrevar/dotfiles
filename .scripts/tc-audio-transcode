@@ -265,9 +265,8 @@ ALBUM_ARTIST=$(_string_cleanser "$INPUT_ALBUM_ARTIST")
 ##================================================================================
 ## OUTPUT variables.
 
-## In this part we prepend backslashes to parenthese when there is an 'eval'
+## In this part we prepend backslashes to parentheses when there is an 'eval'
 ## call to prevent parsing error.
-
 OUTPUT_TITLE=$(eval echo $(echo ${OUTPUT_TITLE:-Unknown Title} | sed 's/[()]/\\&/g'))
 OUTPUT_ALBUM=$(eval echo $(echo ${OUTPUT_ALBUM:-Unknown Album} | sed 's/[()]/\\&/g'))
 
@@ -275,14 +274,14 @@ OUTPUT_ALBUM=$(eval echo $(echo ${OUTPUT_ALBUM:-Unknown Album} | sed 's/[()]/\\&
 [ -z "$OUTPUT_ARTIST" ] && [ -n "$ALBUM_ARTIST" ] && OUTPUT_ARTIST="$ALBUM_ARTIST"
 OUTPUT_ARTIST=$(eval echo $(echo ${OUTPUT_ARTIST:-Unknown Artist} | sed 's/[()]/\\&/g'))
 
-## If OUTPUT_GENRE is set from command-line parameters, we clease the
+## If OUTPUT_GENRE is set from command-line parameters, we use the
 ## string. Otherwise we put GENRE in lower case and underscore to ease matching.
 ## If it matches, we use the Title Case match. If it does not, we set it to
 ## empty.
-if [ -n "$OUTPUT_GENRE" ]; then
-    OUTPUT_GENRE=$(eval _string_cleanser $(echo $OUTPUT_GENRE | sed 's/[()]/\\&/g'))
+if [ ! "$OUTPUT_GENRE" = '$GENRE' ]; then
+    OUTPUT_GENRE=$(eval echo $(echo $OUTPUT_GENRE | sed 's/[()]/\\&/g'))
 else
-    ## We also convert space to underscore.
+    ## We also convert spaces to underscores.
     GENRE=$(echo "$GENRE" | tr '[:upper:] ' '[:lower:]_')
     case $GENRE in
         ost) OUTPUT_GENRE="Soundtrack" ;;
@@ -357,7 +356,6 @@ ATTR_WIDTH="%-13.13s" # Length of longest attribute +2
 ## INPUT_WIDTH = COLUNMS - ATTR_WIDTH -2 (for |))
 INPUT_WIDTH=$((($(tput cols)-15)/2))
 INPUT_WIDTH="%$INPUT_WIDTH.${INPUT_WIDTH}s"
-echo $INPUT_WIDTH
 cat <<EOF
 $(printf "$INPUT_WIDTH" ":: INTPUT ::") | $(printf "$ATTR_WIDTH" "")| :: OUTPUT ::
 $(printf "$INPUT_WIDTH" "[$INPUT_ARTIST]") | $(printf "$ATTR_WIDTH" "Artist")| [$OUTPUT_ARTIST]
