@@ -64,11 +64,11 @@ _init()
 _listdeps()
 {
     msg "$pkgname $pkgver-$pkgrel"
-    msg "Runtime dependencies"
+    msg2 "Runtime dependencies"
     printf -- '%s\n' "${depends[@]}"
-    msg "Buildtime dependencies"
+    msg2 "Buildtime dependencies"
     printf -- '%s\n' "${makedepends[@]}"
-    msg "Optional dependencies"
+    msg2 "Optional dependencies"
     printf -- '%s\n' "${optdepends[@]}"
 }
 
@@ -94,15 +94,16 @@ _fetch()
                 ;;
             git+*)
                 GITURI="${URI#git+}"
-                if [ -d "$_gitname/.git" ]; then
-                    cd "$_gitname"
+                if [ -d "${_gitname:-$FILE}/.git" ]; then
+                    cd "${_gitname:-$FILE}"
                     git pull
                 else
                     git clone "$GITURI"
                 fi
                 ;;
             *)
-                error "Unkown protocol"
+                ## Embedded files (patches, resources...)
+                # Do nothing.
         esac
     done
 }
@@ -191,7 +192,9 @@ _extract ()
             *)
                 case "$URI" in
                     git+*)
-                        ln -sf "../$_gitname" "$srcdir";;
+                        ln -sf "../${_gitname:-$FILE}" "$srcdir";;
+                    *)
+                        ln -sf "../$FILE" "$srcdir";;
                 esac
 	    esac
     done
@@ -224,7 +227,7 @@ _tidying ()
     fi
     if $TIDY_strip; then
         msg2 "Stripping unneeded symbols from binaries and libraries..."
-        find * -type f -executable -exec strip -s {} \;
+        find * -type f -executable -exec strip -s {} \; 2>/dev/null
     fi
 
     ## We make sure folder permissions are world accessible.
@@ -347,8 +350,11 @@ while getopts ":bcdfhiRs" opt; do
             _printhelp "$0"
             exit 1 ;;
         i)
+            OPT_BUILD=true
+            OPT_PACKAGE=true
             OPT_INSTALL=true ;;
         R)
+            OPT_BUILD=true
             OPT_PACKAGE=true ;;
         s)
             OPT_CHECKSKIP=true ;;
@@ -370,9 +376,9 @@ _fetch
 _extract
 _checksum
 
-if $OPT_BUILD; then _buildhook; fi
-if $OPT_PACKAGE; then _packagehook; fi
-if $OPT_INSTALL; then _install; fi
-if $OPT_CLEAN; then _clean; fi
+$OPT_BUILD && _buildhook
+$OPT_PACKAGE && _packagehook
+$OPT_INSTALL && _install
+$OPT_CLEAN && _clean
 
 msg "Finished making: $pkgname ${pkgver}-$pkgrel ($(date))"
