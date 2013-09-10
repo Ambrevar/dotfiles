@@ -1,9 +1,7 @@
 ################################################################################
 
-_ROOT="$(realpath "$0")"
-_ROOT="${_ROOT%/*}"
 srcdir=src
-pkgdir=pkg
+pkgdir=pkg/$pkgname
 
 DLAGENTS=('ftp::/usr/bin/curl -fC - --ftp-pasv --retry 3 --retry-delay 3 -o %o %u'
           'http::/usr/bin/curl -fLC - --retry 3 --retry-delay 3 -o %o %u'
@@ -54,8 +52,8 @@ error ()
 
 _init()
 {
-    mkdir -p "$_ROOT/$srcdir"
-    mkdir -p "$_ROOT/$pkgdir"
+    mkdir -p "$srcdir"
+    mkdir -p "$pkgdir"
 
     srcdir="$(realpath "$srcdir")"
     pkgdir="$(realpath "$pkgdir")"
@@ -242,13 +240,13 @@ _compress()
     msg2 "Generating $UNINS..."
     echo '#!/bin/sh' > "$UNINS"
     (cd "$pkgdir" && \
-        find * -type f -exec echo "rm /"{} \; >> "../$UNINS" && \
-        find * -type d -exec echo "rmdir /"{} \; >> "../$UNINS"
-    )
+        find * -type f -exec echo "rm /"{} \; && \
+        find * -type d -exec echo "rmdir /"{} \;
+    ) >> "$UNINS"
     chmod +x "$UNINS"
 
     msg2 "Compressing package..."
-    (cd "$pkgdir" && tar --owner=root --group=root -cJf "../$pkgname-$pkgver-$pkgrel-$(uname -m).tar.xz" *)
+    ls "$pkgdir" | tar --owner=root --group=root -C "$pkgdir" -cJf "pkgname-$pkgver-$pkgrel-$(uname -m).tar.xz" -T -
 }
 
 _packagehook()
@@ -284,17 +282,22 @@ _install()
 
 _printhelp ()
 {
-    cat <<EOE
+    cat <<EOF
 Usage: ${1##*/} [OPTIONS]
 
-Port builder for $pkgname $pkgver.
+Port build script for $pkgname $pkgver.
 
 This script can perform multiple operations:
-  1. Fetch source code.
-  2. Build.
-  3. Create package.
-  4. Clean folder from build data.
-Default operation is to fetch source code if required.
+  - Fetch source code.
+  - Build.
+  - Create package.
+  - Install package.
+  - Clean folder from build data.
+
+Default operation is to fetch source code if required. Most operations only
+proceed if required (i.e. if run for the first time). Building, packaging and
+installing are hierarchical operation, e.g. if only packaging is requested and
+package was never built, the building will be processed automatically.
 
 Options:
 
@@ -303,11 +306,11 @@ Options:
   -d:  List dependencies and exit.
   -f:  Force operation (overwrite, rebuild, reinstall).
   -h:  Display this help.
-  -i:  Install.
+  -i:  Install package.
   -R:  Create package.
   -s:  Skip integrity checks.
 
-EOE
+EOF
 }
 
 OPT_FORCE="-nc"

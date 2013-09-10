@@ -5,15 +5,15 @@ if [ $# -ne 1 ] || [ "$1" = "-h" ]; then
 Usage: ${0##*/} PKGBUILD
 
 Convert an Arch Linux PKGBUILD to a universal standalone bash script. (The
-infamous 'bash' is assumed because PKGBUILD are bash scripts.)  The resulting
-script tries to resemble makepkg build process where it makes sense. There is no
-dependency resolution because we cannot guess the package names of the target
-system.
+infamous 'bash' is assumed because PKGBUILD are bash scripts, they strongly rely
+on arrays.)  The resulting script tries to resemble makepkg build process where
+it makes sense. There is no dependency resolution because we cannot guess the
+package names of the target system.
 
 Differences with makepkg
-* Parameters are not the same.
-* The output may differ.
-* The fakeroot environment lies directly in \$pkgdir, not in \$pkgdir/\$pkgname.
+* Parameters may differ.
+* The progress output may differ.
+* Some features are not implemented (e.g. explicit source filename)
 
 Options:
 
