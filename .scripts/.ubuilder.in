@@ -77,21 +77,33 @@ _fetch()
     msg "Retrieving sources..."
 
     for URI in "${source[@]}"; do
-        if [ $(echo "$URI" | grep -c "/") -ne 0 ]; then
-            FILE="${URI##*/}"
+        case "$URI" in
+            http://*|https://*|ftp://*)
+                FILE="${URI##*/}"
 
-            ## TODO: add support for DLAGENT
-            msg2 "Downloading $FILE..."
-            wget "$OPT_FORCE" "$URI" -O "$FILE"
+                ## TODO: add support for DLAGENT
+                msg2 "Downloading $FILE..."
+                wget "$OPT_FORCE" "$URI" -O "$FILE"
 
-            ## Strangely enough, wget will not return 0 on success. On error, it
-            ## will still create a 0-byte file.
-            if [ $(du -sb "$FILE" | awk '{print $1}') -eq 0 ]; then
-                error "Failure while downloading $FILE" "Aborting..."
-                exit 1
-            fi
-
-        fi
+                ## Strangely enough, wget will not return 0 on success. On error, it
+                ## will still create a 0-byte file.
+                if [ $(du -sb "$FILE" | awk '{print $1}') -eq 0 ]; then
+                    error "Failure while downloading $FILE" "Aborting..."
+                    exit 1
+                fi
+                ;;
+            git+*)
+                GITURI="${URI#git+}"
+                if [ -d "$_gitname/.git" ]; then
+                    cd "$_gitname"
+                    git pull
+                else
+                    git clone "$GITURI"
+                fi
+                ;;
+            *)
+                error "Unkown protocol"
+        esac
     done
 }
 
@@ -126,6 +138,13 @@ _checksum ()
     ## same index for both arrays.
     ## WARNING: this will only work in bash because indexing start at 0.
     for i in $(seq 0 $((${#source[@]} -1))); do
+
+        eval test '${'${CHECKSUMMER}'s[$i]}' = 'SKIP'
+        if [ $? -eq 0 ]; then
+            echo "Skipped"
+            continue
+        fi
+
         FILE="${source[$i]##*/}"
         if [ ! -f "$FILE" ]; then
             error "$FILE was not found in the build directory and is not a URL."
@@ -141,13 +160,8 @@ _checksum ()
         if [ $? -eq 0 ]; then
             echo "Passed"
         else
-            eval test '${'${CHECKSUMMER}'s[$i]}' = 'SKIP'
-            if [ $? -eq 0 ]; then
-                echo "Skipped"
-            else
-                echo "FAILED"
-                RESULT=false
-            fi
+            echo "FAILED"
+            RESULT=false
         fi
 
 
@@ -162,8 +176,8 @@ _checksum ()
 _extract ()
 {
     msg "Extracting sources..."
-    for FILE in "${source[@]}"; do
-        FILE="${FILE##*/}"
+    for URI in "${source[@]}"; do
+        FILE="${URI##*/}"
 	    case "$FILE" in
 		    *.tar.bz2|*.tbz2)
                 msg2 "Extracting $FILE with tar"
@@ -175,7 +189,10 @@ _extract ()
                 msg2 "Extracting $FILE with tar"
                 tar xJf "$FILE" -C "$srcdir";;
             *)
-                ln -rs "$FILE" "$srcdir" 2>/dev/null;;
+                case "$URI" in
+                    git+*)
+                        ln -sf "../$_gitname" "$srcdir";;
+                esac
 	    esac
     done
 }
@@ -290,7 +307,7 @@ Options:
 EOE
 }
 
-OPT_FORCE="nc"
+OPT_FORCE="-nc"
 OPT_NOCLOBBER=true
 
 OPT_BUILD=false
