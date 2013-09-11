@@ -2,6 +2,7 @@
 
 srcdir=src
 pkgdir=pkg/$pkgname
+arch="$(uname -m)"
 
 DLAGENTS=('ftp::/usr/bin/curl -fC - --ftp-pasv --retry 3 --retry-delay 3 -o %o %u'
           'http::/usr/bin/curl -fLC - --retry 3 --retry-delay 3 -o %o %u'
@@ -81,7 +82,7 @@ _fetch()
 
                 ## TODO: add support for DLAGENT
                 msg2 "Downloading $FILE..."
-                wget "$OPT_FORCE" "$URI" -O "$FILE"
+                wget $OPT_FORCE_WGET "$URI" -O "$FILE"
 
                 ## Strangely enough, wget will not return 0 on success. On error, it
                 ## will still create a 0-byte file.
@@ -93,8 +94,10 @@ _fetch()
             git+*)
                 GITURI="${URI#git+}"
                 if [ -d "${_gitname:-$FILE}/.git" ]; then
-                    cd "${_gitname:-$FILE}"
-                    git pull
+                    if ! $OPT_NOCLOBBER; then
+                        cd "${_gitname:-$FILE}"
+                        git pull
+                    fi
                 else
                     git clone "$GITURI"
                 fi
@@ -178,15 +181,9 @@ _extract ()
     for URI in "${source[@]}"; do
         FILE="${URI##*/}"
 	    case "$FILE" in
-		    *.tar.bz2|*.tbz2)
+		    *.tar.bz2|*.tbz2|*.tar.gz|*.tgz|*.tar.xz|*.txz)
                 msg2 "Extracting $FILE with tar"
-                tar xjf "$FILE" -C "$srcdir";;
-		    *.tar.gz|*.tgz)
-                msg2 "Extracting $FILE with tar"
-                tar xzf "$FILE" -C "$srcdir";;
-		    *.tar.xz|*.txz)
-                msg2 "Extracting $FILE with tar"
-                tar xJf "$FILE" -C "$srcdir";;
+                tar xf "$FILE" -C "$srcdir" $OPT_FORCE_TAR;;
             *)
                 case "$URI" in
                     git+*)
@@ -246,14 +243,21 @@ _compress()
     chmod +x "$UNINS"
 
     msg2 "Compressing package..."
-    ls "$pkgdir" | tar --owner=root --group=root -C "$pkgdir" -cJf "pkgname-$pkgver-$pkgrel-$(uname -m).tar.xz" -T -
+    if [ "$(uname)" = "Linux" ]; then
+        ls "$pkgdir" | tar --numeric-owner --owner=root --group=root \
+            -C "$pkgdir" -cJf "$pkgname-$pkgver-$pkgrel-$arch.tar.xz" -T -
+    else
+        ## BSD and others. WARNING: this may not be portable.
+        ls "$pkgdir" | tar --numeric-owner --uid 0 --gid 0 \
+            -C "$pkgdir" -cJf "$pkgname-$pkgver-$pkgrel-$arch.tar.xz" -T -
+    fi
 }
 
 _packagehook()
 {
     if $OPT_NOCLOBBER && [ $(ls -a1 "$pkgdir" | wc -l) -ne 2 ]; then
-        error "A package has already been built. (use -f to overwrite)"
-        exit 1
+        warning "A package has already been built. Skipping. (Use -f to overwrite.)"
+        return
     fi
 
     rm -rf "$pkgdir"
@@ -276,8 +280,12 @@ _clean ()
 _install()
 {
     msg "Installing package $pkgname..."
-    ## TODO: make sure permissions are fixed.
-    # sudo tar xf "$pkgname-$pkgver-$pkgrel.tar.xz" -C "/"
+    ## Only use sudo if user has write permission to DESTROOT.
+    if [ -w "$OPT_DESTROOT" ]; then
+        tar -xkf "$pkgname-$pkgver-$pkgrel-$arch.tar.xz" -C "$OPT_DESTROOT"
+    else
+        sudo tar -xkf "$pkgname-$pkgver-$pkgrel-$arch.tar.xz" -C "$OPT_DESTROOT"
+    fi
 }
 
 _printhelp ()
@@ -301,19 +309,22 @@ package was never built, the building will be processed automatically.
 
 Options:
 
-  -b:  Build.
-  -c:  Clean source folders from temp file (keep upstream source and built package).
-  -d:  List dependencies and exit.
-  -f:  Force operation (overwrite, rebuild, reinstall).
-  -h:  Display this help.
-  -i:  Install package.
-  -R:  Create package.
-  -s:  Skip integrity checks.
+  -b:      Build.
+  -c:      Clean source folders from temp file (keep upstream source and built package).
+  -d:      List dependencies and exit.
+  -f:      Force operation (overwrite, rebuild, reinstall).
+  -h:      Display this help.
+  -i:      Install package.
+  -r ROOT: Specifiy ROOT folder where to install the package.
+  -R:      Create package.
+  -s:      Skip integrity checks.
 
 EOF
 }
 
-OPT_FORCE="-nc"
+OPT_DESTROOT="$HOME/.local"
+OPT_FORCE_WGET="-nc"
+OPT_FORCE_TAR="-k"
 OPT_NOCLOBBER=true
 
 OPT_BUILD=false
@@ -337,7 +348,7 @@ TIDY_zipman=true
 TIDY_purge=true
 TIDY_upx=false
 
-while getopts ":bcdfhiRs" opt; do
+while getopts ":bcdfhirRs" opt; do
     case $opt in
         b)
             OPT_BUILD=true ;;
@@ -347,7 +358,8 @@ while getopts ":bcdfhiRs" opt; do
             _listdeps
             exit;;
         f)
-            OPT_FORCE=""
+            OPT_FORCE_TAR=""
+            OPT_FORCE_WGET=""
             OPT_NOCLOBBER=false ;;
         h)
             _printhelp "$0"
@@ -356,6 +368,8 @@ while getopts ":bcdfhiRs" opt; do
             OPT_BUILD=true
             OPT_PACKAGE=true
             OPT_INSTALL=true ;;
+        r)
+            OPT_DESTROOT="$OPTARG";;
         R)
             OPT_BUILD=true
             OPT_PACKAGE=true ;;
