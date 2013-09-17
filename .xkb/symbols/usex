@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 // XKB Custom us keyboard
-// 2013-06-16
+// 2013-09-15
 //------------------------------------------------------------------------------
 
 // Installation: copy this file to '/usr/{local/,}share/X11/xkb/symbols'. You
@@ -11,8 +11,8 @@
 // We set Caps Lock to act as Left Control
 
 // ┌─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┲━━━━━━━━━┓
-// │ ~ ~ │ ! ¡ │ @ ˝ │ # ¯ │ $ ¤ │ % ¢ │ ^ ^ │ & ¼ │ * ˛ │ ( ˘ │ )   │ _ ⋅ │ + ÷ ┃ ⌫ Back  ┃
-// │ ` ` │ 1 ¹ │ 2 ² │ 3 ³ │ 4 £ │ 5 € │ 6 ¥ │ 7 ½ │ 8 ¾ │ 9 ‘ │ 0 ’ │ - ¶ │ = × ┃  space  ┃
+// │ ~ ~ │ ! ¡ │ @ ˝ │ # ¯ │ $ ¤ │ % ¢ │ ^ ^ │ & ¼ │ * ˛ │ ( ˘ │ ) ± │ _ ⋅ │ + × ┃ ⌫ Back  ┃
+// │ ` ` │ 1 ¹ │ 2 ² │ 3 ³ │ 4 £ │ 5 € │ 6 ¥ │ 7 ½ │ 8 ¾ │ 9 ‘ │ 0 ’ │ - ÷ │ = ≠ ┃  space  ┃
 // ┢━━━━━┷━┱───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┺━┳━━━━━━━┫
 // ┃       ┃ Q À │ W È │ E É │ R ® │ T ™ │ Y Ù │ U Ú │ I Í │ O Ó │ P Å │ { “ │ } ” ┃ Enter ┃
 // ┃Tab ↹  ┃ q à │ w è │ e é │ r ® │ t © │ y ù │ u ú │ i í │ o ó │ p å │ [ « │ ] » ┃   ⏎   ┃
@@ -20,8 +20,8 @@
 // ┃        ┃ A Á │ S § │ D Â │ F Ê │ G Î │ H Ô │ J Û │ K Œ │ L Æ │ : ° │ " ¨ │ | ¦ ┃      ┃
 // ┃Ctrl    ┃ a á │ s ß │ d â │ f ê │ g î │ h ô │ j û │ k œ │ l æ │ ; ° │ ' ´ │ \ ¬ ┃      ┃
 // ┣━━━━━━━┳┹────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┲┷━━━━━┻━━━━━━┫
-// ┃       ┃ > ≥ │ Z Ä │ X Ë │ C Ï │ V Ö │ B Ü │ N Ñ │ M µ │ < Ç │ > ± │ ? ¿ ┃             ┃
-// ┃Shift ⇧┃ < ≤ │ z ä │ x ë │ c ï │ v ö │ b ü │ n ñ │ m µ │ , ç │ . ≠ │ / … ┃Shift ⇧      ┃
+// ┃       ┃ > ≥ │ Z Ä │ X Ë │ C Ï │ V Ö │ B Ü │ N Ñ │ M µ │ < Ç │ >   │ ? ¿ ┃             ┃
+// ┃Shift ⇧┃ < ≤ │ z ä │ x ë │ c ï │ v ö │ b ü │ n ñ │ m µ │ , ç │ . … │ / ¶ ┃Shift ⇧      ┃
 // ┣━━━━━━━╋━━━━━┷━┳━━━┷━━━┱─┴─────┴─────┴─────┴─────┴─────┴───┲━┷━━━━━╈━━━━━┻━┳━━━━━━━┳━━━┛
 // ┃Caps   ┃       ┃       ┃ ␣            Non-breaking space ⍽ ┃       ┃       ┃       ┃
 // ┃Lock ⇬ ┃Meta   ┃Alt    ┃ ␣ Space                         ␣ ┃AltGr ⇮┃Menu   ┃Ctrl   ┃
@@ -43,9 +43,9 @@ xkb_symbols "basic" {
     key <AE07> { [ 7,     ampersand,       onehalf,              onequarter       ] };
     key <AE08> { [ 8,     asterisk,        threequarters,        dead_ogonek      ] };
     key <AE09> { [ 9,     parenleft,       leftsinglequotemark,  dead_breve       ] };
-    key <AE10> { [ 0,     parenright,      rightsinglequotemark, paragraph        ] };
-    key <AE11> { [ minus, underscore,      paragraph,            0x10022C5        ] };
-    key <AE12> { [ equal, plus,            multiply,             division         ] };
+    key <AE10> { [ 0,     parenright,      rightsinglequotemark, plusminus        ] };
+    key <AE11> { [ minus, underscore,      division,             0x10022C5        ] };
+    key <AE12> { [ equal, plus,            notequal,             multiply         ] };
 
     key <AD01> { [ q,            Q,          agrave,         Agrave               ] };
     key <AD02> { [ w,            W,          egrave,         Egrave               ] };
@@ -80,8 +80,8 @@ xkb_symbols "basic" {
     key <AB06> { [ n,         N,        ntilde,     Ntilde       ] };
     key <AB07> { [ m,         M,        mu,         mu           ] };
     key <AB08> { [ comma,     less,     ccedilla,   Ccedilla     ] };
-    key <AB09> { [ period,    greater,  notequal,   plusminus    ] };
-    key <AB10> { [ slash,     question, 0x1002026,  questiondown ] };
+    key <AB09> { [ period,    greater,  0x1002026,   0x1002026    ] };
+    key <AB10> { [ slash,     question, paragraph,  questiondown ] };
     key <BKSL> { [ backslash, bar,      notsign,    brokenbar    ] };
 
     key <SPCE> { [ spce, space,   space,         nobreakspace     ] };
