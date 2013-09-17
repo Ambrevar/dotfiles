@@ -2,53 +2,24 @@
 ;; TeX and LaTeX
 ;;==============================================================================
 
-;; I find the default tex-mode and AucTeX quite disappointing. I'm using custom
-;; functions for everything.
+;; The default tex-mode and AucTeX may seem quite disappointing. Let's use
+;; custom KISS functions for everything.
 
-(defcustom tex-my-viewer "zathura --fork -s -x \"emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"'\"'\"%{input}\"'\"'\")) (goto-line %{line}))'\""
-  "PDF Viewer for TeX documents. You may want to fork the viewer
-so that it detects when the same document is launched twice, and
-persists when Emacs gets closed.
-
-Simple command:
-
-  zathura --fork
-
-We can use
-
-  emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"%{input}\")) (goto-line %{line}))'
-
-to reverse-search a pdf using SyncTeX. Note that the quotes and
-double-quotes matter and must be escaped appropriately."
-  :safe 'stringp)
-
-(defcustom tex-my-compiler nil
-  "[Local variable]
-
-This is the name of the executable called upon TeX compilations.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CUSTOM
+(defcustom tex-compiler nil
+  "This is the name of the executable called upon TeX compilations.
 Examples: pdftex, pdflatex, xetex, xelatex, luatex, lualatex...
 
-If value is nil, the compiler will be tex-my-default-compiler for
-TeX mode, and latex-my-default-compiler for LaTeX mode."
+If value is nil, the compiler will be tex-default-compiler for
+TeX mode, and latex-default-compiler for LaTeX mode."
   :safe 'stringp)
 
 (defcustom masterfile nil
-  "[Local variable]
-
-The file that should be compiled."
+  "The file that should be compiled. Useful for modular documents."
   :safe 'stringp)
 
-(defcustom tex-my-default-compiler "pdftex"
-  "Default compiler for TeX mode. Used if tex-my-compiler is
-empty."
-  :safe 'stringp)
-
-(defcustom latex-my-default-compiler "pdflatex"
-  "Default compiler for LaTeX mode. Used if tex-my-compiler is
-empty."
-  :safe 'stringp)
-
-(defcustom tex-my-compiler-options "-file-line-error-style -interaction nonstopmode -synctex=1"
+(defcustom tex-compiler-options "-file-line-error-style -interaction nonstopmode -synctex=1"
   "The options to the tex compiler. Options are set between the
 compiler name and the file name.
 
@@ -70,13 +41,13 @@ Interesting options:
 
 You may use file local variable for convenience:
 
-% -*- tex-my-compiler-options: \"-shell-escape\"
+% -*- tex-compiler-options: \"-shell-escape\"
 
 Note that -shell-escape can also be toggled with universal
 argument."
   :safe 'stringp)
 
-(defcustom tex-my-startcommands ""
+(defcustom tex-startcommands ""
   "You can call a TeX compiler upon a string instead of a file.
 This is actually useful if you want to customize your
 compilation.
@@ -96,6 +67,39 @@ document, you may define it here:
   \\def\\myvar{mycontent}"
   :safe 'stringp)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; VARIABLES
+(defvar tex-viewer "zathura --fork -s -x \"emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"'\"'\"%{input}\"'\"'\")) (goto-line %{line}))'\""
+  "PDF Viewer for TeX documents. You may want to fork the viewer
+so that it detects when the same document is launched twice, and
+persists when Emacs gets closed.
+
+Simple command:
+
+  zathura --fork
+
+We can use
+
+  emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"%{input}\")) (goto-line %{line}))'
+
+to reverse-search a pdf using SyncTeX. Note that the quotes and
+double-quotes matter and must be escaped appropriately.")
+
+(defvar tex-default-compiler "pdftex"
+  "Default compiler for TeX mode. Used if tex-compiler is
+empty.")
+
+(defvar latex-default-compiler "pdflatex"
+  "Default compiler for LaTeX mode. Used if tex-compiler is
+empty.")
+
+(defvar tex-extension-list
+  '("aux" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy")
+  "List of known TeX exentsions. This list is used by 'tex-clean
+  to purge all matching files.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; FUNCTIONS
 (defun tex-set-compiler ()
   "Use compile to process your TeX-based document. Use a prefix
 argument to call the compiler along the '-shell-escape'
@@ -107,51 +111,45 @@ This may be useful for some features like GnuPlot support with TikZ.
 
 WARNING: the -shell-escape option is a potential security issue."
   (interactive)
+  (hack-local-variables)
   (let (
-        ;; Set compiler to be tex-my-compiler if not empty, or a default
+        ;; Set compiler to be tex-compiler if not empty, or a default
         ;; compiler otherwise.
         (local-compiler
-         (if (not tex-my-compiler)
+         (if (not tex-compiler)
              (cond
-              ((string= "latex-mode" major-mode) latex-my-default-compiler)
-              ((string= "plain-tex-mode" major-mode) tex-my-default-compiler)
-              (t   (message "Warning: unknown major mode. Trying pdftex.") "pdftex"))
-           tex-my-compiler))
+              ((string= "latex-mode" major-mode) latex-default-compiler)
+              ((string= "plain-tex-mode" major-mode) tex-default-compiler)
+              (t (message "Warning: unknown major mode. Trying pdftex.") "pdftex"))
+           tex-compiler))
 
-        ;; Master file
+        ;; Master file.
         (local-master
-         (if (not masterfile)
-             buffer-file-name
-           masterfile))
+         (if (not masterfile) buffer-file-name masterfile))
 
-        ;; If tex-my-startcommands has some content, we make sure it is a string
+        ;; If tex-startcommands has some content, we make sure it is a string
         ;; that loads the file.
         (local-start-cmd
-         (if (not (string= "" tex-my-startcommands))
-             (concat "\"" tex-my-startcommands "\\input\"")))
+         (if (not (string= "" tex-startcommands))
+             (concat "\"" tex-startcommands "\\input\"")))
 
         ;; Support of prefix argument to toggle -shell-escape.
         (local-shell-escape
          (if (equal current-prefix-arg '(4)) "-shell-escape" "")))
 
     (set (make-local-variable 'compile-command)
-         (concat local-compiler " "  local-shell-escape " " tex-my-compiler-options " " local-start-cmd " \"" local-master "\""))))
+         (concat local-compiler " "  local-shell-escape " " tex-compiler-options " " local-start-cmd " \"" local-master "\""))))
 
-(defcustom tex-my-extension-list
-  '("aux" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy")
-  "List of known TeX exentsions. This list is used by 'tex-clean to purge all matching files."
-  :safe 'listp)
 
 (defun tex-clean ()
   "Remove all TeX temporary files. This command should be safe,
 but there is no warranty."
   (interactive)
+  (hack-local-variables)
   (let (
         ;; Master file.
         (local-master
-         (if (not masterfile)
-             buffer-file-name
-           masterfile)))
+         (if (not masterfile) buffer-file-name masterfile)))
 
     (let (
           ;; File name without extension.
@@ -168,19 +166,18 @@ but there is no warranty."
        (mapcar
         ;; Concat file name with extensions.
         (lambda (arg) (interactive) (concat file arg))
-        tex-my-extension-list)))))
+        tex-extension-list)))))
 
 (defun tex-pdf-compress ()
   "PDF compressions might really strip down the PDF size. The
 compression depends on the fonts used. Do not use this command if
 your document embeds raster graphics."
   (interactive)
+  (hack-local-variables)
   (let (
         ;; Master file.
         (local-master
-         (if (not masterfile)
-             buffer-file-name
-           masterfile)))
+         (if (not masterfile) buffer-file-name masterfile)))
 
     (let (
           ;; Temp compressed file.
@@ -201,26 +198,27 @@ your document embeds raster graphics."
   "Call a PDF viewer for current buffer file. File name should be
 properly escaped with double-quotes in case it has spaces."
   (interactive)
+  (hack-local-variables)
   (let (
         ;; Master file.
         (local-master
-         (if (not masterfile)
-             buffer-file-name
-           masterfile)))
+         (if (not masterfile) buffer-file-name masterfile)))
 
     (shell-command
-     (concat tex-my-viewer
+     (concat tex-viewer
              " \""
              (replace-regexp-in-string "\.tex$" "\.pdf" (file-name-nondirectory local-master))
              "\" &" ))
     (delete-windows-on "*Async Shell Command*")))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; HOOK
 (add-hook
  'tex-mode-hook
  (lambda ()
    (dolist (key '("\C-c\C-f" "\C-c\C-b"))
      (local-unset-key key))
-   (tex-set-compiler)
    (set (make-local-variable 'compilation-scroll-output) t)
    (set (make-local-variable 'compilation-hide-window) t)
+   (tex-set-compiler)
    (local-set-key (kbd "<f9>") 'tex-pdf-view) ))

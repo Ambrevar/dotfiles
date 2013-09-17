@@ -21,6 +21,7 @@ shebang. System `python' is assumed by default."
 (defun python-set-interpreter ()
   "Use compile to run python programs."
   (interactive)
+  (hack-local-variables)
   (let ((py-interpreter
          (if python-interpreter
              python-interpreter
