@@ -29,8 +29,6 @@ if [ "$OSTYPE" = "linux-gnu" ] ; then
     [ -n "$(command -v udiskie)" ] && udiskie &
 fi
 
-[ -d "$HOME/temp" ] && export TEMP="$HOME/temp"
-
 ## This env variable is used by some programs (like ranger and awesome) to get
 ## terminal executable name.
 export TERMCMD="urxvt"

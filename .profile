@@ -109,6 +109,9 @@ if [ -n "$(command -v ssh-agent)" ]; then
     unset SSH_ENV_FILE
 fi
 
+## Set TEMP dir if you want to override /tmp for somce application that check for this variable. Usually not a good idea.
+# [ -d "$HOME/temp" ] && export TEMP="$HOME/temp"
+
 ## Wine DLL override. This removes the annoying messages for Mono and Gecko.
 export WINEDLLOVERRIDES="mscoree,mshtml="
 
