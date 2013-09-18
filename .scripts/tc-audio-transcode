@@ -357,6 +357,7 @@ fi
 ##==============================================================================
 ## PREVIEW
 
+## TODO: there is a alignment issue when strings contain wide characters.
 ATTR_WIDTH="%-13.13s" # Length of longest attribute +2
 ## INPUT_WIDTH = COLUNMS - ATTR_WIDTH -2 (for |))
 INPUT_WIDTH=$((($(tput cols)-15)/2))

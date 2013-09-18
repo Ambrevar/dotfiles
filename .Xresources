@@ -46,7 +46,7 @@ URxvt.clipboard.pastecmd:   xclip -o -quiet
 
 !! Xft that are OK with w3m image preview.
 ! urxvt.font:              xft:terminus:pixelsize=14
-urxvt.font:              xft:Dina:pixelsize=16
+urxvt.font:              xft:Dina:pixelsize=14
 
 !! Xft options
 ! Xft.antialias: false
