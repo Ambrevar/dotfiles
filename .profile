@@ -117,3 +117,14 @@ export WINEDLLOVERRIDES="mscoree,mshtml="
 
 ## Hook. Should be sourced last
 [ -f ~/.profile_hook ] && . ~/.profile_hook
+## Hook example
+
+# appendpath "${HOME}/local/usr/bin"
+# prependpath "${HOME}/local/usr/share/info" INFOPATH
+# prependpath "${HOME}/local/usr/share/man" MANPATH
+# export LD_LIBRARY_PATH="${HOME}/local/usr/lib/"
+# export PKG_CONFIG_PATH="${HOME}/local/usr/lib/pkgconfig"
+# export CPPFLAGS=-I$HOME/local/usr/include
+# export LDFLAGS=-L$HOME/local/usr/lib
+#
+# umask 077
