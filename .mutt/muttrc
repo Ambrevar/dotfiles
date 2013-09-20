@@ -127,7 +127,10 @@ bind editor        <Tab> complete-query
 ## see the password unencrypted. We disable it for this reason. Every command
 ## that the user intends to use must be bound to a key in advance, otherwise it
 ## will never be accessible.
-bind index,pager ':' noop
+bind generic,alias,attach,browser,editor,index,compose,pager,pgp,postpone ':' noop
+
+## HTML mail view with graphical Internet browser.
+macro attach 'V' "<pipe-entry>cat >/tmp/mutt-attach.mail && $BROWSER /tmp/mutt-attach.mail<enter>"
 
 ## Remap bounce-message function to "B"
 bind index B bounce-message

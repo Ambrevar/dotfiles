@@ -1,6 +1,6 @@
 # -*- mode:sh -*-
 ## Mutt -- Personal account
-set imap_user=user@gmail.com 
+set imap_user=user@gmail.com
 set imap_pass=$my_pw_personal
 set from=user@gmail.com
 set hostname="gmail.com"
