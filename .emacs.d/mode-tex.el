@@ -212,6 +212,33 @@ properly escaped with double-quotes in case it has spaces."
     (delete-windows-on "*Async Shell Command*")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; MACROS
+
+(defun tex-itemize()
+  "Append \\item to the beginning of the line. On region, append
+  \item to every line and surround the region by a `itemize'
+  environment."
+  (interactive)
+  (save-excursion
+    (let (min max case-fold-search)
+      (if (not (region-active-p))
+          (progn
+            (goto-char (line-beginning-position))
+            (insert "\\item")
+            (just-one-space))
+
+        (replace-regexp "^ *\\([^
+ ]\\)" "\\\\item \\1" nil (region-beginning) (region-end))
+        (goto-char (region-end))
+        (goto-char (line-end-position))
+        (newline)
+        (insert "\\end{itemize}")
+        (goto-char (region-beginning))
+        (goto-char (line-beginning-position))
+        (insert "\\begin{itemize}")
+        (newline)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; HOOK
 (add-hook
  'tex-mode-hook
@@ -220,5 +247,7 @@ properly escaped with double-quotes in case it has spaces."
      (local-unset-key key))
    (set (make-local-variable 'compilation-scroll-output) t)
    (set (make-local-variable 'compilation-hide-window) t)
-   (tex-set-compiler)
-   (local-set-key (kbd "<f9>") 'tex-pdf-view) ))
+
+   (local-set-key (kbd "<f9>") 'tex-pdf-view)
+   (local-set-key (kbd "M-RET") 'tex-itemize)
+   (tex-set-compiler)))

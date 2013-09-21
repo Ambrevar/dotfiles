@@ -129,6 +129,7 @@
     ("gnu" "GNU" nil 1)
     ("gnulinux" "GNU/Linux" nil 1)
     ("ie" "i.e." nil 1)
+    ("iff" "if and only if" nil 1)
     ("iirc" "if I recall correctly" nil 1)
     ("imho" "in my humble opinion" nil 1)
     ("imo" "in my opinion" nil 1)
