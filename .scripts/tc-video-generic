@@ -1,6 +1,5 @@
 #!/bin/sh
 
-## TODO: option to replace original file.
 ## TODO: audio quality. Copy if AAC or OGG <320k.
 ## TODO: crop options.
 ## TODO: handle srt encoding.
@@ -20,7 +19,7 @@ files are the same as the original, with time appended. You can customize
 encoding with the TC_* variables.
 
   -c:      Copy streams (no reencoding).
-  -f:      Overwrite existing file if any.
+  -f:      Remove source when done.
   -h:      Display this help.
   -o OPT:  Additional options.
   -s:      Sample of 5 minutes.
@@ -52,6 +51,7 @@ TC_VIDEO_OPT="-preset slow -crf 20"
 # -y overwrite
 # -n do not overwrite.
 TC_OVERWRITE="-n"
+OPT_OVERWRITE=false
 
 ## WARNING: we mix down audio to 2 channels with '-ac 2'. This greatly reduce
 ## file size and avoid any confusion for playback, which is often the case when
@@ -67,7 +67,8 @@ while getopts ":cfho:sS:t" opt; do
             TC_VIDEO_CODEC="copy"
             TC_AUDIO_CODEC="copy" ;;
         f)
-            TC_OVERWRITE="-y" ;;
+            TC_OVERWRITE="-y"
+            OPT_OVERWRITE=true;;
         h)
             _printhelp "$0"
             exit 1 ;;
@@ -120,12 +121,18 @@ EOF
         done
     fi
 
+    OUTPUT="${1%.*}-$(date '+%F-%H%M%S').mkv"
     ffmpeg $TC_OVERWRITE -i "$1" \
         -c:v $TC_VIDEO_CODEC $TC_VIDEO_OPT \
         -c:a $TC_AUDIO_CODEC $TC_AUDIO_OPT \
         -c:s copy \
         -map 0 $STREAM_TITLE \
-        $TC_SAMPLE $TC_USER_OPT "${1%.*}-$(date '+%F-%H%M%S').mkv"
+        $TC_SAMPLE $TC_USER_OPT "$OUTPUT"
+
+    if $OPT_OVERWRITE; then
+        rm -f "$1"
+        mv -f "$OUTPUT" "${1%.*}.mkv"
+    fi
 }
 
 for i in "$@"; do
