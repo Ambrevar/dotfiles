@@ -214,10 +214,11 @@ properly escaped with double-quotes in case it has spaces."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MACROS
 
-(defun tex-itemize()
+(defun tex-itemize ()
   "Append \\item to the beginning of the line. On region, append
-  \item to every line and surround the region by a `itemize'
-  environment."
+  \item to every line and surround the region by an `itemize'
+  environment. If bound to M-RET, you can then easily apply this
+  command on the paragraph at point with M-h M-RET."
   (interactive)
   (save-excursion
     (let (min max case-fold-search)
@@ -247,7 +248,7 @@ properly escaped with double-quotes in case it has spaces."
      (local-unset-key key))
    (set (make-local-variable 'compilation-scroll-output) t)
    (set (make-local-variable 'compilation-hide-window) t)
-
+   (set (make-local-variable 'use-hard-newlines) t)
    (local-set-key (kbd "<f9>") 'tex-pdf-view)
    (local-set-key (kbd "M-RET") 'tex-itemize)
    (tex-set-compiler)))
