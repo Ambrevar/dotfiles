@@ -51,6 +51,9 @@ set mail_check = 60
 ## Mailbox type.
 set mbox_type=Maildir
 
+## Keep showing the list of mails while in pager.
+set pager_index_lines=8
+
 ## Encoding
 set send_charset="us-ascii:utf-8"
 
