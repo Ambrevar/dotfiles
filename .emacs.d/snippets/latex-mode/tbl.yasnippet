@@ -4,8 +4,10 @@
 # group: environments
 # name : BEGIN RECEIVE ORGTBL
 # --
+\begin{center}
 % BEGIN RECEIVE ORGTBL ${1:table_name}
 % END RECEIVE ORGTBL $1
+\end{center}
 \begin{comment}
   #+ORGTBL: SEND $1 orgtbl-to-latex
   | $0 | 
