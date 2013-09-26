@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# contributor : Pierre Neidhardt <ambrevar@gmail.com>
+# key: tbl
+# group: environments
+# name : BEGIN RECEIVE ORGTBL
+# --
+% BEGIN RECEIVE ORGTBL ${1:table_name}
+% END RECEIVE ORGTBL $1
+\begin{comment}
+  #+ORGTBL: SEND $1 orgtbl-to-latex
+  | $0 | 
+  %$
+\end{comment}

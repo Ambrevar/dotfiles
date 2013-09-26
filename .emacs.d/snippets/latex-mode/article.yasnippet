@@ -22,7 +22,13 @@
 %% Properties
 
 \title{${1:Title}}
-\author{${2:\textsc{P.~Neidhardt}}}
+\author{${2:P.~\textsc{Neidhardt}}}
+
+\makeatletter
+\let\thetitle\@title
+\let\theauthor\@author
+\let\thedate\@date
+\makeatother
 
 %%=============================================================================
 %% Aliases
@@ -49,7 +55,19 @@
 \renewcommand{\arraystretch}{1.4}
 % \renewcommand{\familydefault}{\sfdefault}
 
-% \usepackage{needspace}
+%% Narrow items
+\newlength{\wideitemsep}
+\setlength{\wideitemsep}{.5\itemsep}
+\addtolength{\wideitemsep}{-7pt}
+\let\olditem\item
+\renewcommand{\item}{\setlength{\itemsep}{\wideitemsep}\olditem}
+
+%% Header
+% \usepackage{fancyhdr}
+% \setlength{\headheight}{15.2pt}
+% \pagestyle{fancy}
+% \lhead{\thetitle}
+% \rhead{\theauthor}
 
 %%==============================================================================
 %% Tables
@@ -74,6 +92,9 @@
 %%==============================================================================
 %% Misc.
 
+\usepackage{comment}
+\usepackage{needspace}
+
 % \usepackage{calc}
 % \usepackage{fp}
 % \usepackage{lipsum}
@@ -84,7 +105,7 @@
 % \usepackage{listings}
 
 %% Source code.
-% \lstdefinestyle{customc}{
+% \lstdefinestyle{custom}{
 %   % numbers=left,
 %   belowcaptionskip=1\baselineskip,
 %   breaklines=true,
@@ -101,7 +122,7 @@
 %   numberstyle=\ttfamily
 % }
 
-% \lstset{escapechar=@,style=customc}
+% \lstset{escapechar=,style=custom}
 
 %%=============================================================================
 %% Babel
@@ -126,9 +147,9 @@
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \maketitle
-\vfill
-\thispagestyle{empty}
-\tableofcontents
+% \vfill
+% \thispagestyle{empty}
+% \tableofcontents
 
 $0
 

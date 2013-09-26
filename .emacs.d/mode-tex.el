@@ -214,8 +214,9 @@ properly escaped with double-quotes in case it has spaces."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MACROS
 
-(defun tex-itemize ()
-  "Append \\item to the beginning of the line. On region, append
+(defun latex-itemize ()
+  "Prepend \\item to the beginning of the line if not already
+  there, otherwise insert it on next line. On region, append
   \item to every line and surround the region by an `itemize'
   environment. If bound to M-RET, you can then easily apply this
   command on the paragraph at point with M-h M-RET."
@@ -223,7 +224,12 @@ properly escaped with double-quotes in case it has spaces."
   (save-excursion
     (let (min max case-fold-search)
       (if (not (region-active-p))
-          (progn
+
+          (if (string-match "\\item" (buffer-substring (line-beginning-position) (line-end-position)))
+              (progn
+                (goto-char (line-end-position))
+                (newline)
+                (insert "\\item "))
             (goto-char (line-beginning-position))
             (insert "\\item")
             (just-one-space))
@@ -240,7 +246,8 @@ properly escaped with double-quotes in case it has spaces."
         (newline)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; HOOK
+;; HOOKS
+
 (add-hook
  'tex-mode-hook
  (lambda ()
@@ -250,5 +257,7 @@ properly escaped with double-quotes in case it has spaces."
    (set (make-local-variable 'compilation-hide-window) t)
    (set (make-local-variable 'use-hard-newlines) t)
    (local-set-key (kbd "<f9>") 'tex-pdf-view)
-   (local-set-key (kbd "M-RET") 'tex-itemize)
    (tex-set-compiler)))
+
+(add-hook 'latex-mode-hook (lambda () (local-set-key (kbd "M-RET") 'latex-itemize)))
+(add-hook 'latex-mode-hook 'turn-on-orgtbl)
