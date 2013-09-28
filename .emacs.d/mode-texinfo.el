@@ -2,57 +2,48 @@
 ;; Texinfo
 ;;==============================================================================
 
-(defcustom texinfo-my-viewer "zathura --fork"
-  "PDF Viewer for Texinfo documents. You may want to fork the viewer
-so that it detects when the same document is launched twice, and
-persists when Emacs gets closed."
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CUSTOM
+
+(defcustom masterfile nil
+  "The file that should be compiled. Useful for modular documents."
   :safe 'stringp)
 
-(defcustom texinfo-my-masterfile nil
-  "[Local variable]
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; VARIABLE
 
-The file that should be compiled."
-  :safe 'stringp)
+(defvar texinfo-viewer "zathura --fork"
+  "PDF Viewer for Texinfo documents. You may want to fork the
+viewer so that it detects when the same document is launched
+twice, and persists when Emacs gets closed.")
 
-(defun texinfo-my-compile ()
+
+(defvar texinfo-extension-list '("aux" "cp" "cps" "fn" "ky" "log" "pg" "toc" "tp" "vr" "vrs")
+  "List of known Texinfo exentsions. This list is used by
+  'texinfo-clean to purge all matching files.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; FUNCTIONS
+
+(defun texinfo-set-compiler ()
   "Use compile to process your Texinfo document."
   (interactive)
+  (hack-local-variables)
   (let
       ;; Master file
-      ( (local-master
-         (if (not texinfo-my-masterfile)
-             buffer-file-name
-           texinfo-my-masterfile)))
+      ( (local-master (if (not masterfile) buffer-file-name masterfile)))
 
-    (let
-        ;; Final command
-        ( (local-compile-command
-           (concat  "texi2pdf -b \"" local-master "\"")))
-
-      (message local-compile-command) ;; Debug only.
-      (save-buffer)
-      (setq compilation-scroll-output t)
-      (compile local-compile-command)
-
-      ;; If no user interaction for 2 seconds, hide the compilation window.
-      (sit-for 2)
-      (delete-windows-on "*compilation*"))))
-
-
-(defcustom texinfo-my-extension-list '("aux" "cp" "cps" "fn" "ky" "log" "pg" "toc" "tp" "vr" "vrs")
-  "List of known Texinfo exentsions. This list is used by 'texinfo-clean to purge all matching files."
-  :safe 'listp)
+    (set (make-local-variable 'compile-command)
+         (concat "texi2pdf -b \"" local-master "\""))))
 
 (defun texinfo-clean ()
   "Remove all Texinfo temporary files. This command should be safe,
 but there is no warranty."
   (interactive)
+  (hack-local-variables)
   (let
       ;; Master file.
-      ((local-master
-        (if (not texinfo-my-masterfile)
-            buffer-file-name
-          texinfo-my-masterfile)))
+      ((local-master (if (not masterfile) buffer-file-name masterfile)))
 
     (let
         ;; File name without extension.
@@ -69,43 +60,44 @@ but there is no warranty."
        (mapcar
         ;; Concat file name with extensions.
         (lambda (arg) (interactive) (concat file arg))
-        texinfo-my-extension-list)))))
+        texinfo-extension-list)))))
 
 (defun texinfo-pdf-view ()
   "Call a PDF viewer for current buffer file. File name should be
 properly escaped with double-quotes in case it has spaces."
   (interactive)
+  (hack-local-variables)
   (let
       ;; Master file.
-      ((local-master
-        (if (not texinfo-my-masterfile)
-            buffer-file-name
-          texinfo-my-masterfile)))
+      ((local-master (if (not masterfile) buffer-file-name masterfile)))
 
     (shell-command
-     (concat texinfo-my-viewer
+     (concat texinfo-viewer
              " \""
              (replace-regexp-in-string "\.texi$" "\.pdf" (file-name-nondirectory local-master))
              "\" &" ))
     (delete-windows-on "*Async Shell Command*")))
 
-(defun texinfo-my-menu-update ()
+(defun texinfo-menu-update ()
   "Update texinfo node menu automatically."
   (interactive)
+  (hack-local-variables)
   (let
       ;; Master file.
-      ((local-master
-        (if (not texinfo-my-masterfile)
-            buffer-file-name
-          texinfo-my-masterfile)))
+      ((local-master (if (not masterfile) buffer-file-name masterfile)))
 
     (texinfo-multiple-files-update local-master t 8)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; HOOKS
 
 (add-hook
  'texinfo-mode-hook
  (lambda ()
    (setq fill-column 80)
-   (setq compilation-scroll-output t)
-   (local-set-key (kbd "C-c C-b") 'texinfo-my-menu-update)
-   (local-set-key (kbd "C-c C-v") 'texinfo-pdf-view)
-   (local-set-key "\C-c\C-t\C-b" 'texinfo-my-compile)))
+   (set (make-local-variable 'compilation-scroll-output) t)
+   (set (make-local-variable 'compilation-hide-window) t)
+   (set (make-local-variable 'use-hard-newlines) t)
+   (local-set-key (kbd "C-c C-b") 'texinfo-menu-update)
+   (local-set-key (kbd "<f9>") 'texinfo-pdf-view)
+   (texinfo-set-compiler)))
