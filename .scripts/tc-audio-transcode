@@ -133,7 +133,7 @@ OUTPUT_TITLE='$TITLE'
 OUTPUT_TRACK='$TRACK'
 
 ## PROPERTIES
-OUTPUT_BITRATE=0
+OUTPUT_BITRATE=-1
 
 ## Non-CLI-option data. Modifying these imply modifications in code below.
 OUTPUT_EXT="ogg"
@@ -315,13 +315,14 @@ fi
 
 ## QUALITY
 ## If bitrate argument is not provided, we use INPUT_BITRATE value.
-[ $OUTPUT_BITRATE -eq 0 ] && OUTPUT_BITRATE=${INPUT_BITRATE}
+## If bitrate argument is 0, we leave FFmpeg chose the value.
+[ $OUTPUT_BITRATE -lt 0 ] && OUTPUT_BITRATE=${INPUT_BITRATE}
+[ $OUTPUT_BITRATE -eq 0 ] && OGG_PARAM="-c:a libvorbis"
 ## If OUTPUT_BITRATE is beyond OGG's limit, we trim it.
 [ $OUTPUT_BITRATE -gt 500 ] && OUTPUT_BITRATE=500
 
 
 ## Only reencode if not in OGG and if SKIP not set.
-OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
 INPUT_EXT_LOW="$(echo $INPUT_EXT | tr [:upper:] [:lower:])"
 if $SKIP; then
     OGG_PARAM="-c:a copy"
