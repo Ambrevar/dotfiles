@@ -217,3 +217,33 @@ Enlarge/Shrink by ARG columns, or 5 if arg is nil."
 (defun map-on-pair (function sequence)
   "Map a function taking two arguments on a sequence of pairs."
   (mapcar (lambda (p) (funcall function (car p) (cadr p))) sequence ))
+
+(defun mark-word (&optional arg allow-extend)
+  "Set mark ARG words away from point.
+The place mark goes is the same place \\[forward-word] would move
+to with the same argument.  Interactively, if this command is
+repeated or (in Transient Mark mode) if the mark is active, it
+marks the next ARG words after the ones already marked.
+
+This overloads the vanilla function to mark words from the
+beginning."
+  (interactive "P\np")
+  (cond ((and allow-extend
+              (or (and (eq last-command this-command) (mark t))
+                  (region-active-p)))
+         (setq arg (if arg (prefix-numeric-value arg)
+                     (if (< (mark) (point)) -1 1)))
+         (set-mark
+          (save-excursion
+            (goto-char (mark))
+            (forward-word arg)
+            (point))))
+        (t
+         (forward-char)
+         (backward-word)
+         (push-mark
+          (save-excursion
+            (forward-word (prefix-numeric-value arg))
+            (point))
+          nil t))))
+

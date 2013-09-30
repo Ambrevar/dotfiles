@@ -279,7 +279,7 @@
  (lambda ()
    (speedbar-toggle-updates)))
 
-;; Compilation .
+;; Compilation bindings and conveniences.
 (setq compilation-hide-window nil)
 (define-key my-keys-minor-mode-map (kbd "<f10>")
   (lambda () (interactive)
@@ -290,7 +290,7 @@
       (delete-windows-on "*compilation*"))))
 (define-key my-keys-minor-mode-map (kbd "<f11>") 'previous-error)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
-;; Code browsing
+;; Code browsing: make C-M-e jump to next function instead of the end of the current function.
 (define-key my-keys-minor-mode-map (kbd "C-M-e") (lambda () (interactive) (beginning-of-defun -1)))
 
 ;; Just because XML is ugly.
