@@ -49,16 +49,19 @@
 (setq kill-whole-line t)
 
 ;; Alternative scrolling
-;; TODO: add support for DocView
 (define-key my-keys-minor-mode-map [next]
   (lambda () (interactive)
-    (condition-case nil (scroll-up)
-      (end-of-buffer (goto-char (point-max))))))
+    (if (string= major-mode "doc-view-mode")
+        (doc-view-next-page)
+      (condition-case nil (scroll-up)
+        (end-of-buffer (goto-char (point-max)))))))
 
 (define-key my-keys-minor-mode-map [prior]
   (lambda () (interactive)
-    (condition-case nil (scroll-down)
-      (beginning-of-buffer (goto-char (point-min))))))
+    (if (string= major-mode "doc-view-mode")
+        (doc-view-previous-page)
+      (condition-case nil (scroll-down)
+        (beginning-of-buffer (goto-char (point-min)))))))
 
 ;; Line numbers
 ;; TODO: This mode is slow on  big files when using beginning-of-buffer binding.

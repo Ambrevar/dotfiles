@@ -4,16 +4,6 @@
 ;; The default tex-mode and AucTeX may seem quite disappointing. Let's use
 ;; custom KISS functions for everything.
 
-;; The magnificent latex-math-preview mode!
-(autoload 'latex-math-preview-expression "latex-math-preview" nil t)
-(autoload 'latex-math-preview-insert-symbol "latex-math-preview" nil t)
-(autoload 'latex-math-preview-save-image-file "latex-math-preview" nil t)
-(autoload 'latex-math-preview-beamer-frame "latex-math-preview" nil t)
-(autoload 'latex-math-preview-text-symbol-datasets "latex-math-preview" nil t)
-
-(setq latex-math-preview-cache-directory-for-insertion
-      (concat emacs-cache-folder "latex-math-preview-cache"))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; CUSTOM
 (defcustom tex-compiler nil
@@ -265,25 +255,37 @@ properly escaped with double-quotes in case it has spaces."
    (set (make-local-variable 'compilation-hide-window) t)
    (set (make-local-variable 'use-hard-newlines) t)
    (local-set-key (kbd "<f9>") 'tex-pdf-view)
-   ;; (local-set-key (kbd "C-c p") 'latex-math-preview-expression)
-   ;; (local-set-key (kbd "C-c C-p") 'latex-math-preview-save-image-file)
-   (local-set-key (kbd "C-c j") 'latex-math-preview-insert-symbol)
-   (local-set-key (kbd "C-c C-j") 'latex-math-preview-last-symbol-again)
-   ;; (local-set-key (kbd "C-c C-b") 'latex-math-preview-beamer-frame)
    (tex-set-compiler)))
 
 (add-hook 'latex-mode-hook (lambda () (local-set-key (kbd "M-RET") 'latex-itemize)))
 (add-hook 'latex-mode-hook 'turn-on-orgtbl)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; The magnificent latex-math-preview mode!
+;; TODO: some symbols are not generated properly.
+(autoload 'latex-math-preview-expression "latex-math-preview" nil t)
+(autoload 'latex-math-preview-insert-symbol "latex-math-preview" nil t)
+(autoload 'latex-math-preview-save-image-file "latex-math-preview" nil t)
+(autoload 'latex-math-preview-beamer-frame "latex-math-preview" nil t)
+(autoload 'latex-math-preview-text-symbol-datasets "latex-math-preview" nil t)
+
+(setq latex-math-preview-cache-directory-for-insertion
+      (concat emacs-cache-folder "latex-math-preview-cache"))
 
 ;; Extra for latex-math-preview-mode.
 ;; TODO: latex-math-preview-mode extra does not work.
 (require 'latex-math-preview-extra-data nil t)
-(add-hook 'latex-mode-hook
-          (lambda ()
-            (add-to-list 'latex-math-preview-text-symbol-datasets
-                         latex-math-preview-textcomp-symbol-data)
-            (add-to-list 'latex-math-preview-text-symbol-datasets
-                         latex-math-preview-pifont-zapf-dingbats-symbol-data)
-            (add-to-list 'latex-math-preview-text-symbol-datasets
-                         latex-math-preview-pifont-symbol-fonts-symbol-data)))
+(add-hook
+ 'latex-mode-hook
+ (lambda ()
+   ;; (local-set-key (kbd "C-c p") 'latex-math-preview-expression)
+   ;; (local-set-key (kbd "C-c C-p") 'latex-math-preview-save-image-file)
+   (local-set-key (kbd "C-c j") 'latex-math-preview-insert-symbol)
+   (local-set-key (kbd "C-c C-j") 'latex-math-preview-last-symbol-again)
+   ;; (local-set-key (kbd "C-c C-b") 'latex-math-preview-beamer-frame)
+   (add-to-list 'latex-math-preview-text-symbol-datasets
+                latex-math-preview-textcomp-symbol-data)
+   (add-to-list 'latex-math-preview-text-symbol-datasets
+                latex-math-preview-pifont-zapf-dingbats-symbol-data)
+   (add-to-list 'latex-math-preview-text-symbol-datasets
+                latex-math-preview-pifont-symbol-fonts-symbol-data)))
