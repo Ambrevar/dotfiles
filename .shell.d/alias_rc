@@ -91,6 +91,9 @@ alias xmorphzi='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ")
 
 alias xres='xrandr --output $(xrandr | awk '"'"'NR==2 {print $1;exit}'"'"') --auto && xrandr -s $(xrandr | awk '"'"'/^ / {print $1;exit}'"'"')'
 
+## Udiskie
+alias uua='udiskie-umount -a'
+
 ##==============================================================================
 ## Zsh power aliases
 ##==============================================================================
