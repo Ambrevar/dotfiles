@@ -49,6 +49,7 @@
 (setq kill-whole-line t)
 
 ;; Alternative scrolling
+;; TODO: add support for DocView
 (define-key my-keys-minor-mode-map [next]
   (lambda () (interactive)
     (condition-case nil (scroll-up)
@@ -106,7 +107,7 @@
 (setq-default fill-column 80)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
-;; Set  man pages to display on a 80 character wide window.
+;; Set man pages to display on a 80 character wide window.
 (setenv "MANWIDTH" "80")
 
 ;; Windmove mode: easy window switching with Shift+arrows.

@@ -266,6 +266,7 @@ comm
 cppcheck
 cut
 dash
+dcraw
 diff
 dosbox
 doxygen
@@ -394,4 +395,3 @@ yasm
 youtube-dl
 zathura
 zsh
-

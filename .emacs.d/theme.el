@@ -2,7 +2,7 @@
 ;; THEME
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; I tried to group colors with some consistency:
+;; I've tried to group colors with some consistency:
 ;; * doc, here-doc, comments, strings
 ;; * variables, types, constants
 ;; * preprocessor, functions, keywords, builtins
@@ -33,6 +33,10 @@
 (when (>= emacs-major-version 24)
       (set-face-foreground  'error                       "red")
       (set-face-bold-p      'error                       t))
+
+;; Blinking cursor is on only when Emacs is not daemonized.
+(when (not (boundp 'server-running-p))
+  (blink-cursor-mode -1))
 
 ;; Line numbers. Graphic version has a gray bar separating text from line
 ;; numbers, so we can leave the background black.
