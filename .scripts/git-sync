@@ -2,9 +2,12 @@
 
 while IFS= read -r FOLDER; do
     ROOT="${FOLDER%/*}"
-    if [ -n "$(cd "$ROOT" && git status -uno | grep "Your branch is ahead of")" ]; then
+    STATUS="$(cd "$ROOT" && git status -uno | grep "Your branch is ahead of")"
+    if [ -n "$STATUS" ]; then
         echo "$ROOT"
+        echo "$STATUS"
         (cd "$ROOT" && git push)
+        echo
     fi
 done <<EOF
 $(find . -type d -name ".git")
