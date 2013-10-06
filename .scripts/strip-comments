@@ -17,7 +17,7 @@ BEGIN {
 
 {
     while (match ($0, COMMENT_OPEN))
-    { 
+    {
         before = substr ($0, 1, RSTART-1)
         $0 = substr($0, RSTART)
         printf(before)

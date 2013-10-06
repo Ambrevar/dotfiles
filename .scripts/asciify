@@ -1,16 +1,24 @@
 #!/bin/sh
 
-if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+if [  "$1" = "--help" ] || [ "$1" = "-h" ]; then
     cat <<EOF
-Usage: ${0##*/} FILES
+Usage: ${0##*/} [FILES]
 
-Convert non-ASCII characters to their ASCII equivalent.
+Convert non-ASCII characters to their ASCII equivalent. If files are provided,
+convert them in-place. Otherwise convert standard input to standard output.
+
 EOF
     exit
 fi
 
-for i; do
-    sed -i \
+_asciify()
+{
+    unset OPT
+    if [ $# -ge 1 ]; then
+        OPT=-i
+    fi
+
+    sed $OPT \
         -e 's/[áàâä]/a/g' \
         -e 's/[éèêë]/e/g' \
         -e 's/[íìîï]/i/g' \
@@ -60,5 +68,13 @@ for i; do
         -e 's/[↑]/^/g' \
         -e 's/[←]/<=/g' \
         -e 's/[→]/=>/g' \
-        "$i"
-done;
+        "$@"
+}
+
+if [ $# -ge 1 ]; then
+    for i; do
+        _asciify "$i"
+    done
+else
+    cat | _asciify
+fi

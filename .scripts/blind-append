@@ -9,7 +9,9 @@ omitted, secret phrase will be appended to the end of the file.  If FILE does
 not exist, it will be created and secret phrase will be inserted. STRING will be
 ignored.
 
-This requires 'read -s'. It will not work for the Bourne Shell.
+This requires 'read -s'. As of Oct 6 2013 it will not work for strictly
+POSIX-compliant shells.
+
 EOF
     exit
 fi
