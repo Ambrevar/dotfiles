@@ -283,9 +283,10 @@ properly escaped with double-quotes in case it has spaces."
    (local-set-key (kbd "C-c j") 'latex-math-preview-insert-symbol)
    (local-set-key (kbd "C-c C-j") 'latex-math-preview-last-symbol-again)
    ;; (local-set-key (kbd "C-c C-b") 'latex-math-preview-beamer-frame)
-   (add-to-list 'latex-math-preview-text-symbol-datasets
-                latex-math-preview-textcomp-symbol-data)
-   (add-to-list 'latex-math-preview-text-symbol-datasets
-                latex-math-preview-pifont-zapf-dingbats-symbol-data)
-   (add-to-list 'latex-math-preview-text-symbol-datasets
-                latex-math-preview-pifont-symbol-fonts-symbol-data)))
+   ;; (add-to-list 'latex-math-preview-text-symbol-datasets
+   ;;              latex-math-preview-textcomp-symbol-data)
+   ;; (add-to-list 'latex-math-preview-text-symbol-datasets
+   ;;              latex-math-preview-pifont-zapf-dingbats-symbol-data)
+   ;; (add-to-list 'latex-math-preview-text-symbol-datasets
+   ;;              latex-math-preview-pifont-symbol-fonts-symbol-data)))
+   ))
