@@ -20,12 +20,14 @@ Synopsis.
 
   -h:  Show this help.
   -i:  input language (optional).
+  -l:  show alternate translations.
 
 EOF
 }
 
+FILTER='s/\[\[\["\([^"]*\).*/\1/'
 unset SL
-while getopts ":hi:" opt; do
+while getopts ":hi:l" opt; do
     case $opt in
         h)
             _printhelp "$0"
@@ -33,6 +35,8 @@ while getopts ":hi:" opt; do
             ;;
         i)
             SL="$OPTARG" ;;
+        l)
+            FILTER='s/\[\[\[[^[]*\[\[[^[]*\[\([^[]*\)\].*/\1/' ;;
         ?)
             _printhelp "$0"
             exit 1
@@ -63,7 +67,7 @@ _translate()
         curl -A "Mozilla/5.0" 'http://translate.google.com/translate_a/t?client=t&text='$TEXT'&tl='$TL'&ie=UTF-8&oe=UTF-8'
     else
         curl -A "Mozilla/5.0" 'http://translate.google.com/translate_a/t?client=t&text='$TEXT'&sl='$SL'&tl='$TL'&ie=UTF-8&oe=UTF-8'
-    fi 2>/dev/null | sed 's/\[\[\["\([^"]*\).*/\1/'
+    fi 2>/dev/null | sed -e $FILTER -e 's/"//g'
 
     echo
 }
