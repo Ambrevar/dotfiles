@@ -38,6 +38,7 @@ Example: to assign some-function to C-i, use
 (load "~/.emacs.d/mode-dot.el" nil t)
 (load "~/.emacs.d/mode-mediawiki.el" nil t)
 (load "~/.emacs.d/mode-python.el" nil t)
+(load "~/.emacs.d/mode-shell.el" nil t)
 (load "~/.emacs.d/mode-tex.el" nil t)
 (load "~/.emacs.d/mode-texinfo.el" nil t)
 (load "~/.emacs.d/personal" nil t)

@@ -367,27 +367,6 @@ has errors and/or warnings."
                   ("ll" "ls -hl")
                   ("la" "ls -ahl")))))
 
-;; Shell allow comment indenation.
-(setq sh-indent-comment t)
-;; We do not put 'sh' only because it could get messy. Emacs knows it anyway.
-(add-to-list 'auto-mode-alist '("\\(bash\\'\\|zsh\\'\\|csh\\'\\|tcsh\\'\\|ksh\\'\\)" . sh-mode))
-(add-to-list 'auto-mode-alist '("rc\\'" . sh-mode))
-
-
-;; GLSL fallback to C mode.
-(add-to-list 'auto-mode-alist '("\\.vert\\'" . c-mode))
-(add-to-list 'auto-mode-alist '("\\.frag\\'" . c-mode))
-(add-to-list 'auto-mode-alist '("\\.glsl\\'" . c-mode))
-(autoload 'glsl-mode "glsl-mode" nil t)
-(when (boundp 'glsl-mode)
-  (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
-  (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
-  (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode)))
-
-;; Lua
-(add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
-(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
-
 ;; Zlc - Zsh style completion.
 ;; (if (require 'zlc nil t)
 ;;     (let ((map minibuffer-local-map))
@@ -406,14 +385,6 @@ has errors and/or warnings."
 ;; xclip
 (if (require 'xclip nil t)
     (turn-on-xclip))
-
-;; Bison/flex -- Fallback to c-mode.
-(add-to-list 'auto-mode-alist '("\\.yy?\\'" . c-mode))
-(add-to-list 'auto-mode-alist '("\\.l\\'" . c-mode))
-(if (require 'bison-mode nil t)
-    (add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode)))
-(if (require 'flex-mode nil t)
-    (add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode)))
 
 ;; Multiple-Cursors
 ;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/multiple-cursors")
@@ -453,7 +424,8 @@ has errors and/or warnings."
      "Window '%s' is normal")
    (current-buffer)))
 
-;; Press [pause] key in each window you want to "freeze"
+;; Press [pause] key in each window you want to "freeze", i.e. prevent Emacs
+;; from acting on it.
 (global-set-key [pause] 'toggle-window-dedicated)
 
 ;; Dired options
@@ -534,6 +506,28 @@ has errors and/or warnings."
 ;; Bookmark file to cache folder
 (setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
 
+;; GLSL fallback to C mode.
+(add-to-list 'auto-mode-alist '("\\.vert\\'" . c-mode))
+(add-to-list 'auto-mode-alist '("\\.frag\\'" . c-mode))
+(add-to-list 'auto-mode-alist '("\\.glsl\\'" . c-mode))
+(autoload 'glsl-mode "glsl-mode" nil t)
+(when (boundp 'glsl-mode)
+  (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
+  (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
+  (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode)))
+
+;; Lua
+(add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
+(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+
+;; Bison/flex -- Fallback to c-mode.
+(add-to-list 'auto-mode-alist '("\\.yy?\\'" . c-mode))
+(add-to-list 'auto-mode-alist '("\\.l\\'" . c-mode))
+(if (require 'bison-mode nil t)
+    (add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode)))
+(if (require 'flex-mode nil t)
+    (add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode)))
+
 ;; Read Matlab files in Octave mode.
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
 
@@ -545,6 +539,11 @@ has errors and/or warnings."
 
 ;; README files.
 (add-to-list 'auto-mode-alist '("README" . text-mode))
+
+;; Shell extensions. We do not put 'sh' only because it could get messy. Emacs
+;; knows it anyway.
+(add-to-list 'auto-mode-alist '("\\(bash\\'\\|zsh\\'\\|csh\\'\\|tcsh\\'\\|ksh\\'\\)" . sh-mode))
+(add-to-list 'auto-mode-alist '("rc\\'" . sh-mode))
 
 ;; Subtitles support.
 (add-to-list 'auto-mode-alist '("\\.srt\\'" . text-mode))
