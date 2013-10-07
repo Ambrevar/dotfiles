@@ -1,15 +1,12 @@
 #!/bin/sh
 
-## Original command:
-# curl -A "Mozilla/5.0" 'http://translate.google.com/translate_a/t?client=t&text=hello&hl=en&sl=en&tl=zh-CN&ie=UTF-8&oe=UTF-8&multires=1&prev=btn&ssel=0&tsel=0&sc=1' | sed 's/\[\[\["\([^"]*\).*/\1/'
-
 _printhelp ()
 {
     cat<<EOF
 Usage: ${1##*/} [-i source-language] target-language [text]
 
-The language are specified using the international prefix (e.g. en for English,
-de for German, etc.).
+Translate text from one language to another.  The languages are specified using
+the international prefix (e.g. 'en' for English, 'de' for German, etc.).
 
 When omitting the source language, the service tries to guess the language from
 the input content.
@@ -18,9 +15,11 @@ When omitting the text, standard input is read.
 
 Synopsis.
 
-  -h:  Show this help.
-  -i:  Input language (optional).
-  -l:  Show alternate translations (single words only).
+  -h: Show this help.
+  -i: Input language (optional).
+  -l: Show alternate translations (single words only). If jshon is found on the
+      system, print all translations for all gramatical types (noun, verb,
+      etc.).
 
 Language codes:
 
@@ -41,8 +40,8 @@ vi: Vietnamese, cy: Welsh, yi: Yiddish
 EOF
 }
 
-FILTER='s/\[\[\["\([^"]*\).*/\1/'
 unset SL
+OPT_LONG=false
 while getopts ":hi:l" opt; do
     case $opt in
         h)
@@ -52,7 +51,7 @@ while getopts ":hi:l" opt; do
         i)
             SL="$OPTARG" ;;
         l)
-            FILTER='s/\[\[\[[^[]*\[\[[^[]*\[\([^[]*\)\].*/\1/' ;;
+            OPT_LONG=true ;;
         ?)
             _printhelp "$0"
             exit 1
@@ -75,21 +74,56 @@ TL=$1
 
 shift
 
+_filter()
+{
+    if ! $OPT_LONG; then
+        sed -e 's/\[\[\["\([^"]*\).*/\1/' -e 's/"//g'
+        echo
+        return
+    fi
+
+    if [ -n "$(command -v jshon)" ]; then
+        ## Input may have empty fields, which is not normally allowed in json. Let's fix this.
+        input="$(sed 's/,\+/,/g')"
+        count=0
+        ## Fetch grammatical type in 'type'
+        while read -r type; do
+            echo -n $type:
+
+            ## Fetch translation alternative from count-th entry
+            echo "$input" | jshon -e 1 -e $count -e 1 -a -u | tr '\n' ',' | sed 's/,$/\n/'
+            count=$(($count+1))
+
+            done<<EOF
+$(echo "$input" | jshon -e 1 -a -e 0 -u)
+EOF
+
+    else
+        ## Use sed to fetch first entry only.
+        sed -e 's/\[\[\[[^[]*\[\[[^[]*\[\([^[]*\)\].*/\1/' -e 's/"//g'
+        echo
+    fi
+}
+
 _translate()
 {
-    TEXT="$(echo "$@" | tr '\n' ' ' | sed 's/[\t ]\+/%20/g')"
+    TEXT="$(tr '\n' ' ' | sed 's/[\t ]\+/%20/g')"
+    ## If input is not a single word, disable alternative translations. We use a
+    ## point in the grep string to ignore any space at the end.
+    [ -n "$(echo $TEXT | grep '%20.')" ] && OPT_LONG=false
 
     if [ "$SL" = "" ]; then
         curl -A "Mozilla/5.0" 'http://translate.google.com/translate_a/t?client=t&text='$TEXT'&tl='$TL'&ie=UTF-8&oe=UTF-8'
     else
         curl -A "Mozilla/5.0" 'http://translate.google.com/translate_a/t?client=t&text='$TEXT'&sl='$SL'&tl='$TL'&ie=UTF-8&oe=UTF-8'
-    fi 2>/dev/null | sed -e $FILTER -e 's/"//g'
-
-    echo
+    fi 2>/dev/null | _filter
 }
 
 if [ $# -ne 0 ]; then
-    _translate "$@"
+    echo "$@" | _translate
 else
-    _translate "$(cat)"
+    _translate
 fi
+
+## Original command:
+# curl -A "Mozilla/5.0" 'http://translate.google.com/translate_a/t?client=t&text=hello&hl=en&sl=en&tl=zh-CN&ie=UTF-8&oe=UTF-8&multires=1&prev=btn&ssel=0&tsel=0&sc=1' | sed 's/\[\[\["\([^"]*\).*/\1/'
