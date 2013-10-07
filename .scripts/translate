@@ -19,8 +19,8 @@ When omitting the text, standard input is read.
 Synopsis.
 
   -h:  Show this help.
-  -i:  input language (optional).
-  -l:  show alternate translations.
+  -i:  Input language (optional).
+  -l:  Show alternate translations (single words only).
 
 Language codes:
 
