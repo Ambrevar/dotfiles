@@ -3,7 +3,7 @@
 _printhelp ()
 {
     cat<<EOF
-Usage: ${1##*/} [-p proc] ROOT [OPTIONS]
+Usage: ${1##*/} [-p PROC] ROOT [OPTIONS]
 
 This will batch-process all audio files found in ROOT folder and subfolders with
 the tc-audio-transcode script.
@@ -15,9 +15,9 @@ All OPTIONS are passed to tc-audio-transcode.  For more details see
 This script has the ability to run multiple processes. The number or processes
 defaults to the number of online cores if 'lscpu' is found, or to 1
 otherwise. The number of parallel processes is bounded by the number of input
-files. Outputting from several at the same time would not make much sense,
-therefore when more than 1 process is started, the output is disabled (except
-for errors).
+files. Outputting from several processes at the same time to the standard output
+is not convenient, therefore when more than 1 process is started, the output is
+disabled (except for errors).
 
 If you still want the output, you need to restrict the number of processes to
 1. For instance to preview changes in current folder you would write:
