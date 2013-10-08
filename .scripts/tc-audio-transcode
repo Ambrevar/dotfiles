@@ -9,29 +9,6 @@
 ## End of user options
 ################################################################################
 
-if [ -z "$(command -v ffmpeg)" ]; then
-    echo "ffmpeg required for transcoding."
-    exit
-fi
-
-if [ -z "$(command -v realpath)" ]; then
-    echo "realpath required to get input file folder."
-    exit
-fi
-
-OUTPUT_ROOT="$(realpath "$OUTPUT_ROOT")"
-if [ ! -d "$OUTPUT_ROOT" ]; then
-    echo "Output folder '$OUTPUT_ROOT' does not exist."
-    exit
-fi
-
-TITLECASE_SCRIPT="${0%/*}/titlecase.awk"
-if [ ! -f "$TITLECASE_SCRIPT" ]; then
-    echo "AWK titlecase script required."
-    exit
-fi
-
-
 ## For the sake of simplicity we convert everything to OGG.
 ## OGG quality ranges from -1 to 10.
 ## -q-1 45 kbit/s
@@ -71,6 +48,7 @@ Options:
   -c : capital case (only first letter in upper case)
   -f : overwrite if file exists
   -p : preview (do not change file)
+  -q : hide FFmpeg runtime output.
   -s : skip encoding
 
 Tags:
@@ -123,6 +101,7 @@ CAPITAL=0
 OVERWRITE="-n"
 PREVIEW=false
 SKIP=false
+LOGLEVEL=""
 
 ## TAGS
 OUTPUT_ALBUM='$ALBUM'
@@ -143,7 +122,7 @@ OGG_PARAM='-c:a libvorbis -b:a ${OUTPUT_BITRATE}k'
 OUTPUT_FOLDER='$OUTPUT_ROOT/$OUTPUT_ARTIST${OUTPUT_ALBUM:+/${OUTPUT_DATE:+$OUTPUT_DATE - }$OUTPUT_ALBUM}'
 OUTPUT_FILE='$OUTPUT_ARTIST - ${OUTPUT_PADDEDTRACK:+$OUTPUT_PADDEDTRACK - }$OUTPUT_TITLE'
 
-while getopts ":a:b:cd:fg:l:n:r:t:hps" opt; do
+while getopts ":a:b:cd:fg:l:n:r:t:hpsq" opt; do
     case $opt in
 
         a) OUTPUT_ARTIST=$OPTARG ;;
@@ -160,19 +139,16 @@ while getopts ":a:b:cd:fg:l:n:r:t:hps" opt; do
             exit 1
             ;;
         c)
-            CAPITAL=1
-            ;;
+            CAPITAL=1 ;;
         f)
-            OVERWRITE="-y"
-            ;;
-
+            OVERWRITE="-y" ;;
         p)
-            PREVIEW=true
-            ;;
-
+            PREVIEW=true ;;
         s)
-            SKIP=true
-            ;;
+            SKIP=true ;;
+
+        q)
+            LOGLEVEL="-v fatal" ;;
 
         ?)
             _printhelp "$0"
@@ -189,6 +165,28 @@ done
 shift $(($OPTIND - 1))
 if [ $# -eq 0 ]; then
     _printhelp "$0"
+    exit
+fi
+
+if [ -z "$(command -v ffmpeg)" ]; then
+    echo "ffmpeg required for transcoding."
+    exit
+fi
+
+if [ -z "$(command -v realpath)" ]; then
+    echo "realpath required to get input file folder."
+    exit
+fi
+
+OUTPUT_ROOT="$(realpath "$OUTPUT_ROOT")"
+if [ ! -d "$OUTPUT_ROOT" ]; then
+    echo "Output folder '$OUTPUT_ROOT' does not exist."
+    exit
+fi
+
+TITLECASE_SCRIPT="${0%/*}/titlecase.awk"
+if [ ! -f "$TITLECASE_SCRIPT" ]; then
+    echo "AWK titlecase script required."
     exit
 fi
 
@@ -360,7 +358,8 @@ fi
 ## PREVIEW
 
 ## Note: most (all?) shell printf have an alignment issue when strings contain
-## wide characters. We need to use AWK for proper alignment.
+## wide characters. We need to use AWK for proper alignment. Hence the 'aprint'
+## function.
 
 ATTR_WIDTH="%-13.13s" # Length of longest attribute +2
 ## INPUT_WIDTH = COLUNMS - ATTR_WIDTH -2 (for |))
@@ -441,7 +440,8 @@ STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
 
 ## TAG/RECODE
 ## With the -map_metadata parameter we clear all metadata.
-ffmpeg $OVERWRITE -i "$1" -vn -sn $OGG_PARAM \
+echo ":: Processing..."
+ffmpeg $LOGLEVEL $OVERWRITE -i "$1" -vn -sn $OGG_PARAM \
     -map_metadata -1 \
     -metadata title="$OUTPUT_TITLE" \
     -metadata artist="$OUTPUT_ARTIST" \
@@ -451,6 +451,7 @@ ffmpeg $OVERWRITE -i "$1" -vn -sn $OGG_PARAM \
     -metadata album_artist="$OUTPUT_ARTIST" \
     -metadata genre="$OUTPUT_GENRE" \
     "$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT"
+echo ":: Process finished!"
 
 ## If we are overwriting inplace.
 if [ -n "$OUTPUT_FILE_ORIGINAL" ]; then
