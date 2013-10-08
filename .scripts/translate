@@ -87,6 +87,10 @@ _filter()
         ## json. Let's fix this.
         input="$(sed -e 's/,\+/,/g' -e 's/\[,\+/\[/g' -e 's/,\+\]/\]/g')"
 
+        ## The use of jshon without checking the array size is unsafe. If the
+        ## size is not as expected, it probably means that source and target
+        ## languages are the same. Anyhow, we drop the error output.
+
         ## Google Translate does not have the same structure when English is
         ## involved. With English, the list of translations is in cell 1,
         ## whitout English it is in cell 3. Without English, there is no
@@ -107,7 +111,7 @@ _filter()
                 done<<EOF
 $(echo "$input" | jshon -e 1 -a -e 0 -u)
 EOF
-        fi
+        fi 2>/dev/null
 
     else
         ## Use sed to fetch first entry only.
