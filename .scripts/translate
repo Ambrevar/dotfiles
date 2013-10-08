@@ -83,20 +83,31 @@ _filter()
     fi
 
     if [ -n "$(command -v jshon)" ]; then
-        ## Input may have empty fields, which is not normally allowed in json. Let's fix this.
-        input="$(sed 's/,\+/,/g')"
-        count=0
-        ## Fetch grammatical type in 'type'
-        while read -r type; do
-            echo -n $type:
+        ## Input may have empty fields, which is not normally allowed in
+        ## json. Let's fix this.
+        input="$(sed -e 's/,\+/,/g' -e 's/\[,\+/\[/g' -e 's/,\+\]/\]/g')"
 
-            ## Fetch translation alternative from count-th entry
-            echo "$input" | jshon -e 1 -e $count -e 1 -a -u | tr '\n' ',' | sed 's/,$/\n/'
-            count=$(($count+1))
+        ## Google Translate does not have the same structure when English is
+        ## involved. With English, the list of translations is in cell 1,
+        ## whitout English it is in cell 3. Without English, there is no
+        ## distinction on grammatical type.
+        if [ "$(echo "$input" | jshon -e 1 -t)" = "string" ]; then
+            ## No English
+            echo "$input" | jshon -e 3 -e 0 -e 2 -a -e 0 -u | tr '\n' ',' | sed 's/,$/\n/'
+        else
+            count=0
+            ## Fetch grammatical type in 'type'
+            while read -r type; do
+                echo -n $type:
 
-            done<<EOF
+                ## Fetch translation alternative from count-th entry
+                echo "$input" | jshon -e 1 -e $count -e 1 -a -u | tr '\n' ',' | sed 's/,$/\n/'
+                count=$(($count+1))
+
+                done<<EOF
 $(echo "$input" | jshon -e 1 -a -e 0 -u)
 EOF
+        fi
 
     else
         ## Use sed to fetch first entry only.
