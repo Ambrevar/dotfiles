@@ -137,7 +137,7 @@ OUTPUT_BITRATE=-1
 
 ## Non-CLI-option data. Modifying these imply modifications in code below.
 OUTPUT_EXT="ogg"
-OGG_PARAM="-c:a libvorbis -b:a ${OUTPUT_BITRATE}k"
+OGG_PARAM='-c:a libvorbis -b:a ${OUTPUT_BITRATE}k'
 
 ## These ones are not CLI-options either, but this could be easily changed.
 OUTPUT_FOLDER='$OUTPUT_ROOT/$OUTPUT_ARTIST${OUTPUT_ALBUM:+/${OUTPUT_DATE:+$OUTPUT_DATE - }$OUTPUT_ALBUM}'
@@ -329,6 +329,7 @@ if $SKIP; then
     OUTPUT_EXT="$INPUT_EXT_LOW"
 fi
 [ "$INPUT_EXT_LOW" = "ogg" ] && OGG_PARAM="-c:a copy"
+OGG_PARAM=$(eval echo "$OGG_PARAM")
 
 ## Make sure track number has two digits for file name only.
 OUTPUT_PADDEDTRACK=$OUTPUT_TRACK
