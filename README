@@ -227,6 +227,8 @@ Emacs
   extremly slow when called from a shortcut, but not when called from the
   command mini-buffer.
 
+* xclip mode will sometimes prevent yanking from working properly.
+
 URxvt
 
 * Using the paste function from Muennich's clipboard on the same terminal where

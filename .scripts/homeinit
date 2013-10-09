@@ -48,9 +48,9 @@ fi
 
 if [ -n "$(command -v rtorrent)" ]; then
     echo "==> rtorrent"
-    mkdir -p "$HOME/.cache/rtorrent"
-    ## TODO: the mkdir with the awk command does not get expanded properly. Why?
-    # mkdir -p "$(awk -F'=' '/^session *= */{gsub(/^ +| +$/,"",$2); gsub(/~/,"$HOME",$2); res=$2} END {printf res}' ~/.rtorrent.rc)"
+    ## We need the evaluation of the result, otherwise the variables will not
+    ## get expanded, should it be '~' or "$HOME".
+    mkdir -p "$(eval echo $(awk -F'=' '/^session *= */{gsub(/^ +| +$/,"",$2); res=$2} END {printf res}' ~/.rtorrent.rc))"
     echo
 fi
 
