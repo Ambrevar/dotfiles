@@ -126,5 +126,6 @@ export WINEDLLOVERRIDES="mscoree,mshtml="
 # export PKG_CONFIG_PATH="${HOME}/local/usr/lib/pkgconfig"
 # export CPPFLAGS=-I$HOME/local/usr/include
 # export LDFLAGS=-L$HOME/local/usr/lib
+# export PYTHONPATH=$HOME/local/usr/lib/python2.7/dist-packages/
 #
 # umask 077

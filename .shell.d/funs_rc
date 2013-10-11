@@ -422,7 +422,7 @@ browse ()
     # can type "cd -" to return to the original directory.
 
     tempfile="$(mktemp)"
-    /usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+    ranger --choosedir="$tempfile" "${@:-$(pwd)}"
     if [ -f "$tempfile" ] && [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
         cd -- "$(cat "$tempfile")"
     fi
