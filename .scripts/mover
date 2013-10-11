@@ -7,15 +7,37 @@ ${0##*/} FOLDERS DEST
 Move FOLDERS into DEST. Does not overwrite by default. Empty folders are ignored.
 
 Options:
-  -f: overwrite destination.
+  -f: Overwrite destination.
+  -r: Remove empty folders.
 EOF
     exit
 fi
 
 OPT_OVERWRITE=false
-if [ "$1" = "-f" ]; then
-    OPT_OVERWRITE=true
-    shift
+OPT_DELEMPTY=false
+
+while getopts ":fhr" opt; do
+    case $opt in
+        h)
+            _printhelp "$0"
+            exit 1 ;;
+        f)
+            OPT_OVERWRITE=true ;;
+        r)
+            OPT_DELEMPTY=true ;;
+        ?)
+            _printhelp "$0"
+            exit 1 ;;
+        :)
+            _printhelp "$0"
+            exit 1 ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+if [ $# -eq 0 ]; then
+    _printhelp "$0"
+    exit 1
 fi
 
 for i; do
@@ -30,11 +52,17 @@ while read -r FOLDER; do
         if [ ! -e "$DESTFILE" ] || $OPT_OVERWRITE; then
             mkdir -p "$(dirname "$DESTFILE")"
             mv -v "$FOLDER/../$FILE" "$DESTFILE"
+
+            if $OPT_DELEMPTY; then
+                PARENT="$FOLDER/../$FILE"
+                PARENT="${PARENT%/*}"
+                rmdir "$PARENT" 2>/dev/null
+            fi
         fi
 
     ## We switch to FOLDER so that 'find' strips the parent dirs from the path.
     done <<EOF
-$(cd "$FOLDER/.." && find "$(basename ${FOLDER})" -type f)
+$(cd "$FOLDER/.." && find "$(basename ${FOLDER})" \( -type f -o -type l \) )
 EOF
 done <<EOF
 $(echo "$FOLDERS")
