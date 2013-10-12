@@ -42,19 +42,15 @@ while getopts ":p:h" opt; do
     case $opt in
         h)
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
         p)
-            CPUNO=$OPTARG
-            ;;
+            CPUNO=$OPTARG ;;
         ?)
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
         :)
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
     esac
 done
 
@@ -88,6 +84,7 @@ INPUT="$(find "."  \( \
     -iname '*.flac' -o \
     -iname '*.ogg'  -o \
     -iname '*.mp3'  -o \
+    -iname '*.mp4'  -o \
     -iname '*.mpc'  -o \
     -iname '*.wav'  -o \
     -iname '*.wv'   \) | sort -n)"

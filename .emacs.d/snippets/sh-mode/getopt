@@ -18,19 +18,15 @@ while getopts ":dh" opt; do
     case \$opt in
         h)
             _printhelp "\$0"
-            return 1
-            ;;
+            exit 1 ;;
         d)
-            USE_OPT=1
-            ;;
+            USE_OPT=1 ;;
         ?)
             _printhelp "\$0"
-            return 1
-            ;;
+            exit 1 ;;
         :)
             _printhelp "\$0"
-            return 1
-            ;;
+            exit 1 ;;
     esac
 done
 
@@ -38,5 +34,5 @@ shift \$((\$OPTIND - 1))
 
 if [ \$# -eq 0 ]; then
     _printhelp "\$0"
-    return 1
+    exit 1
 fi
