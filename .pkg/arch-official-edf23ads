@@ -30,7 +30,6 @@ bison
 blas
 boost-libs
 bridge-utils
-bullet
 bzip2
 ca-certificates
 cairo
@@ -43,7 +42,6 @@ chicken
 chromium
 chrpath
 cloog
-cmake
 cmus
 colord
 compositeproto
@@ -103,7 +101,6 @@ foomatic-db-engine
 foomatic-filters
 fortune-mod
 freeglut
-freeimage
 freetype2
 fribidi
 fuse
@@ -162,7 +159,6 @@ gstreamer0.10-ugly-plugins
 gtkmm
 gtkspell
 gtk-update-icon-cache
-guile
 gutenprint
 gzip
 harfbuzz
@@ -360,7 +356,6 @@ libtirpc
 libtool
 libtorrent
 libtxc_dxtn
-libunistring
 libusb-compat
 libusbx
 libutempter
@@ -447,12 +442,10 @@ mpg123
 mpv
 mtdev
 mtools
-mygui
 namcap
 nano
 nawk
 ncdu
-ncftp
 ncurses
 netctl
 nethogs
@@ -467,11 +460,8 @@ nspr
 nss
 ntfs-3g
 numlockx
-nvidia-cg-toolkit
 octave
 odt2txt
-ogre
-ois
 openal
 openbox
 opencore-amr
@@ -534,12 +524,10 @@ python2-markupsafe
 python2-notify
 python2-setuptools
 python-dbus-common
-python-docutils
 python-pyelftools
 python-xdg
 qhull
 qpdf
-qt4
 quvi
 randrproto
 ranger
@@ -684,7 +672,6 @@ xterm
 xvidcore
 xz
 yajl
-yasm
 youtube-dl
 zathura
 zathura-djvu
@@ -692,4 +679,3 @@ zathura-pdf-poppler
 zathura-ps
 zlib
 zsh
-zziplib
