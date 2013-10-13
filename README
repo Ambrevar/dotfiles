@@ -136,9 +136,13 @@ tc-audio-*: smart audio transcoding implemented as shell functions. It will
   convert, tag and move the input tracks in a dynamic, yet customizable
   manner. It features a smart title case AWK function that will print almost any
   audio tag the proper way. It will copy cover files when found. You can preview
-  the changes without writing data. Using FFmpeg.
+  the changes without writing data. Interesting parallelization with sed. Using
+  FFmpeg.
 
 tc-video-*: batch conversion of any kind of videos. Using FFmpeg.
+
+translate: a tranlation frontend to Internet services. Default to stdin and
+stdout (the Unix way), thus usable from your favorite text editor. 
 
 Shell
 *****
@@ -322,6 +326,7 @@ mercurial
 mkfs
 mkvtoolnix
 mplayer2
+mpv
 mutt
 nasm
 nawk

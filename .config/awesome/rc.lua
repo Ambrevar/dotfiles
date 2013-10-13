@@ -594,6 +594,8 @@ awful.rules.rules = {
      properties = { floating = true } },
    { rule = { class = "mplayer2" },
      properties = { floating = true } },
+   { rule = { class = "mpv" },
+     properties = { floating = true } },
    { rule = { class = "pinentry" },
      properties = { floating = true } },
    { rule = { class = "Steam" },
