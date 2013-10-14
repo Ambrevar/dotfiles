@@ -109,7 +109,8 @@ if [ -n "$(command -v ssh-agent)" ]; then
     unset SSH_ENV_FILE
 fi
 
-## Set TEMP dir if you want to override /tmp for somce application that check for this variable. Usually not a good idea.
+## Set TEMP dir if you want to override /tmp for some applications that check
+## for this variable. Usually not a good idea.
 # [ -d "$HOME/temp" ] && export TEMP="$HOME/temp"
 
 ## Wine DLL override. This removes the annoying messages for Mono and Gecko.
@@ -117,15 +118,23 @@ export WINEDLLOVERRIDES="mscoree,mshtml="
 
 ## Hook. Should be sourced last
 [ -f ~/.profile_hook ] && . ~/.profile_hook
+################################################################################
 ## Hook example
-
+#
 # appendpath "${HOME}/local/usr/bin"
 # prependpath "${HOME}/local/usr/share/info" INFOPATH
 # prependpath "${HOME}/local/usr/share/man" MANPATH
-# export LD_LIBRARY_PATH="${HOME}/local/usr/lib/"
-# export PKG_CONFIG_PATH="${HOME}/local/usr/lib/pkgconfig"
+#
+# appendpath "$HOME/local/usr/include" C_INCLUDE_PATH
+# appendpath "$HOME/local/usr/include" CPLUS_INCLUDE_PATH
+# appendpath "$HOME/local/usr/lib" LIBRARY_PATH
 # export CPPFLAGS=-I$HOME/local/usr/include
 # export LDFLAGS=-L$HOME/local/usr/lib
-# export PYTHONPATH=$HOME/local/usr/lib/python2.7/dist-packages/
+#
+# appendpath "${HOME}/local/usr/lib/pkgconfig" PKG_CONFIG_PATH
+#
+# appendpath "${HOME}/local/usr/lib/" LD_LIBRARY_PATH
+# appendpath "$HOME/local/usr/lib/python2.7/dist-packages/" PYTHONPATH
 #
 # umask 077
+################################################################################
