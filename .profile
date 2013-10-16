@@ -32,6 +32,7 @@ prependpath()
 
 appendpath "${HOME}/.launchers/"
 appendpath "${HOME}/.scripts/"
+appendpath "${HOME}/.hackpool/"
 
 ## TeXlive
 TEXDIR="${TEXDIR:-/usr/local/texlive}"

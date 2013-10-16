@@ -111,3 +111,10 @@ if [ -d "$SOURCEDIR" ]; then
     ln -snf "$SOURCEDIR/launchers" "$HOME/.launchers"
     echo
 fi
+
+## Temp scripts
+if [ -d "$SOURCEDIR" ]; then
+    echo "==> Hackpool"
+    ln -snf "$SOURCEDIR/hackpool" "$HOME/.hackpool"
+    echo
+fi

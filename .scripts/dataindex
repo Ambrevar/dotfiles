@@ -5,7 +5,7 @@ DATE=
 _printhelp ()
 {
     cat<<EOF
-Usage: ${1##*/} [-f]
+Usage: ${1##*/} [-f] FOLDERS
 
 Create index of folder hierarchies. This is used as a small "backup" purpose. In
 case of data loss, it is still possible to get the full file list thanks to the
@@ -49,7 +49,7 @@ for i ; do
     OUTPUT="${i##*/}.index"
     [ -e "$OUTPUT" ] && $OPT_NOCLOBBER && OUTPUT="${i##*/}-$(date +%F-%T).index"
     echo "$OUTPUT"
-    find "$i" -type f | sort > "$OUTPUT"
-    echo "## $(date +%F)" >> "$OUTPUT"
+    (cd "$i" && find * -type f) | sort > "$OUTPUT"
+    # echo "## $(date +%F)" >> "$OUTPUT"
 done
 
