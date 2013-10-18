@@ -1,11 +1,9 @@
-################################################################################
-#                           Unix Home Configuration                            #
-#                             Author: P. Neidhardt                             #
-#                               Date: 2013-07-04                               #
-################################################################################
+# Unix Home Configuration
+## Author: P. Neidhardt
+### 2013-10-18
 
 Description
-***********
+===========
 
 This repository contains scripts and configuration files for various Unix
 programs.  It targets Arch Linux and FreeBSD, but since these are "fundamental"
@@ -17,10 +15,11 @@ Most interesting parts include advanced configuration for Emacs, Mutt, and some
 interesting shell scripts like a video transcoding wrapper and a smart audio
 organizer using FFmpeg.
 
-################################################################################
+--------------------------------------------------------------------------------
 Awesome
-*******
-Extra deps: Vicious (Linux only)
+=======
+
+* Extra deps: Vicious (Linux only)
 
 Configuration is very close to the default one, which mostly fits my needs.
 Most of the work I've done is for the status bar:  dynamic network speed (it
@@ -32,15 +31,17 @@ This configuration is for now very version-sensitive, so you should make sure to
 use latest build.
 
 dwb
-***
+===
+
 Some custom options, download location, search engines, plugins, etc.
 
 Emacs
-*****
-Extra deps
-- recommended: emacs-multiple-cursors emacs-xclip emacs-yasnippet
-- optional: emacs-bison-mode emacs-flex-mode emacs-glsl-mode emacs-lua-mode
-  emacs-make-regexp emacs-mediawiki-bzr
+=====
+
+* Extra deps
+  * recommended: emacs-multiple-cursors emacs-xclip emacs-yasnippet
+  * optional: emacs-bison-mode emacs-flex-mode emacs-glsl-mode emacs-lua-mode
+    emacs-make-regexp emacs-mediawiki-bzr
 
 Emacs daemon is integrated flawlessly thanks to a small script. See homeinit.
 Because terminal and graphical clients do not behave the same way, it is
@@ -67,10 +68,11 @@ A lot of code snippets, especially for LaTeX. Contains document template, plot
 generation, pie chart generation, and others.
 
 Mutt
-****
-Compile options: IMAP and SMTP support.
-Patch: sidebar.
-Extra deps: antiword, ccrypt, fortune, sxiv, w3m.
+====
+
+* Compile options: IMAP and SMTP support.
+* Patch: sidebar.
+* Extra deps: antiword, ccrypt, fortune, sxiv, w3m.
 
 This one is not easy to get into it. I managed to get multiple accounts with
 encrypted passwords working, which means there is no plain password stored on
@@ -92,14 +94,15 @@ URxvt has an URL support that works also for Mutt. For other terminals, you
 might consider using the 'urlview' plugin for Mutt.
 
 Ranger
-******
-Extra deps: antiword, atool, highlight, img2txt, mediainfo, odt2txt, pdftotext,
+======
+
+* Extra deps: antiword, atool, highlight, img2txt, mediainfo, odt2txt, pdftotext,
 unrtf, w3m.
 
 Custom bindings, file association, tweaked a few options.
 
 Scripts
-*******
+=======
 
 Probably the most interesting part here.
 
@@ -145,8 +148,9 @@ translate: a tranlation frontend to Internet services. Default to stdin and
 stdout (the Unix way), thus usable from your favorite text editor. 
 
 Shell
-*****
-Target: POSIX shell, dash, zsh
+=====
+
+* Target: POSIX shell, dash, zsh
 
 A lot of stuff: aliases, functions, shell options, etc.
 
@@ -156,7 +160,7 @@ most of the scripts and the shell configuration are POSIX shell compatible
 (tested with dash).
 
 TeX
-***
+===
 
 Plain TeX macros, most importantly a partial UTF-8 support (taken from LaTeX).
 
@@ -167,19 +171,16 @@ Plain TeX macros are in the '.texmf' folder. LaTeX macros are all bundled into
 Emacs snippets so that .tex documents do not rely on any external file.
 
 URxvt
-*****
-Extra deps: Muennich's perl extensions (keyboard-select, clipboard, url-matcher)
+=====
+
+* Extra deps: Muennich's perl extensions (keyboard-select, clipboard, url-matcher)
 
 Custom font and colors, no scroll bar, url-matcher, clipboard, and
 keyboard-select.
 
-Vim
-***
-I've only been a casual Vim user, so do not expect too much from it.
-
-################################################################################
+--------------------------------------------------------------------------------
 Usage
-*****
+=====
 
 The only purpose is to be a source of inspiration. Examples are always a good
 technical support. (Especially for applications that do not provide examples in
@@ -206,7 +207,7 @@ only. A more convenient solution:
     cp -r source-dir/* dest-dir/
 
 Versioning
-**********
+==========
 
 Git makes it possible to use your home folder as a git repo, thus versioning
 all files directly. To fetch source from Git repo:
@@ -219,13 +220,15 @@ all files directly. To fetch source from Git repo:
     git checkout master
 
 Some applications will need extra dependencies other than the default ones. You
-might have a look at the .pkg-* files to see what software I've been using.
+might have a look at the list files in the .pkg/ folder to see what software
+I've been using.
 
-################################################################################
+--------------------------------------------------------------------------------
 Known issues
-************
+============
 
 Emacs
+-----
 
 * When linum is on in very large files (5000+ lines), beginning-of-buffer is
   extremly slow when called from a shortcut, but not when called from the
@@ -234,6 +237,7 @@ Emacs
 * xclip mode will sometimes prevent yanking from working properly.
 
 URxvt
+-----
 
 * Using the paste function from Muennich's clipboard on the same terminal where
   text was copied will make it hang (and crash).
@@ -241,165 +245,166 @@ URxvt
 * There is a bug with Xft anti-aliased font that prevent w3m image preview from
   working (too bad for ranger).
 
-################################################################################
-Noteworthy apps
-***************
+--------------------------------------------------------------------------------
 
-aalib
-abook
-aircrack-ng
-antiword
-apvlv
-asciidoc
-astyle
-atool
-awesome
-awk
-bashmount
-bc
-cabextract
-cal
-calc
-catdvi
-ccrypt
-cdrkit
-cdrtools
-centerim
-chrpath
-cmus
-column
-comm
-cppcheck
-cut
-dash
-dcraw
-diff
-dosbox
-doxygen
-driconf
-dtach
-dvtm
-dwb
-ecryptfs
-ecryptfs-simple
-emacs
-encfs
-fbpdf
-fbv
-fdisk
-feh
-ffmpeg
-file
-finch
-fmt
-fortune
-gaupol
-gcolor2
-gdb
-gimp
-gnuplot
-gparted
-graphicsmagick
-graphviz
-grep
-groff
-guile
-hdparm
-highlight
-htop
-id3v2
-imagemagick
-indent
-inkscape
-iotop
-irssi
-latex2html
-latex2rtf
-lrzip
-lsb-release
-lshw
-ltrace
-lua
-luakit
-mediainfo
-mercurial
-mkfs
-mkvtoolnix
-mplayer2
-mpv
-mutt
-nasm
-nawk
-ncdu
-nethogs
-newsbeuter
-ngrep
-nmap
-numlockx
-octave
-od
-odt2txt
-okular
-openshot
-openssh
-p7zip
-pari
-parted
-patch
-poppler
-pstotext
-pwgen
-qemu
-ranger
-re2c
-rsync
-rtorrent
-rxvt-unicode
-scrot
-sdlmame
-sdparm
-sed
-shred
-slock
-sort
-splint
-strace
-subdl
-submarine
-sudo
-surfraw
-sxiv
-syslinux
-task
-tcc
-tcpdump
-texi2html
-texinfo
-texlive
-textadept
-tig
-trash-cli
-tree
-udiskie
-unrtf
-unshield
-upx
-valgrind
-vim
-vlock
-vsftpd
-w3m
-weechat
-wipe
-wireshark
-wmfs
-wv
-x264
-xchm
-xclip
-xlockmore
-xosd
-yasm
-youtube-dl
-zathura
-zsh
+Noteworthy apps
+===============
+
+* aalib
+* abook
+* aircrack-ng
+* antiword
+* apvlv
+* asciidoc
+* astyle
+* atool
+* awesome
+* awk
+* bashmount
+* bc
+* cabextract
+* cal
+* calc
+* catdvi
+* ccrypt
+* cdrkit
+* cdrtools
+* centerim
+* chrpath
+* cmus
+* column
+* comm
+* cppcheck
+* cut
+* dash
+* dcraw
+* diff
+* dosbox
+* doxygen
+* driconf
+* dtach
+* dvtm
+* dwb
+* ecryptfs
+* ecryptfs-simple
+* emacs
+* encfs
+* fbpdf
+* fbv
+* fdisk
+* feh
+* ffmpeg
+* file
+* finch
+* fmt
+* fortune
+* gaupol
+* gcolor2
+* gdb
+* gimp
+* gnuplot
+* gparted
+* graphicsmagick
+* graphviz
+* grep
+* groff
+* guile
+* hdparm
+* highlight
+* htop
+* id3v2
+* imagemagick
+* indent
+* inkscape
+* iotop
+* irssi
+* latex2html
+* latex2rtf
+* lrzip
+* lsb-release
+* lshw
+* ltrace
+* lua
+* luakit
+* mediainfo
+* mercurial
+* mkfs
+* mkvtoolnix
+* mplayer2
+* mpv
+* mutt
+* nasm
+* nawk
+* ncdu
+* nethogs
+* newsbeuter
+* ngrep
+* nmap
+* numlockx
+* octave
+* od
+* odt2txt
+* okular
+* openshot
+* openssh
+* p7zip
+* pari
+* parted
+* patch
+* poppler
+* pstotext
+* pwgen
+* qemu
+* ranger
+* re2c
+* rsync
+* rtorrent
+* rxvt-unicode
+* scrot
+* sdlmame
+* sdparm
+* sed
+* shred
+* slock
+* sort
+* splint
+* strace
+* subdl
+* submarine
+* sudo
+* surfraw
+* sxiv
+* syslinux
+* task
+* tcc
+* tcpdump
+* texi2html
+* texinfo
+* texlive
+* textadept
+* tig
+* trash-cli
+* tree
+* udiskie
+* unrtf
+* unshield
+* upx
+* valgrind
+* vim
+* vlock
+* vsftpd
+* w3m
+* weechat
+* wipe
+* wireshark
+* wmfs
+* wv
+* x264
+* xchm
+* xclip
+* xlockmore
+* xosd
+* yasm
+* youtube-dl
+* zathura
+* zsh

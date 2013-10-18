@@ -528,6 +528,11 @@ has errors and/or warnings."
 (if (require 'flex-mode nil t)
     (add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode)))
 
+;; Markdown
+(autoload 'markdown-mode "markdown-mode" "Markdown mode" t)
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+
 ;; Read Matlab files in Octave mode.
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
 
@@ -536,9 +541,6 @@ has errors and/or warnings."
 
 ;; Arch Linux PKGBUILD.
 (add-to-list 'auto-mode-alist '("PKGBUILD" . sh-mode))
-
-;; README files.
-(add-to-list 'auto-mode-alist '("README" . text-mode))
 
 ;; Shell extensions. We do not put 'sh' only because it could get messy. Emacs
 ;; knows it anyway.
