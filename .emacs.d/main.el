@@ -39,6 +39,10 @@
 ;; Make questions less annoying.
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+;; Allow some protected functions.
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
 ;; Print column number in mode line.
 (column-number-mode 1)
 

@@ -327,7 +327,6 @@ Noteworthy apps
 * lua
 * luakit
 * mediainfo
-* mercurial
 * mkfs
 * mkvtoolnix
 * mplayer2
@@ -374,6 +373,7 @@ Noteworthy apps
 * sudo
 * surfraw
 * sxiv
+* sxlock
 * syslinux
 * task
 * tcc
