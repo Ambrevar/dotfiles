@@ -209,6 +209,8 @@
 ;; Org mode config.
 ;; Move annoying babel folder. This move does not seem to work properly.
 (setq org-babel-temporary-directory (concat emacs-cache-folder "babel"))
+;; Disable line splitting on M-RET
+(setq org-M-RET-may-split-line '((default)))
 (add-hook
  'org-mode-hook
  (lambda () (interactive)
