@@ -526,6 +526,9 @@ has errors and/or warnings."
 (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
 (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
 
+;; Go
+(require 'go-mode-load)
+
 ;; Bison/flex -- Fallback to c-mode.
 (add-to-list 'auto-mode-alist '("\\.yy?\\'" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.l\\'" . c-mode))

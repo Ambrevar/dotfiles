@@ -308,6 +308,7 @@ Noteworthy apps
 * graphviz
 * grep
 * groff
+* gtypist
 * guile
 * hdparm
 * highlight
