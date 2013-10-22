@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ## TODO: audio quality. Copy if AAC or OGG <320k.
-## TODO: crop options.
+## TODO: crop is not correct.
 ## TODO: handle srt encoding.
 
 if [ -z "$(command -v ffmpeg)" ]; then
@@ -14,11 +14,12 @@ _printhelp()
     cat <<EOF
 Usage: ${1##*/} [OPTIONS] FILES|FOLDERS
 
-Transcode FILES or files found in FOLDERS to .mkv with x264 and ogg. Output
-files are the same as the original, with time appended. You can customize
-encoding with the TC_* variables.
+Transcode FILES or files found in FOLDERS to .mkv with x264 and ogg. Black
+stripes are *not* cropped by default. Output files are the same as the original,
+with time appended.
 
   -c:      Copy streams (no reencoding).
+  -C:      Enable auto-crop.
   -f:      Remove source when done.
   -h:      Display this help.
   -o OPT:  Additional options.
@@ -40,46 +41,47 @@ Examples:
 EOF
 }
 
-TC_SAMPLE=""
-TC_USER_OPT=""
-TC_REMOVE_TITLE=false
-TC_VIDEO_CODEC="libx264"
-TC_AUDIO_CODEC="libvorbis"
-TC_VIDEO_OPT="-preset slow -crf 20"
-
-## What to do if file exists:
-# -y overwrite
-# -n do not overwrite.
-TC_OVERWRITE="-n"
-OPT_OVERWRITE=false
+SAMPLE=""
+# USER_OPT="" ## Can use environment value.
+VIDEO_FILTER=""
+VIDEO_CODEC="-c:v libx264 -preset slow -crf 20"
 
 ## WARNING: we mix down audio to 2 channels with '-ac 2'. This greatly reduce
 ## file size and avoid any confusion for playback, which is often the case when
 ## converting DTS to any other format because DTS has embedded channel
 ## description which is not available in other formats.
-TC_AUDIO_OPT="-b:a 192k -ac 2"
+AUDIO_CODEC="-c:a libvorbis -b:a 192k -ac 2"
 
-while getopts ":cfho:sS:t" opt; do
+## What to do if file exists:
+# -y overwrite
+# -n do not overwrite.
+OVERWRITE="-n"
+OPT_OVERWRITE=false
+
+OPT_REMOVE_TITLE=false
+OPT_CROP=false
+
+while getopts ":cCfho:sS:t" opt; do
     case $opt in
         c)
-            TC_VIDEO_OPT=""
-            TC_AUDIO_OPT=""
-            TC_VIDEO_CODEC="copy"
-            TC_AUDIO_CODEC="copy" ;;
+            VIDEO_CODEC="-c:v copy"
+            AUDIO_CODEC="-c:a copy" ;;
+        C)
+            OPT_CROP=true;;
         f)
-            TC_OVERWRITE="-y"
+            OVERWRITE="-y"
             OPT_OVERWRITE=true;;
         h)
             _printhelp "$0"
             exit 1 ;;
         o)
-            TC_USER_OPT="$OPTARG" ;;
+            USER_OPT="$OPTARG" ;;
         s)
-            TC_SAMPLE="-ss 60 -t 360" ;;
+            SAMPLE="-ss 60 -t 360" ;;
         S)
-            TC_SAMPLE="-ss 60 -t $((60*$OPTARG))" ;;
+            SAMPLE="-ss 60 -t $((60*$OPTARG))" ;;
         t)
-            TC_REMOVE_TITLE=true ;;
+            OPT_REMOVE_TITLE=true ;;
         ?)
             _printhelp "$0"
             exit 1 ;;
@@ -99,40 +101,70 @@ if [ $# -eq 0 ]; then
 fi
 
 ## Zsh compatibility. We need it otherwise word splitting of parameter like
-## TC_SAMPLE will not work.
+## SAMPLE will not work.
 STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
 [ "$STATUS" = "off" ] && set -o shwordsplit
+
+_duration()
+{
+    ## In seconds.
+    ffmpeg -i "$1" 2>&1 | awk '/Duration/ {split($2, time, /:|\./); print time[1]*60*60 + time[2]*60 + time[3]}'
+}
+
+_highfreq()
+{
+    awk 'BEGIN{max=0} /crop=/ {t[$NF]++; if (t[$NF]>max) {max=t[$NF]; val=$NF}} END{print val}'
+}
+
+_cropvalue()
+{
+    ## For 5 different timeslices of 1 second at every 1/6th of the video, we
+    ## sample the crop values. We keep the values with highest frequency.
+    STEP=$(($(_duration "$1")/6))
+    for i in $(seq $STEP $STEP $((5*$STEP))); do
+        echo -ss $i -t 10
+        ffmpeg -ss $i -t 10 -i "$1" -vf "cropdetect=24:16:0" -f null - 2>&1
+    done | _highfreq
+}
 
 _tc_transcode()
 {
     cat<<EOF
 ================================================================================
-User options:  ${TC_USER_OPT:-None}
-Sample:        ${TC_SAMPLE:-No}
-Clear 'Title': $TC_REMOVE_TITLE
+File:          $1
+
+User options:  ${USER_OPT:-None}
+Sample:        ${SAMPLE:-No}
+Clear 'Title': $OPT_REMOVE_TITLE
+Crop:          $OPT_CROP
 ================================================================================
 EOF
 
     STREAM_TITLE=""
-    if $TC_REMOVE_TITLE; then
+    if $OPT_REMOVE_TITLE; then
         STREAM_NUM=$(ffmpeg -i "$1" 2>&1 | grep -c 'Stream')
         for i in $(seq 0 $STREAM_NUM); do
             STREAM_TITLE="${STREAM_TITLE}-metadata:s:$i title= "
         done
     fi
 
+    if $OPT_CROP; then
+        VIDEO_FILTER="-vf $(_cropvalue "$1")"
+    fi
+
     OUTPUT="${1%.*}-$(date '+%F-%H%M%S').mkv"
-    ffmpeg $TC_OVERWRITE -i "$1" \
-        -c:v $TC_VIDEO_CODEC $TC_VIDEO_OPT \
-        -c:a $TC_AUDIO_CODEC $TC_AUDIO_OPT \
+    ffmpeg $OVERWRITE -i "$1" \
+        $VIDEO_CODEC $VIDEO_FILTER \
+        $AUDIO_CODEC \
         -c:s copy \
         -map 0 $STREAM_TITLE \
-        $TC_SAMPLE $TC_USER_OPT "$OUTPUT"
+        $SAMPLE $USER_OPT "$OUTPUT"
 
     if $OPT_OVERWRITE; then
         rm -f "$1"
         mv -f "$OUTPUT" "${1%.*}.mkv"
     fi
+    echo
 }
 
 for i in "$@"; do
@@ -140,19 +172,27 @@ for i in "$@"; do
     ## Argument is a folder. We search for all video files in there.
     if [ -d "$i" ]; then
 
-        ## TODO: provide max-depth as option.
-        while read -r j; do
-            _tc_transcode $j
-        done <<EOF
-$(find "$i"  \( \
- -iname '*.mkv' -o \
- -iname '*.mp4' -o \
- -iname '*.avi' -o \
- -iname '*.webm' -o \
- -iname '*.flv' -o \
- -iname '*.wmv' -o \
- -iname '*.mpg' \) )
-EOF
+        ## WARNING: ffmpeg should not be called from within a while<<EOF loop
+        ## since it continues to read input while running. However IFS needs to
+        ## be restored for wordsplitting to work correctly.
+        OLDIFS="$IFS"
+        IFS="
+"
+
+        for j in $(find "$i"  \( \
+            -iname '*.mkv' -o \
+            -iname '*.mp4' -o \
+            -iname '*.avi' -o \
+            -iname '*.webm' -o \
+            -iname '*.flv' -o \
+            -iname '*.wmv' -o \
+            -iname '*.mpg' \) ); do
+            IFS="$OLDIFS"
+            _tc_transcode "$j"
+            IFS="
+"
+        done
+        IFS=$OLDIFS
 
     else
         ## Argument is a regular file.
