@@ -1,5 +1,7 @@
 #!/bin/sh
 
+## TODO: support for long texts.
+
 _printhelp ()
 {
     cat<<EOF

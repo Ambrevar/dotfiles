@@ -366,26 +366,29 @@ ATTR_WIDTH="%-13.13s" # Length of longest attribute +2
 INPUT_WIDTH=$((($(tput cols)-15)/2))
 INPUT_WIDTH="%$INPUT_WIDTH.${INPUT_WIDTH}s"
 
-## This function is somewhat weak if the separator is found in tags.
+## We output everything in one pass to speed up the process since this is quite
+## demanding and called frequently.  This function is reliable as long as no
+## tabs are found in tags. But since we have no control over the input, we never
+## no.
 aprint()
 {
-    awk -F' *;; *' -v FMT="$INPUT_WIDTH | $ATTR_WIDTH| %s\n" '{printf FMT, $1, $2, $3 }'
+    awk -F'\t+' -v FMT="$INPUT_WIDTH | $ATTR_WIDTH| %s\n" '{printf FMT, $1, $2, $3 }'
 }
 
 aprint <<EOF
-:: INTPUT ::         ;;             ;; :: OUTPUT ::
-[$INPUT_ARTIST]      ;; Artist      ;; [$OUTPUT_ARTIST]
-[$INPUT_ALBUM]       ;; Album       ;; [$OUTPUT_ALBUM]
-[$INPUT_TRACK]       ;; Track       ;; [$OUTPUT_TRACK]
-[$INPUT_TITLE]       ;; Title       ;; [$OUTPUT_TITLE]
-[$INPUT_DATE]        ;; Date        ;; [$OUTPUT_DATE]
-[$INPUT_GENRE]       ;; Genre       ;; [$OUTPUT_GENRE]
-[$INPUT_EXT]         ;; Ext         ;; [$OUTPUT_EXT]
-[$INPUT_BITRATE]     ;; Bitrate     ;; [$OUTPUT_BITRATE]
-[$INPUT_ALBUMARTIST] ;; Albumartist ;;
-[$INPUT_COMPOSER]    ;; Composer    ;;
-[$INPUT_DISC]        ;; Disc        ;;
-[$INPUT_TYER]        ;; Tyer        ;;
+:: INTPUT ::			 				 :: OUTPUT ::
+[$INPUT_ARTIST]			 Artist			 [$OUTPUT_ARTIST]
+[$INPUT_ALBUM]			 Album			 [$OUTPUT_ALBUM]
+[$INPUT_TRACK]			 Track			 [$OUTPUT_TRACK]
+[$INPUT_TITLE]			 Title			 [$OUTPUT_TITLE]
+[$INPUT_DATE]			 Date			 [$OUTPUT_DATE]
+[$INPUT_GENRE]			 Genre			 [$OUTPUT_GENRE]
+[$INPUT_EXT]			 Ext			 [$OUTPUT_EXT]
+[$INPUT_BITRATE]		 Bitrate		 [$OUTPUT_BITRATE]
+[$INPUT_ALBUMARTIST]	 Albumartist	
+[$INPUT_COMPOSER]		 Composer		
+[$INPUT_DISC]			 Disc			
+[$INPUT_TYER]			 Tyer			
 EOF
 
 cat <<EOF
