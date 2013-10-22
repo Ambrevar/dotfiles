@@ -239,11 +239,12 @@ beginning."
             (forward-word arg)
             (point))))
         (t
-         (forward-char)
+         ;; The next line makes sure the word at point gets selected if point is
+         ;; on the first letter. We need to ignore error if point is at EOF.
+         (ignore-errors (forward-char))
          (backward-word)
          (push-mark
           (save-excursion
             (forward-word (prefix-numeric-value arg))
             (point))
           nil t))))
-
