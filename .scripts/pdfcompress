@@ -1,25 +1,69 @@
 #!/bin/sh
 
-if [ $# -lt 1 ] || [ $# -gt 2 ] || [ "$1" = "-h" ]; then
+
+_printhelp ()
+{
     cat <<EOF
-Usage: ${0##*/} PDFFILE [DESTFILE]
+Usage: ${1##*/} [OPTIONS] PDFFILES
+
+All PDF files will be compressed to a PDF file with "-compressed" appended in its name.
 
 WARNING: use this function with caution.  It may drastically improve compression
 of some PDF files, but in some case, the output filesize will be greater! You
-should not use it over PDF files embedding raster graphics as well.
+should not use it over PDF files embedding raster graphics.
+
+Options:
+
+  -f:  Overwrite existing files.
+  -i:  In-place compression.
+
 EOF
-     exit
+}
+
+OPT_INPLACE=false
+OPT_OVERWRITE=false
+while getopts ":ifh" opt; do
+    case $opt in
+        h)
+            _printhelp "$0"
+            exit 1 ;;
+        i)
+            OPT_INPLACE=true ;;
+        f)
+            OPT_OVERWRITE=true ;;
+        ?)
+            _printhelp "$0"
+            exit 1 ;;
+        :)
+            _printhelp "$0"
+            exit 1 ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+if [ $# -eq 0 ]; then
+    _printhelp "$0"
+    exit 1
 fi
 
-if [ ! -f "$1" ]; then
-    echo "$1 is not a valid file."
-fi
-INPUTFILE="$1"
+for i ; do
 
-if [ -z "$2" ]; then
-    gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="${INPUTFILE%%.*}-COMPRESSED.pdf" "${INPUTFILE}"
-    rm -rf "${INPUTFILE}"
-    mv "${INPUTFILE%%.*}-COMPRESSED.pdf" "${INPUTFILE}"
-else
-    gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="$2" "${INPUTFILE}"
-fi
+    if [ ! -f "$i" ]; then
+        echo "$i is not a valid file."
+        continue
+    fi
+
+    OUTPUT="${i%.*}-compressed.pdf"
+    if [ -e "$OUTPUT" ] && ! $OPT_OVERWRITE; then
+        echo "$OUTPUT alredy present. Skipping."
+        continue
+    fi
+
+    echo "$i"
+    gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="$OUTPUT" "$i"
+    if $OPT_INPLACE; then
+        rm -f "$i"
+        mv "$OUTPUT" "$i"
+    fi
+done
