@@ -1,7 +1,5 @@
 #!/bin/sh
 
-## TODO: audio quality. Copy if AAC or OGG <320k.
-## mediainfo out.mkv | awk '/^Audio/{while(getline && ! index($0,"Bit rate  ")); print $4}'
 ## TODO: handle srt encoding.
 
 if [ -z "$(command -v ffmpeg)" ]; then
@@ -44,15 +42,15 @@ EOF
 SAMPLE=""
 # USER_OPT="" ## Can use environment value.
 VIDEO_FILTER=""
-VIDEO_CODEC="-vn"
-# VIDEO_CODEC="-c:v libx264 -preset slow -crf 20"
+VIDEO_CODEC="-c:v libx264 -preset slow -crf 20"
 
 ## WARNING: we mix down audio to 2 channels with '-ac 2'. This greatly reduce
 ## file size and avoid any confusion for playback, which is often the case when
 ## converting DTS to any other format because DTS has embedded channel
-## description which is not available in other formats.
-# AUDIO_CODEC="-c:a libvorbis -b:a 192k -ac 2"
-AUDIO_CODEC="-c:a libvorbis -ac 2"
+## description which is not available in these formats.
+AUDIO_FILTER="-ac 2"
+AUDIO_CODEC="libvorbis"
+AUDIO_DEFAULT_RATE="192"
 
 ## What to do if file exists:
 # -y overwrite
@@ -110,7 +108,7 @@ STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
 _duration()
 {
     ## In seconds.
-    ffmpeg -i "$1" 2>&1 | awk '/Duration/ {split($2, time, /:|\./); print time[1]*60*60 + time[2]*60 + time[3]}'
+    ffmpeg -i "$1" 2>&1 </dev/null | awk '/Duration/ {split($2, time, /:|\./); print time[1]*60*60 + time[2]*60 + time[3]}'
 }
 
 _highfreq()
@@ -124,47 +122,93 @@ _cropvalue()
     ## sample the crop values. We keep the values with highest frequency.
     STEP=$(($(_duration "$1")/6))
     for i in $(seq $STEP $STEP $((5*$STEP))); do
-        ffmpeg -ss $i -t 10 -i "$1" -vf "cropdetect=24:2:0" -f null - 2>&1
+        ffmpeg -ss $i -t 10 -i "$1" -vf "cropdetect=24:2:0" -f null - 2>&1 </dev/null
     done | _highfreq
+}
+
+_audiobitrate()
+{
+    ## As of 2013-10-23, ffmpeg sucks at retrieving audio bitrate. Therefore we
+    ## use mediainfo if available, ffmpeg otherwise.
+
+    ## In the end, if some stream bitrates are missing, we have two
+    ## possibilities: either we copy the stream, or we encore it to a default
+    ## value.
+
+    ## Case1: copy streams
+    if [ ! -n "$(command -v mediainfo)" ]; then
+        mediainfo "$1" | awk -v codec="$AUDIO_CODEC" 'BEGIN {id=0} /^Audio/ { getline; while(getline && ! index($0,"Bit rate  ")); if($4) printf "-c:a:" id " " codec " -b:a:" id " " $4 "k " ; else printf "-c:a:" id " copy "; id++} END {print ""}'
+    else
+        ffmpeg -i "$1" 2>&1 </dev/null | awk -v codec="$AUDIO_CODEC" 'BEGIN {id=0} /^ *Stream.*Audio/ {match($0, / [^ ]+ kb\/s/); res=substr($0, RSTART+1, RLENGTH-6); if(res) printf "-c:a:" id " " codec " -b:a:" id " " res "k " ; else printf "-c:a:" id " copy "; id++} END {print ""}'
+    fi
+
+
+    ## Case2: encode to default
+    if [ ! -n "$(command -v mediainfo)" ]; then
+        mediainfo "$1" | awk -v codec="$AUDIO_CODEC" -v bitrate="$AUDIO_DEFAULT_RATE" 'BEGIN {id=0} /^Audio/ { getline; while(getline && ! index($0,"Bit rate  ")); if($4) printf "-c:a:" id " " codec " -b:a:" id " "  $4 "k " ; else printf "-c:a:" id " copy "; id++} END {print ""}'
+    else
+        ffmpeg -i "$1" 2>&1 </dev/null | awk -v codec="$AUDIO_CODEC" -v bitrate="$AUDIO_DEFAULT_RATE" 'BEGIN {id=0} /^ *Stream.*Audio/ {match($0, / [^ ]+ kb\/s/); res=substr($0, RSTART+1, RLENGTH-6); if(res) printf "-c:a:" id " " codec " -b:a:" id " " res "k " ; else printf "-c:a:" id " " codec " -b:a:" id " " bitrate "k "; id++} END {print ""}'
+    fi
+
+
+    ## TODO: audio quality. Copy if AAC or OGG <320k.
+
+
+    # if [ -n "$(command -v mediainfo)" ]; then
+    #     mediainfo "$1" | awk '/^Audio/ {while(getline && ! index($0,"Bit rate  ")); if($4) print $4 ;else print 0}'
+    # else
+    #     ffmpeg -i "$1" 2>&1 </dev/null | awk '/^ *Stream.*Audio/{match($0, / [^ ]+ kb\/s/); res=substr($0, RSTART+1, RLENGTH-6); if (res) print res; else print 0}'
+    # fi
+
+
+
+
+
+
+    # AUDIO_BITRATE="-b:a 192k"
+
 }
 
 _tc_transcode()
 {
-    cat<<EOF
-================================================================================
-File:          $1
-
-User options:  ${USER_OPT:-None}
-Sample:        ${SAMPLE:-No}
-Clear 'Title': $OPT_REMOVE_TITLE
-Crop:          $OPT_CROP
-================================================================================
-EOF
+    echo "==> [$1]"
 
     STREAM_TITLE=""
     if $OPT_REMOVE_TITLE; then
-        STREAM_NUM=$(ffmpeg -i "$1" 2>&1 | grep -c 'Stream')
+        STREAM_NUM=$(ffmpeg -i "$1" 2>&1 </dev/null| grep -c 'Stream')
         for i in $(seq 0 $STREAM_NUM); do
             STREAM_TITLE="${STREAM_TITLE}-metadata:s:$i title= "
         done
     fi
 
     if $OPT_CROP; then
-        echo -n "Computing crop values... "
+        echo "Computing crop values... "
         VIDEO_FILTER="-vf $(_cropvalue "$1")"
-        echo "$VIDEO_FILTER"
-        # return
     fi
 
-    AUDIO_BITRATE="-b:a 192k"
+    AUDIO_BITRATE="$(_audiobitrate "$1")"
+
+    cat<<EOF
+================================================================================
+User options:  ${USER_OPT:-None}
+Sample:        ${SAMPLE:-No}
+Clear 'Title': $OPT_REMOVE_TITLE
+Crop:          $OPT_CROP
+Video filter:  $VIDEO_FILTER
+Audio bitrate: $AUDIO_BITRATE
+Audio filter:  $AUDIO_FILTER
+================================================================================
+EOF
+    exit
+
 
     OUTPUT="${1%.*}-$(date '+%F-%H%M%S').mkv"
     ffmpeg $OVERWRITE -i "$1" \
         $VIDEO_CODEC $VIDEO_FILTER \
-        $AUDIO_CODEC $AUDIO_BITRATE \
+        $AUDIO_CODEC $AUDIO_BITRATE $AUDIO_FILTER \
         -c:s copy \
         -map 0 $STREAM_TITLE \
-        $SAMPLE $USER_OPT "$OUTPUT"
+        $SAMPLE $USER_OPT "$OUTPUT" </dev/null
 
     if $OPT_OVERWRITE; then
         rm -f "$1"
@@ -178,27 +222,21 @@ for i in "$@"; do
     ## Argument is a folder. We search for all video files in there.
     if [ -d "$i" ]; then
 
-        ## WARNING: ffmpeg should not be called from within a while<<EOF loop
-        ## since it continues to read input while running. However IFS needs to
-        ## be restored for wordsplitting to work correctly.
-        OLDIFS="$IFS"
-        IFS="
-"
+        ## WARNING: ffmpeg continues to read stdin once it has started, so it should
+        ## not be called from within a while<<EOF loop without redirecting stdin.
 
-        for j in $(find "$i"  \( \
+        while IFS= read -r i; do
+            _tc_transcode "$j"
+            done<<EOF
+$(find "$i"  \( \
             -iname '*.mkv' -o \
             -iname '*.mp4' -o \
             -iname '*.avi' -o \
             -iname '*.webm' -o \
             -iname '*.flv' -o \
             -iname '*.wmv' -o \
-            -iname '*.mpg' \) ); do
-            IFS="$OLDIFS"
-            _tc_transcode "$j"
-            IFS="
-"
-        done
-        IFS=$OLDIFS
+            -iname '*.mpg' \) )
+EOF
 
     else
         ## Argument is a regular file.
