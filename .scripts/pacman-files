@@ -1,5 +1,4 @@
 #!/bin/sh
-[ -z "$(command -v pacman)" ] && echo "You need pacman to run this script." && exit 1
 
 _printhelp()
 {
@@ -10,6 +9,7 @@ Display size of files in PACKAGES.
 
   -h:  Display this help.
   -n:  Sort by size.
+
 EOF
 }
 
@@ -19,20 +19,16 @@ while getopts ":hn" opt; do
     case $opt in
         h)
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
         n)
-            OPTION_SORT="sort -h"
-            ;;
+            OPTION_SORT="sort -h" ;;
         ?)
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
         :)
             echo "Missing argument."
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
     esac
 done
 
@@ -43,5 +39,7 @@ if [ $# -eq 0 ]; then
     _printhelp "$0"
     exit 1
 fi
+
+[ -z "$(command -v pacman)" ] && echo "You need pacman to run this script." && exit 1
 
 du -bch $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u) 2>/dev/null | eval ${OPTION_SORT}

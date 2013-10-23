@@ -1,9 +1,4 @@
 #!/bin/sh
-if [ -f "${0%/*}/.pacman-init" ];then
-    . "${0%/*}/.pacman-init"
-else
-    echo "Missing init file" && exit 1
-fi
 
 _printhelp()
 {
@@ -16,7 +11,6 @@ default.
 
   -h: Show this help.
   -n: Output is sorted by size.
-
   -q: Uses installed packages database instead of repos database. It speeds up
       queries and allows displaying size of local packages not available in
       repos.
@@ -34,23 +28,18 @@ while getopts ":hnq" opt; do
     case $opt in
         h)
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
         n)
-            SORT_SIZE="sort -n"
-            ;;
+            SORT_SIZE="sort -n" ;;
         q)
-            CMD="pacman -Qi"
-            ;;
+            CMD="pacman -Qi" ;;
         ?)
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
         :)
             echo "Missing argument."
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
     esac
 done
 
@@ -62,6 +51,12 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
+if [ -f "${0%/*}/.pacman-init" ];then
+    . "${0%/*}/.pacman-init"
+else
+    echo "Missing init file" && exit 1
+fi
+
 ## We use external variable for awk to fit current locales.
 RESULT="$(eval "${CMD} $@" 2>/dev/null | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
 '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | eval "$SORT" | eval "$SORT_SIZE")"
@@ -70,6 +65,7 @@ echo "$RESULT"
 
 ## Print total size.
 echo "$RESULT" | awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}'
+
 
 ## One line version. Approximately same performance. Note the combination of
 ## 'tee' and >(awk ...) to write the detailed list to standard output and to

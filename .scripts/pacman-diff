@@ -1,5 +1,4 @@
 #!/bin/sh
-[ -z "$(command -v pacman)" ] && echo "You need pacman to run this script." && exit 1
 
 _printhelp()
 {
@@ -22,27 +21,21 @@ OPTION_LOCAL="-1"
 while getopts ":hmqe" opt; do
     case $opt in
         e)
-            OPTION_EXPLICIT="e"
-            ;;
+            OPTION_EXPLICIT="e" ;;
         h)
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
         m)
-            OPTION_FOREIGN="m"
-            ;;
+            OPTION_FOREIGN="m" ;;
         q)
-            OPTION_LOCAL="-2"
-            ;;
+            OPTION_LOCAL="-2" ;;
         ?)
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
         :)
             echo "Missing argument."
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
     esac
 done
 
@@ -53,6 +46,8 @@ if [ $# -eq 0 ]; then
     _printhelp "$0"
     exit 1
 fi
+
+[ -z "$(command -v pacman)" ] && echo "You need pacman to run this script." && exit 1
 
 PKGLIST="$(mktemp)"
 FILE="$(mktemp)"
