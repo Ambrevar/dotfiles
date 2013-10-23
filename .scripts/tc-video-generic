@@ -2,11 +2,6 @@
 
 ## TODO: handle srt encoding.
 
-if [ -z "$(command -v ffmpeg)" ]; then
-    echo "ffmpeg required."
-    exit
-fi
-
 _printhelp()
 {
     cat <<EOF
@@ -16,14 +11,21 @@ Transcode FILES or files found in FOLDERS to .mkv with x264 and ogg. Black
 stripes are *not* cropped by default since it may be sometimes
 inaccurate. Output files are the same as the original, with time appended.
 
+Options:
+  -b:      Default bitrate for audio stream with unidentifiable bitrate. If 0,
+           copy stream (default).
   -c:      Copy streams (no reencoding).
-  -C:      Enable auto-crop.
+  -C:      Enable auto-crop (needs video reencoding).
   -f:      Remove source when done.
   -h:      Display this help.
   -o OPT:  Additional options.
+  -p:      Preview changes, do not encode.
   -s:      Sample of 5 minutes.
   -S MIN:  Sample of MIN minutes.
   -t:      Remove all "title" metadata.
+
+User options are read from variable TC_VIDEO_OPT. This can be useful if you
+always use the same options.
 
 Examples:
 
@@ -40,17 +42,11 @@ EOF
 }
 
 SAMPLE=""
-# USER_OPT="" ## Can use environment value.
-VIDEO_FILTER=""
-VIDEO_CODEC="-c:v libx264 -preset slow -crf 20"
-
-## WARNING: we mix down audio to 2 channels with '-ac 2'. This greatly reduce
-## file size and avoid any confusion for playback, which is often the case when
-## converting DTS to any other format because DTS has embedded channel
-## description which is not available in these formats.
-AUDIO_FILTER="-ac 2"
+pVIDEO_FILTER=""
+VIDEO_PARAM="-c:v libx264 -preset slow -crf 20"
+AUDIO_PARAM=""
 AUDIO_CODEC="libvorbis"
-AUDIO_DEFAULT_RATE="192"
+AUDIO_DEFAULT_RATE=0
 
 ## What to do if file exists:
 # -y overwrite
@@ -60,12 +56,15 @@ OPT_OVERWRITE=false
 
 OPT_REMOVE_TITLE=false
 OPT_CROP=false
+OPT_PREVIEW=false
 
-while getopts ":cCfho:sS:t" opt; do
+while getopts ":b:cCfho:psS:t" opt; do
     case $opt in
+        b)
+            AUDIO_DEFAULT_RATE=$OPTARG ;;
         c)
-            VIDEO_CODEC="-c:v copy"
-            AUDIO_CODEC="-c:a copy" ;;
+            VIDEO_PARAM="-c:v copy"
+            AUDIO_PARAM="-c:a copy" ;;
         C)
             OPT_CROP=true;;
         f)
@@ -75,7 +74,9 @@ while getopts ":cCfho:sS:t" opt; do
             _printhelp "$0"
             exit 1 ;;
         o)
-            USER_OPT="$OPTARG" ;;
+            TC_VIDEO_OPT="$OPTARG" ;;
+        p)
+            OPT_PREVIEW=true ;;
         s)
             SAMPLE="-ss 60 -t 360" ;;
         S)
@@ -100,10 +101,10 @@ if [ $# -eq 0 ]; then
     exit
 fi
 
-## Zsh compatibility. We need it otherwise word splitting of parameter like
-## SAMPLE will not work.
-STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
-[ "$STATUS" = "off" ] && set -o shwordsplit
+if [ -z "$(command -v ffmpeg)" ]; then
+    echo "ffmpeg required."
+    exit
+fi
 
 _duration()
 {
@@ -136,18 +137,19 @@ _audiobitrate()
     ## value.
 
     ## Case1: copy streams
-    if [ ! -n "$(command -v mediainfo)" ]; then
-        mediainfo "$1" | awk -v codec="$AUDIO_CODEC" 'BEGIN {id=0} /^Audio/ { getline; while(getline && ! index($0,"Bit rate  ")); if($4) printf "-c:a:" id " " codec " -b:a:" id " " $4 "k " ; else printf "-c:a:" id " copy "; id++} END {print ""}'
-    else
-        ffmpeg -i "$1" 2>&1 </dev/null | awk -v codec="$AUDIO_CODEC" 'BEGIN {id=0} /^ *Stream.*Audio/ {match($0, / [^ ]+ kb\/s/); res=substr($0, RSTART+1, RLENGTH-6); if(res) printf "-c:a:" id " " codec " -b:a:" id " " res "k " ; else printf "-c:a:" id " copy "; id++} END {print ""}'
-    fi
+    # if [ ! -n "$(command -v mediainfo)" ]; then
+    #     mediainfo "$1" | awk -v codec="$AUDIO_CODEC" 'BEGIN {id=0} /^Audio/ { getline; while(getline && ! index($0,"Bit rate  ")); if($4) printf "-c:a:" id " " codec " -b:a:" id " " $4 "k " ; else printf "-c:a:" id " copy "; id++} END {print ""}'
+    # else
+    #     ffmpeg -i "$1" 2>&1 </dev/null | awk -v codec="$AUDIO_CODEC" 'BEGIN {id=0} /^ *Stream.*Audio/ {match($0, / [^ ]+ kb\/s/); res=substr($0, RSTART+1, RLENGTH-6); if(res) printf "-c:a:" id " " codec " -b:a:" id " " res "k " ; else printf "-c:a:" id " copy "; id++} END {print ""}'
+    # fi
 
+    ## TODO: merge two cases, use default value when not 0, copy otherwise.
 
     ## Case2: encode to default
     if [ ! -n "$(command -v mediainfo)" ]; then
         mediainfo "$1" | awk -v codec="$AUDIO_CODEC" -v bitrate="$AUDIO_DEFAULT_RATE" 'BEGIN {id=0} /^Audio/ { getline; while(getline && ! index($0,"Bit rate  ")); if($4) printf "-c:a:" id " " codec " -b:a:" id " "  $4 "k " ; else printf "-c:a:" id " copy "; id++} END {print ""}'
     else
-        ffmpeg -i "$1" 2>&1 </dev/null | awk -v codec="$AUDIO_CODEC" -v bitrate="$AUDIO_DEFAULT_RATE" 'BEGIN {id=0} /^ *Stream.*Audio/ {match($0, / [^ ]+ kb\/s/); res=substr($0, RSTART+1, RLENGTH-6); if(res) printf "-c:a:" id " " codec " -b:a:" id " " res "k " ; else printf "-c:a:" id " " codec " -b:a:" id " " bitrate "k "; id++} END {print ""}'
+        ffmpeg -i "$1" 2>&1 </dev/null | awk -v codec="$AUDIO_CODEC" -v bitrate="$AUDIO_DEFAULT_RATE" 'BEGIN {id=0} /^ *Stream.*Audio/ {match($0, / [^ ]+ kb\/s/); res=substr($0, RSTART+1, RLENGTH-6); if(res) printf "-c:a:" id " " codec " -b:a:" id " " res "k " ; else if (bitrate > 0)  printf "-c:a:" id " " codec " -b:a:" id " " bitrate "k "; else printf "-c:a:" id " copy "; id++} END {print ""}'
     fi
 
 
@@ -186,29 +188,52 @@ _tc_transcode()
         VIDEO_FILTER="-vf $(_cropvalue "$1")"
     fi
 
-    AUDIO_BITRATE="$(_audiobitrate "$1")"
+
+    ## WARNING: we mix down audio to 2 channels with '-ac 2'. This greatly reduce
+    ## file size and avoid any confusion for playback, which is often the case when
+    ## converting DTS to any other format because DTS has embedded channel
+    ## description which is not available in these formats.
+    # AUDIO_FILTER="-ac 2"
+
+    ## If AUDIO_FILTER is already set, it means that we copy.
+    if [ -z "$AUDIO_PARAM" ]; then
+            AUDIO_PARAM="$(_audiobitrate "$1") -ac 2"
+    fi
 
     cat<<EOF
 ================================================================================
-User options:  ${USER_OPT:-None}
-Sample:        ${SAMPLE:-No}
-Clear 'Title': $OPT_REMOVE_TITLE
+User options:  ${TC_VIDEO_OPT:-none}
+Sample:        ${SAMPLE:-no}
+Clear tags:    $OPT_REMOVE_TITLE
+In place:      $OPT_OVERWRITE
 Crop:          $OPT_CROP
+Video param:   $VIDEO_PARAM
 Video filter:  $VIDEO_FILTER
-Audio bitrate: $AUDIO_BITRATE
-Audio filter:  $AUDIO_FILTER
+Audio param:   $AUDIO_PARAM
 ================================================================================
 EOF
-    exit
 
+    $OPT_PREVIEW && exit
 
     OUTPUT="${1%.*}-$(date '+%F-%H%M%S').mkv"
+
+
+    ## Zsh compatibility. We need it otherwise word splitting of parameter like
+    ## SAMPLE will not work.
+    STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
+    [ "$STATUS" = "off" ] && set -o shwordsplit
+
     ffmpeg $OVERWRITE -i "$1" \
-        $VIDEO_CODEC $VIDEO_FILTER \
-        $AUDIO_CODEC $AUDIO_BITRATE $AUDIO_FILTER \
+        $VIDEO_PARAM $VIDEO_FILTER \
+        $AUDIO_PARAM \
         -c:s copy \
         -map 0 $STREAM_TITLE \
-        $SAMPLE $USER_OPT "$OUTPUT" </dev/null
+        $SAMPLE $TC_VIDEO_OPT "$OUTPUT" </dev/null
+
+
+    ## Restore Zsh previous options. This will not turn off shwordsplit if it
+    ## was on before calling the function.
+    [ "$STATUS" = "off" ] && set +o shwordsplit
 
     if $OPT_OVERWRITE; then
         rm -f "$1"
@@ -244,7 +269,3 @@ EOF
     fi
 
 done
-
-## Restore Zsh previous options. This will not turn off shwordsplit if it
-## was on before calling the function.
-[ "$STATUS" = "off" ] && set +o shwordsplit
