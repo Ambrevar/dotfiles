@@ -58,14 +58,14 @@ done
 
 shift $(($OPTIND - 1))
 
-## Choose to process all files in one batch
-_transcode ###FILELIST
+## Choose to process all files one after another.
+while read -r i; do
+    _transcode "$i"
+done<<FILELINES
+FILELINES
 
-## Or one after another.
-# while read -r i; do
-#     _transcode "$i"
-# done<<FILELINES
-# FILELINES
+## Or in one batch
+# _transcode ###FILELIST
 
 ################################################################################
 ## USE CASES

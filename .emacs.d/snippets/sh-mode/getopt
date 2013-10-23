@@ -4,9 +4,9 @@
 _printhelp ()
 {
     cat<<EOF
-Usage: \${1##*/} [-h]
+Usage: \${1##*/} [OPTIONS] FILES
 
-Synopsis.
+Synopsis:
 
   -h:  Show this help.
 

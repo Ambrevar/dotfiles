@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ## TODO: audio quality. Copy if AAC or OGG <320k.
-## TODO: crop is not correct.
+## mediainfo out.mkv | awk '/^Audio/{while(getline && ! index($0,"Bit rate  ")); print $4}'
 ## TODO: handle srt encoding.
 
 if [ -z "$(command -v ffmpeg)" ]; then
@@ -15,8 +15,8 @@ _printhelp()
 Usage: ${1##*/} [OPTIONS] FILES|FOLDERS
 
 Transcode FILES or files found in FOLDERS to .mkv with x264 and ogg. Black
-stripes are *not* cropped by default. Output files are the same as the original,
-with time appended.
+stripes are *not* cropped by default since it may be sometimes
+inaccurate. Output files are the same as the original, with time appended.
 
   -c:      Copy streams (no reencoding).
   -C:      Enable auto-crop.
@@ -44,13 +44,15 @@ EOF
 SAMPLE=""
 # USER_OPT="" ## Can use environment value.
 VIDEO_FILTER=""
-VIDEO_CODEC="-c:v libx264 -preset slow -crf 20"
+VIDEO_CODEC="-vn"
+# VIDEO_CODEC="-c:v libx264 -preset slow -crf 20"
 
 ## WARNING: we mix down audio to 2 channels with '-ac 2'. This greatly reduce
 ## file size and avoid any confusion for playback, which is often the case when
 ## converting DTS to any other format because DTS has embedded channel
 ## description which is not available in other formats.
-AUDIO_CODEC="-c:a libvorbis -b:a 192k -ac 2"
+# AUDIO_CODEC="-c:a libvorbis -b:a 192k -ac 2"
+AUDIO_CODEC="-c:a libvorbis -ac 2"
 
 ## What to do if file exists:
 # -y overwrite
@@ -122,8 +124,7 @@ _cropvalue()
     ## sample the crop values. We keep the values with highest frequency.
     STEP=$(($(_duration "$1")/6))
     for i in $(seq $STEP $STEP $((5*$STEP))); do
-        echo -ss $i -t 10
-        ffmpeg -ss $i -t 10 -i "$1" -vf "cropdetect=24:16:0" -f null - 2>&1
+        ffmpeg -ss $i -t 10 -i "$1" -vf "cropdetect=24:2:0" -f null - 2>&1
     done | _highfreq
 }
 
@@ -149,13 +150,18 @@ EOF
     fi
 
     if $OPT_CROP; then
+        echo -n "Computing crop values... "
         VIDEO_FILTER="-vf $(_cropvalue "$1")"
+        echo "$VIDEO_FILTER"
+        # return
     fi
+
+    AUDIO_BITRATE="-b:a 192k"
 
     OUTPUT="${1%.*}-$(date '+%F-%H%M%S').mkv"
     ffmpeg $OVERWRITE -i "$1" \
         $VIDEO_CODEC $VIDEO_FILTER \
-        $AUDIO_CODEC \
+        $AUDIO_CODEC $AUDIO_BITRATE \
         -c:s copy \
         -map 0 $STREAM_TITLE \
         $SAMPLE $USER_OPT "$OUTPUT"
