@@ -5,73 +5,56 @@ _printhelp()
     cat <<EOF
 Usage: ${1##*/} [-m METHOD] [-v] FILES|FOLDERS
 
-Create an archive from a single or multiples files/folders. The archive is
-created without owner/group information.
+Create an archive in current folder from a single or multiples
+files/folders. Each input entry will be at archive root (no absolute path is
+used). If only one file/folder is given as input, then the archive is named
+after this input. Otherwise it is named after current PWD.
 
   -h:  Display this help.
   -m:  Choose compression method.
          * gz:  gzip (default).
          * xz:  LZMA.
+  -i:  The archive is created without owner/group information. (GNU tar only.)
   -v:  Exclude VCS data. (GNU tar only.)
 EOF
 }
 
-OPTION_VCS=""
-OPTION_METHOD=""
-OPTIONS="--owner=root --group=root --numeric-owner"
-while getopts ":hm:v" opt; do
+OUTPATH="$PWD"
+ARCEXT="tar.gz"
+ARCOPT="z"
+OPTIONS=""
+while getopts ":him:v" opt; do
     case $opt in
         h)
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
+        i)
+            OPTIONS="$OPTIONS --owner=root --group=root --numeric-owner" ;;
         m)
-            OPTION_METHOD="${OPTARG}"
+            [ "$OPTARG" = "gz" ] && ARCEXT="tar.gz" && ARCOPT="z"
+            [ "$OPTARG" = "xz" ] && ARCEXT="tar.xz" && ARCOPT="J"
             ;;
         v)
-            OPTION_VCS="--exclude-vcs"
-            ;;
+            OPTIONS="$OPTIONS --exclude-vcs" ;;
         ?)
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
         :)
             echo "Missing argument."
             _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
     esac
 done
 
-ARCEXT="tar.gz"
-ARCOPT="z"
-case $OPTION_METHOD in
-    "gz")
-        ARCEXT="tar.gz"
-        ARCOPT="z"
-        ;;
-    "xz")
-        ARCEXT="tar.xz"
-        ARCOPT="J"
-        ;;
-esac
 
 shift $(($OPTIND - 1))
 
-## Case 1: no argument, we archive current folder to parent folder.
 if [ $# -eq 0 ]; then
-    FULLPATH="$PWD"
-    OUTPUT="${FULLPATH}-$(date +%F-%H%M%S).${ARCEXT}"
-    (cd "${FULLPATH}/.." && \
-        echo "tar ${OPTION_VCS} ${OPTIONS} -${ARCOPT} -cf '$OUTPUT' '${FULLPATH##*/}'" && \
-        tar ${OPTION_VCS} ${OPTIONS} -${ARCOPT} -cf "$OUTPUT" "${FULLPATH##*/}" )
-    exit
+    _printhelp "$0"
+    exit 1
 fi
 
-## Case 2: files and folders are passed as arguments. Each of them will be at
-## the archive root. Archive is produced in current folder if it is not directly
-## part of the archive.
-OUTPATH="$PWD"
+## Only one input entry: use it as base name for the archive.
 if [ $# -eq 1 ]; then
     REALPATH="$(realpath "$1")"
     OUTFILE="${REALPATH##*/}-$(date +%F-%H%M%S).${ARCEXT}"
@@ -82,8 +65,9 @@ fi
 for i; do
     REALPATH="$(realpath "$i")"
 
-    # Check if one if the argument is current folder. We need to make sure the
-    # archive is not created in an input folder, otherwise it will include itself.
+    ## Check if one of the arguments is current folder. We need to make sure the
+    ## archive is not created in an input folder, otherwise it will include
+    ## itself.
     if [ "$REALPATH" = "$(realpath "$PWD")" ]; then
         OUTPATH="$(realpath "$PWD/..")"
         echo "Creating archive in [$OUTPATH]."
@@ -94,6 +78,11 @@ for i; do
     INPUTARGS="$INPUTARGS -C '$DIRNAME' '$BASENAME'"
 done
 
-echo "tar ${OPTION_VCS} ${OPTIONS} -${ARCOPT} -cf '$OUTPATH/$OUTFILE' ${INPUTARGS}"
-eval "tar ${OPTION_VCS} ${OPTIONS} -${ARCOPT} -cf '$OUTPATH/$OUTFILE' ${INPUTARGS}"
 
+if [ ! -w "$OUTPATH" ]; then
+    echo "[$OUTPATH] is not writable. Exiting."
+    exit
+fi
+
+echo "tar $OPTIONS -$ARCOPT -cf '$OUTPATH/$OUTFILE' $INPUTARGS"
+eval "tar $OPTIONS -$ARCOPT -cf '$OUTPATH/$OUTFILE' $INPUTARGS"
