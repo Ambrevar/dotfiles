@@ -1,14 +1,22 @@
 #!/bin/sh
 
-if [ "$1" = "-h" ]; then
+_printhelp()
+{
     cat<<EOF
-Usage: ${0##*/} [FILES|FOLDERS]
+Usage: ${0##*/} FILES|FOLDERS
 
 Format C source code using 'indent'.
 
 Alternative to indent: astyle, uncrustify.
 EOF
+
+}
+
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+    _printhelp
+    exit
 fi
+
 
 if [ -z "$(command -v indent)" ]; then
     echo "Please install 'indent'."
@@ -29,17 +37,10 @@ _formatc_dir()
         -delete
 }
 
-if [ $# -eq 0 ]; then
-    echo "Working on current dir"
-    _formatc_dir "$PWD"
-    exit
-fi
-
 for i ; do
     if [ ! -e "$i" ]; then
         continue
     fi
-
 
     if [ -d "$i" ]; then
         _formatc_dir "$i"
