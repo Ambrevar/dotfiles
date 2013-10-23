@@ -94,21 +94,19 @@ _worker()
     CORE=$1
     shift
 
-    ## WARNING: ffmpeg should not be called from within a while<<EOF loop since
-    ## it continues to read input while running.
-    OLDIFS=$IFS
-    IFS="
-"
+    ## WARNING: ffmpeg continues to read stdin once it has started, so it should
+    ## not be called from within a while<<EOF loop without redirecting stdin.
 
-    for file in $(echo "$INPUT" | sed -n "$CORE~${CPUNO}p"); do
+    while IFS= read -r file; do
         if [ -n "$file" ]; then
             echo "$(tput setf 2)$(tput bold)==>$(tput sgr0) $file"
 
             [ $CPUNO -eq 1 ] && "${0%/*}"/tc-audio-transcode "$@" "$file" || \
                 tc-audio-transcode -q "$@" "$file" >/dev/null
         fi
-    done
-    IFS=$OLDIFS
+        done<<EOF
+$(echo "$INPUT" | sed -n "$CORE~${CPUNO}p")
+EOF
 
     echo "$(tput setf 5)$(tput bold)::$(tput sgr0) Thread $CORE/$CPUNO terminated."
 }

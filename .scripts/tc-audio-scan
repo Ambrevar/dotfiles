@@ -6,19 +6,13 @@ if [ -z "$(command -v mediainfo)" ]; then
 fi
 
 ## This will check for badly encoded audio.
-while read -r i; do
+while IFS= read -r i; do
     BUFFER="$(mediainfo "$i")"
-    if [ -n "$(echo "$BUFFER" | grep "Bit rate mode *: Constant")" ]; then
-        echo "$i : CBR"
-    fi
+    [ -n "$(echo "$BUFFER" | grep "Bit rate mode *: Constant")" ] && echo "$i : CBR"
 
-    if [ -n "$(echo "$BUFFER" | grep "Cover *: Yes")" ]; then
-        echo "$i : Cover"
-    fi
+    [ -n "$(echo "$BUFFER" | grep "Cover *: Yes")" ] && echo "$i : Cover"
 
-    if [ -n "$(echo "$BUFFER" | grep "Track name/Position *: 0+")" ]; then
-        echo "$i : Leading zeros"
-    fi
+    [ -n "$(echo "$BUFFER" | grep "Track name/Position *: 0+")" ] && echo "$i : Leading zeros"
 done <<EOF
 $(find "."  \( \
         -iname '*.mp3'  -o \

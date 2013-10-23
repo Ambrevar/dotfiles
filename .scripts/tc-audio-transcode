@@ -385,10 +385,10 @@ aprint <<EOF
 [$INPUT_GENRE]			 Genre			 [$OUTPUT_GENRE]
 [$INPUT_EXT]			 Ext			 [$OUTPUT_EXT]
 [$INPUT_BITRATE]		 Bitrate		 [$OUTPUT_BITRATE]
-[$INPUT_ALBUMARTIST]	 Albumartist	
-[$INPUT_COMPOSER]		 Composer		
-[$INPUT_DISC]			 Disc			
-[$INPUT_TYER]			 Tyer			
+[$INPUT_ALBUMARTIST]	 Albumartist
+[$INPUT_COMPOSER]		 Composer
+[$INPUT_DISC]			 Disc
+[$INPUT_TYER]			 Tyer
 EOF
 
 cat <<EOF
@@ -410,7 +410,7 @@ fi
 
 ## COVER. We copy cover only if it does not already exist. Only files found in
 ## the folder where the music is located will be taken into account.
-while read -r i; do
+while IFS= read -r i; do
     [ -z "$i" ] && break
     OUTPUT_COVER="$OUTPUT_FOLDER/${OUTPUT_ALBUM:+$OUTPUT_ALBUM - }Cover"
     OUTPUT_COVERFILE="$OUTPUT_COVER.${i##*.}"
@@ -443,6 +443,9 @@ STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
 
 ## TAG/RECODE
 ## With the -map_metadata parameter we clear all metadata.
+
+## WARNING: ffmpeg continues to read stdin once it has started, so it should not
+## be called from within a while<<EOF loop without redirecting stdin.
 echo ":: Processing..."
 ffmpeg $LOGLEVEL $OVERWRITE -i "$1" -vn -sn $OGG_PARAM \
     -map_metadata -1 \
@@ -453,7 +456,7 @@ ffmpeg $LOGLEVEL $OVERWRITE -i "$1" -vn -sn $OGG_PARAM \
     -metadata album="$OUTPUT_ALBUM" \
     -metadata album_artist="$OUTPUT_ARTIST" \
     -metadata genre="$OUTPUT_GENRE" \
-    "$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT"
+    "$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT" </dev/null
 echo ":: Process finished!"
 
 ## If we are overwriting inplace.
