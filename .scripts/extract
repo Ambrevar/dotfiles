@@ -87,7 +87,7 @@ _extract()
 for i ; do
 
     if [ -d "$i" ]; then
-        while read -r FILE; do
+        while IFS= read -r FILE; do
             _extract "$FILE"
         done <<EOF
 $(find "$i" -type f)

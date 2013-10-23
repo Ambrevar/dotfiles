@@ -148,7 +148,7 @@ abs_buildmissing ()
 {
     DEPLIST="$(makepkg -s 2>&1 | awk -F: '/target not found/ {print $3}')"
     cd ..
-    while read -r p; do
+    while IFS= read -r p; do
         abs_pkgbuild $p
         abs_build $p
         abs_install $p

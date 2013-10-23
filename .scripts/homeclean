@@ -75,7 +75,7 @@ fi
 
 ## Remove data.
 echo
-while read -r i; do
+while IFS= read -r i; do
     rm -rvf "$i"
 done <<EOF
 $RMLIST
@@ -83,7 +83,7 @@ EOF
 
 ## Wipe data
 echo
-while read -r i; do
+while IFS= read -r i; do
     shred -zuv "$i"
 done <<EOF
 $RMLIST_CRITICAL

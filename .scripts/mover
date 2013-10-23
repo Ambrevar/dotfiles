@@ -46,8 +46,8 @@ done
 FOLDERS="$(echo $ARGLIST | head -n-1)"
 DEST="$(echo $ARGLIST | tail -n1)"
 
-while read -r FOLDER; do
-    while read -r FILE; do
+while IFS= read -r FOLDER; do
+    while IFS= read -r FILE; do
         DESTFILE="$DEST/$FILE"
         if [ ! -e "$DESTFILE" ] || $OPT_OVERWRITE; then
             mkdir -p "$(dirname "$DESTFILE")"

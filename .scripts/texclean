@@ -16,7 +16,7 @@ EOF
 fi
 
 for i ; do
-    while read -r FILE; do
+    while IFS= read -r FILE; do
         FILE_NOEXT="${FILE##*/}"
         FILE_NOEXT="${FILE_NOEXT%.*}"
         FILE_PATH="${FILE%/*}"

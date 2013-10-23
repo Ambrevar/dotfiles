@@ -1,7 +1,7 @@
-# name: while read -r i
+# name: while IFS= read -r i
 # key: whiler
 # --
-while read -r i; do
+while IFS= read -r i; do
     $0
 done<<EOF
 EOF

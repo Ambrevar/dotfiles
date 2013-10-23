@@ -24,7 +24,7 @@ _install ()
 
 SOURCE_PATH="$(realpath "$0")"
 SOURCE_PATH="${SOURCE_PATH%/*}"
-while read -r i; do
+while IFS= read -r i; do
     _install "$i"
 done<<EOF
 $(find "$SOURCE_PATH" -iname '*.map' -type f)

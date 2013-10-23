@@ -1,43 +1,53 @@
 #!/bin/sh
 
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+    cat<<EOF
+Usage: ${1##*/} FOLDERS
+
+Convert all 'bad' encoding to UTF-8/LF.
+
+WARNING: It will fail for encodings other the one explicitly supported below.
+
+EOF
+fi
+
 if [ -z "$(command -v recode)" ]; then
     echo "recode needed."
     exit
 fi
 
+for i ; do
+    while IFS= read -r j; do
+        CODING=$(file "$j")
 
-## Convert all 'bad' encoding to UTF-8/LF. WARNING: It will fail for encodings
-## other the one explicitly supported below.
-while read -r i; do
-    CODING=$(file "$i")
+        if [ -n "$(echo $CODING | grep 'ISO-8859')" ]; then
+            echo "ISO-8859:   [$j]"
+            recode latin1..utf-8 "$j"
 
-    if [ -n "$(echo $CODING | grep 'ISO-8859')" ]; then
-        echo "ISO-8859:   [$i]"
-        recode latin1..utf-8 "$i"
+        elif [ -n "$(echo $CODING | grep 'Non-ISO extended-ASCII')" ]; then
+            echo "cp1252:     [$j]"
+            recode cp1252..utf-8 "$j"
 
-    elif [ -n "$(echo $CODING | grep 'Non-ISO extended-ASCII')" ]; then
-        echo "cp1252:     [$i]"
-        recode cp1252..utf-8 "$i"
+        elif [ -n "$(echo $CODING | grep 'UTF-16 Unicode text')" ]; then
+            echo "UTF-16:     [$j]"
+            recode utf-16..utf-8 "$j"
 
-    elif [ -n "$(echo $CODING | grep 'UTF-16 Unicode text')" ]; then
-        echo "UTF-16:     [$i]"
-        recode utf-16..utf-8 "$i"
+        elif [ -n "$(echo $CODING | grep 'UTF-8 Unicode (with BOM)')" ]; then
+            echo "UTF-8 BOM:  [$j]"
+            sed -i '1s/^.//' "$j"
+            ## sed -i is not the fastest depending on the implementations. The
+            ## following commands work, but may be overkill.
+            # dd iflag=skip_bytes skip=3 if=file.srt of=temp.srt
+            # dd bs=1 skip=3 if=file.srt of=temp.srt
+            # tail -c +32 file.srt > temp.srt
+        fi
 
-    elif [ -n "$(echo $CODING | grep 'UTF-8 Unicode (with BOM)')" ]; then
-        echo "UTF-8 BOM:  [$i]"
-        sed -i '1s/^.//' "$i"
-        ## sed -i is not the fastest depending on the implementations. The
-        ## following commands work, but may be overkill.
-        # dd iflag=skip_bytes skip=3 if=file.srt of=temp.srt
-        # dd bs=1 skip=3 if=file.srt of=temp.srt
-        # tail -c +32 file.srt > temp.srt
-    fi
+        if [ -n "$(echo $CODING | grep 'CRLF')" ]; then
+            echo "CRLF:       [$j]"
+            sed -i 's/\r//g' "$j"
+        fi
 
-    if [ -n "$(echo $CODING | grep 'CRLF')" ]; then
-        echo "CRLF:       [$i]"
-        sed -i 's/\r//g' "$i"
-    fi
-
-done <<EOF
-$(find . -type f -size -50M -print)
+    done <<EOF
+$(find "$i" -type f -size -50M -print)
 EOF
+done
