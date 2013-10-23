@@ -76,5 +76,5 @@ if [ $# -ge 1 ]; then
         _asciify "$i"
     done
 else
-    cat | _asciify
+    _asciify
 fi
