@@ -1,9 +1,26 @@
 #!/bin/sh
 
-while IFS= read -r FOLDER; do
-    if [ -z "$(cd "${FOLDER%/*}" && git status -uno | grep "nothing to commit")" ]; then
-        echo "${FOLDER%/*}"
-    fi
-done <<EOF
-$(find . -type d -name ".git")
+_printhelp()
+{
+    cat<<EOF
+Usage: ${0##*/} FOLDERS
+
+Chack all git repos found in FOLDERS for non-commited file.
 EOF
+}
+
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+    _printhelp
+    exit
+fi
+
+for i; do
+
+    while IFS= read -r FOLDER; do
+        if [ -z "$(cd "${FOLDER%/*}" && git status -uno | grep "nothing to commit")" ]; then
+            echo "${FOLDER%/*}"
+        fi
+    done <<EOF
+$(find "$i" -type d -name ".git")
+EOF
+done
