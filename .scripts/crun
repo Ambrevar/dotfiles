@@ -2,30 +2,29 @@
 
 if [ $# -lt 1 ]; then
     cat<<EOF
-Usage: ${0##*/} FILE [GCC_OPTS]
+Usage: ${0##*/} FILE [FLAGS]
 
 Simulate a C interpreter by compiling, executing and removing file in one run.
 EOF
     exit
 fi
 
+[ -z "$CC" ] && CC=gcc
+FLAGS="-Wall -Wextra -Wshadow -pthread -lm -g3 -O0"
 INPUT="$1"
 
 shift
-GCC_OPTS="-O0 -Wall -Wextra -Wshadow -pthread -lm"
-if [ $# -ne 0 ]; then
-    GCC_OPTS="$@"
-fi
+[ $# -ne 0 ] && FLAGS="$@"
 
 FILE="$(mktemp)"
-echo "==> gcc \"$INPUT\" -o \"$FILE\" $GCC_OPTS"
+echo "==> $CC \"$INPUT\" -o \"$FILE\" $FLAGS"
 
-## Zsh compatibility. We need it otherwise word splitting of parameter GCC_OPTS
-## will not work.
+## Zsh compatibility. We need it otherwise word splitting of parameter will not
+## work.
 STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
 [ "$STATUS" = "off" ] && set -o shwordsplit
 
-gcc "$INPUT" -o "$FILE" $GCC_OPTS
+$CC "$INPUT" -o "$FILE" $FLAGS
 
 ## Restore Zsh previous options. This will not turn off shwordsplit if it
 ## was on before calling the function.
