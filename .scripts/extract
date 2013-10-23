@@ -1,26 +1,38 @@
 #!/bin/sh
 
-[ -n "$(command -v atool)" ] && echo "You should use atool instead."
+if [ $# -eq 0 ]; then
+    cat<<EOF
+Usage: ${0##*/} ARCHIVES
 
-if [ -f "$1" ] ; then
-	case "$1" in
-		*.tar.bz2) tar xvjf "$1"   ;;
-		*.tar.gz)  tar xvzf "$1"   ;;
-		*.tar.xz)  tar xvJf "$1"   ;;
-		*.bz2)     bunzip2 "$1"    ;;
-		*.rar)     unrar x "$1"    ;;
-		*.gz)      gunzip "$1"     ;;
-		*.tar)     tar xvf "$1"    ;;
-		*.tbz2)    tar xvjf "$1"   ;;
-		*.tgz)     tar xvzf "$1"   ;;
-		*.txz)     tar xvJf "$1"   ;;
-		*.zip)     unzip "$1"      ;;
-		*.Z)       uncompress "$1" ;;
-		*.7z)      7z x "$1"       ;;
-		*.xz)      unxz "$1"       ;;
-		*.exe)     cabextract "$1" ;;
-		*)         echo "[$1]: unrecognized file compression" ;;
-	esac
-else
-	echo "[$1] is not a valid file"
+Wrapper around various archive extraction tools. The archives are recognized
+according to their file extension.
+EOF
 fi
+
+[ -n "$(command -v atool)" ] && echo "You should use atool instead." && echo
+
+for i ; do
+    if [ -f "$i" ] ; then
+        echo "[$i] processed."
+	    case "$1" in
+		    *.tar.bz2) tar xvjf "$i"   ;;
+		    *.tar.gz)  tar xvzf "$i"   ;;
+		    *.tar.xz)  tar xvJf "$i"   ;;
+		    *.bz2)     bunzip2 "$i"    ;;
+		    *.rar)     unrar x "$i"    ;;
+		    *.gz)      gunzip "$i"     ;;
+		    *.tar)     tar xvf "$i"    ;;
+		    *.tbz2)    tar xvjf "$i"   ;;
+		    *.tgz)     tar xvzf "$i"   ;;
+		    *.txz)     tar xvJf "$i"   ;;
+		    *.zip)     unzip "$i"      ;;
+		    *.Z)       uncompress "$i" ;;
+		    *.7z)      7z x "$i"       ;;
+		    *.xz)      unxz "$i"       ;;
+		    *.exe)     cabextract "$i" ;;
+		    *)         echo "[$i]: unrecognized archive format." ;;
+	    esac
+    else
+	    echo "[$i] is not a valid file."
+    fi
+done
