@@ -108,6 +108,7 @@ fuseiso
 gawk
 gc
 gcc-fortran
+gcc-go
 gcc-libs-multilib
 gcc-multilib
 gcolor2
@@ -137,6 +138,7 @@ gmp
 gnupg
 gnuplot
 gnutls
+go
 gobject-introspection
 gpgme
 gpm
@@ -159,6 +161,8 @@ gstreamer0.10-ugly-plugins
 gtkmm
 gtkspell
 gtk-update-icon-cache
+gtypist
+guile
 gutenprint
 gzip
 harfbuzz
@@ -183,6 +187,7 @@ imagemagick
 imlib2
 indent
 inetutils
+inkscape
 inputproto
 intel-dri
 iotop
@@ -346,6 +351,7 @@ libsm
 libsndfile
 libsoup
 libspectre
+libspiro
 libssh2
 libstdc++5
 libtasn1
@@ -356,6 +362,7 @@ libtirpc
 libtool
 libtorrent
 libtxc_dxtn
+libunistring
 libusb-compat
 libusbx
 libutempter
@@ -426,6 +433,7 @@ m4
 make
 man-db
 man-pages
+markdown
 mcpp
 mdadm
 mediainfo
@@ -626,8 +634,10 @@ x264
 xbitmaps
 xcb-proto
 xcb-util
+xcb-util-cursor
 xcb-util-image
 xcb-util-keysyms
+xcb-util-renderutil
 xcb-util-wm
 xclip
 xdg-user-dirs

@@ -9,6 +9,7 @@ emacs-graphviz-dot-mode
 emacs-gtk2
 emacs-latex-math-preview
 emacs-make-regexp
+emacs-markdown-mode
 emacs-mediawiki-bzr
 emacs-multiple-cursors-git
 emacs-xclip
@@ -16,7 +17,6 @@ emacs-yasnippet-git
 foo2zjs
 foomatic-db-foo2zjs
 gtk2-pruned
-inkscape-pruned
 lib32-sdl_mixer
 lib32-smpeg
 mutt-sidebar
