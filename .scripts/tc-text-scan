@@ -1,10 +1,28 @@
 #!/bin/sh
 
-while read -r i; do
-    echo -n "# "
-    file "$i"
-    grep -m1 "\`" "$i"
-    grep -m1 "oe" "$i"
-done <<EOF
-$(find . -type f -size -50M -print)
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+    cat<<EOF
+Usage: ${1##*/} FOLDERS
+
+Check for files containing common mispelling, like "`" and "´" instead of "'",
+or "oe" instead of "œ".
+
 EOF
+fi
+
+if [ -z "$(command -v recode)" ]; then
+    echo "recode needed."
+    exit
+fi
+
+for i ; do
+    while IFS= read -r j; do
+        echo -n "# "
+        file "$j"
+        grep -m1 "\`" "$j"
+        grep -m1 "´"  "$j"
+        grep -m1 "oe" "$j"
+    done <<EOF
+$(find "$i" -type f -size -50M -print)
+EOF
+done
