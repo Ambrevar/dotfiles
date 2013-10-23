@@ -1,51 +1,36 @@
 #!/bin/sh
 
-if [ -z "$(command -v ffmpeg)" ]; then
-    echo "ffmpeg required."
-    exit
-fi
-
-_transcode ()
-{
-    ## Zsh compatibility. We need it otherwise word splitting of parameter like
-    ## TC_SAMPLE will not work.
-    STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
-    [ "$STATUS" = "off" ] && set -o shwordsplit
-
-    ffmpeg -i "$@" \
-        -c:v libx264 -preset slow -crf 20 \
-        -c:a libvorbis -b:a 192k -ac 2 \
-        -c:s copy \
-        -map 0 \
-        $TC_SAMPLE \
-        "${1%.*}-$(date '+%F-%H%M%S').mkv"
-
-    ## Restore Zsh previous options. This will not turn off shwordsplit if it
-    ## was on before calling the function.
-    [ "$STATUS" = "off" ] && set +o shwordsplit
-}
-
-
 _printhelp()
 {
     cat <<EOF
-Usage: ${1##*/} [-f] [FILES]
+Usage: ${1##*/} MODE
 
-Transcode FILES using custom FFmpeg command.  By default FFmpeg will only encode
-a sample for preview purpose. Use the '-f' flag to process the complete file.
-Edit this file to fit your needs and learn more about FFmpeg.
+This script was generated with tc-video-custom.
+
+It transcodes the embedded list of files using FFmpeg. MODE will specify what
+kind of output you want. Edit this file to fit your needs and learn more about
+FFmpeg.
+
+Modes:
+
+  -e:  Excerpt of 1 minute starting at 1 minute.
+  -f:  Full video.
 
 EOF
 }
 
-TC_SAMPLE="-ss 60 -t 360"
-while getopts ":hf" opt; do
+TC_SAMPLE=""
+OPT_PROCESS=false
+while getopts ":hef" opt; do
     case $opt in
         h)
             _printhelp "$0"
             exit 1 ;;
+        e)
+            TC_SAMPLE="-ss 60 -t 60"
+            OPT_PROCESS=true ;;
         f)
-            TC_SAMPLE="" ;;
+            OPT_PROCESS=true ;;
         ?)
             _printhelp "$0"
             exit 1 ;;
@@ -58,14 +43,48 @@ done
 
 shift $(($OPTIND - 1))
 
+if ! $OPT_PROCESS; then
+    _printhelp "$0"
+    exit
+fi
+
+if [ -z "$(command -v ffmpeg)" ]; then
+    echo "ffmpeg required."
+    exit
+fi
+
+_transcode ()
+{
+    ## Zsh compatibility. We need it otherwise word splitting of parameter will
+    ## not work.
+    STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
+    [ "$STATUS" = "off" ] && set -o shwordsplit
+
+    ## You can choose here to process all files at the same time. Useful if you
+    ## need to remux streams or to concatenate.
+    # ffmpeg -i ###FILELIST \
+    ffmpeg -i "$@" \
+        -c:v libx264 -preset slow -crf 20 \
+        -c:a libvorbis -b:a 192k -ac 2 \
+        -c:s copy \
+        -map 0 \
+        $SAMPLE \
+        "${1%.*}-$(date '+%F-%H%M%S').mkv" </dev/null
+
+    ## Restore Zsh previous options. This will not turn off shwordsplit if it
+    ## was on before calling the function.
+    [ "$STATUS" = "off" ] && set +o shwordsplit
+}
+
 ## Choose to process all files one after another.
-while read -r i; do
+while IFS= read -r i; do
     _transcode "$i"
 done<<FILELINES
 FILELINES
 
-## Or in one batch
-# _transcode ###FILELIST
+## Or all files at the same time. You ahve to change the ffmpeg input in the
+## function.
+# _transcode
 
 ################################################################################
 ## USE CASES
@@ -87,6 +106,10 @@ FILELINES
 ##
 ## Add a delay to audio (assuming stream 0 is video and stream 1 is audio)
 ##   -i "$1" -itsoffset 0.300 -i "$1" -map 0:0 -map 1:1
+##
+## Insert stream 3 from file2 between all non-audio streams and audio streams of
+## file1:
+##   -i "file1" -i "file2" -map -0:a map 1:3 -map 0:a
 ##
 ## Concatenate files. See
 ## https://trac.ffmpeg.org/wiki/How%20to%20concatenate%20(join,%20merge)%20media%20files

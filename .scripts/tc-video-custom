@@ -1,12 +1,14 @@
 #!/bin/sh
 
+OUTPUT_NAME="tc-video"
+
 _printhelp()
 {
     cat <<EOF
 Usage: ${1##*/} [FILES]
 
-Create a 'tc-video' script in current folder. The script provides a FFmpeg call
-command with some useful options and instructive help.
+Create a '$OUTPUT_NAME' script in current folder. The script provides a FFmpeg call
+to transcode FILES with some useful options and instructive help.
 
 FILES realpath will be included into the script.
 
@@ -15,8 +17,8 @@ This script is meant to be easily editable to fit the user needs.
 EOF
 }
 
-if [ "$1" = "-h" ]; then
-   _printhelp "$0"
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+    _printhelp "$0"
     exit
 fi
 
@@ -25,25 +27,17 @@ if [ -z "$(command -v realpath)" ]; then
     exit
 fi
 
-
-for i ; do
-    REAL="$(realpath "$i")"
-    FILELIST="${FILELIST:+$FILELIST }'$REAL'"
-done
-
 SCRIPT_PATH="${0%/*}"
 SCRIPT_NAME="${0##*/}"
-OUTPUT_NAME="tc-video"
+FILELIST=""
 if [ -f "$SCRIPT_PATH/.$SCRIPT_NAME.in" ]; then
     cp -i "$SCRIPT_PATH/.$SCRIPT_NAME.in" "$OUTPUT_NAME"
-    # echo "$FILELIST"
-    # echo "$FILELINES"
-    sed -i 's|###FILELIST|'"$FILELIST"'|' "$OUTPUT_NAME"
     for i ; do
         REAL="$(realpath "$i")"
-        sed -i "s|# FILELINES|# $REAL\n# FILELINES|" "$OUTPUT_NAME"
+        FILELIST="${FILELIST:+$FILELIST -i }'$REAL'"
+        sed -i "s|^FILELINES|$REAL\nFILELINES|" "$OUTPUT_NAME"
     done
-    sed -i "s|###FILELINES||" "$OUTPUT_NAME"
+    sed -i 's|###FILELIST|'"$FILELIST"'|' "$OUTPUT_NAME"
     chmod +x "$OUTPUT_NAME"
 else
     echo ".$SCRIPT_NAME.in not found!"
