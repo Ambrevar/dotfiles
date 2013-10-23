@@ -80,7 +80,6 @@ _fetch()
             http://*|https://*|ftp://*)
                 FILE="${URI##*/}"
 
-                ## TODO: add support for DLAGENT
                 msg2 "Downloading $FILE..."
                 wget $OPT_FORCE_WGET "$URI" -O "$FILE"
 
