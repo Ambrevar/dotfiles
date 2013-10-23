@@ -1,7 +1,6 @@
 #!/bin/sh
 
-## Wine FPS monitor
-if [ $# -lt 1 ]; then
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
     cat<<EOF
 Usage: ${0##*/} WIN32EXE PARAMS"
 
@@ -11,16 +10,17 @@ EOF
 fi
 
 if [ -z "$(command -v osd_cat)" ]; then
-    echo "You must have osd_cat."
+    echo "You need osd_cat."
     exit
 fi
 
-if [ -z "$(sed --version | grep "GNU")" ]; then
-    echo "You must have GNU sed."
-    exit
+## The unbuffered option is -u on GNU and OpenBSD, -l on others.
+OPT_UNBUF=-l
+if [ "$(uname)" = "Linux" ] || [ "$(uname)" = "OpenBSD" ]; then
+    OPT_UNBUF=-u
 fi
 
 WINEDEBUG=fps wine "$@" 2>&1 | tee /dev/stderr | \
-    sed -un '/^trace:fps:/{s/.* \([^ ]*\)fps/\1/;p}' | \
+    sed $OPT_UNBUF -n '/^trace:fps:/{s/.* \([^ ]*\)fps/\1/;p}' | \
     osd_cat -l1 -f  "-*-*-*-*-*-*-32-*-*-*-*-*-*-*" -O1 -c "yellow"
 
