@@ -2,9 +2,11 @@
 
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
     cat <<EOF
-Usage: ${0##*/} STRING FILES
+Usage: ${0##*/} STRING [FILES]
 
-Prepend STRING to FILES. STRING may not contain pipes ('|').
+Prepend STRING to FILES or stdin if unspecified. STRING may not contain pipes
+('|').
+
 EOF
     exit
 fi
@@ -12,4 +14,6 @@ fi
 VAR="$1"
 shift
 
-sed -ni '1{s|^|'$VAR'\n|;h};1!H;${x;p}' "$@"
+[ $# -eq 0 ] && OPT_INPLACE="" || OPT_INPLACE="-i"
+
+sed -n $OPT_INPLACE '1{s|^|'$VAR'\n|;h};1!H;${x;p}' "$@"
