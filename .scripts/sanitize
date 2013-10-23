@@ -2,7 +2,7 @@
 
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
     cat <<EOF
-Usage: ${0##*/} [FOLDER]
+Usage: ${0##*/} FOLDERS
 
 Set file/directory owner and permissions according to current umask for current
 used.
@@ -10,14 +10,13 @@ EOF
     exit
 fi
 
-WORKDIR="$PWD"
-if [ $# -eq 1 ]; then
-    WORKDIR="$1"
-fi
-
 FMASK=$(umask -S | sed 's/x//g')
 DMASK=$(umask -S)
+[ -z "$UID" ] && UID=$(id -u)
+[ -z "$GID" ] && GID=$(id -g)
 
-find "$WORKDIR" -exec chown -R ${UID}:${GID} {} \;
-find "$WORKDIR" -type d -exec chmod ${DMASK} {} \;
-find "$WORKDIR" -type f -exec chmod ${FMASK} {} \;
+for i ; do
+    find "$i" -exec chown -R ${UID}:${GID} {} \;
+    find "$i" -type d -exec chmod ${DMASK} {} \;
+    find "$i" -type f -exec chmod ${FMASK} {} \;
+done
