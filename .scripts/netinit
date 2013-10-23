@@ -1,8 +1,5 @@
 #!/usr/bin/env zsh
-################################################################################
-## Custom network initialization script.
-## 2013-05-03
-################################################################################
+
 ## Deps: wpa_supplicant, ccrypt (optional)
 
 ## We need to use wpa_supplicant's unencrypted config file. We store it in a
@@ -11,7 +8,7 @@
 ## accessible unencrypted. So we need to use an internal path with a syntax like
 ## <(...) which is not specified by POSIX. Ksh, bash and Zsh can handle it.
 
-## Use 'wpa_passphrase essid $PW >> /etc/wpa_supplicant.conf', where PW is a
+## Use 'wpa_passphrase ESSID $PW >> /etc/wpa_supplicant.conf', where PW is a
 ## variable containing the password.  You can set PW securely by using a shell
 ## built-in like 'read -s PW'.
 
