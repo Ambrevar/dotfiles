@@ -13,14 +13,14 @@ Synopsis.
 EOF
 }
 
-USE_OPT=0
-while getopts ":dh" opt; do
+OPT_TEST=false
+while getopts ":ht" opt; do
     case \$opt in
         h)
             _printhelp "\$0"
             exit 1 ;;
-        d)
-            USE_OPT=1 ;;
+        t)
+            OPT_TEST=true ;;
         ?)
             _printhelp "\$0"
             exit 1 ;;
