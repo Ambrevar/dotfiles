@@ -42,4 +42,5 @@ fi
 
 [ -z "$(command -v pacman)" ] && echo "You need pacman to run this script." && exit 1
 
+## We use "eval" to be compatible with non-POSIX wordglobbing (e.g. zsh).
 du -bch $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u) 2>/dev/null | eval ${OPTION_SORT}

@@ -137,7 +137,7 @@ _checksum ()
 
     ## Here we need to use a numeric index to browse arrays to make sure we get
     ## same index for both arrays.
-    ## WARNING: this will only work in bash because indexing start at 0.
+    ## WARNING: this will only work in bash because indexing starts at 0.
     for i in $(seq 0 $((${#source[@]} -1))); do
 
         eval test '${'${CHECKSUMMER}'s[$i]}' = 'SKIP'

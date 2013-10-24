@@ -38,6 +38,7 @@
 ## TODO: cover resolution check. Should be > 100x100. Above 1000x1000 should
 ## give a warning.
 ## TODO: extract cover from tags if checksum does not match any from current folder.
+## TODO: use "eval" more securely.
 
 _printhelp ()
 {

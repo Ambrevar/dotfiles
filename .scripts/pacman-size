@@ -21,8 +21,9 @@ EOF
 CMD="pacman -Si"
 SEP=": "
 TOTAL_SIZE=0
-SORT="sort -u -k3"
-SORT_SIZE="cat"
+OPT_SORTN="cat"
+# SORT="sort -u -k3"
+# SORT_SIZE="cat"
 
 while getopts ":hnq" opt; do
     case $opt in
@@ -30,7 +31,7 @@ while getopts ":hnq" opt; do
             _printhelp "$0"
             exit 1 ;;
         n)
-            SORT_SIZE="sort -n" ;;
+            OPT_SORTN="sort -n" ;;
         q)
             CMD="pacman -Qi" ;;
         ?)
@@ -58,8 +59,9 @@ else
 fi
 
 ## We use external variable for awk to fit current locales.
-RESULT="$(eval "${CMD} $@" 2>/dev/null | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
-'$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | eval "$SORT" | eval "$SORT_SIZE")"
+## We use "eval" to be compatible with non-POSIX wordglobbing (e.g. zsh).
+RESULT="$(${CMD} $@ 2>/dev/null | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
+'$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | sort -uk3 | eval $OPT_SORTN)"
 
 echo "$RESULT"
 
@@ -71,7 +73,7 @@ echo "$RESULT" | awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}'
 ## 'tee' and >(awk ...) to write the detailed list to standard output and to
 ## pass it to awk.
 
-# eval "${CMD} $@ 2>/dev/null" | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
+# ${CMD} $@ 2>/dev/null | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
 #     '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | sort -u -k3 \
 # | tee >(awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}')
 
