@@ -42,7 +42,7 @@ EOF
 }
 
 SAMPLE=""
-pVIDEO_FILTER=""
+VIDEO_FILTER=""
 VIDEO_PARAM="-c:v libx264 -preset slow -crf 20"
 AUDIO_PARAM=""
 AUDIO_CODEC="libvorbis"
@@ -160,11 +160,10 @@ _tc_transcode()
 
     if $OPT_CROP; then
         echo "Computing crop values... "
-        VIDEO_FILTER="-vf $(_cropvalue "$1")"
+        VIDEO_FILTER="-vf $(_cropvalue "$1") $VIDEO_FILTER"
     fi
 
-
-    ## Only set AUDIO_PARAM if not already set.
+    ## Only if AUDIO_PARAM not already set.
     if [ -z "$AUDIO_PARAM" ]; then
         ## WARNING: we mix down audio to 2 channels with '-ac 2'. This greatly
         ## reduce file size and avoid any confusion for playback, which is often
