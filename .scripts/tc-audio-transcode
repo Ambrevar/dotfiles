@@ -446,9 +446,9 @@ STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
 ## With the -map_metadata parameter we clear all metadata.
 
 ## WARNING: ffmpeg continues to read stdin once it has started, so it should not
-## be called from within a while<<EOF loop without redirecting stdin.
+## be called from within a while<<EOF loop without disabling stdin.
 echo ":: Processing..."
-ffmpeg $LOGLEVEL $OVERWRITE -i "$1" -vn -sn $OGG_PARAM \
+ffmpeg -nostdin $LOGLEVEL $OVERWRITE -i "$1" -vn -sn $OGG_PARAM \
     -map_metadata -1 \
     -metadata title="$OUTPUT_TITLE" \
     -metadata artist="$OUTPUT_ARTIST" \
@@ -457,7 +457,7 @@ ffmpeg $LOGLEVEL $OVERWRITE -i "$1" -vn -sn $OGG_PARAM \
     -metadata album="$OUTPUT_ALBUM" \
     -metadata album_artist="$OUTPUT_ARTIST" \
     -metadata genre="$OUTPUT_GENRE" \
-    "$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT" </dev/null
+    "$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT"
 echo ":: Process finished!"
 
 ## If we are overwriting inplace.
