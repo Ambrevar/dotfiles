@@ -62,20 +62,17 @@ else
     OUTFILE="${PWD##*/}-$(date +%F-%H%M%S).${ARCEXT}"
 fi
 
+REALPWD="$(realpath "$PWD")"
 for i; do
     REALPATH="$(realpath "$i")"
 
     ## Check if one of the arguments is current folder. We need to make sure the
     ## archive is not created in an input folder, otherwise it will include
     ## itself.
-    if [ "$REALPATH" = "$(realpath "$PWD")" ]; then
-        OUTPATH="$(realpath "$PWD/..")"
-        echo "Creating archive in [$OUTPATH]."
+    if [ "$REALPATH" = "$REALPWD" ]; then
+        OUTPATH="$(realpath "$REALPWD/..")"
+        break
     fi
-
-    DIRNAME="${REALPATH%/*}"
-    BASENAME="${REALPATH##*/}"
-    INPUTARGS="$INPUTARGS -C '$DIRNAME' '$BASENAME'"
 done
 
 
@@ -84,5 +81,12 @@ if [ ! -w "$OUTPATH" ]; then
     exit
 fi
 
-echo "tar $OPTIONS -$ARCOPT -cf '$OUTPATH/$OUTFILE' $INPUTARGS"
-eval "tar $OPTIONS -$ARCOPT -cf '$OUTPATH/$OUTFILE' $INPUTARGS"
+echo "==> [$OUTPATH/$OUTFILE]"
+for i; do
+    REALPATH="$(realpath "$i")"
+    # REALPATH="$i"
+    echo "${REALPATH}" >&2
+    echo "-C '${REALPATH%/*}'"
+    echo "${REALPATH##*/}"
+done | tar $OPTIONS -$ARCOPT -cf "$OUTPATH/$OUTFILE" -T -
+
