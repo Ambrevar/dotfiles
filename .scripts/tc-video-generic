@@ -8,8 +8,8 @@ _printhelp()
 Usage: ${1##*/} [OPTIONS] FILES|FOLDERS
 
 Transcode FILES or files found in FOLDERS to .mkv with x264 and ogg. Black
-stripes are *not* cropped by default since it may be sometimes
-inaccurate. Output files are the same as the original, with time appended.
+stripes are *not* cropped by default since it may be sometimes inaccurate. By
+default output filenames are the same as the original, with time appended.
 
 Options:
   -b:      Default bitrate for audio stream with unidentifiable bitrate. If 0,
@@ -27,7 +27,7 @@ Options:
   -t:      Remove all "title" metadata.
 
 User options are read from variable TC_VIDEO_OPT. This can be useful if you
-always use the same options.
+often use the same options.
 
 Examples:
 
@@ -101,8 +101,6 @@ while getopts ":b:cCfho:pPsS:t" opt; do
 done
 
 shift $(($OPTIND - 1))
-
-
 if [ $# -eq 0 ]; then
     _printhelp "$0"
     exit
@@ -162,7 +160,7 @@ _audiobitrate()
         '{if($2 || bitrate) {if($2) bitrate=$2; if(bitrate+0 > 500) bitrate=500; printf "-c:a:" $1 " " codec " -b:a:" $1 " " bitrate "k "} else printf "-c:a:" $1 " copy "} END {print ""}'
 }
 
-_tc_transcode()
+_transcode()
 {
     echo "==> [$1]"
     OUTPUT="${1%.*}-$(date '+%F-%H%M%S').mkv"
@@ -227,7 +225,7 @@ EOF
     [ "$STATUS" = "off" ] && set +o shwordsplit
 
     if $OPT_OVERWRITE; then
-        rm -f "$1"
+        rm "$1"
         mv -f "$OUTPUT" "${1%.*}.mkv"
     fi
     echo
@@ -241,7 +239,7 @@ for i in "$@"; do
         ## WARNING: ffmpeg continues to read stdin once it has started, so it should
         ## not be called from within a while<<EOF loop without disabling stdin.
         while IFS= read -r i; do
-            _tc_transcode "$j"
+            _transcode "$j"
             done<<EOF
 $(find "$i"  \( \
             -iname '*.mkv' -o \
@@ -255,7 +253,7 @@ EOF
 
     else
         ## Argument is a regular file.
-        _tc_transcode "$i"
+        _transcode "$i"
     fi
 
 done
