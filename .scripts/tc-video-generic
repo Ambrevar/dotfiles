@@ -238,7 +238,7 @@ for i in "$@"; do
 
         ## WARNING: ffmpeg continues to read stdin once it has started, so it should
         ## not be called from within a while<<EOF loop without disabling stdin.
-        while IFS= read -r i; do
+        while IFS= read -r j; do
             _transcode "$j"
             done<<EOF
 $(find "$i"  \( \
