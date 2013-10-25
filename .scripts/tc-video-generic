@@ -175,7 +175,7 @@ _transcode()
 
     if $OPT_CROP; then
         echo "Computing crop values... "
-        VIDEO_FILTER="-vf $(_cropvalue "$1") $VIDEO_FILTER"
+        VIDEO_FILTER="-vf $(_cropvalue "$1")"
         if $OPT_CROPPREVIEW; then
             echo "Generating preview... "
             _croppreview "$1"
