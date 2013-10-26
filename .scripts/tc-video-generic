@@ -242,13 +242,15 @@ for i in "$@"; do
             _transcode "$j"
             done<<EOF
 $(find "$i"  \( \
-            -iname '*.mkv' -o \
-            -iname '*.mp4' -o \
             -iname '*.avi' -o \
-            -iname '*.webm' -o \
             -iname '*.flv' -o \
-            -iname '*.wmv' -o \
-            -iname '*.mpg' \) )
+            -iname '*.mkv' -o \
+            -iname '*.mov' -o \
+            -iname '*.mp4' -o \
+            -iname '*.mpeg' -o \
+            -iname '*.mpg' -o \
+            -iname '*.webm' -o \
+            -iname '*.wmv' \) )
 EOF
 
     else
