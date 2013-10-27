@@ -48,7 +48,7 @@ if ! $OPT_PROCESS; then
     exit
 fi
 
-if [ -z "$(command -v ffmpeg)" ]; then
+if ! command -v ffmpeg >/dev/null; then
     echo "ffmpeg required."
     exit
 fi

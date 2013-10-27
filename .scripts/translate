@@ -84,7 +84,7 @@ _filter()
         return
     fi
 
-    if [ -n "$(command -v jshon)" ]; then
+    if command -v jshon >/dev/null; then
         ## Input may have empty fields, which is not normally allowed in
         ## json. Let's fix this.
         input="$(sed -e 's/,\+/,/g' -e 's/\[,\+/\[/g' -e 's/,\+\]/\]/g')"

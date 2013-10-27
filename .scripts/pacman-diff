@@ -47,7 +47,7 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-[ -z "$(command -v pacman)" ] && echo "You need pacman to run this script." && exit 1
+! command -v pacman >/dev/null && echo "You need pacman to run this script." && exit 1
 
 PKGLIST="$(mktemp)"
 FILE="$(mktemp)"

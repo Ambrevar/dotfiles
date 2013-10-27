@@ -14,7 +14,7 @@ if [ ! -f ~/.zshrc ]; then
     echo '~/.zshrc not found. Exiting.'
     exit
 fi
-if [ ! -f "$(command -v realpath)" ]; then
+if ! command -v realpath; then
     echo "'realpath' not found. Exiting."
     exit
 fi

@@ -4,13 +4,13 @@
 
 # Support: pacman 4.1
 
-if [ -z "$(command -v pacman)" ]; then
-    echo "You need to have the pacman package manager installed."
+if ! command -v pacman >/dev/null; then
+    echo "You need the pacman package manager."
     exit
 fi
 
-if [ -z "$(command -v makepkg)" ]; then
-    echo "You need to have makepkg (the pacman package builder) installed."
+if ! command -v makepkg >/dev/null; then
+    echo "You need makepkg (the pacman package builder)."
     exit
 fi
 

@@ -9,7 +9,7 @@ EOF
     exit
 fi
 
-if [ -z "$(command -v osd_cat)" ]; then
+if ! command -v osd_cat >/dev/null; then
     echo "You need osd_cat."
     exit
 fi

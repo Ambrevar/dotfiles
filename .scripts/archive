@@ -84,7 +84,6 @@ fi
 echo "==> [$OUTPATH/$OUTFILE]"
 for i; do
     REALPATH="$(realpath "$i")"
-    # REALPATH="$i"
     echo "${REALPATH}" >&2
     echo "-C '${REALPATH%/*}'"
     echo "${REALPATH##*/}"

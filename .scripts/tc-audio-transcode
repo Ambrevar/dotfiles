@@ -24,26 +24,34 @@
 ## -q9  320 kbit/s
 ## -q10 500 kbit/s
 
-## Artists:  we use same value for artist and album_artist.
-## Genres:   since this is not universal by nature, we do not put a genre in tags,
-##           except for special cases like Soundtrack.
-## Composer: not universal neither, we prefer ARTIST over COMPOSER, so COMPOSER
-##           will be empty.
-
-## This script is supposed to work on a per-album basis. Folders will not be
-## accepted as argument. This function will work best if all tracks of a folder
-## belong to the same album. There's is no way to handle covers reliably, so you
-## should remove the undesired covers from the working folder.
-
 ## TODO: cover resolution check. Should be > 100x100. Above 1000x1000 should
 ## give a warning.
 ## TODO: extract cover from tags if checksum does not match any from current folder.
-## TODO: use "eval" more securely.
+## TODO: use "eval" more securely. eval "$ref"'=$value'
 
 _printhelp ()
 {
     cat <<EOF | less
 Usage: ${1##*/} [OPTIONS] FILE
+
+Encode FILE in OGG with proper tags thanks to a very efficient titlecase
+checker.  Output is written to user library with subfolders created according to
+tags. It is smart enough to handle empty tags. Covers are extracted from tags
+and found in input folder. Identical covers are only processed once.
+
+Tags are proccessed according to the following rules (among others):
+
+* Artist: we use same value for artist and album_artist.
+
+* Genre: since this is not universal by nature, we do not put a genre in tags,
+  except for special cases like Soundtrack.
+
+* Composer: not universal neither, we prefer ARTIST over COMPOSER, so COMPOSER
+  will be empty.
+
+Encoding quality is set to be the same as the source. OGG cannot go beyond 500,
+so lossless formats like FLAC and WavPack will suffer from a quality loss
+(should you mind).
 
 Options:
   -c : capital case (only first letter in upper case)
@@ -169,12 +177,12 @@ if [ $# -eq 0 ]; then
     exit
 fi
 
-if [ -z "$(command -v ffmpeg)" ]; then
+if ! command -v ffmpeg >/dev/null; then
     echo "ffmpeg required for transcoding."
     exit
 fi
 
-if [ -z "$(command -v realpath)" ]; then
+if ! command -v realpath >/dev/null; then
     echo "realpath required to get input file folder."
     exit
 fi
@@ -193,7 +201,7 @@ fi
 
 ##================================================================================
 ## Get metadata.
-STREAM=$(ffmpeg -i "$1" 2>&1)
+STREAM=$(ffmpeg -nostdin -i "$1" 2>&1)
 
 if [ -z "$(echo $STREAM | grep "Stream")" ]; then
     echo "ERROR: Non-audio file [$1]."
@@ -411,6 +419,16 @@ fi
 
 ## COVER. We copy cover only if it does not already exist. Only files found in
 ## the folder where the music is located will be taken into account.
+
+## Dump embedded covers first
+# $(ffmpeg -i "$1" 2>&1 | awk '/^ +Stream.*Video/{print id++}')
+for i in $(seq 0 $(($(echo "$STREAM" | grep -c Video)-1))); do
+    TEMP_COVER="$(mktemp "$INPUT_FOLDER/cover-XXXXXX.jpg")"
+    COVER_LIST="$TEMP_COVER
+$COVER_LIST"
+    ffmpeg -nostdin -v quiet -y -i "$1" -an -sn -c:v copy -map 0:v:$i "$TEMP_COVER"
+done
+
 while IFS= read -r i; do
     [ -z "$i" ] && break
     OUTPUT_COVER="$OUTPUT_FOLDER/${OUTPUT_ALBUM:+$OUTPUT_ALBUM - }Cover"
@@ -437,10 +455,16 @@ done <<EOF
 $(find "$INPUT_FOLDER" -maxdepth 1  \( -iname '*.png' -o -iname '*.jpg' \) )
 EOF
 
+
 ## Zsh compatibility. We need it otherwise word splitting of parameter like
 ## OGG_PARAM will not work.
 STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
 [ "$STATUS" = "off" ] && set -o shwordsplit
+
+## We do not want to bloat the input folder with folder, so we remove it
+## silently. TODO: remove silently.
+# echo $COVER_LIST
+# rm -iv $COVER_LIST
 
 ## TAG/RECODE
 ## With the -map_metadata parameter we clear all metadata.

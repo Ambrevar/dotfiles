@@ -56,7 +56,7 @@ if [ $# -eq 0 ]; then
 fi
 
 
-if [ -z "$(command -v realpath)" ]; then
+if ! command -v realpath >/dev/null; then
     echo "You need 'realpath'"
     exit
 fi
@@ -81,11 +81,11 @@ for i ; do
     cat<<"EOF" > "$UBUILD"
 #!/bin/bash
 
-if [ -z "$(command -v realpath)" ];then
+if ! command -v realpath >/dev/null; then
     echo "You need 'realpath'."
     exit
 fi
-if [ -z "$(command -v wget)" ];then
+if ! command -v wget >/dev/null; then
     echo "You need 'wget'."
     exit
 fi

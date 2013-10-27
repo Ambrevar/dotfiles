@@ -98,15 +98,15 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-if [ -z "$(command -v makepkg)"  ]; then
+if ! command -v makepkg >/dev/null; then
     echo "You need makepkg to run this script."
     exit 1
 fi
 
 HAS_ABS=false
 HAS_YAOURT=false
-[ -n "$(command -v abs)" ] && HAS_ABS=true
-[ -n "$(command -v yaourt)" ] && HAS_YAOURT=true
+command -v abs >/dev/nulll && HAS_ABS=true
+command -v yaourt >/dev/nulll && HAS_YAOURT=true
 
 if ! $HAS_ABS && ! $HAS_YAOURT; then
     echo "Please install either an ABS-tree or yaourt."

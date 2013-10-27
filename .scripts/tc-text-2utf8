@@ -11,7 +11,7 @@ WARNING: It will fail for encodings other the one explicitly supported below.
 EOF
 fi
 
-if [ -z "$(command -v recode)" ]; then
+if ! command -v recode >/dev/null; then
     echo "recode needed."
     exit
 fi

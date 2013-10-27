@@ -31,7 +31,7 @@ Options:
 EOF
 }
 
-if [ -n "$(command -v lscpu)" ]; then
+if command -v lscpu >/dev/null; then
     ## lscpu is a Linux util also available on *BSD.
     CPUNO=$(lscpu  | awk '/^CPU\(s\)/ {print $2;exit}')
 else
@@ -63,7 +63,7 @@ fi
 ROOT="$1"
 shift
 
-if [ -z "$(command -v ffmpeg)" ]; then
+if ! command -v ffmpeg >/dev/null; then
     echo "ffmpeg required."
     exit
 fi

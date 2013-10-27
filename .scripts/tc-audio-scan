@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ -z "$(command -v mediainfo)" ]; then
+if ! command -v mediainfo >/dev/null; then
     echo "mediainfo required."
     exit
 fi

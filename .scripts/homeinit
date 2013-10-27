@@ -33,7 +33,7 @@ if [ -d "$SOURCEDIR/contacts" ]; then
     echo
 fi
 
-if [ -n "$(command -v mutt)" ]; then
+if command -v mutt >/dev/null; then
     echo "==> Mutt"
     [ -d "$SOURCEDIR" ] && ln -snf "$SOURCEDIR/mails" "$HOME/.mutt.d"
     mkdir -p "$HOME/.cache/mutt/hcache"
@@ -46,7 +46,7 @@ if [ -d "$SOURCEDIR/todo" ]; then
     echo
 fi
 
-if [ -n "$(command -v rtorrent)" ]; then
+if command -v rtorrent >/dev/null; then
     echo "==> rtorrent"
     ## We need the evaluation of the result, otherwise the variables will not
     ## get expanded, should it be '~' or "$HOME".
@@ -55,7 +55,7 @@ if [ -n "$(command -v rtorrent)" ]; then
 fi
 
 ## Luakit -- Install the adblock modules
-if [ -n "$(command -v luakit)" ]; then
+if command -v luakit >/dev/null; then
     echo "==> Luakit"
     git clone https://github.com/Plaque-fcc/luakit-adblock/ "$HOME/luakit-adblock"
     cp -fv ~/luakit-adblock/*.lua "$XDG_CONFIG_HOME/luakit"
@@ -72,7 +72,7 @@ if [ -n "$(command -v luakit)" ]; then
 fi
 
 ## dwb -- Install extensions.
-if [ -n "$(command -v dwb)" ] && [ ! -f "$XDG_DATA_HOME/dwb/extensions/adblock_subscriptions" ] ; then
+if command -v dwb >/dev/null && [ ! -f "$XDG_DATA_HOME/dwb/extensions/adblock_subscriptions" ] ; then
     echo "==> dwb"
     dwbem -Ni adblock_subscriptions
     dwbem -Ni navtools
@@ -97,7 +97,7 @@ if [ -d "$SOURCEDIR" ]; then
 fi
 
 ## News
-if [ -n "$(command -v newsbeuter)" ]; then
+if command -v newsbeuter >/dev/null; then
     echo "==> Newsbeuter"
     mkdir -p "$XDG_DATA_HOME/newsbeuter"
     [ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"

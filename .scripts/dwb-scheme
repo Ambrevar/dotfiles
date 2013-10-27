@@ -3,12 +3,15 @@
 ## TODO: 'urxvt -e' does not seem to work with ftp clients.
 TERMCMD=xterm
 
-[ -z "$(command -v xclip)" ] && exit
-[ -z "$(command -v xdg-open)" ] && exit
-[ -z "$(command -v $TERMCMD)" ] && exit
-
 case ${DWB_SCHEME} in
-    mailto) echo "${DWB_URI}" | sed -e 's/mailto://' -e 's/?/ /' | xclip -i ;;
-    ftp) $TERMCMD -e "lftp ${DWB_URI}";;
-    *) xdg-open "${DWB_URI}"
+    mailto)
+        ! command -v xclip >/dev/null && exit
+        echo "${DWB_URI}" | sed -e 's/mailto://' -e 's/?/ /' | xclip -i ;;
+    ftp)
+        ! command -v $TERMCMD >/dev/null && exit
+        ! command -v lftp >/dev/null && exit
+        $TERMCMD -e "lftp ${DWB_URI}";;
+    *)
+        ! command -v xdg-open >/dev/null && exit
+        xdg-open "${DWB_URI}";;
 esac

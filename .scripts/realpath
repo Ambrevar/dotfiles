@@ -1,10 +1,10 @@
 #!/bin/sh
 ## This is a compatibility wrapper for 'realpath'.
 
-if [ -n "$(command -v greadlink)" ]; then
+if command -v greadlink >/dev/null; then
     ## On BSD systems, we might have greadlink
     greadlink -f "$@"
-elif [ -n "$(command -v readlink)" ] && [ "$(uname)" = "Linux" ]; then
+elif command -v readlink >/dev/null && [ "$(uname)" = "Linux" ]; then
     readlink -f "$@"
 else
     ## Dirty fallback

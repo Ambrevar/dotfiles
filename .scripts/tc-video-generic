@@ -108,7 +108,7 @@ if [ $# -eq 0 ]; then
     exit
 fi
 
-if [ -z "$(command -v ffmpeg)" ]; then
+if ! command -v ffmpeg >/dev/null; then
     echo "ffmpeg required."
     exit
 fi
@@ -154,7 +154,7 @@ _audiobitrate()
     ## default value.
 
     ## AWK note: in "(bitrate+0 > 500)", the +0 is required to make sure bitrate is numeric.
-    if [ -n "$(command -v mediainfo)" ]; then
+    if command -v mediainfo >/dev/null; then
         mediainfo "$1" | awk 'BEGIN {id=0} /^Audio/ { getline; while(getline && ! index($0,"Bit rate  ")); if($4) res=$4; else res=0; print id, res; id++}'
     else
         ffmpeg -nostdin -i "$1" 2>&1 | awk 'BEGIN {id=0} /^ *Stream.*Audio/ {match($0, / [^ ]+ kb\/s/); res=substr($0, RSTART+1, RLENGTH-6); print id, res; id++}'

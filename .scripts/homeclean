@@ -66,8 +66,8 @@ fi
 ## Clean trash if possible.
 echo
 echo "==> Emptying trash."
-if [ -z "$(command -v trash-empty)" ]; then
-    echo ":: 'trash-empty' not installed, you have to clean trash manually."
+if ! command -v trash-empty >/dev/null; then
+    echo ":: 'trash-empty' not installed, you have to clean other drives manually."
     rm -rvf "$HOME/.local/share/Trash"
 else
     trash-empty

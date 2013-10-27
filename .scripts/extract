@@ -55,7 +55,7 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-[ -n "$(command -v atool)" ] && echo "You should use atool instead." && echo
+command -v atool >/dev/null && echo "You should use atool instead." && echo
 
 _extract()
 {
