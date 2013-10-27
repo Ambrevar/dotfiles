@@ -24,9 +24,6 @@
 ## -q9  320 kbit/s
 ## -q10 500 kbit/s
 
-## TODO: cover resolution check. Should be > 100x100. Above 1000x1000 should
-## give a warning.
-## TODO: extract cover from tags if checksum does not match any from current folder.
 ## TODO: use "eval" more securely. eval "$ref"'=$value'
 
 _printhelp ()
@@ -403,12 +400,14 @@ EOF
 cat <<EOF
 :: OUTPUT $OUTPUT_MSG
 [$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT]
+
 EOF
 
 $PREVIEW && exit
 
 ##==============================================================================
 ## RUN PROCESS
+echo ":: Processing..."
 
 ## Make sure directory exists.
 mkdir -p "$OUTPUT_FOLDER"
@@ -417,40 +416,63 @@ if [ $? -ne 0 ]; then
     exit
 fi
 
-## COVER. We copy cover only if it does not already exist. Only files found in
-## the folder where the music is located will be taken into account.
+## COVER. We copy the covers only if they do not already exist. All covers
+## embedded in tags will be extracted. Only files found in the folder where the
+## music is located will be taken into account, subfolders will be discarded.
+COVER_LIMIT=100
+_cover()
+{
+    [ ! -f "$1" ] && return
+    echo -n "$1 -> "
 
-## Dump embedded covers first
-# $(ffmpeg -i "$1" 2>&1 | awk '/^ +Stream.*Video/{print id++}')
+    OUTPUT_COVER="$OUTPUT_FOLDER/${OUTPUT_ALBUM:+$OUTPUT_ALBUM - }Cover"
+    OUTPUT_COVERFILE="$OUTPUT_COVER.${1##*.}"
+    COVER_COUNTER=1
+
+    ## Different cover with same name is in target folder. We append a number.
+    ## If a different cover with the same name already exist, we append a number
+    ## and check again. If it is the same cover, we skip it.
+    while [ -e "$OUTPUT_COVERFILE" ]; do
+        if [ "$(sha1sum "$OUTPUT_COVERFILE" | cut -f1 -d' ')" = "$(sha1sum "$1" | cut -f1 -d' ')" ]; then
+            echo "Skipping"
+            return
+        else
+            OUTPUT_COVERFILE="${OUTPUT_COVER} $COVER_COUNTER.${1##*.}"
+            COVER_COUNTER=$(($COVER_COUNTER+1))
+        fi
+    done
+
+    echo -n "$OUTPUT_COVERFILE"
+    ## Output warning if cover is too small.
+    if command -v mediainfo >/dev/null; then
+        BUF="$(mediainfo "$1")"
+        COVER_WIDTH=$(echo "$BUF" | awk '/^Width/ {print $3}')
+        COVER_HEIGHT=$(echo "$BUF" | awk '/^Height/ {print $3}')
+
+        if [ -z "$COVER_WIDTH" ] || [ $COVER_WIDTH -lt $COVER_LIMIT ] || \
+            [ -z "$COVER_HEIGHT" ] || [ $COVER_HEIGHT -lt $COVER_LIMIT ]; then
+            echo -n " $(tput setf 4)$(tput bold)(Warning: bad quality cover!)$(tput sgr0)"
+        fi
+    fi
+
+    cp -n "$1" "$OUTPUT_COVERFILE"
+    echo
+    echo
+}
+
+## Embedded covers.
 for i in $(seq 0 $(($(echo "$STREAM" | grep -c Video)-1))); do
     TEMP_COVER="$(mktemp "$INPUT_FOLDER/cover-XXXXXX.jpg")"
-    COVER_LIST="$TEMP_COVER
-$COVER_LIST"
     ffmpeg -nostdin -v quiet -y -i "$1" -an -sn -c:v copy -map 0:v:$i "$TEMP_COVER"
+
+    _cover "$TEMP_COVER"
+
+    ## We do not want to bloat the input folder with folder, so we remove it.
+    rm "$TEMP_COVER"
 done
 
 while IFS= read -r i; do
-    [ -z "$i" ] && break
-    OUTPUT_COVER="$OUTPUT_FOLDER/${OUTPUT_ALBUM:+$OUTPUT_ALBUM - }Cover"
-    OUTPUT_COVERFILE="$OUTPUT_COVER.${i##*.}"
-    COVER_COUNTER=1
-
-    ## Same cover is already in target folder.
-    if [ -e "$OUTPUT_COVERFILE" ] && \
-        [ "$(sha1sum "$OUTPUT_COVERFILE" | cut -f1 -d' ')" = "$(sha1sum "$i" | cut -f1 -d' ')" ]; then
-        continue
-    fi
-
-    ## Different cover with same name is in target folder. We append a number.
-    while [ -e "$OUTPUT_COVERFILE" ] && \
-        [ ! "$(sha1sum "$OUTPUT_COVERFILE" | cut -f1 -d' ')" = "$(sha1sum "$i" | cut -f1 -d' ')" ]; do
-        OUTPUT_COVERFILE="${OUTPUT_COVER} $COVER_COUNTER.${i##*.}"
-        COVER_COUNTER=$(($COVER_COUNTER+1))
-    done
-
-    echo ":: COVER [$i] from $INPUT_FOLDER"
-    cp -nv "$i" "$OUTPUT_COVERFILE"
-    echo
+    _cover "$i"
 done <<EOF
 $(find "$INPUT_FOLDER" -maxdepth 1  \( -iname '*.png' -o -iname '*.jpg' \) )
 EOF
@@ -461,17 +483,10 @@ EOF
 STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
 [ "$STATUS" = "off" ] && set -o shwordsplit
 
-## We do not want to bloat the input folder with folder, so we remove it
-## silently. TODO: remove silently.
-# echo $COVER_LIST
-# rm -iv $COVER_LIST
-
 ## TAG/RECODE
 ## With the -map_metadata parameter we clear all metadata.
-
 ## WARNING: ffmpeg continues to read stdin once it has started, so it should not
 ## be called from within a while<<EOF loop without disabling stdin.
-echo ":: Processing..."
 ffmpeg -nostdin $LOGLEVEL $OVERWRITE -i "$1" -vn -sn $OGG_PARAM \
     -map_metadata -1 \
     -metadata title="$OUTPUT_TITLE" \
@@ -482,7 +497,6 @@ ffmpeg -nostdin $LOGLEVEL $OVERWRITE -i "$1" -vn -sn $OGG_PARAM \
     -metadata album_artist="$OUTPUT_ARTIST" \
     -metadata genre="$OUTPUT_GENRE" \
     "$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT"
-echo ":: Process finished!"
 
 ## If we are overwriting inplace.
 if [ -n "$OUTPUT_FILE_ORIGINAL" ]; then
@@ -493,3 +507,6 @@ echo
 ## Restore Zsh previous options. This will not turn off shwordsplit if it
 ## was on before calling the function.
 [ "$STATUS" = "off" ] && set +o shwordsplit
+
+echo ":: Process finished!"
+
