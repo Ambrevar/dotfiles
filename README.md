@@ -236,6 +236,18 @@ Emacs
 
 * xclip mode will sometimes prevent yanking from working properly.
 
+Scripts
+-------
+
+* All scripts take a strong point at being POSIX. However, there is not POSIX
+  way (at least to my knowledge) to execute a shell function on the result of a
+  'find'. One ugly way would be to execute 'sh -c' and write the code as
+  argument, which is really unmaintainable. Another way is to do the same but
+  to fetch the code into a variable, which could be done from another file. This
+  is rather ugly and expansion is hard to control.
+  For now we assume no input file has newline, which is quite a strong
+  assumption and not safe at all.
+
 URxvt
 -----
 
