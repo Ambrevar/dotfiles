@@ -13,7 +13,7 @@
     (fill-region (region-beginning) (region-end) nil)))
 
 (defun sort-lines-unique ()
-"Remove duplicate lines using shell command `sort -u'"
+  "Remove duplicate lines using shell command `sort -u'"
   (interactive)
   (shell-command-on-region (point) (mark) "sort -u" (buffer-name) t))
 
@@ -248,3 +248,73 @@ beginning."
             (forward-word (prefix-numeric-value arg))
             (point))
           nil t))))
+
+(setq translate-lang-input "")
+(setq translate-lang-output "en")
+(setq translate-lang-p nil)
+(defun translate-set-language ()
+  "Set input/output languages for current buffer. Leave input
+empty for auto-detect. Empty output defaults to English."
+  (interactive)
+  (set (make-local-variable 'translate-lang-input)
+       (read-from-minibuffer "Input language: "))
+  (let ((out (read-from-minibuffer "Output language: ")))
+    (set (make-local-variable 'translate-lang-output)
+         (if (string-match "^ *$" out) "en" out))))
+
+(defun translate ()
+  "Replace current region with its translation."
+  (interactive)
+  (unless translate-lang-p
+    (translate-set-language)
+    (setq translate-lang-p t))
+  (shell-command-on-region
+   (point) (mark)
+   (concat "translate "
+           (unless (string= translate-lang-input "")
+             (concat "-i " translate-lang-input))
+           " "  translate-lang-output) nil t))
+
+(defun translate-line-by-line ()
+  "Translate lines in region or current line if there is no
+region. Output result at the end after an ' = ' separtor."
+  (interactive)
+  (unless translate-lang-p
+    (translate-set-language)
+    (setq translate-lang-p t))
+
+  (let ((line)
+        (cmd (concat "translate "
+                     (unless (string= translate-lang-input "")
+                       (concat "-i " translate-lang-input))
+                     " "  translate-lang-output))
+        (beg (line-number-at-pos (point)))
+        (end (line-number-at-pos (if mark-active (mark) (point)))))
+
+    ;; Mark is assumed to specify the end. If it not not the case, we switch
+    ;; the values.
+    (when (> beg end)
+      (setq beg (line-number-at-pos (mark)))
+      (setq end (line-number-at-pos (point))))
+
+    (save-excursion
+      ;; forward-line will remain on the same line if EOF has been reached. Need
+      ;; to check for it.
+      (while (<= beg end)
+        (goto-line beg)
+        (setq line (buffer-substring-no-properties
+                    (line-beginning-position) (line-end-position)))
+        (unless (string-match "^ *$" line)
+          (end-of-line)
+          (insert " = " (shell-command-to-string
+                         (concat cmd " '" line "'")))
+          ;; Shell commands usually outputs an EOL. We should remove it.
+          (delete-char -1))
+        (setq beg (1+ beg))))))
+
+(defun pos-at-line (arg)
+  "Return the position at beginning of line."
+  (save-excursion
+    (goto-line arg)
+    (beginning-of-line)
+    (point)))
