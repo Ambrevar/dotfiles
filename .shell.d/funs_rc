@@ -15,6 +15,7 @@ man()
     # so = status bar
     # us = italic (arguments, files)
 	env \
+		MANWIDTH=$(tput cols) \
 		LESS_TERMCAP_mb=$(printf "\e[1;31m") \
 		LESS_TERMCAP_md=$(printf "\e[0;36m") \
 		LESS_TERMCAP_me=$(printf "\e[0m") \
