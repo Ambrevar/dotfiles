@@ -12,11 +12,11 @@ All OPTIONS are passed to tc-audio-transcode.  For more details see
 
   tc-audio-transcode -h
 
-This script has the ability to run multiple processes. The number or processes
+This script has the ability to run multiple processes. The number of processes
 defaults to the number of online cores if 'lscpu' is found, or to 1
 otherwise. The number of parallel processes is bounded by the number of input
 files. Outputting from several processes at the same time to the standard output
-is not convenient, therefore when more than 1 process is started, the output is
+is not convenient, therefore when more than 1 process are started, the output is
 disabled (except for errors).
 
 If you still want the output, you need to restrict the number of processes to

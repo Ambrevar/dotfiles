@@ -225,11 +225,11 @@ if $SKIP &&[ -z "$INPUT_EXT" ]; then
     exit
 fi
 
-## This function greps for one match only, so if several metadata are present,
-## this may not be the desired values.
+## WARNING: This function greps for one match only, so if several metadata are
+## present, this may not be the desired values.
 _metadata_filter()
 {
-    echo "$METADATA" | grep -im1 "\<$1\>" | sed 's/[^:]* : //g'
+    echo "$METADATA" | grep -im1 "^ *$1 *:" | sed 's/[^:]* : //g'
 }
 
 INPUT_TITLE=$(_metadata_filter "title")
@@ -398,7 +398,7 @@ aprint <<EOF
 EOF
 
 cat <<EOF
-:: OUTPUT $OUTPUT_MSG
+:: DESTINATION $OUTPUT_MSG
 [$OUTPUT_FOLDER/$OUTPUT_FILE.$OUTPUT_EXT]
 
 EOF
@@ -461,13 +461,16 @@ _cover()
 }
 
 ## Embedded covers.
-for i in $(seq 0 $(($(echo "$STREAM" | grep -c Video)-1))); do
-    TEMP_COVER="$(mktemp "$INPUT_FOLDER/cover-XXXXXX.jpg")"
-    ffmpeg -nostdin -v quiet -y -i "$1" -an -sn -c:v copy -map 0:v:$i "$TEMP_COVER"
+for i in $(seq 0 $(($(echo "$STREAM" | grep -c '^ *Stream.*Video')-1))); do
+    COVER_EXT="$(echo "$STREAM" | awk '/^ *Stream.*Video/ {gsub(/,/, "", $4);print $4}')"
+    [ -z "$COVER_EXT" ] && continue
+    [ "$COVER_EXT" = "mjpeg" ] && COVER_EXT="jpg"
 
+    TEMP_COVER="$(mktemp "/tmp/cover-XXXXXX.$COVER_EXT")"
+    ffmpeg -nostdin -v quiet -y -i "$1" -an -sn -c:v copy -map 0:v:$i "$TEMP_COVER"
     _cover "$TEMP_COVER"
 
-    ## We do not want to bloat the input folder with folder, so we remove it.
+    ## We do not want to bloat the temp folder with covers, so we remove it.
     rm "$TEMP_COVER"
 done
 
