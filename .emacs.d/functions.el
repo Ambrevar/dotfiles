@@ -267,7 +267,7 @@ empty for auto-detect. Empty output defaults to English."
   (interactive)
   (unless translate-lang-p
     (translate-set-language)
-    (setq translate-lang-p t))
+    (set (make-local-variable 'translate-lang-p) t))
   (shell-command-on-region
    (point) (mark)
    (concat "translate "
@@ -281,7 +281,7 @@ region. Output result at the end after an ' = ' separtor."
   (interactive)
   (unless translate-lang-p
     (translate-set-language)
-    (setq translate-lang-p t))
+    (set (make-local-variable 'translate-lang-p) t))
 
   (let ((line)
         (cmd (concat "translate "
