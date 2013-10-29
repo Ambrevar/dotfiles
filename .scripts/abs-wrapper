@@ -9,6 +9,8 @@ _printhelp ()
     cat <<EOF
 Usage: ${1##*/} [OPTIONS] PACKAGES
 
+WARNING: development version. Not reliable for AUR-dependency resolution.
+
 This script can perform multiple operations:
   1. Fetch PKGBUILD.
   2. Fetch source code.
@@ -105,8 +107,8 @@ fi
 
 HAS_ABS=false
 HAS_YAOURT=false
-command -v abs >/dev/nulll && HAS_ABS=true
-command -v yaourt >/dev/nulll && HAS_YAOURT=true
+command -v abs >/dev/null && HAS_ABS=true
+command -v yaourt >/dev/null && HAS_YAOURT=true
 
 if ! $HAS_ABS && ! $HAS_YAOURT; then
     echo "Please install either an ABS-tree or yaourt."

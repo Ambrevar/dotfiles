@@ -10,12 +10,16 @@
 ## Colored man pager.
 man()
 {
+    # Justify man pager to current window size.
+    BUF=$(tput cols)
+    [ $BUF -gt $MANWIDTH ] && BUF=$MANWIDTH
+
     # mb = ?
     # md = bold (titles, commands)
     # so = status bar
     # us = italic (arguments, files)
 	env \
-		MANWIDTH=$(tput cols) \
+		MANWIDTH=$BUF \
 		LESS_TERMCAP_mb=$(printf "\e[1;31m") \
 		LESS_TERMCAP_md=$(printf "\e[0;36m") \
 		LESS_TERMCAP_me=$(printf "\e[0m") \
