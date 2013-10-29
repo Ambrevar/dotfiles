@@ -360,6 +360,7 @@ Noteworthy apps
 * openshot
 * openssh
 * p7zip
+* parallel
 * pari
 * parted
 * patch

@@ -1,7 +1,5 @@
 aspell-sv
 ccan-git
-dropbox
-dropbox-cli
 dwb-git
 emacs-bison-mode
 emacs-flex-mode
@@ -16,9 +14,12 @@ emacs-xclip
 emacs-yasnippet-git
 foo2zjs
 foomatic-db-foo2zjs
+gmp-ecm
+google-talkplugin
 gtk2-pruned
 lib32-sdl_mixer
 lib32-smpeg
+msieve
 mutt-sidebar
 package-query
 pkgtools

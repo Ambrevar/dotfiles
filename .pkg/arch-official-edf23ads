@@ -108,7 +108,6 @@ fuseiso
 gawk
 gc
 gcc-fortran
-gcc-go
 gcc-libs-multilib
 gcc-multilib
 gcolor2
@@ -138,7 +137,6 @@ gmp
 gnupg
 gnuplot
 gnutls
-go
 gobject-introspection
 gpgme
 gpm
@@ -414,6 +412,7 @@ llvm-libs
 lm_sensors
 logrotate
 lrzip
+lsb-release
 lshw
 lsof
 ltrace

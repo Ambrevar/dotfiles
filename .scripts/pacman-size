@@ -55,12 +55,17 @@ fi
 if [ -f "${0%/*}/.pacman-init" ];then
     . "${0%/*}/.pacman-init"
 else
-    echo "Missing init file" && exit 1
+    echo "Missing init file" >&2 && exit 1
+fi
+
+if [ $(pacman -Qq "$@" 2>/dev/null | wc -l) -eq 0 ]; then
+    echo "No valid package given." >&2
+    exit
 fi
 
 ## We use external variable for awk to fit current locales.
 ## We use "eval" to be compatible with non-POSIX wordsplitting (e.g. zsh).
-RESULT="$(${CMD} $@ 2>/dev/null | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
+RESULT="$(${CMD} $@ | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
 '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | sort -uk3 | eval $OPT_SORTN)"
 
 echo "$RESULT"
