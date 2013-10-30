@@ -1,0 +1,6 @@
+# name: if command -v ... 
+# key: ifcmd
+# --
+if command -v $1 >/dev/null; then
+    $0
+fi
