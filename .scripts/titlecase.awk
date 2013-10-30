@@ -1,4 +1,4 @@
-#!/bin/gawk -f
+#!/usr/env/gawk -f
 ## This script is inspired by
 ##   http://www.pement.org/awk/titlecase.awk.txt
 ##
