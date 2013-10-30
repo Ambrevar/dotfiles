@@ -253,7 +253,9 @@ properly escaped with double-quotes in case it has spaces."
      (local-unset-key key))
    (set (make-local-variable 'compilation-scroll-output) t)
    (set (make-local-variable 'compilation-hide-window) t)
-   (set (make-local-variable 'use-hard-newlines) t)
+   (set (make-local-variable 'paragraph-start) "
+")
+   ;; (set (make-local-variable 'use-hard-newlines) t)
    (local-set-key (kbd "<f9>") 'tex-pdf-view)
    (tex-set-compiler)))
 

@@ -213,8 +213,9 @@
 (setq org-M-RET-may-split-line '((default)))
 (add-hook
  'org-mode-hook
- (lambda () (interactive)
+ (lambda ()
    (setq org-agenda-files '("~/todo.org"))
+   (auto-fill-mode -1)
    (setq org-enforce-todo-dependencies t)))
 ;; Set PDF association in Org-mode (was Evince by default).
 (eval-after-load "org"
@@ -231,7 +232,7 @@
 ;; Change GUD many-windows layout.
 (add-hook
  'gud-mode-hook
- (lambda () (interactive)
+ (lambda ()
    (defun gdb-setup-windows ()
      "Layout the window pattern for `gdb-many-windows'."
      (setq gdb-source-window (selected-window))
