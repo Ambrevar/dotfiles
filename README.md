@@ -144,8 +144,8 @@ tc-audio-*: smart audio transcoding implemented as shell functions. It will
 
 tc-video-*: batch conversion of any kind of videos. Using FFmpeg.
 
-translate: a tranlation frontend to Internet services. Default to stdin and
-stdout (the Unix way), thus usable from your favorite text editor. 
+translate: a translation frontend to Internet services. Default to stdin and
+  stdout (the Unix way), thus usable from your favorite text editor.
 
 Shell
 =====
@@ -210,7 +210,7 @@ Versioning
 ==========
 
 Git makes it possible to use your home folder as a git repo, thus versioning
-all files directly. To fetch source from Git repo:
+all files directly. To do so:
 
     cd
     git init
@@ -220,8 +220,8 @@ all files directly. To fetch source from Git repo:
     git checkout master
 
 Some applications will need extra dependencies other than the default ones. You
-might have a look at the list files in the .pkg/ folder to see what software
-I've been using.
+might have a look at the lists in the .pkg/ folder to know what software I've
+been using.
 
 --------------------------------------------------------------------------------
 Known issues
@@ -239,14 +239,12 @@ Emacs
 Scripts
 -------
 
-* All scripts take a strong point at being POSIX. However, there is not POSIX
-  way (at least to my knowledge) to execute a shell function on the result of a
-  'find'. One ugly way would be to execute 'sh -c' and write the code as
-  argument, which is really unmaintainable. Another way is to do the same but
-  to fetch the code into a variable, which could be done from another file. This
-  is rather ugly and expansion is hard to control.
-  For now we assume no input file has newline, which is quite a strong
-  assumption and not safe at all.
+* All scripts take a strong point at being POSIX. However, there is no POSIX way
+  (at least to my knowledge) to execute a shell function on the result of a
+  'find'. Neither 'find' nor 'xargs' can execute shell functions. One solution
+  to this would be to call an external script, but then we lose all global
+  variables.  For now we assume no input file has newline, which is quite a
+  strong assumption and not safe at all.
 
 URxvt
 -----

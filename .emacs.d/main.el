@@ -542,6 +542,11 @@ has errors and/or warnings."
 (autoload 'markdown-mode "markdown-mode" "Markdown mode" t)
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-hook
+ 'markdown-mode-hook
+ (lambda ()
+   (set (make-local-variable 'paragraph-start) "
+")))
 
 ;; Read Matlab files in Octave mode.
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
