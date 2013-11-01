@@ -3,30 +3,30 @@
 ## Default to C block comments. You can change the comment delimiters from
 ## command line. The delims are regexes. For instance call this script with
 ##
-##   awk -v COMMENT_OPEN="#" -v COMMENT_CLOSE="$" -f <this-script> <files>
+##   awk -v begin="#" -v end="$" -f <this-script> <files>
 ##
 ## to use shell comment delimiters.
 
 BEGIN {
-    ## Since COMMENT_* are regexes, we need to escape some sequences.
-    if(COMMENT_OPEN == "")
-        COMMENT_OPEN="/\\*"
-    if(COMMENT_CLOSE == "")
-        COMMENT_CLOSE="\\*/"
+    ## Since 'begin' and 'end' are regexes, we need to escape some sequences.
+    if(begin == "")
+        begin="/\\*"
+    if(end == "")
+        end="\\*/"
 }
 
 {
-    while (match ($0, COMMENT_OPEN))
+    while (match ($0, begin))
     {
         before = substr ($0, 1, RSTART-1)
         $0 = substr($0, RSTART)
         printf("%s", before)
 
-        ## Reach line where first COMMENT_CLOSE is found.
-        while (! match($0, COMMENT_CLOSE) )
+        ## Reach line where first 'end' is found.
+        while (! match($0, end) )
             getline
 
-        $0 = substr($0, RSTART + length(COMMENT_CLOSE) -1)
+        $0 = substr($0, RSTART + length(end) -1)
     }
     print
 }
