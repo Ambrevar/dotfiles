@@ -12,15 +12,16 @@ after this input. Otherwise it is named after current PWD.
 
   -h:  Display this help.
   -m:  Choose compression method.
-         * gz:  gzip (default).
-         * xz:  LZMA.
+         * gz:   gzip (default).
+         * none: Simple tar archive.
+         * xz:   LZMA.
   -i:  The archive is created without owner/group information. (GNU tar only.)
   -v:  Exclude VCS data. (GNU tar only.)
 EOF
 }
 
 OUTPATH="$PWD"
-ARCEXT="tar.gz"
+ARCEXT=".gz"
 ARCOPT="z"
 OPTIONS=""
 while getopts ":him:v" opt; do
@@ -31,8 +32,9 @@ while getopts ":him:v" opt; do
         i)
             OPTIONS="$OPTIONS --owner=root --group=root --numeric-owner" ;;
         m)
-            [ "$OPTARG" = "gz" ] && ARCEXT="tar.gz" && ARCOPT="z"
-            [ "$OPTARG" = "xz" ] && ARCEXT="tar.xz" && ARCOPT="J"
+            [ "$OPTARG" = "gz" ] && ARCEXT=".gz" && ARCOPT="z"
+            [ "$OPTARG" = "xz" ] && ARCEXT=".xz" && ARCOPT="J"
+            [ "$OPTARG" = "none" ] && ARCEXT="" && ARCOPT=""
             ;;
         v)
             OPTIONS="$OPTIONS --exclude-vcs" ;;
@@ -57,9 +59,9 @@ fi
 ## Only one input entry: use it as base name for the archive.
 if [ $# -eq 1 ]; then
     REALPATH="$(realpath "$1")"
-    OUTFILE="${REALPATH##*/}-$(date +%F-%H%M%S).${ARCEXT}"
+    OUTFILE="${REALPATH##*/}-$(date +%F-%H%M%S).tar${ARCEXT}"
 else
-    OUTFILE="${PWD##*/}-$(date +%F-%H%M%S).${ARCEXT}"
+    OUTFILE="${PWD##*/}-$(date +%F-%H%M%S).tar${ARCEXT}"
 fi
 
 REALPWD="$(realpath "$PWD")"
@@ -87,5 +89,5 @@ for i; do
     echo "${REALPATH}" >&2
     echo "-C '${REALPATH%/*}'"
     echo "${REALPATH##*/}"
-done | tar $OPTIONS -$ARCOPT -cf "$OUTPATH/$OUTFILE" -T -
+done | tar $OPTIONS -${ARCOPT}cf "$OUTPATH/$OUTFILE" -T -
 
