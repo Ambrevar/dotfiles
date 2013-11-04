@@ -29,6 +29,7 @@ if ostype == "Linux" then
    vicious = require("vicious")
 end
 
+
 --------------------------------------------------------------------------------
 -- Error handling
 --------------------------------------------------------------------------------
@@ -319,6 +320,7 @@ end
 --------------------------------------------------------------------------------
 term = os.getenv("TERMCMD") or "urxvt"
 termcmd = term .. " -e "
+home = os.getenv("HOME")
 
 globalkeys = awful.util.table.join(
    -- Terminal
@@ -366,7 +368,8 @@ globalkeys = awful.util.table.join(
    awful.key({ }, "XF86AudioPrev",  function () awful.util.spawn("cmus-remote -r") end),
 
    -- Screenshot
-   awful.key({}, "Print", function () awful.util.spawn("scrot 'screen-%Y-%m-%d-%H%M%S.png' -e 'mkdir -p ~/temp && mv $f ~/temp/'") end),
+   -- Using $HOME in command line does not work for scrot.
+   awful.key({}, "Print",         function () awful.util.spawn("scrot '" .. home .. "/temp/screen-%Y-%m-%d-%H%M%S.png'") end),
 
    -- Screenshot
    awful.key({ modkey }, "t", function () awful.util.spawn("todo") end),
