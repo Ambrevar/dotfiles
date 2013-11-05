@@ -107,7 +107,7 @@ _worker()
         done<<EOF
 $(echo "$INPUT" | sed -n "$CORE~${CPUNO}p")
 EOF
-
+    # Instead of sed, we could also use: awk "NR % $CPUNO == $CORE"
     echo "$(tput setf 5)$(tput bold)::$(tput sgr0) Thread $CORE/$CPUNO terminated."
 }
 

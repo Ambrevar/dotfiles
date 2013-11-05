@@ -401,7 +401,7 @@ echokeymap ()
 ## Dump optical disc to iso
 clonecd ()
 {
-    if [ $# -ne 1 ]; then
+    if [ $# -ne 1 ] || [ "$1" = "-h" ]; then
         echo "Usage: $0 ISO (without extension)"
         return
     fi

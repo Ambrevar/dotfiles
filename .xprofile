@@ -26,7 +26,7 @@ if [ "$OSTYPE" = "linux-gnu" ] ; then
     [ -n "$(amixer 2>/dev/null | grep PCM)" ] && amixer set PCM 80%
 
     ## External device auto-mounting.
-    [ -n "$(command -v udiskie)" ] && udiskie &
+    command -v udiskie >/dev/null && udiskie &
 fi
 
 ## This env variable is used by some programs (like ranger and awesome) to get

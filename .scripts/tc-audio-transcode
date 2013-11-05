@@ -402,7 +402,7 @@ aprint()
 
 aprint <<EOF
 :: INTPUT ::			 				 :: OUTPUT ::
-[$INPUT_ARTIST]			 Artist			 [$OUTPUT_ARTIST]
+[$INPUT_ARTIST]			 Artist			 [$(tput setf 4)$OUTPUT_ARTIST$(tput sgr0)]
 [$INPUT_ALBUM]			 Album			 [$OUTPUT_ALBUM]
 [$INPUT_TRACK]			 Track			 [$OUTPUT_TRACK]
 [$INPUT_TITLE]			 Title			 [$OUTPUT_TITLE]
