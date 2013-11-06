@@ -18,7 +18,7 @@ mono index bold ~D
 ## Highlights inside the body of a message.
 
 # URLs
-color body brightgreen black "(https?|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
+color body brightgreen black "(https?|ftp|news|telnet|finger)://[^ \(\)\"\t\r\n]*"
 color body brightgreen black "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
 mono body bold "(https?|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
 mono body bold "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
