@@ -1,7 +1,8 @@
-g              http://google.com/search?q=%s
+ddg            https://duckduckgo.com/?q=%s
 arch           http://wiki.archlinux.org/index.php?title=Special%%3ASearch&search=%s&go=Go
 aur            https://aur.archlinux.org/packages.php?O=0&K=%s&do_Search=Go
 ctan           http://www.ctan.org/search?phrase=%s
+gi             https://www.google.com/search?site=imghp&tbm=isch&source=hp&biw=1676&bih=997&q=%s
 gm             https://maps.google.com/maps?q=%s
 gt             http://translate.google.com/#en/fr/%s
 imdb           http://www.imdb.com/find?q=%s&s=all
@@ -13,5 +14,6 @@ wbf            http://fr.wikibooks.org/wiki/Special:Search?search=%s
 wf             http://fr.wikipedia.org/wiki/Special:Search?search=%s
 wk             http://en.wiktionary.org/wiki/Special:Search?search=%s
 wkf            http://fr.wiktionary.org/wiki/Special:Search?search=%s
+wine           http://www.winehq.org/search/?cx=partner-pub-0971840239976722:w9sqbcsxtyf&cof=FORID:10&ie=UTF-8&q=%s
 wr             http://www.wordreference.com/enfr/%s
 yt             http://www.youtube.com/results?search_query=%s
