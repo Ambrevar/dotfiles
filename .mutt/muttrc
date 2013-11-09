@@ -99,13 +99,6 @@ set sleep_time = 0
 source "~/.mutt.d/accountrc"
 
 ##------------------------------------------------------------------------------
-## Sidebar
-##------------------------------------------------------------------------------
-
-## We use a script to test if sidebar is installed.
-source "~/.mutt/sidebar.sh|"
-
-##------------------------------------------------------------------------------
 ## Aliases
 ##------------------------------------------------------------------------------
 
@@ -193,8 +186,17 @@ folder-hook .*[sS]ent.* 'set my_col_from = `echo $((30 * ($(tput cols)-35-24) / 
 folder-hook ! .*[sS]ent.* 'set my_col_from = `echo $((30 * ($(tput cols)-35-24) / 100))`; set my_col_subject = `echo $((70 * ($(tput cols)-35-24) / 100))`; set index_format="%2C | %Z [%d] %-$my_col_from.${my_col_from}F (%-4.4c) %-$my_col_subject.${my_col_subject}s"'
 
 ## Colors
-source "~/.mutt/colorset.sh|"
-source "~/.mutt/colors.ambrevar"
 # source "/usr/share/doc/mutt/samples/colors.default"
 # source "/usr/share/doc/mutt/samples/colors.linux"
+# source "~/.mutt/colors.classic.sh|"
+source "~/.mutt/colors.zenburn.sh|"
+source "~/.mutt/colors.fallback.sh|"
+source "~/.mutt/mutt.colors"
 
+##------------------------------------------------------------------------------
+## Sidebar
+##------------------------------------------------------------------------------
+
+## We use a script to test if sidebar is installed. Needs to be loaded _after_
+## the theme.
+source "~/.mutt/sidebar.sh|"

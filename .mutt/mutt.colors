@@ -1,0 +1,85 @@
+# -*- mode:sh -*-
+## Theme kindly inspired from
+## http://nongeekshandbook.blogspot.ie/2009/03/mutt-color-configuration.html
+
+## Colours for items in the index
+color index $my_new $my_bg ~N
+color index $my_old $my_bg ~O
+## Hmm, don't like this.
+#color index brightgreen black "~N (~x byers.world)|(~x byers.x)"
+color index $my_flag $my_bg ~F
+color index black green ~T
+color index brightred $my_bg ~D
+mono index bold ~N
+mono index bold ~F
+mono index bold ~T
+mono index bold ~D
+
+## Highlights inside the body of a message.
+
+# URLs
+color body $my_uri $my_bg "(https?|ftp|news|telnet|finger)://[^ \(\)\"\t\r\n]*"
+color body $my_uri $my_bg "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
+mono body bold "(https?|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
+mono body bold "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
+
+## Email addresses.
+# color body brightgreen $my_bg "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+color body $my_address $my_bg "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+#mono body bold "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+
+## Header
+color header white $my_bg ".*"
+color header $my_from $my_bg "^from:"
+color header $my_to $my_bg "^to:"
+color header $my_cc $my_bg "^cc:"
+color header $my_bcc $my_bg "^bcc:"
+color header $my_replyto $my_bg "^reply-to:"
+color header $my_inreplyto $my_bg "^in-reply-to:"
+color header $my_date $my_bg "^date:"
+color header yellow $my_bg "^newsgroups:"
+color header $my_subject $my_bg "^subject:"
+color header red $my_bg "^x-spam-rule:"
+color header green $my_bg "^x-mailer:"
+color header yellow $my_bg "^message-id:"
+color header yellow $my_bg "^Organization:"
+color header yellow $my_bg "^Organisation:"
+color header yellow $my_bg "^User-Agent:"
+color header yellow $my_bg "^message-id: .*pine"
+color header $my_x $my_bg "^X-Fnord:"
+color header $my_x $my_bg "^X-WebTV-Stationery:"
+color header $my_x $my_bg "^X-Message-Flag:"
+color header $my_x $my_bg "^X-Spam-Status:"
+color header $my_x $my_bg "^X-SpamProbe:"
+color header red $my_bg "^X-SpamProbe: SPAM"
+
+## Coloring quoted text - coloring the first 7 levels:
+color quoted $my_quote0 $my_bg
+color quoted1 $my_quote1 $my_bg
+color quoted2 $my_quote2 $my_bg
+color quoted3 $my_quote3 $my_bg
+color quoted4 $my_quote4 $my_bg
+color quoted5 $my_quote5 $my_bg
+color quoted6 $my_quote6 $my_bg
+color quoted7 $my_quote7 $my_bg
+
+## Default color definitions
+#color hdrdefault white green
+color signature $my_sig $my_bg
+color indicator $my_indicator $my_indicator_bg
+color attachment $my_attach $my_attach_bg
+color error red $my_bg
+color message white $my_bg
+color search brightwhite magenta
+color status $my_status $my_status_bg
+color tree brightblue $my_bg
+color normal white $my_bg
+color tilde green $my_bg
+color bold brightyellow $my_bg
+#color underline magenta $my_bg
+color markers brightcyan $my_bg
+
+## Colour definitions when on a mono screen
+mono bold bold
+mono underline underline
+mono indicator reverse

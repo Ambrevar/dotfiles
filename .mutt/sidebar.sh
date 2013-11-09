@@ -2,7 +2,7 @@
 
 ## Set sidebar options only if sidebar patch is installed.
 if [ -n "$(man muttrc | grep sidebar)" ]; then
-    cat <<EOF
+    cat <<'EOF'
 set sidebar_visible = yes
 set sidebar_width = 24
 set sidebar_shortpath = yes
@@ -12,7 +12,7 @@ set sidebar_delim=' '
 # set sidebar_folderindent = yes
 
 ## Color of folders with new mail
-color sidebar_new yellow default
+color sidebar_new $my_new $my_bg
 
 ## Ctrl-n, Ctrl-p to select next, previous folder.
 ## Ctrl-o to open selected folder
