@@ -13,9 +13,16 @@ _mount ()
     DEVICE="$(cdemu status | awk 'NR>2 && $2==0 {print $1; found=1; exit}  END {if(! found)print NR-2}')"
     DEV_COUNT="$(cdemu device-mapping | awk 'END {print NR-3}')"
 
-    while [ $DEVICE -gt $DEV_COUNT ]; do
-        cdemu add-device
-        DEV_COUNT="$(cdemu device-mapping | awk 'END {print NR-3}')"
+    if [  $(cdemu status |  grep -c "$1") -gt 0 ]; then
+        echo "Image alredy mounted."
+        return
+    fi
+
+    if [ $DEVICE -gt $DEV_COUNT ]; then
+        while [ $DEVICE -gt $DEV_COUNT ]; do
+            cdemu add-device
+            DEV_COUNT="$(cdemu device-mapping | awk 'END {print NR-3}')"
+        done
 
         ## WARNING: adding a new device takes some time. If we want to avoid errors,
         ## we need to sleep until it is ready.
@@ -24,11 +31,6 @@ _mount ()
             sleep 1
         done
 
-    done
-
-    if [  $(cdemu status |  grep -c "$1") -gt 0 ]; then
-        echo "Image alredy mounted."
-        return
     fi
 
     cdemu load $DEVICE "$1"
@@ -54,6 +56,10 @@ _mount ()
 
     else
         NODE="$(cdemu device-mapping | awk -v devnum=$DEVICE 'NR>2 && $1==devnum {print $2}')"
+        ## TODO: This is terrible,but checking cdemu status does not work. Maybe
+        ## a kernel limitation.
+        echo "Mounting..."
+        sleep 2
         udiskie-mount "$NODE"
     fi
 
@@ -69,7 +75,7 @@ _umount ()
     if [ -n "$NODE" ]; then
         udiskie-umount "$1"
 
-        DEVICE=$(cdemu device-mapping | awk -v node=/dev/sr3 '$2 == node {print $1; exit}')
+        DEVICE=$(cdemu device-mapping | awk -v node="$NODE" '$2 == node {print $1; exit}')
         cdemu unload $DEVICE
     elif command -v fuseiso >/dev/null; then
         fusermount -u "$1"
@@ -93,7 +99,8 @@ _printhelp ()
 Usage: ${1##*/} FILES
        ${1##*/} -u FOLDERS
 
-Mount image files using CDEmu or fall back to fuseriso if available.
+Mount image files using CDEmu or fall back to fuseriso if available.  It will
+not mount an image if already mounted.
 
 Synopsis:
 
