@@ -1,6 +1,6 @@
 #name : type fun (args) { ... }
 # --
-${1:void}
+static ${1:void}
 ${2:name} (${3:void})
 {
     $0

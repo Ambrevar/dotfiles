@@ -510,6 +510,14 @@ has errors and/or warnings."
    (local-set-key (kbd "<backspace>") 'dired-up-directory)
    (local-set-key (kbd "b") 'dired-up-directory)))
 
+;; GMP
+(eval-after-load "info-look"
+  '(let ((mode-value (assoc 'c-mode (assoc 'symbol info-lookup-alist))))
+     (setcar (nthcdr 3 mode-value)
+             (cons '("(gmp)Function Index" nil "^ -.* " "\\>")
+                   (nth 3 mode-value)))))
+
+
 ;; Bookmark file to cache folder
 (setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
 

@@ -251,6 +251,7 @@ properly escaped with double-quotes in case it has spaces."
  (lambda ()
    (dolist (key '("\C-c\C-f" "\C-c\C-b"))
      (local-unset-key key))
+   (set-face-attribute 'tex-verbatim nil :family "freemono")
    (set (make-local-variable 'compilation-scroll-output) t)
    (set (make-local-variable 'compilation-hide-window) t)
    (set (make-local-variable 'paragraph-start) "
@@ -261,6 +262,7 @@ properly escaped with double-quotes in case it has spaces."
 
 (add-hook 'latex-mode-hook (lambda () (local-set-key (kbd "M-RET") 'latex-itemize)))
 (add-hook 'latex-mode-hook 'turn-on-orgtbl)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The magnificent latex-math-preview mode!
