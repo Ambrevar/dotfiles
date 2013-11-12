@@ -1,0 +1,73 @@
+#!/bin/awk -f
+
+function _printhelp() {
+    print "Usage: " ARGV[0] "[-vr=1] SOURCE TARGET"
+    print "\nMove files in TARGET identical to files in SOURCE such that they follow the same hierarchy."
+    print "\nSymlinks are ignored."
+    print "\nSet 'r' to 1 to actually run the process."
+}
+
+BEGIN {
+    if (ARGC != 3)
+    {
+        _printhelp()
+        exit
+    }
+
+    ## Array subindices
+    dup=1
+
+    print "==> Scanning " ARGV[1] "..."
+    while ( ("cd " ARGV[1] " && find * -type f -exec md5sum {} +" | getline ) > 0)
+    {
+        ## We need to remove sum from line since filename may contain spaces.
+        sum=$1
+        sub(/[^ ]+  /, "")
+
+        if (source[sum])
+        {
+            print ":: Skipping duplicate: " $0
+            source[sum, dup]=1
+            continue
+        }
+        source[sum]=$0
+    }
+
+    print "\n==> Scanning " ARGV[2] "..."
+    while ( ("cd " ARGV[2] " && find * -type f -exec md5sum {} +" | getline ) > 0)
+    {
+        sum=$1
+        if (source[sum, dup] || ! source[sum])
+            continue
+        sub(/[^ ]+  /, "")
+
+        if (target[sum])
+        {
+            print ":: Skipping duplicate: " $0
+            target[sum, dup]=1
+            continue
+        }
+        target[sum]=$0
+    }
+
+    print "\n==> Syncing from " ARGV[1] " to " ARGV[2]
+    for (i in target)
+    {
+        split(i, subi, SUBSEP)
+        if (subi[2] != dup && ! target[subi[1],dup] && source[subi[1]] != target[subi[1]])
+        {
+            dirname=source[subi[1]]
+            sub(/[^/]+$/, "", dirname)
+
+            ## We only create a new folder if necessary.
+            if (dirname)
+                cmd="mkdir -p " ARGV[2] "/" dirname " && mv " ARGV[2] "/" target[subi[1]] " " ARGV[2] "/" source[subi[1]]
+            else
+                cmd="mv " ARGV[2] "/" target[subi[1]] " " ARGV[2] "/" source[subi[1]]
+
+            print cmd
+            if (run)
+                system(cmd)
+        }
+    }
+}
