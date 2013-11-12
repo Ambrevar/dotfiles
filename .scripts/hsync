@@ -1,10 +1,11 @@
 #!/bin/awk -f
 
 function _printhelp() {
-    print "Usage: " ARGV[0] "[-vr=1] SOURCE TARGET"
-    print "\nMove files in TARGET identical to files in SOURCE such that they follow the same hierarchy."
-    print "\nSymlinks are ignored."
-    print "\nSet 'r' to 1 to actually run the process."
+    print "Usage: hsync [-vr=1] SOURCE TARGET\n"
+    print "Filesystem Hierarchy synchronizer."
+    print "Move files in TARGET identical to files in SOURCE such that they follow the same hierarchy."
+    print "Symlinks are ignored."
+    print "Set 'r' to 1 to actually run the process."
 }
 
 BEGIN {
@@ -50,7 +51,7 @@ BEGIN {
         target[sum]=$0
     }
 
-    print "\n==> Syncing from " ARGV[1] " to " ARGV[2]
+    print "\n==> Syncing hierarchy from " ARGV[1] " to " ARGV[2]
     for (i in target)
     {
         split(i, subi, SUBSEP)
@@ -59,14 +60,22 @@ BEGIN {
             dirname=source[subi[1]]
             sub(/[^/]+$/, "", dirname)
 
-            ## We only create a new folder if necessary.
-            if (dirname)
-                cmd="mkdir -p " ARGV[2] "/" dirname " && mv " ARGV[2] "/" target[subi[1]] " " ARGV[2] "/" source[subi[1]]
-            else
-                cmd="mv " ARGV[2] "/" target[subi[1]] " " ARGV[2] "/" source[subi[1]]
+            ## Target -> Source
+            change="'" ARGV[2] "/" target[subi[1]] "' '" ARGV[2] "/" source[subi[1]] "'"
 
-            print cmd
-            if (run)
+            ## We only create a new folder if necessary.
+            cmd="[ ! -d '" dirname "' ] && mkdir -p \"" ARGV[2] "/" dirname "\" && mv -n " change
+            #     if (dirname)
+            # {
+            #     print "### NARJ"
+            #     cmd="[ ! -d ] \'" dirname "\' && mkdir -p \"" ARGV[2] "/" dirname "\" && mv -n " change
+            # }
+            # else
+            #     cmd="mv -n " change
+
+            ## TODO: sort preview.
+            print change
+            if (r)
                 system(cmd)
         }
     }
