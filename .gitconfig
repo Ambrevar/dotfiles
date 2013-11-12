@@ -11,7 +11,7 @@
     co = checkout
     d = diff --cached
     l = log --stat
-    lol =  log --graph --decorate --pretty=oneline --abbrev-commit
+    lol =  log --graph --decorate --pretty=format:'%C(yellow)%h %Cgreen%cd%C(bold red)%d%Creset %s' --abbrev-commit --date=short
     m = mergetool
     r = remote -v
     s = status -uno
