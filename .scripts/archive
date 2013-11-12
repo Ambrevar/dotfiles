@@ -11,11 +11,12 @@ used). If only one file/folder is given as input, then the archive is named
 after this input. Otherwise it is named after current PWD.
 
   -h:  Display this help.
+  -i:  The archive is created without owner/group information. (GNU tar only.)
   -m:  Choose compression method.
          * gz:   gzip (default).
          * none: Simple tar archive.
          * xz:   LZMA.
-  -i:  The archive is created without owner/group information. (GNU tar only.)
+  -s:  Archive each input entry an individual file.
   -v:  Exclude VCS data. (GNU tar only.)
 EOF
 }
@@ -24,7 +25,8 @@ OUTPATH="$PWD"
 ARCEXT=".gz"
 ARCOPT="z"
 OPTIONS=""
-while getopts ":him:v" opt; do
+OPT_SPLIT=false
+while getopts ":him:sv" opt; do
     case $opt in
         h)
             _printhelp "$0"
@@ -36,6 +38,8 @@ while getopts ":him:v" opt; do
             [ "$OPTARG" = "xz" ] && ARCEXT=".xz" && ARCOPT="J"
             [ "$OPTARG" = "none" ] && ARCEXT="" && ARCOPT=""
             ;;
+        s)
+            OPT_SPLIT=true ;;
         v)
             OPTIONS="$OPTIONS --exclude-vcs" ;;
         ?)
@@ -56,38 +60,48 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-## Only one input entry: use it as base name for the archive.
-if [ $# -eq 1 ]; then
-    REALPATH="$(realpath "$1")"
-    OUTFILE="${REALPATH##*/}-$(date +%F-%H%M%S).tar${ARCEXT}"
-else
-    OUTFILE="${PWD##*/}-$(date +%F-%H%M%S).tar${ARCEXT}"
-fi
 
-REALPWD="$(realpath "$PWD")"
-for i; do
-    REALPATH="$(realpath "$i")"
-
-    ## Check if one of the arguments is current folder. We need to make sure the
-    ## archive is not created in an input folder, otherwise it will include
-    ## itself.
-    if [ "$REALPATH" = "$REALPWD" ]; then
-        OUTPATH="$(realpath "$REALPWD/..")"
-        break
+_archive()
+{
+    ## Only one input entry: use it as base name for the archive.
+    if [ $# -eq 1 ]; then
+        REALPATH="$(realpath "$1")"
+        OUTFILE="${REALPATH##*/}-$(date +%F-%H%M%S).tar${ARCEXT}"
+    else
+        OUTFILE="${PWD##*/}-$(date +%F-%H%M%S).tar${ARCEXT}"
     fi
-done
 
+    REALPWD="$(realpath "$PWD")"
+    for i; do
+        REALPATH="$(realpath "$i")"
 
-if [ ! -w "$OUTPATH" ]; then
-    echo "[$OUTPATH] is not writable. Exiting."
-    exit
+        ## Check if one of the arguments is current folder. We need to make sure the
+        ## archive is not created in an input folder, otherwise it will include
+        ## itself.
+        if [ "$REALPATH" = "$REALPWD" ]; then
+            OUTPATH="$(realpath "$REALPWD/..")"
+            break
+        fi
+    done
+
+    if [ ! -w "$OUTPATH" ]; then
+        echo "[$OUTPATH] is not writable. Exiting."
+        return
+    fi
+
+    echo "==> [$OUTPATH/$OUTFILE]"
+    for i; do
+        REALPATH="$(realpath "$i")"
+        echo "${REALPATH}" >&2
+        echo "-C '${REALPATH%/*}'"
+        echo "${REALPATH##*/}"
+    done | tar $OPTIONS -${ARCOPT}cf "$OUTPATH/$OUTFILE" -T -
+}
+
+if $OPT_SPLIT; then
+    for j ; do
+        _archive "$j"
+    done
+else
+    _archive "$@"
 fi
-
-echo "==> [$OUTPATH/$OUTFILE]"
-for i; do
-    REALPATH="$(realpath "$i")"
-    echo "${REALPATH}" >&2
-    echo "-C '${REALPATH%/*}'"
-    echo "${REALPATH##*/}"
-done | tar $OPTIONS -${ARCOPT}cf "$OUTPATH/$OUTFILE" -T -
-
