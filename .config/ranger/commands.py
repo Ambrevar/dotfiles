@@ -93,22 +93,25 @@ class extracthere(Command):
         obj.signal_bind('after', refresh)
         self.fm.loader.add(obj)
 
-
 class mkcd(Command):
-    def execute(self):
-        """ Create folder and cd to it """
+    """
+    :mkcd <dirname>
+
+    Creates a directory with the name <dirname> and enters it.
+    """
 
     def execute(self):
-        from os.path import join, expanduser, lexists
+        from os.path import join, expanduser, lexists, basename
         from os import mkdir
 
         dirname = join(self.fm.thisdir.path, expanduser(self.rest(1)))
         if not lexists(dirname):
             mkdir(dirname)
+
+            if self.rest(1).startswith('.') and not self.fm.settings['show_hidden']:
+                self.fm.cd(dirname)
+            else:
+                self.fm.thisdir.load_content(schedule=False)
+                self.fm.execute_console('scout -ae ^{}$'.format(self.rest(1)))
         else:
             self.fm.notify("file/directory exists!", bad=True)
-
-        self.fm.cd(dirname)
-
-    def tab(self):
-        return self._tab_directory_content()
