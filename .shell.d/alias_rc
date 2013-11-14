@@ -1,16 +1,10 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Shell Config -- Alias Definitions.
-## Date 2013-01-04
 ################################################################################
 
 ## Warning: if this does not work if you change shell without relogging, use
 ## 'source .<shell>rc' instead.
-
-if [ "bash" = "$SHELL_CURRENT" ]; then
-    alias ..='cd ..'
-    alias ssrc='source ~/.bashrc'
-fi
 
 if [ "zsh" = "$SHELL_CURRENT" ]; then
     alias ssrc='source ~/.zshrc'
@@ -51,13 +45,13 @@ alias grep='grep --color=auto'
 [ ${#XDG_APPS} -ne 0 ] && alias applist='grep -R "^Name=" $XDG_APPS | cut -d'=' -f2 | sort'
 
 ## Remove executable attribute.
-alias nox='find . -type f -exec chmod a-x {} \;'
+alias nox='find * -type f -exec chmod a-x {} +'
 
 ## Get your external IP.
-[ -n "$(command -v curl)" ] && alias myip='curl ifconfig.me'
+command -v curl >/dev/null && alias myip='curl ifconfig.me'
 
 ## Network discovery.
-[ -n "$(command -v nmap)" ] && alias network-discover='nmap -sP "192.168.0.*"'
+command -v nmap >/dev/null && alias network-discover='nmap -sP "192.168.0.*"'
 
 ## Prevents accidentally clobbering files.
 alias mkdir='mkdir -p'
@@ -65,23 +59,20 @@ alias mkdir='mkdir -p'
 ## Reset terminal -- Faster alternative of 'reset'.
 alias cls='printf "\ec"'
 
-## Display PATH and LD_LIBRARY_PATH in a more readable way.
-alias echopath='echo -e ${PATH//:/\\n}'
-alias echolibpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
-
 ## Shutdown / Reboot.
 ## If you do not want to get prompted for your password, configure sudo properly.
-if [ -n "$(command -v systemctl)" ]; then
+if command -v systemctl >/dev/null; then
     alias halt='systemctl poweroff'
 else
     alias halt='sudo halt -p'
 fi
 
-## Start X and lock current terminal (press ENTER when back in terminal to prompt for password).
-[ -n "$(command -v vlock)" ] && alias sx='startx & vlock'
+## Start X and lock current terminal (press ENTER when back in terminal to
+## prompt for password). Useless if X is running on the same TTY.
+command -v vlock >/dev/null && alias sx='startx & vlock'
 
 ## Zathura -- Fork to background.
-[ -n "$(command -v zathura)" ] && alias zat='zathura --fork'
+command -v zathura >/dev/null && alias zat='zathura --fork'
 
 ## Xrandr
 alias xmorphnone='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --transform none'
@@ -92,7 +83,10 @@ alias xmorphzi='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ")
 alias xres='xrandr --output $(xrandr | awk '"'"'NR==2 {print $1;exit}'"'"') --auto && xrandr -s $(xrandr | awk '"'"'/^ / {print $1;exit}'"'"')'
 
 ## Udiskie
-alias uua='udiskie-umount -a'
+command -v udiskie-umount >/dev/null && alias uua='udiskie-umount -a'
+
+## Emacs
+command -v em >/dev/null && alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
 
 ##==============================================================================
 ## Zsh power aliases
@@ -109,16 +103,9 @@ alias uua='udiskie-umount -a'
 # fi
 
 ##==============================================================================
-## Emacs
-##==============================================================================
-if [ -n "$(command -v em)" ]; then
-   alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
-fi
-
-##==============================================================================
 ## Pacman aliases
 ##==============================================================================
-if [ -e "/usr/bin/pacman" ]; then
+if command -v "pacman" >/dev/null; then
     PACMAN_FRONTEND='pacman'
 
     ## The eval trick lets us define the alias after the variable has been expanded.
