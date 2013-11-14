@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+    cat<<EOF
+Usage: ${0##*/} PROCESS-EXP
+
+Extended pgrep -a
+
+EOF
+    exit
+fi
+
+for i ; do
+    ## We need to store the result of 'ps' first to prevent the filtering from
+    ## appearing in the result.
+    BUF="$(ps aux)"
+    echo "$BUF" | awk -v pid=$$ -v pattern="$i" '$2 != pid && $0 ~ pattern'
+done
