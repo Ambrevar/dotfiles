@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+    cat<<EOF
+Usage: ${0##*/} PAGE
+
+Fetch FreeBSD man page PAGE from the official website and display it.
+
+EOF
+    exit
+fi
+
+AGENT="curl -s"
+if ! command -v curl >/dev/null; then
+    AGENT="wget -q -O - "
+fi
+
+$AGENT "http://www.freebsd.org/cgi/man.cgi?query=$1&apropos=0&sektion=0&manpath=FreeBSD+10-current&arch=default&format=ascii" | less
