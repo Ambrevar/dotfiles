@@ -1,0 +1,32 @@
+#!/bin/sh
+
+if [ $# -ne 2 ] || [ "$1" = "-h" ] ; then
+    cat<<EOF
+Usage: ${1##*/} FILE1 FILE2
+
+Swap 2 filenames around.
+
+EOF
+fi
+
+## We need a temp file is case both files are in the same folder. We use the
+## unsecure option since we do not want to create a empty file in
+## advance. Indeed, creating a file with mktemp is problematic for folders since
+## non-GNU mv can only move _into_ an exisintg folder. But we do not overwrite
+## if file exists.
+TEMPFILE="$(mktemp -u "$1.XXXXXX")"
+
+case "$1" in
+	*/*) DIR1="${1%/*}" ;;
+	*) DIR1="." ;;
+esac
+case "$2" in
+	*/*) DIR2="${2%/*}" ;;
+	*) DIR2="." ;;
+esac
+
+if ! mv -n "$1" "$TEMPFILE"; then
+    echo >&2 "Race condition, exiting. Try again."
+fi
+mv -n "$2" "$DIR2/${1##*/}"
+mv -n "$TEMPFILE" "$DIR1/${2##*/}"
