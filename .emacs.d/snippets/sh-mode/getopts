@@ -1,5 +1,5 @@
-# name: getopt
-# key: getopt
+# name: getopts
+# key: getopts
 # --
 _printhelp ()
 {
