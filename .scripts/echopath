@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ "$1" == "-h" ]; then
+if [ "$1" = "-h" ]; then
     cat<<EOF
 Usage: ${0##*/} PATH
 

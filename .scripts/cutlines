@@ -1,0 +1,51 @@
+#!/bin/sh
+
+_printhelp ()
+{
+    cat<<EOF
+Usage: ${1##*/} [OPTIONS] [FILES]
+
+Cut last 10 lines from stdin. If FILES are provided, cut files instead of stdin
+and output to stdout.
+
+Note: GNU 'head' has the '-n -10' option to do this. This program is only useful
+for non-GNU systems.
+
+Synopsis:
+
+  -h:    Show this help.
+  -t:    Cut head instead of the tail. Like 'tail -n +11' with GNU tail (11
+         because the limit line is included).
+  -n N:  Cut N lines instead of 10.
+
+EOF
+}
+
+OPT_TAIL=true
+OPT_LINES=10
+while getopts ":hn:t" opt; do
+    case $opt in
+        h)
+            _printhelp "$0"
+            exit 1 ;;
+        n)
+            OPT_LINES=$OPTARG ;;
+        t)
+            OPT_TAIL=false ;;
+        ?)
+            _printhelp "$0"
+            exit 1 ;;
+        :)
+            _printhelp "$0"
+            exit 1 ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+if $OPT_TAIL; then
+    # sed -n -e ":begin ; 1,${OPT_LINES}!{P;N;D} ; N ; b begin" $1
+    sed -n -e ":begin ; 1,${OPT_LINES}!{P;N;D} ; N ; b begin" $1
+else
+    sed -n -e "1,${OPT_LINES}!p" $1
+fi
