@@ -1,0 +1,56 @@
+#!/bin/sh
+
+_printhelp ()
+{
+    cat<<EOF
+Usage: ${1##*/} [OPTIONS] FILES
+
+Dump optical disc to ISOFILE (without extension).
+
+Synopsis:
+
+  -h:       Show this help.
+  -d DRIVE: Set optical drive to use (e.g. 'sr1').
+
+EOF
+}
+
+DRIVE=/dev/sr0
+while getopts ":hd:" opt; do
+    case $opt in
+        h)
+            _printhelp "$0"
+            exit 1 ;;
+        d)
+            DRIVE=/dev/$OPTARG ;;
+        ?)
+            _printhelp "$0"
+            exit 1 ;;
+        :)
+            _printhelp "$0"
+            exit 1 ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+if [ $# -eq 0 ]; then
+    _printhelp "$0"
+    exit 1
+fi
+
+
+if ! command -v readcd >/dev/null; then
+    echo >&2 "readcd required."
+    exit
+fi
+
+
+
+## Fast?
+readcd dev=$DRIVE f="$1.iso" -v retries=5 timeout=30 -noerror
+
+## Slow
+# readcd f="$1.iso" -v retries=32 timeout=30 -s speed=16 -noerror
+
+# dd if=$DRIVE of='$1.iso' bs=2048 count=$(isosize -d 2048 $DRIVE) conv=sync,notrunc
