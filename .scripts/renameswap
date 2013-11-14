@@ -7,6 +7,8 @@ Usage: ${1##*/} FILE1 FILE2
 Swap 2 filenames around.
 
 EOF
+
+    exit
 fi
 
 ## We need a temp file is case both files are in the same folder. We use the

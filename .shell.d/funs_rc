@@ -1,15 +1,16 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Shell -- Functions.
-## Date 2013-03-03
 ################################################################################
 
 ## Functions that can be useful outside a shell (like in Emacs or Ranger) should
-## be written in stand-alone script instead.
+## be written in stand-alone scripts instead.
 
 ## Colored man pager.
 man()
 {
+    local BUF
+
     # Justify man pager to current window size.
     BUF=$(tput cols)
     [ $BUF -gt $MANWIDTH ] && BUF=$MANWIDTH
@@ -42,157 +43,9 @@ search()
     find . -iname "*$1*"
 }
 
-## Cut last n lines in file, 10 by default.
-cuttail()
-{
-    local nlines=${2:-10}
-    sed -n -e ":begin ; 1,${nlines}!{P;N;D} ; N ; b begin" $1
-}
-
-## Cut first n lines in file, 10 by default.
-cuthead()
-{
-    local nlines=${2:-10}
-    sed -n -e "1,${nlines}!p" $1
-}
-
-## Move filenames to lowercase.
-## Use ranger + bulkrename + vim/emacs (+ TwindleCase) for more flexibility.
-renamelower()
-{
-    local file
-    local filename
-    local dirname
-
-    for file ; do
-	    filename=${file##*/}
-
-	    case "$filename" in
-	        */*) dirname="${file%/*}" ;;
-	        *) dirname="." ;;
-        esac
-
-        local nf=$(echo $filename | tr A-Z a-z)
-        local newname="${dirname}/${nf}"
-        if [ "$nf" != "$filename" ]; then
-	        mv "$file" "$newname"
-	        echo "lowercase: $file --> $newname"
-        else
-	        echo "lowercase: $file not changed."
-        fi
-    done
-}
-
-## Swap 2 filenames around.
-renameswap()
-{
-    local TEMPFILE="$(mktemp)"
-    mv "$1" "$TEMPFILE"
-    mv "$2" "$1"
-    mv "$TEMPFILE" "$2"
-}
-
-## Network operations
-if [ -n  "$(command -v nmap)" ]; then
-    network-map()
-    {
-        echo "$1"
-        for SCANIP in $( nmap -sL "$1" | grep -i "\([[:digit:]]\+\.\)\{3,\}[[:digit:]]\+" | awk '{print $5}' ); do
-            sudo nmap -oX - -n -sT -T Normal -O -sR -I -F -P0 "$SCANIP"
-            echo
-        done
-    }
-fi
-
-netspeed ()
-{
-    local INTERFACE="eth0"
-    if [ -n "$1" ]; then
-        INTERFACE="$1"
-    fi
-
-    if [ ! -d "/sys/class/net/${INTERFACE}" ]; then
-        echo "Error: no such interface (${INTERFACE})"
-        return
-    fi
-
-    local RX_BEFORE=$(cat /sys/class/net/${INTERFACE}/statistics/rx_bytes)
-    local TX_BEFORE=$(cat /sys/class/net/${INTERFACE}/statistics/tx_bytes)
-    sleep 1
-    local RX_AFTER=$(cat /sys/class/net/${INTERFACE}/statistics/rx_bytes)
-    local TX_AFTER=$(cat /sys/class/net/${INTERFACE}/statistics/tx_bytes)
-
-    local RX_RESULT=$(((${RX_AFTER:-0}-${RX_BEFORE:-0})/1024))
-    local TX_RESULT=$(((${TX_AFTER:-0}-${TX_BEFORE:-0})/1024))
-
-    echo "RX $RX_RESULT KiB/s"
-    echo "TX $TX_RESULT KiB/s"
-}
-
-## CPU usage
-##
-## A typical CPU array is (on Linux Kernel 3.0)
-##   cpu  158150 0 52354 18562746 1472 0 10198 0 0 0
-##
-## The meanings of the columns are as follows, from left to right:
-##
-##   user: normal processes executing in user mode
-##   nice: niced processes executing in user mode
-##   system: processes executing in kernel mode
-##   idle: twiddling thumbs
-##   iowait: waiting for I/O to complete
-##   irq: servicing interrupts
-##   softirq: servicing softirqs
-##   ... (see 'man 5 proc' for further details)
-##
-## Only the first 4 values are interesting here.
-cpuusage()
-{
-    local cpuarray
-    local f1
-    local f2
-    local f3
-    local f4
-
-    cpuarray="$(grep 'cpu ' /proc/stat)"
-    f1=$(echo $cpuarray | cut -f3 -d' ')
-    f2=$(echo $cpuarray | cut -f4 -d' ')
-    f3=$(echo $cpuarray | cut -f5 -d' ')
-    f4=$(echo $cpuarray | cut -f6 -d' ')
-
-    local totalA=$(($f1+$f2+$f3+$f4))
-    local idleA=$f4
-
-    sleep 0.4
-
-    cpuarray="$(grep 'cpu ' /proc/stat)"
-    f1=$(echo $cpuarray | cut -f3 -d' ')
-    f2=$(echo $cpuarray | cut -f4 -d' ')
-    f3=$(echo $cpuarray | cut -f5 -d' ')
-    f4=$(echo $cpuarray | cut -f6 -d' ')
-
-    local totalB=$(($f1+$f2+$f3+$f4))
-    local idleB=$f4
-
-    local totaldiff=$((${totalB:-0}-${totalA:-0}))
-
-    if [ $totaldiff -eq 0 ]; then
-        echo 0
-    else
-        echo "$((100 - 100 * ($idleB-$idleA) / $totaldiff ))"
-    fi
-}
-
-## Webcam
-webcam ()
-{
-    ## With mplayer.
-    mplayer -fps 30 -tv driver=v4l2:width=640:height=480:device=/dev/video0 tv:// -flip
-}
-
 ## Vim-only: search the vim reference manual for a keyword.
 ## Usage: :h <keyword>
-if [ -n "$(command -v vim)" ]; then
+if command -v vim >/dev/null; then
     :h()
     {
         vim --cmd ":silent help $@" --cmd "only";
@@ -202,6 +55,7 @@ fi
 ## Term properties
 termcolors256()
 {
+    local x y o
     x=$(tput op)
     y=$(printf %76s)
     for i in {0..256}; do
@@ -213,6 +67,8 @@ termcolors256()
 ## Will not work for Bourne Shell.
 termcolors()
 {
+    local T
+
     # The test text. Must be 3 letters.
     T='Doh'
 
@@ -244,9 +100,11 @@ termsupport()
     done | sort -nk2
 }
 
-if [ -n "$(command -v highlight)" ] ; then
+if command -v highlight >/dev/null ; then
     hlt-viewer ()
     {
+        local SAMPLE DUMMY
+
         _printhelp()
         {
             cat<<EOF
@@ -265,7 +123,7 @@ EOF
             return
         fi
 
-        local SAMPLE="$(cat <<EOF
+        SAMPLE="$(cat <<EOF
 void function(char* pointer, int &ref)
 {
   int integer=3;
@@ -280,7 +138,6 @@ void function(char* pointer, int &ref)
 EOF
 )"
 
-        unset DUMMY
         for i in $(highlight -w | grep -v "\s\|^$"); do
             echo "******************** $i ********************"
             highlight -S c -O xterm256 <(echo "$SAMPLE") -s "$i"
@@ -292,21 +149,21 @@ EOF
     }
 fi
 
-## LSOF stats. Print number of open files per process.
-lsofstat()
+## Keymap view in terminal
+echokeymap ()
 {
-    local LSOFOUT=$(lsof|awk '{print $1}')
+    if [ $# -ne 1 ]; then
+        1="$HOME/.xkb/symbols/usex"
+    fi
 
-    for i in $(echo $LSOFOUT |sort -u);do
-        echo -n "$i "
-        echo $LSOFOUT | grep ^$i | wc -l
-    done
+    awk '/━|┃|│|─/ {gsub(/^\/\/ /, ""); print $0}' "$1"
 }
 
 ## Extended info
 typex()
 {
-    if [ $# -ne 1 ] || [ -z "$(command -v "$1")" ]; then
+    local xpath
+    if [ $# -ne 1 ] || ! command -v "$1" >/dev/null; then
         echo "Provide an existing command as parameter."
         return
     fi
@@ -316,7 +173,7 @@ typex()
         return
     fi
 
-    local xpath="$(type $1 | cut -d' ' -f3)"
+    xpath="$(type $1 | cut -d' ' -f3)"
     ls -l "$xpath"
     file "$xpath" | cut -d':' -f2 | cut -b 2-
 }
@@ -361,6 +218,39 @@ bindatasearch()
 # ' _ {} "$SOURCE" \;
 }
 
+browse ()
+{
+    # Compatible with ranger 1.4.2 through 1.6.*
+    #
+    # Automatically change the directory in bash after closing ranger.
+    #
+    # This is a shell wrapper script to automatically change the directory to the
+    # last visited one after ranger quits. To undo the effect of this function, you
+    # can type "cd -" to return to the original directory.
+
+    tempfile="$(mktemp)"
+    ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+    if [ -f "$tempfile" ] && [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
+        cd -- "$(cat "$tempfile")"
+    fi
+    rm -f -- "$tempfile"
+}
+
+## Webcam testing
+webcam ()
+{
+    ## With mplayer-like player.
+    mpv -fps 30 -tv driver=v4l2:width=640:height=480:device=/dev/video0 tv:// -flip
+}
+
+xscreen ()
+{
+    ## Does not work?
+    cvt $1 $2
+    echo  "$(cvt $1 $2 | tail -1 | cut -d' ' -f2-)"
+    xrandr --newmode "$(cvt $1 $2 | tail -1 | cut -d' ' -f2-)"
+}
+
 ## Xrandr
 xmulti ()
 {
@@ -382,70 +272,11 @@ xmultioff ()
     xrandr --output "$1" --off
 }
 
-## Extended pgrep -a.
-pgex ()
-{
-    ps aux | grep "$(echo "$@" | sed 's/./[&]/;q')"
-}
-
-## Keymap view in terminal
-echokeymap ()
-{
-    if [ $# -ne 1 ]; then
-        1="$HOME/.xkb/symbols/usex"
-    fi
-
-    awk '/━|┃|│|─/ {gsub(/^\/\/ /, ""); print $0}' "$1"
-}
-
-## Dump optical disc to iso
-clonecd ()
-{
-    if [ $# -ne 1 ] || [ "$1" = "-h" ]; then
-        echo "Usage: $0 ISO (without extension)"
-        return
-    fi
-
-    ## Slow
-    # readcd f="$1.iso" -v retries=32 timeout=30 -s speed=16 -noerror
-
-    ## Fast?
-    readcd f="$1.iso" -v retries=5 timeout=30 -noerror
-
-    DRIVE=/dev/sr0
-    # dd if=$DRIVE of='$1.iso' bs=2048 count=$(isosize -d 2048 $DRIVE) conv=sync,notrunc
-}
-
-browse ()
-{
-    # Compatible with ranger 1.4.2 through 1.6.*
-    #
-    # Automatically change the directory in bash after closing ranger.
-    #
-    # This is a shell wrapper script to automatically change the directory to the
-    # last visited one after ranger quits. To undo the effect of this function, you
-    # can type "cd -" to return to the original directory.
-
-    tempfile="$(mktemp)"
-    ranger --choosedir="$tempfile" "${@:-$(pwd)}"
-    if [ -f "$tempfile" ] && [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
-        cd -- "$(cat "$tempfile")"
-    fi
-    rm -f -- "$tempfile"
-}
-
-bb ()
-{
-    for i; do
-        git clone git@bitbucket.org:/ambrevar/$i
-    done
-}
-
 ##==============================================================================
 ## Pacman functions
 ##==============================================================================
 
-if [ -n "$(command -v pacman)" ]; then
+if command -v pacman >/dev/null; then
     ## Get detailed file list for the specified packages, omitting folders.
     pql ()
     {
@@ -510,4 +341,3 @@ if [ -d "/usr/local/texlive" ]; then
         sudo sh -c 'umask 022 && tlmgr remove $0 $@' "$@"
     }
 fi
-

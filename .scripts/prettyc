@@ -5,9 +5,10 @@ _printhelp()
     cat<<EOF
 Usage: ${0##*/} FILES|FOLDERS
 
-Format C source code using 'indent'.
+Prettify C source code using 'indent'.
 
 Alternative to indent: astyle, uncrustify.
+
 EOF
 
 }
@@ -23,29 +24,25 @@ if ! command -v indent >/dev/null; then
     exit
 fi
 
+CMD="indent -i4 -ppi4 -bli0 -cli4 -nut"
 _formatc_dir()
 {
+    ## Note that '+' does not work together with {} concatenation. Don't know
+    ## why...
     find "$1" -type f \
 	    -name "*.[ch]" \
         -print \
-        -exec indent -i4 -ppi4 -bli0 -cli4 -nut {} \;
-
-    ## Remove backup files.
-    find "$1" -type f \( \
-	    -name "*.[ch]~" -o \
-	    -name "*.[ch]~[0-9]*~" \) \
-        -delete
+        -exec $CMD {} \; \
+        -exec rm {}"~" \;
 }
 
 for i ; do
-    if [ ! -e "$i" ]; then
-        continue
-    fi
+    [ ! -e "$i" ] && continue
 
     if [ -d "$i" ]; then
         _formatc_dir "$i"
     else
-        indent -i4 -ppi4 -bli0 -cli4 -nut "$i"
-        rm -f "$i~" "$i~[0-9]*~"
+        $CMD "$i"
+        rm -f "$i~"
     fi
 done

@@ -7,6 +7,8 @@ Usage: ${1##*/} FILES
 Rename FILES to lowercase.
 
 EOF
+
+    exit
 fi
 
 for FILE ; do

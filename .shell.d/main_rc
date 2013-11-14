@@ -1,13 +1,12 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Shell configuration
-## Date 2013-08-04
 ################################################################################
 
 ## Terminal
 ## WARNING: this is often a bad idea!
 ## FreeBSD urxvt $TERM variable is not set properly for some reasons.
-if [ ! "$OSTYPE" = "linux-gnu" ]; then
+if [ ! "$(uname -o)" = "GNU/Linux" ]; then
     case "$TERM" in
         *rxvt*) export TERM="rxvt-unicode-256color";;
     esac
