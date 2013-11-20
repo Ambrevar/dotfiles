@@ -2,7 +2,7 @@
 
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
     cat<<EOF
-Usage: ${0##*/} PAGE
+Usage: ${0##*/} [SECTION] PAGE
 
 Fetch FreeBSD man page PAGE from the official website and display it.
 
@@ -10,9 +10,17 @@ EOF
     exit
 fi
 
+SECTION=0
+PAGE=$1
+if [ $# -eq 2 ]; then
+    SECTION="$1"
+    PAGE="$2"
+fi
+
+
 AGENT="curl -s"
 if ! command -v curl >/dev/null; then
     AGENT="wget -q -O - "
 fi
 
-$AGENT "http://www.freebsd.org/cgi/man.cgi?query=$1&apropos=0&sektion=0&manpath=FreeBSD+10-current&arch=default&format=ascii" | less
+$AGENT "http://www.freebsd.org/cgi/man.cgi?query=$PAGE&apropos=0&sektion=$SECTION&manpath=FreeBSD+10-current&arch=default&format=ascii" | less
