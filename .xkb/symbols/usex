@@ -1,18 +1,23 @@
 //------------------------------------------------------------------------------
 // XKB Custom us keyboard
-// 2013-09-15
 //------------------------------------------------------------------------------
+
+// Description: This keyboard layout is based on Xorg's "us intl". We set Caps
+// Lock to act as Left Control.
 
 // Installation: copy this file to '/usr/{local/,}share/X11/xkb/symbols'. You
 // can use it by selecting the "usex" layout from Xorg configuration file, or by
 // using the following command:
 //   $ setxkbmap usex
-// This keyboard layout is based on Xorg's "us intl".
-// We set Caps Lock to act as Left Control
+//
+// It is also possible to generate an xmodmap-compatible keymap with
+//   $ xmodmap -pke >> ~/.xmodmap_usex
+
+
 
 // ┌─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┲━━━━━━━━━┓
-// │ ~ ~ │ ! ¡ │ @ ˝ │ # ¯ │ $ ¤ │ % ¢ │ ^ ^ │ & ¼ │ * ˛ │ ( ˘ │ ) ± │ _ ⋅ │ + × ┃ ⌫ Back  ┃
-// │ ` ` │ 1 ¹ │ 2 ² │ 3 ³ │ 4 £ │ 5 € │ 6 ¥ │ 7 ½ │ 8 ¾ │ 9 ‘ │ 0 ’ │ - ÷ │ = ≠ ┃  space  ┃
+// │ ~ ~ │ ! ¡ │ @ ˝ │ # ¯ │ $ ¤ │ % ¢ │ ^ ^ │ & ¼ │ * ˛ │ ( ˘ │ ) ÷ │ _ × │ + ± ┃ ⌫ Back  ┃
+// │ ` ` │ 1 ¹ │ 2 ² │ 3 ³ │ 4 £ │ 5 € │ 6 ¥ │ 7 ½ │ 8 ¾ │ 9 ‘ │ 0 ’ │ - ⋅ │ = ≠ ┃  space  ┃
 // ┢━━━━━┷━┱───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┺━┳━━━━━━━┫
 // ┃       ┃ Q À │ W È │ E É │ R ® │ T ™ │ Y Ù │ U Ú │ I Í │ O Ó │ P Å │ { “ │ } ” ┃ Enter ┃
 // ┃Tab ↹  ┃ q à │ w è │ e é │ r ® │ t © │ y ù │ u ú │ i í │ o ó │ p å │ [ « │ ] » ┃   ⏎   ┃
@@ -43,9 +48,9 @@ xkb_symbols "basic" {
     key <AE07> { [ 7,     ampersand,       onehalf,              onequarter       ] };
     key <AE08> { [ 8,     asterisk,        threequarters,        dead_ogonek      ] };
     key <AE09> { [ 9,     parenleft,       leftsinglequotemark,  dead_breve       ] };
-    key <AE10> { [ 0,     parenright,      rightsinglequotemark, plusminus        ] };
-    key <AE11> { [ minus, underscore,      division,             0x10022C5        ] };
-    key <AE12> { [ equal, plus,            notequal,             multiply         ] };
+    key <AE10> { [ 0,     parenright,      rightsinglequotemark, division         ] };
+    key <AE11> { [ minus, underscore,      0x10022C5,            multiply         ] };
+    key <AE12> { [ equal, plus,            notequal,             plusminus        ] };
 
     key <AD01> { [ q,            Q,          agrave,         Agrave               ] };
     key <AD02> { [ w,            W,          egrave,         Egrave               ] };
