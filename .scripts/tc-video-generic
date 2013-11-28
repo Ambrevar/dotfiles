@@ -7,63 +7,91 @@ _printhelp()
     cat <<EOF
 Usage: ${1##*/} [OPTIONS] FILES|FOLDERS
 
-Transcode FILES or files found in FOLDERS to .mkv with x264 and ogg. Black
-stripes are *not* cropped by default since it may be sometimes inaccurate. By
-default output filenames are the same as the original, with time appended.
+Transcode FILES or files found in FOLDERS to desired format (default to .mkv
+with x264 and ogg vorbis). Black stripes are *not* cropped by default since it
+may be sometimes inaccurate. By default output filenames are the same as the
+original, with time appended.
 
 Options:
-  -b:      Default bitrate for audio stream with unidentifiable bitrate. If 0,
-           copy stream (default).
-  -c:      Copy streams (no reencoding).
-  -C:      Enable auto-crop (needs video reencoding).
-  -f:      Remove source when done.
-  -h:      Display this help.
-  -o OPT:  Additional options.
-  -p:      Preview changes, do not encode.
-  -P:      Generate two thumbnails, one cropped, the other not. Enable
-           auto-crop, do not encode.
-  -s:      Sample of 5 minutes.
-  -S MIN:  Sample of MIN minutes.
-  -t:      Remove all "title" metadata.
+  -a CODEC: Audio codec supported by ffmpeg. Defaults to libvorbis.
+  -b:       Default bitrate for audio stream with unidentifiable bitrate. If 0,
+            copy stream (default).
+  -c:       Copy streams (no reencoding).
+  -C:       Enable auto-crop (needs video reencoding).
+  -e EXT:   Set output container by specifying the extension. Defaults to mkv.
+  -f:       Remove source when done.
+  -h:       Display this help.
+  -o OPT:   Additional options.
+  -p:       Preview changes, do not encode.
+  -P:       Generate two thumbnails, one cropped, the other not. Enable
+            auto-crop, do not encode.
+  -s:       Sample of 5 minutes.
+  -S MIN:   Sample of MIN minutes.
+  -t:       Remove all "title" metadata.
+  -v CODEC: Video codec supported by ffmpeg. Defaults to libx264.
+
+You can get a list of supported codecs with
+
+  $ ffmpeg -codecs
 
 User options are read from variable TC_VIDEO_OPT. This can be useful if you
 often use the same options.
 
 Examples:
 
+* Get a preview of changes.
+
+  ${1##*/} -p input.video
+
+* Proceed with default options over folders and files.
+
+  ${1##*/} input-folder input.video
+
+* Convert to .avi container with xvid video and mp3 audio.
+
+  ${1##*/} -e avi -v xvid -a mp3 input.video
+
+* Preview black stripes cropping.
+
+  ${1##*/} -P input.video
+
+* Process with default options and remove black stripes.
+
+  ${1##*/} -C input.video
+
 * Exchange stream 1 an 2 by first removing them, then reading them in the
   desired order.
 
-  ${1##*/} -o '-map -0:1 -map -0:2 -map 0:2 -map 0:1' input.mkv
+  ${1##*/} -o '-map -0:1 -map -0:2 -map 0:2 -map 0:1' input.video
 
 * Change audio stream 1 title and remove audio stream 2 title:
 
-  ${1##*/} -o '-metadata:s:a:0 title="FR: OGG Stereo" -metadata:s:a:1 title=' input.mkv
+  ${1##*/} -o '-metadata:s:a:0 title="FR: OGG Stereo" -metadata:s:a:1 title=' input.video
 
 EOF
 }
 
-SAMPLE=""
-VIDEO_FILTER=""
+EXT="mkv"
+AUDIO_CODEC="libvorbis"
 VIDEO_PARAM="-c:v libx264 -preset slow -crf 20"
 AUDIO_PARAM=""
-AUDIO_CODEC="libvorbis"
+
+VIDEO_FILTER=""
 AUDIO_DEFAULT_RATE=0
 
-## What to do if file exists:
-# -y overwrite
-# -n do not overwrite.
 OVERWRITE="-n"
+SAMPLE=""
 OPT_OVERWRITE=false
-
 OPT_REMOVE_TITLE=false
 OPT_CROP=false
 OPT_CROPPREVIEW=false
 OPT_PREVIEW=false
 OPT_COPY=false
 
-while getopts ":b:cCfho:pPsS:t" opt; do
+while getopts ":a:b:cCe:fho:pPsS:tv:" opt; do
     case $opt in
+        a)
+            AUDIO_CODEC=$OPTARG ;;
         b)
             AUDIO_DEFAULT_RATE=$OPTARG ;;
         c)
@@ -72,6 +100,8 @@ while getopts ":b:cCfho:pPsS:t" opt; do
             OPT_COPY=true;;
         C)
             OPT_CROP=true;;
+        e)
+            EXT=$OPTARG;;
         f)
             OVERWRITE="-y"
             OPT_OVERWRITE=true;;
@@ -92,6 +122,8 @@ while getopts ":b:cCfho:pPsS:t" opt; do
             SAMPLE="-ss 60 -t $((60*$OPTARG))" ;;
         t)
             OPT_REMOVE_TITLE=true ;;
+        v)
+            VIDEO_PARAM="-c:v $OPTARG" ;;
         ?)
             _printhelp "$0"
             exit 1 ;;
@@ -127,7 +159,8 @@ _highfreq()
 _cropvalue()
 {
     ## For 5 different timeslices of 1 second at every 1/6th of the video, we
-    ## sample the crop values. We keep the values with highest frequency.
+    ## sample the crop values. We keep the values with highest frequency. This
+    ## is much faster than encoding in one pass with low framerate.
     STEP=$(($(_duration "$1")/6))
     for i in $(seq $STEP $STEP $((5*$STEP))); do
         ffmpeg -nostdin -ss $i -i "$1"  -t 10 -vf "cropdetect=24:2:0" -f null - 2>&1
@@ -166,7 +199,8 @@ _audiobitrate()
 _transcode()
 {
     echo "==> [$1]"
-    OUTPUT="${1%.*}-$(date '+%F-%H%M%S').mkv"
+    OUTPUT="${1%.*}.$EXT"
+    [ -e "$OUTPUT" ] && OUTPUT="${1%.*}-$(date '+%F-%H%M%S').$EXT"
 
     STREAM_TITLE=""
     if $OPT_REMOVE_TITLE; then
@@ -198,9 +232,10 @@ Sample:        ${SAMPLE:-no}
 Clear tags:    $OPT_REMOVE_TITLE
 In place:      $OPT_OVERWRITE
 Crop:          $OPT_CROP
-Video param:   $VIDEO_PARAM
+Video codec:   $VIDEO_PARAM
 Video filter:  $VIDEO_FILTER
-Audio param:   $AUDIO_PARAM
+Audio codec:   $AUDIO_PARAM
+Output file:   $OUTPUT
 ================================================================================
 EOF
 
@@ -224,7 +259,7 @@ EOF
 
     if $OPT_OVERWRITE; then
         rm "$1"
-        mv -f "$OUTPUT" "${1%.*}.mkv"
+        mv -f "$OUTPUT" "${1%.*}.$EXT"
     fi
     echo
 }
