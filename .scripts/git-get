@@ -11,7 +11,7 @@ Synopsis:
 
   -h:        Show this help.
   -d DOMAIN: Set domain.
-  -u USER:   Set domain.
+  -u USER:   Set the repository owner.
 
 EOF
 }
