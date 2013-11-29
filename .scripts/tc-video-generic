@@ -47,9 +47,9 @@ Examples:
 
   ${1##*/} input-folder input.video
 
-* Convert to .avi container with xvid video and mp3 audio.
+* Convert to .avi container with xvid (quality 3) video and mp3 audio.
 
-  ${1##*/} -e avi -v xvid -a mp3 input.video
+  ${1##*/} -e avi -v "libxvid -qscale:v 3" -a mp3 input.video
 
 * Preview black stripes cropping.
 
