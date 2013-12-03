@@ -9,7 +9,8 @@
     c = commit
     ca = commit -a
     co = checkout
-    d = diff --cached
+    d = diff --color-words
+    dc = diff --color-words --cached
     l = log --stat
     lol =  log --graph --decorate --pretty=format:'%C(yellow)%h %Cgreen%cd%C(bold red)%d%Creset %s' --abbrev-commit --date=short
     m = mergetool
