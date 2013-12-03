@@ -318,3 +318,10 @@ region. Output result at the end after an ' = ' separtor."
     (goto-line arg)
     (beginning-of-line)
     (point)))
+
+
+(defun toggle-trailing-whitespace ()
+  (interactive)
+  (if show-trailing-whitespace
+      (setq show-trailing-whitespace nil)
+      (setq show-trailing-whitespace t)))
