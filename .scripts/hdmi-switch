@@ -24,7 +24,7 @@ HDMICARD="$(aplay -l | awk '/HDMI/ {sub(/:/,"",$2); sub(/:/,"",$7); printf "card
 
 [ -z "$HDMI_STATUS" ] && exit
 
-udevadm settle --quiet --timeout=16
+udevadm settle --quiet --timeout=2
 
 ## Video
 for i in $(xrandr | awk '/^[[:alnum:]-]+ connected/ {print $1}'); do
