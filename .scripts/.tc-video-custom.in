@@ -19,7 +19,7 @@ Modes:
 EOF
 }
 
-TC_SAMPLE=""
+SAMPLE=""
 OPT_PROCESS=false
 while getopts ":hef" opt; do
     case $opt in
@@ -27,7 +27,7 @@ while getopts ":hef" opt; do
             _printhelp "$0"
             exit 1 ;;
         e)
-            TC_SAMPLE="-ss 60 -t 60"
+            SAMPLE="-ss 60 -t 60"
             OPT_PROCESS=true ;;
         f)
             OPT_PROCESS=true ;;
