@@ -16,6 +16,7 @@
     m = mergetool
     r = remote -v
     s = status -uno
+    su = status -uno -u
 [push]
     default = current
 
