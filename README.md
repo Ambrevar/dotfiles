@@ -1,6 +1,6 @@
 # Unix Home Configuration
 ## Author: P. Neidhardt
-### 2013-10-18
+### 2013-12-10
 
 Description
 ===========
@@ -12,8 +12,7 @@ maintain universality: it should work anywhere (whatever the versions of the
 programs are installed) with as few modifications as possible.
 
 Most interesting parts include advanced configuration for Emacs, Mutt, and some
-interesting shell scripts like a video transcoding wrapper and a smart audio
-organizer using FFmpeg.
+interesting shell scripts like a video transcoding wrapper using FFmpeg.
 
 --------------------------------------------------------------------------------
 Awesome
@@ -43,16 +42,17 @@ Emacs
   * optional: emacs-bison-mode emacs-flex-mode emacs-glsl-mode emacs-lua-mode
     emacs-make-regexp emacs-mediawiki-bzr
 
-Emacs daemon is integrated flawlessly thanks to a small script. See homeinit.
+Emacs daemon is integrated flawlessly thanks to a small script -- see the scripts folder.
 Because terminal and graphical clients do not behave the same way, it is
 sometimes useful to specify which version should be used. For mutt, ranger
 bulkrename, git commit message and dwb, it is required to wait for the client to
-return.
+return, for which only the console client will work properly.
 
 Configuration for C programming. Bindings to compile either from makefile or
 from a custom command if no makefile is found.
 
-TeX and LaTeX full-featured home made environment: no AucTeX required, snippets,
+TeX and LaTeX full-featured home made environment: no AucTeX required, itemize
+function, snippets,
 dynamic compilation with various engines, dynamic configuration, proper PDF
 view, temp files clean function, PDF compression, SyncTeX support.
 
@@ -64,8 +64,8 @@ Some customization: columns, kill whole line, org-mode, semantic, etc.
 
 Some custom functions: duplicate line, unfill-paragraph, etc.
 
-A lot of code snippets, especially for LaTeX. Contains document template, plot
-generation, pie chart generation, and others.
+A lot of code snippets, especially for C and LaTeX (document templates, plot
+generation, pie chart generation, and others).
 
 Mutt
 ====
@@ -78,7 +78,7 @@ This one is not easy to get into it. I managed to get multiple accounts with
 encrypted passwords working, which means there is no plain password stored on
 the disk. As a result, I just get prompted for a main password on Mutt startup,
 then everything works out of the box.  I use ccrypt for password management
-because it is much more simple than gnupg.
+because it is much simpler than gnupg.
 
 I'm using embedded IMAP and SMTP services which need appropriate compilation
 options.
@@ -99,7 +99,8 @@ Ranger
 * Extra deps: antiword, atool, highlight, img2txt, mediainfo, odt2txt, pdftotext,
 unrtf, w3m.
 
-Custom bindings, file association, tweaked a few options.
+Custom bindings, file association, tweaked a few options, additional functions
+(mkcd, extracthere...).
 
 Scripts
 =======
@@ -134,13 +135,6 @@ pdf*: PDF manipulation, e.g. extract pages, compress, resize to A4.
 
 pkggen: generate lists of installed with pacman, FreeBSD's pkg and tlmgr (TeX
   Live manager).
-
-tc-audio-*: smart audio transcoding implemented as shell functions. It will
-  convert, tag and move the input tracks in a dynamic, yet customizable
-  manner. It features a smart title case AWK function that will print almost any
-  audio tag the proper way. It will copy cover files when found. You can preview
-  the changes without writing data. Interesting parallelization with sed. Using
-  FFmpeg.
 
 tc-video-*: batch conversion of any kind of videos. Using FFmpeg.
 
