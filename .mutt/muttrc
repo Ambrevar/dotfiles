@@ -50,6 +50,10 @@ set mail_check = 60
 ## Mailbox type.
 set mbox_type=Maildir
 
+## Forward attachment as well
+set mime_forward=yes
+set mime_forward_rest=yes
+
 ## Keep showing the list of mails while in pager.
 set pager_index_lines=8
 
