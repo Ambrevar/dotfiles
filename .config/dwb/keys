@@ -178,6 +178,8 @@ repeat= .
 
 entry_delete_active=Control d
 
+hints_selector= 
+
 [1]
 save_search_field=gs
 tab_new=ga

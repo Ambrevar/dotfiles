@@ -57,7 +57,7 @@ fi
 unset TEXDIR
 
 ## Make 'less' more friendly for non-text input files, see lesspipe(1).
-[ -n "$(command -v lesspipe)" ] && eval "$(lesspipe)"
+command -v lesspipe >/dev/null && eval "$(lesspipe)"
 
 ## Manpage.
 export MANPAGER="less -s"
@@ -78,38 +78,34 @@ export TIME_STYLE=+"|%Y-%m-%d %H:%M:%S|"
 
 ## Default text editor
 EDITOR="nano"
-[ -n "$(command -v vim)" ] && EDITOR="vim"
-[ -n "$(command -v emacs)" ] && EDITOR="emacs"
+command -v vim >/dev/null && EDITOR="vim"
+command -v emacs >/dev/null && EDITOR="emacs"
 GIT_EDITOR="$EDITOR"
 
 ## 'em' is a script for emacsclient. See 'homeinit'.
-if [ -n "$(command -v em)" ]; then
+if command -v em >/dev/null; then
    EDITOR='em'
    GIT_EDITOR='emc'
 fi
+
 export EDITOR
 export GIT_EDITOR
 
 ## Internet Browser
-[ -n "$(command -v luakit)" ] && export BROWSER="luakit"
-[ -n "$(command -v dwb)" ] && export BROWSER="dwb"
+command -v luakit >/dev/null && export BROWSER="luakit"
+command -v dwb >/dev/null && export BROWSER="dwb"
 
 ## SSH-Agent
-## WARNING: this is somewhat insecure. Avoid using it on a mutli-user machine.
-if [ -n "$(command -v ssh-agent)" ]; then
-    SSH_ENV_FILE="/tmp/ssh-agent-env"
-    if [ $(ps ax -o command="" | grep -c "ssh-agent") -eq 1 ]; then
-        SSH_AGENT_VARS=$(ssh-agent)
-        eval $(echo "${SSH_AGENT_VARS}")
-        echo "${SSH_AGENT_VARS}" | sed '2q' | cut -d'=' -f2  | cut -d';' -f1 > "$SSH_ENV_FILE"
-        chmod 444 "$SSH_ENV_FILE"
-        unset $SSH_AGENT_VARS
-    elif [ -f "$SSH_ENV_FILE" ]; then
-        SSH_AUTH_SOCK=$(sed -n '1{p;q}' "$SSH_ENV_FILE") ; export SSH_AUTH_SOCK
-        SSH_AGENT_PID=$(sed -n '2{p;q}' "$SSH_ENV_FILE") 2>/dev/null ; export SSH_AGENT_PID
+## WARNING: this is somewhat insecure if someone else has root access to the machine.
+if command -v ssh-agent >/dev/null; then
+    readonly SSH_ENV_FILE="$HOME/.ssh/ssh-agent-env"
+    if [ ! -f "$SSH_ENV_FILE" ]; then
+        ssh-agent > "$SSH_ENV_FILE"
     fi
-    unset SSH_ENV_FILE
+    source "$SSH_ENV_FILE"
 fi
+## Kill ssh-agent if this is the only running session.
+trap '[ $(w -hs $USER | wc -l) -eq 1 ] && test -n "$SSH_AGENT_PID" && eval $(ssh-agent -k) && rm "$SSH_ENV_FILE"' 0
 
 ## Set TEMP dir if you want to override /tmp for some applications that check
 ## for this variable. Usually not a good idea.
