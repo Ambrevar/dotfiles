@@ -1,3 +1,6 @@
+remove Lock = Caps_Lock
+remove Control = Control_L
+!!
 keycode   8 =
 keycode   9 = Escape NoSymbol Escape
 keycode  10 = 1 exclam 1 exclam onesuperior exclamdown onesuperior
@@ -246,3 +249,6 @@ keycode 252 =
 keycode 253 =
 keycode 254 =
 keycode 255 =
+!!
+add Lock = Caps_Lock
+add Control = Control_L

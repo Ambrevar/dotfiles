@@ -18,7 +18,7 @@ installkeymap ()
 {
     if [ -f "$HOME/.xkb/symbols/$1" ] && ( [ ! -f "/usr/share/X11/xkb/symbols/$1" ] || \
         [ ! "$(sha1sum "$HOME/.xkb/symbols/$1" | cut -f1 -d' ')" = "$(sha1sum /usr/share/X11/xkb/symbols/$1 | cut -f1 -d ' ')" ] ); then
-        echo "==> '$1' font (press Ctrl-D to skip)"
+        echo "==> '$1' keymap (press Ctrl-D to skip)"
         sudo sh -c "install -m644 $HOME/.xkb/symbols/$1 /usr/share/X11/xkb/symbols/"
         echo
     fi

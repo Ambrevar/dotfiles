@@ -2,15 +2,11 @@
 ## Shell Config -- Master File
 ################################################################################
 
-##==============================================================================
-## Sourcing
-##==============================================================================
+readonly SHELL_CURRENT="$(ps -o command="" $$)"
+readonly SHELL_DIR="$HOME/.shell.d"
 
-SHELL_CURRENT="$(ps -o command="" $$)"
-SHELL_DIR="$HOME/.shell.d"
-
-## .profile is sourced automatically when X is started, but we need to source it
-## manually to TTY.
+## .profile is sourced automatically by most login managers, but we need to
+## source it manually to TTY.
 [ -z "$DISPLAY" ] && [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
 loadrc()

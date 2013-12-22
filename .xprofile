@@ -1,13 +1,8 @@
 #!/bin/sh
 ################################################################################
 ## XPROFILE
-## 2013-05-23
 ################################################################################
 ## This file is sourced by some DM and should not contain any desktop execution.
-
-## Env vars and general config. The .profile file should be automatically
-## sourced by the login manager.
-# [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
 ## X config (for URxvt, etc.)
 [ -f "${HOME}/.Xresources" ] && xrdb -merge "${HOME}/.Xresources"
@@ -16,7 +11,8 @@
 numlockx on
 
 ## Keymap. Only useful on multi-user environment where users have different
-## keymaps.
+## keymaps. The map file can be generated from current layout with
+##  xmodmap -pke > ~/.xmodmap
 if [ "$(setxkbmap -v 7 | awk '/^layout/ {print $2}')" != "usex" ]; then
     xmodmap ~/.xmodmap_usex
 fi
