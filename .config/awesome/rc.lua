@@ -552,18 +552,23 @@ for i = 1, keynumber do
 
       awful.key({ modkey, "Mod1" }, "#" .. i + 9,
                 function ()
-                   if client.focus and tags[client.focus.screen][i] then
-                      awful.client.movetotag(tags[client.focus.screen][i])
+                   if client.focus then
+                      local tag = awful.tag.gettags(client.focus.screen)[i]
+                      if tag then
+                         awful.client.movetotag(tag)
+                      end
                    end
                 end),
 
       -- Multi screen
       awful.key({ modkey, "Control" }, "#" .. i + 9,
                 function ()
-                   if client.focus and tags[client.focus.screen+1] and tags[client.focus.screen+1][i] then
-                      awful.client.movetotag(tags[client.focus.screen+1][i])
-                   elseif client.focus and tags[1][i] then
-                      awful.client.movetotag(tags[1][i])
+                   if client.focus then
+                      if tags[client.focus.screen+1] and tags[client.focus.screen+1][i] then
+                         awful.client.movetotag(tags[client.focus.screen+1][i])
+                      elseif tags[1][i] then
+                         awful.client.movetotag(tags[1][i])
+                      end
                    end
                 end)
                                      )
