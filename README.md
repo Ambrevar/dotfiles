@@ -311,6 +311,7 @@ Noteworthy apps
 * graphicsmagick
 * graphviz
 * grep
+* grip
 * groff
 * gtypist
 * guile

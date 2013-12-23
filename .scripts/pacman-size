@@ -10,30 +10,30 @@ grand total is printed at the end. It will only work for repos packages by
 default.
 
   -h: Show this help.
-  -n: Output is sorted by size.
+  -n: Output is sorted by name.
   -q: Uses installed packages database instead of repos database. It speeds up
       queries and allows displaying size of local packages not available in
       repos.
+  -s: Output is sorted by size.
 
 EOF
 }
 
 CMD="pacman -Si"
-SEP=": "
 TOTAL_SIZE=0
-OPT_SORTN="cat"
-# SORT="sort -u -k3"
-# SORT_SIZE="cat"
+OPT_SORT="false"
 
-while getopts ":hnq" opt; do
+while getopts ":hnqs" opt; do
     case $opt in
         h)
             _printhelp "$0"
             exit 1 ;;
         n)
-            OPT_SORTN="sort -n" ;;
+            OPT_SORT="sort -uk3" ;;
         q)
             CMD="pacman -Qi" ;;
+        s)
+            OPT_SORT="sort -n" ;;
         ?)
             _printhelp "$0"
             exit 1 ;;
@@ -63,22 +63,18 @@ if [ $(pacman -Qq "$@" 2>/dev/null | wc -l) -eq 0 ]; then
     exit
 fi
 
-## We use external variable for awk to fit current locales.
-## We use "eval" to be compatible with non-POSIX wordsplitting (e.g. zsh).
-RESULT="$(${CMD} $@ | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
-'$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | sort -uk3 | eval $OPT_SORTN)"
+## We use external variable for awk to fit current locales.  We use "eval" to be
+## compatible with non-POSIX wordsplitting (e.g. zsh).
+RESULT="$(${CMD} $@ | awk -F ": " -v filter="$pacman_size" -v pkg="$pacman_name" \
+'$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/[\.,].*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | ($OPT_SORT || cat))"
+
+## In the above version, we strip the decimals. This makes output lighter. The
+## line below does not do it.
+# '$0 ~ pkg {pkgname=$2} $0 ~ filter {printf("%13s %s\n", $2, pkgname)}'
 
 echo "$RESULT"
 
 ## Print total size.
 echo "$RESULT" | awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}'
 
-
-## One line version. Approximately same performance. Note the combination of
-## 'tee' and >(awk ...) to write the detailed list to standard output and to
-## pass it to awk.
-
-# ${CMD} $@ 2>/dev/null | awk -F "$SEP" -v filter="$pacman_size" -v pkg="$pacman_name" \
-#     '$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/\..*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | sort -u -k3 \
-# | tee >(awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}')
 
