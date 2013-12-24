@@ -57,15 +57,16 @@ done
 shift $(($OPTIND - 1))
 
 ## If expac is available, use it since it is much faster.
-if ! command -v expac >/dev/null; then
+if command -v expac >/dev/null; then
     expac -HK -$CMD '%6m %n' "$@" | awk -v sum=$OPT_TOTAL '{sub(/[\.,]00/,""); if(sum) total+=$1; printf("%6s %s %s\n",$1,$2,$3)} END {if(sum) print total, "KiB TOTAL"}' | ($OPT_SORT || cat)
     exit
 fi
 
+## All-packages mode. We use a different algorithm which is much faster than for a list of packages.
 if $OPT_ALL; then
-    ## All-packages mode. We use a different algorithm which is much faster than for a list of packages.
     DBPath=$(awk -F = '/^ *DBPath/{print $2}' /etc/pacman.conf)
     [ ! -d "$DBPath" ] && DBPath="/var/lib/pacman/"
+    [ ! -d "$DBPath/local/" ] && exit
 
     awk -v sum=$OPT_TOTAL '/^%NAME%/ {getline;pkg=$0} /^%SIZE%/ {getline; size=$0/1024; if (sum) total+=size; printf("%6s KiB %s\n", size, pkg)} END {if (sum) print total, "KiB TOTAL"}' "$DBPath"/local/*/desc | ($OPT_SORT || cat)
     exit
@@ -73,20 +74,30 @@ fi
 
 ## Per-package mode
 if [ $# -eq 0 ]; then
-    echo "Missing argument."
+    echo "Missing argument." >&2
     _printhelp "$0"
     exit 1
 fi
 
-if [ -f "${0%/*}/.pacman-init" ];then
-    . "${0%/*}/.pacman-init"
-else
-    echo "Missing init file" >&2 && exit 1
+if ! command -v pacman >/dev/null; then
+    echo "You need the pacman package manager." >&2
+    exit 1
 fi
+
+## We use the 'tzdata' package as reference for the output fields, because it is
+## almost always installed. This let's us access the entry of pacman's output
+## independently of the current locale.
+pacman_var_list="$(pacman -Qi tzdata | cut -f1 -d':')"
+if [ -z "$pacman_var_list" ]; then
+    echo "Could not get pacman's variables." >&2
+    exit 1
+fi
+pacman_name="$(echo "$pacman_var_list" | sed -n '1{p;q}')"
+pacman_size="$(echo "$pacman_var_list" | sed -n '15{p;q}')"
 
 if [ $(pacman -Qq "$@" 2>/dev/null | wc -l) -eq 0 ]; then
     echo "No valid package given." >&2
-    exit
+    exit 1
 fi
 
 ## We use external variable for awk to fit current locales. In the following
