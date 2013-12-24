@@ -17,9 +17,9 @@ if [ $(pacman -Qi catalyst-utils 2>/dev/null |wc -l) -ge 2 ]; then
     rm -f "/etc/X11/xorg.conf"
     pacman -S --noconfirm ati-dri lib32-ati-dri  xf86-video-ati
     pacman -S --noconfirm mesa-libgl lib32-mesa-libgl
-    pacman -S --noconfirm libcl
+    pacman -S --noconfirm libcl lib32-libcl
     if [ -f "/boot/syslinux/syslinux.cfg" ]; then
-        sed -i 's/nomodeset//' "/boot/syslinux/syslinux.cfg"
+        sed -i 's/ nomodeset//' "/boot/syslinux/syslinux.cfg"
         echo
         echo "#### Syslinux entry:"
         grep -A4 "^LABEL arch$" "/boot/syslinux/syslinux.cfg"
@@ -30,7 +30,7 @@ if [ $(pacman -Qi catalyst-utils 2>/dev/null |wc -l) -ge 2 ]; then
 else
     pacman -Rs --noconfirm ati-dri lib32-ati-dri  xf86-video-ati
     pacman -Rdd --noconfirm mesa-libgl lib32-mesa-libgl
-    pacman -Rdd --noconfirm libcl
+    pacman -Rdd --noconfirm libcl lib32-libcl
     pacman -S  --noconfirm catalyst catalyst-utils lib32-catalyst-utils
     aticonfig --initial
     if [ $? -eq 0 ] && [ -f "/boot/syslinux/syslinux.cfg" ]; then
