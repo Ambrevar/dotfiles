@@ -17,16 +17,18 @@ default.
       queries and allows displaying size of local packages not available in
       repos.
   -s: Output is sorted by size.
+  -t: Print total.
 
 EOF
 }
 
 CMD="S"
 TOTAL_SIZE=0
-OPT_SORT="false"
+OPT_SORT=false
 OPT_ALL=false
+OPT_TOTAL=0
 
-while getopts ":ahnqs" opt; do
+while getopts ":ahnqst" opt; do
     case $opt in
         a)
             OPT_ALL=true
@@ -40,6 +42,8 @@ while getopts ":ahnqs" opt; do
             CMD="Q" ;;
         s)
             OPT_SORT="sort -n" ;;
+        t)
+            OPT_TOTAL=1 ;;
         ?)
             _printhelp "$0"
             exit 1 ;;
@@ -52,18 +56,9 @@ done
 
 shift $(($OPTIND - 1))
 
-_result()
-{
-    echo "$RESULT" | ($OPT_SORT || cat)
-
-    ## Print total size.
-    echo "$RESULT" | awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}'
-}
-
 ## If expac is available, use it since it is much faster.
 if ! command -v expac >/dev/null; then
-    RESULT="$(expac -HK -$CMD '%6m %n' "$@" | awk '{sub(/[\.,]00/,"");printf("%6s %s %s\n",$1,$2,$3)}')"
-    _result
+    expac -HK -$CMD '%6m %n' "$@" | awk -v sum=$OPT_TOTAL '{sub(/[\.,]00/,""); if(sum) total+=$1; printf("%6s %s %s\n",$1,$2,$3)} END {if(sum) print total, "KiB TOTAL"}' | ($OPT_SORT || cat)
     exit
 fi
 
@@ -72,8 +67,7 @@ if $OPT_ALL; then
     DBPath=$(awk -F = '/^ *DBPath/{print $2}' /etc/pacman.conf)
     [ ! -d "$DBPath" ] && DBPath="/var/lib/pacman/"
 
-    RESULT="$(awk '/^%NAME%/{getline;pkg=$0}/^%SIZE%/{getline;printf("%6s KiB %s\n",$0/1024,pkg)}' "$DBPath"/local/*/desc)"
-    _result
+    awk -v sum=$OPT_TOTAL '/^%NAME%/ {getline;pkg=$0} /^%SIZE%/ {getline; size=$0/1024; if (sum) total+=size; printf("%6s KiB %s\n", size, pkg)} END {if (sum) print total, "KiB TOTAL"}' "$DBPath"/local/*/desc | ($OPT_SORT || cat)
     exit
 fi
 
@@ -95,13 +89,9 @@ if [ $(pacman -Qq "$@" 2>/dev/null | wc -l) -eq 0 ]; then
     exit
 fi
 
-## We use external variable for awk to fit current locales.  We use "eval" to be
-## compatible with non-POSIX wordsplitting (e.g. zsh).  In the following
+## We use external variable for awk to fit current locales. In the following
 ## command, we strip the decimals. This makes output lighter. The line below
 ## does not do it.
-# '$0 ~ pkg {pkgname=$2} $0 ~ filter {printf("%13s %s\n", $2, pkgname)}'
-RESULT="$(pacman -${CMD}i $@ | awk -F ": " -v filter="$pacman_size" -v pkg="$pacman_name" \
-'$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/[\.,].*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}')"
-
-_result
-
+#   '$0 ~ pkg {pkgname=$2} $0 ~ filter {printf("%13s %s\n", $2, pkgname)}'
+pacman -${CMD}i "$@" | awk -F ": " -v filter="$pacman_size" -v pkgname="$pacman_name" -v sum=$OPT_TOTAL \
+'$0 ~ pkgname {pkg=$2} $0 ~ filter {gsub(/[\.,].*/,""); if(sum) total+=$2; printf("%6s KiB %s\n", $2, pkg)} END {if(sum) print total, "KiB TOTAL"}' | ($OPT_SORT || cat)
