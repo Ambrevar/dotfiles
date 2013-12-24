@@ -4,11 +4,13 @@ _printhelp()
 {
     cat <<EOF
 Usage: ${1##*/} [OPTIONS] PACKAGES
+       ${1##*/} -a [OPTIONS]
 
 Display package size. Output contains no double and is alphabetically sorted. A
 grand total is printed at the end. It will only work for repos packages by
 default.
 
+  -a: All installed packages.
   -h: Show this help.
   -n: Output is sorted by name.
   -q: Uses installed packages database instead of repos database. It speeds up
@@ -19,19 +21,23 @@ default.
 EOF
 }
 
-CMD="pacman -Si"
+CMD="S"
 TOTAL_SIZE=0
 OPT_SORT="false"
+OPT_ALL=false
 
-while getopts ":hnqs" opt; do
+while getopts ":ahnqs" opt; do
     case $opt in
+        a)
+            OPT_ALL=true
+            CMD="Q" ;;
         h)
             _printhelp "$0"
             exit 1 ;;
         n)
             OPT_SORT="sort -uk3" ;;
         q)
-            CMD="pacman -Qi" ;;
+            CMD="Q" ;;
         s)
             OPT_SORT="sort -n" ;;
         ?)
@@ -46,6 +52,32 @@ done
 
 shift $(($OPTIND - 1))
 
+_result()
+{
+    echo "$RESULT" | ($OPT_SORT || cat)
+
+    ## Print total size.
+    echo "$RESULT" | awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}'
+}
+
+## If expac is available, use it since it is much faster.
+if ! command -v expac >/dev/null; then
+    RESULT="$(expac -HK -$CMD '%6m %n' "$@" | awk '{sub(/[\.,]00/,"");printf("%6s %s %s\n",$1,$2,$3)}')"
+    _result
+    exit
+fi
+
+if $OPT_ALL; then
+    ## All-packages mode. We use a different algorithm which is much faster than for a list of packages.
+    DBPath=$(awk -F = '/^ *DBPath/{print $2}' /etc/pacman.conf)
+    [ ! -d "$DBPath" ] && DBPath="/var/lib/pacman/"
+
+    RESULT="$(awk '/^%NAME%/{getline;pkg=$0}/^%SIZE%/{getline;printf("%6s KiB %s\n",$0/1024,pkg)}' "$DBPath"/local/*/desc)"
+    _result
+    exit
+fi
+
+## Per-package mode
 if [ $# -eq 0 ]; then
     echo "Missing argument."
     _printhelp "$0"
@@ -64,17 +96,12 @@ if [ $(pacman -Qq "$@" 2>/dev/null | wc -l) -eq 0 ]; then
 fi
 
 ## We use external variable for awk to fit current locales.  We use "eval" to be
-## compatible with non-POSIX wordsplitting (e.g. zsh).
-RESULT="$(${CMD} $@ | awk -F ": " -v filter="$pacman_size" -v pkg="$pacman_name" \
-'$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/[\.,].*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}' | ($OPT_SORT || cat))"
-
-## In the above version, we strip the decimals. This makes output lighter. The
-## line below does not do it.
+## compatible with non-POSIX wordsplitting (e.g. zsh).  In the following
+## command, we strip the decimals. This makes output lighter. The line below
+## does not do it.
 # '$0 ~ pkg {pkgname=$2} $0 ~ filter {printf("%13s %s\n", $2, pkgname)}'
+RESULT="$(pacman -${CMD}i $@ | awk -F ": " -v filter="$pacman_size" -v pkg="$pacman_name" \
+'$0 ~ pkg {pkgname=$2} $0 ~ filter {gsub(/[\.,].*/,"") ; printf("%6s KiB %s\n", $2, pkgname)}')"
 
-echo "$RESULT"
-
-## Print total size.
-echo "$RESULT" | awk '{TOTAL=$1+TOTAL} END {printf("Total: %d KiB\n",TOTAL)}'
-
+_result
 
