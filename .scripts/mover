@@ -4,7 +4,12 @@ if [ "$1" = "-h" ] || [ $# -lt 2 ]; then
     cat <<EOF
 ${0##*/} FOLDERS DEST
 
-Move FOLDERS into DEST. Does not overwrite by default. Empty folders are ignored.
+Merge FOLDERS content into DEST. Existing files and folders will remain. It does
+not overwrite by default. Empty folders are ignored. The resulting hierarchy is:
+
+  DEST/FOLDER1/<folder1data>
+  DEST/FOLDER2/<folder1data>
+  ...
 
 Options:
   -f: Overwrite destination.
@@ -40,18 +45,21 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-for i; do
-    ARGLIST="${ARGLIST:+$ARGLIST\n}$i"
-done
-FOLDERS="$(echo $ARGLIST | head -n-1)"
-DEST="$(echo $ARGLIST | tail -n1)"
+## We the counter we offer the interesting feature of processing all arguments
+## but the last one. We can get the last argument with an 'eval'. Note that the
+## 'eval' is safe here.
+DEST="$(eval "echo \$$#")"
+count=0
 
-while IFS= read -r FOLDER; do
+for i ; do
+    count=$(($count+1))
+    [ $count -eq $# ] && break
+
     while IFS= read -r FILE; do
         DESTFILE="$DEST/$FILE"
         if [ ! -e "$DESTFILE" ] || $OPT_OVERWRITE; then
             mkdir -p "$(dirname "$DESTFILE")"
-            mv -v "$FOLDER/../$FILE" "$DESTFILE"
+            mv -v "$i/../$FILE" "$DESTFILE"
 
             if $OPT_DELEMPTY; then
                 PARENT="$FOLDER/../$FILE"
@@ -60,10 +68,8 @@ while IFS= read -r FOLDER; do
             fi
         fi
 
-    ## We switch to FOLDER so that 'find' strips the parent dirs from the path.
+    ## We switch to $i so that 'find' strips the parent dirs from the path.
     done <<EOF
-$(cd "$FOLDER/.." && find "$(basename ${FOLDER})" \( -type f -o -type l \) )
+$(cd "$i/.." && find "$(basename ${i})" \( -type f -o -type l \) )
 EOF
-done <<EOF
-$(echo "$FOLDERS")
-EOF
+done
