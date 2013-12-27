@@ -45,7 +45,7 @@ alias grep='grep --color=auto'
 [ ${#XDG_APPS} -ne 0 ] && alias applist='grep -R "^Name=" $XDG_APPS | cut -d'=' -f2 | sort'
 
 ## Remove executable attribute.
-alias nox='find * -type f -exec chmod a-x {} +'
+alias nox='find . -type f -exec chmod a-x {} +'
 
 ## Get your external IP.
 command -v curl >/dev/null && alias myip='curl ifconfig.me'

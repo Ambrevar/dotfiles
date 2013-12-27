@@ -134,6 +134,13 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
+if ! command -v realpath >/dev/null; then
+    echo >&2 "'realpath' is required."
+    exit 1
+fi
+
+
+## realpath is needed to check if image was already mounted or not.
 if $OPT_UNMOUNT; then
     for i ; do
         _umount "$(realpath "$i")"

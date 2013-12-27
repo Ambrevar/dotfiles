@@ -60,8 +60,11 @@ command -v atool >/dev/null && echo "You should use atool instead." && echo
 _extract()
 {
     echo "[$1]"
-    FOLDER="$(realpath "$1")"
-    FOLDER="${FOLDER%/*}"
+    case "$1" in
+        */*) FOLDER="${1%/*}";;
+        *) FOLDER="." ;;
+    esac
+
 	case "$1" in
 		*.tar*|*.tbz2|*.tbz|*.tgz|*.txz) tar xf "$1" -C "$FOLDER" ;;
 		*.7z)      7z x "$PASS" -o"$FOLDER" "$1";;

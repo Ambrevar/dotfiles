@@ -72,9 +72,7 @@ _asciify()
 }
 
 if [ $# -ge 1 ]; then
-    for i; do
-        _asciify "$i"
-    done
+    _asciify "$@"
 else
     _asciify
 fi

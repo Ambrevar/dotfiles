@@ -44,7 +44,6 @@ done
 shift $(($OPTIND - 1))
 
 if $OPT_TAIL; then
-    # sed -n -e ":begin ; 1,${OPT_LINES}!{P;N;D} ; N ; b begin" $1
     sed -n -e ":begin ; 1,${OPT_LINES}!{P;N;D} ; N ; b begin" $1
 else
     sed -n -e "1,${OPT_LINES}!p" "$@"

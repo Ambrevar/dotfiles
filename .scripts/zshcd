@@ -12,19 +12,21 @@ ZDIRS="$HOME/.cache/zsh/dirs"
 ## Fetch file location dynamically.
 if [ ! -f ~/.zshrc ]; then
     echo '~/.zshrc not found. Exiting.'
-    exit
-fi
-if ! command -v realpath; then
-    echo "'realpath' not found. Exiting."
-    exit
+    exit 1
 fi
 
+## We need realpath to prevent us from adding duplicates to the zsh
+## DIRSTACKFILE.
+if ! command -v realpath; then
+    echo "'realpath' not found. Exiting."
+    exit 1
+fi
 
 SHELL_DIR_GREP="$(grep "SHELL_DIR=" ~/.zshrc | cut -f2 -d=)"
 [ -n "$SHELL_DIR_GREP" ] && SHELL_DIR="$(eval echo "$SHELL_DIR_GREP")"
 if [ ! -d "$SHELL_DIR" ]; then
     echo 'SHELL_DIR not found. Could not search for DIRSTACKFILE. Exiting.'
-    exit
+    exit 1
 fi
 
 ZDIRS_GREP="$(grep -rm1 'DIRSTACKFILE=' "$SHELL_DIR" | cut -f2 -d=)"
@@ -32,7 +34,7 @@ ZDIRS_GREP="$(grep -rm1 'DIRSTACKFILE=' "$SHELL_DIR" | cut -f2 -d=)"
 
 if [ ! -f "$ZDIRS" ]; then
     echo 'DIRSTACKFILE not found. Exiting.'
-    exit
+    exit 1
 fi
 
 ## Prepend argument to zsh dirstack.
