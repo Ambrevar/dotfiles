@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DATE=
+unset DATE
 
 _printhelp ()
 {
@@ -11,7 +11,7 @@ Create index of folder hierarchies. This is used as a small "backup" purpose. In
 case of data loss, it is still possible to get the full file list thanks to the
 indexes.
 
- -f: overwrite if output exists
+ -f: Overwrite if output exists.
 EOF
 }
 
@@ -44,12 +44,18 @@ if [ $# -eq 0 ]; then
 fi
 
 for i ; do
-    i="$(realpath "$i")"
+    base="$(basename "$i")"
     [ ! -d "$i" ] && continue
-    OUTPUT="${i##*/}.index"
-    [ -e "$OUTPUT" ] && $OPT_NOCLOBBER && OUTPUT="${i##*/}-$(date +%F-%T).index"
+    OUTPUT="$base.index"
+    [ -e "$OUTPUT" ] && $OPT_NOCLOBBER && OUTPUT="$base-$(date +%F-%T).index"
     echo "$OUTPUT"
-    (cd "$i" && find * -type f) | sort > "$OUTPUT"
-    # echo "## $(date +%F)" >> "$OUTPUT"
+
+    ## Find over '.*' and '*', is bad practice since if will fail if no existing
+    ## files or for files beginning with a dash. The 'printf' command in find is
+    ## for GNU find only.
+
+    ## The two following lines do the same for the same time cost. The former is shorter.
+    (cd "$i" && find . -type f) | sed 's/^.\///' | sort > "$OUTPUT"
+    # find "$i" -type f | awk -v str="$i" '{l=length(str)+2; print substr($0, l)}' | sort > "$OUTPUT"
 done
 
