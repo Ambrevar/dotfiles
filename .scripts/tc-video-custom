@@ -10,8 +10,6 @@ Usage: ${1##*/} [FILES]
 Create a '$OUTPUT_NAME' script in current folder. The script provides a FFmpeg call
 to transcode FILES with some useful options and instructive help.
 
-FILES realpath will be included into the script.
-
 This script is meant to be easily editable to fit the user needs.
 
 EOF
@@ -22,20 +20,14 @@ if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
     exit
 fi
 
-if ! command -v realpath >/dev/null; then
-    echo "realpath required."
-    exit
-fi
-
 SCRIPT_PATH="${0%/*}"
 SCRIPT_NAME="${0##*/}"
 FILELIST=""
 if [ -f "$SCRIPT_PATH/.$SCRIPT_NAME.in" ]; then
     cp -i "$SCRIPT_PATH/.$SCRIPT_NAME.in" "$OUTPUT_NAME"
     for i ; do
-        REAL="$(realpath "$i")"
-        FILELIST="${FILELIST:+$FILELIST -i }'$REAL'"
-        sed -i "s|^FILELINES|$REAL\nFILELINES|" "$OUTPUT_NAME"
+        FILELIST="${FILELIST:+$FILELIST -i }'$i'"
+        sed -i "s|###FILENAMES|'$i' ###FILENAMES|" "$OUTPUT_NAME"
     done
     sed -i 's|###FILELIST|'"$FILELIST"'|' "$OUTPUT_NAME"
     chmod +x "$OUTPUT_NAME"

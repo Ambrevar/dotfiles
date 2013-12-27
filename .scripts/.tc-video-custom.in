@@ -55,11 +55,6 @@ fi
 
 _transcode ()
 {
-    ## Zsh compatibility. We need it otherwise word splitting of parameter will
-    ## not work.
-    STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
-    [ "$STATUS" = "off" ] && set -o shwordsplit
-
     ## You can choose here to process all files at the same time. Useful if you
     ## need to remux streams or to concatenate.
     # ffmpeg -i ###FILELIST \
@@ -70,19 +65,16 @@ _transcode ()
         -map 0 \
         $SAMPLE \
         "${1%.*}-$(date '+%F-%H%M%S').mkv"
-
-    ## Restore Zsh previous options. This will not turn off shwordsplit if it
-    ## was on before calling the function.
-    [ "$STATUS" = "off" ] && set +o shwordsplit
 }
 
-## Choose to process all files one after another.
-while IFS= read -r i; do
-    _transcode "$i"
-done<<FILELINES
-FILELINES
+set -- ###FILENAMES
 
-## Or all files at the same time. You ahve to change the ffmpeg input in the
+## Choose to process all files one after another.
+for i ; do
+    _transcode "$i"
+done
+
+## Or all files at the same time. You have to change the ffmpeg input in the
 ## function.
 # _transcode
 
