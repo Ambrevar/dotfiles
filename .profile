@@ -74,7 +74,24 @@ export LESS=' -R '
 export TIME_STYLE=+"|%Y-%m-%d %H:%M:%S|"
 
 ## System locale
-# export LC_MESSAGES=fr_FR.utf8
+if [ "$USER" = "peter" ]; then
+    LANG=sv_SE.UTF-8
+    LC_CTYPE="sv_SE.UTF-8"
+    LC_NUMERIC="sv_SE.UTF-8"
+    LC_TIME="sv_SE.UTF-8"
+    LC_COLLATE="sv_SE.UTF-8"
+    LC_MONETARY="sv_SE.UTF-8"
+    LC_MESSAGES=sv_SE.UTF-8
+    LC_PAPER="sv_SE.UTF-8"
+    LC_NAME="sv_SE.UTF-8"
+    LC_ADDRESS="sv_SE.UTF-8"
+    LC_TELEPHONE="sv_SE.UTF-8"
+    LC_MEASUREMENT="sv_SE.UTF-8"
+    LC_IDENTIFICATION="sv_SE.UTF-8"
+
+    # LC_ALL=
+    LC_ALL=sv_SE.UTF-8
+fi
 
 ## Default text editor
 EDITOR="nano"
@@ -84,8 +101,8 @@ GIT_EDITOR="$EDITOR"
 
 ## 'em' is a script for emacsclient. See 'homeinit'.
 if command -v em >/dev/null; then
-   EDITOR='em'
-   GIT_EDITOR='emc'
+    EDITOR='em'
+    GIT_EDITOR='emc'
 fi
 
 export EDITOR
