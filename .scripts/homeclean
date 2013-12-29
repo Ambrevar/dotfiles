@@ -1,42 +1,43 @@
 #!/bin/sh
 
-RMLIST="$HOME/.cache/dwb
-$HOME/.cache/emacs
-$HOME/.cache/mutt
-$HOME/.cache/rtorrent
-$HOME/.cache/zsh
-$HOME/.cmus/autosave
-$HOME/.cmus/cache
-$HOME/.cmus/lib.pl
-$HOME/.cmus/playlist.pl
-$HOME/.cmus/queue.pl
-$HOME/.cmus/resume
-$HOME/.cmus/search-history
-$HOME/.config/gtk-2.0
-$HOME/.config/gtk-3.0
-$HOME/.config/ranger/bookmarks
-$HOME/.config/ranger/history
-$HOME/.config/ranger/tagged
-$HOME/.fehbg
-$HOME/.gtk-bookmarks
-$HOME/.lesshst
-$HOME/.local/share/newsbeuter
-$HOME/.local/share/webkit
-$HOME/.mtap.fuseiso
-$HOME/.pulse-cookie
-$HOME/.viminfo
-$HOME/.w3m
-$HOME/.zcompdump"
+set -- "$HOME/.cache/dwb" \
+    "$HOME/.cache/emacs" \
+    "$HOME/.cache/mutt" \
+    "$HOME/.cache/rtorrent" \
+    "$HOME/.cache/zsh" \
+    "$HOME/.cmus/autosave" \
+    "$HOME/.cmus/cache" \
+    "$HOME/.cmus/lib.pl" \
+    "$HOME/.cmus/playlist.pl" \
+    "$HOME/.cmus/queue.pl" \
+    "$HOME/.cmus/resume" \
+    "$HOME/.cmus/search-history" \
+    "$HOME/.config/gtk-2.0" \
+    "$HOME/.config/gtk-3.0" \
+    "$HOME/.config/ranger/bookmarks" \
+    "$HOME/.config/ranger/history" \
+    "$HOME/.config/ranger/tagged" \
+    "$HOME/.fehbg" \
+    "$HOME/.gtk-bookmarks" \
+    "$HOME/.lesshst" \
+    "$HOME/.local/share/newsbeuter" \
+    "$HOME/.local/share/webkit" \
+    "$HOME/.mpv/watch_later" \
+    "$HOME/.mtap.fuseiso" \
+    "$HOME/.pulse-cookie" \
+    "$HOME/.viminfo" \
+    "$HOME/.w3m" \
+    "$HOME/.zcompdump"
 
-RMLIST_CRITICAL="
-$HOME/.mutt.pwds.cpt
-$HOME/.ssh"
+## POSIX can store only one list at a time. Here we rely on the fact there is no
+## space in the file names.
+RMLIST_CRITICAL="$HOME/.mutt.pwds.cpt $HOME/.ssh"
 
 echo "==> List of files to be removed."
-echo "$RMLIST"
+echo "$@" | sed 's/ /\n/g'
 echo
 echo "==> List of files to be wiped."
-echo "$RMLIST_CRITICAL"
+echo "$RMLIST_CRITICAL" | sed 's/ /\n/g'
 
 CHOICE="N"
 echo
@@ -46,21 +47,6 @@ CHOICE="$(echo $CHOICE | tr [:lower:] [:upper:])"
 if [ "$CHOICE" != "Y" ]; then
     echo "Nothing done."
     exit
-fi
-
-## Delete git repo if any.
-if [ -d "$HOME/.git" ]; then
-    echo
-    echo "==> Cleaning git repo."
-    rm -rf "$HOME/.git"
-fi
-
-## Delete Dropbox folder if any.
-if [ -d "$HOME/Dropbox" ] || [ -d "$HOME/.dropbox" ]; then
-    echo
-    echo "==> Cleaning Dropbox folder."
-    rm -rvf "$HOME/Dropbox"
-    rm -rvf "$HOME/.dropbox"
 fi
 
 ## Clean trash if possible.
@@ -75,19 +61,17 @@ fi
 
 ## Remove data.
 echo
-while IFS= read -r i; do
-    rm -rvf "$i"
-done <<EOF
-$RMLIST
-EOF
+echo "==> Remove dotfiles."
+rm -rvf "$@"
 
 ## Wipe data
 echo
-while IFS= read -r i; do
-    shred -zuv "$i"
-done <<EOF
-$RMLIST_CRITICAL
-EOF
+echo "==> Remove critical data."
+if [ "$($HOME | grep -c' ')" -ne 0 ]; then
+    shred -zuv $RMLIST_CRITICAL
+else
+    echo 'WARNING: $HOME contains spaces, skipping.'
+fi
 
 echo
 echo "==> Cleaning done."
