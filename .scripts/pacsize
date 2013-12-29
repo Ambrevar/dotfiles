@@ -44,10 +44,10 @@ Examples:
   ${1##*/} -ast
     Convenient way to monitor big packages.
 
-  ${1##*/} -q $(pactree -ld1 linux)
+  ${1##*/} -q \$(pactree -ld1 linux)
     Print the size of linux and its direct dependencies.
 
-  ${1##*/} -qst $(pacman -Qdtq)
+  ${1##*/} -qst \$(pacman -Qdtq)
     Print a grand total of orphan packages, and sort by size.
 EOF
 }
