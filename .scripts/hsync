@@ -1,15 +1,37 @@
 #!/bin/awk -f
 
 function _printhelp() {
-    print "Usage: hsync [-vr=1] SOURCE TARGET\n"
-    print "Filesystem Hierarchy synchronizer."
-    print "Move files in TARGET identical to files in SOURCE such that they follow the same hierarchy."
-    print "Symlinks are ignored."
-    print "Set 'r' to 1 to actually run the process."
+    print "Filesystem hierarchy synchronizer\n\
+\n\
+Usage: hsync SOURCE TARGET\n\
+\n\
+Preview how to move files in TARGET so that identical files found in SOURCE and\n\
+TARGET have the same path in both folders. If duplicate files are found either\n\
+in SOURCE or in TARGET, they are ignored as it is up to the user to decide what\n\
+to do.\n\
+\n\
+Files are not actually moved, the command is printed to stdout. This way you can\n\
+redirect to a file and preview the changes before actually processing them.\n\
+\n\
+You can also process the changes directly from command-line with some shell\n\
+evaluation:\n\
+  eval $(hsync SOURCE TARGET)"
+}
+
+function _info(s) {
+    print "\n==> " s | "cat >&2"
+    close("cat >&2")
+}
+
+function _msg(s) {
+    print ":: " s | "cat >&2"
+    close("cat >&2")
 }
 
 BEGIN {
-    if (ARGC != 3)
+    ## Both parameters must be existing folders.
+    if (ARGC != 3 ||
+        ("test -d " ARGV[1] " && test -d " ARGV[2] " || echo KO" | getline) > 0 )
     {
         _printhelp()
         exit
@@ -18,40 +40,42 @@ BEGIN {
     ## Array subindices
     dup=1
 
-    print "==> Scanning " ARGV[1] "..."
+    _info("Scanning " ARGV[1] "...")
     while ( ("cd " ARGV[1] " && find . -type f -exec md5sum {} +" | getline ) > 0)
     {
-        ## We need to remove sum from line since filename may contain spaces.
         sum=$1
+        ## We need to remove sum from line since filename may contain spaces.
         sub(/[^ ]+  /, "")
 
         if (source[sum])
         {
-            print ":: Skipping duplicate: " $0
+            _msg("Skipping duplicate: " $0)
             source[sum, dup]=1
             continue
         }
         source[sum]=$0
     }
 
-    print "\n==> Scanning " ARGV[2] "..."
+    _info("Scanning " ARGV[2] "...")
     while ( ("cd " ARGV[2] " && find . -type f -exec md5sum {} +" | getline ) > 0)
     {
         sum=$1
+        ## Skip if duplicate or not existant in source.
         if (source[sum, dup] || ! source[sum])
             continue
+
         sub(/[^ ]+  /, "")
 
         if (target[sum])
         {
-            print ":: Skipping duplicate: " $0
+            _msg("Skipping duplicate: " $0)
             target[sum, dup]=1
             continue
         }
         target[sum]=$0
     }
 
-    print "\n==> Syncing hierarchy from " ARGV[1] " to " ARGV[2]
+    _info("Hierarchy syncing preview of " ARGV[2] " based on " ARGV[1])
     for (i in target)
     {
         ## Some indices are compound, e.g. 'sum, dup'. We split the indices to
@@ -70,12 +94,12 @@ BEGIN {
             change="'" ARGV[2] "/" target[subi[1]] "' '" ARGV[2] "/" source[subi[1]] "'"
 
             ## We only create a new folder if necessary.
-            cmd="[ ! -d '" dirname "' ] && mkdir -p \"" ARGV[2] "/" dirname "\" && mv -n " change
+            cmd="[ ! -d '" dirname "' ] && mkdir -p \"" ARGV[2] "/" dirname "\" && mv -nv " change
 
-            ## TODO: sort preview.
-            print change
-            if (r)
-                system(cmd)
+            ## We can sort preview by uncommenting the following pipe. This is
+            ## not very useful however, and it costs some n*log(n) more
+            ## operations.
+            print cmd #|"sort"
         }
     }
 }
