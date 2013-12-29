@@ -1,7 +1,6 @@
 #!/bin/sh
 ################################################################################
 ## .profile
-## 2013-06-03
 ################################################################################
 ## This file is sourced by .xprofile and shell rc files to make sure it work in
 ## TTY as well as under X.
@@ -113,22 +112,16 @@ command -v luakit >/dev/null && export BROWSER="luakit"
 command -v dwb >/dev/null && export BROWSER="dwb"
 
 ## SSH-Agent
-## WARNING: this is somewhat insecure if someone else has root access to the machine.
+## WARNING: this is insecure on machines where someone else has root access.
 if command -v ssh-agent >/dev/null; then
-    [ ! -e "$HOME/.ssh" ] && mkdir -p "$HOME/.ssh"
-    if [ -d "$HOME/.ssh" ]; then
-        readonly SSH_ENV_FILE="$HOME/.ssh/ssh-agent-env"
-        if [ ! -f "$SSH_ENV_FILE" ]; then
-            ssh-agent > "$SSH_ENV_FILE"
-        fi
-        source "$SSH_ENV_FILE"
-    fi
+    eval "$(ssh-agent)"
 fi
-## Kill ssh-agent if this is the only running session.
-trap '[ $(w -hs $USER | wc -l) -eq 1 ] && test -n "$SSH_AGENT_PID" && eval $(ssh-agent -k) && rm -f "$SSH_ENV_FILE"' 0
+## Kill ssh-agent on session end.
+trap 'test -n "$SSH_AGENT_PID" && eval $(ssh-agent -k)' 0
 
 ## Set TEMP dir if you want to override /tmp for some applications that check
-## for this variable. Usually not a good idea.
+## for this variable. Usually not a good idea since some applications will write
+## junk files in it.
 # [ -d "$HOME/temp" ] && export TEMP="$HOME/temp"
 
 ## Wine DLL override. This removes the annoying messages for Mono and Gecko.
