@@ -77,7 +77,8 @@ BEGIN {
         if (source[sum] || source_dup[sum])
         {
             _msg("Skipping duplicate: " name)
-            delete source[sum]
+            ## Note: it is not necessary to delete source[sum] since it will not
+            ## be used anyway if source_dup[sum] is set to 1.
             source_dup[sum] = 1
             continue
         }
