@@ -39,13 +39,10 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-
-if ! command -v readcd >/dev/null; then
-    echo >&2 "readcd required."
-    exit
+if ! command -v readcd >/dev/null 2>&1; then
+    echo >&2 "'readcd' not found in PATH. Exiting."
+    exit 1
 fi
-
-
 
 ## Fast?
 readcd dev=$DRIVE f="$1.iso" -v retries=5 timeout=30 -noerror

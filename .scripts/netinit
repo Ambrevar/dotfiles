@@ -27,7 +27,7 @@ Usage: ${1##*/} [OPTIONS]
 
 Connect to a wireless network.
 
-  -c:       Decrypt $WSFILE with ccrypt.
+  -c:       Decrypt $WSFILE with ccrypt's ccat command'.
   -d:       Use DHCP.
   -h:       Show this help.
   -t ITER:  Timeout (default: $TIMEOUT_LIMIT).
@@ -73,10 +73,11 @@ if [ $(id -u) -ne 0 ]; then
 fi
 
 if [ $USE_CRYPT -eq 1 ]; then
-    if ! command -v ccrypt >/dev/null; then
-        echo "You need to have 'ccrypt' installed."
-        exit
+    if ! command -v ccat >/dev/null 2>&1; then
+        echo >&2 "'ccat' not found in PATH. Exiting."
+        exit 1
     fi
+
     WPA_SUPPLICANT_CONF="$(ccat "$WSFILE")"
     if [ $? -ne 0 ]; then
         echo "Failed to decrypt wpa_supplicant config from $WSFILE."

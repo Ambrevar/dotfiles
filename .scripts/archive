@@ -63,8 +63,8 @@ fi
 ## We need 'realpath' since we need to work on the real path for the input
 ## files/folders and the archive location. Otherwise we could have troubles with
 ## circular symlinks and so on.
-if ! command -v realpath >/dev/null; then
-    echo >&2 "'realpath' is required."
+if ! command -v realpath >/dev/null 2>&1; then
+    echo >&2 "'realpath' not found in PATH. Exiting."
     exit 1
 fi
 

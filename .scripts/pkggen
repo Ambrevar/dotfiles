@@ -8,7 +8,7 @@ PKG_ROOT="$HOME/.pkg"
 mkdir -p "$PKG_ROOT"
 
 ## Arch Linux
-if command -v pacman >/dev/null; then
+if command -v pacman >/dev/null 2>&1; then
     ## Note: the "-n" option was added between 2012 and 2013.
     pacman -Qnq | sort >"$PKG_ROOT/arch-official-${HOST}"
     pacman -Qmq | sort >"$PKG_ROOT/arch-aur-${HOST}"

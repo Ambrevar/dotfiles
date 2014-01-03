@@ -19,7 +19,7 @@ fi
 
 
 AGENT="curl -s"
-if ! command -v curl >/dev/null; then
+if ! command -v curl >/dev/null 2>&1; then
     AGENT="wget -q -O - "
 fi
 

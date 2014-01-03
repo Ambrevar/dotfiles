@@ -56,7 +56,7 @@ fi
 unset TEXDIR
 
 ## Make 'less' more friendly for non-text input files, see lesspipe(1).
-command -v lesspipe >/dev/null && eval "$(lesspipe)"
+command -v lesspipe >/dev/null 2>&1 && eval "$(lesspipe)"
 
 ## Manpage.
 export MANPAGER="less -s"
@@ -94,12 +94,12 @@ fi
 
 ## Default text editor
 EDITOR="nano"
-command -v vim >/dev/null && EDITOR="vim"
-command -v emacs >/dev/null && EDITOR="emacs"
+command -v vim >/dev/null 2>&1 && EDITOR="vim"
+command -v emacs >/dev/null 2>&1 && EDITOR="emacs"
 GIT_EDITOR="$EDITOR"
 
-## 'em' is a script for emacsclient. See 'homeinit'.
-if command -v em >/dev/null; then
+## 'em' is a script for emacsclient. See '.scripts/em'.
+if command -v em >/dev/null 2>&1; then
     EDITOR='em'
     GIT_EDITOR='emc'
 fi
@@ -108,14 +108,12 @@ export EDITOR
 export GIT_EDITOR
 
 ## Internet Browser
-command -v luakit >/dev/null && export BROWSER="luakit"
-command -v dwb >/dev/null && export BROWSER="dwb"
+command -v luakit >/dev/null 2>&1 && export BROWSER="luakit"
+command -v dwb >/dev/null 2>&1 && export BROWSER="dwb"
 
 ## SSH-Agent
 ## WARNING: this is insecure on machines where someone else has root access.
-if command -v ssh-agent >/dev/null; then
-    eval "$(ssh-agent)"
-fi
+command -v ssh-agent >/dev/null 2>&1 && eval "$(ssh-agent)"
 ## Kill ssh-agent on session end.
 trap 'test -n "$SSH_AGENT_PID" && eval $(ssh-agent -k)' 0
 

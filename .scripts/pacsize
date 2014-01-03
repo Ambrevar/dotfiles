@@ -87,7 +87,7 @@ done
 shift $(($OPTIND - 1))
 
 ## If expac is available, use it since it is much faster.
-if ! command -v expac >/dev/null; then
+if ! command -v expac >/dev/null 2>&1; then
     expac -HK -$cmd '%6m %n' "$@" | awk -v sum=$opt_total '{sub(/[\.,]00/,""); if(sum) total+=$1; printf("%6s %s %s\n",$1,$2,$3)} END {if(sum) print total, "KiB TOTAL"}' | ($opt_sort || cat)
     exit
 fi
@@ -109,7 +109,7 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-if ! command -v pacman >/dev/null; then
+if ! command -v pacman >/dev/null 2>&1; then
     echo "You need the pacman package manager." >&2
     exit 1
 fi

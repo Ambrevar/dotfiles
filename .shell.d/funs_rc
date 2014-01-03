@@ -45,7 +45,7 @@ search()
 
 ## Vim-only: search the vim reference manual for a keyword.
 ## Usage: :h <keyword>
-if command -v vim >/dev/null; then
+if command -v vim >/dev/null 2>&1; then
     :h()
     {
         vim --cmd ":silent help $@" --cmd "only";
@@ -100,7 +100,7 @@ termsupport()
     done | sort -nk2
 }
 
-if command -v highlight >/dev/null ; then
+if command -v highlight >/dev/null 2>&1; then
     hlt-viewer ()
     {
         local SAMPLE DUMMY
@@ -163,12 +163,12 @@ echokeymap ()
 typex()
 {
     local xpath
-    if [ $# -ne 1 ] || ! command -v "$1" >/dev/null; then
+    if [ $# -ne 1 ] || ! command -v "$1" >/dev/null 2>&1; then
         echo "Provide an existing command as parameter."
         return
     fi
 
-    if [ -z "$(command -v "$1" | grep ^/)" ]; then
+    if [ -z "$(command -v "$1" 2>/dev/null | grep ^/)" ]; then
         type "$1"
         return
     fi
@@ -276,7 +276,7 @@ xmultioff ()
 ## Pacman functions
 ##==============================================================================
 
-if command -v pacman >/dev/null; then
+if command -v pacman >/dev/null 2>&1; then
     ## Get detailed file list for the specified packages, omitting folders.
     pql ()
     {
