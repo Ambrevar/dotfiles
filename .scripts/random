@@ -1,0 +1,26 @@
+#!/bin/sh
+
+if [  "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    cat <<EOF
+Usage: ${0##*/} [FILES]
+
+Shuffle letters randomly. If no file is provided, stdin is used.
+
+EOF
+    exit
+fi
+
+_shuffle()
+{
+    fold -w 1 "$@" | shuf | tr -d '\n' && echo
+
+    ## Interesting AWK alternative, much slower however.
+    # awk -F'\n' 'BEGIN {srand()} {input=input $0} END {count = split(input,a,"");  while(count >= 1) {i = (int(rand()*count) % count)+1; printf("%s", a[i]); a[i]=a[count];delete a[count]; count--} print ""}' "$@"
+
+}
+
+if [ $# -ge 1 ]; then
+    _shuffle "$@"
+else
+    _shuffle
+fi
