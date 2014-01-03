@@ -33,14 +33,15 @@ dwb
 ===
 
 Some custom options, download location, search engines, plugins, etc.
+Custom "fast-forward" javascript.
 
 Emacs
 =====
 
 * Extra deps
-  * recommended: emacs-multiple-cursors emacs-xclip emacs-yasnippet
-  * optional: emacs-bison-mode emacs-flex-mode emacs-glsl-mode emacs-lua-mode
-    emacs-make-regexp emacs-mediawiki-bzr
+* recommended: emacs-multiple-cursors emacs-xclip emacs-yasnippet
+* optional: emacs-bison-mode emacs-flex-mode emacs-glsl-mode emacs-lua-mode
+  emacs-make-regexp emacs-mediawiki-bzr
 
 Emacs daemon is integrated flawlessly thanks to a small script -- see the scripts folder.
 Because terminal and graphical clients do not behave the same way, it is
@@ -190,13 +191,10 @@ in some shells, the '*' joker will NOT match hidden files, that is
 will copy non-hidden folders only.  To match all folders, use the following
 joker instead:
 
-    cp -r source-dir/{.*,*} dest-dir/   # zsh
-    cp -r source-dir/{.??*,*} dest-dir/ # bash
+    cp -r source-dir/{.*,*} dest-dir/
 
-Still, the solution for bash is not perfect as it affects 3 characters files
-only. A more convenient solution:
+Still, the solution will not work for bash. A more convenient solution for bash:
 
-    # bash only.
     shopt -s dotglob
     cp -r source-dir/* dest-dir/
 
