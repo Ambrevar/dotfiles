@@ -1,0 +1,4 @@
+# name: command -v ...
+# key: cmd
+# --
+command -v $1 >/dev/null 2>&1 && $0
