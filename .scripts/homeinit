@@ -76,6 +76,7 @@ if command -v dwb >/dev/null 2>&1 && [ ! -f "$XDG_DATA_HOME/dwb/extensions/adblo
     echo "==> dwb"
     dwbem -Ni adblock_subscriptions
     dwbem -Ni navtools
+    dwbem -Ni contenthandler
     # dwbem -Ni youtube_html5
     echo
 fi

@@ -388,6 +388,7 @@ Noteworthy apps
 * texlive
 * textadept
 * tig
+* transmission
 * trash-cli
 * tree
 * udiskie
