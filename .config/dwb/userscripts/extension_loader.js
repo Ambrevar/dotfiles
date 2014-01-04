@@ -117,6 +117,7 @@ extensions.load("contenthandler", {
 
   // Handle requests based on URI scheme
   uriScheme : {
+      // Note: does not work with urxvt.
       ftp : function(uri) {
          if (uri[uri.length-1] == "/")
              return "xterm -e 'ncftp " + uri + "'";
