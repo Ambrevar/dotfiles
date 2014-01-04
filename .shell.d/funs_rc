@@ -191,7 +191,7 @@ bindatasearch()
         return
     fi
 
-    if [ $(du -b Cover.jpg | awk '{print $1}') -gt 1048576 ]; then
+    if [ $(wc -c Cover.jpg | cut -f1 -d' ') -gt 1048576 ]; then
         echo "[$1] file size must not exceed 1MB."
         return
     fi
