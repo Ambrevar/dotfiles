@@ -1,0 +1,20 @@
+#!/bin/sh
+
+check()
+{
+    for i ; do
+        if ! command -v $i >/dev/null 2>&1; then
+            echo >&2 "'$i' not found in PATH. Exiting."
+            exit 1
+        fi
+    done
+}
+check transmission-daemon transmission-remote-cli
+
+[ $(ps -U $USER | grep -c transmission-da) -eq 0 ] && transmission-daemon
+if [ $# -eq 0 ]; then
+    transmission-remote-cli
+else
+    transmission-remote "$@"
+fi
+
