@@ -5,9 +5,7 @@ if [ $# -ne 1 ] || [ "$1" = "-h" ] ; then
 Usage: ${1##*/} IP
 
 Print the map of the network associated to the provided IP.
-
 EOF
-
     exit
 fi
 
