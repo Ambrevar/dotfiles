@@ -19,7 +19,7 @@ the Bourne Shell.
 
 WARNING: this script is rather weak, most notably regarding existing files.
 
-Synopsis.
+Options.
 
   -f:  Remove archive if extraction was succesful.
   -p:  Ask for password.

@@ -7,7 +7,7 @@ Usage: ${1##*/} [OPTIONS] FILES
 
 Dump optical disc to ISOFILE (without extension).
 
-Synopsis:
+Options:
 
   -h:       Show this help.
   -d DRIVE: Set optical drive to use (e.g. 'sr1').

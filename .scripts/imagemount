@@ -92,7 +92,7 @@ Usage: ${1##*/} FILES
 Mount image files using CDEmu or fall back to fuseriso if available.  It will
 not mount an image if already mounted.
 
-Synopsis:
+Options:
 
   -h:  Show this help.
   -u:  Unmount folders.

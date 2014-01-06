@@ -7,7 +7,7 @@ Usage: ${1##*/} [OPTIONS] REPOS
 
 Clone multiple git repos from \$DOMAIN:\$USER.
 
-Synopsis:
+Options:
 
   -h:        Show this help.
   -d DOMAIN: Set domain.

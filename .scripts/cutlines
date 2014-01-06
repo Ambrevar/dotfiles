@@ -11,9 +11,10 @@ and output to stdout.
 Note: GNU 'head' has the '-n -10' option to do this. This program is only useful
 for non-GNU systems.
 
-Synopsis:
+Options:
 
   -h:    Show this help.
+  -i:    Replace file content instead of writing to stdout.
   -t:    Cut head instead of the tail. Like 'tail -n +11' with GNU tail (11
          because the limit line is included).
   -n N:  Cut N lines instead of 10.
@@ -23,8 +24,11 @@ EOF
 
 OPT_TAIL=true
 OPT_LINES=10
-while getopts ":hn:t" opt; do
+OPT_INPLACE=""
+while getopts ":ihn:t" opt; do
     case $opt in
+        i)
+            OPT_INPLACE="-i"
         h)
             _printhelp "$0"
             exit 1 ;;
@@ -44,7 +48,7 @@ done
 shift $(($OPTIND - 1))
 
 if $OPT_TAIL; then
-    sed -n -e ":begin ; 1,${OPT_LINES}!{P;N;D} ; N ; b begin" $1
+    sed $OPT_INPLACE -n -e ":begin ; 1,${OPT_LINES}!{P;N;D} ; N ; b begin" $1
 else
-    sed -n -e "1,${OPT_LINES}!p" "$@"
+    sed $OPT_INPLACE -n -e "1,${OPT_LINES}!p" "$@"
 fi

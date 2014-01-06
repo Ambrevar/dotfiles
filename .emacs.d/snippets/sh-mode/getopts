@@ -6,7 +6,7 @@ _printhelp ()
     cat<<EOF
 Usage: \${1##*/} [OPTIONS] FILES
 
-Synopsis:
+Options:
 
   -h:  Show this help.
 
