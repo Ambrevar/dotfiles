@@ -11,8 +11,8 @@ inhibit this behaviour, you need to double them.
 
 Options:
 
-  -i:  Replace file content instead of printing to stdout.
   -h:  Show this help.
+  -i:  Replace file content instead of printing to stdout.
 
 EOF
 }

@@ -4,16 +4,21 @@ if [  "$1" = "--help" ] || [ "$1" = "-h" ]; then
     cat <<EOF
 Usage: ${0##*/} [FILES]
 
-Convert non-ASCII characters to their ASCII equivalent. If files are provided,
-convert them in-place. Otherwise convert standard input to standard output.
+Convert non-ASCII characters to their ASCII equivalent. If no files are
+provided, use stdin.
+
+Options:
+
+  -i: If files are provided, convert them in-place.
 
 EOF
     exit
 fi
 
 unset OPT
-if [ $# -ge 1 ]; then
+if [ "$1" = "-i" ]; then
     OPT=-i
+    shift
 fi
 
 ## Note that we also use 'sed -i' to edit files instead of 'ex'. Otherwise the

@@ -5,37 +5,37 @@ _printhelp ()
     cat<<EOF
 Usage: ${1##*/} [OPTIONS] [FILES]
 
-Cut last 10 lines from stdin. If FILES are provided, cut files instead of stdin
-and output to stdout.
+Cut out last 10 lines from stdin. If FILES are provided, cut files instead of
+stdin and output to stdout.
 
 Note: GNU 'head' has the '-n -10' option to do this. This program is only useful
 for non-GNU systems.
 
 Options:
 
+  -f:    Cut out first 11 instead of the last. Like 'tail -n +11' with GNU tail (11
+         because the limit line is included).
   -h:    Show this help.
   -i:    Replace file content instead of writing to stdout.
-  -t:    Cut head instead of the tail. Like 'tail -n +11' with GNU tail (11
-         because the limit line is included).
   -n N:  Cut N lines instead of 10.
 
 EOF
 }
 
-OPT_TAIL=true
+OPT_CUTFIRST=false
 OPT_LINES=10
 OPT_INPLACE=""
-while getopts ":ihn:t" opt; do
+while getopts ":fhin:" opt; do
     case $opt in
-        i)
-            OPT_INPLACE="-i"
+        f)
+            OPT_CUTFIRST=true ;;
         h)
             _printhelp "$0"
             exit 1 ;;
+        i)
+            OPT_INPLACE="-i" ;;
         n)
             OPT_LINES=$OPTARG ;;
-        t)
-            OPT_TAIL=false ;;
         ?)
             _printhelp "$0"
             exit 1 ;;
@@ -47,8 +47,9 @@ done
 
 shift $(($OPTIND - 1))
 
-if $OPT_TAIL; then
-    sed $OPT_INPLACE -n -e ":begin ; 1,${OPT_LINES}!{P;N;D} ; N ; b begin" $1
+if $OPT_CUTFIRST; then
+    sed $OPT_INPLACE -n "1,${OPT_LINES}!p" "$@"
 else
-    sed $OPT_INPLACE -n -e "1,${OPT_LINES}!p" "$@"
+    echo CUTLAST
+    sed $OPT_INPLACE -n ":begin ; 1,${OPT_LINES}!{P;N;D}; N; b begin" "$@"
 fi

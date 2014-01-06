@@ -2,18 +2,26 @@
 
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
     cat <<EOF
-Usage: ${0##*/} STRING [FILES]
+Usage: ${0##*/} [OPTIONS] STRING [FILES]
 
 Prepend STRING to FILES or stdin if unspecified. STRING may not contain pipes
 ('|').
+
+Options:
+
+  -i: If files are provided, convert them in-place.
 
 EOF
     exit
 fi
 
+unset OPT
+if [ "$1" = "-i" ]; then
+    OPT=-i
+    shift
+fi
+
 VAR="$1"
 shift
 
-[ $# -eq 0 ] && OPT_INPLACE="" || OPT_INPLACE="-i"
-
-sed $OPT_INPLACE "1i$VAR" "$@"
+sed $OPT "1i$VAR" "$@"
