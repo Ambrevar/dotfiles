@@ -1,5 +1,20 @@
 #!/bin/sh
 
+if [ "$1" = "-h" ]; then
+    cat<<EOF
+Usage: ${0##*/} [OPTIONS]
+
+With no argument, start transmission-remote-cli. Otherwise, run
+transmission-remote with the provided options.
+
+In both cases if transmission-daemon is not running it will be started
+beforehand.
+
+EOF
+    exit
+fi
+
+
 check()
 {
     for i ; do
