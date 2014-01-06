@@ -59,8 +59,10 @@
     "speed-limit-up": 100, 
     "speed-limit-up-enabled": false, 
     "start-added-torrents": true, 
-    "trash-original-torrent-files": false, 
+    "trash-original-torrent-files": true, 
     "umask": 18, 
     "upload-slots-per-torrent": 14, 
-    "utp-enabled": true
+    "utp-enabled": true, 
+    "watch-dir": "/home/peter/temp", 
+    "watch-dir-enabled": true
 }

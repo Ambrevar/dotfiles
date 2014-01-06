@@ -111,8 +111,12 @@ extensions.load("contenthandler", {
 
   // Handle requests based on filename extension
   extension : {
-    // "torrent" : "xterm -e 'aria2 %u'",
-    // "pdf" : "xterm -e 'wget %u --directory-prefix=~/mypdfs'"
+      // Note that the extension handler does not always work (e.g. on
+      // torrenthound). As a workaround transmission can be configured to watch
+      // for the download path.
+      "torrent" : "trc -a '%u'"
+
+      // "pdf" : "xterm -e 'wget %u --directory-prefix=~/mypdfs'"
   },
 
   // Handle requests based on URI scheme
