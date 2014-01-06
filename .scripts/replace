@@ -7,8 +7,7 @@ Usage: ${1##*/} [OPTIONS] SEARCH REPLACE [FILES]
 
 Replace SEARCH by REPLACE in FILES. If no file is provided, use stdin.
 Backslashes are interpreted in SEARCH and REPLACE (e.g. \n, \t). If you want to
-inhibit this behaviour, you need to double them in REPLACE and to quadruple them
-in SEARCH.
+inhibit this behaviour, you need to double them.
 
 Options:
 
