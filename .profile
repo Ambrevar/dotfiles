@@ -55,6 +55,16 @@ if [ -d "${TEXDIR}" ]; then
 fi
 unset TEXDIR
 
+## Plan9
+PLAN9DIR="/opt/plan9"
+if [ -d "$PLAN9DIR" ]; then
+    appendpath "$PLAN9DIR/bin"
+    if [ "$OSTYPE" = "linux-gnu" ]; then
+        appendpath "$PLAN9DIR/share/man" MANPATH
+    fi
+fi
+unset PLAN9DIR
+
 ## Make 'less' more friendly for non-text input files, see lesspipe(1).
 command -v lesspipe >/dev/null 2>&1 && eval "$(lesspipe)"
 
