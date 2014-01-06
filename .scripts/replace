@@ -3,9 +3,12 @@
 _printhelp ()
 {
     cat<<EOF
-Usage: ${0##*/} [OPTIONS] SEARCH REPLACE [FILES]
+Usage: ${1##*/} [OPTIONS] SEARCH REPLACE [FILES]
 
 Replace SEARCH by REPLACE in FILES. If no file is provided, use stdin.
+Backslashes are interpreted in SEARCH and REPLACE (e.g. \n, \t). If you want to
+inhibit this behaviour, you need to double them in REPLACE and to quadruple them
+in SEARCH.
 
 Options:
 
@@ -45,7 +48,9 @@ shift 2
 
 _replace()
 {
-    awk -v search="$search" -v replace="$replace" '{gsub(search, replace); print}' "$@"
+    ## We cannot use gsub, otherwise regex substitutions could occur.
+    ## Source: http://mywiki.wooledge.org/BashFAQ/021
+    awk -v s="$search" -v r="$replace" 'BEGIN {l=length(s)} {o="";while (i=index($0, s)) {o=o substr($0,1,i-1) r; $0=substr($0,i+l)} print o $0}' "$@"
 }
 
 if [ $# -eq 0 ] || [ -z "$OPT_INPLACE" ]; then
