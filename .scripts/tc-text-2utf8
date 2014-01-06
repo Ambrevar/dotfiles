@@ -34,9 +34,9 @@ for i ; do
 
         elif [ -n "$(echo $CODING | grep 'UTF-8 Unicode (with BOM)')" ]; then
             echo "UTF-8 BOM:  [$j]"
-            sed -i '1s/^.//' "$j"
-            ## sed -i is not the fastest depending on the implementations. The
-            ## following commands work, but may be overkill.
+            ex -sc '1s/^.//|xit' "$j"
+            ## The following commands are funny alternatives, but are completely
+            ## overkill.
             # dd iflag=skip_bytes skip=3 if=file.srt of=temp.srt
             # dd bs=1 skip=3 if=file.srt of=temp.srt
             # tail -c +32 file.srt > temp.srt
@@ -44,7 +44,7 @@ for i ; do
 
         if [ -n "$(echo $CODING | grep 'CRLF')" ]; then
             echo "CRLF:       [$j]"
-            sed -i 's/\r//g' "$j"
+            ex -sc '%s///g|xit' "$j"
         fi
 
     done <<EOF

@@ -16,4 +16,4 @@ shift
 
 [ $# -eq 0 ] && OPT_INPLACE="" || OPT_INPLACE="-i"
 
-sed -n $OPT_INPLACE '1{s|^|'$VAR'\n|;h};1!H;${x;p}' "$@"
+sed $OPT_INPLACE "1i$VAR" "$@"

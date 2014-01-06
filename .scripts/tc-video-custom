@@ -27,9 +27,9 @@ if [ -f "$SCRIPT_PATH/.$SCRIPT_NAME.in" ]; then
     cp -i "$SCRIPT_PATH/.$SCRIPT_NAME.in" "$OUTPUT_NAME"
     for i ; do
         FILELIST="${FILELIST:+$FILELIST -i }'$i'"
-        sed -i "s|###FILENAMES|'$i' ###FILENAMES|" "$OUTPUT_NAME"
+        ex -sc "%s|###FILENAMES|'$i' ###FILENAMES|xit" "$OUTPUT_NAME"
     done
-    sed -i 's|###FILELIST|'"$FILELIST"'|' "$OUTPUT_NAME"
+    ex -sc '%s|###FILELIST|'"$FILELIST"'|xit' "$OUTPUT_NAME"
     chmod +x "$OUTPUT_NAME"
 else
     echo ".$SCRIPT_NAME.in not found!"
