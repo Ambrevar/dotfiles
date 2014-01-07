@@ -1,7 +1,9 @@
 ;; -*- mode:emacs-lisp -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Emacs config
-;; 2013-06-12
+;; Emacs lighweight config
+;;
+;; Load everything but the slowest config parts. Useful when non-client emacs is
+;; required.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar my-keys-minor-mode-map (make-keymap)
@@ -37,6 +39,7 @@ Example: to assign some-function to C-i, use
 (load "~/.emacs.d/mode-cc.el" nil t)
 (load "~/.emacs.d/mode-dot.el" nil t)
 (load "~/.emacs.d/mode-mediawiki.el" nil t)
+(load "~/.emacs.d/mode-perl.el" nil t)
 (load "~/.emacs.d/mode-python.el" nil t)
 (load "~/.emacs.d/mode-shell.el" nil t)
 (load "~/.emacs.d/mode-tex.el" nil t)
