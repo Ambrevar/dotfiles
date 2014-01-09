@@ -88,11 +88,7 @@
 ;; Highlight selections -- not activated by default on old Emacs.
 (transient-mark-mode 1)
 
-;; No trailing whitespace
-;; WARNING: this can break some configuration files needing whitespaces at the
-;; end.
-;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
+;; Whitespace, tabs, and other frivolities.
 ;; Highlight trailing whitespaces. For programming languages only, so that it
 ;; does not affect buffer like calendar and so on. There is no prog-mode-hook on
 ;; Emacs<24.
@@ -100,9 +96,16 @@
  (lambda (mode-hook)
    (add-hook
     mode-hook
-    (lambda () (interactive)
-      (setq show-trailing-whitespace t))))
+    (lambda ()
+      ;; (setq show-trailing-whitespace t)
+      (whitespace-mode))))
  '(prog-mode-hook lua-mode-hook))
+;; WARNING: this can break some configuration files needing whitespaces at the
+;; end.
+; (add-hook 'before-save-hook 'delete-trailing-whitespace)
+(setq whitespace-style (quote (face empty trailing tab-mark)))
+;; Does not seem to work properly.
+; (setq whitespace-action '(report-on-bogus))
 
 ;; Remove whitespaces on region, or whole file.
 (define-key my-keys-minor-mode-map (kbd "C-\\") 'delete-trailing-whitespace)
