@@ -328,7 +328,10 @@ region. Output result at the end after an ' = ' separtor."
 (defun toggle-indent-tabs ()
   (interactive)
   (if indent-tabs-mode
-      (setq indent-tabs-mode nil)
+      (progn
+        (message "Indent using tabs")
+        (setq indent-tabs-mode nil))
+    (message "Indent using spaces")
     (setq indent-tabs-mode t)))
 
 (define-key my-keys-minor-mode-map (kbd "C-c C-i") 'toggle-indent-tabs)

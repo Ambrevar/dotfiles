@@ -103,7 +103,7 @@
 ;; WARNING: this can break some configuration files needing whitespaces at the
 ;; end.
 ; (add-hook 'before-save-hook 'delete-trailing-whitespace)
-(setq whitespace-style (quote (face empty trailing tab-mark)))
+(setq whitespace-style (quote (face trailing tab-mark)))
 ;; Does not seem to work properly.
 ; (setq whitespace-action '(report-on-bogus))
 
