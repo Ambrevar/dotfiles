@@ -18,6 +18,7 @@ etoolbox
 eukdate
 eurosym
 fancyhdr
+fancyvrb
 geometry
 glossaries
 graphics
@@ -36,6 +37,7 @@ listings
 lm
 marvosym
 metalogo
+mh
 microtype
 minitoc
 moderncv
@@ -43,6 +45,7 @@ ms
 needspace
 oberdiek
 parskip
+pbox
 pdftex-def
 pgf
 pgfplots
@@ -55,6 +58,7 @@ tipa
 tools
 url
 varwidth
+wrapfig
 xargs
 xcolor
 xkeyval
