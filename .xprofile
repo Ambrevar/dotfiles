@@ -10,12 +10,8 @@
 ## Numlock
 numlockx on
 
-## Keymap. Only useful on multi-user environment where users have different
-## keymaps. The map file can be generated from current layout with
-##  xmodmap -pke > ~/.xmodmap
-if [ "$(setxkbmap -v 7 | awk '/^layout/ {print $2}')" != "usex" ]; then
-    xmodmap ~/.xmodmap_usex
-fi
+## Keymap
+xmodmap ~/.xmodmap_usim
 
 if [ "$OSTYPE" = "linux-gnu" ] ; then
     ## Set sound volume.
