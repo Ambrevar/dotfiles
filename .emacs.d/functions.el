@@ -335,3 +335,12 @@ region. Output result at the end after an ' = ' separtor."
     (setq indent-tabs-mode t)))
 
 (define-key my-keys-minor-mode-map (kbd "C-c C-i") 'toggle-indent-tabs)
+
+(defun toggle-word-delim ()
+  (interactive)
+  (if (string= (char-to-string (char-syntax ?_)) "_")
+      (progn
+        (modify-syntax-entry ?_ "w")
+        (message "_ is a not word delimiter"))
+    (modify-syntax-entry ?_ "_")
+    (message "_ is a word delimiter")))
