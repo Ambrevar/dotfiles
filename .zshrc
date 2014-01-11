@@ -3,8 +3,8 @@
 ################################################################################
 
 ## Note that 'ps -o command= $$' gives the same result with parameters.
-readonly SHELL_CURRENT="$(ps -o comm= $$)"
-readonly SHELL_DIR="$HOME/.shell.d"
+[ -z "$SHELL_CURRENT" ] && readonly SHELL_CURRENT="$(ps -o comm= $$)"
+[ -z "$SHELL_DIR" ] && readonly SHELL_DIR="$HOME/.shell.d"
 
 ## .profile is sourced automatically by most login managers, but we need to
 ## source it manually to TTY.
