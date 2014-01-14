@@ -30,6 +30,9 @@ check transmission-daemon transmission-remote-cli
 if [ $# -eq 0 ]; then
     transmission-remote-cli
 else
+    ## The 'sleep' is needed here to give the daemon some time to start. 1 sec
+    ## should be enough on most system.
+    sleep 1
     transmission-remote "$@"
 fi
 
