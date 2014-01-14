@@ -344,3 +344,12 @@ region. Output result at the end after an ' = ' separtor."
         (message "_ is a not word delimiter"))
     (modify-syntax-entry ?_ "_")
     (message "_ is a word delimiter")))
+
+(defun calc-eval-line ()
+  "Compute mathematical expression with calc and append result to
+end of line after an ' = ' separtor."
+  (interactive)
+  (end-of-line)
+  (insert " = " (calc-eval (buffer-substring-no-properties
+                            (line-beginning-position) (line-end-position)))))
+
