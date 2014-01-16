@@ -9,3 +9,9 @@ library_ext="/media/backup2/Musics"
 use_colors=true
 use_formatting=true
 
+## French
+constants="$constants un une de du le la les et mais pour ni ou à a où contre entre chez dans sur que qui "
+## German
+constants="$constants der die das den dem des ein eine einen eines einer wo an am in bei aus mit nach seit von zu vom zur zum durch für gegen ohne um "
+## Music
+constants="$constants d'Acide JBX "
