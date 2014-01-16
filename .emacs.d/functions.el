@@ -329,9 +329,9 @@ region. Output result at the end after an ' = ' separtor."
   (interactive)
   (if indent-tabs-mode
       (progn
-        (message "Indent using tabs")
+        (message "Indent using spaces")
         (setq indent-tabs-mode nil))
-    (message "Indent using spaces")
+    (message "Indent using tabs")
     (setq indent-tabs-mode t)))
 
 (define-key my-keys-minor-mode-map (kbd "C-c C-i") 'toggle-indent-tabs)
