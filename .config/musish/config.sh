@@ -9,6 +9,9 @@ library_ext="/media/backup2/Musics"
 use_colors=true
 use_formatting=true
 
+## Replace chars
+tagsed="s/[’´]/'/g; s/]/)/g; s/\[/(/g; s| *[/|\\:] *| - |g"
+
 ## French
 constants="$constants un une de du le la les et mais pour ni ou à a où contre entre chez dans sur que qui "
 ## German
