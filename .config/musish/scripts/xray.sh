@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ## X-Ray Dog.
-
+artist="X-Ray Dog"
 ## Albums actually have years, but is it relevent since they have a code?
 date=""
 ## Genre could be Soundtrack, or Trailer Music. We choose "" for now.
