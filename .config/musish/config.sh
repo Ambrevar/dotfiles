@@ -9,7 +9,7 @@ library_ext="/media/backup2/Musics"
 use_colors=true
 use_formatting=true
 
-## Replace chars
+## Replace chars: same as default with [] -> ()
 tagsed="s/[’´]/'/g; s/]/)/g; s/\[/(/g; s| *[/|\\:] *| - |g"
 
 ## French
