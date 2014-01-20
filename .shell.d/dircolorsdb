@@ -130,6 +130,7 @@ MULTIHARDLINK 1;37 # regular file with more than one link
 
 ## Audio formats (underlined bright magenta)
 .aac   4;95
+.ape   4;95
 .au    4;95
 .flac  4;95
 .mid   4;95
