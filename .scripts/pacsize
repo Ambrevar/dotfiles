@@ -30,12 +30,13 @@ processing.
 
 Options:
 
-  -a: All installed packages. Implies -q.
+  -a: All installed packages. Implies -Q.
   -h: Show this help.
   -n: Output is sorted by name.
-  -q: Uses installed packages database instead of repos database. It speeds up
-      queries and allows displaying size of local packages not available in
-      repos.
+  -Q: Use local database. It speeds up queries and allows displaying
+      size of local packages not available in repos.
+  -S: Use sync database. It is slower but allows to display size of
+      non-installed packages.
   -s: Output is sorted by size.
   -t: Print total.
 
@@ -44,7 +45,7 @@ Examples:
   ${1##*/} -ast
     Convenient way to monitor big packages.
 
-  ${1##*/} -q \$(pactree -ld1 linux)
+  ${1##*/} -Q \$(pactree -ld1 linux)
     Print the size of linux and its direct dependencies.
 
   ${1##*/} -qst \$(pacman -Qdtq)
@@ -52,13 +53,13 @@ Examples:
 EOF
 }
 
-cmd="S"
+cmd="Q"
 total_size=0
 opt_sort=false
 opt_all=false
 opt_total=0
 
-while getopts ":ahnqst" opt; do
+while getopts ":ahnQSst" opt; do
     case $opt in
         a)
             opt_all=true
@@ -68,8 +69,10 @@ while getopts ":ahnqst" opt; do
             exit ;;
         n)
             opt_sort="sort -uk3" ;;
-        q)
+        Q)
             cmd="Q" ;;
+        S)
+            cmd="S" ;;
         s)
             opt_sort="sort -n" ;;
         t)
@@ -87,14 +90,16 @@ done
 shift $(($OPTIND - 1))
 
 ## If expac is available, use it since it is much faster.
-if ! command -v expac >/dev/null 2>&1; then
+if command -v expac >/dev/null 2>&1; then
+    $opt_all && shift "$#"
     expac -HK -$cmd '%6m %n' "$@" | awk -v sum=$opt_total '{sub(/[\.,]00/,""); if(sum) total+=$1; printf("%6s %s %s\n",$1,$2,$3)} END {if(sum) print total, "KiB TOTAL"}' | ($opt_sort || cat)
     exit
 fi
 
-## All-packages mode. We use a different algorithm which is much faster than for a list of packages.
+## All-packages mode. We use a different algorithm which is much faster than for
+## a list of packages.
 if $opt_all; then
-    DBPath=$(awk -F = '/^ *DBPath/{print $2}' /etc/pacman.conf)
+    DBPath="$(awk -F = '/^ *DBPath/{print $2}' /etc/pacman.conf)"
     [ ! -d "$DBPath" ] && DBPath="/var/lib/pacman/"
     [ ! -d "$DBPath/local/" ] && exit
 
