@@ -1,7 +1,7 @@
 #!/bin/sh
 # pacsize -- display package sizes
 #
-# Copyright (C) 2013 Pierre Neidhardt <ambrevar@gmail.com>
+# Copyright (C) 2014 Pierre Neidhardt <ambrevar@gmail.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,6 +15,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+## TODO: move TOTAL at the end when not sorting by size.
 
 _printhelp()
 {
@@ -89,25 +91,31 @@ done
 
 shift $(($OPTIND - 1))
 
-## If expac is available, use it since it is much faster.
-if command -v expac >/dev/null 2>&1; then
-    $opt_all && shift "$#"
-    expac -HK -$cmd '%6m %n' "$@" | awk -v sum=$opt_total '{sub(/[\.,]00/,""); if(sum) total+=$1; printf("%6s %s %s\n",$1,$2,$3)} END {if(sum) print total, "KiB TOTAL"}' | ($opt_sort || cat)
-    exit
-fi
-
-## All-packages mode. We use a different algorithm which is much faster than for
-## a list of packages.
+################################################################################
+## All-packages mode. We use a dedicated algorithm which is much faster than
+## per-package mode.
 if $opt_all; then
     DBPath="$(awk -F = '/^ *DBPath/{print $2}' /etc/pacman.conf)"
     [ ! -d "$DBPath" ] && DBPath="/var/lib/pacman/"
     [ ! -d "$DBPath/local/" ] && exit
 
-    awk -v sum=$opt_total '/^%NAME%/ {getline;pkg=$0} /^%SIZE%/ {getline; size=$0/1024; if (sum) total+=size; printf("%6s KiB %s\n", size, pkg)} END {if (sum) print total, "KiB TOTAL"}' "$DBPath"/local/*/desc | ($opt_sort || cat)
+    awk -v total=$opt_total '/^%NAME%/ {getline;pkg=$0}
+/^%SIZE%/ {
+    getline
+    size = $0 / 1024
+    if (total)
+    total += size
+    printf ("%6s KiB %s\n", size, pkg)
+}
+END {
+    if (sum)
+    print total, "KiB TOTAL"
+}' "$DBPath"/local/*/desc | ($opt_sort || cat)
     exit
 fi
 
-## Per-package mode
+################################################################################
+## Per-package mode.
 if [ $# -eq 0 ]; then
     echo "Missing argument." >&2
     _printhelp "$0"
@@ -119,20 +127,24 @@ if ! command -v pacman >/dev/null 2>&1; then
     exit 1
 fi
 
-## We use the 'tzdata' package as reference for the output fields, because it is
-## almost always installed. This let's us access the entry of pacman's output
-## independently of the current locale.
-pacman_var_list="$(pacman -Qi tzdata | cut -f1 -d':')"
-if [ -z "$pacman_var_list" ]; then
-    echo "Could not get pacman's variables." >&2
-    exit 1
-fi
-pacman_name="$(echo "$pacman_var_list" | sed -n '1{p;q}')"
-pacman_size="$(echo "$pacman_var_list" | sed -n '15{p;q}')"
+## Locale.
+LC_NAME="$(gettext pacman "Name")"
+LC_SIZE="$(gettext pacman "Installed Size :" | sed 's/ *: *$//')"
 
 ## We use external variable for awk to fit current locales. In the following
 ## command, we strip the decimals. This makes output lighter. The line below
 ## does not do it.
 #   '$0 ~ pkg {pkgname=$2} $0 ~ filter {printf("%13s %s\n", $2, pkgname)}'
-pacman -${cmd}i "$@" 2>/dev/null | awk -F ": " -v filter="$pacman_size" -v pkgname="$pacman_name" -v sum=$opt_total \
-'$0 ~ pkgname {pkg=$2} $0 ~ filter {gsub(/[\.,].*/,""); if(sum) total+=$2; printf("%6s KiB %s\n", $2, pkg)} END {if(sum && total) print total, "KiB TOTAL"}' | ($opt_sort || cat)
+pacman -${cmd}i "$@" 2>/dev/null | awk -F ": " \
+    -v pkgsize="$LC_SIZE" -v pkgname="$LC_NAME" -v sum=$opt_total \
+'$0 ~ pkgname { pkg = $2 }
+$0 ~ pkgsize {
+    gsub (/[\.,].*/, "")
+    if (sum)
+        total += $2
+    printf ("%6s KiB %s\n", $2, pkg)
+}
+END {
+    if (sum && total)
+    print total, "KiB TOTAL"
+}' | ($opt_sort || cat)
