@@ -38,11 +38,9 @@ usage() {
 Usage: ${1##*/} [OPTIONS] PACKAGES
        ${1##*/} -a [OPTIONS]
 
-Display package sizes. Output can be sorted by name or size, while removing
-duplicates if any. A grand total can be printed at the end. By default, search
-the sync database. For faster processing and local package support, you can use
-the local databases. If 'expac' is found in the path, it will be used for faster
-processing.
+Display package sizes. Duplicates are removed if any. Output can be sorted by
+name or size. A grand total can be printed at the end. Both the sync and the
+local databes can be used for lookup.
 
 Options:
 
@@ -59,12 +57,12 @@ Options:
 Examples:
 
   ${1##*/} -ast
-    Convenient way to monitor big packages.
+    Convenient way to keep track of big packages.
 
   ${1##*/} -Q \$(pactree -ld1 linux)
-    Print the size of linux and its direct dependencies.
+    Print the size of linux and all its direct dependencies.
 
-  ${1##*/} -qst \$(pacman -Qdtq)
+  ${1##*/} -Qst \$(pacman -Qdtq)
     Print a grand total of orphan packages, and sort by size.
 EOF
 }
