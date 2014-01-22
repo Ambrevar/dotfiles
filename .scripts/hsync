@@ -74,7 +74,7 @@ BEGIN {
         ## spaces. substr is faster than sub.
         name = substr($0, 35)
 
-        if (source[sum] || source_dup[sum])
+        if (sum in source || sum in source_dup)
         {
             _msg("Skipping duplicate: " name)
             ## Note: it is not necessary to delete source[sum] since it will not
@@ -92,10 +92,10 @@ BEGIN {
         name = substr($0, 35)
 
         ## Skip if duplicate, not existant in source, or identical.
-        if (source_dup[sum] || ! source[sum] || source[sum] == name)
+        if (sum in source_dup || ! (sum in  source) || source[sum] == name)
             continue
 
-        if (target[sum] || target_dup[sum])
+        if (sum in target || sum in target_dup)
         {
             _msg("Skipping duplicate: " name)
             delete target[sum]

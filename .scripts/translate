@@ -84,7 +84,7 @@ _filter()
         return
     fi
 
-    if command -v jshon >/dev/null; then
+    if command -v jshon >/dev/null 2>&1; then
         ## Input may have empty fields, which is not normally allowed in
         ## json. Let's fix this.
         input="$(sed -e 's/,\+/,/g' -e 's/\[,\+/\[/g' -e 's/,\+\]/\]/g')"
@@ -102,7 +102,7 @@ _filter()
             echo "$input" | jshon -e 3 -e 0 -e 2 -a -e 0 -u | tr '\n' ',' | sed 's/,$/\n/'
         else
             count=0
-            ## Fetch grammatical type in 'type'
+            ## Fetch grammatical type in 'type'.
             while read -r type; do
                 echo -n $type:
 
