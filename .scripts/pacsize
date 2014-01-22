@@ -16,10 +16,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## TODO: move TOTAL at the end when not sorting by size.
+################################################################################
+## Helper functions.
 
-_printhelp()
-{
+calc_total () {
+    awk '{
+    total += $1
+    print
+}
+END {
+    printf ("%7s KIB TOTAL\n", total)
+}'
+}
+
+remove_duplicates () {
+    awk '! table[$0]++'
+}
+
+usage() {
     cat <<EOF
 Usage: ${1##*/} [OPTIONS] PACKAGES
        ${1##*/} -a [OPTIONS]
@@ -55,36 +69,35 @@ Examples:
 EOF
 }
 
-cmd="Q"
-total_size=0
+db="Q"
 opt_sort=false
 opt_all=false
-opt_total=0
+opt_total=false
 
 while getopts ":ahnQSst" opt; do
     case $opt in
         a)
             opt_all=true
-            cmd="Q" ;;
+            db="Q" ;;
         h)
-            _printhelp "$0"
+            usage "$0"
             exit ;;
         n)
             opt_sort="sort -uk3" ;;
         Q)
-            cmd="Q" ;;
+            db="Q" ;;
         S)
-            cmd="S" ;;
+            db="S" ;;
         s)
-            opt_sort="sort -n" ;;
+            opt_sort="sort -un" ;;
         t)
-            opt_total=1 ;;
+            opt_total="calc_total" ;;
         ?)
-            _printhelp "$0"
+            usage "$0"
             exit 1 ;;
         :)
             echo "Missing argument."
-            _printhelp "$0"
+            usage "$0"
             exit 1 ;;
     esac
 done
@@ -99,18 +112,15 @@ if $opt_all; then
     [ ! -d "$DBPath" ] && DBPath="/var/lib/pacman/"
     [ ! -d "$DBPath/local/" ] && exit
 
-    awk -v total=$opt_total '/^%NAME%/ {getline;pkg=$0}
+    awk '/^%NAME%/ {
+    getline
+    pkg=$0
+}
 /^%SIZE%/ {
     getline
     size = $0 / 1024
-    if (total)
-    total += size
     printf ("%6s KiB %s\n", size, pkg)
-}
-END {
-    if (sum)
-    print total, "KiB TOTAL"
-}' "$DBPath"/local/*/desc | ($opt_sort || cat)
+}' "$DBPath"/local/*/desc | ($opt_sort || cat) | ($opt_total || cat)
     exit
 fi
 
@@ -118,12 +128,12 @@ fi
 ## Per-package mode.
 if [ $# -eq 0 ]; then
     echo "Missing argument." >&2
-    _printhelp "$0"
+    usage "$0"
     exit 1
 fi
 
 if ! command -v pacman >/dev/null 2>&1; then
-    echo "You need the pacman package manager." >&2
+    echo "'pacman' not found." >&2
     exit 1
 fi
 
@@ -132,19 +142,13 @@ LC_NAME="$(gettext pacman "Name")"
 LC_SIZE="$(gettext pacman "Installed Size :" | sed 's/ *: *$//')"
 
 ## We use external variable for awk to fit current locales. In the following
-## command, we strip the decimals. This makes output lighter. The line below
-## does not do it.
-#   '$0 ~ pkg {pkgname=$2} $0 ~ filter {printf("%13s %s\n", $2, pkgname)}'
-pacman -${cmd}i "$@" 2>/dev/null | awk -F ": " \
-    -v pkgsize="$LC_SIZE" -v pkgname="$LC_NAME" -v sum=$opt_total \
-'$0 ~ pkgname { pkg = $2 }
+## command, we strip the decimals. This makes output lighter.
+pacman -${db}i "$@" 2>/dev/null | awk -F ": " \
+    -v pkgsize="$LC_SIZE" -v pkgname="$LC_NAME" \
+'$0 ~ pkgname {
+    pkg = $2
+}
 $0 ~ pkgsize {
     gsub (/[\.,].*/, "")
-    if (sum)
-        total += $2
-    printf ("%6s KiB %s\n", $2, pkg)
-}
-END {
-    if (sum && total)
-    print total, "KiB TOTAL"
-}' | ($opt_sort || cat)
+    printf ("%7s KiB %s\n", $2, pkg)
+}' | ($opt_sort || remove_duplicates) | ($opt_total || cat)
