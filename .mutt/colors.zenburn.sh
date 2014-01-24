@@ -7,6 +7,8 @@ set my_new = color142
 set my_old = color172
 set my_uri = color108
 set my_flag = color116
+set my_tag = color116
+set my_tag_bg = color238
 
 set my_address = color69
 set my_from = color201
