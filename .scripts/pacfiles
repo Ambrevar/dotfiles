@@ -47,4 +47,4 @@ if [ $(pacman -Qq "$@" 2>/dev/null | wc -l) -eq 0 ]; then
 fi
 
 ## We use "eval" to be compatible with non-POSIX wordsplitting (e.g. zsh).
-du -bch $(pacman -Qlq "$@" | grep -v ".*/$" | sort -u) 2>/dev/null | eval ${OPTION_SORT}
+du -bch $(pacman -Qlq "$@" | grep -v '.*/$' | sort -u) 2>/dev/null | eval ${OPTION_SORT}
