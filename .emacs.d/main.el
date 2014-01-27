@@ -561,6 +561,13 @@ has errors and/or warnings."
 
 ;; Read Matlab files in Octave mode.
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+;; Set comments to be '%'. TODO: does not work?
+(add-hook
+ 'octave-mode-hook
+ (lambda ()
+   (setq octave-comment-char 37)
+   (setq octave-comment-start "% ")
+   ))
 
 ;; Mutt support.
 (add-to-list 'auto-mode-alist '("/tmp/mutt.*" . mail-mode))
