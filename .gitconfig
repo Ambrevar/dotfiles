@@ -31,6 +31,17 @@
 [merge]
     tool = ediff
 
+[sendemail]
+    smtpencryption = tls
+    smtpserver = smtp.gmail.com
+    smtpuser = ambrevar@gmail.com
+    smtpserverport = 587
+    to = pacman-dev@archlinux.org
+    suppresscc = author
+    # sendemail.confir = auto
+    aliasfiletype = mutt
+    # aliasesfile = ~/.mutt.d/aliases
+
 [tig]
     line-graphics = "utf-8"
     author-width = 12

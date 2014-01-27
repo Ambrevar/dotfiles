@@ -7,6 +7,8 @@ set my_new = brightcyan
 set my_old = brightred
 set my_uri = brightgreen
 set my_flag = brightyellow
+set my_tag = brightmagenta
+set my_tag_bg = $my_bg
 
 set my_address = color69
 set my_from = color201
@@ -20,7 +22,7 @@ set my_date = yellow
 set my_x = blue
 set my_sig = brightblack
 set my_attach = white
-set my_attach_bg = black
+set my_attach_bg = $my_bg
 set my_status = brightwhite
 set my_status_bg = color240
 set my_indicator = white
