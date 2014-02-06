@@ -12,21 +12,19 @@ EOF
 fi
 
 for FILE ; do
-	FILENAME=${FILE##*/}
+    FILENAME=${FILE##*/}
 
-	case "$FILENAME" in
-	    */*) DIRNAME="${FILE%/*}" ;;
-	    *) DIRNAME="." ;;
+    case "$FILE" in
+        */*) DIRNAME="${FILE%/*}" ;;
+        *) DIRNAME="." ;;
     esac
 
     NF="$(echo $FILENAME | tr '[:upper:]' '[:lower:]')"
     NEWNAME="${DIRNAME}/${NF}"
-    if [ "$NF" != "$FILENAME" ]; then
-        if [ -e "$NEWNAME" ]; then
-            echo >&2 "$NEWNAME already exists, not overwriting."
-        else
-	        mv "$FILE" "$NEWNAME"
-	        echo "'$FILE' '$NEWNAME'"
-        fi
+    if [ -e "$NEWNAME" ]; then
+        echo >&2 "$NEWNAME already exists, not overwriting."
+    else
+        mv "$FILE" "$NEWNAME"
+        echo "'$FILE' '$NEWNAME'"
     fi
 done
