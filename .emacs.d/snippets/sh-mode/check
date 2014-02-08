@@ -5,7 +5,7 @@ check()
 {
     for i ; do
         if ! command -v \$i >/dev/null 2>&1; then
-            echo >&2 "\'$i' not found in PATH. Exiting."
+            echo "\'$i' not found in PATH. Exiting." >&2
             exit 1
         fi
     done
