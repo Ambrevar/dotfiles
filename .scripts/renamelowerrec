@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if [ $# -eq 0 ] || [ "$1" = "-h" ] ; then
+    cat<<EOF
+Usage: ${1##*/} FOLDERS
+
+Rename to lowercase all files found in FOLDERS if destination does not exists.
+
+EOF
+
+    exit
+fi
+
+for i ; do
+    find "$i" -depth -exec renamelower {} +
+done
