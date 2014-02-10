@@ -353,3 +353,11 @@ end of line after an ' = ' separtor."
   (insert " = " (calc-eval (buffer-substring-no-properties
                             (line-beginning-position) (line-end-position)))))
 
+(defun count-occurences (regex string)
+  "Return number of times regex occurs in string."
+  (let ((start 0) (matches 0))
+    (while (string-match regex string start)
+      (setq start (match-end 0))
+      (setq matches (1+ matches)))
+    matches))
+

@@ -123,3 +123,28 @@ restored."
      (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig.h"))
      (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig-large.h"))
      (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qglobal.h")))))
+
+;;==============================================================================
+;; Skel
+;;==============================================================================
+;; TODO: elements: (setq skeleton-further-elements '((q "\"")))
+
+;; TODO: print: simpler version?
+;; TODO: same number of prompt than of %
+(add-hook
+ 'c++-mode-hook
+ (lambda ()
+
+   (define-skeleton snip-print
+     "fprintf/printf snippet
+
+If no file descriptor is provided, switch do printf.
+
+The format string is properly parsed (%% are not taken into account)." nil
+     '(setq v1 (skeleton-read "File desc: " "stdout"))
+     (if (string= v1 "") "printf (" (concat "fprintf (" v1 ", "))
+     "\"" (setq v1 (skeleton-read "Format string: " "%s\\n")) "\""
+     (if (not (string-match "\\([^%]\\|^\\)\\(%%\\)*%[^%]" v1)) ");" "" ) |
+     (nil ("Value: "  ", " str) ");")
+     )
+))
