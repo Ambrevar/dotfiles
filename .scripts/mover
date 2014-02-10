@@ -33,9 +33,6 @@ while getopts ":fhr" opt; do
         ?)
             _printhelp "$0"
             exit 1 ;;
-        :)
-            _printhelp "$0"
-            exit 1 ;;
     esac
 done
 
@@ -70,6 +67,6 @@ for i ; do
 
     ## We switch to $i so that 'find' strips the parent dirs from the path.
     done <<EOF
-$(cd "$i/.." && find "$(basename ${i})" \( -type f -o -type l \) )
+$(cd -- "$i/.." && find "$(basename ${i})" \( -type f -o -type l \) )
 EOF
 done

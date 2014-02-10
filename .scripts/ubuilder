@@ -42,9 +42,6 @@ while getopts ":flh" opt; do
         ?)
             _printhelp "$0"
             exit 1 ;;
-        :)
-            _printhelp "$0"
-            exit 1 ;;
     esac
 done
 

@@ -67,7 +67,7 @@ BEGIN {
     }
 
     _info("Scanning " ARGV[1] "...")
-    while ( ("cd " ARGV[1] " && find . -type f -exec md5sum {} +" | getline ) > 0)
+    while ( ("cd -- " ARGV[1] " && find . -type f -exec md5sum {} +" | getline ) > 0)
     {
         sum = $1
         ## We need to remove sum from line since filename may contain
@@ -86,7 +86,7 @@ BEGIN {
     }
 
     _info("Scanning " ARGV[2] "...")
-    while ( ("cd " ARGV[2] " && find . -type f -exec md5sum {} +" | getline ) > 0)
+    while ( ("cd -- " ARGV[2] " && find . -type f -exec md5sum {} +" | getline ) > 0)
     {
         sum = $1
         name = substr($0, 35)

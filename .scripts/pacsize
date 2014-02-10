@@ -93,10 +93,6 @@ while getopts ":ahnQSst" opt; do
         ?)
             usage "$0"
             exit 1 ;;
-        :)
-            echo "Missing argument."
-            usage "$0"
-            exit 1 ;;
     esac
 done
 

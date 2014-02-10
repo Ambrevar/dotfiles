@@ -45,10 +45,6 @@ while getopts ":him:sv" opt; do
         ?)
             _printhelp "$0"
             exit 1 ;;
-        :)
-            echo "Missing argument."
-            _printhelp "$0"
-            exit 1 ;;
     esac
 done
 

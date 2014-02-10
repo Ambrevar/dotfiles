@@ -32,18 +32,17 @@ PASS=''
 
 while getopts ":hfp" opt; do
     case $opt in
-        h) _printhelp "$0"
+        h)
+            _printhelp "$0"
             exit 1 ;;
-        f) OPT_DELAFTER=true ;;
+        f)
+            OPT_DELAFTER=true ;;
         p)
             echo -n "Password: "
             read -s PASS
-            PASS="-p$PASS"
-            ;;
+            PASS="-p$PASS" ;;
         ?)
             _printhelp "$0"
-            exit 1 ;;
-        :) _printhelp "$0"
             exit 1 ;;
     esac
 done

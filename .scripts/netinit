@@ -40,28 +40,18 @@ while getopts ":cdht:w:" opt; do
     case $opt in
         h)
             _printhelp "$0"
-            return 1
-            ;;
+            return 1 ;;
         c)
-            USE_CRYPT=1
-            ;;
+            USE_CRYPT=1 ;;
         d)
-            USE_DHCP=1
-            ;;
+            USE_DHCP=1 ;;
         t)
-            TIMEOUT_LIMIT=$OPTARG
-            ;;
+            TIMEOUT_LIMIT=$OPTARG ;;
         w)
-            WSFILE="$OPTARG"
-            ;;
+            WSFILE="$OPTARG" ;;
         ?)
             _printhelp "$0"
-            return 1
-            ;;
-        :)
-            _printhelp "$0"
-            return 1
-            ;;
+            return 1 ;;
     esac
 done
 

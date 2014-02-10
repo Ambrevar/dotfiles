@@ -314,7 +314,7 @@ if [ "$(uname)" = FreeBSD ]; then
     mcd()
     {
         local DEST=$(pkg_search -r "$@" | head -n1 | awk '{print $2}')
-        cd "$DEST"
+        cd -- "$DEST"
     }
 
 fi
