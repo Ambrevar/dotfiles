@@ -334,7 +334,7 @@ region. Output result at the end after an ' = ' separtor."
     (message "Indent using tabs")
     (setq indent-tabs-mode t)))
 
-(define-key my-keys-minor-mode-map (kbd "C-c C-i") 'toggle-indent-tabs)
+(define-key my-keys-minor-mode-map (kbd "C-c i") 'toggle-indent-tabs)
 
 (defun toggle-word-delim ()
   (interactive)
