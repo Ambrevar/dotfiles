@@ -68,7 +68,7 @@
         (beginning-of-buffer (goto-char (point-min)))))))
 
 ;; Line numbers
-;; TODO: This mode is slow on  big files when using beginning-of-buffer binding.
+;; TODO: This mode is slow on big files when using beginning-of-buffer binding.
 (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
 (add-hook 'find-file-hook (lambda () (linum-mode 1)))
 (define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode)
@@ -88,10 +88,9 @@
 ;; Highlight selections -- not activated by default on old Emacs.
 (transient-mark-mode 1)
 
-;; Whitespace, tabs, and other frivolities.
-;; Highlight trailing whitespaces. For programming languages only, so that it
-;; does not affect buffer like calendar and so on. There is no prog-mode-hook on
-;; Emacs<24.
+;; Whitespace, tabs, and other frivolities.  Highlight trailing whitespaces. For
+;; programming languages only, so that it does not affect buffer like calendar
+;; and so on. There is no prog-mode-hook on Emacs<24.
 (mapcar
  (lambda (mode-hook)
    (add-hook
@@ -104,7 +103,7 @@
 ;; end.
 ; (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (setq whitespace-style (quote (face trailing tab-mark)))
-;; Does not seem to work properly.
+;; TODO: whitespace report-on-bogus does not seem to work properly.
 ; (setq whitespace-action '(report-on-bogus))
 
 ;; Remove whitespaces on region, or whole file.
@@ -333,7 +332,7 @@ has errors and/or warnings."
   'flymake-display-err-message-for-current-line)
 
 ;; Ediff split horizontally by default.
-;; TODO: does not seem to work.
+;; TODO: ediff split does not seem to work.
 (add-hook
  'ediff-mode-hook
  (lambda ()
