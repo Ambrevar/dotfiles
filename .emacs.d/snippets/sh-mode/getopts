@@ -13,18 +13,15 @@ Options:
 EOF
 }
 
-OPT_TEST=false
+opt_test=false
 while getopts ":ht" opt; do
     case \$opt in
         h)
             _printhelp "\$0"
             exit 1 ;;
         t)
-            OPT_TEST=true ;;
+            opt_test=true ;;
         ?)
-            _printhelp "\$0"
-            exit 1 ;;
-        :)
             _printhelp "\$0"
             exit 1 ;;
     esac
