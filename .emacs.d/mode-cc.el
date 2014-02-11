@@ -129,8 +129,7 @@ restored."
 ;;==============================================================================
 ;; TODO: elements: (setq skeleton-further-elements '((q "\"")))
 
-;; TODO: print: simpler version?
-;; TODO: same number of prompt than of %
+;; TODO: insert % variables progressively
 (add-hook
  'c++-mode-hook
  (lambda ()
@@ -138,13 +137,19 @@ restored."
    (define-skeleton snip-print
      "fprintf/printf snippet
 
-If no file descriptor is provided, switch do printf.
-
-The format string is properly parsed (%% are not taken into account)." nil
+If no file descriptor is provided, switch do printf.  The format
+string is properly parsed (%% are not taken into account)."
+     nil
      '(setq v1 (skeleton-read "File desc: " "stdout"))
      (if (string= v1 "") "printf (" (concat "fprintf (" v1 ", "))
      "\"" (setq v1 (skeleton-read "Format string: " "%s\\n")) "\""
-     (if (not (string-match "\\([^%]\\|^\\)\\(%%\\)*%[^%]" v1)) ");" "" ) |
-     (nil ("Value: "  ", " str) ");")
-     )
-))
+     '(setq v2 (count-percents v1))
+     '(setq v1 0)
+     '(setq str "")
+     '(while (< v1 v2)
+        (setq v1 (1+ v1))
+        (setq str (concat str ", " (skeleton-read "Value: "))))
+     str
+     ");")
+
+   ))

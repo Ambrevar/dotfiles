@@ -361,3 +361,11 @@ end of line after an ' = ' separtor."
       (setq matches (1+ matches)))
     matches))
 
+(defun count-percents (string)
+  "Return number of times % occurs in string, %% exluded."
+  (let ((start 0) (matches 0))
+    (while (string-match "%." string start)
+      (unless (string= (match-string 0 string) "%%")
+        (setq matches (1+ matches)))
+      (setq start (match-end 0)))
+    matches))
