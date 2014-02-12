@@ -2,20 +2,27 @@
 
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
     cat<<EOF
-Usage: ${0##*/} FILES
+Usage: ${0##*/} [OPTIONS] FILES
 
 LaTeX quick compiler. It adds the preambule and the "\end{document}"
 automatically.
+
+Options:
+
+  -p PACKAGES: Use the comma separated list of packages.
 
 EOF
     exit
 fi
 
 ## One line is mandatory.
-PREAMBLE='\documentclass[10pt,a4paper]{article}\usepackage[utf8]{inputenc}\usepackage[T1]{fontenc}\usepackage{amsmath,amssymb,amsfonts}\usepackage{geometry}\usepackage{lmodern}\usepackage{marvosym}\usepackage{textcomp}\DeclareUnicodeCharacter{20AC}{\EUR{}}\DeclareUnicodeCharacter{2264}{\leqslant}\DeclareUnicodeCharacter{2265}{\geqslant}\begin{document}\input'
+PREAMBLE='\documentclass[10pt,a4paper]{article}\usepackage[utf8]{inputenc}\usepackage[T1]{fontenc}\usepackage{amsmath,amssymb,amsfonts}\usepackage{geometry}\usepackage{lmodern}\usepackage{marvosym}\usepackage{textcomp}\DeclareUnicodeCharacter{20AC}{\EUR{}}\DeclareUnicodeCharacter{2264}{\leqslant}\DeclareUnicodeCharacter{2265}{\geqslant}'
 
-END='\end{document}'
+if [ "$1" = "-p" ]; then
+    PACKAGES="\usepackage{$2}"
+    shift 2
+fi
 
 for i ; do
-    pdflatex -file-line-error-style -interaction nonstopmode -jobname="${i%.tex}" "$PREAMBLE" "$i" "$END"
+    pdflatex -file-line-error-style -interaction nonstopmode -jobname="${i%.tex}" "$PREAMBLE" "$PACKAGES" "\begin{document}\input" "$i" "\end{document}"
 done
