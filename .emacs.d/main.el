@@ -69,7 +69,6 @@
 
 ;; Line numbers
 ;; TODO: This mode is slow on big files when using beginning-of-buffer binding.
-(autoload 'linum-mode "linum" "toggle line numbers on/off" t)
 (add-hook 'find-file-hook (lambda () (linum-mode 1)))
 (define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode)
 (add-hook
@@ -392,19 +391,18 @@ has errors and/or warnings."
 ;;       ))
 
 ;; xclip
-(if (require 'xclip nil t)
+(when (require 'xclip nil t)
     (turn-on-xclip))
 
 ;; Multiple-Cursors
 ;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/multiple-cursors")
-(if (require 'multiple-cursors nil t)
-    (progn
-      (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
-      (global-unset-key (kbd "C-<down-mouse-1>"))
-      (define-key my-keys-minor-mode-map (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
-      (define-key my-keys-minor-mode-map (kbd "C-c C-r") 'mc/edit-lines)
-      (define-key my-keys-minor-mode-map (kbd "C-c C-m") 'mc/mark-more-like-this-extended)
-      (define-key my-keys-minor-mode-map (kbd "C-c C-l") 'mc/mark-all-like-this-dwim)))
+(when (require 'multiple-cursors nil t)
+  (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
+  (global-unset-key (kbd "C-<down-mouse-1>"))
+  (define-key my-keys-minor-mode-map (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
+  (define-key my-keys-minor-mode-map (kbd "C-c C-r") 'mc/edit-lines)
+  (define-key my-keys-minor-mode-map (kbd "C-c C-m") 'mc/mark-more-like-this-extended)
+  (define-key my-keys-minor-mode-map (kbd "C-c C-l") 'mc/mark-all-like-this-dwim))
 
 ;; Let Emacs auto-load/save sessions.
 (when (boundp 'server-running-p)
@@ -527,15 +525,14 @@ has errors and/or warnings."
 (add-to-list 'auto-mode-alist '("\\.vert\\'" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.frag\\'" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.glsl\\'" . c-mode))
-(autoload 'glsl-mode "glsl-mode" nil t)
-(when (boundp 'glsl-mode)
+(when (require 'glsl-mode nil t)
   (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
   (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
   (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode)))
 
 ;; Lua
-(add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
-(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+(when (require 'lua-mode nil t)
+  (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode)))
 
 ;; Go
 (require 'go-mode-load nil t)
@@ -543,20 +540,20 @@ has errors and/or warnings."
 ;; Bison/flex -- Fallback to c-mode.
 (add-to-list 'auto-mode-alist '("\\.yy?\\'" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.l\\'" . c-mode))
-(if (require 'bison-mode nil t)
+(when (require 'bison-mode nil t)
     (add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode)))
-(if (require 'flex-mode nil t)
+(when (require 'flex-mode nil t)
     (add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode)))
 
 ;; Markdown
-(autoload 'markdown-mode "markdown-mode" "Markdown mode" t)
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-hook
- 'markdown-mode-hook
- (lambda ()
-   (set (make-local-variable 'paragraph-start) "
-")))
+(when (require 'markdown-mode nil t)
+    (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+    (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+    (add-hook
+     'markdown-mode-hook
+     (lambda ()
+       (set (make-local-variable 'paragraph-start) "
+"))))
 
 ;; Read Matlab files in Octave mode.
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
@@ -586,10 +583,7 @@ has errors and/or warnings."
 (add-to-list 'auto-mode-alist '("COMMIT_EDITMSG\\'" . conf-mode))
 
 ;; .po support.
-(autoload 'po-mode "po-mode"
-  "Major mode for translators to edit PO files" t)
-(setq auto-mode-alist (cons '("\\.po\\'\\|\\.po\\." . po-mode)
-                            auto-mode-alist))
-(autoload 'po-find-file-coding-system "po-compat")
-(modify-coding-system-alist 'file "\\.po\\'\\|\\.po\\."
-                            'po-find-file-coding-system)
+(when (require 'po-mode nil t)
+  (add-to-list 'auto-mode-alist '("\\.po\\'\\|\\.po\\." . po-mode)))
+(when (require 'po-find-file-coding-system nil t)
+  (modify-coding-system-alist 'file "\\.po\\'\\|\\.po\\." 'po-find-file-coding-system))

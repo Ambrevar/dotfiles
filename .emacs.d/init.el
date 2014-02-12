@@ -26,6 +26,9 @@ Example: to assign some-function to C-i, use
 (if (not (file-directory-p emacs-cache-folder))
     (make-directory emacs-cache-folder t))
 
+;; Load config easily.
+(add-to-list 'load-path "~/.emacs.d")
+
 ;; Local plugin folder for quick install. All files in this folder will be
 ;; accessible to Emacs config.
 (add-to-list 'load-path "~/.emacs.d/plugins")
@@ -36,7 +39,7 @@ Example: to assign some-function to C-i, use
 (load "~/.emacs.d/mode-cc.el" nil t)
 (load "~/.emacs.d/mode-dot.el" nil t)
 (load "~/.emacs.d/mode-mediawiki.el" nil t)
-(load "~/.emacs.d/mode-perl.el" nil t)
+(add-hook 'perl-mode-hook (lambda () (require 'mode-perl)))
 (load "~/.emacs.d/mode-python.el" nil t)
 (load "~/.emacs.d/mode-shell.el" nil t)
 (load "~/.emacs.d/mode-tex.el" nil t)
