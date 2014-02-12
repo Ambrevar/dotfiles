@@ -11,4 +11,5 @@ check()
 }
 check emacs realpath
 
-emacs --eval '(progn (info "'"$(realpath "$1")"'")(delete-other-windows))'
+[ -f "$1" ] && node="$(realpath "$1")" || node="$1"
+emacs --eval '(progn (info "'"$node"'")(delete-other-windows))'
