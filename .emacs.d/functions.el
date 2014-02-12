@@ -369,3 +369,19 @@ end of line after an ' = ' separtor."
         (setq matches (1+ matches)))
       (setq start (match-end 0)))
     matches))
+
+;; Toggle window dedication
+(defun toggle-window-dedicated ()
+  "Toggle whether the current active window is dedicated or not"
+  (interactive)
+  (message
+   (if (let (window (get-buffer-window (current-buffer)))
+         (set-window-dedicated-p window
+                                 (not (window-dedicated-p window))))
+       "Window '%s' is dedicated"
+     "Window '%s' is normal")
+   (current-buffer)))
+
+;; Press [pause] key in each window you want to "freeze", i.e. prevent Emacs
+;; from acting on it.
+(global-set-key [pause] 'toggle-window-dedicated)

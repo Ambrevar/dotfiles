@@ -1,4 +1,3 @@
-;; -*- mode:emacs-lisp -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs config
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -33,13 +32,18 @@ Example: to assign some-function to C-i, use
 ;; accessible to Emacs config.
 (add-to-list 'load-path "~/.emacs.d/plugins")
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load main config
 
-(load "~/.emacs.d/main" nil t)
-(load "~/.emacs.d/theme" nil t)
+(load "main" nil t)
+(load "theme" nil t)
 
-(load "~/.emacs.d/functions" nil t)
-(load "~/.emacs.d/personal" nil t)
-(load "~/.emacs.d/snippets.el" nil t)
+(load "functions" nil t)
+(load "personal" nil t)
+;; (load "snippets" nil t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Modes config
 
 (add-hook 'c-mode-hook (lambda () (require 'mode-cc)))
 (add-hook 'c++-mode-hook (lambda () (require 'mode-cc)))
@@ -50,6 +54,48 @@ Example: to assign some-function to C-i, use
 (add-hook 'tex-mode-hook (lambda () (require 'mode-tex)))
 (add-hook 'texinfo-mode-hook (lambda () (require 'mode-texinfo)))
 
+(add-hook 'org-mode-hook (lambda () (require 'mode-org)))
+(add-hook 'ediff-mode-hook (lambda () (require 'mode-ediff)))
+(add-hook 'octave-mode-hook (lambda () (require 'mode-octave)))
+(add-hook 'dired-mode-hook (lambda () (require 'mode-dired)))
+(add-hook 'gud-mode-hook (lambda () (require 'mode-gud)))
+
+(add-hook 'eshell-mode-hook (lambda () (require 'eshell-markdown)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Extra modes
+
+(require 'go-mode-load nil t)
+
+;; Lua
+(when (require 'lua-mode nil t)
+  (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode)))
+
+(when (require 'markdown-mode nil t)
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+  (set (make-local-variable 'paragraph-start) "
+"))
+
+;; .po support. This mode has no hooks.
+(when (require 'po-mode nil t)
+  (add-to-list 'auto-mode-alist '("\\.po\\'\\|\\.po\\." . po-mode)))
+(when (require 'po-find-file-coding-system nil t)
+  (modify-coding-system-alist 'file "\\.po\\'\\|\\.po\\." 'po-find-file-coding-system))
+
+;; Bison/flex
+(when (require 'bison-mode nil t)
+  (add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode)))
+(when (require 'flex-mode nil t)
+  (add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode)))
+
+;; GLSL
+(when (require 'glsl-mode nil t)
+  (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
+  (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
+  (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We need to put it at the end to make sure it doesn't get overriden by other
 ;; minor modes.
 (my-keys-minor-mode 1)

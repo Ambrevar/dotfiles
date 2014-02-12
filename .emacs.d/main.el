@@ -204,76 +204,6 @@
   (lambda () (interactive)
     (buffer-menu 1)))
 
-;; Disable prompt (but leave warning) on git symlink.
-(setq vc-follow-symlinks t)
-
-;; Org mode config.
-;; Move annoying babel folder. This move does not seem to work properly.
-(setq org-babel-temporary-directory (concat emacs-cache-folder "babel"))
-;; Disable line splitting on M-RET
-(setq org-M-RET-may-split-line '((default)))
-(add-hook
- 'org-mode-hook
- (lambda ()
-   (setq org-agenda-files '("~/todo.org"))
-   (auto-fill-mode -1)
-   (setq org-enforce-todo-dependencies t)))
-;; Set PDF association in Org-mode (was Evince by default).
-(eval-after-load "org"
-  '(progn
-     ;; Change .pdf association directly within the alist
-     (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura --fork %s")))
-
-;; Ediff in one frame.
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-
-;; Set GUD to display many windows by default.
-;; (setq gdb-show-main t)
-(setq gdb-many-windows t)
-;; Change GUD many-windows layout.
-(add-hook
- 'gud-mode-hook
- (lambda ()
-   (defun gdb-setup-windows ()
-     "Layout the window pattern for `gdb-many-windows'."
-     (setq gdb-source-window (selected-window))
-     (gdb-display-locals-buffer)
-     (delete-other-windows)
-     (gdb-display-stack-buffer)
-     (delete-other-windows)
-     (gdb-display-breakpoints-buffer)
-     (delete-other-windows)
-
-     ;; TODO: this does not behave the same on Emacs 23 and 24.
-     (switch-to-buffer
-      (if gud-last-last-frame
-          (gud-find-file (car gud-last-last-frame))
-        (if gdb-main-file
-            (gud-find-file gdb-main-file)
-          ;; Put buffer list in window if we can't find a source file.
-          (list-buffers-noselect))))
-
-     (split-window-horizontally)
-     (other-window 1)
-     (split-window nil ( / ( * (window-height) 3) 4))
-     (split-window nil ( / (window-height) 3))
-     (gdb-set-window-buffer (gdb-locals-buffer-name))
-     (other-window 1)
-     (gdb-set-window-buffer gud-comint-buffer)
-     (when (and
-            (boundp 'gdb-use-separate-io-buffer)
-            gdb-use-separate-io-buffer)
-       (split-window-horizontally)
-       (other-window 1)
-       (gdb-set-window-buffer
-        (gdb-get-buffer-create 'gdb-inferior-io)))
-     (other-window 1)
-     (gdb-set-window-buffer (gdb-stack-buffer-name))
-     (split-window-horizontally)
-     (other-window 1)
-     (gdb-set-window-buffer (gdb-breakpoints-buffer-name))
-     (other-window 1))))
-
 ;; Remove auto-fill in dwb edit because wikis and forums do not like it.
 (add-hook
  'find-file-hook
@@ -311,69 +241,24 @@
 ;; Common LISP
 (setq inferior-lisp-program "clisp")
 
-;; Flymake has a bug that prevents menu from spawning in a console. We redefine
-;; the function to spawn the error message in the mini-buffer.
-(defun flymake-display-err-message-for-current-line ()
-  "Display a message with errors/warnings for current line if it
-has errors and/or warnings."
-  (interactive)
-  (let* ((line-no             (flymake-current-line-no))
-         (line-err-info-list  (nth 0 (flymake-find-err-info flymake-err-info line-no)))
-         (menu-data           (flymake-make-err-menu-data line-no line-err-info-list)))
-    (if menu-data
-        (let ((messages))
-          (push (concat (car menu-data) ":") messages)
-          (dolist (error-or-warning (cadr menu-data))
-            (push (car error-or-warning) messages))
-          (message "%s" (mapconcat #'identity (reverse messages) "\n"))))))
-
-(define-key my-keys-minor-mode-map (kbd "C-<f10>")
-  'flymake-display-err-message-for-current-line)
-
-;; Ediff split horizontally by default.
-;; TODO: ediff split does not seem to work.
-(add-hook
- 'ediff-mode-hook
- (lambda ()
-   (setq ediff-merge-split-window-function 'split-window-horizontally)))
-
-;; Eshell
-(setq eshell-directory-name (concat emacs-cache-folder "eshell"))
-;; (setq eshell-aliases-file (concat user-emacs-directory "eshell-alias"))
-;; TODO: this breaks eshell completion and history.
-;; (setq eshell-prompt-function
-;;       (lambda nil
-;;         (let ((path (abbreviate-file-name (eshell/pwd))))
-;;           (concat ".-(" path ")"
-;;                   (make-string (- (window-body-width) 5 (length path)) ?-)
-;;                   "\n`--"
-;;                   (if (= (user-uid) 0) "# " "> ")))))
-
-(add-hook
- 'eshell-mode-hook
- (lambda ()
-   (nconc eshell-visual-commands
-          '("abook" "cmus" "htop" "mutt" "ncdu" "newsbeuter" "ranger"
-            "rtorrent" "task" "tig"))
-   (when (file-executable-p "/usr/bin/pacman")
-     (map-on-pair 'eshell/alias
-                  '(("pc" "sudo pacman -Sc")
-                    ("pi" "sudo pacman -S --needed")
-                    ("pqi" "pacman -Qi")
-                    ("pqo" "pacman -Qo")
-                    ("pqs" "pacman -Qs")
-                    ("pr" "sudo pacman -Rs")
-                    ("psi" "pacman -Si")
-                    ("pss" "pacman -Ss")
-                    ("pu" "sudo pacman -Syu"))))
-   (map-on-pair 'eshell/alias
-                '(("mkdir" "mkdir -p")
-                  ("lx" "ls -lXh")
-                  ("lx" "ls -lXh")
-                  ("lk" "ls -lSrh")
-                  ("lc" "ls -lrc")
-                  ("ll" "ls -hl")
-                  ("la" "ls -ahl")))))
+;; ;; Flymake has a bug that prevents menu from spawning in a console. We redefine
+;; ;; the function to spawn the error message in the mini-buffer.
+;; (defun flymake-display-err-message-for-current-line ()
+;;   "Display a message with errors/warnings for current line if it
+;; has errors and/or warnings."
+;;   (interactive)
+;;   (let* ((line-no             (flymake-current-line-no))
+;;          (line-err-info-list  (nth 0 (flymake-find-err-info flymake-err-info line-no)))
+;;          (menu-data           (flymake-make-err-menu-data line-no line-err-info-list)))
+;;     (if menu-data
+;;         (let ((messages))
+;;           (push (concat (car menu-data) ":") messages)
+;;           (dolist (error-or-warning (cadr menu-data))
+;;             (push (car error-or-warning) messages))
+;;           (message "%s" (mapconcat #'identity (reverse messages) "\n"))))))
+;;
+;; (define-key my-keys-minor-mode-map (kbd "C-<f10>")
+;;  'flymake-display-err-message-for-current-line)
 
 ;; Zlc - Zsh style completion.
 ;; (if (require 'zlc nil t)
@@ -419,97 +304,6 @@ has errors and/or warnings."
 
 (ad-activate 'pop-to-buffer)
 
-;; Toggle window dedication
-(defun toggle-window-dedicated ()
-  "Toggle whether the current active window is dedicated or not"
-  (interactive)
-  (message
-   (if (let (window (get-buffer-window (current-buffer)))
-         (set-window-dedicated-p window
-                                 (not (window-dedicated-p window))))
-       "Window '%s' is dedicated"
-     "Window '%s' is normal")
-   (current-buffer)))
-
-;; Press [pause] key in each window you want to "freeze", i.e. prevent Emacs
-;; from acting on it.
-(global-set-key [pause] 'toggle-window-dedicated)
-
-;; Dired options
-;; On a GNU system, ls has the option to sort folders first.
-(if (string-match "^gnu.*" (prin1-to-string system-type))
-    (setq dired-listing-switches "--group-directories-first -lh")
-  (setq dired-listing-switches "-lh"))
-(setq wdired-allow-to-change-permissions t)
-
-(defvar dired-showing-hidden nil "If dired is displaying hidden files or not.")
-(defvar dired-showing-humansize t "If dired is displaying humansize or not.")
-
-(defun dired-toggle-hidden ()
-  "Toggle displaying hidden files in dired."
-  (interactive)
-  (let (;; Regexp for finding (possibly embedded) -a switches.
-        (switch-regexp "\\(\\`\\| \\)-\\([b-zA-Z]*\\)\\(a\\)\\([^ ]*\\)")
-        case-fold-search)
-    ;; Remove the -a switch.
-    (while (string-match switch-regexp dired-actual-switches)
-      (if (and (equal (match-string 2 dired-actual-switches) "")
-               (equal (match-string 4 dired-actual-switches) ""))
-          ;; Remove a stand-alone -a switch.
-          (setq dired-actual-switches
-                (replace-match "" t t dired-actual-switches))
-        ;; Remove a switch of the form -XaY for some X and Y.
-        (setq dired-actual-switches
-              (replace-match "" t t dired-actual-switches 3))))
-    ;; Now, if we weren't sorting by date before, add the -a switch.  Some
-    ;; simple-minded ls implementations (eg ftp servers) only allow a single
-    ;; option string, so try not to add " -a" if possible.
-    (if dired-showing-hidden
-        (setq dired-showing-hidden nil)
-      (progn
-        (setq dired-actual-switches
-              (concat dired-actual-switches
-                      (if (string-match-p "\\`-[[:alnum:]]+\\'"
-                                          dired-actual-switches)
-                          "a" " -a")))
-        (setq dired-showing-hidden t))))
-  ;; (dired-sort-set-mode-line)
-  (revert-buffer))
-
-(defun dired-toggle-humansize ()
-  "Toggle displaying humansize in dired."
-  (interactive)
-  (let ((switch-regexp "\\(\\`\\| \\)-\\([a-gi-zA-Z]*\\)\\(h\\)\\([^ ]*\\)")
-        case-fold-search)
-    (while (string-match switch-regexp dired-actual-switches)
-      (if (and (equal (match-string 2 dired-actual-switches) "")
-               (equal (match-string 4 dired-actual-switches) ""))
-          (setq dired-actual-switches
-                (replace-match "" t t dired-actual-switches))
-        (setq dired-actual-switches
-              (replace-match "" t t dired-actual-switches 3))))
-    (if dired-showing-humansize
-        (setq dired-showing-humansize nil)
-      (progn
-        (setq dired-actual-switches
-              (concat dired-actual-switches
-                      (if (string-match-p "\\`-[[:alnum:]]+\\'"
-                                          dired-actual-switches)
-                          "h" " -h")))
-        (setq dired-showing-humansize t))))
-  (revert-buffer))
-
-(add-hook
- 'dired-mode-hook
- (lambda ()
-   (local-set-key (kbd "C-c a") 'dired-toggle-hidden)
-   (local-set-key (kbd "C-c h") 'dired-toggle-humansize)
-   (local-set-key (kbd "<left>") 'dired-up-directory)
-   (local-set-key (kbd "<right>") 'dired-find-file)
-   (local-set-key (kbd "SPC") 'dired-mark)
-   (local-set-key (kbd "<backspace>") 'dired-up-directory)
-   (local-set-key (kbd "b") 'dired-up-directory)))
-
 ;; GMP
 (eval-after-load "info-look"
   '(let ((mode-value (assoc 'c-mode (assoc 'symbol info-lookup-alist))))
@@ -521,49 +315,20 @@ has errors and/or warnings."
 ;; Bookmark file to cache folder
 (setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
 
+;; Disable prompt (but leave warning) on git symlink.
+(setq vc-follow-symlinks t)
+
+;; Git commit meessages.
+(add-to-list 'auto-mode-alist '("COMMIT_EDITMSG\\'" . conf-mode))
+
 ;; GLSL fallback to C mode.
 (add-to-list 'auto-mode-alist '("\\.vert\\'" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.frag\\'" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.glsl\\'" . c-mode))
-(when (require 'glsl-mode nil t)
-  (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
-  (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
-  (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode)))
-
-;; Lua
-(when (require 'lua-mode nil t)
-  (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode)))
-
-;; Go
-(require 'go-mode-load nil t)
 
 ;; Bison/flex -- Fallback to c-mode.
 (add-to-list 'auto-mode-alist '("\\.yy?\\'" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.l\\'" . c-mode))
-(when (require 'bison-mode nil t)
-    (add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode)))
-(when (require 'flex-mode nil t)
-    (add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode)))
-
-;; Markdown
-(when (require 'markdown-mode nil t)
-    (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-    (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-    (add-hook
-     'markdown-mode-hook
-     (lambda ()
-       (set (make-local-variable 'paragraph-start) "
-"))))
-
-;; Read Matlab files in Octave mode.
-(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
-;; Set comments to be '%'. TODO: does not work?
-(add-hook
- 'octave-mode-hook
- (lambda ()
-   (setq octave-comment-char 37)
-   (setq octave-comment-start "% ")
-   ))
 
 ;; Mutt support.
 (add-to-list 'auto-mode-alist '("/tmp/mutt.*" . mail-mode))
@@ -578,12 +343,3 @@ has errors and/or warnings."
 
 ;; Subtitles support.
 (add-to-list 'auto-mode-alist '("\\.srt\\'" . text-mode))
-
-;; Git commit meessages.
-(add-to-list 'auto-mode-alist '("COMMIT_EDITMSG\\'" . conf-mode))
-
-;; .po support.
-(when (require 'po-mode nil t)
-  (add-to-list 'auto-mode-alist '("\\.po\\'\\|\\.po\\." . po-mode)))
-(when (require 'po-find-file-coding-system nil t)
-  (modify-coding-system-alist 'file "\\.po\\'\\|\\.po\\." 'po-find-file-coding-system))
