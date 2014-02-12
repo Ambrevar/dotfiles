@@ -3,20 +3,10 @@
 ;;==============================================================================
 (require 'compile)
 
-(defun get-closest-pathname (&optional file)
-  "Determine the pathname of the first instance of FILE starting
-from the current directory towards root.  This may not do the
-correct thing in presence of links. If it does not find FILE,
-then it shall return the name of FILE in the current directory,
-suitable for creation"
-  (let ((current-dir default-directory) (looping t) (makefile (or file "Makefile")))
-    (while (progn
-             (if (file-exists-p (expand-file-name makefile current-dir))
-                 (setq looping nil)
-               (setq current-dir (expand-file-name ".." current-dir)))
-             (and looping (not (equal current-dir "/")))))
-    (if (equal current-dir "/") nil (expand-file-name makefile current-dir))))
-
+;; We need some functions:
+;; (get-closest-pathname)
+;; (count-percents)
+(require 'functions)
 
 (defcustom mode-cc-ldlibs "-lm -pthread"
   "[Local variable] Custom linker flags for C/C++ linkage."

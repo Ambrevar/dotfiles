@@ -1,8 +1,4 @@
-;; Read Matlab files in Octave mode.
-(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
-
-;; Set comments to be '%'. TODO: does not work?
-(setq octave-comment-char 37)
-(setq octave-comment-start "% ")
+;; Set comments to be '%' to be matlab-compatible.
+(set (make-local-variable 'comment-start) "% ")
 
 (provide 'mode-octave)

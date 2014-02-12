@@ -40,7 +40,7 @@ Example: to assign some-function to C-i, use
 
 (load "functions" nil t)
 (load "personal" nil t)
-;; (load "snippets" nil t)
+(load "snippets" nil t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Modes config

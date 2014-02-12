@@ -343,3 +343,6 @@
 
 ;; Subtitles support.
 (add-to-list 'auto-mode-alist '("\\.srt\\'" . text-mode))
+
+;; Read Matlab files in Octave mode.
+(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))

@@ -362,7 +362,8 @@ end of line after an ' = ' separtor."
     matches))
 
 (defun count-percents (string)
-  "Return number of times % occurs in string, %% exluded."
+  "Return number of times % occurs in a printf format string, %%
+exluded."
   (let ((start 0) (matches 0))
     (while (string-match "%." string start)
       (unless (string= (match-string 0 string) "%%")
@@ -370,9 +371,12 @@ end of line after an ' = ' separtor."
       (setq start (match-end 0)))
     matches))
 
-;; Toggle window dedication
+
 (defun toggle-window-dedicated ()
-  "Toggle whether the current active window is dedicated or not"
+  "Toggle whether the current active window is dedicated or not.
+
+Run it in each window you want to 'freeze', i.e. prevent Emacs
+from acting on it."
   (interactive)
   (message
    (if (let (window (get-buffer-window (current-buffer)))
@@ -382,6 +386,19 @@ end of line after an ' = ' separtor."
      "Window '%s' is normal")
    (current-buffer)))
 
-;; Press [pause] key in each window you want to "freeze", i.e. prevent Emacs
-;; from acting on it.
-(global-set-key [pause] 'toggle-window-dedicated)
+(define-key my-keys-minor-mode-map [pause] 'toggle-window-dedicated)
+
+(defun get-closest-pathname (&optional file)
+  "Determine the pathname of the first instance of FILE starting
+from the current directory towards root.  This may not do the
+correct thing in presence of links. If it does not find FILE,
+then it shall return the name of FILE in the current directory,
+suitable for creation"
+  (let ((current-dir default-directory) (looping t) (makefile (or file "Makefile")))
+    (while (progn
+             (if (file-exists-p (expand-file-name makefile current-dir))
+                 (setq looping nil)
+               (setq current-dir (expand-file-name ".." current-dir)))
+             (and looping (not (equal current-dir "/")))))
+    (if (equal current-dir "/") nil (expand-file-name makefile current-dir))))
+
