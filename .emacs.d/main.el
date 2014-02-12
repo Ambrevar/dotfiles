@@ -280,7 +280,6 @@
     (turn-on-xclip))
 
 ;; Multiple-Cursors
-;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/multiple-cursors")
 (when (require 'multiple-cursors nil t)
   (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
   (global-unset-key (kbd "C-<down-mouse-1>"))
