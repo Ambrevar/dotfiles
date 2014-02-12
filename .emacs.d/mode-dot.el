@@ -36,4 +36,4 @@ buffer is saved before the command is executed."
                        (downcase mode-name) nil cmd))
        (message (format "Executing `%s'..." cmd))))))
 
-
+(provide 'mode-dot)

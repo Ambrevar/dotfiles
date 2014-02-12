@@ -28,3 +28,5 @@ otherwise use 'sh-shell-file'."
  'sh-mode-hook
  (lambda ()
    (shell-set-interpreter)))
+
+(provide 'mode-shell)

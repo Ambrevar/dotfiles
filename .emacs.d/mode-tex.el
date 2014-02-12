@@ -294,3 +294,5 @@ properly escaped with double-quotes in case it has spaces."
    ;; (add-to-list 'latex-math-preview-text-symbol-datasets
    ;;              latex-math-preview-pifont-symbol-fonts-symbol-data)))
    ))
+
+(provide 'mode-tex)

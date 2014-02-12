@@ -34,19 +34,21 @@ Example: to assign some-function to C-i, use
 (add-to-list 'load-path "~/.emacs.d/plugins")
 
 
-(load "~/.emacs.d/functions" nil t)
 (load "~/.emacs.d/main" nil t)
-(load "~/.emacs.d/mode-cc.el" nil t)
-(load "~/.emacs.d/mode-dot.el" nil t)
-(load "~/.emacs.d/mode-mediawiki.el" nil t)
-(add-hook 'perl-mode-hook (lambda () (require 'mode-perl)))
-(load "~/.emacs.d/mode-python.el" nil t)
-(load "~/.emacs.d/mode-shell.el" nil t)
-(load "~/.emacs.d/mode-tex.el" nil t)
-(load "~/.emacs.d/mode-texinfo.el" nil t)
+(load "~/.emacs.d/theme" nil t)
+
+(load "~/.emacs.d/functions" nil t)
 (load "~/.emacs.d/personal" nil t)
 (load "~/.emacs.d/snippets.el" nil t)
-(load "~/.emacs.d/theme" nil t)
+
+(add-hook 'c-mode-hook (lambda () (require 'mode-cc)))
+(add-hook 'c++-mode-hook (lambda () (require 'mode-cc)))
+(add-hook 'dot-mode-hook (lambda () (require 'mode-dot)))
+(add-hook 'perl-mode-hook (lambda () (require 'mode-perl)))
+(add-hook 'python-mode-hook (lambda () (require 'mode-python)))
+(add-hook 'shell-mode-hook (lambda () (require 'mode-shell)))
+(add-hook 'tex-mode-hook (lambda () (require 'mode-tex)))
+(add-hook 'texinfo-mode-hook (lambda () (require 'mode-texinfo)))
 
 ;; We need to put it at the end to make sure it doesn't get overriden by other
 ;; minor modes.

@@ -41,3 +41,5 @@ shebang. System `python' is assumed by default."
 ;; https://bitbucket.org/jonwaltman/pydoc-info/.
 ;; (add-to-list 'load-path "~/path/to/pydoc-info")
 ;; (require 'pydoc-info nil t)
+
+(provide 'python)

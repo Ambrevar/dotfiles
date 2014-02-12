@@ -151,3 +151,5 @@ Requires the `count-percents' function."
      ");")
 
    ))
+
+(provide 'mode-cc)
