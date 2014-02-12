@@ -10,7 +10,9 @@ checked, and if no shabang is present, `python' will be used."
 (defun python-version ()
   "Returns whether we're running Python 2 or 3 according to the
 shebang. System `python' is assumed by default."
-  (let ((firstline (car (split-string (buffer-string) "\n" t))))
+  (let ((firstline
+         (car
+          (split-string (buffer-substring-no-properties 1 (point-max)) "\n"))))
     (if (not (string-match "^#!" firstline))
         "python"
       (cond

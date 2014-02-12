@@ -13,7 +13,9 @@ otherwise use 'sh-shell-file'."
   "Use compile to run python programs."
   (interactive)
   (hack-local-variables)
-  (let ((firstline (car (split-string (buffer-string) "\n" t))))
+  (let ((firstline
+         (car
+          (split-string (buffer-substring-no-properties 1 (point-max)) "\n"))))
     (let ((sh-interpreter
            (if (not (string-match "^#!" firstline))
                sh-shell-file
