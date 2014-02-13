@@ -35,10 +35,9 @@ Example: to assign some-function to C-i, use
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load main config
 
+(load "functions" nil t)
 (load "main" nil t)
 (load "theme" nil t)
-
-(load "functions" nil t)
 (load "personal" nil t)
 ;; (load "snippets" nil t)
 

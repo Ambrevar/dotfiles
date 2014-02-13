@@ -2,14 +2,14 @@
 ;; MediaWiki
 ;;==============================================================================
 
-
-(setq mediawiki-site-alist
-      '(
-        ("Wikipedia" "http://en.wikipedia.org/w/" "Ambrevar" "" "Main Page")
-        ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX")
-        ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt")
-        ("WikEmacs" "https://wikemacs.org/wiki/" "Ambrevar" "" "Main Page")
-        ))
+(setq
+ mediawiki-site-alist
+ '(
+   ("Wikipedia" "http://en.wikipedia.org/w/" "Ambrevar" "" "Main Page")
+   ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX")
+   ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt")
+   ("WikEmacs" "https://wikemacs.org/wiki/" "Ambrevar" "" "Main Page")
+   ))
 
 ;; The url-cookie timer is set to a high value because it seems that once the
 ;; cookie has been saved, MediaWiki fails to upload files correctly.  Is

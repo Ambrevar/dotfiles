@@ -402,5 +402,27 @@ suitable for creation"
              (and looping (not (equal current-dir "/")))))
     (if (equal current-dir "/") nil (expand-file-name makefile current-dir))))
 
+(defun skeleton-make-markers ()
+  (while skeleton-markers
+    (set-marker (pop skeleton-markers) nil))
+  (setq skeleton-markers
+        (mapcar 'copy-marker (reverse skeleton-positions))))
+;; TODO: skeleton move reverse does not work properly.
+(defun skeleton-next-position (&optional reverse)
+  "Skeleton movements through placeholders."
+  (interactive "P")
+  (let ((positions (mapcar 'marker-position skeleton-markers))
+        (comp (if reverse '> '<))
+        pos)
+    (when positions
+      (if (catch 'break
+            (while (setq pos (pop positions))
+              (when (funcall comp (point) pos)
+                (throw 'break t))))
+          (goto-char pos)
+        (goto-char (marker-position
+                    (if reverse
+                        (car (last skeleton-markers))
+                      (car skeleton-markers))))))))
 
 (provide 'functions)

@@ -2,6 +2,8 @@
 ;; MAIN
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'functions)
+
 ;; Remember last cursor position.
 (require 'saveplace)
 (setq save-place-file (concat emacs-cache-folder "saveplace"))
@@ -284,9 +286,9 @@
   (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
   (global-unset-key (kbd "C-<down-mouse-1>"))
   (define-key my-keys-minor-mode-map (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
-  (define-key my-keys-minor-mode-map (kbd "C-c C-r") 'mc/edit-lines)
+  (define-key my-keys-minor-mode-map (kbd "C-c M-r") 'mc/edit-lines)
   (define-key my-keys-minor-mode-map (kbd "C-c C-m") 'mc/mark-more-like-this-extended)
-  (define-key my-keys-minor-mode-map (kbd "C-c C-l") 'mc/mark-all-like-this-dwim))
+  (define-key my-keys-minor-mode-map (kbd "C-c M-l") 'mc/mark-all-like-this-dwim))
 
 ;; Let Emacs auto-load/save sessions.
 (when (boundp 'server-running-p)
@@ -313,6 +315,11 @@
 ;; Do not expand abbrevs in skeletons. Not sure it is useful.
 ;; (setq skeleton-further-elements '((abbrev-mode nil)))
 ;; (setq skeleton-end-hook nil)
+(defvar skeleton-markers nil
+  "Markers for locations saved in skeleton-positions")
+(add-hook 'skeleton-end-hook 'skeleton-make-markers)
+(define-key my-keys-minor-mode-map (kbd "C->") 'skeleton-next-position)
+(define-key my-keys-minor-mode-map (kbd "C-<") (lambda () (interactive) (skeleton-next-position t)))
 
 ;; Bookmark file to cache folder.
 (setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))

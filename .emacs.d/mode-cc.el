@@ -65,6 +65,7 @@ restored."
       (cc-set-compiler)
       (local-set-key (kbd "<f9>") 'cc-clean)
       (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
+      (local-set-key (kbd "C-c C-f") 'snip-cc-fori)
       ;; (local-set-key "." 'semantic-complete-self-insert) ; This is a bit slow.
       ;; (local-set-key ">" 'semantic-complete-self-insert)
       (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1))))))
@@ -108,7 +109,7 @@ restored."
 ;; Skel
 ;;==============================================================================
 ;; TODO: elements: (setq skeleton-further-elements '((q "\"")))
-(define-skeleton snip-cc-print
+(define-skeleton snip-cc-printf
   "fprintf/printf snippet
 
 If no file descriptor is provided, switch do printf.  The format
@@ -124,14 +125,14 @@ Requires the `count-percents' function."
   '(while (< v1 v2)
      (setq v1 (1+ v1))
      (skeleton-insert '(nil (concat ", " (skeleton-read "Value: ")))))
-  ");")
+  @ ");")
 
-(define-skeleton snip-cc-for
-  "for loop."
+(define-skeleton snip-cc-fori
+  "for i loop."
   nil
-  > "for (" (skeleton-read "" "i = 0") "; " (skeleton-read "" "i < N") "; " (skeleton-read "" "i++") ")" \n
-  > "{" \n
-  > _ \n
-  "}" >)
+  > "for (" @ (skeleton-read "" "i = 0") "; " @ (skeleton-read "" "i < N") "; " @ (skeleton-read "" "i++") ")" \n
+  "{" > \n
+  @ _ \n
+  "}" > )
 
 (provide 'mode-cc)

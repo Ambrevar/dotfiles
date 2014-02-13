@@ -12,7 +12,6 @@
 (define-abbrev-table 'c-mode-abbrev-table
   '(
     ("printf" "" snip-cc-printf 0)
-    ("for" "" snip-cc-for 0)
    ))
 
 (define-abbrev-table 'comint-mode-abbrev-table '())
