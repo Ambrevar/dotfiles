@@ -54,10 +54,12 @@ otherwise use 'sh-shell-file'."
 }
 ")
 
-(define-skeleton sh-getopts
+
+
+(define-skeleton sh-while-getopts
   "Insert a getops prototype."
-  nil
-  "_printhelp ()
+  "optstring: "
+  > "_printhelp ()
 {
     cat<<EOF
 Usage: ${1##*/} [OPTIONS] FILES
@@ -67,29 +69,29 @@ Options:
   -h:  Show this help.
 
 EOF
-}
-
-opt_test=false
-while getopts ':ht' opt; do
-    case $opt in
-        h)
-            _printhelp \"$0\"
-            exit 1 ;;
-        t)
-            opt_test=true ;;
-        ?)
-            _printhelp \"$0\"
-            exit 1 ;;
-    esac
-done
-
-shift $(($OPTIND - 1))
-
-if [ $# -eq 0 ]; then
+}" \n
+\n
+> "while getopts :" str " OPT; do" \n
+> "case $OPT in" \n
+'(setq v1 (append (vconcat str) nil))
+( (prog1 (if v1 (char-to-string (car v1)))
+    (if (eq (nth 1 v1) ?:)
+        (setq v1 (nthcdr 2 v1)
+              v2 "\"$OPTARG\"")
+      (setq v1 (cdr v1)
+            v2 nil)))
+  > str ")" \n
+  > _ v2 " ;;" \n)
+> "?)" \n
+> "_printhelp \"$0\"" \n
+"exit 1 ;;"  > \n
+"esac" > \n
+"done" > \n\n
+"shift $(($OPTIND - 1))" \n
+"if [ $# -eq 0 ]; then
     _printhelp \"$0\"
     exit 1
-fi
-")
+fi" \n)
 
 (define-skeleton sh-command
   "Insert a line that executes if command is found in path."
