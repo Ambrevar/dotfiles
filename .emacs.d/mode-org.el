@@ -5,7 +5,7 @@
 (setq org-M-RET-may-split-line '((default)))
 
 (setq org-agenda-files '("~/todo.org"))
-(setq org-enforce-todo-dependencies t)))
+(setq org-enforce-todo-dependencies t)
 ;; Set PDF association in Org-mode (was Evince by default).
 (eval-after-load "org"
   '(progn

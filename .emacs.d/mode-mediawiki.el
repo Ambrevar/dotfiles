@@ -18,8 +18,8 @@
 ;; TODO: url-cookie timer does not work.
 (setq url-cookie-save-interval 86400)
 
-(setq
- mediawiki-mode-hook
+(add-hook
+ 'mediawiki-mode-hook
  (lambda ()
    (visual-line-mode 1)
    (turn-off-auto-fill)
@@ -29,4 +29,6 @@
    (local-set-key (kbd "C-c C-d") 'duplicate-line)
    (local-set-key (kbd "C-c C-s") 'mediawiki-save)
    (local-set-key (kbd "C-x C-s") 'save-buffer)
-   )) )
+   ))
+
+(provide 'mode-mediawiki)
