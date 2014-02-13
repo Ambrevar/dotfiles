@@ -5,9 +5,15 @@
 
 (define-abbrev-table 'awk-mode-abbrev-table '())
 
-(define-abbrev-table 'c++-mode-abbrev-table '())
+(define-abbrev-table 'c++-mode-abbrev-table
+  '(
+   ))
 
-(define-abbrev-table 'c-mode-abbrev-table '())
+(define-abbrev-table 'c-mode-abbrev-table
+  '(
+    ("printf" "" snip-cc-printf 0)
+    ("for" "" snip-cc-for 0)
+   ))
 
 (define-abbrev-table 'comint-mode-abbrev-table '())
 
@@ -15,9 +21,13 @@
 
 (define-abbrev-table 'docTeX-mode-abbrev-table '())
 
+(define-abbrev-table 'emacs-lisp-byte-code-mode-abbrev-table '())
+
 (define-abbrev-table 'emacs-lisp-mode-abbrev-table '())
 
 (define-abbrev-table 'fundamental-mode-abbrev-table '())
+
+(define-abbrev-table 'gfm-mode-abbrev-table '())
 
 (define-abbrev-table 'global-abbrev-table '())
 
@@ -29,6 +39,10 @@
 
 (define-abbrev-table 'lisp-mode-abbrev-table '())
 
+(define-abbrev-table 'lua-mode-abbrev-table '())
+
+(define-abbrev-table 'markdown-mode-abbrev-table '())
+
 (define-abbrev-table 'objc-mode-abbrev-table '())
 
 (define-abbrev-table 'occur-edit-mode-abbrev-table '())
@@ -38,6 +52,8 @@
 (define-abbrev-table 'outline-mode-abbrev-table '())
 
 (define-abbrev-table 'pike-mode-abbrev-table '())
+
+(define-abbrev-table 'po-mode-abbrev-table '())
 
 (define-abbrev-table 'process-menu-mode-abbrev-table '())
 
@@ -50,6 +66,8 @@
 (define-abbrev-table 'snippet-mode-abbrev-table '())
 
 (define-abbrev-table 'special-mode-abbrev-table '())
+
+(define-abbrev-table 'tabulated-list-mode-abbrev-table '())
 
 (define-abbrev-table 'text-mode-abbrev-table
   '(
@@ -173,7 +191,6 @@
     ("pcq" "parce que" nil 3)
     ("pdt" "pendant" nil 2)
     ("pe" "peut-être" nil 2)
-    ("pe" "peut-être" nil 2)
     ("pgrm" "program" nil 1)
     ("pgrms" "programs" nil 1)
     ("plsu" "plus" nil 3)
@@ -218,6 +235,8 @@
     ("yen" "il y en" nil 1)
     ("ê" "être" nil 1)
    ))
+
+(define-abbrev-table 'vc-git-log-edit-mode-abbrev-table '())
 
 (define-abbrev-table 'vc-git-log-view-mode-abbrev-table '())
 

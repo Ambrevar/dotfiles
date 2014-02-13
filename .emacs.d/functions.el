@@ -402,3 +402,5 @@ suitable for creation"
              (and looping (not (equal current-dir "/")))))
     (if (equal current-dir "/") nil (expand-file-name makefile current-dir))))
 
+
+(provide 'functions)

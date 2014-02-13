@@ -310,8 +310,11 @@
              (cons '("(gmp)Function Index" nil "^ -.* " "\\>")
                    (nth 3 mode-value)))))
 
+;; Do not expand abbrevs in skeletons. Not sure it is useful.
+;; (setq skeleton-further-elements '((abbrev-mode nil)))
+;; (setq skeleton-end-hook nil)
 
-;; Bookmark file to cache folder
+;; Bookmark file to cache folder.
 (setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
 
 ;; Disable prompt (but leave warning) on git symlink.

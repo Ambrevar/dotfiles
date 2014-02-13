@@ -40,11 +40,12 @@ Example: to assign some-function to C-i, use
 
 (load "functions" nil t)
 (load "personal" nil t)
-(load "snippets" nil t)
+;; (load "snippets" nil t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Modes config
 
+;; (load "mode-cc")
 (add-hook 'c-mode-hook (lambda () (require 'mode-cc)))
 (add-hook 'c++-mode-hook (lambda () (require 'mode-cc)))
 (add-hook 'dot-mode-hook (lambda () (require 'mode-dot)))

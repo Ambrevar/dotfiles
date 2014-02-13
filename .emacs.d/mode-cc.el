@@ -53,24 +53,21 @@ restored."
 ;; C-mode
 ;;==============================================================================
 
-;; Identation style
-(setq c-default-style "linux" c-basic-offset 4)
+(mapcar
+ (lambda (mode-hook)
+   (add-hook
+    mode-hook
+    (lambda ()
+      ;; Identation style
+      (setq c-default-style "linux" c-basic-offset 4)
 
-(add-hook
- 'c-mode-hook
- (lambda ()
-   (cc-set-compiler)
-   (local-set-key (kbd "<f9>") 'cc-clean)
-   (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
-   (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1)))
-   ;; (local-set-key "." 'semantic-complete-self-insert) ; This is a bit slow.
-   ;; (local-set-key ">" 'semantic-complete-self-insert)
-   ))
-
-;;==============================================================================
-;; C++-mode
-;;==============================================================================
-(require 'compile)
+      (cc-set-compiler)
+      (local-set-key (kbd "<f9>") 'cc-clean)
+      (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
+      ;; (local-set-key "." 'semantic-complete-self-insert) ; This is a bit slow.
+      ;; (local-set-key ">" 'semantic-complete-self-insert)
+      (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1))))))
+ '(c-mode-hook c++-mode-hook))
 
 ;; TODO: test this!
 ;; (defun vlad-cc-style()
@@ -86,14 +83,6 @@ restored."
 ;;   (setq indent-tabs-mode nil)
 ;; )
 ;; (add-hook 'c++-mode-hook 'vlad-cc-style)
-
-(add-hook
- 'c++-mode-hook
- (lambda ()
-   (cc-set-compiler)
-   (local-set-key (kbd "<f9>") 'cc-clean)
-   (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1)))
-   (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)))
 
 ;;==============================================================================
 ;; Qt semantic support
@@ -118,28 +107,30 @@ restored."
 ;; Skel
 ;;==============================================================================
 ;; TODO: elements: (setq skeleton-further-elements '((q "\"")))
-(add-hook
- 'c++-mode-hook
- (lambda ()
-
-   (define-skeleton snip-print
-     "fprintf/printf snippet
+(define-skeleton snip-cc-print
+  "fprintf/printf snippet
 
 If no file descriptor is provided, switch do printf.  The format
 string is properly parsed (%% are not taken into account).
 
 Requires the `count-percents' function."
-     nil
-     '(setq v1 (skeleton-read "File desc: " "stdout"))
-     (if (string= v1 "") "printf (" (concat "fprintf (" v1 ", "))
-     "\"" (setq v1 (skeleton-read "Format string: " "%s\\n")) "\""
-     '(setq v2 (count-percents v1))
-     '(setq v1 0)
-     '(while (< v1 v2)
-        (setq v1 (1+ v1))
-        (skeleton-insert '(nil (concat ", " (skeleton-read "Value: ")))))
-     ");")
+  nil
+  '(setq v1 (skeleton-read "File desc: " "stderr"))
+  (if (string= v1 "") "printf (" (concat "fprintf (" v1 ", "))
+  "\"" (setq v1 (skeleton-read "Format string: " "%s\\n")) "\""
+  '(setq v2 (count-percents v1))
+  '(setq v1 0)
+  '(while (< v1 v2)
+     (setq v1 (1+ v1))
+     (skeleton-insert '(nil (concat ", " (skeleton-read "Value: ")))))
+  ");")
 
-   ))
+(define-skeleton snip-cc-for
+  "for loop."
+  nil
+  > "for (" (skeleton-read "" "i = 0") "; " (skeleton-read "" "i < N") "; " (skeleton-read "" "i++") ")" \n
+  > "{" \n
+  > _ \n
+  "}" >)
 
 (provide 'mode-cc)
