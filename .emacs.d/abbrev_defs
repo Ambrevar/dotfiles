@@ -60,7 +60,10 @@
 
 (define-abbrev-table 'select-tags-table-mode-abbrev-table '())
 
-(define-abbrev-table 'sh-mode-abbrev-table '())
+(define-abbrev-table 'sh-mode-abbrev-table
+  '(
+    ("null" "" sh-redirect-to-null 0)
+  ))
 
 (define-abbrev-table 'snippet-mode-abbrev-table '())
 
