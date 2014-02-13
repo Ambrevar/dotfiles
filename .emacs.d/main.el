@@ -111,7 +111,7 @@
 (define-key my-keys-minor-mode-map (kbd "C-\\") 'delete-trailing-whitespace)
 
 ;; Abbreviation support
-(setq default-abbrev-mode t)
+(setq-default abbrev-mode t)
 
 ;; Set Fill Column
 (setq-default fill-column 80)
