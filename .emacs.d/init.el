@@ -45,10 +45,8 @@ Example: to assign some-function to C-i, use
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Modes config
 
-;; (load "mode-cc")
 (add-hook 'c-mode-hook (lambda () (require 'mode-cc)))
 (add-hook 'c++-mode-hook (lambda () (require 'mode-cc)))
-(add-hook 'dot-mode-hook (lambda () (require 'mode-dot)))
 (add-hook 'perl-mode-hook (lambda () (require 'mode-perl)))
 (add-hook 'python-mode-hook (lambda () (require 'mode-python)))
 (add-hook 'shell-mode-hook (lambda () (require 'mode-shell)))
@@ -66,15 +64,16 @@ Example: to assign some-function to C-i, use
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Extra modes
 
-(require 'go-mode-load nil t)
+(when (require 'go-mode nil t)
+  (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode)))
 
-;; Lua
 (when (require 'lua-mode nil t)
   (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode)))
 
 (when (require 'markdown-mode nil t)
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+  ;; If we need more option, add it to dedicated file.
   (set (make-local-variable 'paragraph-start) "
 "))
 
@@ -84,17 +83,24 @@ Example: to assign some-function to C-i, use
 (when (require 'po-find-file-coding-system nil t)
   (modify-coding-system-alist 'file "\\.po\\'\\|\\.po\\." 'po-find-file-coding-system))
 
-;; Bison/flex
 (when (require 'bison-mode nil t)
   (add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode)))
 (when (require 'flex-mode nil t)
   (add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode)))
 
-;; GLSL
 (when (require 'glsl-mode nil t)
   (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
   (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
   (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode)))
+
+;; This mode has no 'provide'.
+(when (autoload 'graphviz-dot-mode "graphviz-dot-mode" "Dot mode." t)
+  (add-to-list 'auto-mode-alist '("\\.dot\\'" . graphviz-dot-mode))
+  (add-hook 'dot-mode-hook (lambda () (require 'mode-dot))))
+
+(when (require 'mediawiki nil t)
+  (add-to-list 'auto-mode-alist '("\\.wiki\\'" . mediawiki-mode))
+  (add-hook 'mediawiki-mode-hook (lambda () (require 'mode-mediawiki))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We need to put it at the end to make sure it doesn't get overriden by other

@@ -5,12 +5,17 @@
 (setq org-M-RET-may-split-line '((default)))
 
 (setq org-agenda-files '("~/todo.org"))
-(auto-fill-mode -1)
 (setq org-enforce-todo-dependencies t)))
 ;; Set PDF association in Org-mode (was Evince by default).
 (eval-after-load "org"
   '(progn
      ;; Change .pdf association directly within the alist
      (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura --fork %s")))
+
+(add-hook
+ 'org-mode-hook
+ (lambda ()
+   (auto-fill-mode -1)
+   ))
 
 (provide 'mode-org)

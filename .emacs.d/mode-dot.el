@@ -2,10 +2,6 @@
 ;; Graphviz' dot mode
 ;;==============================================================================
 
-(autoload 'graphviz-dot-mode "graphviz-dot-mode.el" "Graphviz dot mode." t)
-(add-to-list 'auto-mode-alist '("\\.dot\\'" . graphviz-dot-mode))
-
-
 (setq graphviz-dot-preview-extension "pdf")
 (defcustom graphviz-dot-view-extension "pdf"
   "Graphviz format for external view."

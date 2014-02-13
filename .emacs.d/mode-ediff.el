@@ -3,7 +3,7 @@
 
 ;; Ediff split horizontally by default.
 ;; TODO: ediff split does not seem to work.
-(lambda ()
-  (setq ediff-merge-split-window-function 'split-window-horizontally))
+;; (setq ediff-merge-split-window-function 'split-window-horizontally)
+(setq ediff-merge-split-window-function 'split-window-vertically)
 
 (provide 'mode-ediff)

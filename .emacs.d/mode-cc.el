@@ -59,7 +59,8 @@ restored."
     mode-hook
     (lambda ()
       ;; Identation style
-      (setq c-default-style "linux" c-basic-offset 4)
+      (c-set-style "linux")
+      (setq c-basic-offset 4)
 
       (cc-set-compiler)
       (local-set-key (kbd "<f9>") 'cc-clean)
