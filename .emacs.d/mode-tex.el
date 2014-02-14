@@ -167,6 +167,7 @@ but there is no warranty."
         (lambda (arg) (interactive) (concat file arg))
         tex-extension-list)))))
 
+;; TODO: call pdfcompress from command-line to avoid code duplication.
 (defun tex-pdf-compress ()
   "PDF compressions might really strip down the PDF size. The
 compression depends on the fonts used. Do not use this command if

@@ -3,11 +3,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun unfill-paragraph ()
+  "Paragraph at point is unwrapped on one single line."
   (interactive)
   (let ((fill-column (point-max)))
     (fill-paragraph nil)))
 
 (defun unfill-region ()
+  "Unfill all paragraphs found in current region. Each paragraph
+stand on its line."
   (interactive)
   (let ((fill-column (point-max)))
     (fill-region (region-beginning) (region-end) nil)))
@@ -17,7 +20,8 @@
   (interactive)
   (shell-command-on-region (point) (mark) "sort -u" (buffer-name) t))
 
-(defun dtwi () "Delete trailing whitespaces interactively."
+(defun dtwi ()
+  "Delete trailing whitespaces interactively."
   (interactive)
   (query-replace-regexp " +
 " "
@@ -182,7 +186,7 @@ Enlarge/Shrink by ARG columns, or 5 if arg is nil."
                (set-buffer-modified-p nil)
                (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
 
-(define-key my-keys-minor-mode-map (kbd "C-x C-w") 'rename-buffer-and-file)
+(define-key my-keys-minor-mode-map (kbd "C-x w") 'rename-buffer-and-file)
 
 (defun kill-all-buffers ()
   "Kill all buffers, leaving *scratch* only."
@@ -249,9 +253,16 @@ beginning."
             (point))
           nil t))))
 
-(setq translate-lang-input "")
-(setq translate-lang-output "en")
-(setq translate-lang-p nil)
+(defvar translate-lang-input ""
+  "Current input language for the `translate' function. Change it
+with `translate-set-language'.")
+(defvar translate-lang-output "en"
+  "Current output language for the `translate' function. Change
+it with `translate-set-language'.")
+(defvar translate-lang-p nil
+  "The original value is nil. When `translate' is called for the
+first time, input and output languages are set and this variable
+is set to true.")
 (defun translate-set-language ()
   "Set input/output languages for current buffer. Leave input
 empty for auto-detect. Empty output defaults to English."
@@ -308,7 +319,7 @@ region. Output result at the end after an ' = ' separtor."
           (end-of-line)
           (insert " = " (shell-command-to-string
                          (concat cmd " '" line "'")))
-          ;; Shell commands usually outputs an EOL. We should remove it.
+          ;; Shell commands usually output an EOL. We should remove it.
           (delete-char -1))
         (setq beg (1+ beg))))))
 
@@ -320,12 +331,14 @@ region. Output result at the end after an ' = ' separtor."
     (point)))
 
 (defun toggle-trailing-whitespace ()
+  "Show trailing whitespace or not."
   (interactive)
   (if show-trailing-whitespace
       (setq show-trailing-whitespace nil)
       (setq show-trailing-whitespace t)))
 
 (defun toggle-indent-tabs ()
+  "Indent with tabs or spaces."
   (interactive)
   (if indent-tabs-mode
       (progn
@@ -337,6 +350,7 @@ region. Output result at the end after an ' = ' separtor."
 (define-key my-keys-minor-mode-map (kbd "C-c i") 'toggle-indent-tabs)
 
 (defun toggle-word-delim ()
+  "Make underscore part of the word syntax or not."
   (interactive)
   (if (string= (char-to-string (char-syntax ?_)) "_")
       (progn
@@ -403,6 +417,7 @@ suitable for creation"
     (if (equal current-dir "/") nil (expand-file-name makefile current-dir))))
 
 (defun skeleton-make-markers ()
+  "Hook function for skeletons."
   (while skeleton-markers
     (set-marker (pop skeleton-markers) nil))
   (setq skeleton-markers

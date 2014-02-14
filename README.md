@@ -38,24 +38,21 @@ Custom "fast-forward" javascript.
 Emacs
 =====
 
-* Extra deps
-* recommended: emacs-multiple-cursors emacs-xclip emacs-yasnippet
-* optional: emacs-bison-mode emacs-flex-mode emacs-glsl-mode emacs-lua-mode
-  emacs-make-regexp emacs-mediawiki-bzr
+* Recommended packages: emacs-multiple-cursors emacs-xclip
 
-Emacs daemon is integrated flawlessly thanks to a small script -- see the scripts folder.
-Because terminal and graphical clients do not behave the same way, it is
-sometimes useful to specify which version should be used. For mutt, ranger
-bulkrename, git commit message and dwb, it is required to wait for the client to
-return, for which only the console client will work properly.
+Emacs daemon is integrated flawlessly thanks to a small script -- see the
+scripts folder.  Because terminal and graphical clients do not behave the same
+way, it is sometimes useful to specify which version should be used. For mutt,
+ranger bulkrename, git commit message and dwb, it is required to wait for the
+client to return, for which only the console client will work properly.
 
 Configuration for C programming. Bindings to compile either from makefile or
 from a custom command if no makefile is found.
 
 TeX and LaTeX full-featured home made environment: no AucTeX required, itemize
-function, snippets,
-dynamic compilation with various engines, dynamic configuration, proper PDF
-view, temp files clean function, PDF compression, SyncTeX support.
+function, snippets, templates, dynamic compilation with various engines, dynamic
+configuration, proper PDF view, temp files clean function, PDF compression,
+SyncTeX support.
 
 Custom theme with 256 colors, works for both text and graphical Emacs.
 
@@ -63,10 +60,9 @@ Extended file support (shell files, Mutt mails, Arch Linux PKGBUILDs).
 
 Some customization: columns, kill whole line, org-mode, semantic, etc.
 
-Some custom functions: duplicate line, unfill-paragraph, etc.
+A lot of functions: duplicate line, unfill-paragraph, etc.
 
-A lot of code snippets, especially for C and LaTeX (document templates, plot
-generation, pie chart generation, and others).
+A lot of code snippets for shell, C, LaTeX and others.
 
 Mutt
 ====
@@ -110,27 +106,30 @@ Probably the most interesting part here.
 
 *clean: remove junk files from TeX projects, home folder, etc.
 
-abs-wrapper: helper script to compile pacman-based packages (using
-  makepkg). Using this you can recompile the whole system.
-
 archive: simple tar wrapper to create archive for files and folders.
 
 asciify: convert many non-ASCII characters to their nearest ASCII counterpart.
 
+bsdman: read *BSD man pages.
+
 crun: quick way to execute C files.
+
+dataindex: create index of hierarchies. Useful to keep track of folder content
+  and structure.
 
 ediff: diff with Emacs.
 
+einfo: info viewer with Emacs
+
 formatc: wrapper for 'indent' to prettify C source code.
+
+git-*: some git helper functions for sync and so on.
 
 homeinit: initialize a new home configuration, i.e. get needed files, create
   symlinks, etc.
 
 netinit: network setup. Works with wpa_supplicant. May replace any network
   manager.
-
-pacman-*: a lot of handy functions for the pacman package manager, like sorting
-  by size with grand total, file listing with size, etc.
 
 pdf*: PDF manipulation, e.g. extract pages, compress, resize to A4.
 
@@ -162,8 +161,7 @@ Plain TeX macros, most importantly a partial UTF-8 support (taken from LaTeX).
 A lot of LaTeX macros. Among others: pie charts, dynamic plots with
 input file and trend.
 
-Plain TeX macros are in the '.texmf' folder. LaTeX macros are all bundled into
-Emacs snippets so that .tex documents do not rely on any external file.
+Plain TeX macros are in the '.texmf' folder.
 
 URxvt
 =====
