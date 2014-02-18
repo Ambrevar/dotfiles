@@ -26,8 +26,8 @@ Options:
 
 For more details:
 
-  $ gs -sDEVICE=pdfwrite -o /dev/null \
-   -c "currentpagedevice { exch ==only ( ) print == } forall"
+  $ gs -sDEVICE=pdfwrite -o /dev/null \\
+    -c "currentpagedevice { exch ==only ( ) print == } forall"
 
   http://partners.adobe.com/public/developer/en/acrobat/sdk/pdf/pdf_creation_apis_and_specs/DistillerParameters.pdf
 
