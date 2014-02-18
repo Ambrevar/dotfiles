@@ -440,4 +440,20 @@ suitable for creation"
                         (car (last skeleton-markers))
                       (car skeleton-markers))))))))
 
+(defun pdf-compress (&optional arg)
+  "Call `pdfcompess' inplace over argument. If no argument is
+provided, use PDF associated to current buffer filename."
+  (interactive)
+  (let ((file (concat
+               (file-name-sans-extension
+                (if arg arg
+                  (if (equal current-prefix-arg '(4))
+                      (read-string "File name: " nil nil buffer-file-name)
+                    buffer-file-name)))
+               ".pdf")))
+    (when (and (file-exists-p file) (file-writable-p file))
+      ;; TODO: check for errors and print better messages.
+      (call-process "pdfcompress" nil nil nil "-i" file))
+    ))
+
 (provide 'functions)

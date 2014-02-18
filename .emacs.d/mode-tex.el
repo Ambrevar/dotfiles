@@ -167,32 +167,12 @@ but there is no warranty."
         (lambda (arg) (interactive) (concat file arg))
         tex-extension-list)))))
 
-;; TODO: call pdfcompress from command-line to avoid code duplication.
 (defun tex-pdf-compress ()
-  "PDF compressions might really strip down the PDF size. The
-compression depends on the fonts used. Do not use this command if
-your document embeds raster graphics."
+  "Use `masterfile' variable as default value for `pdf-compress'."
   (interactive)
   (hack-local-variables)
-  (let (
-        ;; Master file.
-        (local-master
-         (if (not masterfile) buffer-file-name masterfile)))
-
-    (let (
-          ;; Temp compressed file.
-          (file-temp
-           (concat (make-temp-name (concat "/tmp/" (file-name-nondirectory local-master))) ".pdf"))
-
-          ;; File name with PDF extension.
-          (file
-           (replace-regexp-in-string "tex" "pdf" (file-name-nondirectory local-master))))
-
-      (when (and (file-exists-p file) (file-writable-p file))
-        (shell-command
-         (concat  "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=\"" file-temp "\" \"" file "\""))
-        (rename-file file-temp file t)
-        ))))
+  (let ((local-master (if (not masterfile) buffer-file-name masterfile)))
+    (pdf-compress local-master)))
 
 (defun tex-pdf-view ()
   "Call a PDF viewer for current buffer file. File name should be
@@ -245,11 +225,9 @@ properly escaped with double-quotes in case it has spaces."
       (newline))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; HOOKS
+;; TeX setup
 
-(add-hook
- 'tex-mode-hook
- (lambda ()
+(defun tex-setup ()
    (dolist (key '("\C-c\C-f" "\C-c\C-b"))
      (local-unset-key key))
    (set-face-attribute 'tex-verbatim nil :family "freemono")
@@ -259,11 +237,20 @@ properly escaped with double-quotes in case it has spaces."
 ")
    ;; (set (make-local-variable 'use-hard-newlines) t)
    (local-set-key (kbd "<f9>") 'tex-pdf-view)
-   (tex-set-compiler)))
+   (tex-set-compiler))
 
-(add-hook 'latex-mode-hook (lambda () (local-set-key (kbd "M-RET") 'latex-itemize)))
-(add-hook 'latex-mode-hook 'turn-on-orgtbl)
+(add-hook 'tex-mode-hook 'tex-setup)
+(tex-setup)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; LaTeX setup
+
+(defun latex-setup ()
+ (local-set-key (kbd "M-RET") 'latex-itemize)
+ (turn-on-orgtbl))
+
+(add-hook 'latex-mode-hook 'latex-setup)
+(latex-setup)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The magnificent latex-math-preview mode!

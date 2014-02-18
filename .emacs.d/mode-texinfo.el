@@ -62,6 +62,13 @@ but there is no warranty."
         (lambda (arg) (interactive) (concat file arg))
         texinfo-extension-list)))))
 
+(defun texinfo-pdf-compress ()
+  "Use `masterfile' variable as default value for `pdf-compress'."
+  (interactive)
+  (hack-local-variables)
+  (let ((local-master (if (not masterfile) buffer-file-name masterfile)))
+    (pdf-compress local-master)))
+
 (defun texinfo-pdf-view ()
   "Call a PDF viewer for current buffer file. File name should be
 properly escaped with double-quotes in case it has spaces."
