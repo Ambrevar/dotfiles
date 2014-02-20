@@ -82,7 +82,7 @@ there's a region, all lines that region covers will be duplicated."
       (if auto-fill-p (auto-fill-mode))
       (goto-char (+ origin (* (length region) arg) arg)))))
 
-(define-key my-keys-minor-mode-map (kbd "C-c C-d") 'duplicate)
+(define-key my-keys-minor-mode-map (kbd "C-x M-d") 'duplicate)
 
 (defun comment-or-uncomment-current-line-or-region ()
   "Comments or uncomments current current line or whole lines in region."
@@ -167,7 +167,7 @@ Enlarge/Shrink by ARG columns, or 5 if arg is nil."
            (set-window-start w2 s1))))
   (other-window 1))
 
-(define-key my-keys-minor-mode-map (kbd "C-c s") 'swap-windows)
+(define-key my-keys-minor-mode-map (kbd "C-x M-s") 'swap-windows)
 
 (defun rename-buffer-and-file ()
   "Renames current buffer and file it is visiting."
@@ -347,7 +347,7 @@ region. Output result at the end after an ' = ' separtor."
     (message "Indent using tabs")
     (setq indent-tabs-mode t)))
 
-(define-key my-keys-minor-mode-map (kbd "C-c i") 'toggle-indent-tabs)
+(define-key my-keys-minor-mode-map (kbd "C-x M-i") 'toggle-indent-tabs)
 
 (defun toggle-word-delim ()
   "Make underscore part of the word syntax or not."

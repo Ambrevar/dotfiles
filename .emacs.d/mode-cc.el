@@ -64,7 +64,11 @@ restored."
       (cc-set-compiler)
       (local-set-key (kbd "<f9>") 'cc-clean)
       (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
-      (local-set-key (kbd "C-c C-f") 'snip-cc-fori)
+      (local-set-key (kbd "C-c C-f") 'cc-fori)
+      (local-set-key (kbd "C-c m") 'cc-main)
+      (local-set-key (kbd "C-c C-i") 'cc-if)
+      (local-set-key (kbd "C-c i") 'cc-include)
+      (local-set-key (kbd "C-c I") 'cc-include-local)
       ;; (local-set-key "." 'semantic-complete-self-insert) ; This is a bit slow.
       ;; (local-set-key ">" 'semantic-complete-self-insert)
       (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1))))))
@@ -107,8 +111,11 @@ restored."
 ;;==============================================================================
 ;; Skel
 ;;==============================================================================
-;; TODO: elements: (setq skeleton-further-elements '((q "\"")))
-(define-skeleton snip-cc-printf
+
+;; Note that it is possible to extend the skel syntax like this: (setq
+;; skeleton-further-elements '((q "\"")))
+
+(define-skeleton cc-printf
   "fprintf/printf snippet
 
 If no file descriptor is provided, switch do printf.  The format
@@ -126,12 +133,51 @@ Requires the `count-percents' function."
      (skeleton-insert '(nil (concat ", " (skeleton-read "Value: ")))))
   @ ");")
 
-(define-skeleton snip-cc-fori
+(define-skeleton cc-fori
   "for i loop."
   nil
   > "for (" @ (skeleton-read "" "i = 0") "; " @ (skeleton-read "" "i < N") "; " @ (skeleton-read "" "i++") ")" \n
   "{" > \n
   @ _ \n
   "}" > )
+
+(define-skeleton cc-main
+  "Insert main function with basic includes."
+  nil
+  > "#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdint.h>
+#include <inttypes.h>
+
+int main(int argc, char** argv)
+{" \n
+> @ _ \n
+> "return 0;
+}" \n)
+
+(define-skeleton cc-include
+  "Insert system include."
+  "Header: "
+  \n "#include <" @ str ">" \n)
+
+(define-skeleton cc-include-local
+  "Insert local include."
+  "Header: "
+  \n "#include \"" @ str "\"" \n)
+
+;; TODO: solve indentation issues
+(define-skeleton cc-if
+  "Insert an if statement."
+  "Condition: "
+  > "if (" @ str ") {" \n
+  > @ _ \n
+  ( "Other condition, %s: "
+    > "} else if (" @ str ") {" > \n
+    > @ \n)
+  "} else {" > \n
+  > @ \n
+  resume:
+  "}" > \n)
 
 (provide 'mode-cc)
