@@ -227,7 +227,9 @@ properly escaped with double-quotes in case it has spaces."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TeX setup
 
-(defun tex-setup ()
+(add-hook
+ 'tex-mode-hook
+ (lambda ()
    (dolist (key '("\C-c\C-f" "\C-c\C-b"))
      (local-unset-key key))
    (set-face-attribute 'tex-verbatim nil :family "freemono")
@@ -237,21 +239,19 @@ properly escaped with double-quotes in case it has spaces."
 ")
    ;; (set (make-local-variable 'use-hard-newlines) t)
    (local-set-key (kbd "<f9>") 'tex-pdf-view)
-   (tex-set-compiler))
+   (tex-set-compiler)))
 
-;; TODO: why is tex-setup needed for tex-mode only?
-(add-hook 'tex-mode-hook 'tex-setup t)
-(tex-setup)
+;; TODO: why is run-hooks needed for tex-mode only?
+(run-hooks 'tex-mode-hook)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LaTeX setup
 
-(defun latex-setup ()
- (local-set-key (kbd "M-RET") 'latex-itemize)
- (turn-on-orgtbl))
-
-(add-hook 'latex-mode-hook 'latex-setup)
-(latex-setup)
+(add-hook
+ 'latex-mode-hook
+ (lambda ()
+   (local-set-key (kbd "M-RET") 'latex-itemize)
+   (turn-on-orgtbl)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The magnificent latex-math-preview mode!
