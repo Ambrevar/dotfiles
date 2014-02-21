@@ -16,8 +16,8 @@
 (define-key my-keys-minor-mode-map "\M-;" 'comment-or-uncomment-current-line-or-region)
 
 (defun calc-eval-line ()
-  "Compute mathematical expression with calc and append result to
-end of line after an ' = ' separtor."
+  "Append calc expression to end of line after an ' = ' separtor.
+Regular math expression can be computed with calc."
   (interactive)
   (end-of-line)
   (insert " = " (calc-eval (buffer-substring-no-properties
@@ -32,8 +32,9 @@ end of line after an ' = ' separtor."
     matches))
 
 (defun count-percents (string)
-  "Return number of times % occurs in a printf format string, %%
-exluded."
+  "Return count of 'printf' conversion specifications.
+Those specifications are introduced by a percent
+sign (%). Escaped percent signs (%%) are skipped."
   (let ((start 0) (matches 0))
     (while (string-match "%." string start)
       (unless (string= (match-string 0 string) "%%")
@@ -49,7 +50,7 @@ exluded."
 "))
 
 (defun duplicate (arg)
-  "Duplicates the current line or region ARG times.
+  "Duplicate the current line or region ARG times.
 If there's no region, the current line will be duplicated. However, if
 there's a region, all lines that region covers will be duplicated."
   (interactive "p")
@@ -85,11 +86,10 @@ there's a region, all lines that region covers will be duplicated."
            (insert (current-kill 0)))))
 
 (defun get-closest-pathname (&optional file)
-  "Determine the pathname of the first instance of FILE starting
-from the current directory towards root.  This may not do the
-correct thing in presence of links. If it does not find FILE,
-then it shall return the name of FILE in the current directory,
-suitable for creation"
+  "Get pathname of the first instance of FILE towards root.
+This may not do the correct thing in presence of links. If it
+does not find FILE, then it shall return the name of FILE in the
+current directory, suitable for creation"
   (let ((current-dir default-directory) (looping t) (makefile (or file "Makefile")))
     (while (progn
              (if (file-exists-p (expand-file-name makefile current-dir))
@@ -117,8 +117,7 @@ suitable for creation"
 The place mark goes is the same place \\[forward-word] would move
 to with the same argument.  Interactively, if this command is
 repeated or (in Transient Mark mode) if the mark is active, it
-marks the next ARG words after the ones already marked.
-
+marks the next ARG words after the ones already marked.\n
 This overloads the vanilla function to mark words from the
 beginning."
   (interactive "P\np")
@@ -144,11 +143,11 @@ beginning."
           nil t))))
 
 (defun move-border-left (arg)
-  "If this is a window with its right edge being the edge of the
+  "Move window border in a natural manner.
+If this is a window with its right edge being the edge of the
 screen, enlarge the window horizontally. If this is a window with
 its left edge being the edge of the screen, shrink the window
-horizontally. Otherwise, default to enlarging horizontally.
-
+horizontally. Otherwise, default to enlarging horizontally.\n
 Enlarge/Shrink by ARG columns, or 5 if arg is nil."
   (interactive "P")
   (if (= (count-windows) 2)
@@ -156,9 +155,8 @@ Enlarge/Shrink by ARG columns, or 5 if arg is nil."
 (define-key my-keys-minor-mode-map (kbd "M-(") 'move-border-left)
 
 (defun move-border-left-or-right (arg dir)
-  "General function covering move-border-left and
-move-border-right. If DIR is t, then move left, otherwise move
-right."
+  "Wrapper around move-border-left and move-border-right.
+If DIR is t, then move left, otherwise move right."
   (interactive)
   (if (null arg) (setq arg 5))
   (let ((left-edge (nth 0 (window-edges))))
@@ -167,12 +165,7 @@ right."
       (enlarge-window arg t))))
 
 (defun move-border-right (arg)
-  "If this is a window with its right edge being the edge of the
-screen, shrink the window horizontally. If this is a window with
-its left edge being the edge of the screen, enlarge the window
-horizontally. Otherwise, default to shrinking horizontally.
-
-Enlarge/Shrink by ARG columns, or 5 if arg is nil."
+  "See `move-border-left'."
   (interactive "P")
   (if (= (count-windows) 2)
       (move-border-left-or-right arg nil)))
@@ -186,9 +179,9 @@ Enlarge/Shrink by ARG columns, or 5 if arg is nil."
     (point)))
 
 (defun pdf-compress (&optional arg)
-  "Call `pdfcompess' inplace over argument. If no universal
-argument is provided, use PDF associated to current buffer
-filename, ask for filename otherwise."
+  "Call external `pdfcompess' inplace.
+If no universal argument is provided, use PDF associated to
+current buffer filename, ask for filename otherwise."
   (interactive)
   (let ((file (concat
                (file-name-sans-extension
@@ -203,9 +196,9 @@ filename, ask for filename otherwise."
     ))
 
 (defun pdf-view (&optional arg)
-  "Call `pdf-viewer' for current buffer file. If no universal
-argument is provided, use PDF associated to current buffer
-filename, ask for filename otherwise."
+  "Call `pdf-viewer' for current buffer file.
+If no universal argument is provided, use PDF associated to
+current buffer filename, ask for filename otherwise."
   (interactive)
   (let ((file (concat
                (file-name-sans-extension
@@ -224,18 +217,13 @@ filename, ask for filename otherwise."
       (delete-windows-on "*Async Shell Command*"))))
 
 (defvar pdf-viewer "zathura --fork -s -x \"emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"'\"'\"%{input}\"'\"'\")) (goto-line %{line}))'\""
-  "View PDF associated to current buffer. You may want to fork
-the viewer so that it detects when the same document is launched
-twice, and persists when Emacs gets closed.
-
-Simple command:
-
-  zathura --fork
-
-We can use
-
-  emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"%{input}\")) (goto-line %{line}))'
-
+  "View PDF associated to current buffer.
+You may want to fork the viewer so that it detects when the same
+document is launched twice, and persists when Emacs gets closed.\n
+Simple command:\n
+  zathura --fork\n
+We can use\n
+  emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"%{input}\")) (goto-line %{line}))'\n
 to reverse-search a PDF using SyncTeX. Note that the quotes and
 double-quotes matter and must be escaped appropriately.")
 
@@ -258,7 +246,8 @@ double-quotes matter and must be escaped appropriately.")
 (define-key my-keys-minor-mode-map (kbd "C-x w") 'rename-buffer-and-file)
 
 (defun sanitize ()
-  "Untabifies, indents and deletes trailing whitespace from buffer or region."
+  "Untabifies, indents and deletes trailing whitespace.
+Works on buffer or region."
   (interactive)
   (save-excursion
     (unless (region-active-p)
@@ -279,7 +268,8 @@ double-quotes matter and must be escaped appropriately.")
 (define-key my-keys-minor-mode-map (kbd "C-M-!") 'shell-last-command)
 
 (defun skeleton-make-markers ()
-  "Hook function for skeletons."
+  "Save last skeleton markers in a list.
+Hook function for skeletons."
   (while skeleton-markers
     (set-marker (pop skeleton-markers) nil))
   (setq skeleton-markers
@@ -305,15 +295,14 @@ double-quotes matter and must be escaped appropriately.")
 
 ;; Do not expand abbrevs in skeletons. Not sure it is useful.
 ;; (setq skeleton-further-elements '((abbrev-mode nil)))
-;; (setq skeleton-end-hook nil)
 (defvar skeleton-markers nil
-  "Markers for locations saved in skeleton-positions")
+  "Markers for locations saved in skeleton-positions.")
 (add-hook 'skeleton-end-hook 'skeleton-make-markers)
 (define-key my-keys-minor-mode-map (kbd "C->") 'skeleton-next-position)
 (define-key my-keys-minor-mode-map (kbd "C-<") (lambda () (interactive) (skeleton-next-position t)))
 
 (defun sort-lines-unique ()
-  "Remove duplicate lines using shell command `sort -u'"
+  "Remove duplicate lines using shell command `sort -u'."
   (interactive)
   (shell-command-on-region (point) (mark) "sort -u" (buffer-name) t))
 
@@ -356,7 +345,6 @@ double-quotes matter and must be escaped appropriately.")
 
 (defun toggle-window-dedicated ()
   "Toggle whether the current active window is dedicated or not.
-
 Run it in each window you want to 'freeze', i.e. prevent Emacs
 from acting on it."
   (interactive)
@@ -370,9 +358,8 @@ from acting on it."
 (define-key my-keys-minor-mode-map [pause] 'toggle-window-dedicated)
 
 (defun toggle-window-split ()
-  "Vertical split shows more of each line, horizontal split shows
-more lines. This code toggles between them. It only works for
-frames with exactly two windows."
+  "Switch between vertical and horizontal split.
+It only works for frames with exactly two windows."
   (interactive)
   (if (= (count-windows) 2)
       (let* ((this-win-buffer (window-buffer))
@@ -399,7 +386,8 @@ frames with exactly two windows."
 (define-key my-keys-minor-mode-map [(control c) (|)] 'toggle-window-split)
 
 (defun toggle-word-delim ()
-  "Make underscore part of the word syntax or not."
+  "Make underscore part of the word syntax or not.
+This does not interfere with `subword-mode'."
   (interactive)
   (if (string= (char-to-string (char-syntax ?_)) "_")
       (progn
@@ -422,18 +410,20 @@ frames with exactly two windows."
            " "  translate-lang-output) nil t))
 
 (defvar translate-lang-input ""
-  "Current input language for the `translate' function. Change it
-with `translate-set-language'.")
+  "Current input language for the `translate' function.
+Change it with `translate-set-language'.")
 (defvar translate-lang-output "en"
-  "Current output language for the `translate' function. Change
-it with `translate-set-language'.")
+  "Current output language for the `translate' function.
+Change it with `translate-set-language'.")
 (defvar translate-lang-p nil
-  "The original value is nil. When `translate' is called for the
+  "If language has been set for translation.
+The original value is nil. When `translate' is called for the
 first time, input and output languages are set and this variable
 is set to true.")
 (defun translate-line-by-line ()
-  "Translate lines in region or current line if there is no
-region. Output result at the end after an ' = ' separtor."
+  "Translate current line or lines in region.
+This calls the `translate' function.  Output result at the end
+after an ' = ' separtor."
   (interactive)
   (unless translate-lang-p
     (translate-set-language)
@@ -469,8 +459,9 @@ region. Output result at the end after an ' = ' separtor."
         (setq beg (1+ beg))))))
 
 (defun translate-set-language ()
-  "Set input/output languages for current buffer. Leave input
-empty for auto-detect. Empty output defaults to English."
+  "Set input/output translation languages for current buffer.
+These languages are used by `translate'. Leave input empty for
+auto-detect. Empty output defaults to English."
   (interactive)
   (set (make-local-variable 'translate-lang-input)
        (read-from-minibuffer "Input language: "))
@@ -485,8 +476,8 @@ empty for auto-detect. Empty output defaults to English."
     (fill-paragraph nil)))
 
 (defun unfill-region ()
-  "Unfill all paragraphs found in current region. Each paragraph
-stand on its line."
+  "Unfill all paragraphs found in current region.
+Each paragraph stand on its line."
   (interactive)
   (let ((fill-column (point-max)))
     (fill-region (region-beginning) (region-end) nil)))
