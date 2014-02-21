@@ -1,12 +1,9 @@
 ;;==============================================================================
 ;; C/C++
 ;;==============================================================================
-(require 'compile)
 
-;; We need some functions:
-;; (get-closest-pathname)
-;; (count-percents)
-(require 'functions)
+;; TODO: require compile is not needed?
+;; (require 'compile)
 
 (defcustom mode-cc-ldlibs "-lm -pthread"
   "[Local variable] Custom linker flags for C/C++ linkage."
@@ -17,9 +14,11 @@
   :safe 'stringp)
 
 (defun cc-set-compiler ()
-  "Set C/C++ compile command to be nearest Makefile found in
-parent folders. If no Makefile is found, then a configurable
-command line is provided."
+  "Set compile command to be nearest Makefile.
+The Makefile is looked up in parent folders. If no Makefile is
+found, then a configurable command line is provided.\n
+Requires `get-closest-pathname'."
+  (require 'functions)
   (interactive)
   (if (get-closest-pathname)
       (set (make-local-variable 'compile-command) (format "make -k -f %s" (get-closest-pathname)))
@@ -116,13 +115,12 @@ restored."
 ;; skeleton-further-elements '((q "\"")))
 
 (define-skeleton cc-printf
-  "fprintf/printf snippet
-
+  "fprintf/printf snippet.
 If no file descriptor is provided, switch do printf.  The format
-string is properly parsed (%% are not taken into account).
-
-Requires the `count-percents' function."
+string is properly parsed (%% are not taken into account).\n
+Requires `count-percents'."
   nil
+  (require 'functions)
   '(setq v1 (skeleton-read "File desc: " "stderr"))
   (if (string= v1 "") "printf (" (concat "fprintf (" v1 ", "))
   "\"" (setq v1 (skeleton-read "Format string: " "%s\\n")) "\""

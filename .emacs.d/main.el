@@ -2,8 +2,6 @@
 ;; MAIN
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'functions)
-
 ;; Remember last cursor position.
 (require 'saveplace)
 (setq save-place-file (concat emacs-cache-folder "saveplace"))
@@ -308,7 +306,6 @@
 
 (defadvice pop-to-buffer (before cancel-other-window first)
   (ad-set-arg 1 nil))
-
 (ad-activate 'pop-to-buffer)
 
 ;; GMP documentation
