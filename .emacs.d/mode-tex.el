@@ -121,22 +121,19 @@ WARNING: the -shell-escape option is a potential security issue."
 but there is no warranty."
   (interactive)
   (hack-local-variables)
-  (let ((local-master (if (not masterfile) buffer-file-name masterfile)))
-    (let ((file (file-name-sans-extension local-master)))
-      (message )
-      ;; Concatate file name to list.
-      (mapcar
-       ;; Delete file if exist
-       (lambda (argfile) (interactive)
-         (message argfile)
-         (if (not (and (file-exists-p argfile) (file-writable-p argfile)))
-             (message "[%s] not found." argfile)
-           (delete-file argfile)
-           (message "[%s] deleted." argfile)))
-       (mapcar
-        ;; Concat file name with extensions.
-        (lambda (arg) (interactive) (concat file arg))
-        tex-extension-list)))))
+  (let* ((local-master (if (not masterfile) buffer-file-name masterfile)))
+    ;; Concatate file name to list.
+    (mapcar
+     ;; Delete file if exist
+     (lambda (argfile) (interactive)
+       (if (not (and (file-exists-p argfile) (file-writable-p argfile)))
+           (message "[%s] not found." argfile)
+         (delete-file argfile)
+         (message "[%s] deleted." argfile)))
+     (mapcar
+      ;; Concat file name with extensions.
+      (lambda (arg) (interactive) (concat file arg))
+      tex-extension-list))))
 
 (defun tex-pdf-compress ()
   "Use `masterfile' variable as default value for `pdf-compress'."

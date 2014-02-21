@@ -108,11 +108,12 @@ Example: to assign some-function to C-i, use
 ;; minor modes.
 (my-keys-minor-mode 1)
 
+;; Benchmark
 (add-hook
  'after-init-hook
  (lambda ()
    (message "Init completed in %.2fms"
-            (time-subtract-millis after-init-time before-init-time))))
+            (* 1000.0 (float-time (time-subtract after-init-time before-init-time))))))
 
 ;; End of file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
