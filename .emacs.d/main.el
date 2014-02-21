@@ -135,11 +135,14 @@
 ;; Default ispell dictionnay
 ;; (setq ispell-dictionary "fr")
 (define-key my-keys-minor-mode-map
-  (kbd "C-<f7>")
+  (kbd "<f5>")
   (lambda () (interactive) (ispell-change-dictionary "en")))
 (define-key my-keys-minor-mode-map
-  (kbd "C-<f8>")
+  (kbd "<f6>")
   (lambda () (interactive) (ispell-change-dictionary "fr")))
+(define-key my-keys-minor-mode-map
+  (kbd "<f7>")
+  (lambda () (interactive) (ispell-change-dictionary "sv")))
 
 ;; Use color escape sequences. Only use if needed.
 ;; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)

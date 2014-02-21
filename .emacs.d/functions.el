@@ -441,8 +441,9 @@ suitable for creation"
                       (car skeleton-markers))))))))
 
 (defun pdf-compress (&optional arg)
-  "Call `pdfcompess' inplace over argument. If no argument is
-provided, use PDF associated to current buffer filename."
+  "Call `pdfcompess' inplace over argument. If no universal
+argument is provided, use PDF associated to current buffer
+filename, ask for filename otherwise."
   (interactive)
   (let ((file (concat
                (file-name-sans-extension
@@ -455,5 +456,66 @@ provided, use PDF associated to current buffer filename."
       ;; TODO: check for errors and print better messages.
       (call-process "pdfcompress" nil nil nil "-i" file))
     ))
+
+(defvar pdf-viewer "zathura --fork -s -x \"emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"'\"'\"%{input}\"'\"'\")) (goto-line %{line}))'\""
+  "View PDF associated to current buffer. You may want to fork
+the viewer so that it detects when the same document is launched
+twice, and persists when Emacs gets closed.
+
+Simple command:
+
+  zathura --fork
+
+We can use
+
+  emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"%{input}\")) (goto-line %{line}))'
+
+to reverse-search a PDF using SyncTeX. Note that the quotes and
+double-quotes matter and must be escaped appropriately.")
+
+(defun pdf-view (&optional arg)
+  "Call `pdf-viewer' for current buffer file. If no universal
+argument is provided, use PDF associated to current buffer
+filename, ask for filename otherwise."
+  (interactive)
+  (let ((file (concat
+               (file-name-sans-extension
+                (if arg arg
+                  (if (equal current-prefix-arg '(4))
+                      (read-string "File name: " nil nil buffer-file-name)
+                    buffer-file-name)))
+               ".pdf")))
+    (when (and (file-exists-p file) (file-writable-p file))
+      ;; TODO: check for errors and print better messages.
+      ;; (call-process "pdfcompress" nil nil nil "-i" file))
+
+      (shell-command
+       (concat pdf-viewer
+               " \"" file "\" &" ))
+      (delete-windows-on "*Async Shell Command*"))))
+
+
+(defun time-subtract-millis (b a)
+  (* 1000.0 (float-time (time-subtract b a))))
+
+(defvar require-times nil
+ "A list of (FEATURE . LOAD-DURATION).
+LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
+
+(defadvice require
+  (around build-require-times (feature &optional filename noerror) activate)
+  "Note in `require-times' the time taken to require each feature."
+  (let* ((already-loaded (memq feature features))
+         (require-start-time (and (not already-loaded) (current-time))))
+    (prog1
+        ad-do-it
+      (when (and (not already-loaded) (memq feature features))
+        (add-to-list 'sanityinc/require-times
+                     (cons feature
+                           (sanityinc/time-subtract-millis (current-time)
+                                                           require-start-time))
+                     t)))))
+
+
 
 (provide 'functions)

@@ -42,29 +42,46 @@ Example: to assign some-function to C-i, use
 ;; (load "snippets" nil t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Modes config
+;; Major modes
 
-(add-hook 'c-mode-hook (lambda () (require 'mode-cc)))
-(add-hook 'c++-mode-hook (lambda () (require 'mode-cc)))
-(add-hook 'perl-mode-hook (lambda () (require 'mode-perl)))
-(add-hook 'python-mode-hook (lambda () (require 'mode-python)))
-(add-hook 'shell-mode-hook (lambda () (require 'mode-shell)))
-(add-hook 'tex-mode-hook (lambda () (require 'mode-tex)))
+(add-hook 'c++-mode-hook     (lambda () (require 'mode-cc)))
+(add-hook 'c-mode-hook       (lambda () (require 'mode-cc)))
+(add-hook 'latex-mode-hook   (lambda () (require 'mode-latex)))
+(add-hook 'perl-mode-hook    (lambda () (require 'mode-perl)))
+(add-hook 'python-mode-hook  (lambda () (require 'mode-python)))
+(add-hook 'shell-mode-hook   (lambda () (require 'mode-shell)))
+(add-hook 'tex-mode-hook     (lambda () (require 'mode-tex)))
 (add-hook 'texinfo-mode-hook (lambda () (require 'mode-texinfo)))
 
-(add-hook 'org-mode-hook (lambda () (require 'mode-org)))
-(add-hook 'ediff-mode-hook (lambda () (require 'mode-ediff)))
+;; Minor modes
+(add-hook 'dired-mode-hook  (lambda () (require 'mode-dired)))
+(add-hook 'ediff-mode-hook  (lambda () (require 'mode-ediff)))
+(add-hook 'eshell-mode-hook (lambda () (require 'mode-eshell)))
+(add-hook 'gud-mode-hook    (lambda () (require 'mode-gud)))
 (add-hook 'octave-mode-hook (lambda () (require 'mode-octave)))
-(add-hook 'dired-mode-hook (lambda () (require 'mode-dired)))
-(add-hook 'gud-mode-hook (lambda () (require 'mode-gud)))
-
-(add-hook 'eshell-mode-hook (lambda () (require 'eshell-markdown)))
+(add-hook 'org-mode-hook    (lambda () (require 'mode-org)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Extra modes
 
+(when (require 'bison-mode nil t)
+  (add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode)))
+
+(when (require 'flex-mode nil t)
+  (add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode)))
+
+(when (require 'glsl-mode nil t)
+  (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
+  (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
+  (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode)))
+
 (when (require 'go-mode nil t)
   (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode)))
+
+;; This mode has no 'provide'.
+(when (autoload 'graphviz-dot-mode "graphviz-dot-mode" "Dot mode." t)
+  (add-to-list 'auto-mode-alist '("\\.dot\\'" . graphviz-dot-mode))
+  (add-hook 'dot-mode-hook (lambda () (require 'mode-dot))))
 
 (when (require 'lua-mode nil t)
   (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode)))
@@ -76,35 +93,26 @@ Example: to assign some-function to C-i, use
   (set (make-local-variable 'paragraph-start) "
 "))
 
+(when (require 'mediawiki nil t)
+  (add-to-list 'auto-mode-alist '("\\.wiki\\'" . mediawiki-mode))
+  (add-hook 'mediawiki-mode-hook (lambda () (require 'mode-mediawiki))))
+
 ;; .po support. This mode has no hooks.
 (when (require 'po-mode nil t)
   (add-to-list 'auto-mode-alist '("\\.po\\'\\|\\.po\\." . po-mode)))
 (when (require 'po-find-file-coding-system nil t)
   (modify-coding-system-alist 'file "\\.po\\'\\|\\.po\\." 'po-find-file-coding-system))
 
-(when (require 'bison-mode nil t)
-  (add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode)))
-(when (require 'flex-mode nil t)
-  (add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode)))
-
-(when (require 'glsl-mode nil t)
-  (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
-  (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
-  (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode)))
-
-;; This mode has no 'provide'.
-(when (autoload 'graphviz-dot-mode "graphviz-dot-mode" "Dot mode." t)
-  (add-to-list 'auto-mode-alist '("\\.dot\\'" . graphviz-dot-mode))
-  (add-hook 'dot-mode-hook (lambda () (require 'mode-dot))))
-
-(when (require 'mediawiki nil t)
-  (add-to-list 'auto-mode-alist '("\\.wiki\\'" . mediawiki-mode))
-  (add-hook 'mediawiki-mode-hook (lambda () (require 'mode-mediawiki))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We need to put it at the end to make sure it doesn't get overriden by other
 ;; minor modes.
 (my-keys-minor-mode 1)
+
+(add-hook
+ 'after-init-hook
+ (lambda ()
+   (message "Init completed in %.2fms"
+            (time-subtract-millis after-init-time before-init-time))))
 
 ;; End of file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
