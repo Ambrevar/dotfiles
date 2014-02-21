@@ -315,15 +315,6 @@
              (cons '("(gmp)Function Index" nil "^ -.* " "\\>")
                    (nth 3 mode-value)))))
 
-;; Do not expand abbrevs in skeletons. Not sure it is useful.
-;; (setq skeleton-further-elements '((abbrev-mode nil)))
-;; (setq skeleton-end-hook nil)
-(defvar skeleton-markers nil
-  "Markers for locations saved in skeleton-positions")
-(add-hook 'skeleton-end-hook 'skeleton-make-markers)
-(define-key my-keys-minor-mode-map (kbd "C->") 'skeleton-next-position)
-(define-key my-keys-minor-mode-map (kbd "C-<") (lambda () (interactive) (skeleton-next-position t)))
-
 ;; Bookmark file to cache folder.
 (setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
 
