@@ -280,6 +280,11 @@
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
+;; Alternate focus.
+(add-hook 'occur-hook (lambda () (pop-to-buffer occur-buf)))
+(add-hook 'help-mode-hook (lambda () (pop-to-buffer (get-buffer "*Help*"))))
+(add-hook 'grep-mode-hook (lambda () (pop-to-buffer (get-buffer "*grep*"))))
+
 ;; Disable prompt (but leave warning) on git symlink.
 (setq vc-follow-symlinks t)
 
