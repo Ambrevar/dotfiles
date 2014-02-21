@@ -14,6 +14,7 @@ wbf            http://fr.wikibooks.org/wiki/Special:Search?search=%s
 wf             http://fr.wikipedia.org/wiki/Special:Search?search=%s
 wk             http://en.wiktionary.org/wiki/Special:Search?search=%s
 wkf            http://fr.wiktionary.org/wiki/Special:Search?search=%s
+wks            http://sv.wiktionary.org/wiki/Special:Search?search=%s
 wine           http://www.winehq.org/search/?cx=partner-pub-0971840239976722:w9sqbcsxtyf&cof=FORID:10&ie=UTF-8&q=%s
 wr             http://www.wordreference.com/enfr/%s
 yt             http://www.youtube.com/results?search_query=%s
