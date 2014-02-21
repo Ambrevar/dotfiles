@@ -9,6 +9,9 @@
 (setq save-place-file (concat emacs-cache-folder "saveplace"))
 (setq-default save-place t)
 
+;; Bookmark file to cache folder.
+(setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
+
 ;; Disable autosave features.
 (setq auto-save-default nil)
 (setq auto-save-list-file-prefix nil)
@@ -308,15 +311,15 @@
 
 (ad-activate 'pop-to-buffer)
 
-;; GMP
+;; GMP documentation
 (eval-after-load "info-look"
   '(let ((mode-value (assoc 'c-mode (assoc 'symbol info-lookup-alist))))
      (setcar (nthcdr 3 mode-value)
              (cons '("(gmp)Function Index" nil "^ -.* " "\\>")
                    (nth 3 mode-value)))))
 
-;; Bookmark file to cache folder.
-(setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
 
 ;; Disable prompt (but leave warning) on git symlink.
 (setq vc-follow-symlinks t)
