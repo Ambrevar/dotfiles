@@ -111,6 +111,9 @@
 ;; Remove whitespaces on region, or whole file.
 (define-key my-keys-minor-mode-map (kbd "C-\\") 'delete-trailing-whitespace)
 
+;; Hippie expand.
+(define-key my-keys-minor-mode-map (kbd "M-/") 'hippie-expand)
+
 ;; Abbreviation support
 (setq-default abbrev-mode t)
 
@@ -144,9 +147,6 @@
 (define-key my-keys-minor-mode-map
   (kbd "<f7>")
   (lambda () (interactive) (ispell-change-dictionary "sv")))
-
-;; Use color escape sequences. Only use if needed.
-;; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
 ;; Long paragraphs. Useful for quick navigation with backward-paragraph and
 ;; forward-paragraph.
@@ -247,40 +247,6 @@
 ;; Common LISP
 (setq inferior-lisp-program "clisp")
 
-;; ;; Flymake has a bug that prevents menu from spawning in a console. We redefine
-;; ;; the function to spawn the error message in the mini-buffer.
-;; (defun flymake-display-err-message-for-current-line ()
-;;   "Display a message with errors/warnings for current line if it
-;; has errors and/or warnings."
-;;   (interactive)
-;;   (let* ((line-no             (flymake-current-line-no))
-;;          (line-err-info-list  (nth 0 (flymake-find-err-info flymake-err-info line-no)))
-;;          (menu-data           (flymake-make-err-menu-data line-no line-err-info-list)))
-;;     (if menu-data
-;;         (let ((messages))
-;;           (push (concat (car menu-data) ":") messages)
-;;           (dolist (error-or-warning (cadr menu-data))
-;;             (push (car error-or-warning) messages))
-;;           (message "%s" (mapconcat #'identity (reverse messages) "\n"))))))
-;;
-;; (define-key my-keys-minor-mode-map (kbd "C-<f10>")
-;;  'flymake-display-err-message-for-current-line)
-
-;; Zlc - Zsh style completion.
-;; (if (require 'zlc nil t)
-;;     (let ((map minibuffer-local-map))
-;;       ;; Like Zsh menu select.  Should not use arrows directly because it overrides
-;;       ;; default controls like previous entry, or previous/next char.
-;;       (define-key map (kbd "M-<down>")  'zlc-select-next-vertical)
-;;       (define-key map (kbd "M-<up>")    'zlc-select-previous-vertical)
-;;       (define-key map (kbd "M-<right>") 'zlc-select-next)
-;;       (define-key map (kbd "M-<left>")  'zlc-select-previous)
-;;       ;; Reset selection.
-;;       (define-key map (kbd "C-c") 'zlc-reset)
-;;       ;; (setq zlc-select-completion-immediately t)
-;;       ;; To change style, M-x customize-face and input zlc-selected-completion-face.
-;;       ))
-
 ;; xclip
 (when (require 'xclip nil t)
     (turn-on-xclip))
@@ -303,10 +269,6 @@
       (make-directory desktop-dirname t))
   (setq desktop-path `(,desktop-dirname))
   (add-to-list 'desktop-globals-to-save 'compile-command))
-
-(defadvice pop-to-buffer (before cancel-other-window first)
-  (ad-set-arg 1 nil))
-(ad-activate 'pop-to-buffer)
 
 ;; GMP documentation
 (eval-after-load "info-look"
@@ -349,3 +311,30 @@
 
 ;; Read Matlab files in Octave mode.
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+
+;; This may be needed for gud/pdb.
+; (defadvice pop-to-buffer (before cancel-other-window first)
+;   (ad-set-arg 1 nil))
+; (ad-activate 'pop-to-buffer)
+
+;; Use color escape sequences. Only use if needed.
+; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+
+;; Flymake has a bug that prevents menu from spawning in a console. We redefine
+;; the function to spawn the error message in the mini-buffer.
+; (defun flymake-display-err-message-for-current-line ()
+;   "Display a message with errors/warnings for current line if it
+; has errors and/or warnings."
+;   (interactive)
+;   (let* ((line-no             (flymake-current-line-no))
+;          (line-err-info-list  (nth 0 (flymake-find-err-info flymake-err-info line-no)))
+;          (menu-data           (flymake-make-err-menu-data line-no line-err-info-list)))
+;     (if menu-data
+;         (let ((messages))
+;           (push (concat (car menu-data) ":") messages)
+;           (dolist (error-or-warning (cadr menu-data))
+;             (push (car error-or-warning) messages))
+;           (message "%s" (mapconcat #'identity (reverse messages) "\n"))))))
+;
+; (define-key my-keys-minor-mode-map (kbd "C-<f10>")
+;  'flymake-display-err-message-for-current-line)
