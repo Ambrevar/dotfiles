@@ -1,3 +1,19 @@
+!! ┌─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┲━━━━━━━━━┓
+!! │ ~ ~ │ ! ¡ │ @ ˝ │ # ¯ │ $ ¤ │ % ¢ │ ^ ^ │ & ¼ │ * ¾ │ ( ˘ │ ) ÷ │ _ × │ + ± ┃ ⌫ Back  ┃
+!! │ ` ` │ 1 ¹ │ 2 ² │ 3 ³ │ 4 £ │ 5 € │ 6 ¥ │ 7 ½ │ 8 „ │ 9 “ │ 0 ” │ - ⋅ │ = ≠ ┃  space  ┃
+!! ┢━━━━━┷━┱───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┺━┳━━━━━━━┫
+!! ┃       ┃ Q À │ W È │ E É │ R ® │ T ™ │ Y Ù │ U Ú │ I Í │ O Ó │ P Å │ { ‘ │ } ’ ┃ Enter ┃
+!! ┃Tab ↹  ┃ q à │ w è │ e é │ r ® │ t © │ y ù │ u ú │ i í │ o ó │ p å │ [ « │ ] » ┃   ⏎   ┃
+!! ┣━━━━━━━┻┱────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┺┓      ┃
+!! ┃        ┃ A Á │ S § │ D Â │ F Ê │ G Î │ H Ô │ J Û │ K Œ │ L Æ │ : ° │ " ¨ │ | ¦ ┃      ┃
+!! ┃Ctrl    ┃ a á │ s ß │ d â │ f ê │ g î │ h ô │ j û │ k œ │ l æ │ ; ° │ ' ´ │ \ ¬ ┃      ┃
+!! ┣━━━━━━━┳┹────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┲┷━━━━━┻━━━━━━┫
+!! ┃       ┃ > ≥ │ Z Ä │ X Ë │ C Ï │ V Ö │ B Ü │ N Ñ │ M µ │ < Ç │ >   │ ? ¿ ┃             ┃
+!! ┃Shift ⇧┃ < ≤ │ z ä │ x ë │ c ï │ v ö │ b ü │ n ñ │ m µ │ , ç │ . … │ / ¶ ┃Shift ⇧      ┃
+!! ┣━━━━━━━╋━━━━━┷━┳━━━┷━━━┱─┴─────┴─────┴─────┴─────┴─────┴───┲━┷━━━━━╈━━━━━┻━┳━━━━━━━┳━━━┛
+!! ┃Caps   ┃       ┃       ┃ ␣            Non-breaking space ⍽ ┃       ┃       ┃       ┃
+!! ┃Lock ⇬ ┃Meta   ┃Alt    ┃ ␣ Space                         ␣ ┃AltGr ⇮┃Menu   ┃Ctrl   ┃
+!! ┗━━━━━━━┻━━━━━━━┻━━━━━━━┹───────────────────────────────────┺━━━━━━━┻━━━━━━━┻━━━━━━━┛
 clear shift
 clear lock
 clear control
@@ -16,9 +32,9 @@ keycode  13 = 4 dollar sterling currency
 keycode  14 = 5 percent EuroSign cent
 keycode  15 = 6 asciicircum yen dead_circumflex
 keycode  16 = 7 ampersand onehalf onequarter
-keycode  17 = 8 asterisk threequarters dead_ogonek
-keycode  18 = 9 parenleft leftsinglequotemark dead_breve
-keycode  19 = 0 parenright rightsinglequotemark division
+keycode  17 = 8 asterisk doublelowquotemark threequarters
+keycode  18 = 9 parenleft  leftdoublequotemark dead_breve
+keycode  19 = 0 parenright rightdoublequotemark division
 keycode  20 = minus underscore U22C5 multiply
 keycode  21 = equal plus notequal plusminus
 keycode  22 = BackSpace
@@ -33,8 +49,8 @@ keycode  30 = u U uacute Uacute
 keycode  31 = i I iacute Iacute
 keycode  32 = o O oacute Oacute
 keycode  33 = p P aring Aring
-keycode  34 = bracketleft braceleft guillemotleft leftdoublequotemark
-keycode  35 = bracketright braceright guillemotright rightdoublequotemark
+keycode  34 = bracketleft braceleft guillemotleft leftsinglequotemark
+keycode  35 = bracketright braceright guillemotright rightsinglequotemark
 keycode  36 = Return
 keycode  37 = Caps_Lock
 keycode  38 = a A aacute Aacute
