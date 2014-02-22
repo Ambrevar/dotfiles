@@ -6,6 +6,7 @@
 (require 'saveplace)
 (setq save-place-file (concat emacs-cache-folder "saveplace"))
 (setq-default save-place t)
+(add-hook 'before-save-hook 'save-place-to-alist)
 
 ;; Bookmark file to cache folder.
 (setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
@@ -81,7 +82,6 @@
 ;; Indentation
 (setq-default tab-width 4)
 (setq-default standard-indent 4)
-(setq-default c-basic-offset 4)
 (setq-default indent-tabs-mode nil) ;; Indentation cannot insert tabs
 
 ;; Line by line scrolling
@@ -249,7 +249,7 @@
 
 ;; xclip
 (when (require 'xclip nil t)
-    (turn-on-xclip))
+  (turn-on-xclip))
 
 ;; Multiple-Cursors
 (when (require 'multiple-cursors nil t)
@@ -282,7 +282,7 @@
 
 ;; Alternate focus.
 (add-hook 'occur-hook (lambda () (pop-to-buffer occur-buf)))
-(add-hook 'help-mode-hook (lambda () (pop-to-buffer (get-buffer "*Help*"))))
+;; (add-hook 'help-mode-hook (lambda () (pop-to-buffer (get-buffer "*Help*"))))
 (add-hook 'grep-mode-hook (lambda () (pop-to-buffer (get-buffer "*grep*"))))
 
 ;; Disable prompt (but leave warning) on git symlink.
@@ -340,6 +340,5 @@
 ;           (dolist (error-or-warning (cadr menu-data))
 ;             (push (car error-or-warning) messages))
 ;           (message "%s" (mapconcat #'identity (reverse messages) "\n"))))))
-;
 ; (define-key my-keys-minor-mode-map (kbd "C-<f10>")
 ;  'flymake-display-err-message-for-current-line)

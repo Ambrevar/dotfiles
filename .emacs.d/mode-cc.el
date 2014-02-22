@@ -52,6 +52,8 @@ restored."
 ;; C-mode
 ;;==============================================================================
 
+(setq-default c-basic-offset 4)
+
 (mapcar
  (lambda (mode-hook)
    (add-hook
@@ -59,7 +61,6 @@ restored."
     (lambda ()
       ;; Identation style
       (c-set-style "linux")
-      (setq c-basic-offset 4)
       (cc-set-compiler)
       (local-set-key (kbd "<f9>") 'cc-clean)
       (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
