@@ -1,8 +1,9 @@
 #!/bin/sh
 
+## This script is Linux only.
+##
 ## This script will toggle HDMI Audio (and set video properly). To do this
-## automatically when the cable is plugged, add the following udev rule (Linux
-## only):
+## automatically when the cable is plugged, add the following udev rule:
 ##
 ## $ cat /etc/udev/rules.d/hdmi.rules
 ## SUBSYSTEM=="drm", ACTION=="change", RUN+="/bin/sh /usr/local/bin/hdmi-switch"
@@ -17,12 +18,17 @@ if [ $(id -u) -ne 0 ]; then
     exit
 fi
 
-HDMI_STATUS="$(cat /sys/class/drm/card0-HDMI-A-1/status)"
 ALSACONF="/etc/asound.conf"
-
-HDMICARD="$(aplay -l | awk '/HDMI/ {sub(/:/,"",$2); sub(/:/,"",$7); printf "card " $2 "\ndevice " $7 "\n"}')"
-
+HDMI_STATUS="$(cat /sys/class/drm/card0-HDMI-A-1/status)"
 [ -z "$HDMI_STATUS" ] && exit
+
+BUF="$(aplay -l | grep HDMI)"
+_getprop() {
+    echo "$BUF" | awk -v prop="$1" '{for(i=1; i<NF; i++) if ($i == prop) { print substr($(i+1), 1,1); exit}}'
+}
+
+CARD="$(_getprop card)"
+DEVICE="$(_getprop device)"
 
 udevadm settle --quiet --timeout=2
 
@@ -33,13 +39,17 @@ done
 
 ## Sound
 if [ "$HDMI_STATUS" = "connected" ]; then
-    echo "pcm.!default {
+    cat<<EOF > "$ALSACONF"
+pcm.!default {
   type hw
-  $HDMICARD
-}" > "$ALSACONF"
-
+  card $CARD
+  device $DEVICE
+}
+EOF
     chmod 644 "${ALSACONF}"
+    echo "HDMI sound enabled"
 else
     rm -f "$ALSACONF"
+    echo "HDMI sound disabled"
 fi
 
