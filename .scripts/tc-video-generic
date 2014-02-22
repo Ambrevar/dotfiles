@@ -146,25 +146,14 @@ _highfreq()
     awk 'BEGIN{max=0} /crop=/ {t[$NF]++; if (t[$NF]>max) {max=t[$NF]; val=$NF}} END{print val}'
 }
 
+## Usage: _cropvalue FILE STEP
+## Return the crop values as ffmpeg output them.
 _cropvalue()
 {
-    ## For 5 different timeslices of 1 second at every 1/6th of the video, we
-    ## sample the crop values. We keep the values with highest frequency. This
-    ## is much faster than encoding in one pass with low framerate.
-    STEP=$((${format_duration:-$streams_stream_0_duration}/6))
-    for i in $(seq $STEP $STEP $((5*$STEP))); do
+    local step=$2
+    for i in $(seq $step $step $((5*$step))); do
         ffmpeg -nostdin -ss $i -i "$1"  -t 10 -vf "cropdetect=24:2:0" -f null - 2>&1
     done | _highfreq
-}
-
-_croppreview()
-{
-    STEP=$((${format_duration:-$streams_stream_0_duration}/6))
-    for i in $(seq  $STEP $STEP $((5*$STEP))); do
-            ffmpeg -nostdin -v warning -y -ss $i -i "$1" \
-                -f image2 -vframes 1 $VIDEO_FILTER "${1%.*}-preview-$i-cropped.png" \
-                -f image2 -vframes 1 "${1%.*}-preview-$i-uncropped.png"
-    done
 }
 
 ## Return the audio encoding parameters. For instance
@@ -216,10 +205,21 @@ _transcode()
 
     if $OPT_CROP; then
         echo "Computing crop values... "
-        VIDEO_FILTER="-vf $(_cropvalue "$1")"
+        ## For 5 different timeslices of 1 second at every 1/6th of the video,
+        ## we sample the crop values. We keep the values with highest
+        ## frequency. This is much faster than encoding in one pass with low
+        ## framerate.
+        STEP=${format_duration:-$streams_stream_0_duration}
+        STEP="${STEP%%.*}"
+        STEP=$(($STEP/6))
+        VIDEO_FILTER="-vf $(_cropvalue "$1" "$STEP")"
         if $OPT_CROPPREVIEW; then
             echo "Generating preview... "
-            _croppreview "$1"
+            for i in $(seq  $STEP $STEP $((5*$STEP))); do
+                ffmpeg -nostdin -v warning -y -ss $i -i "$1" \
+                    -f image2 -vframes 1 $VIDEO_FILTER "${1%.*}-preview-$i-cropped.png" \
+                    -f image2 -vframes 1 "${1%.*}-preview-$i-uncropped.png"
+            done
         fi
     fi
 
