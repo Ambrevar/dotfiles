@@ -50,7 +50,7 @@ Example: to assign some-function to C-i, use
 (add-hook 'latex-mode-hook   (lambda () (require 'mode-latex)))
 (add-hook 'perl-mode-hook    (lambda () (require 'mode-perl)))
 (add-hook 'python-mode-hook  (lambda () (require 'mode-python)))
-(add-hook 'shell-mode-hook   (lambda () (require 'mode-shell)))
+(add-hook 'sh-mode-hook      (lambda () (require 'mode-sh)))
 (add-hook 'tex-mode-hook     (lambda () (require 'mode-tex)))
 (add-hook 'texinfo-mode-hook (lambda () (require 'mode-texinfo)))
 

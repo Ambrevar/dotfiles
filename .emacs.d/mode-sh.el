@@ -54,8 +54,6 @@ otherwise use 'sh-shell-file'."
 }
 ")
 
-
-
 (define-skeleton sh-while-getopts
   "Insert a getops prototype."
   "optstring: "
@@ -86,7 +84,7 @@ EOF
 > "_printhelp \"$0\"" \n
 "exit 1 ;;"  > \n
 "esac" > \n
-"done" > \n\n
+"done" > \n \n
 "shift $(($OPTIND - 1))" \n
 "if [ $# -eq 0 ]; then
     _printhelp \"$0\"
@@ -126,4 +124,4 @@ fi" \n)
   > "done <<EOF" \n
   > "EOF" \n)
 
-(provide 'mode-shell)
+(provide 'mode-sh)
