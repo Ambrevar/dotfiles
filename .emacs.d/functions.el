@@ -254,7 +254,7 @@ Works on buffer or region."
   (let ((last (car shell-command-history)))
     (if last
         (shell-command last)
-      (message "Shell command history is empty."))))
+      (error "Shell command history is empty"))))
 (define-key my-keys-minor-mode-map (kbd "C-M-!") 'shell-last-command)
 
 (defun skeleton-make-markers ()

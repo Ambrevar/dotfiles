@@ -112,8 +112,8 @@ Example: to assign some-function to C-i, use
 (autoload 'pdf-view "tool-pdf" nil t)
 (autoload 'pdf-compress "tool-pdf" nil t)
 
-(autoload 'translate "tool-translate" nil t)
-(autoload 'translate-line-by-line "tool-translate" nil t)
+(autoload 'itranslate "tool-itranslate" nil t)
+(autoload 'itranslate-lines "tool-itranslate" nil t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We need to put it at the end to make sure it doesn't get overriden by other
