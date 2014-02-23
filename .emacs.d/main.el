@@ -209,6 +209,9 @@
 ;; IDO.
 ;; (ffap-bindings)
 
+;; Icomplete
+(icomplete-mode)
+
 ;; Quick buffer switching.
 (define-key my-keys-minor-mode-map (kbd "C-<prior>") 'previous-buffer)
 (define-key my-keys-minor-mode-map (kbd "C-<next>") 'next-buffer)
