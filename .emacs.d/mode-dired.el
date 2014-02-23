@@ -1,43 +1,36 @@
 ;; Dired options
+
 ;; On a GNU system, ls has the option to sort folders first.
 (if (string-match "^gnu.*" (prin1-to-string system-type))
-    (setq dired-listing-switches "--group-directories-first -lh")
-  (setq dired-listing-switches "-lh"))
+    (setq dired-listing-switches "--group-directories-first -lha")
+  (setq dired-listing-switches "-lha"))
+
+;; Switches are set before the hook is called, so we need to reload dired. The
+;; dired-internal-noselect is a lower level function, so it is faster. WARNING:
+;; Not sure if it is equivalent though.
+; (dired dired-directory dired-listing-switches)
+(dired-internal-noselect dired-directory dired-listing-switches)
+
 (setq wdired-allow-to-change-permissions t)
 
-(defvar dired-showing-hidden nil "If dired is displaying hidden files or not.")
-(defvar dired-showing-humansize t "If dired is displaying humansize or not.")
+(require 'dired-x)
+(setq dired-omit-files "^\\.")
+;; omit-mode needs to be start _after_ omit-files redefinition.
+(dired-omit-mode)
 
-(defun dired-toggle-hidden ()
-  "Toggle displaying hidden files in dired."
-  (interactive)
-  (let (;; Regexp for finding (possibly embedded) -a switches.
-        (switch-regexp "\\(\\`\\| \\)-\\([b-zA-Z]*\\)\\(a\\)\\([^ ]*\\)")
-        case-fold-search)
-    ;; Remove the -a switch.
-    (while (string-match switch-regexp dired-actual-switches)
-      (if (and (equal (match-string 2 dired-actual-switches) "")
-               (equal (match-string 4 dired-actual-switches) ""))
-          ;; Remove a stand-alone -a switch.
-          (setq dired-actual-switches
-                (replace-match "" t t dired-actual-switches))
-        ;; Remove a switch of the form -XaY for some X and Y.
-        (setq dired-actual-switches
-              (replace-match "" t t dired-actual-switches 3))))
-    ;; Now, if we weren't sorting by date before, add the -a switch.  Some
-    ;; simple-minded ls implementations (eg ftp servers) only allow a single
-    ;; option string, so try not to add " -a" if possible.
-    (if dired-showing-hidden
-        (setq dired-showing-hidden nil)
-      (progn
-        (setq dired-actual-switches
-              (concat dired-actual-switches
-                      (if (string-match-p "\\`-[[:alnum:]]+\\'"
-                                          dired-actual-switches)
-                          "a" " -a")))
-        (setq dired-showing-hidden t))))
-  ;; (dired-sort-set-mode-line)
-  (revert-buffer))
+(setq dired-guess-shell-alist-user
+      (list
+       '("\\.ogg$" "mpv")
+       '("\\.\\(jpe?g\\|png\\|git\\)$" "sxiv")
+       '("\\.\\(mkv\\|mpe?g\\|avi\\|mp4\\|ogm\\)$" "mpv")
+       '("\\.pdf$" "zathura --fork")))
+
+;; TODO: set these together with mode-[la]tex.
+; `dired-tex-unclean-extensions'
+; `dired-texinfo-unclean-extensions'
+; `dired-latex-unclean-extensions'
+
+(defvar dired-showing-humansize t "If dired is displaying humansize or not.")
 
 (defun dired-toggle-humansize ()
   "Toggle displaying humansize in dired."
