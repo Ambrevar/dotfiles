@@ -291,15 +291,6 @@
 ;; Git commit meessages.
 (add-to-list 'auto-mode-alist '("COMMIT_EDITMSG\\'" . conf-mode))
 
-;; GLSL fallback to C mode.
-(add-to-list 'auto-mode-alist '("\\.vert\\'" . c-mode))
-(add-to-list 'auto-mode-alist '("\\.frag\\'" . c-mode))
-(add-to-list 'auto-mode-alist '("\\.glsl\\'" . c-mode))
-
-;; Bison/flex -- Fallback to c-mode.
-(add-to-list 'auto-mode-alist '("\\.yy?\\'" . c-mode))
-(add-to-list 'auto-mode-alist '("\\.l\\'" . c-mode))
-
 ;; Mutt support.
 (add-to-list 'auto-mode-alist '("/tmp/mutt.*" . mail-mode))
 

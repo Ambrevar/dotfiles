@@ -42,8 +42,9 @@ Example: to assign some-function to C-i, use
 ;; (load "snippets" nil t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Major modes
+;; Vanilla modes
 
+;; Major modes
 (add-hook 'c++-mode-hook     (lambda () (require 'mode-cc)))
 (add-hook 'c-mode-hook       (lambda () (require 'mode-cc)))
 (add-hook 'latex-mode-hook   (lambda () (require 'mode-latex)))
@@ -62,45 +63,43 @@ Example: to assign some-function to C-i, use
 (add-hook 'org-mode-hook    (lambda () (require 'mode-org)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Extra modes
+;; Third-party modes
 
-(when (require 'bison-mode nil t)
-  (add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode)))
+;; TODO: implement function for loading and add support for fallback mode.
 
-(when (require 'flex-mode nil t)
-  (add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode)))
+(autoload 'bison-mode "bison-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode))
+(autoload 'flex-mode "flex-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode))
 
-(when (require 'glsl-mode nil t)
-  (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
-  (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
-  (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode)))
+(autoload 'glsl-mode "glsl-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.vert\\'\\|\\.frag\\'\\|\\.glsl\\'" . glsl-mode))
 
-(when (require 'go-mode nil t)
-  (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode)))
+(autoload 'go-mode "go-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
 
-;; This mode has no 'provide'.
-(when (autoload 'graphviz-dot-mode "graphviz-dot-mode" "Dot mode." t)
-  (add-to-list 'auto-mode-alist '("\\.dot\\'" . graphviz-dot-mode))
-  (add-hook 'dot-mode-hook (lambda () (require 'mode-dot))))
+;; Note that graphviz-mode has no 'provide'.
+(autoload 'graphviz-dot-mode "graphviz-dot-mode" "Dot mode." t)
+(add-to-list 'auto-mode-alist '("\\.dot\\'" . graphviz-dot-mode))
+(add-hook 'graphviz-dot-mode-hook (lambda () (require 'mode-dot)))
 
-(when (require 'lua-mode nil t)
-  (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode)))
+(autoload 'lua-mode "lua-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
 
-(when (require 'markdown-mode nil t)
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-  ;; If we need more option, add it to dedicated file.
-  (set (make-local-variable 'paragraph-start) "
-"))
+(autoload 'markdown-mode "markdown-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.md\\'\\|\\.markdown\\'" . markdown-mode))
+;; If we need more option, add it to a dedicated file.
+(add-hook 'markdown-mode-hook (lambda () (set (make-local-variable 'paragraph-start) "
+")))
 
-(when (require 'mediawiki nil t)
-  (add-to-list 'auto-mode-alist '("\\.wiki\\'" . mediawiki-mode))
-  (add-hook 'mediawiki-mode-hook (lambda () (require 'mode-mediawiki))))
+(autoload 'mediawiki-mode "mediawiki-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.wiki\\'" . mediawiki-mode))
+(add-hook 'mediawiki-mode-hook (lambda () (require 'mode-mediawiki)))
 
 ;; .po support. This mode has no hooks.
-(when (require 'po-mode nil t)
-  (add-to-list 'auto-mode-alist '("\\.po\\'\\|\\.po\\." . po-mode)))
-(when (require 'po-find-file-coding-system nil t)
+(autoload 'po-mode "po-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.po\\'\\|\\.po\\." . po-mode))
+(when (fboundp 'po-find-file-coding-system)
   (modify-coding-system-alist 'file "\\.po\\'\\|\\.po\\." 'po-find-file-coding-system))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
