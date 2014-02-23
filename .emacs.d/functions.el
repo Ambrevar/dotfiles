@@ -294,7 +294,7 @@ Hook function for skeletons."
 (defun sort-lines-unique ()
   "Remove duplicate lines using shell command `sort -u'."
   (interactive)
-  (shell-command-on-region (point) (mark) "sort -u" (buffer-name) t))
+  (call-process-region (point) (mark) "sort" t t nil "-u"))
 
 (defun swap-windows ()
   "If you have 2 windows, it swaps them."
