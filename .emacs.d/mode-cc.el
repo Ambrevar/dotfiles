@@ -52,16 +52,32 @@ restored."
 ;; C-mode
 ;;==============================================================================
 
-(setq-default c-basic-offset 4)
-(c-set-offset 'case-label '+)
+(c-add-style
+ "peter"
+ '((c-basic-offset . 4)
+  (c-comment-only-line-offset . 0)
+  (c-hanging-braces-alist
+   (brace-list-open)
+   (brace-entry-open)
+   (substatement-open after)
+   (block-close . c-snug-do-while)
+   (arglist-cont-nonempty))
+  (c-cleanup-list brace-else-brace)
+  (c-offsets-alist
+   (statement-block-intro . +)
+   (knr-argdecl-intro . 0)
+   (substatement-open . 0)
+   (substatement-label . 0)
+   (label . 0)
+   (case-label . +)
+   (statement-cont . +))))
 
 (mapcar
  (lambda (mode-hook)
    (add-hook
     mode-hook
     (lambda ()
-      ;; Identation style
-      (c-set-style "linux")
+      (c-set-style "peter")
       (cc-set-compiler)
       (local-set-key (kbd "<f9>") 'cc-clean)
       (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
@@ -74,21 +90,6 @@ restored."
       ;; (local-set-key ">" 'semantic-complete-self-insert)
       (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1))))))
  '(c-mode-hook c++-mode-hook))
-
-;; TODO: test this!
-;; (defun vlad-cc-style()
-;;   (c-set-style "linux")
-;;   (c-set-offset 'innamespace '0)
-;;   (c-set-offset 'inextern-lang '0)
-;;   (c-set-offset 'inline-open '0)
-;;   (c-set-offset 'label '*)
-;;   (c-set-offset 'case-label '*)
-;;   (c-set-offset 'access-label '/)
-;;   (setq c-basic-offset 4)
-;;   (setq tab-width 4)
-;;   (setq indent-tabs-mode nil)
-;; )
-;; (add-hook 'c++-mode-hook 'vlad-cc-style)
 
 ;;==============================================================================
 ;; Qt semantic support
