@@ -168,7 +168,7 @@ int main(int argc, char** argv)
   "Header: "
   \n "#include \"" @ str "\"" \n)
 
-;; TODO: solve indentation issues
+;; TODO: solve indentation issues in if-skeleton.
 (define-skeleton cc-if
   "Insert an if statement."
   "Condition: "

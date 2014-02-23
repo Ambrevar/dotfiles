@@ -1,10 +1,14 @@
 ;;; tool-pdf.el --- PDF utils
 
-(defvar pdf-viewer "zathura --fork -s -x \"emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"'\"'\"%{input}\"'\"'\")) (goto-line %{line}))'\""
-  "View PDF associated to current buffer.
+(defvar pdf-viewer "zathura" "PDF viewer.")
+
+(defvar pdf-viewer-args
+  '("--fork" "-s"
+    "-x" "\"emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"'\"'\"%{input}\"'\"'\")) (goto-line %{line}))'\"")
+  "List of arguments passed to `pdf-viewer' when called.
 You may want to fork the viewer so that it detects when the same
 document is launched twice, and persists when Emacs gets closed.\n
-Simple command:\n
+For instance with `zathura':\n
   zathura --fork\n
 We can use\n
   emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"%{input}\")) (goto-line %{line}))'\n
@@ -24,10 +28,9 @@ current buffer filename, ask for filename otherwise."
                       (read-string "File name: " nil nil buffer-file-name)
                     buffer-file-name)))
                ".pdf")))
-    (when (and (file-exists-p file) (file-writable-p file))
-      ;; TODO: check for errors and print better messages.
-      (call-process "pdfcompress" nil nil nil "-i" file))
-    ))
+    (when (and (file-exists-p file) (file-writable-p file)
+               (executable-find pdfcompress))
+      (start-process "dummy" nil "pdfcompress" "-i" file))))
 
 ;;;###autoload
 (defun pdf-view (&optional arg)
@@ -42,14 +45,10 @@ current buffer filename, ask for filename otherwise."
                       (read-string "File name: " nil nil buffer-file-name)
                     buffer-file-name)))
                ".pdf")))
-    (when (and (file-exists-p file) (file-writable-p file))
-      ;; TODO: check for errors and print better messages.
-      ;; (call-process "pdfcompress" nil nil nil "-i" file))
-
-      (shell-command
-       (concat pdf-viewer
-               " \"" file "\" &" ))
-      (delete-windows-on "*Async Shell Command*"))))
+    (when (and
+           (file-exists-p file) (file-writable-p file)
+           (executable-find pdf-viewer))
+      (apply 'start-process "dummy" nil pdf-viewer file pdf-viewer-args))))
 
 (provide 'tool-pdf)
 
