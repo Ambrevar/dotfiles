@@ -14,24 +14,26 @@ The original value is nil. When `translate' is called for the
 first time, input and output languages are set and this variable
 is set to true.")
 
-;; TODO: check executable existence
-;; TODO: use call-
+;; TODO: use call-process
 ;; TODO: check if region, if not do sth else
 ;;;###autoload
 (defun translate ()
   "Replace current region with its translation."
   (interactive)
-  (if (not (mark))
-      (error "Mark not set")
-    (unless translate-lang-p
-      (translate-set-language)
-      (set (make-local-variable 'translate-lang-p) t))
-    (shell-command-on-region
-     (point) (mark)
-     (concat "translate "
-             (unless (string= translate-lang-input "")
-               (concat "-i " translate-lang-input))
-             " "  translate-lang-output) nil t)))
+  (cond ((not (mark)) (error "Mark not set"))
+        ((not (executable-find "translate")) (error "Program `translate' not found in path"))
+        (t
+         (unless translate-lang-p
+           (translate-set-language)
+           (set (make-local-variable 'translate-lang-p) t))
+         (shell-command-on-region
+          (point) (mark)
+          (concat "translate "
+                  (unless (string= translate-lang-input "")
+                    (concat "-i " translate-lang-input))
+                  " "  translate-lang-output) nil t))))
+
+
 
 ;;;###autoload
 (defun translate-line-by-line ()
