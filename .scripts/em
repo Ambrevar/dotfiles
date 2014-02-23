@@ -1,12 +1,14 @@
 #!/bin/sh
-if [ -z "$DISPLAY" ]; then
-    IS_GRAPHICAL=true
+## Note: we do not use the (-a "") parameters of emacsclient to auto start the
+## daemon since we want to pass additional parameters to emacs.
+
+if [ "${0##*/}" = "emc" ]; then
+    param="-t"
+elif [ -z "$DISPLAY" ]; then
+    param="-nc"
 else
-    IS_GRAPHICAL=$(emacs --batch -Q --eval='(if (fboundp '"'"'tool-bar-mode) (message "true") (message "false"))' 2>&1)
+    param=$(emacs --batch -Q --eval='(if (fboundp '"'"'tool-bar-mode) (message "-nc") (message "-t"))' 2>&1)
 fi
 
-if $IS_GRAPHICAL; then
-    emacsclient -a "" -nc "$@"
-else
-    emacsclient -a "" -t "$@"
-fi
+[ ! -e /tmp/emacs$(id -u)/server ] && emacs --daemon --no-site-file
+emacsclient $param "$@"

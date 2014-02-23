@@ -217,15 +217,6 @@ been using.
 Known issues
 ============
 
-Emacs
------
-
-* When linum is on in very large files (5000+ lines), beginning-of-buffer is
-  extremly slow when called from a shortcut, but not when called from the
-  command mini-buffer.
-
-* xclip mode will sometimes prevent yanking from working properly.
-
 Scripts
 -------
 
@@ -243,7 +234,7 @@ URxvt
   text was copied will make it hang (and crash).
 
 * There is a bug with Xft anti-aliased font that prevent w3m image preview from
-  working (too bad for ranger).
+  working (too bad for ranger). Use non-Xft fonts as a workaround.
 
 --------------------------------------------------------------------------------
 
