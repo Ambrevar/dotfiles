@@ -46,6 +46,7 @@
 ;; Allow some protected functions.
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
+(put 'narrow-to-page 'disabled nil)
 
 ;; Print column number in mode line.
 (column-number-mode 1)
@@ -71,6 +72,10 @@
       (condition-case nil (scroll-down)
         (beginning-of-buffer (goto-char (point-min)))))))
 
+;; TODO: display page number in mode line with `what-page'.
+(define-key my-keys-minor-mode-map (kbd "C-x M-n") (lambda () (interactive) (narrow-to-page 1)))
+(define-key my-keys-minor-mode-map (kbd "C-x M-p") (lambda () (interactive) (narrow-to-page -1)))
+
 ;; Line numbers
 ;; TODO: This mode is slow on big files when using beginning-of-buffer binding.
 (add-hook 'find-file-hook (lambda () (linum-mode 1)))
@@ -86,6 +91,9 @@
 
 ;; Line by line scrolling
 (setq scroll-step 1)
+
+;; Useful of autofill.
+(setq sentence-end-double-space nil)
 
 ;; Highlight selections -- not activated by default on old Emacs.
 (transient-mark-mode 1)

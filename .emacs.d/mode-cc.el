@@ -53,6 +53,7 @@ restored."
 ;;==============================================================================
 
 (setq-default c-basic-offset 4)
+(c-set-offset 'case-label '+)
 
 (mapcar
  (lambda (mode-hook)

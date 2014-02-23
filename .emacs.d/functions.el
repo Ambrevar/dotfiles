@@ -85,6 +85,45 @@ there's a region, all lines that region covers will be duplicated."
     (error (message "Invalid expression")
            (insert (current-kill 0)))))
 
+;; Fix forward-page. Previously, when the point was at the end of the page,
+;; going forward would skip 1 page.  Changed:
+;;
+;;    (if (bolp) (forward-char 1))
+;;
+;; to
+;;
+;;    (if (string= page-delimiter "")
+;;
+;; I do not know why the (bolp) condition was used since it does not match the
+;; above comment. TODO: report this fix!
+(defun forward-page (&optional count)
+  "Move forward to page boundary.  With arg, repeat, or go back if negative.
+A page boundary is any line whose beginning matches the regexp
+`page-delimiter'."
+  (interactive "p")
+  (or count (setq count 1))
+  (while (and (> count 0) (not (eobp)))
+    ;; In case the page-delimiter matches the null string,
+    ;; don't find a match without moving.
+    (if (string= page-delimiter "") (forward-char 1))
+    (if (re-search-forward page-delimiter nil t)
+        nilp
+      (goto-char (point-max)))
+    (setq count (1- count)))
+  (while (and (< count 0) (not (bobp)))
+    ;; In case the page-delimiter matches the null string,
+    ;; don't find a match without moving.
+    (and (save-excursion (re-search-backward page-delimiter nil t))
+         (= (match-end 0) (point))
+         (goto-char (match-beginning 0)))
+    (forward-char -1)
+    (if (re-search-backward page-delimiter nil t)
+        ;; We found one--move to the end of it.
+        (goto-char (match-end 0))
+      ;; We found nothing--go to beg of buffer.
+      (goto-char (point-min)))
+    (setq count (1+ count))))
+
 (defun get-closest-pathname (&optional file)
   "Get pathname of the first instance of FILE towards root.
 This may not do the correct thing in presence of links. If it
@@ -334,7 +373,7 @@ It only works for frames with exactly two windows."
           (set-window-buffer (next-window) next-win-buffer)
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
-(define-key my-keys-minor-mode-map [(control c) (|)] 'toggle-window-split)
+(define-key my-keys-minor-mode-map [(control x) (|)] 'toggle-window-split)
 
 (defun toggle-word-delim ()
   "Make underscore part of the word syntax or not.
