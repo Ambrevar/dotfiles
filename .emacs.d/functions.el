@@ -217,6 +217,30 @@ If DIR is t, then move left, otherwise move right."
       (move-border-left-or-right arg nil)))
 (define-key my-keys-minor-mode-map (kbd "M-)") 'move-border-right)
 
+(defun page-count ()
+  "Return page count.
+Requires `count-occurences'."
+  (save-restriction
+    (widen)
+    (save-excursion
+      (count-occurences
+       page-delimiter (buffer-substring-no-properties 1 (point-max))))))
+
+(defun page-number ()
+  "Reurn page number."
+  (save-restriction
+    (widen)
+    (save-excursion
+      (let ((count 1)
+            (opoint (point)))
+        (goto-char (point-min))
+        (while (re-search-forward page-delimiter opoint t)
+          (if (= (match-beginning 0) (match-end 0))
+              (forward-char 1))
+          (setq count (1+ count)))
+        count)
+      )))
+
 (defun pos-at-line (arg)
   "Return the position at beginning of line."
   (save-excursion
@@ -338,7 +362,7 @@ Hook function for skeletons."
   (interactive)
   (if show-trailing-whitespace
       (setq show-trailing-whitespace nil)
-      (setq show-trailing-whitespace t)))
+    (setq show-trailing-whitespace t)))
 
 (defun toggle-window-dedicated ()
   "Toggle whether the current active window is dedicated or not.
