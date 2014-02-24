@@ -2,6 +2,13 @@
 ;; FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun call-process-to-string (program &rest args)
+  "Call PROGRAM with ARGS and return output."
+  (with-output-to-string
+    (with-current-buffer
+        standard-output
+      (apply 'call-process program nil t nil args))))
+
 (defun comment-or-uncomment-current-line-or-region ()
   "Comments or uncomments current current line or whole lines in region."
   (interactive)
