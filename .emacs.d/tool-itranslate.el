@@ -24,7 +24,7 @@ Requires `call-process-to-string' from `functions'."
   (if (not (executable-find itranslate-program))
       (error "Program `%s' not found in path" itranslate-program)
     (replace-regexp-in-string
-     "\n$" ""
+     " *\n$" ""
      (call-process-to-string
       itranslate-program
       "-i"
@@ -42,49 +42,36 @@ respectively."
          (equal current-prefix-arg '(4))))
   (when (called-interactively-p 'any) (itranslate-init))
   (let ((lang-in (or in itranslate-lang-input))
-        (lang-out (or out itranslate-lang-input)))
+        (lang-out (or out itranslate-lang-output)))
     (if insert
         (insert (itranslate-string str lang-in lang-out))
       (message (itranslate-string str lang-in lang-out)))))
 
-;; TODO: rewrite this one.
 ;;;###autoload
-(defun itranslate-lines (&option in out)
-  "Translate current line or lines in region.
-This calls the `itranslate' function.  Output result at the end
-after an ' = ' separtor."
-  (interactive)
-  (unless itranslate-lang-p
-    (itranslate-set-language)
-    (set (make-local-variable 'itranslate-lang-p) t))
-
-  (let ((line)
-        (cmd (concat itranslate-program " "
-                     (unless (string= itranslate-lang-input "")
-                       (concat "-i " itranslate-lang-input))
-                     " "  itranslate-lang-output))
-        (beg (line-number-at-pos (point)))
-        (end (line-number-at-pos (if mark-active (mark) (point)))))
-
-    ;; Mark is assumed to specify the end. If it not not the case, we switch
-    ;; the values.
-    (when (> beg end)
-      (setq beg (line-number-at-pos (mark)))
-      (setq end (line-number-at-pos (point))))
-
-    (save-excursion
-      ;; forward-line will remain on the same line if EOF has been reached. Need
-      ;; to check for it.
+(defun itranslate-lines (beg end &optional in out)
+  "Translate lines between BEG and END.
+Interactively, lines in region are used, or current line if no
+region. This calls the `itranslate' function. Output result at
+the end after an ' = ' separtor."
+  (interactive
+   (list (line-number-at-pos (point))
+         (line-number-at-pos (if mark-active (mark) (point))) nil nil))
+  (when (called-interactively-p 'any) (itranslate-init))
+  (when (> beg end)
+    (setq beg end)
+    (setq end (line-number-at-pos (point))))
+  (save-excursion
+    ;; forward-line will remain on the same line if EOF has been reached. Need
+    ;; to check for it.
+    (let ((lang-in (or in itranslate-lang-input))
+          (lang-out (or out itranslate-lang-output)))
       (while (<= beg end)
         (goto-line beg)
         (setq line (buffer-substring-no-properties
                     (line-beginning-position) (line-end-position)))
         (unless (string-match "^ *$" line)
           (end-of-line)
-          (insert " = " (shell-command-to-string
-                         (concat cmd " '" line "'")))
-          ;; Shell commands usually output an EOL. We should remove it.
-          (delete-char -1))
+          (insert " = " (itranslate line in out)))
         (setq beg (1+ beg))))))
 
 (defun itranslate-init ()
@@ -100,9 +87,10 @@ These languages are used by `itranslate'. Leave input empty for
 auto-detect. Empty output defaults to English."
   (interactive)
   (set (make-local-variable 'itranslate-lang-input)
-       (read-from-minibuffer "Input language: "))
+       (read-from-minibuffer
+        "Input language (leave empty for auto-detect): " itranslate-lang-input))
   (set (make-local-variable 'itranslate-lang-output)
-       (read-string "Output language: " nil nil "en")))
+       (read-string "Output language: " itranslate-lang-output)))
 
 (provide 'tool-itranslate)
 
