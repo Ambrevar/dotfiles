@@ -114,7 +114,7 @@ A page boundary is any line whose beginning matches the regexp
     ;; don't find a match without moving.
     (if (string= page-delimiter "") (forward-char 1))
     (if (re-search-forward page-delimiter nil t)
-        nilp
+        nil
       (goto-char (point-max)))
     (setq count (1- count)))
   (while (and (< count 0) (not (bobp)))
@@ -223,8 +223,8 @@ Requires `count-occurences'."
   (save-restriction
     (widen)
     (save-excursion
-      (count-occurences
-       page-delimiter (buffer-substring-no-properties 1 (point-max))))))
+      (+ 1 (count-occurences
+            page-delimiter (buffer-substring-no-properties 1 (point-max)))))))
 
 (defun page-number ()
   "Reurn page number."
@@ -240,6 +240,34 @@ Requires `count-occurences'."
           (setq count (1+ count)))
         count)
       )))
+
+(defun page-number-mode (activate)
+  "Display of page number in mode line.
+If ACTIVATE is non-nil, enable, disable otherwise. Interactively,
+activate unless called with universal argument.\n\nThis adds
+page-number/page-count to mode line. It will only display if
+there is more than one page. A page is delimited by
+page-delimiter.\n
+WARNING: this may slow down editing on big files."
+  (interactive (list (not (equal current-prefix-arg '(4)))))
+  (setq-default
+   mode-line-format
+ `("%e"
+   mode-line-front-space
+   mode-line-mule-info
+   mode-line-client
+   mode-line-modified
+   mode-line-remote
+   mode-line-frame-identification
+   mode-line-buffer-identification
+   "   "
+   mode-line-position
+   ,(when activate '(:eval (when (> (page-count) 1) (format "%d/%d" (page-number) (page-count)))))
+   (vc-mode vc-mode)
+   "  "
+   mode-line-modes
+   mode-line-misc-info
+   mode-line-end-spaces)))
 
 (defun pos-at-line (arg)
   "Return the position at beginning of line."

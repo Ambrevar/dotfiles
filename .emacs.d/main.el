@@ -291,6 +291,9 @@
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
+(require 'functions)
+(page-number-mode t)
+
 ;; Alternate focus.
 (add-hook 'occur-hook (lambda () (pop-to-buffer occur-buf)))
 ;; (add-hook 'help-mode-hook (lambda () (pop-to-buffer (get-buffer "*Help*"))))
