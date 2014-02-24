@@ -32,8 +32,8 @@ Requires `call-process-to-string' from `functions'."
 
 ;;;###autoload
 (defun itranslate (str &optional insert in out)
-  "Output translate STR to minibuffer.
-If INSERT is non-nil or called with universal argument, insert
+  "Output translated STR to minibuffer.
+If INSERT is non-nil or if called with universal argument, insert
 result at point. If IN or OUT are nil, use
 `itranslate-lang-input' and `itranslate-lang-output'
 respectively."
@@ -45,7 +45,30 @@ respectively."
         (lang-out (or out itranslate-lang-output)))
     (if insert
         (insert (itranslate-string str lang-in lang-out))
-      (message (itranslate-string str lang-in lang-out)))))
+      (message "%s" (itranslate-string str lang-in lang-out)))))
+
+;;;###autoload
+(defun itranslate-region (beg end &optional replace in out)
+  "Return translated region to minibuffer.
+If no region is set, return an error. If REPLACE is non-nil or if
+called with universal argument, insert result at point. If IN or
+OUT are nil, use `itranslate-lang-input' and
+`itranslate-lang-output' respectively."
+  (interactive
+   (list (if mark-active (mark) (error "Mark not set"))
+         (point)
+         (equal current-prefix-arg '(4))))
+  (when (called-interactively-p 'any) (itranslate-init))
+  (when (> beg end)
+    (setq beg (point))
+    (setq end (mark)))
+  (let ((lang-in (or in itranslate-lang-input))
+        (lang-out (or out itranslate-lang-output))
+        (text (buffer-substring-no-properties beg end)))
+    (if (not replace)
+        (message (itranslate-string text lang-in lang-out))
+      (delete-region beg end)
+      (insert (itranslate-string text lang-in lang-out)))))
 
 ;;;###autoload
 (defun itranslate-lines (beg end &optional in out)

@@ -114,6 +114,7 @@ Example: to assign some-function to C-i, use
 
 (autoload 'itranslate "tool-itranslate" nil t)
 (autoload 'itranslate-lines "tool-itranslate" nil t)
+(autoload 'itranslate-region "tool-itranslate" nil t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We need to put it at the end to make sure it doesn't get overriden by other
