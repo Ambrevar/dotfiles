@@ -250,8 +250,7 @@ there is more than one page. A page is delimited by
 page-delimiter.\n
 WARNING: this may slow down editing on big files."
   (interactive (list (not (equal current-prefix-arg '(4)))))
-  (setq-default
-   mode-line-format
+  (setq mode-line-format
  `("%e"
    mode-line-front-space
    mode-line-mule-info

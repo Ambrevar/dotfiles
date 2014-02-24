@@ -72,7 +72,6 @@
       (condition-case nil (scroll-down)
         (beginning-of-buffer (goto-char (point-min)))))))
 
-;; TODO: display page number in mode line with `what-page'.
 (define-key my-keys-minor-mode-map (kbd "C-x M-n") (lambda () (interactive) (narrow-to-page 1)))
 (define-key my-keys-minor-mode-map (kbd "C-x M-p") (lambda () (interactive) (narrow-to-page -1)))
 
@@ -101,11 +100,13 @@
 ;; Whitespace, tabs, and other frivolities.  Highlight trailing whitespaces. For
 ;; programming languages only, so that it does not affect buffer like calendar
 ;; and so on. There is no prog-mode-hook on Emacs<24.
+(require 'functions) ; for page-number-mode
 (mapcar
  (lambda (mode-hook)
    (add-hook
     mode-hook
     (lambda ()
+      (page-number-mode t)
       ;; (setq show-trailing-whitespace t)
       (whitespace-mode))))
  '(prog-mode-hook lua-mode-hook))
@@ -290,9 +291,6 @@
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
-
-(require 'functions)
-(page-number-mode t)
 
 ;; Alternate focus.
 (add-hook 'occur-hook (lambda () (pop-to-buffer occur-buf)))
