@@ -1,5 +1,7 @@
 ;;; tool-pdf.el --- PDF utils
 
+(defvar pdf-compressor "pdfcompress" "PDF compressor.")
+
 (defvar pdf-viewer "zathura" "PDF viewer.")
 
 (defvar pdf-viewer-args
@@ -16,39 +18,46 @@ to reverse-search a PDF using SyncTeX. Note that the quotes and
 double-quotes matter and must be escaped appropriately.")
 
 ;;;###autoload
-(defun pdf-compress (&optional arg)
-  "Call external `pdfcompess' inplace.
-If no universal argument is provided, use PDF associated to
-current buffer filename, ask for filename otherwise."
-  (interactive)
-  (let ((file (concat
-               (file-name-sans-extension
-                (if arg arg
-                  (if (equal current-prefix-arg '(4))
-                      (read-string "File name: " nil nil buffer-file-name)
-                    buffer-file-name)))
-               ".pdf")))
-    (when (and (file-exists-p file) (file-writable-p file)
-               (executable-find pdfcompress))
-      (start-process "dummy" nil "pdfcompress" "-i" file))))
+(defun pdf-compress (&optional file)
+  "Call `pdf-compessor' over FILE.
+If FILE is not provided, use PDF associated to current buffer
+filename. If called with universal argument, prompt for filename.
+It FILE is not a PDF, the extension is automatically replaced by
+.pdf."
+  (interactive
+   (list (if (equal current-prefix-arg '(4))
+             (expand-file-name (read-file-name "PDF to view: " nil nil t
+                                               (concat (file-name-base buffer-file-name) ".pdf"))))))
+  (let ((pdf (concat
+              (file-name-sans-extension
+               (if file file
+                 buffer-file-name))
+              ".pdf")))
+    (when (and (file-exists-p pdf) (file-writable-p pdf)
+               (executable-find pdf-compressor))
+      (start-process "dummy" nil pdf-compressor "-i" pdf)
+      (message "File %s compressed." pdf))))
 
 ;;;###autoload
-(defun pdf-view (&optional arg)
-  "Call `pdf-viewer' for current buffer file.
-If no universal argument is provided, use PDF associated to
-current buffer filename, ask for filename otherwise."
-  (interactive)
-  (let ((file (concat
-               (file-name-sans-extension
-                (if arg arg
-                  (if (equal current-prefix-arg '(4))
-                      (read-string "File name: " nil nil buffer-file-name)
-                    buffer-file-name)))
-               ".pdf")))
+(defun pdf-view (&optional file)
+  "Call `pdf-viewer' over FILE.
+If FILE is not provided, use PDF associated to current buffer
+filename. If called with universal argument, prompt for filename.
+It FILE is not a PDF, the extension is automatically replaced by
+.pdf."
+  (interactive
+   (list (if (equal current-prefix-arg '(4))
+             (expand-file-name (read-file-name "PDF to view: " nil nil t
+                                               (concat (file-name-base buffer-file-name) ".pdf"))))))
+  (let ((pdf (concat
+              (file-name-sans-extension
+               (if file file
+                 buffer-file-name))
+              ".pdf")))
     (when (and
-           (file-exists-p file) (file-writable-p file)
+           (file-exists-p pdf) (file-writable-p pdf)
            (executable-find pdf-viewer))
-      (apply 'start-process "dummy" nil pdf-viewer file pdf-viewer-args))))
+      (apply 'start-process "dummy" nil pdf-viewer pdf pdf-viewer-args))))
 
 (provide 'tool-pdf)
 
