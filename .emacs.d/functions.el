@@ -31,7 +31,8 @@ Regular math expression can be computed with calc."
                             (line-beginning-position) (line-end-position)))))
 
 (defun count-occurences (regex string)
-  "Return number of times regex occurs in string."
+  "Return number of times regex occurs in string.
+If you want to operate on buffer, use `how-many' instead."
   (let ((start 0) (matches 0))
     (while (string-match regex string start)
       (setq start (match-end 0))
@@ -223,8 +224,8 @@ Requires `count-occurences'."
   (save-restriction
     (widen)
     (save-excursion
-      (+ 1 (count-occurences
-            page-delimiter (buffer-substring-no-properties 1 (point-max)))))))
+      (+ 1 (how-many
+            page-delimiter 1 (point-max))))))
 
 (defun page-number ()
   "Reurn page number."
