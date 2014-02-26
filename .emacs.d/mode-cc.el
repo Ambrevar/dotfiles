@@ -2,14 +2,11 @@
 ;; C/C++
 ;;==============================================================================
 
-;; TODO: require compile is not needed?
-;; (require 'compile)
-
-(defcustom mode-cc-ldlibs "-lm -pthread"
+(defcustom cc-ldlibs "-lm -pthread"
   "[Local variable] Custom linker flags for C/C++ linkage."
   :safe 'stringp)
 
-(defcustom mode-cc-ldflags ""
+(defcustom cc-ldflags ""
   "[Local variable] Custom linker libs for C/C++ linkage."
   :safe 'stringp)
 
@@ -35,8 +32,8 @@ Requires `get-closest-pathname'."
                    (if is-cpp
                        (or (getenv "CPPFLAGS") "-Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0")
                      (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0"))
-                   (or (getenv "LDFLAGS") mode-cc-ldflags)
-                   (or (getenv "LDLIBS") mode-cc-ldlibs))))))
+                   (or (getenv "LDFLAGS") cc-ldflags)
+                   (or (getenv "LDLIBS") cc-ldlibs))))))
 
 (defun cc-clean ()
   "Find Makefile and call the `clean' rule. If no Makefile is
@@ -45,7 +42,7 @@ restored."
   (interactive)
   (when (get-closest-pathname)
     (let ((compile-command-backup compile-command))
-      (compile (format "make -k -f %s clean" (get-closest-pathname)))
+      (compile (format "make -k -f '%s' clean" (get-closest-pathname)))
       (setq compile-command compile-command-backup))))
 
 ;;==============================================================================
@@ -91,6 +88,8 @@ restored."
       ;; (local-set-key ">" 'semantic-complete-self-insert)
       (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1))))))
  '(c-mode-hook c++-mode-hook))
+
+;; Note: cc-modes do not need to run hooks for first buffer, since their hook are run twice already.
 
 ;;==============================================================================
 ;; Qt semantic support
