@@ -89,7 +89,9 @@ restored."
       (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1))))))
  '(c-mode-hook c++-mode-hook))
 
-;; Note: cc-modes do not need to run hooks for first buffer, since their hook are run twice already.
+;; WARNING: cc-modes do not need to run hooks for first buffer, since their hook
+;; are run twice already. This behaviour may change in future Emacs version, in
+;; which case we need to use add-hook-and-eval instead.
 
 ;;==============================================================================
 ;; Qt semantic support

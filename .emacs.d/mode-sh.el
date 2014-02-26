@@ -7,12 +7,10 @@
 ;; Allow comment indentation.
 (setq sh-indent-comment t)
 
-(add-hook
+(add-hook-and-eval
  'sh-mode-hook
  (lambda ()
    (set (make-local-variable 'compile-command) (concat sh-shell-file " " buffer-file-name))) )
-
-(run-mode-hooks 'sh-mode-hook)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

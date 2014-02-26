@@ -39,49 +39,33 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LaTeX setup
 
-(add-hook
+(add-hook-and-eval
  'latex-mode-hook
  (lambda ()
    (setq tex-extension-list
          '("aux" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy"))
    (setq tex-default-compiler "pdflatex")
+   (tex-set-compiler)
    (local-set-key (kbd "M-RET") 'latex-itemize)
+   (local-set-key (kbd "C-c C-a") 'latex-article)
+   (local-set-key (kbd "C-c C-e") 'latex-emph)
+   (local-set-key (kbd "C-c C-s") 'latex-section)
+   (local-set-key (kbd "C-c C-p") 'latex-paragraph)
+   (local-set-key (kbd "C-c C-l") 'latex-slanted)
    (turn-on-orgtbl)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; The magnificent latex-math-preview mode!
-;; TODO: some symbols are not generated properly.
-(autoload 'latex-math-preview-expression "latex-math-preview" nil t)
-(autoload 'latex-math-preview-insert-symbol "latex-math-preview" nil t)
-(autoload 'latex-math-preview-save-image-file "latex-math-preview" nil t)
-(autoload 'latex-math-preview-beamer-frame "latex-math-preview" nil t)
-(autoload 'latex-math-preview-text-symbol-datasets "latex-math-preview" nil t)
-
-(setq latex-math-preview-cache-directory-for-insertion
-      (concat emacs-cache-folder "latex-math-preview-cache"))
-
-;; Extra for latex-math-preview-mode.
-;; TODO: latex-math-preview-mode extra does not work.
-(require 'latex-math-preview-extra-data nil t)
-(add-hook
- 'latex-mode-hook
- (lambda ()
-   ;; (local-set-key (kbd "C-c p") 'latex-math-preview-expression)
-   ;; (local-set-key (kbd "C-c C-p") 'latex-math-preview-save-image-file)
-   (local-set-key (kbd "C-c j") 'latex-math-preview-insert-symbol)
-   (local-set-key (kbd "C-c C-j") 'latex-math-preview-last-symbol-again)
-   ;; (local-set-key (kbd "C-c C-b") 'latex-math-preview-beamer-frame)
-   ;; (add-to-list 'latex-math-preview-text-symbol-datasets
-   ;;              latex-math-preview-textcomp-symbol-data)
-   ;; (add-to-list 'latex-math-preview-text-symbol-datasets
-   ;;              latex-math-preview-pifont-zapf-dingbats-symbol-data)
-   ;; (add-to-list 'latex-math-preview-text-symbol-datasets
-   ;;              latex-math-preview-pifont-symbol-fonts-symbol-data)))
-   ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Skeletons
 
+(define-skeleton latex-emph "Insert emph command." nil "\\emph{" _ "}")
+(define-skeleton latex-slanted "Insert textsl command." nil "\\textsl{" _ "}")
+
+(define-skeleton latex-paragraph "Insert paragraph command." nil "\\paragraph{" _ "}" \n)
+(define-skeleton latex-subparagraph "Insert subparagraph command." nil "\\subparagraph{" _ "}" \n)
+
+(define-skeleton latex-section "Insert section command." nil "\\section{" _ "}" \n)
+(define-skeleton latex-subsection "Insert section command." nil "\\subsection{" _ "}" \n)
+(define-skeleton latex-subsubsection "Insert section command." nil "\\subsubsection{" _ "}" \n)
 
 (define-skeleton latex-article
   "Insert article template."
@@ -265,5 +249,35 @@
 \\newcommand{\\includecode}[2][custom]{
   \\lstinputlisting[caption=#2, escapechar=, style=#1]{#2}}" \n)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; The magnificent latex-math-preview mode!
+;; TODO: some symbols are not generated properly.
+(autoload 'latex-math-preview-expression "latex-math-preview" nil t)
+(autoload 'latex-math-preview-insert-symbol "latex-math-preview" nil t)
+(autoload 'latex-math-preview-save-image-file "latex-math-preview" nil t)
+(autoload 'latex-math-preview-beamer-frame "latex-math-preview" nil t)
+(autoload 'latex-math-preview-text-symbol-datasets "latex-math-preview" nil t)
+
+(setq latex-math-preview-cache-directory-for-insertion
+      (concat emacs-cache-folder "latex-math-preview-cache"))
+
+;; Extra for latex-math-preview-mode.
+;; TODO: latex-math-preview-mode extra does not work.
+(require 'latex-math-preview-extra-data nil t)
+(add-hook
+ 'latex-mode-hook
+ (lambda ()
+   ;; (local-set-key (kbd "C-c p") 'latex-math-preview-expression)
+   ;; (local-set-key (kbd "C-c C-p") 'latex-math-preview-save-image-file)
+   (local-set-key (kbd "C-c j") 'latex-math-preview-insert-symbol)
+   (local-set-key (kbd "C-c C-j") 'latex-math-preview-last-symbol-again)
+   ;; (local-set-key (kbd "C-c C-b") 'latex-math-preview-beamer-frame)
+   ;; (add-to-list 'latex-math-preview-text-symbol-datasets
+   ;;              latex-math-preview-textcomp-symbol-data)
+   ;; (add-to-list 'latex-math-preview-text-symbol-datasets
+   ;;              latex-math-preview-pifont-zapf-dingbats-symbol-data)
+   ;; (add-to-list 'latex-math-preview-text-symbol-datasets
+   ;;              latex-math-preview-pifont-symbol-fonts-symbol-data)))
+   ))
 
 (provide 'mode-latex)

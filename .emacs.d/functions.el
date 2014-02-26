@@ -2,6 +2,13 @@
 ;; FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun add-hook-and-eval (hook function)
+  "Add FUNCTION to HOOK and evaluate it.
+This can be useful when called from a hooked function to make
+sure it gets executed."
+  (add-hook hook function)
+  (funcall function))
+
 (defun call-process-to-string (program &rest args)
   "Call PROGRAM with ARGS and return output."
   (with-output-to-string

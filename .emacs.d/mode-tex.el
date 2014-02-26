@@ -15,7 +15,7 @@
   "This is the name of the executable called upon TeX compilations.
 Examples: pdftex, pdflatex, xetex, xelatex, luatex, lualatex...
 
-If value is nil, the compiler will be tex-default-compiler for
+If value is nil, the compiler will be `tex-default-compiler' for
 TeX mode, and latex-default-compiler for LaTeX mode."
   :safe 'stringp)
 
@@ -47,6 +47,7 @@ Note that -shell-escape can also be toggled with universal
 argument."
   :safe 'stringp)
 
+;; TODO: test tex-startcommands.
 (defcustom tex-startcommands ""
   "You can call a TeX compiler upon a string instead of a file.
 This is actually useful if you want to customize your
@@ -81,9 +82,9 @@ empty.")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FUNCTIONS
 (defun tex-set-compiler ()
-  "Use compile to process your TeX-based document. Use a prefix
-argument to call the compiler along the '-shell-escape'
-option. This will enable the use of '\write18{<external
+  "Set `compile-command' for TeX-based document.
+Use a prefix argument to append the '-shell-escape' option to the
+compile options. This will enable the use of '\write18{<external
 command>}' from within TeX documents, which need to allow
 external application to be called from TeX.
 
@@ -138,6 +139,7 @@ but there is no warranty."
 (defun tex-pdf-compress ()
   "Use `masterfile' variable as default value for `pdf-compress'."
   (interactive)
+  (require 'tool-pdf)
   (hack-local-variables)
   (let ((local-master (if (not masterfile) buffer-file-name masterfile)))
     (pdf-compress local-master)))
@@ -145,6 +147,7 @@ but there is no warranty."
 (defun tex-pdf-view ()
   "Use `masterfile' variable as default value for `pdf-view'."
   (interactive)
+  (require 'tool-pdf)
   (hack-local-variables)
   (let ((local-master (if (not masterfile) buffer-file-name masterfile)))
     (pdf-view local-master)))
@@ -152,7 +155,7 @@ but there is no warranty."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TeX setup
 
-(add-hook
+(add-hook-and-eval
  'tex-mode-hook
  (lambda ()
    (dolist (key '("\C-c\C-f" "\C-c\C-b"))
@@ -165,8 +168,5 @@ but there is no warranty."
    ;; (set (make-local-variable 'use-hard-newlines) t)
    (local-set-key (kbd "<f9>") 'tex-pdf-view)
    (tex-set-compiler)))
-
-;; TODO: why is run-hooks needed for tex-mode only?
-;; (run-hooks 'tex-mode-hook)
 
 (provide 'mode-tex)
