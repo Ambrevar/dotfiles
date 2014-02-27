@@ -42,9 +42,9 @@
 (add-hook-and-eval
  'latex-mode-hook
  (lambda ()
-   (setq tex-extension-list
+   (set (make-local-variable 'tex-extension-list)
          '("aux" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy"))
-   (setq tex-default-compiler "pdflatex")
+   (set (make-local-variable 'tex-command) "pdflatex")
    (tex-set-compiler)
    (local-set-key (kbd "M-RET") 'latex-itemize)
    (local-set-key (kbd "C-c C-a") 'latex-article)

@@ -1,35 +1,8 @@
 ;;==============================================================================
 ;; Texinfo using TeX setup
 ;;==============================================================================
+(require 'tex-mode)
 (require 'mode-tex)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; VARIABLE
-
-(defvar tex-default-compiler "texi2pdf -b"
-  "Default compiler for LaTeX mode. Used if `tex-compiler' is
-empty.")
-
-(defvar tex-extension-list '("aux" "cp" "cps" "fn" "ky" "log" "pg" "toc" "tp" "vr" "vrs")
-  "List of known Texinfo exentsions. This list is used by
-  'texinfo-clean to purge all matching files.")
-
-(defcustom tex-compiler-options ""
-  "The options to the tex compiler. Options are set between the
-compiler name and the file name.
-
-Interesting options:
-
-* --shell-escape: allow the use of \write18{<external command>}
-   from within TeX documents. This is a potential security issue.
-
-You may use file local variable for convenience:
-
-% -*- tex-compiler-options: \"--shell-escape\"
-
-Note that --shell-escape can also be toggled with universal
-argument."
-  :safe 'stringp)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FUNCTIONS
@@ -47,8 +20,15 @@ argument."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; HOOKS
 
-(add-hook
+(add-hook-and-eval
  'texinfo-mode-hook
  (lambda ()
    (setq fill-column 80) ;; Really needed?
-   (local-set-key (kbd "C-c C-b") 'texinfo-menu-update)))
+   (local-set-key (kbd "C-c C-b") 'texinfo-menu-update)
+   (set (make-local-variable 'tex-extension-list)
+         '("aux" "cp" "cps" "fn" "ky" "log" "pg" "toc" "tp" "vr" "vrs"))
+   (set (make-local-variable 'tex-start-options) nil)
+   (set (make-local-variable 'tex-command) "texi2pdf -b")
+   (tex-set-compiler)))
+
+(provide 'mode-texinfo)
