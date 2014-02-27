@@ -6,7 +6,7 @@
 
 (defvar pdf-viewer-args
   '("--fork" "-s"
-    "-x" "\"emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"'\"'\"%{input}\"'\"'\")) (goto-line %{line}))'\"")
+    "-x" "emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"%{input}\")) (goto-line %{line}))'")
   "List of arguments passed to `pdf-viewer' when called.
 You may want to fork the viewer so that it detects when the same
 document is launched twice, and persists when Emacs gets closed.\n
@@ -14,8 +14,9 @@ For instance with `zathura':\n
   zathura --fork\n
 We can use\n
   emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"%{input}\")) (goto-line %{line}))'\n
-to reverse-search a PDF using SyncTeX. Note that the quotes and
-double-quotes matter and must be escaped appropriately.")
+to reverse-search a PDF using SyncTeX. Note this can only work
+with emacsclient since we need to communicate the command to an
+existing instance.")
 
 ;;;###autoload
 (defun pdf-compress (&optional file)
