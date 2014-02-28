@@ -13,7 +13,7 @@ may be sometimes inaccurate. By default output filenames are the same as the
 original, with time appended.
 
 Options:
-  -a CODEC: Audio codec supported by ffmpeg. Defaults to libvorbis.
+  -a CODEC: Audio codec supported by ffmpeg. (Default: vorbis).
   -b:       Default bitrate for audio stream with unidentifiable bitrate. If 0,
             copy stream (default).
   -c:       Copy streams (no reencoding).
@@ -72,7 +72,7 @@ EOF
 }
 
 EXT="mkv"
-AUDIO_CODEC="libvorbis"
+AUDIO_CODEC="vorbis"
 VIDEO_PARAM="-c:v libx264 -preset slow -crf 20"
 AUDIO_PARAM=""
 
@@ -157,9 +157,10 @@ _cropvalue()
 }
 
 ## Return the audio encoding parameters. For instance
-##  -c:2 libvorbis -b:2 384k -c:5 copy
-## If some stream bitrates are missing, we have two possibilities:
-## either we copy the stream (default), or we encode it to a default value.
+##   -c:2 libvorbis -b:2 384k -c:5 copy
+## If input codec is $AUDIO_CODEC, we copy. If some stream bitrates are missing
+## or 0, we encode it to a default value. If default value is 0, then we copy
+## stream.
 _audiobitrate()
 {
     local bitrate
@@ -168,15 +169,19 @@ _audiobitrate()
         ## Skip non audio tracks.
         [ "$(eval echo \$streams_stream_${i}_codec_type)" != "audio" ] && continue
 
-        bitrate=$(( $(eval echo \$streams_stream_${i}_bit_rate) / 1000))
-        if [ -z "$bitrate" ] || [ "$bitrate" -le 0 ]; then
+        bitrate=$(eval echo \$streams_stream_${i}_bit_rate)
+        if [ -n "$bitrate" ] && [ "$bitrate" -gt 0 ] 2>/dev/null; then
+            ## If non-empty and a positive number.
+            bitrate=$(( $bitrate / 1000))
+        else
             bitrate="$AUDIO_DEFAULT_RATE"
         fi
-        if [ -n "$bitrate" ] && [ "$bitrate" -gt 0 ]; then
+        if [ "$bitrate" -le 0 ] || \
+            [ "$AUDIO_CODEC" = "$(eval echo \$streams_stream_${i}_codec_name)" ]; then
+            printf -- "-c:%s copy " $i
+        else
             [ $bitrate -gt 500 ] && bitrate=500
             printf -- "-c:%s %s -b:%s %sk " $i "$AUDIO_CODEC" $i "$bitrate"
-        else
-            printf -- "-c:%s copy " $i
         fi
     done
 }
