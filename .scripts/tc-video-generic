@@ -13,7 +13,7 @@ may be sometimes inaccurate. By default output filenames are the same as the
 original, with time appended.
 
 Options:
-  -a CODEC: Audio codec supported by ffmpeg. (Default: vorbis).
+  -a CODEC: Audio codec supported by ffmpeg. (Default: libvorbis).
   -b:       Default bitrate for audio stream with unidentifiable bitrate. If 0,
             copy stream (default).
   -c:       Copy streams (no reencoding).
@@ -72,7 +72,7 @@ EOF
 }
 
 EXT="mkv"
-AUDIO_CODEC="vorbis"
+AUDIO_CODEC="libvorbis"
 VIDEO_PARAM="-c:v libx264 -preset slow -crf 20"
 AUDIO_PARAM=""
 
@@ -177,7 +177,8 @@ _audiobitrate()
             bitrate="$AUDIO_DEFAULT_RATE"
         fi
         if [ "$bitrate" -le 0 ] || \
-            [ "$AUDIO_CODEC" = "$(eval echo \$streams_stream_${i}_codec_name)" ]; then
+            [ "$AUDIO_CODEC" = "$(eval echo \$streams_stream_${i}_codec_name)" ] || \
+            [ "$AUDIO_CODEC" = "lib$(eval echo \$streams_stream_${i}_codec_name)" ]; then
             printf -- "-c:%s copy " $i
         else
             [ $bitrate -gt 500 ] && bitrate=500
