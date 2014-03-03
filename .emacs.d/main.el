@@ -266,6 +266,8 @@
 ;; Multiple-Cursors
 (when (require 'multiple-cursors nil t)
   (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
+  ;; Load the file at the new location
+  (load mc/list-file t)
   (global-unset-key (kbd "C-<down-mouse-1>"))
   (define-key my-keys-minor-mode-map (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
   (define-key my-keys-minor-mode-map (kbd "C-x M-r") 'mc/edit-lines)
