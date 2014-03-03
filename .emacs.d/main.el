@@ -6,7 +6,9 @@
 (require 'saveplace)
 (setq save-place-file (concat emacs-cache-folder "saveplace"))
 (setq-default save-place t)
-(add-hook 'before-save-hook 'save-place-to-alist)
+;; When the daemon is killed abruptly, places are not saved. Adding this hook
+;; allows to save places at a strategic moment.
+(add-hook 'before-save-hook 'save-place-kill-emacs-hook)
 
 ;; Bookmark file to cache folder.
 (setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
