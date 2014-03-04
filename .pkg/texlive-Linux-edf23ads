@@ -9,6 +9,7 @@ bigfoot
 caption
 carlisle
 comment
+courier
 dvipng
 easylist
 ec
@@ -42,6 +43,7 @@ microtype
 minitoc
 moderncv
 ms
+multirow
 needspace
 oberdiek
 parskip
@@ -50,12 +52,18 @@ pdftex-def
 pgf
 pgfplots
 preprint
+pslatex
+psnfss
 subfigure
+symbol
 synctex
 tabu
 texinfo
+times
 tipa
 tools
+txfonts
+upquote
 url
 varwidth
 wrapfig
