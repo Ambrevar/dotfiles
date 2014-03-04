@@ -124,9 +124,8 @@ command -v dwb >/dev/null 2>&1 && export BROWSER="dwb"
 ## SSH-Agent
 ## WARNING: this is insecure on machines where someone else has root access.
 command -v ssh-agent >/dev/null 2>&1 && eval "$(ssh-agent)"
-## Kill ssh-agent on session end. WARNING: this does not seem to work with some
-## login managers.
-trap 'test -n "$SSH_AGENT_PID" && eval $(ssh-agent -k)' 0
+## Kill ssh-agent on session end. Console login only.
+command -v sessionclean >/dev/null 2>&1 && trap 'sessionclean' 0
 
 ## Set TEMP dir if you want to override /tmp for some applications that check
 ## for this variable. Usually not a good idea since some applications will write

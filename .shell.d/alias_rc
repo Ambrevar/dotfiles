@@ -83,7 +83,7 @@ alias xres='xrandr --output $(xrandr | awk '"'"'NR==2 {print $1;exit}'"'"') --au
 command -v udiskie-umount >/dev/null 2>&1 && alias uua='udiskie-umount -a'
 
 ## Emacs
-command -v em >/dev/null 2>&1 && alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1 2>&1; emacs --daemon"
+command -v em >/dev/null 2>&1 && alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
 
 ##==============================================================================
 ## Zsh power aliases

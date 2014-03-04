@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if [ "$1" = "-h" ]; then
+    cat <<EOF
+Usage: ${0##*/}
+
+Clean various running processes. Run it before exiting a session.
+
+EOF
+    exit
+fi
+
+## Emacs
+command -v emacsclient >/dev/null 2>&1 && emacsclient -e '(kill-emacs)' >/dev/null 2>&1
+
+## SSH
+[ -n "$SSH_AGENT_PID" ] && eval "$(ssh-agent -k)"

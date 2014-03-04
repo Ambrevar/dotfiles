@@ -10,11 +10,15 @@
 ## Launch session
 ##==============================================================================
 
+## Note: we do not 'exec' as we want to clean the session when the session is
+## exited.
 if [ $# -eq 1 ] && command -v $1 >/dev/null; then
-    exec $1
+    $1
 else
-    exec awesome
+    awesome
 fi
+
+command -v sessionclean >/dev/null 2>&1 && sessionclean
 
 ## Crappy desktops
 # exec openbox-session
