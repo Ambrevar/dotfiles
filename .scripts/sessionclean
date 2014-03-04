@@ -10,8 +10,13 @@ EOF
     exit
 fi
 
-echo "Emacs" >&2
-command -v emacsclient >/dev/null 2>&1 && emacsclient -e '(kill-emacs)' >/dev/null 2>&1
+if command -v emacsclient >/dev/null 2>&1; then
+    if emacsclient -e '(kill-emacs)'; then
+        echo "Emacs terminated." >&2
+    fi
+fi
 
-echo "SSH" >&2
-[ -n "$SSH_AGENT_PID" ] && eval "$(ssh-agent -k)"
+if [ -n "$SSH_AGENT_PID" ]; then
+    echo "SSH" >&2
+    eval "$(ssh-agent -k)"
+fi
