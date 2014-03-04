@@ -56,14 +56,6 @@ alias mkdir='mkdir -p'
 ## Reset terminal -- Faster alternative of 'reset'.
 alias cls='printf "\ec"'
 
-## Shutdown / Reboot.
-## If you do not want to get prompted for your password, configure sudo properly.
-if command -v systemctl >/dev/null 2>&1; then
-    alias halt='systemctl poweroff'
-else
-    alias halt='sudo halt -p'
-fi
-
 ## Start X and lock current terminal (press ENTER when back in terminal to
 ## prompt for password). Useless if X is running on the same TTY.
 command -v vlock >/dev/null 2>&1 && alias sx='startx & vlock'

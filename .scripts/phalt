@@ -1,0 +1,25 @@
+#!/bin/sh
+
+rawname=${0##*/}
+rawname=${rawname#p}
+
+if [ "$1" = "-h" ]; then
+    cat <<EOF
+Usage: ${0##*/}
+
+Run `sessionclean' if available and $rawname the system.
+
+EOF
+    exit
+fi
+
+command -v sessionclean >/dev/null 2>&1 && sessionclean
+
+## Poweroff / Reboot.
+## If you do not want to get prompted for your password, configure sudo properly.
+## TODO: use only "sudo halt -p"?
+    sudo $rawname
+if command -v systemctl >/dev/null 2>&1; then
+    
+else
+fi
