@@ -16,133 +16,153 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-################################################################################
-## Helper functions.
+readonly myname='pacsize'
+readonly myver='4.1.2'
 
 calc_total () {
-    awk '{
-    total += $1
-    print
+	awk '{
+	total += $1
+	print
 }
 END {
-    printf ("%7s KIB TOTAL\n", total)
+	printf ("%7s KIB TOTAL\n", total)
+}'
+}
+
+error () {
+	echo "$@" >&2
+}
+
+## Print size and name. We strip the arguably useless decimals. This makes
+## output lighter.
+filter () {
+	awk -F ": " \
+		'$0 ~ "^Name" {
+	pkg = $2
+}
+$0 ~ "^Installed Size" {
+	gsub (/[\.,][^ ]*/, "")
+	split($2, a, " ")
+	printf ("%4d%s %s\n", a[1], a[2], pkg)
 }'
 }
 
 remove_duplicates () {
-    awk '! table[$0]++'
+	awk '! table[$0]++'
 }
 
-usage() {
+usage () {
     cat <<EOF
 Usage: ${1##*/} [OPTIONS] PACKAGES
        ${1##*/} -a [OPTIONS]
 
-Display package sizes. Duplicates are removed if any. Output can be sorted by
-name or size. A grand total can be printed at the end. Both the sync and the
-local databes can be used for lookup.
+Display the size of PACKAGES. Duplicates are removed if any. The local database
+is queried first; if the package is not found, the sync database is then used
+for lookup.
 
 Options:
 
-  -a: All installed packages. Implies -Q.
+  -a: Process all installed packages.
   -h: Show this help.
-  -n: Output is sorted by name.
-  -Q: Use local database. It speeds up queries and allows displaying
-      size of local packages not available in repos.
-  -S: Use sync database. It is slower but allows to display size of
-      non-installed packages.
-  -s: Output is sorted by size.
+  -n: Sort output by name.
+  -s: Sort output by size.
   -t: Print total.
 
 Examples:
 
-  ${1##*/} -ast
+  $ ${1##*/} -ast
     Convenient way to keep track of big packages.
 
-  ${1##*/} -Q \$(pactree -ld1 linux)
+  $ ${1##*/} \$(pactree -ld1 linux)
     Print the size of linux and all its direct dependencies.
 
-  ${1##*/} -Qst \$(pacman -Qdtq)
+  $ ${1##*/} -st \$(pacman -Qdtq)
     Print a grand total of orphan packages, and sort by size.
 EOF
 }
 
-db="Q"
+version () {
+	echo "$myname $myver"
+	echo 'Copyright (C) 2014 Pierre Neidhardt <ambrevar@gmail.com>'
+}
+
 opt_sort=false
 opt_all=false
 opt_total=false
 
-while getopts ":ahnQSst" opt; do
-    case $opt in
-        a)
-            opt_all=true
-            db="Q" ;;
-        h)
-            usage "$0"
-            exit ;;
-        n)
-            opt_sort="sort -uk3" ;;
-        Q)
-            db="Q" ;;
-        S)
-            db="S" ;;
-        s)
-            opt_sort="sort -un" ;;
-        t)
-            opt_total="calc_total" ;;
-        ?)
-            usage "$0"
-            exit 1 ;;
-    esac
+while getopts ":ahnstv" opt; do
+	case $opt in
+		a)
+			opt_all=true ;;
+		h)
+			usage "$0"
+			exit ;;
+		n)
+			opt_sort="sort -uk3" ;;
+		s)
+			opt_sort="sort -uh" ;;
+		t)
+			opt_total="calc_total" ;;
+		v)
+			version "$0"
+			exit ;;
+		?)
+			usage "$0"
+			exit 1 ;;
+	esac
 done
 
 shift $(($OPTIND - 1))
 
-################################################################################
-## All-packages mode. We use a dedicated algorithm which is much faster than
-## per-package mode.
+## All-packages mode.
+## We use a dedicated algorithm which is much faster than per-package mode.
+## Unfortunately there is no easy way to select packages with this method.
 if $opt_all; then
-    DBPath="$(awk -F = '/^ *DBPath/{print $2}' /etc/pacman.conf)"
-    [ ! -d "$DBPath" ] && DBPath="/var/lib/pacman/"
-    [ ! -d "$DBPath/local/" ] && exit
+	DBPath="$(awk -F = '/^ *DBPath/{print $2}' /etc/pacman.conf 2>/dev/null)"
+	[ ! -d "$DBPath" ] && DBPath="/var/lib/pacman"
 
-    awk '/^%NAME%/ {
-    getline
-    pkg=$0
+	if [ ! -d "$DBPath/local/" ]; then
+		error "Could not find local database in $DBPath/local/."
+		exit 1
+	fi
+
+	awk 'BEGIN {
+	split("B KiB MiB GiB TiB PiB EiB ZiB YiB", unit)
+}
+/^%NAME%/ {
+	getline
+	pkg=$0
 }
 /^%SIZE%/ {
-    getline
-    size = $0 / 1024
-    printf ("%6s KiB %s\n", size, pkg)
+	getline
+	size = $0
+	i = 1
+	while (size > 2048) {
+		size /= 1024
+		i++
+	}
+	printf ("%4d%s %s\n", size, unit[i], pkg)
 }' "$DBPath"/local/*/desc | ($opt_sort || cat) | ($opt_total || cat)
-    exit
+	exit
 fi
 
-################################################################################
 ## Per-package mode.
 if [ $# -eq 0 ]; then
-    echo "Missing argument." >&2
-    usage "$0"
-    exit 1
+	error "Missing argument."
+	usage "$0"
+	exit 1
 fi
 
 if ! command -v pacman >/dev/null 2>&1; then
-    echo "'pacman' not found." >&2
-    exit 1
+	error "'pacman' not found."
+	exit 1
 fi
 
-## Locale.
-LC_NAME="$(gettext pacman "Name")"
-LC_SIZE="$(gettext pacman "Installed Size :" | sed 's/ *: *$//')"
+{
+	## If package is not found locally (-Q), we use the sync database (-S). We
+	## use LC_ALL=C to make sure pacman output is not localized.
+	buffer=$(LC_ALL=C pacman -Qi "$@" 2>&1 1>&3 3>&- | cut -f2 -d "'")
+	[ -n "$buffer" ] && LC_ALL=C pacman -Si $buffer
+} 3>&1 | filter | ($opt_sort || remove_duplicates) | ($opt_total || cat)
 
-## We use external variable for awk to fit current locales. In the following
-## command, we strip the decimals. This makes output lighter.
-pacman -${db}i "$@" 2>/dev/null | awk -F ": " \
-    -v pkgsize="$LC_SIZE" -v pkgname="$LC_NAME" \
-'$0 ~ pkgname {
-    pkg = $2
-}
-$0 ~ pkgsize {
-    gsub (/[\.,].*/, "")
-    printf ("%7s KiB %s\n", $2, pkg)
-}' | ($opt_sort || remove_duplicates) | ($opt_total || cat)
+# vim: set noet:
