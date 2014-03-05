@@ -118,7 +118,9 @@
 ;; end.
 ; (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (setq whitespace-style (quote (face trailing tab-mark)))
-;; TODO: whitespace report-on-bogus does not seem to work properly.
+;; TODO: whitespace report-on-bogus and cleanup do not seem to work properly.
+;; Empty lines seems to be always true. Report is shown even when style is not
+;; matching the errors.
 ; (setq whitespace-action '(report-on-bogus))
 
 ;; Remove whitespaces on region, or whole file.
