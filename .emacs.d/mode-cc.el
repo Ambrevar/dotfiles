@@ -76,7 +76,6 @@ restored."
     (lambda ()
       (c-set-style "peter")
       (cc-set-compiler)
-      (guess-style-guess-all)
       (local-set-key (kbd "<f9>") 'cc-clean)
       (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
       (local-set-key (kbd "C-c C-f") 'cc-fori)

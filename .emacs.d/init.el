@@ -112,6 +112,8 @@ Example: to assign some-function to C-i, use
 (when (fboundp 'po-find-file-coding-system)
   (modify-coding-system-alist 'file "\\.po\\'\\|\\.po\\." 'po-find-file-coding-system))
 
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Third-party tools
 (autoload 'guess-style-set-variable "guess-style" nil t)

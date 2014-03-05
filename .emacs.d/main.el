@@ -109,9 +109,12 @@
     mode-hook
     (lambda ()
       (page-number-mode t)
+      (when (fboundp 'guess-style-guess-all)
+        (guess-style-guess-all))
       ;; (setq show-trailing-whitespace t)
       (whitespace-mode))))
  '(prog-mode-hook lua-mode-hook))
+
 ;; WARNING: this can break some configuration files needing whitespaces at the
 ;; end.
 ; (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -147,8 +150,8 @@
       browse-url-browser-function 'browse-url-generic)
 (define-key my-keys-minor-mode-map (kbd "C-M-u") 'browse-url)
 
-;; Default ispell dictionnay
-;; (setq ispell-dictionary "fr")
+;; Default ispell dictionnay. If not set, Emacs uses the current locale.
+(setq ispell-dictionary "en")
 (define-key my-keys-minor-mode-map
   (kbd "<f5>")
   (lambda () (interactive) (ispell-change-dictionary "en")))
