@@ -111,7 +111,6 @@
       (page-number-mode t)
       (when (fboundp 'guess-style-guess-all)
         (guess-style-guess-all))
-      ;; (setq show-trailing-whitespace t)
       (whitespace-mode))))
  '(prog-mode-hook lua-mode-hook))
 
@@ -198,8 +197,9 @@
 ;; Run ranger asynchronously.
 (define-key my-keys-minor-mode-map (kbd "C-x D")
   (lambda () (interactive)
-    (shell-command "urxvt -e ranger &")
-    (delete-windows-on "*Async Shell Command*")))
+    (let ((term (getenv "TERMCMD")))
+      (when (and (executable-find "ranger") (executable-find term))
+        (start-process "dummy" nil term "-e" "ranger")))))
 
 ;; Calendar ISO display.
 (setq calendar-week-start-day 1)
@@ -271,7 +271,7 @@
 ;; Multiple-Cursors
 (when (require 'multiple-cursors nil t)
   (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
-  ;; Load the file at the new location
+  ;; Load the file at the new location.
   (load mc/list-file t)
   (global-unset-key (kbd "C-<down-mouse-1>"))
   (define-key my-keys-minor-mode-map (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
