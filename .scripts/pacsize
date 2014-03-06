@@ -118,8 +118,8 @@ shift $(($OPTIND - 1))
 ## We use a dedicated algorithm which is much faster than per-package mode.
 ## Unfortunately there is no easy way to select packages with this method.
 if $opt_all; then
-	DBPath="$(awk -F = '/^ *DBPath/{print $2}' /etc/pacman.conf 2>/dev/null)"
-	[ ! -d "$DBPath" ] && DBPath="/var/lib/pacman"
+	DBPath="$(awk -F "=[ \t]*" '/^[ \t]*DBPath[ \t]*=/{gsub(/[ \t]*$/, "", $2); print $2}' /etc/pacman.conf 2>/dev/null)"
+	[ -z "$DBPath" ] && DBPath="/var/lib/pacman"
 
 	if [ ! -d "$DBPath/local/" ]; then
 		error "Could not find local database in $DBPath/local/."
@@ -129,20 +129,18 @@ if $opt_all; then
 	awk 'BEGIN {
 	split("B KiB MiB GiB TiB PiB EiB ZiB YiB", unit)
 }
-/^%NAME%/ {
-	getline
-	pkg=$0
+$0 == "%NAME%" {
+	getline pkg
 }
-/^%SIZE%/ {
-	getline
-	size = $0
+$0 == "%SIZE%" {
+	getline size
 	i = 1
 	while (size > 2048) {
 		size /= 1024
 		i++
 	}
 	printf ("%4d%s %s\n", size, unit[i], pkg)
-}' "$DBPath"/local/*/desc | ($opt_sort || cat) | ($opt_total || cat)
+}' "$DBPath"/local/*/desc | { $opt_sort || cat ;} | { $opt_total || cat ;}
 	exit
 fi
 
@@ -153,6 +151,7 @@ if [ $# -eq 0 ]; then
 	exit 1
 fi
 
+## Remove this check if integrated to pacman.
 if ! command -v pacman >/dev/null 2>&1; then
 	error "'pacman' not found."
 	exit 1
@@ -163,6 +162,6 @@ fi
 	## use LC_ALL=C to make sure pacman output is not localized.
 	buffer=$(LC_ALL=C pacman -Qi "$@" 2>&1 1>&3 3>&- | cut -f2 -d "'")
 	[ -n "$buffer" ] && LC_ALL=C pacman -Si $buffer
-} 3>&1 | filter | ($opt_sort || remove_duplicates) | ($opt_total || cat)
+} 3>&1 | filter | { $opt_sort || remove_duplicates ;} | { $opt_total || cat ;}
 
 # vim: set noet:
