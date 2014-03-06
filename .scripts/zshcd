@@ -1,5 +1,6 @@
 #!/bin/sh
-## Start zsh in the directory specified as first argument.
+## Start zsh in the directory specified as first argument. Useful for file
+## browsers to start shell in pointed folder.
 
 if [ ! -d "$1" ]; then
     zsh

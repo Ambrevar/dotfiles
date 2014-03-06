@@ -109,14 +109,18 @@
     mode-hook
     (lambda ()
       (page-number-mode t)
-      ;; (setq show-trailing-whitespace t)
+      (when (fboundp 'guess-style-guess-all)
+        (guess-style-guess-all))
       (whitespace-mode))))
  '(prog-mode-hook lua-mode-hook))
+
 ;; WARNING: this can break some configuration files needing whitespaces at the
 ;; end.
 ; (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (setq whitespace-style (quote (face trailing tab-mark)))
-;; TODO: whitespace report-on-bogus does not seem to work properly.
+;; TODO: whitespace report-on-bogus and cleanup do not seem to work properly.
+;; Empty lines seems to be always true. Report is shown even when style is not
+;; matching the errors.
 ; (setq whitespace-action '(report-on-bogus))
 
 ;; Remove whitespaces on region, or whole file.
@@ -147,8 +151,8 @@
       browse-url-browser-function 'browse-url-generic)
 (define-key my-keys-minor-mode-map (kbd "C-M-u") 'browse-url)
 
-;; Default ispell dictionnay
-;; (setq ispell-dictionary "fr")
+;; Default ispell dictionnay. If not set, Emacs uses the current locale.
+(setq ispell-dictionary "en")
 (define-key my-keys-minor-mode-map
   (kbd "<f5>")
   (lambda () (interactive) (ispell-change-dictionary "en")))
@@ -195,8 +199,9 @@
 ;; Run ranger asynchronously.
 (define-key my-keys-minor-mode-map (kbd "C-x D")
   (lambda () (interactive)
-    (shell-command "urxvt -e ranger &")
-    (delete-windows-on "*Async Shell Command*")))
+    (let ((term (getenv "TERMCMD")))
+      (when (and (executable-find "ranger") (executable-find term))
+        (start-process "dummy" nil term "-e" "ranger")))))
 
 ;; Calendar ISO display.
 (setq calendar-week-start-day 1)
@@ -268,7 +273,7 @@
 ;; Multiple-Cursors
 (when (require 'multiple-cursors nil t)
   (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
-  ;; Load the file at the new location
+  ;; Load the file at the new location.
   (load mc/list-file t)
   (global-unset-key (kbd "C-<down-mouse-1>"))
   (define-key my-keys-minor-mode-map (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
