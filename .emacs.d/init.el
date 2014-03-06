@@ -76,6 +76,26 @@ Example: to assign some-function to C-i, use
 ;; Third-party modes
 
 ;; TODO: implement function for loading and add support for fallback mode.
+;; TODO: find how to build lambdas dynamically.
+ (defun load-external-mode (ext package &optional mode default) "Add EXT to
+   auto-mode-alist such that it loads the associated PACKAGE. EXT should be a
+   regex. If PACKAGE has not the same name as the mode, you should provide the
+   real mode name in MODE. If MODE is nil or unspecified, PACKAGE is used as
+   the mode name.
+
+ We use an 'autoload to make the mode accessible interactively. We need the
+ 'require to check if package is loadable. It allows us to fallback to the
+ DEFAULT mode if provided."
+
+  (let ((local-mode (if mode mode (string-to-symbol package))))
+    (autoload local-mode package nil t)
+    (add-to-list 'auto-mode-alist
+                 (cons ext 
+                       (lambda () 
+                         (if (require package nil t)
+                             (funcall local-mode)
+                           (unless (null default) (funcall default))
+                           (error "Could not load %s" package)))))))
 
 (autoload 'bison-mode "bison-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode))
