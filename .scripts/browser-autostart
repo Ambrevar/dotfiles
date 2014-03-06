@@ -1,6 +1,8 @@
 #!/bin/sh
 
-## Toggle shell browser autostart and launch terminal.
+## Invoke a terminal while setting this environment variable. This way the shell
+## can behave accordingly. This is useful to launch a program from X, which can
+## then exit to shell, without closing the terminal.
 
 if [ -z "$TERMCMD" ]; then
     echo 'TERMCMD not set. Exiting.'
