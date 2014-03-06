@@ -33,15 +33,14 @@ error () {
 	echo "$@" >&2
 }
 
-## Print size and name. We strip the arguably useless decimals. This makes
-## output lighter.
+## Print size and name. We round to the lowest integer, this makes output
+## lighter.
 filter () {
 	awk -F ": " \
 		'$0 ~ "^Name" {
 	pkg = $2
 }
 $0 ~ "^Installed Size" {
-	gsub (/[\.,][^ ]*/, "")
 	split($2, a, " ")
 	printf ("%4d%s %s\n", a[1], a[2], pkg)
 }'
@@ -67,6 +66,7 @@ Options:
   -n: Sort output by name.
   -s: Sort output by size.
   -t: Print total.
+  -V: Show version information.
 
 Examples:
 
@@ -90,7 +90,7 @@ opt_sort=false
 opt_all=false
 opt_total=false
 
-while getopts ":ahnstv" opt; do
+while getopts ":ahnstV" opt; do
 	case $opt in
 		a)
 			opt_all=true ;;
@@ -103,7 +103,7 @@ while getopts ":ahnstv" opt; do
 			opt_sort="sort -uh" ;;
 		t)
 			opt_total="calc_total" ;;
-		v)
+		V)
 			version "$0"
 			exit ;;
 		?)
