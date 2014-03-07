@@ -230,9 +230,6 @@ Scripts
 URxvt
 -----
 
-* Using the paste function from Muennich's clipboard on the same terminal where
-  text was copied will make it hang (and crash).
-
 * There is a bug with Xft anti-aliased font that prevent w3m image preview from
   working (too bad for ranger). Use non-Xft fonts as a workaround.
 
