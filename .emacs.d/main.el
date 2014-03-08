@@ -2,6 +2,15 @@
 ;; MAIN
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Minimal UI. Load early to hide as soon as possible.
+(setq inhibit-startup-screen t)
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(menu-bar-mode -1)
+(when (fboundp 'set-scroll-bar-mode)
+  (set-scroll-bar-mode 'left)
+  (scroll-bar-mode -1)
+  (define-key my-keys-minor-mode-map (kbd "C-<f6>") 'toggle-scroll-bar))
+
 ;; Remember last cursor position.
 (require 'saveplace)
 (setq save-place-file (concat emacs-cache-folder "saveplace"))
@@ -32,15 +41,6 @@
 ;; Disable suspend key since it is useless on Emacs server.
 (global-unset-key (kbd "C-z"))
 (global-unset-key (kbd "C-x C-z"))
-
-;; For convenience.
-(setq inhibit-startup-screen t)
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-(menu-bar-mode -1)
-(when (fboundp 'set-scroll-bar-mode)
-  (set-scroll-bar-mode 'left)
-  (scroll-bar-mode -1)
-  (define-key my-keys-minor-mode-map (kbd "C-<f6>") 'toggle-scroll-bar))
 
 ;; Make questions less annoying.
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -266,21 +266,6 @@
 ;; Common LISP
 (setq inferior-lisp-program "clisp")
 
-;; xclip
-(when (require 'xclip nil t)
-  (turn-on-xclip))
-
-;; Multiple-Cursors
-(when (require 'multiple-cursors nil t)
-  (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
-  ;; Load the file at the new location.
-  (load mc/list-file t)
-  (global-unset-key (kbd "C-<down-mouse-1>"))
-  (define-key my-keys-minor-mode-map (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
-  (define-key my-keys-minor-mode-map (kbd "C-x M-r") 'mc/edit-lines)
-  (define-key my-keys-minor-mode-map (kbd "C-x M-m") 'mc/mark-more-like-this-extended)
-  (define-key my-keys-minor-mode-map (kbd "C-x M-l") 'mc/mark-all-like-this-dwim))
-
 ;; Let Emacs auto-load/save sessions.
 (when (boundp 'server-running-p)
   (desktop-save-mode 1)
@@ -328,6 +313,10 @@
 
 ;; Read Matlab files in Octave mode.
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(provide 'main)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; This may be needed for gud/pdb.
 ; (defadvice pop-to-buffer (before cancel-other-window first)
