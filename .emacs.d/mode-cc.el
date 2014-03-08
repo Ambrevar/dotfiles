@@ -3,12 +3,14 @@
 ;;==============================================================================
 
 (defcustom cc-ldlibs "-lm -pthread"
-  "[Local variable] Custom linker flags for C/C++ linkage."
+  "Custom linker flags for C/C++ linkage."
   :safe 'stringp)
+(make-variable-buffer-local 'cc-ldlibs)
 
 (defcustom cc-ldflags ""
-  "[Local variable] Custom linker libs for C/C++ linkage."
+  "Custom linker libs for C/C++ linkage."
   :safe 'stringp)
+(make-variable-buffer-local 'cc-ldflags)
 
 (defun cc-set-compiler ()
   "Set compile command to be nearest Makefile.
@@ -17,23 +19,24 @@ found, then a configurable command line is provided.\n
 Requires `get-closest-pathname'."
   (require 'functions)
   (interactive)
-  (if (get-closest-pathname)
-      (set (make-local-variable 'compile-command) (format "make -k -f %s" (get-closest-pathname)))
-    (set (make-local-variable 'compile-command)
-         (let
-             ((is-cpp (equal (symbol-name major-mode) "c++-mode"))
-              (file (file-name-nondirectory buffer-file-name)))
-           (format "%s %s -o %s %s %s %s"
-                   (if is-cpp
-                       (or (getenv "CXX") "g++")
-                     (or (getenv "CC") "gcc"))
-                   file
-                   (file-name-sans-extension file)
-                   (if is-cpp
-                       (or (getenv "CPPFLAGS") "-Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0")
-                     (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0"))
-                   (or (getenv "LDFLAGS") cc-ldflags)
-                   (or (getenv "LDLIBS") cc-ldlibs))))))
+  (let ((makefile (get-closest-pathname)))
+    (if makefile
+        (set (make-local-variable 'compile-command) (format "make -k -f %s" makefile))
+      (set (make-local-variable 'compile-command)
+           (let
+               ((is-cpp (eq major-mode 'c++-mode))
+                (file (file-name-nondirectory buffer-file-name)))
+             (format "%s %s -o %s %s %s %s"
+                     (if is-cpp
+                         (or (getenv "CXX") "g++")
+                       (or (getenv "CC") "gcc"))
+                     file
+                     (file-name-sans-extension file)
+                     (if is-cpp
+                         (or (getenv "CPPFLAGS") "-Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0")
+                       (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0"))
+                     (or (getenv "LDFLAGS") cc-ldflags)
+                     (or (getenv "LDLIBS") cc-ldlibs)))))))
 
 (defun cc-clean ()
   "Find Makefile and call the `clean' rule. If no Makefile is
@@ -115,8 +118,9 @@ restored."
 ;; Skel
 ;;==============================================================================
 
-;; Note that it is possible to extend the skel syntax like this: (setq
-;; skeleton-further-elements '((q "\"")))
+;; Note that it is possible to extend the skel syntax with
+;; `skeleton-further-elements'. For instance:
+; (setq skeleton-further-elements '((q "\"")))
 
 (define-skeleton cc-printf
   "fprintf/printf snippet.
