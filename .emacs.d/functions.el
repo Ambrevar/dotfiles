@@ -186,6 +186,29 @@ it appears in the minibuffer prompt."
   "Map a function taking two arguments on a sequence of pairs."
   (mapcar (lambda (p) (funcall function (car p) (cadr p))) sequence ))
 
+(defun load-external (ext feature &optional mode default)
+  "Add the EXT regex to `auto-mode-alist' such that it loads the
+associated symbol FEATURE. If FEATURE has not the same name as
+the mode, you should provide the real mode name in symbol MODE.
+If MODE is nil or unspecified, FEATURE is used as the mode name.
+We call `autoload' to make the mode accessible interactively. We
+need `require' to check if feature is loadable. It allows us to
+fallback to the mode provided in symbol DEFAULT."
+  (let ((local-mode (if mode mode feature)))
+    (autoload local-mode (symbol-name feature) nil t)
+    (add-to-list
+     'auto-mode-alist
+     (cons ext `(lambda ()
+                  (if (require ',feature nil t)
+                      (,local-mode)
+                    ,(if (null default)
+                         `(warn "Could not load %s, fallback to %s"
+                                (symbol-name ',feature) (symbol-name ',default-major-mode))
+                       `(progn
+                          (,default)
+                          (warn "Could not load %s, fallback to %s"
+                                (symbol-name ',feature) (symbol-name ',default))))))))))
+
 ;; TODO: use defadvice instead of duplicate code.
 (defun mark-word (&optional arg allow-extend)
   "Set mark ARG words away from point.

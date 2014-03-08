@@ -83,57 +83,30 @@ Example: to assign some-function to C-i, use
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
   (package-initialize))
 
-;; TODO: test this!
-(defun load-external-mode (ext package &optional mode default)
-  "Add EXT to auto-mode-alist such that it loads the associated
-PACKAGE. EXT should be a regex. If PACKAGE has not the same name
-as the mode, you should provide the real mode name in MODE. If
-MODE is nil or unspecified, PACKAGE is used as the mode name.\n
-We use an 'autoload to make the mode accessible interactively. We
-need the 'require to check if package is loadable. It allows us
-to fallback to the DEFAULT mode if provided."
-  (let ((local-mode (if mode mode (string-to-symbol package))))
-    (autoload local-mode package nil t)
-    (add-to-list 'auto-mode-alist
-                 (cons ext
-                       `(lambda ()
-                         (if (require ,package nil t)
-                             (funcall ,local-mode)
-                           ,(unless (null default) '(funcall default))
-                           (error "Could not load %s" package)))))))
+(load-external "\\.l\\'" 'flex-mode nil 'c-mode)
+(load-external "\\.yy?\\'" 'bison-mode nil 'c-mode)
 
-(autoload 'bison-mode "bison-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode))
-(autoload 'flex-mode "flex-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode))
+(load-external "\\.vert\\'\\|\\.frag\\'\\|\\.glsl\\'" 'glsl-mode nil 'c-mode)
 
-(autoload 'glsl-mode "glsl-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.vert\\'\\|\\.frag\\'\\|\\.glsl\\'" . glsl-mode))
-
-(autoload 'go-mode "go-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
+(load-external "\\.go\\'" 'go-mode)
 
 ;; Note that graphviz-mode has no 'provide'.
 (autoload 'graphviz-dot-mode "graphviz-dot-mode" "Dot mode." t)
 (add-to-list 'auto-mode-alist '("\\.dot\\'" . graphviz-dot-mode))
 (add-hook 'graphviz-dot-mode-hook (lambda () (require 'mode-dot)))
 
-(autoload 'lua-mode "lua-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
+(load-external "\\.lua\\'" 'lua-mode nil 'sh-mode)
 
-(autoload 'markdown-mode "markdown-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.md\\'\\|\\.markdown\\'" . markdown-mode))
+(load-external "\\.md\\'\\|\\.markdown\\'" 'markdown-mode)
 ;; If we need more option, add it to a dedicated file.
 (add-hook 'markdown-mode-hook (lambda () (set (make-local-variable 'paragraph-start) "
 ")))
 
-(autoload 'mediawiki-mode "mediawiki-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.wiki\\'" . mediawiki-mode))
+(load-external "\\.wiki\\'" 'mediawiki-mode)
 (add-hook 'mediawiki-mode-hook (lambda () (require 'mode-mediawiki)))
 
 ;; .po support. This mode has no hooks.
-(autoload 'po-mode "po-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.po\\'\\|\\.po\\." . po-mode))
+(load-external "\\.po\\'\\|\\.po\\." 'po-mode)
 (when (fboundp 'po-find-file-coding-system)
   (modify-coding-system-alist 'file "\\.po\\'\\|\\.po\\." 'po-find-file-coding-system))
 
