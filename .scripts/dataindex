@@ -54,7 +54,10 @@ for i ; do
 
     ## The two following lines do the same for the same time cost. The former is shorter.
     # find "$i" -type f | awk -v str="$i" '{l=length(str)+2; print substr($0, l)}' | sort > "$OUTPUT"
-    (cd -- "$i" && find . -type f) | sed 's/^.\///' | sort | \
+
+    ## 'LC_ALL=C sort' is required to make sure to output is consistent across
+    ## different systems.
+    (cd -- "$i" && find . -type f) | sed 's/^.\///' | LC_ALL=C sort | \
     if $opt_file; then
         i="$(realpath -- "$i")"
         base="${i##*/}"

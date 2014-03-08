@@ -56,7 +56,7 @@ _mount ()
 
     else
         NODE="$(cdemu device-mapping | awk -v devnum=$DEVICE 'NR>2 && $1==devnum {print $2}')"
-        ## TODO: This is terrible,but checking cdemu status does not work. Maybe
+        ## TODO: This is terrible, but checking cdemu status does not work. Maybe
         ## a kernel limitation.
         echo "Mounting..."
         sleep 2
