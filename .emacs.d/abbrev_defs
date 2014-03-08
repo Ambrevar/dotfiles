@@ -5,20 +5,38 @@
 
 (define-abbrev-table 'awk-mode-abbrev-table '())
 
-(define-abbrev-table 'c++-mode-abbrev-table
-  '(
-   ))
+(define-abbrev-table 'bibtex-mode-abbrev-table '())
+
+(define-abbrev-table 'c++-mode-abbrev-table '())
 
 (define-abbrev-table 'c-mode-abbrev-table
   '(
     ("printf" "" cc-printf 0)
    ))
 
+(define-abbrev-table 'calendar-mode-abbrev-table '())
+
 (define-abbrev-table 'comint-mode-abbrev-table '())
 
 (define-abbrev-table 'completion-list-mode-abbrev-table '())
 
+(define-abbrev-table 'conf-colon-mode-abbrev-table '())
+
+(define-abbrev-table 'conf-javaprop-mode-abbrev-table '())
+
+(define-abbrev-table 'conf-ppd-mode-abbrev-table '())
+
+(define-abbrev-table 'conf-space-mode-abbrev-table '())
+
+(define-abbrev-table 'conf-unix-mode-abbrev-table '())
+
+(define-abbrev-table 'conf-windows-mode-abbrev-table '())
+
+(define-abbrev-table 'conf-xdefaults-mode-abbrev-table '())
+
 (define-abbrev-table 'docTeX-mode-abbrev-table '())
+
+(define-abbrev-table 'doctex-mode-abbrev-table '())
 
 (define-abbrev-table 'emacs-lisp-byte-code-mode-abbrev-table '())
 
@@ -32,9 +50,13 @@
 
 (define-abbrev-table 'help-mode-abbrev-table '())
 
+(define-abbrev-table 'html-mode-abbrev-table '())
+
 (define-abbrev-table 'idl-mode-abbrev-table '())
 
 (define-abbrev-table 'java-mode-abbrev-table '())
+
+(define-abbrev-table 'latex-mode-abbrev-table '())
 
 (define-abbrev-table 'lisp-mode-abbrev-table '())
 
@@ -48,9 +70,15 @@
 
 (define-abbrev-table 'occur-mode-abbrev-table '())
 
+(define-abbrev-table 'org-mode-abbrev-table '())
+
 (define-abbrev-table 'outline-mode-abbrev-table '())
 
+(define-abbrev-table 'perl-mode-abbrev-table '())
+
 (define-abbrev-table 'pike-mode-abbrev-table '())
+
+(define-abbrev-table 'plain-tex-mode-abbrev-table '())
 
 (define-abbrev-table 'po-mode-abbrev-table '())
 
@@ -60,16 +88,27 @@
 
 (define-abbrev-table 'select-tags-table-mode-abbrev-table '())
 
+(define-abbrev-table 'sgml-mode-abbrev-table '())
+
 (define-abbrev-table 'sh-mode-abbrev-table
   '(
-    ("null" "" sh-redirect-to-null 0)
-  ))
+    ("/null" "" sh-redirect-to-null 0)
+    ("null" "" sh-redirect-to-null 2)
+   ))
+
+(define-abbrev-table 'shell-mode-abbrev-table '())
+
+(define-abbrev-table 'slitex-mode-abbrev-table '())
 
 (define-abbrev-table 'snippet-mode-abbrev-table '())
 
 (define-abbrev-table 'special-mode-abbrev-table '())
 
 (define-abbrev-table 'tabulated-list-mode-abbrev-table '())
+
+(define-abbrev-table 'tex-mode-abbrev-table '())
+
+(define-abbrev-table 'tex-shell-abbrev-table '())
 
 (define-abbrev-table 'text-mode-abbrev-table
   '(
@@ -87,7 +126,7 @@
     ("atm" "at the moment" nil 1)
     ("autom" "automatique" nil 2)
     ("automt" "automatiquement" nil 2)
-    ("bcp" "beaucoup" nil 2)
+    ("bcp" "beaucoup" nil 3)
     ("biblio" "bibliothèque" nil 1)
     ("biblios" "bibliothèques" nil 1)
     ("btw" "by the way" nil 1)
@@ -102,7 +141,7 @@
     ("cmt" "comment" nil 1)
     ("coeur" "cœur" nil 1)
     ("coeurs" "cœurs" nil 1)
-    ("config" "configuration" nil 1)
+    ("config" "configuration" nil 2)
     ("configs" "configurations" nil 1)
     ("cpd" "cependant" nil 2)
     ("cvg" "converge" nil 1)
