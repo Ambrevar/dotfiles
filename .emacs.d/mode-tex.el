@@ -67,18 +67,20 @@ WARNING: the -shell-escape option is a potential security issue."
 but there is no warranty."
   (interactive)
   (hack-local-variables)
-  (let* ((local-master (if (not masterfile) buffer-file-name masterfile)))
-    ;; Concatate file name to list.
+  (let ((master (concat
+                 (if masterfile
+                     (file-name-sans-extension masterfile)
+                   (file-name-sans-extension buffer-file-name))
+                 ".")))
     (mapcar
-     ;; Delete file if exist
-     (lambda (argfile) (interactive)
-       (if (not (and (file-exists-p argfile) (file-writable-p argfile)))
-           (message "[%s] not found." argfile)
+     ;; Delete file if it exists.
+     (lambda (argfile)
+       (when (and (file-exists-p argfile) (file-writable-p argfile))
          (delete-file argfile)
          (message "[%s] deleted." argfile)))
      (mapcar
       ;; Concat file name with extensions.
-      (lambda (arg) (interactive) (concat file arg))
+      (lambda (arg) (concat master arg))
       tex-extension-list))))
 
 (defun tex-pdf-compress ()

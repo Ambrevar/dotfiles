@@ -1,6 +1,7 @@
 ;;==============================================================================
 ;; C/C++
 ;;==============================================================================
+;; Note: maybe this should be split in mode-c and mode-c++.
 
 (defcustom cc-ldlibs "-lm -pthread"
   "Custom linker flags for C/C++ linkage."
