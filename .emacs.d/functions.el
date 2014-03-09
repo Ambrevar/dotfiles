@@ -210,36 +210,21 @@ fallback to the mode provided in symbol DEFAULT."
                           (warn "Could not load %s, fallback to %s"
                                 (symbol-name ',feature) (symbol-name ',default))))))))))
 
-;; TODO: use defadvice instead of duplicate code.
-(defun mark-word-alt (&optional arg allow-extend)
-  "Set mark ARG words away from point.
-The place mark goes is the same place \\[forward-word] would move
-to with the same argument.  Interactively, if this command is
-repeated or (in Transient Mark mode) if the mark is active, it
-marks the next ARG words after the ones already marked.\n
-This overloads the vanilla function to mark words from the
-beginning."
+;; TODO: try defadvice.
+(defun mark-word-from-beginning (&optional arg allow-extend)
+  "Set the point at the beginning of the word and call `mark-word'."
   (interactive "P\np")
   (cond ((and allow-extend
               (or (and (eq last-command this-command) (mark t))
                   (region-active-p)))
-         (setq arg (if arg (prefix-numeric-value arg)
-                     (if (< (mark) (point)) -1 1)))
-         (set-mark
-          (save-excursion
-            (goto-char (mark))
-            (forward-word arg)
-            (point))))
+         (mark-word arg allow-extend))
         (t
          ;; The next line makes sure the word at point gets selected if point is
          ;; on the first letter. We need to ignore error if point is at EOF.
          (ignore-errors (forward-char))
          (backward-word)
-         (push-mark
-          (save-excursion
-            (forward-word (prefix-numeric-value arg))
-            (point))
-          nil t))))
+         (mark-word arg allow-extend))))
+(define-key my-keys-minor-mode-map (kbd "M-@") 'mark-word-from-beginning)
 
 (defun move-border-left (arg)
   "Move window border in a natural manner.
