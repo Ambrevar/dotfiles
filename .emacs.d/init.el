@@ -116,6 +116,7 @@ Example: to assign some-function to C-i, use
 (autoload 'guess-style-guess-variable "guess-style")
 (autoload 'guess-style-guess-all "guess-style" nil t)
 (setq guess-style-info-mode 1)
+(add-hook 'prog-mode-hook 'guess-style-guess-all)
 
 (autoload 'pdf-view "tool-pdf" nil t)
 (autoload 'pdf-compress "tool-pdf" nil t)

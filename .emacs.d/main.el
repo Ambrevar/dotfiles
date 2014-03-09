@@ -103,16 +103,11 @@
 ;; programming languages only, so that it does not affect buffer like calendar
 ;; and so on. There is no prog-mode-hook on Emacs<24.
 (require 'functions) ; for page-number-mode
-(mapcar
- (lambda (mode-hook)
-   (add-hook
-    mode-hook
-    (lambda ()
-      (page-number-mode t)
-      (when (fboundp 'guess-style-guess-all)
-        (guess-style-guess-all))
-      (whitespace-mode))))
- '(prog-mode-hook lua-mode-hook))
+(add-hook
+ 'prog-mode-hook
+ (lambda ()
+   (page-number-mode t)
+   (whitespace-mode)))
 
 ;; WARNING: this can break some configuration files needing whitespaces at the
 ;; end.

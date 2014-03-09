@@ -211,7 +211,7 @@ fallback to the mode provided in symbol DEFAULT."
                                 (symbol-name ',feature) (symbol-name ',default))))))))))
 
 ;; TODO: use defadvice instead of duplicate code.
-(defun mark-word (&optional arg allow-extend)
+(defun mark-word-alt (&optional arg allow-extend)
   "Set mark ARG words away from point.
 The place mark goes is the same place \\[forward-word] would move
 to with the same argument.  Interactively, if this command is
