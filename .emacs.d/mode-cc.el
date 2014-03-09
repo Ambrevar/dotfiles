@@ -143,8 +143,7 @@ Requires `count-percents'."
 (define-skeleton cc-fori
   "for i loop."
   nil
-  > "for (" @ (skeleton-read "" "i = 0") "; " @ (skeleton-read "" "i < N") "; " @ (skeleton-read "" "i++") ")" \n
-  "{" > \n
+  > "for (" @ (skeleton-read "" "i = 0") "; " @ (skeleton-read "" "i < N") "; " @ (skeleton-read "" "i++") ") {" \n
   @ _ \n
   "}" > )
 
@@ -173,17 +172,16 @@ int main(int argc, char** argv)
   "Header: "
   \n "#include \"" @ str "\"" \n)
 
-;; TODO: solve indentation issues in if-skeleton.
 (define-skeleton cc-if
   "Insert an if statement."
   "Condition: "
   > "if (" @ str ") {" \n
   > @ _ \n
-  ( "Other condition, %s: "
-    > "} else if (" @ str ") {" > \n
-    > @ \n)
+  ("Other condition, %s: "
+   "} else if (" > @ str ") {" \n
+   @ \n)
   "} else {" > \n
-  > @ \n
+  @ \n
   resume:
   "}" > \n)
 
