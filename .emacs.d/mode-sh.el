@@ -14,17 +14,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-skeleton sh-for
-  "Insert a for loop.  See `sh-feature'. This overrides vanilla function."
-  "Index variable: "
-  > "for " str | "i"
-  '(setq v1 (skeleton-read "Index values: " ""))
-  (unless (string= v1 "")
-    (concat " in " v1))
-  "; do" \n
-  > _ \n
-  "done" > \n)
-
 (define-skeleton sh-check
   "Insert a function checking for presence in PATH."
   nil
@@ -39,10 +28,46 @@
 }
 ")
 
+(define-skeleton sh-command
+  "Insert a line that executes if command is found in path."
+  "Command name: "
+  > "command -v " @ str " >/dev/null 2>&1 && " @ _)
+
+(define-skeleton sh-command-or-die
+  "Insert a line that quits if command is not found in path."
+  "Command name: "
+  > "if ! command -v " @ str " >/dev/null 2>&1; then" \n
+  > "echo '" str " not found in PATH. Exiting.' >&2" \n
+  > "exit 1" \n
+  "fi" > \n)
+
+(define-skeleton sh-for
+  "Insert a for loop.  See `sh-feature'. This overrides vanilla function."
+  "Index variable: "
+  > "for " str | "i"
+  '(setq v1 (skeleton-read "Index values: " ""))
+  (unless (string= v1 "")
+    (concat " in " v1))
+  "; do" \n
+  > _ \n
+  "done" > \n)
+
+(define-skeleton sh-ifcommand
+  "Insert a test to check if command is found in path."
+  "Command name: "
+  > "if command -v " @ str " >/dev/null 2>&1; then" \n
+  > @ _ \n
+  "fi" > \n)
+
+(define-skeleton sh-redirect-to-null
+  "Insert a null redirection."
+  nil
+  ">/dev/null 2>&1")
+
 (define-skeleton sh-while-getopts
   "Insert a getops prototype."
   "optstring: "
-  > "_printhelp ()
+  > "usage ()
 {
     cat<<EOF
 Usage: ${1##*/} [OPTIONS] FILES
@@ -66,40 +91,15 @@ EOF
   > str ")" \n
   > _ v2 " ;;" \n)
 > "?)" \n
-> "_printhelp \"$0\"" \n
+> "usage \"$0\"" \n
 "exit 1 ;;"  > \n
 "esac" > \n
 "done" > \n \n
 "shift $(($OPTIND - 1))" \n
 "if [ $# -eq 0 ]; then
-    _printhelp \"$0\"
+    usage \"$0\"
     exit 1
 fi" \n)
-
-(define-skeleton sh-command
-  "Insert a line that executes if command is found in path."
-  "Command name: "
-  > "command -v " @ str " >/dev/null 2>&1 && " @ _)
-
-(define-skeleton sh-ifcommand
-  "Insert a test to check if command is found in path."
-  "Command name: "
-  > "if command -v " @ str " >/dev/null 2>&1; then" \n
-  > @ _ \n
-  "fi" > \n)
-
-(define-skeleton sh-command-or-die
-  "Insert a line that quits if command is not found in path."
-  "Command name: "
-  > "if ! command -v " @ str " >/dev/null 2>&1; then" \n
-  > "echo '" str " not found in PATH. Exiting.' >&2" \n
-  > "exit 1" \n
-  "fi" > \n)
-
-(define-skeleton sh-redirect-to-null
-  "Insert a null redirection."
-  nil
-  ">/dev/null 2>&1")
 
 (define-skeleton sh-while-read
   "Insert a while read loop."
