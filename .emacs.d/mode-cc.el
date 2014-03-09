@@ -123,22 +123,35 @@ restored."
 ;; `skeleton-further-elements'. For instance:
 ; (setq skeleton-further-elements '((q "\"")))
 
-(define-skeleton cc-printf
-  "fprintf/printf snippet.
-If no file descriptor is provided, switch do printf.  The format
-string is properly parsed (%% are not taken into account).\n
-Requires `count-percents'."
+(define-skeleton cc-case
+  "Insert a case/switch statement."
+  "expression: "
+  > "switch (" str ") {" \n
+  ( "Value, %s: "
+    > "case " > str ":" \n
+    > _ \n
+    "break;" \n)
+  "default:" > \n
+  > _ \n
+  "break;" \n
+  resume:
+  "}" > \n)
+
+(define-skeleton cc-debug
+  "Insert debug macros."
   nil
-  (require 'functions)
-  '(setq v1 (skeleton-read "File desc: " "stderr"))
-  (if (string= v1 "") "printf (" (concat "fprintf (" v1 ", "))
-  "\"" (setq v1 (skeleton-read "Format string: " "%s\\n")) "\""
-  '(setq v2 (count-percents v1))
-  '(setq v1 0)
-  '(while (< v1 v2)
-     (setq v1 (1+ v1))
-     (skeleton-insert '(nil (concat ", " (skeleton-read "Value: ")))))
-  @ ");")
+  "#ifdef DEBUG
+#define DEBUG_CMD(CMD) do {CMD;} while(0)
+#else
+#define DEBUG_CMD(CMD) do {} while(0)
+#endif
+
+#define DEBUG_STR(STR) DEBUG_CMD(fprintf(stderr, \":: %s\\n\", STR))
+#define DEBUG_PRINT(...) DEBUG_CMD ( \\
+    fprintf(stderr, \"\\n\\033[31;1mDEBUG:\\033[0m %s:%d:%s()\\t\", __FILE__, __LINE__, __func__); \\
+    fprintf(stderr, __VA_ARGS__);\\
+    fprintf(stderr, \"\\n\"); \\
+    )")
 
 (define-skeleton cc-fori
   "for i loop."
@@ -146,6 +159,86 @@ Requires `count-percents'."
   > "for (" @ (skeleton-read "" "i = 0") "; " @ (skeleton-read "" "i < N") "; " @ (skeleton-read "" "i++") ") {" \n
   @ _ \n
   "}" > )
+
+(define-skeleton cc-function
+  "Insert struction for function"
+  "Arguments: " "(" @ str ") {" \n
+  > _ \n
+  "}" > \n)
+
+(define-skeleton cc-if
+  "Insert an if statement."
+  "Condition: "
+  > "if (" @ str ") {" \n
+  > @ _ \n
+  ("Other condition, %s: "
+   "} else if (" > @ str ") {" \n
+   @ \n)
+  "} else {" > \n
+  @ \n
+  resume:
+  "}" > \n)
+
+(define-skeleton cc-include
+  "Insert system include."
+  "Header: "
+  \n "#include <" @ str ">" \n)
+
+(define-skeleton cc-include-local
+  "Insert local include."
+  "Header: "
+  \n "#include \"" @ str "\"" \n)
+
+(define-skeleton cc-loadfile
+  "Insert loadfile function."
+  nil
+  "unsigned long loadfile (const char * path, char ** buffer_ptr)
+{
+#define MAX_FILESIZE 1073741824 /* One gigabyte */
+
+    /* Handle variable. */
+    char* buffer;
+
+    FILE* file = fopen(path, \"rb\");
+    if (file == NULL)
+    {
+        perror(path);
+        return 0;
+    }
+
+    fseek(file, 0, SEEK_END);
+    long length = ftell(file);
+    /* fprintf (stdout, \"Note: file %s is %u bytes long.\\n\", path, length); */
+
+    if (length > MAX_FILESIZE)
+    {
+        fprintf (stderr, \"%s size %ld is bigger than %d bytes.\\n\", path, length, MAX_FILESIZE);
+        fclose(file);
+        return 0;
+    }
+
+    fseek(file, 0, SEEK_SET);
+    buffer = (char*)malloc(length + 1);
+    if (buffer == NULL)
+    {
+        perror(\"malloc\");
+        fclose(file);
+        return 0;
+    }
+
+
+    if(fread(buffer, 1, length, file) == 0)
+    {
+        fclose(file);
+        return 0;
+    }
+
+    buffer[length] = '\\0';
+    fclose(file);
+
+    *buffer_ptr = buffer;
+    return length;
+}")
 
 (define-skeleton cc-main
   "Insert main function with basic includes."
@@ -162,27 +255,21 @@ int main(int argc, char** argv)
 > "return 0;
 }" \n)
 
-(define-skeleton cc-include
-  "Insert system include."
-  "Header: "
-  \n "#include <" @ str ">" \n)
-
-(define-skeleton cc-include-local
-  "Insert local include."
-  "Header: "
-  \n "#include \"" @ str "\"" \n)
-
-(define-skeleton cc-if
-  "Insert an if statement."
-  "Condition: "
-  > "if (" @ str ") {" \n
-  > @ _ \n
-  ("Other condition, %s: "
-   "} else if (" > @ str ") {" \n
-   @ \n)
-  "} else {" > \n
-  @ \n
-  resume:
-  "}" > \n)
+(define-skeleton cc-printf
+  "fprintf/printf snippet.
+If no file descriptor is provided, switch do printf.  The format
+string is properly parsed (%% are not taken into account).\n
+Requires `count-percents'."
+  nil
+  (require 'functions)
+  '(setq v1 (skeleton-read "File desc: " "stderr"))
+  (if (string= v1 "") "printf (" (concat "fprintf (" v1 ", "))
+  "\"" (setq v1 (skeleton-read "Format string: " "%s\\n")) "\""
+  '(setq v2 (count-percents v1))
+  '(setq v1 0)
+  '(while (< v1 v2)
+     (setq v1 (1+ v1))
+     (skeleton-insert '(nil (concat ", " (skeleton-read "Value: ")))))
+  @ ");")
 
 (provide 'mode-cc)
