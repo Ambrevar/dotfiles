@@ -359,24 +359,23 @@ Hook function for skeletons."
     (set-marker (pop skeleton-markers) nil))
   (setq skeleton-markers
         (mapcar 'copy-marker (reverse skeleton-positions))))
-;; TODO: skeleton move reverse does not work properly.
 
 (defun skeleton-next-position (&optional reverse)
   "Skeleton movements through placeholders."
   (interactive "P")
   (let ((positions (mapcar 'marker-position skeleton-markers))
-        (comp (if reverse '> '<))
-        pos)
+        (comp (if reverse '< '<=))
+        pos prev)
     (when positions
-      (if (catch 'break
-            (while (setq pos (pop positions))
-              (when (funcall comp (point) pos)
-                (throw 'break t))))
-          (goto-char pos)
-        (goto-char (marker-position
-                    (if reverse
-                        (car (last skeleton-markers))
-                      (car skeleton-markers))))))))
+      (setq pos (pop positions))
+      (while (and pos (funcall comp pos (point)))
+        (setq prev pos)
+        (setq pos (pop positions)))
+      (cond
+       ((and reverse prev) (goto-char prev))
+       (reverse (goto-char (car (last skeleton-markers))))
+       (pos (goto-char pos))
+       (t (goto-char (car skeleton-markers)))))))
 
 ;; Do not expand abbrevs in skeletons. Not sure it is useful.
 ;; (setq skeleton-further-elements '((abbrev-mode nil)))
