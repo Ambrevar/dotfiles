@@ -90,6 +90,23 @@ there's a region, all lines that region covers will be duplicated."
       (goto-char (+ origin (* (length region) arg) arg)))))
 (define-key my-keys-minor-mode-map (kbd "C-x M-d") 'duplicate)
 
+(defun escape-region (&optional regex to-string)
+  "Escape double-quotes and backslashes.
+You can control the regex replacement with the two optional
+parameters."
+  (interactive)
+  (unless regex (setq regex "\\([\"\\\\]\\)"))
+  (unless to-string (setq to-string "\\\\\\1"))
+  (save-excursion
+    (while (re-search-forward
+            regex
+            (if (not mark-active)
+                (point-max)
+              (when (> (point) (mark)) (exchange-point-and-mark))
+              (mark))
+            t)
+      (replace-match to-string))))
+
 (defun eval-and-replace ()
   "Replace the last sexp with its value."
   (interactive)
