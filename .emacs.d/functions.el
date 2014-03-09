@@ -210,7 +210,6 @@ fallback to the mode provided in symbol DEFAULT."
                           (warn "Could not load %s, fallback to %s"
                                 (symbol-name ',feature) (symbol-name ',default))))))))))
 
-;; TODO: try defadvice.
 (defun mark-word-from-beginning (&optional arg allow-extend)
   "Set the point at the beginning of the word and call `mark-word'."
   (interactive "P\np")

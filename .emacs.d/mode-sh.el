@@ -2,15 +2,15 @@
 ;; Shell
 ;;==============================================================================
 
-;; TODO: set sh-shell-file per buffer?
-
 ;; Allow comment indentation.
 (setq sh-indent-comment t)
 
 (add-hook-and-eval
  'sh-mode-hook
  (lambda ()
-   (set (make-local-variable 'compile-command) (concat sh-shell-file " " buffer-file-name))) )
+   (set (make-local-variable 'defun-prompt-regexp)
+        (concat "^\\(function[ \t]\\|[[:alnum:]_]+[ \t]+()[ \t]+\\)"))
+   (set (make-local-variable 'compile-command) (concat (symbol-name sh-shell) " " buffer-file-name))) )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
