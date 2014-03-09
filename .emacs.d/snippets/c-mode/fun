@@ -1,7 +1,0 @@
-#name : type fun (args) { ... }
-# --
-static ${1:void}
-${2:name} (${3:void})
-{
-    $0
-}

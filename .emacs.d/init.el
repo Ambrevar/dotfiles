@@ -42,7 +42,6 @@ Example: to assign some-function to C-i, use
 (require 'main nil t)
 (require 'theme nil t)
 (require 'personal nil t)
-;; (load "snippets" nil t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Vanilla modes

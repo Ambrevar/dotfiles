@@ -1,6 +1,0 @@
-# name: for i do done
-# key: for
-# --
-for i $1; do
-    $0
-done
