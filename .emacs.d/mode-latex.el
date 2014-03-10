@@ -57,15 +57,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Skeletons
 
-(define-skeleton latex-emph "Insert emph command." nil "\\emph{" _ "}")
-(define-skeleton latex-slanted "Insert textsl command." nil "\\textsl{" _ "}")
+(define-skeleton latex-emph "Insert emph command." nil "\\emph{" @ _ "}" @)
+(define-skeleton latex-slanted "Insert textsl command." nil "\\textsl{" @ _ "}" @)
 
-(define-skeleton latex-paragraph "Insert paragraph command." nil "\\paragraph{" _ "}" \n)
-(define-skeleton latex-subparagraph "Insert subparagraph command." nil "\\subparagraph{" _ "}" \n)
+(define-skeleton latex-paragraph "Insert paragraph command." nil "\\paragraph{" @ _ "}" \n)
+(define-skeleton latex-subparagraph "Insert subparagraph command." nil "\\subparagraph{" @ _ "}" \n)
 
-(define-skeleton latex-section "Insert section command." nil "\\section{" _ "}" \n)
-(define-skeleton latex-subsection "Insert section command." nil "\\subsection{" _ "}" \n)
-(define-skeleton latex-subsubsection "Insert section command." nil "\\subsubsection{" _ "}" \n)
+(define-skeleton latex-section "Insert section command." nil "\\section{" @ _ "}" \n)
+(define-skeleton latex-subsection "Insert section command." nil "\\subsection{" @ _ "}" \n)
+(define-skeleton latex-subsubsection "Insert section command." nil "\\subsubsection{" @ _ "}" \n)
 
 (define-skeleton latex-article
   "Insert article template."

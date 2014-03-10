@@ -88,7 +88,7 @@ but there is no warranty."
   (interactive)
   (require 'tool-pdf)
   (hack-local-variables)
-  (let ((local-master (if (not masterfile) buffer-file-name masterfile)))
+  (let ((local-master (if masterfile masterfile buffer-file-name)))
     (pdf-compress local-master)))
 
 (defun tex-pdf-view ()
@@ -96,7 +96,7 @@ but there is no warranty."
   (interactive)
   (require 'tool-pdf)
   (hack-local-variables)
-  (let ((local-master (if (not masterfile) buffer-file-name masterfile)))
+  (let ((local-master (if masterfile masterfile buffer-file-name)))
     (pdf-view local-master)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -119,5 +119,33 @@ but there is no warranty."
    (local-set-key (kbd "<f9>") 'tex-pdf-view)
    (setq tex-command "pdftex")
    (tex-set-compiler)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Skeletons
+
+(define-skeleton tex-array
+  "Insert skel."
+  "Format: "
+  "$$\\begin{array}{" @ str "}" \n
+  _ \n
+  "\\end{array}$$" > \n)
+
+(define-skeleton tex-bf "Insert skel." nil "{\\bf{" @ _ "}" @)
+(define-skeleton tex-binom "Insert skel." nil "\\binom{" @ _ "}{" @ _ "}" @)
+(define-skeleton tex-coprod "Insert skel." nil "\\coprod_{" @ _ "}^{" @ _ "}" @)
+(define-skeleton tex-em "Insert skel." nil "{\\em{" @ _ "}" @)
+(define-skeleton tex-footnote "Insert skel." nil "\\footnote{" @ _ "}" @)
+(define-skeleton tex-href "Insert skel." "Desc: " "\\href{" @ _ "}{" @ str "}" @)
+(define-skeleton tex-it "Insert skel." nil "{\\it{" @ _ "}" @)
+
+(define-skeleton tex-main "Insert skel." nil
+  "\\input eplain" \n
+  @ > _ \n
+    "\\bye" > @)
+
+(define-skeleton tex-prod "Insert skel." nil "\\prod_{" @ _ "}^{" @ _ "}" @)
+(define-skeleton tex-sum "Insert skel." nil "\\sum_{" @ _ "}^{" @ _ "}" @)
+(define-skeleton tex-tt "Insert skel." nil "{\\tt{" @ _ "}" @)
+(define-skeleton tex-url "Insert skel." nil "\\url{" @ _ "}" @)
 
 (provide 'mode-tex)
