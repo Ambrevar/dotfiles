@@ -100,14 +100,21 @@
 %% Properties
 
 \\title{" @ (skeleton-read "Title: " "Title") "}
-\\author{" @ (skeleton-read "Autho: " "P.~\\textsc{Neidhardt}") "}
+\\author{" @ (skeleton-read "Author: " "P.~\\textsc{Neidhardt}") "}
 
 \\makeatletter
 \\let\\thetitle\\@title
 \\let\\theauthor\\@author
 \\let\\thedate\\@date
-\\makeatother" \n\n
+\\makeatother" \n
 
+'(setq latex-setup-list '(latex-preamble-aliases latex-preamble-formatting latex-preamble-tables latex-preamble-graphics latex-preamble-listing))
+'(while (and latex-setup-list
+             (= (read-key (concat "Insert " (symbol-name (car latex-setup-list)) "? (y)")) ?y))
+   (newline-and-indent)
+   (funcall (pop latex-setup-list))
+   (newline-and-indent))
+\n
 "%%=============================================================================
 %% Babel (load last before 'hyperref')
 \\usepackage[french,ngerman,english]{babel}
