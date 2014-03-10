@@ -102,7 +102,7 @@ Example: to assign some-function to C-i, use
 (add-hook 'markdown-mode-hook (lambda () (set (make-local-variable 'paragraph-start) "
 ")))
 
-(load-external "\\.wiki\\'" 'mediawiki-mode)
+(load-external "\\.wiki\\'" 'mediawiki 'mediawiki-mode)
 (add-hook 'mediawiki-mode-hook (lambda () (require 'mode-mediawiki)))
 
 ;; .po support. This mode has no hooks.
