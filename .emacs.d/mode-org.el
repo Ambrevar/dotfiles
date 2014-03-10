@@ -9,13 +9,14 @@
 ;; Set PDF association in Org-mode (was Evince by default).
 (eval-after-load "org"
   '(progn
+     (require 'tool-pdf)
      ;; Change .pdf association directly within the alist
-     (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura --fork %s")))
+     (setcdr (assoc "\\.pdf\\'" org-file-apps)
+             (concat pdf-viewer " " (mapconcat 'identity pdf-viewer-args " ")))))
 
 (add-hook
  'org-mode-hook
  (lambda ()
-   (auto-fill-mode -1)
-   ))
+   (auto-fill-mode -1)))
 
 (provide 'mode-org)
