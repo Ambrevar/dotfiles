@@ -90,9 +90,7 @@ Example: to assign some-function to C-i, use
 
 (load-external "\\.go\\'" 'go-mode)
 
-;; Note that graphviz-mode has no 'provide'.
-(autoload 'graphviz-dot-mode "graphviz-dot-mode" "Dot mode." t)
-(add-to-list 'auto-mode-alist '("\\.dot\\'" . graphviz-dot-mode))
+(load-external "\\.dot\\'" 'graphviz-dot-mode)
 (add-hook 'graphviz-dot-mode-hook (lambda () (require 'mode-dot)))
 
 (load-external "\\.lua\\'" 'lua-mode nil 'sh-mode)
@@ -136,7 +134,7 @@ Example: to assign some-function to C-i, use
   (define-key my-keys-minor-mode-map (kbd "C-x M-l") 'mc/mark-all-like-this-dwim))
 
 (when (require 'xclip nil t)
-  (turn-on-xclip))
+  (xclip-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We need to put it at the end to make sure it doesn't get overriden by other
