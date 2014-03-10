@@ -4,7 +4,7 @@
 (require 'mode-tex)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Macros
+;; Functions
 
 (defun latex-itemize ()
   "Prepend \\item to the beginning of the line if not already
@@ -39,6 +39,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LaTeX setup
 
+(setq latex-block-default "itemize")
+(setq latex-standard-block-names '("description" "listing" "quote" "verbatim"))
+
 (add-hook-and-eval
  'latex-mode-hook
  (lambda ()
@@ -46,34 +49,99 @@
          '("aux" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy"))
    (set (make-local-variable 'tex-command) "pdflatex")
    (tex-set-compiler)
-   (local-set-key (kbd "M-RET") 'latex-itemize)
    (local-set-key (kbd "C-c C-a") 'latex-article)
+   (local-set-key (kbd "C-c C-c") 'latex-smallcaps)
    (local-set-key (kbd "C-c C-e") 'latex-emph)
-   (local-set-key (kbd "C-c C-s") 'latex-section)
-   (local-set-key (kbd "C-c C-p") 'latex-paragraph)
    (local-set-key (kbd "C-c C-l") 'latex-slanted)
-   (local-set-key (kbd "C-c l") 'latex-listing)
+   (local-set-key (kbd "C-c C-p") 'latex-paragraph)
+   (local-set-key (kbd "C-c C-s") 'latex-section)
+   (local-set-key (kbd "C-c C-u") 'latex-superscript)
+   (local-set-key (kbd "C-c L") 'latex-listing)
+   (local-set-key (kbd "C-c l") 'latex-lstinline)
+   (local-set-key (kbd "C-c u") 'latex-superscript)
+   (local-set-key (kbd "M-RET") 'latex-itemize)
    (turn-on-orgtbl)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Skeletons
 
-(define-skeleton latex-emph "Insert emph command." nil "\\emph{" @ _ "}" @)
-(define-skeleton latex-slanted "Insert textsl command." nil "\\textsl{" @ _ "}" @)
+(define-skeleton latex-emph "Insert emph." nil "\\emph{" @ _ "}" @)
+(define-skeleton latex-slanted "Insert slanted text." nil "\\textsl{" @ _ "}" @)
+(define-skeleton latex-smallcaps "Insert smallcaps text." nil "\\textsc{" @ _ "}" @)
+(define-skeleton latex-superscript "Insert supercript text." nil "\\textsuperscript{" @ _ "}" @)
+
+(define-skeleton latex-package "Use package." "Package: " \n "\\usepackage[" @ "]{" @ _ "}" \n @)
 
 (define-skeleton latex-paragraph "Insert paragraph command." nil "\\paragraph{" @ _ "}" \n)
 (define-skeleton latex-subparagraph "Insert subparagraph command." nil "\\subparagraph{" @ _ "}" \n)
 
+;; TODO: use argument to change level and starred version.
 (define-skeleton latex-section "Insert section command." nil "\\section{" @ _ "}" \n)
 (define-skeleton latex-subsection "Insert section command." nil "\\subsection{" @ _ "}" \n)
 (define-skeleton latex-subsubsection "Insert section command." nil "\\subsubsection{" @ _ "}" \n)
 
+;; TODO: use block option to tell `latex-insert-block not to indent.
 (define-skeleton latex-listing
-  "Insert skel."
+  "Insert listing.
+This skel is different from `latex-insert-block' in the way that
+  the content is not indented."
   nil
-  "\\begin{lstlisting}" \n
+  "\\begin{lstlisting}\n"
   @ _ \n
   "\\end{lstlisting}" > \n @)
+
+;; If tabular, center.
+;; '(tabular, align, "pmatrix" "bmatrix" "Bmatrix" "vmatrix" "Vmatrix" "smallmatrix"))}}
+(define-skeleton latex-matrix
+  "Insert matrix/align."
+  nil
+  > "\\begin{"
+  '(setq str (skeleton-read "Type: " "align"))
+  str "}{" (skeleton-read "Format: " "ll") "}" \n
+  ;; TODO: count number of letter in format and add number of & accodingly.
+  @ _ "\\" \n
+  "\\end{" str "}" > \n @)
+
+(define-skeleton latex-orgtbl
+  "Insert skel.
+TODO: orgtbl broken?
+TODO: implement orgtbl directly with latex tables and remove this
+skel."
+  "Table name: "
+  > "\\begin{center}" \n
+  "% BEGIN RECEIVE ORGTBL " str \n
+  "% END RECEIVE ORGTBL " str \n
+  "\\end{center}" > \n
+  "\\begin{comment}" \n
+  "#+ORGTBL: SEND " str " orgtbl-to-latex" \n
+  "| " @ _ " |" \n
+  "%$" \n
+  "\\end{comment}" > \n @)
+
+(define-skeleton latex-minipage
+  "Insert skel."
+  "Width: "
+  > "\\begin{minipage}{" str "}" \n
+  @ _ \n
+  "\\end{minipage}" > \n @)
+
+(define-skeleton latex-parbox
+  "Insert skel."
+  "Width: "
+  > "\\parbox{" str "}{" \n
+  @ _ \n
+  "}" > \n @)
+
+(define-skeleton latex-lstinline
+  "Insert inline listing." nil
+  "\\lstinline @" @ _ "@" @)
+
+(define-skeleton latex-graphics
+  "Insert centered picture."
+  nil
+  > "\\begin{center}" \n
+  "\\includegraphics[width=" @ (skeleton-read "Width: " "\\linewidth") "]{" @ _ "}" \n
+  "\\end{center}" > \n @)
 
 (define-skeleton latex-article
   "Insert article template."
