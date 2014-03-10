@@ -87,6 +87,7 @@ restored."
       (local-set-key (kbd "C-c C-i") 'cc-if)
       (local-set-key (kbd "C-c i") 'cc-include)
       (local-set-key (kbd "C-c I") 'cc-include-local)
+      (local-set-key (kbd "C-c (") 'cc-function)
       ;; (local-set-key "." 'semantic-complete-self-insert) ; This is a bit slow.
       ;; (local-set-key ">" 'semantic-complete-self-insert)
       (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1))))))
@@ -261,7 +262,7 @@ If no file descriptor is provided, switch do printf.  The format
 string is properly parsed (%% are not taken into account).\n
 Requires `count-percents'."
   nil
-  (require 'functions)
+  '(require 'functions)
   '(setq v1 (skeleton-read "File desc: " "stderr"))
   (if (string= v1 "") "printf (" (concat "fprintf (" v1 ", "))
   "\"" (setq v1 (skeleton-read "Format string: " "%s\\n")) "\""

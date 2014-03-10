@@ -47,6 +47,7 @@ Example: to assign some-function to C-i, use
 ;; Vanilla modes
 
 ;; Major modes
+(add-hook 'awk-mode-hook     (lambda () (require 'mode-awk)))
 (add-hook 'c++-mode-hook     (lambda () (require 'mode-cc)))
 (add-hook 'c-mode-hook       (lambda () (require 'mode-cc)))
 (add-hook 'latex-mode-hook   (lambda () (require 'mode-latex)))
