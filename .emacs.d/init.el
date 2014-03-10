@@ -57,16 +57,6 @@ Example: to assign some-function to C-i, use
 (add-hook 'tex-mode-hook     (lambda () (require 'mode-tex)))
 (add-hook 'texinfo-mode-hook (lambda () (require 'mode-texinfo)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Major modes pre-loading config.
-
-;; sh-shell-file is initialized to the environment variable SHELL when sh-mode
-;; is started with file without extension nor shabang. Since this the hook is
-;; executed afterward, changing sh-shell-file in it will not alter the first
-;; opened file.
-(setq sh-shell-file "/bin/sh")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Minor modes
 (add-hook 'dired-mode-hook  (lambda () (require 'mode-dired)))
 (add-hook 'ediff-mode-hook  (lambda () (require 'mode-ediff)))

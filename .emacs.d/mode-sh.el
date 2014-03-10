@@ -2,15 +2,55 @@
 ;; Shell
 ;;==============================================================================
 
-;; Allow comment indentation.
 (setq sh-indent-comment t)
+(setq-default sh-shell-file "/bin/sh")
+;; (setq-default sh-shell 'sh)
+
+(defun sh-set-interpreter ()
+  "Set shell interpreter.
+Set `sh-shell', `sh-shell-file' and `compile-command' according to the following rules:
+- Look at shabang.
+- If file has no name, use default value of sh-shell-file.
+- Check extension or file name.
+- If none of the above yields a result, use default value of
+  sh-shell-file.
+The advantages of this function over the vanilla code are:
+- You can change default value of sh-shell-file in sh-mode-hook
+  and it will be used subsequently.
+- Zsh is supported
+- compile-command is set.
+- Once sh-shell is set, sh-shell-file is changed accordingly. In
+  default Emacs, sh-shell-file is always the same."
+  (interactive)
+  (setq-local sh-shell-file sh-shell-file) ; Useful only the first time this hook is loaded.
+  (sh-set-shell
+   (cond ((save-excursion
+            (goto-char (point-min))
+            (looking-at "#![ \t]?\\([^ \t\n]*/bin/env[ \t]\\)?\\([^ \t\n]+\\)"))
+          (match-string 2))
+         ((not buffer-file-name) sh-shell-file)
+         ;; Checks that use `buffer-file-name' follow.
+         ((string-match "\\.m?spec\\'" buffer-file-name) "rpm")
+         ((string-match "[.]bash\\>"   buffer-file-name) "bash")
+         ((string-match "[.]csh\\>"    buffer-file-name) "csh")
+         ((string-match "[.]ksh\\>"    buffer-file-name) "ksh")
+         ((string-match "[.]sh\\>"     buffer-file-name) "sh")
+         ((string-match "[.]zsh\\>"    buffer-file-name) "zsh")
+         ((equal (file-name-nondirectory buffer-file-name) ".profile") "sh")
+         (t sh-shell-file))
+   nil nil)
+  ;; Universal version.
+  ; (setq sh-shell-file (executable-find (symbol-name sh-shell)))
+  ;; Convenient version.
+  (setq sh-shell-file (concat "/bin/" (symbol-name sh-shell)))
+  (set (make-local-variable 'compile-command) (concat sh-shell-file " " buffer-file-name)))
 
 (add-hook-and-eval
  'sh-mode-hook
  (lambda ()
    (set (make-local-variable 'defun-prompt-regexp)
         (concat "^\\(function[ \t]\\|[[:alnum:]_]+[ \t]+()[ \t]+\\)"))
-   (set (make-local-variable 'compile-command) (concat (symbol-name sh-shell) " " buffer-file-name))) )
+   (sh-set-interpreter)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
