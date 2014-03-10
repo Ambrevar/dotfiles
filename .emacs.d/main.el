@@ -19,6 +19,9 @@
 ;; allows to save places at a strategic moment.
 (add-hook 'before-save-hook 'save-place-kill-emacs-hook)
 
+;; url-cookie
+(setq url-cookie-file (concat emacs-cache-folder "url.cookies"))
+
 ;; Bookmark file to cache folder.
 (setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
 
