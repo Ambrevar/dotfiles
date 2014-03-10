@@ -52,6 +52,7 @@
    (local-set-key (kbd "C-c C-s") 'latex-section)
    (local-set-key (kbd "C-c C-p") 'latex-paragraph)
    (local-set-key (kbd "C-c C-l") 'latex-slanted)
+   (local-set-key (kbd "C-c l") 'latex-listing)
    (turn-on-orgtbl)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -66,6 +67,13 @@
 (define-skeleton latex-section "Insert section command." nil "\\section{" @ _ "}" \n)
 (define-skeleton latex-subsection "Insert section command." nil "\\subsection{" @ _ "}" \n)
 (define-skeleton latex-subsubsection "Insert section command." nil "\\subsubsection{" @ _ "}" \n)
+
+(define-skeleton latex-listing
+  "Insert skel."
+  nil
+  "\\begin{lstlisting}" \n
+  @ _ \n
+  "\\end{lstlisting}" > \n @)
 
 (define-skeleton latex-article
   "Insert article template."
@@ -216,6 +224,10 @@
 
 (define-skeleton latex-preamble-listing
   "Insert listing setup template."
+  ;; WARNING: we need to put a '-' at the very end so that the cursor will end
+  ;; there. Otherwise it will be placed at the beginning. This is due to some
+  ;; unicode or escape characters in the literate array, which `skeleton-insert'
+  ;; does not seem to parse correctly.
   nil
   > "%%=============================================================================
 %% Listings
@@ -256,7 +268,7 @@
 }
 
 \\newcommand{\\includecode}[2][custom]{
-  \\lstinputlisting[caption=#2, escapechar=, style=#1]{#2}}" \n)
+  \\lstinputlisting[caption=#2, escapechar=, style=#1]{#2}}" \n -)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The magnificent latex-math-preview mode!
