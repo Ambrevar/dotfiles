@@ -74,8 +74,6 @@
 \\documentclass[10pt,a4paper]{article}
 \\usepackage[utf8]{inputenc}
 \\usepackage[T1]{fontenc}
-\\usepackage{amsmath,amssymb,amsfonts}
-\\usepackage{geometry}
 \\usepackage{lmodern}
 \\usepackage{marvosym}
 \\usepackage{textcomp}
@@ -87,85 +85,31 @@
 \\DeclareUnicodeCharacter{A0}{~}
 \\DeclareUnicodeCharacter{B1}{\\pm}
 \\DeclareUnicodeCharacter{D7}{\\times}
+
+%%=============================================================================
+%% Packages
+
+\\usepackage{amsmath,amssymb,amsfonts}
+% \\usepackage{comment}
+\\usepackage{geometry}
+% \\usepackage{lipsum}
+% \\usepackage{needspace}
+\\usepackage{xspace}
+
 %%=============================================================================
 %% Properties
 
-\\title{Title}
-\\author{P.~\\textsc{Neidhardt}}
+\\title{" @ (skeleton-read "Title: " "Title") "}
+\\author{" @ (skeleton-read "Autho: " "P.~\\textsc{Neidhardt}") "}
 
 \\makeatletter
 \\let\\thetitle\\@title
 \\let\\theauthor\\@author
 \\let\\thedate\\@date
-\\makeatother
+\\makeatother" \n\n
 
-%%=============================================================================
-%% Aliases
-
-\\usepackage{xspace}
-
-\\let\\latexbak\\LaTeX
-\\renewcommand{\\LaTeX}{\\textrm{\\latexbak}\\xspace}
-
-\\let\\texbak\\TeX
-\\renewcommand{\\TeX}{\\textrm{\\texbak}\\xspace}
-
-\\def\\unix{\\textsc{Unix}\\xspace}
-\\def\\ie{\\textsl{i.e.}\\xspace}
-\\def\\eg{\\textsl{e.g.}\\xspace}
-
-%%=============================================================================
-%% Formatting
-
-% \\usepackage{parskip}
-% \\setlength{\\parindent}{15pt}
-
-% \\renewcommand{\\thefigure}{\\arabic{section}.\\arabic{figure}}
-\\renewcommand{\\arraystretch}{1.4}
-% \\renewcommand{\\familydefault}{\\sfdefault}
-
-%% Header
-% \\usepackage{fancyhdr}
-% \\setlength{\\headheight}{15.2pt}
-% \\pagestyle{fancy}
-% \\lhead{\\thetitle}
-% \\rhead{\\theauthor}
-
-%%==============================================================================
-%% Tables
-
-% \\usepackage{longtable}
-% \\usepackage{tabu}
-
-%%==============================================================================
-%% Graphics
-
-%% Load TikZ after xcolor.
-\\usepackage[svgnames]{xcolor}
-% \\usepackage{graphicx}
-% \\usepackage{tikz}
-
-% \\newcommand{\\fancybox}[1]{
-%   \\begin{tikzpicture}
-%     \\node[draw,rounded corners]{#1};
-%   \\end{tikzpicture}
-% }
-
-%%==============================================================================
-%% Misc.
-
-\\usepackage{comment}
-\\usepackage{needspace}
-
-% \\usepackage{calc}
-% \\usepackage{fp}
-% \\usepackage{lipsum}
-
-
-%%=============================================================================
-%% Babel
-
-%% Load last before 'hyperref'.
+"%%=============================================================================
+%% Babel (load last before 'hyperref')
 \\usepackage[french,ngerman,english]{babel}
 \\iflanguage{french}{
 }{
@@ -178,11 +122,8 @@
 }
 
 %%==============================================================================
-%% Hyperref
-
-%% Load last.
+%% Hyperref (load last)
 \\usepackage[]{hyperref}
-
 \\hypersetup{
   colorlinks=true,
   linkcolor=DarkRed,
@@ -198,14 +139,75 @@
 % \\thispagestyle{empty}
 % \\tableofcontents
 " \n
-> @ _ \n
-> "
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+> @ _ \n \n
+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \\end{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " \n)
 
-(define-skeleton latex-listing-setup
+(define-skeleton latex-preamble-aliases
+  "Insert setup template."
+  nil
+  > "%%=============================================================================
+%% Aliases
+
+\\let\\latexbak\\LaTeX
+\\renewcommand{\\LaTeX}{\\textrm{\\latexbak}\\xspace}
+
+\\let\\texbak\\TeX
+\\renewcommand{\\TeX}{\\textrm{\\texbak}\\xspace}
+
+\\def\\unix{\\textsc{Unix}\\xspace}
+\\def\\ie{\\textsl{i.e.}\\xspace}
+\\def\\eg{\\textsl{e.g.}\\xspace}" \n)
+
+(define-skeleton latex-preamble-formatting
+  "Insert setup template."
+  nil
+  > "%%=============================================================================
+%% Formatting
+
+% \\usepackage{parskip}
+% \\setlength{\\parindent}{15pt}
+
+% \\renewcommand{\\thefigure}{\\arabic{section}.\\arabic{figure}}
+\\renewcommand{\\arraystretch}{1.4}
+% \\renewcommand{\\familydefault}{\\sfdefault}
+
+%% Header
+% \\usepackage{fancyhdr}
+% \\setlength{\\headheight}{15.2pt}
+% \\pagestyle{fancy}
+% \\lhead{\\thetitle}
+% \\rhead{\\theauthor}" \n)
+
+(define-skeleton latex-preamble-tables
+  "Insert setup template."
+  nil
+  > "%%==============================================================================
+%% Tables
+
+\\usepackage{longtable}
+\\usepackage{tabu}" \n)
+
+(define-skeleton latex-preamble-graphics
+  "Insert setup template."
+  nil
+  > "%%==============================================================================
+%% Graphics
+
+%% Load TikZ after xcolor.
+\\usepackage[svgnames]{xcolor}
+\\usepackage{graphicx}
+\\usepackage{tikz}
+
+\\newcommand{\\fancybox}[1]{
+  \\begin{tikzpicture}
+    \\node[draw,rounded corners]{#1};
+  \\end{tikzpicture}
+}" \n)
+
+(define-skeleton latex-preamble-listing
   "Insert listing setup template."
   nil
   > "%%=============================================================================
@@ -280,4 +282,6 @@
    ;;              latex-math-preview-pifont-symbol-fonts-symbol-data)))
    ))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'mode-latex)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
