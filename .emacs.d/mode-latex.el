@@ -49,6 +49,8 @@
          '("aux" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy"))
    (set (make-local-variable 'tex-command) "pdflatex")
    (tex-set-compiler)
+   ;; For some unknown reasons, `skeleton-end-hook' is set to nil in tex-mode.
+   (add-hook 'skeleton-end-hook 'skeleton-make-markers)
    (local-set-key (kbd "C-c C-a") 'latex-article)
    (local-set-key (kbd "C-c C-c") 'latex-smallcaps)
    (local-set-key (kbd "C-c C-e") 'latex-emph)
@@ -90,16 +92,20 @@ This skel is different from `latex-insert-block' in the way that
   @ _ \n
   "\\end{lstlisting}" > \n @)
 
-;; If tabular, center.
-;; '(tabular, align, "pmatrix" "bmatrix" "Bmatrix" "vmatrix" "Vmatrix" "smallmatrix"))}}
+;; TODO: If tabular, center.
+;; TODO: complete with '(tabular, align, "pmatrix" "bmatrix" "Bmatrix" "vmatrix" "Vmatrix" "smallmatrix"))}}
 (define-skeleton latex-matrix
   "Insert matrix/align."
   nil
+  '(require 'functions)
   > "\\begin{"
   '(setq str (skeleton-read "Type: " "align"))
-  str "}{" (skeleton-read "Format: " "ll") "}" \n
-  ;; TODO: count number of letter in format and add number of & accodingly.
-  @ _ "\\" \n
+  str "}{"
+  '(setq str (skeleton-read "Format: " "ll"))
+  str "}" \n
+  '(setq v1 (count-occurences "[a-z]" str))
+  @ (mapconcat 'identity (split-string (make-string v1 ?&) "" t) " ") " \\\\" \n
+  @ _ "\\\\" \n
   "\\end{" str "}" > \n @)
 
 (define-skeleton latex-orgtbl
