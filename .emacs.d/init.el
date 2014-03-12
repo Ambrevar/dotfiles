@@ -124,6 +124,9 @@ Example: to assign some-function to C-i, use
   (define-key my-keys-minor-mode-map (kbd "C-x M-l") 'mc/mark-all-like-this-dwim))
 
 (when (require 'xclip nil t)
+  (unless (executable-find "xclip")
+    (when (executable-find "xsel")
+      (setq xclip-program "xsel")))
   (xclip-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
