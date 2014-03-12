@@ -131,5 +131,8 @@ Example: to assign some-function to C-i, use
 ;; minor modes.
 (my-keys-minor-mode 1)
 
+;; Local hook.
+(load "local" t t)
+
 ;; End of file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
