@@ -18,17 +18,13 @@
 ;; omit-mode needs to be start _after_ omit-files redefinition.
 (dired-omit-mode)
 
+(require 'tool-pdf) ; for `pdf-viewer'
 (setq dired-guess-shell-alist-user
       (list
        '("\\.ogg$" "mpv")
        '("\\.\\(jpe?g\\|png\\|git\\)$" "sxiv")
        '("\\.\\(mkv\\|mpe?g\\|avi\\|mp4\\|ogm\\)$" "mpv")
-       '("\\.pdf$" "zathura --fork")))
-
-;; TODO: set these together with mode-[la]tex.
-; `dired-tex-unclean-extensions'
-; `dired-texinfo-unclean-extensions'
-; `dired-latex-unclean-extensions'
+       '("\\.pdf$" (concat pdf-viewer " " (mapconcat 'identity pdf-viewer-args " ")))))
 
 (defvar dired-showing-humansize t "If dired is displaying humansize or not.")
 
