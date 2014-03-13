@@ -40,7 +40,12 @@
 ;; LaTeX setup
 
 (setq latex-block-default "itemize")
-(setq latex-block-names '("description" "listing" "quote" "verbatim"))
+(setq latex-block-names '("listing"))
+
+(mapcar
+ (lambda (latex-block)
+   (add-to-list 'latex-block-body-alist `(,latex-block nil '(delete-horizontal-space t) _)))
+ '("listing" "verbatim" "verbatim*"))
 
 (add-hook-and-eval
  'latex-mode-hook
@@ -80,16 +85,6 @@
 (define-skeleton latex-section "Insert section command." nil "\\section{" @ _ "}" \n)
 (define-skeleton latex-subsection "Insert section command." nil "\\subsection{" @ _ "}" \n)
 (define-skeleton latex-subsubsection "Insert section command." nil "\\subsubsection{" @ _ "}" \n)
-
-;; TODO: use block option to tell `latex-insert-block not to indent.
-(define-skeleton latex-listing
-  "Insert listing.
-This skel is different from `latex-insert-block' in the way that
-  the content is not indented."
-  nil
-  "\\begin{lstlisting}\n"
-  @ _ \n
-  "\\end{lstlisting}" > \n @)
 
 ;; TODO: If tabular, center.
 ;; TODO: complete with '(tabular, align, "pmatrix" "bmatrix" "Bmatrix" "vmatrix" "Vmatrix" "smallmatrix"))}}
