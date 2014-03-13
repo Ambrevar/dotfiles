@@ -3,7 +3,8 @@
 ;;==============================================================================
 
 (setq sh-indent-comment t)
-(setq-default sh-shell-file "/bin/sh")
+(setq-local sh-shell-file "/bin/sh") ; Useful for the first time this hook is loaded.
+(setq-default sh-shell-file sh-shell-file)
 ;; (setq-default sh-shell 'sh)
 
 (defun sh-set-interpreter ()
@@ -22,7 +23,6 @@ The advantages of this function over the vanilla code are:
 - Once sh-shell is set, sh-shell-file is changed accordingly. In
   default Emacs, sh-shell-file is always the same."
   (interactive)
-  (setq-local sh-shell-file sh-shell-file) ; Useful only the first time this hook is loaded.
   (sh-set-shell
    (cond ((save-excursion
             (goto-char (point-min))
