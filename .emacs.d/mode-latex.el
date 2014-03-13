@@ -59,10 +59,8 @@
    (local-set-key (kbd "C-c C-c") 'latex-smallcaps)
    (local-set-key (kbd "C-c C-e") 'latex-emph)
    (local-set-key (kbd "C-c C-l") 'latex-slanted)
-   (local-set-key (kbd "C-c C-p") 'latex-paragraph)
-   (local-set-key (kbd "C-c C-s") 'latex-section)
+   (local-set-key (kbd "C-c C-s") 'latex-insert-section)
    (local-set-key (kbd "C-c C-u") 'latex-superscript)
-   (local-set-key (kbd "C-c L") 'latex-listing)
    (local-set-key (kbd "C-c l") 'latex-lstinline)
    (local-set-key (kbd "C-c u") 'latex-superscript)
    (local-set-key (kbd "M-RET") 'latex-itemize)
@@ -75,16 +73,27 @@
 (define-skeleton latex-slanted "Insert slanted text." nil "\\textsl{" @ _ "}" @)
 (define-skeleton latex-smallcaps "Insert smallcaps text." nil "\\textsc{" @ _ "}" @)
 (define-skeleton latex-superscript "Insert supercript text." nil "\\textsuperscript{" @ _ "}" @)
-
 (define-skeleton latex-package "Use package." "Package: " \n "\\usepackage[" @ "]{" @ _ "}" \n @)
 
-(define-skeleton latex-paragraph "Insert paragraph command." nil "\\paragraph{" @ _ "}" \n)
-(define-skeleton latex-subparagraph "Insert subparagraph command." nil "\\subparagraph{" @ _ "}" \n)
+(defvar latex-section-default "section")
+(defvar latex-section-names
+  '("part" "part*" "chapter" "chapter*" "section*" "subsection" "subsection*"
+    "subsubsection" "subsubsection*" "paragraph" "paragraph*" "subparagraph" "subparagraph*")
+  "Standard LaTeX section names.")
 
-;; TODO: use argument to change level and starred version.
-(define-skeleton latex-section "Insert section command." nil "\\section{" @ _ "}" \n)
-(define-skeleton latex-subsection "Insert section command." nil "\\subsection{" @ _ "}" \n)
-(define-skeleton latex-subsubsection "Insert section command." nil "\\subsubsection{" @ _ "}" \n)
+(define-skeleton latex-insert-section
+  "Create a matching pair of lines \\begin{NAME} and \\end{NAME} at point.
+Puts point on a blank line between them."
+  (let ((choice (completing-read (format "LaTeX section name [%s]: "
+                                         latex-section-default)
+                                 latex-section-names
+                                 nil nil nil nil latex-section-default)))
+    (setq latex-section-default choice)
+    (unless (member choice latex-section-names)
+      ;; Remember new block names for later completion.
+      (push choice latex-section-names))
+    choice)
+  \n "\\" str "{" @ _ "}" @)
 
 ;; TODO: If tabular, center.
 ;; TODO: complete with '(tabular, align, "pmatrix" "bmatrix" "Bmatrix" "vmatrix" "Vmatrix" "smallmatrix"))}}
