@@ -25,7 +25,7 @@
  'python-mode-hook
  (lambda ()
    (set (make-local-variable 'compilation-scroll-output) t)
-   (python-set-interpreter)))
+   (add-hook 'compilation-before-hook 'python-set-interpreter)))
 
 ;; Doc lookup. Requires the python.info file to be installed. See
 ;; https://bitbucket.org/jonwaltman/pydoc-info/.

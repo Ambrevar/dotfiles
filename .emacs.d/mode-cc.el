@@ -18,22 +18,23 @@
 The Makefile is looked up in parent folders. If no Makefile is
 found, then a configurable command line is provided.\n
 Requires `get-closest-pathname'."
-  (require 'functions)
   (interactive)
+  (require 'functions)
+  (hack-local-variables)
   (let ((makefile (get-closest-pathname)))
     (if makefile
         (set (make-local-variable 'compile-command) (format "make -k -f %s" makefile))
       (set (make-local-variable 'compile-command)
            (let
-               ((is-cpp (eq major-mode 'c++-mode))
+               ((cppp (eq major-mode 'c++-mode))
                 (file (file-name-nondirectory buffer-file-name)))
              (format "%s %s -o %s %s %s %s"
-                     (if is-cpp
+                     (if cppp
                          (or (getenv "CXX") "g++")
                        (or (getenv "CC") "gcc"))
                      file
                      (file-name-sans-extension file)
-                     (if is-cpp
+                     (if cppp
                          (or (getenv "CPPFLAGS") "-Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0")
                        (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0"))
                      (or (getenv "LDFLAGS") cc-ldflags)
@@ -79,7 +80,7 @@ restored."
     mode-hook
     (lambda ()
       (c-set-style "peter")
-      (cc-set-compiler)
+      (add-hook 'compilation-before-hook 'cc-set-compiler)
       (local-set-key (kbd "<f9>") 'cc-clean)
       (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
       (local-set-key (kbd "C-c C-f") 'cc-fori)

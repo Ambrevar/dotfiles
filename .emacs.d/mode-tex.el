@@ -36,29 +36,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FUNCTIONS
 (defun tex-set-compiler ()
-  "Set `compile-command' for TeX-based document.
-Use a prefix argument to append the '-shell-escape' option to the
-compile options. This will enable the use of '\write18{<external
-command>}' from within TeX documents, which need to allow
-external application to be called from TeX.
-
-This may be useful for some features like GnuPlot support with TikZ.
-
-WARNING: the -shell-escape option is a potential security issue."
-  (interactive)
+  "Set `compile-command' for TeX-based document."
   (hack-local-variables)
   (let (;; Master file.
         (local-master
-         (if masterfile masterfile buffer-file-name))
-
-        ;; Support of prefix argument to toggle -shell-escape.
-        (local-shell-escape
-         (if (equal current-prefix-arg '(4)) "-shell-escape" "")))
-
+         (if masterfile masterfile (if buffer-file-name buffer-file-name (error "Buffer has no file name")))))
     (set (make-local-variable 'compile-command)
          (concat tex-command
                  " " tex-start-options
-                 " " local-shell-escape
                  " " tex-start-commands
                  " " (shell-quote-argument local-master)))))
 
@@ -118,7 +103,7 @@ but there is no warranty."
    ;; (set (make-local-variable 'use-hard-newlines) t)
    (local-set-key (kbd "<f9>") 'tex-pdf-view)
    (setq tex-command "pdftex")
-   (tex-set-compiler)))
+   (add-hook 'compilation-before-hook 'tex-set-compiler)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Skeletons

@@ -40,7 +40,7 @@
 ;; LaTeX setup
 
 (setq latex-block-default "itemize")
-(setq latex-standard-block-names '("description" "listing" "quote" "verbatim"))
+(setq latex-block-names '("description" "listing" "quote" "verbatim"))
 
 (add-hook-and-eval
  'latex-mode-hook
@@ -48,7 +48,6 @@
    (set (make-local-variable 'tex-extension-list)
          '("aux" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy"))
    (set (make-local-variable 'tex-command) "pdflatex")
-   (tex-set-compiler)
    ;; For some unknown reasons, `skeleton-end-hook' is set to nil in tex-mode.
    (add-hook 'skeleton-end-hook 'skeleton-make-markers)
    (local-set-key (kbd "C-c C-a") 'latex-article)

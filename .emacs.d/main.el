@@ -241,16 +241,39 @@
    (speedbar-toggle-updates)))
 
 ;; Compilation bindings and conveniences.
-(setq compilation-hide-window nil)
-(define-key my-keys-minor-mode-map (kbd "<f10>")
-  (lambda () (interactive)
-    (save-buffer)
-    (compile compile-command)
-    (when compilation-hide-window
-      (sit-for 2)
-      (delete-windows-on "*compilation*"))))
+(defvar compilation-time-before-hide-window nil
+  "Hide compilation window after the specified seconds.
+If nil, do not hide.")
+(defcustom compilation-before-hook nil
+  "List of hook functions run by `compile-custom'."
+  :type 'hook
+  :group 'compilation)
+(defcustom compilation-after-hook nil
+  "List of hook functions run by `compile-custom'."
+  :type 'hook
+  :group 'compilation)
+
+(setq compilation-ask-about-save nil)
+(autoload 'recompile "compile" nil t)
+
+(define-key my-keys-minor-mode-map (kbd "<f10>") 'compile-custom)
 (define-key my-keys-minor-mode-map (kbd "<f11>") 'previous-error)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
+
+(defun compile-custom ()
+  "Run hooks in `compilation-before-hook', then `recompile', then `compilation-after-hook'."
+  (interactive)
+  (run-hooks 'compilation-before-hook)
+  (recompile)
+  (run-hooks 'compilation-after-hook))
+
+(add-hook
+ 'compilation-after-hook
+ (lambda ()
+   (when compilation-time-before-hide-window
+     (sit-for compilation-time-before-hide-window)
+     (delete-windows-on "*compilation*"))))
+
 ;; Code browsing: make C-M-e jump to next function instead of the end of the current function.
 (define-key my-keys-minor-mode-map (kbd "C-M-e") (lambda () (interactive) (beginning-of-defun -1)))
 
