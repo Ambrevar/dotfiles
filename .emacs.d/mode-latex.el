@@ -55,14 +55,16 @@
    (set (make-local-variable 'tex-command) "pdflatex")
    ;; For some unknown reasons, `skeleton-end-hook' is set to nil in tex-mode.
    (add-hook 'skeleton-end-hook 'skeleton-make-markers)
-   (local-set-key (kbd "C-c C-a") 'latex-article)
+   (local-set-key (kbd "C-c a") 'latex-article)
+   (local-set-key (kbd "C-c C-a") 'latex-insert-table)
    (local-set-key (kbd "C-c C-c") 'latex-smallcaps)
    (local-set-key (kbd "C-c C-e") 'latex-emph)
    (local-set-key (kbd "C-c C-l") 'latex-slanted)
+   (local-set-key (kbd "C-c C-o") 'latex-orgtbl)
    (local-set-key (kbd "C-c C-s") 'latex-insert-section)
    (local-set-key (kbd "C-c C-u") 'latex-superscript)
    (local-set-key (kbd "C-c l") 'latex-lstinline)
-   (local-set-key (kbd "C-c u") 'latex-superscript)
+   (local-set-key (kbd "C-c u") 'latex-usepackage)
    (local-set-key (kbd "M-RET") 'latex-itemize)
    (turn-on-orgtbl)))
 
@@ -124,11 +126,9 @@ The table type is any value found in `latex-table-names'."
       "\\end{" str "}" > \n
       "\\end{center}" > \n @)
 
+;; TODO: implement orgtbl directly with latex tables and remove this skel.
 (define-skeleton latex-orgtbl
-  "Insert skel.
-TODO: orgtbl broken?
-TODO: implement orgtbl directly with latex tables and remove this
-skel."
+  "Insert orgtbl skel."
   "Table name: "
   > "\\begin{center}" \n
   "% BEGIN RECEIVE ORGTBL " str \n

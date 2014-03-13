@@ -9,6 +9,14 @@ sure it gets executed."
   (add-hook hook function)
   (funcall function))
 
+(defun calc-eval-line ()
+  "Append calc expression to end of line after an ' = ' separtor.
+Regular math expression can be computed with calc."
+  (interactive)
+  (end-of-line)
+  (insert " = " (calc-eval (buffer-substring-no-properties
+                            (line-beginning-position) (line-end-position)))))
+
 (defun call-process-to-string (program &rest args)
   "Call PROGRAM with ARGS and return output."
   (with-output-to-string
@@ -29,13 +37,26 @@ sure it gets executed."
        (progn (goto-char max) (line-end-position))))))
 (define-key my-keys-minor-mode-map "\M-;" 'comment-or-uncomment-current-line-or-region)
 
-(defun calc-eval-line ()
-  "Append calc expression to end of line after an ' = ' separtor.
-Regular math expression can be computed with calc."
+(defcustom compilation-after-hook nil
+  "List of hook functions run by `compile-custom'."
+  :type 'hook
+  :group 'compilation)
+
+(defcustom compilation-before-hook nil
+  "List of hook functions run by `compile-custom'."
+  :type 'hook
+  :group 'compilation)
+
+(defvar compilation-time-before-hide-window nil
+  "Hide compilation window after the specified seconds.
+If nil, do not hide.")
+
+(defun compile-custom ()
+  "Run hooks in `compilation-before-hook', then `recompile', then `compilation-after-hook'."
   (interactive)
-  (end-of-line)
-  (insert " = " (calc-eval (buffer-substring-no-properties
-                            (line-beginning-position) (line-end-position)))))
+  (run-hooks 'compilation-before-hook)
+  (recompile)
+  (run-hooks 'compilation-after-hook))
 
 (defun count-occurences (regex string)
   "Return number of times regex occurs in string.
@@ -377,6 +398,9 @@ Hook function for skeletons."
   (setq skeleton-markers
         (mapcar 'copy-marker (reverse skeleton-positions))))
 
+(defvar skeleton-markers nil
+  "Markers for locations saved in skeleton-positions.")
+
 (defun skeleton-next-position (&optional reverse)
   "Skeleton movements through placeholders."
   (interactive "P")
@@ -393,14 +417,6 @@ Hook function for skeletons."
        (reverse (goto-char (car (last skeleton-markers))))
        (pos (goto-char pos))
        (t (goto-char (car skeleton-markers)))))))
-
-;; Do not expand abbrevs in skeletons. Not sure it is useful.
-;; (setq skeleton-further-elements '((abbrev-mode nil)))
-(defvar skeleton-markers nil
-  "Markers for locations saved in skeleton-positions.")
-(add-hook 'skeleton-end-hook 'skeleton-make-markers)
-(define-key my-keys-minor-mode-map (kbd "C->") 'skeleton-next-position)
-(define-key my-keys-minor-mode-map (kbd "C-<") (lambda () (interactive) (skeleton-next-position t)))
 
 (defun sort-lines-unique ()
   "Remove duplicate lines using shell command `sort -u'."

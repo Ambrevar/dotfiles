@@ -241,32 +241,12 @@
    (speedbar-toggle-updates)))
 
 ;; Compilation bindings and conveniences.
-(defvar compilation-time-before-hide-window nil
-  "Hide compilation window after the specified seconds.
-If nil, do not hide.")
-(defcustom compilation-before-hook nil
-  "List of hook functions run by `compile-custom'."
-  :type 'hook
-  :group 'compilation)
-(defcustom compilation-after-hook nil
-  "List of hook functions run by `compile-custom'."
-  :type 'hook
-  :group 'compilation)
-
+(require 'functions)
 (setq compilation-ask-about-save nil)
 (autoload 'recompile "compile" nil t)
-
 (define-key my-keys-minor-mode-map (kbd "<f10>") 'compile-custom)
 (define-key my-keys-minor-mode-map (kbd "<f11>") 'previous-error)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
-
-(defun compile-custom ()
-  "Run hooks in `compilation-before-hook', then `recompile', then `compilation-after-hook'."
-  (interactive)
-  (run-hooks 'compilation-before-hook)
-  (recompile)
-  (run-hooks 'compilation-after-hook))
-
 (add-hook
  'compilation-after-hook
  (lambda ()
@@ -306,6 +286,14 @@ If nil, do not hide.")
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
+
+;; Skeleton settings
+(require 'functions)
+;; Do not expand abbrevs in skeletons.
+(setq-default skeleton-further-elements '((abbrev-mode nil)))
+(add-hook 'skeleton-end-hook 'skeleton-make-markers)
+(define-key my-keys-minor-mode-map (kbd "C->") 'skeleton-next-position)
+(define-key my-keys-minor-mode-map (kbd "C-<") (lambda () (interactive) (skeleton-next-position t)))
 
 ;; Alternate focus.
 (add-hook 'occur-hook (lambda () (pop-to-buffer occur-buf)))

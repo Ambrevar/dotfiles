@@ -108,7 +108,7 @@ This does not interfere with `subword-mode'."
      (local-unset-key key))
    (set-face-attribute 'tex-verbatim nil :family "freemono")
    (set (make-local-variable 'compilation-scroll-output) t)
-   (set (make-local-variable 'compilation-hide-window) t)
+   (set (make-local-variable 'compilation-time-before-hide-window) 2)
    (set (make-local-variable 'paragraph-start) "
 ")
    ;; (set (make-local-variable 'use-hard-newlines) t)
