@@ -11,12 +11,11 @@ EOF
 fi
 
 if command -v emacsclient >/dev/null 2>&1; then
-    if emacsclient -e '(kill-emacs)'; then
+    if emacsclient -e '(kill-emacs)' >/dev/null 2>&1; then
         echo "Emacs terminated." >&2
     fi
 fi
-
-if [ -n "$SSH_AGENT_PID" ]; then
-    echo "SSH" >&2
+if [ -S "$SSH_AUTH_SOCK" ]; then
+    echo "SSH agent terminated." >&2
     eval "$(ssh-agent -k)"
 fi

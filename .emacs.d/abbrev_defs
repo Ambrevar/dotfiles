@@ -90,11 +90,7 @@
 
 (define-abbrev-table 'sgml-mode-abbrev-table '())
 
-(define-abbrev-table 'sh-mode-abbrev-table
-  '(
-    ("/null" "" sh-redirect-to-null 0)
-    ("null" "" sh-redirect-to-null 2)
-   ))
+(define-abbrev-table 'sh-mode-abbrev-table '())
 
 (define-abbrev-table 'shell-mode-abbrev-table '())
 
