@@ -490,7 +490,7 @@ It only works for frames with exactly two windows."
   "Make underscore part of the word syntax or not.
 This does not interfere with `subword-mode'."
   (interactive)
-  (if (string= (char-to-string (char-syntax ?_)) "_")
+  (if (equal (char-syntax ?_) "_")
       (progn
         (modify-syntax-entry ?_ "w")
         (message "_ is a not word delimiter"))

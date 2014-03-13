@@ -84,6 +84,17 @@ but there is no warranty."
   (let ((local-master (if masterfile masterfile buffer-file-name)))
     (pdf-view local-master)))
 
+(defun tex-toggle-escape-char ()
+  "Make backslash part of the word syntax or not.
+This does not interfere with `subword-mode'."
+  (interactive)
+  (if (equal (char-syntax ?\\) ?\\)
+      (progn
+        (modify-syntax-entry ?\\ "w")
+        (message "\\ is a not an escape character"))
+    (modify-syntax-entry ?\\ "\\")
+    (message "\\ is a an escape character")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TeX setup
 

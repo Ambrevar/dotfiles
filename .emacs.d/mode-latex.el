@@ -40,7 +40,7 @@
 ;; LaTeX setup
 
 (setq latex-block-default "itemize")
-(setq latex-block-names '("listing"))
+(setq latex-block-names '("listing" "align" "align*" "Bmatrix" "Vmatrix" "bmatrix" "matrix" "pmatrix" "smallmatrix" "vmatrix"))
 
 (mapcar
  (lambda (latex-block)
@@ -82,8 +82,9 @@
   "Standard LaTeX section names.")
 
 (define-skeleton latex-insert-section
-  "Create a matching pair of lines \\begin{NAME} and \\end{NAME} at point.
-Puts point on a blank line between them."
+  "Insert section at point.
+Puts point to section title. Section are auto-completed from
+`latex-section-names'."
   (let ((choice (completing-read (format "LaTeX section name [%s]: "
                                          latex-section-default)
                                  latex-section-names
@@ -95,21 +96,33 @@ Puts point on a blank line between them."
     choice)
   \n "\\" str "{" @ _ "}" @)
 
-;; TODO: If tabular, center.
-;; TODO: complete with '(tabular, align, "pmatrix" "bmatrix" "Bmatrix" "vmatrix" "Vmatrix" "smallmatrix"))}}
-(define-skeleton latex-matrix
-  "Insert matrix/align."
-  nil
+(defvar latex-table-default "tabular")
+(defvar latex-table-names
+  '("tabular" "tabu" "tabular*" "tabularx" "tabulary" "longtabu")
+  "Standard LaTeX table names.")
+
+(define-skeleton latex-insert-table
+  "Create a table at point.
+The table type is any value found in `latex-table-names'."
+  (let ((choice (completing-read (format "LaTeX table type [%s]: "
+                                         latex-table-default)
+                                 latex-table-names
+                                 nil nil nil nil latex-table-default)))
+    (setq latex-table-default choice)
+    (unless (member choice latex-table-names)
+      ;; Remember new block names for later completion.
+      (push choice latex-table-names))
+    choice)
   '(require 'functions)
-  > "\\begin{"
-  '(setq str (skeleton-read "Type: " "align"))
-  str "}{"
-  '(setq str (skeleton-read "Format: " "ll"))
-  str "}" \n
-  '(setq v1 (count-occurences "[a-z]" str))
-  @ (mapconcat 'identity (split-string (make-string v1 ?&) "" t) " ") " \\\\" \n
-  @ _ "\\\\" \n
-  "\\end{" str "}" > \n @)
+  \n "\\begin{center}" > \n
+  "\\begin{" str "}{"
+  '(setq v1 (skeleton-read "Format: " "ll"))
+  v1 "}" > \n
+  '(setq v2 (count-occurences "[a-z]" v1))
+  @ (mapconcat 'identity (split-string (make-string v2 ?&) "" t) " ") " \\\\" \n
+    @ _ "\\\\" \n
+      "\\end{" str "}" > \n
+      "\\end{center}" > \n @)
 
 (define-skeleton latex-orgtbl
   "Insert skel.
