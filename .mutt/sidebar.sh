@@ -5,7 +5,6 @@ if [ -n "$(man muttrc | grep sidebar)" ]; then
     cat <<'EOF'
 set sidebar_visible = yes
 set sidebar_width = 24
-set sidebar_shortpath = yes
 set sidebar_sort = yes
 set sidebar_delim=' '
 # set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%4S"
