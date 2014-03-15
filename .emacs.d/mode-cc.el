@@ -80,7 +80,7 @@ restored."
     mode-hook
     (lambda ()
       (c-set-style "peter")
-      (add-hook 'compilation-before-hook 'cc-set-compiler)
+      (add-hook 'compilation-before-hook 'cc-set-compiler nil t)
       (local-set-key (kbd "<f9>") 'cc-clean)
       (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
       (local-set-key (kbd "C-c C-f") 'cc-fori)

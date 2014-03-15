@@ -43,7 +43,9 @@ Regular math expression can be computed with calc."
   :group 'compilation)
 
 (defcustom compilation-before-hook nil
-  "List of hook functions run by `compile-custom'."
+  "List of hook functions run by `compile-custom'.
+You may want to set the `compile-command' with this hook. If you
+do so, do not forget to set the LOCAL flag to t."
   :type 'hook
   :group 'compilation)
 

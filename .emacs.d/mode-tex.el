@@ -114,7 +114,7 @@ This does not interfere with `subword-mode'."
    ;; (set (make-local-variable 'use-hard-newlines) t)
    (local-set-key (kbd "<f9>") 'tex-pdf-view)
    (setq tex-command "pdftex")
-   (add-hook 'compilation-before-hook 'tex-set-compiler)))
+   (add-hook 'compilation-before-hook 'tex-set-compiler nil t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Skeletons

@@ -127,6 +127,7 @@ Example: to assign some-function to C-i, use
   (unless (executable-find "xclip")
     (when (executable-find "xsel")
       (setq xclip-program "xsel")))
+  (turn-on-xclip) ; Don't know why this is needed.
   (xclip-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
