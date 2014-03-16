@@ -153,7 +153,7 @@ fi
 echokeymap ()
 {
     if [ $# -ne 1 ]; then
-        1="$HOME/.xmodmap_usim"
+        1="$HOME/.xkb/symbols/usim"
     fi
 
     awk '/━|┃|│|─/ {line=substr($0,4); print line}' "$1"
