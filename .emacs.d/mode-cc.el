@@ -23,7 +23,7 @@ Requires `get-closest-pathname'."
   (hack-local-variables)
   (let ((makefile (get-closest-pathname)))
     (if makefile
-        (set (make-local-variable 'compile-command) (format "make -k -f %s" makefile))
+        (set (make-local-variable 'compile-command) (format "make -k -C %s" (file-name-directory makefile)))
       (set (make-local-variable 'compile-command)
            (let
                ((cppp (eq major-mode 'c++-mode))
@@ -104,7 +104,7 @@ restored."
 
 ;; Qt base directory, meaning the directory where the 'Qt' directory can be found.
 ;; Adapt accordingly.
-(when (fboundp 'semantic-add-system-include)
+(when  (fboundp 'semantic-add-system-include)
   (setq qt4-base-dir "/usr/include/qt4")
   (setq qt4-gui-dir (concat qt4-base-dir "/QtGui"))
   (semantic-add-system-include qt4-base-dir 'c++-mode)
@@ -113,9 +113,10 @@ restored."
   (add-hook
    'c++-mode-hook
    (lambda ()
-     (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig.h"))
-     (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig-large.h"))
-     (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qglobal.h")))))
+     (when semantic-mode
+       (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig.h"))
+       (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig-large.h"))
+       (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qglobal.h"))))))
 
 ;;==============================================================================
 ;; Skel
