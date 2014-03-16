@@ -98,9 +98,9 @@ while getopts ":ahnstV" opt; do
 			usage "$0"
 			exit ;;
 		n)
-			opt_sort="sort -uk3" ;;
+			opt_sort="sort -k3" ;;
 		s)
-			opt_sort="sort -uh" ;;
+			opt_sort="sort -h" ;;
 		t)
 			opt_total="calc_total" ;;
 		V)
