@@ -11,7 +11,7 @@
 numlockx on
 
 ## Keymap
-xmodmap ~/.xmodmap_usim
+xkbcomp -I"$HOME/.xkb" "$HOME/.xkb/usim.xkb" $DISPLAY
 
 if [ "$OSTYPE" = "linux-gnu" ] ; then
     ## Set sound volume.
