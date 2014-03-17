@@ -98,7 +98,7 @@ This does not interfere with `subword-mode'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TeX setup
 
-(setq tex-start-options "-file-line-error-style -interaction=nonstopmode -synctex=1")
+(setq tex-start-options "-file-line-error-style -interaction=nonstopmode -synctex=1 ")
 (setq tex-start-commands nil)
 
 (add-hook-and-eval

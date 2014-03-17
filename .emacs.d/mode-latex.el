@@ -64,7 +64,7 @@
    (local-set-key (kbd "C-c C-s") 'latex-insert-section)
    (local-set-key (kbd "C-c C-u") 'latex-superscript)
    (local-set-key (kbd "C-c l") 'latex-lstinline)
-   (local-set-key (kbd "C-c u") 'latex-usepackage)
+   (local-set-key (kbd "C-c u") 'latex-package)
    (local-set-key (kbd "M-RET") 'latex-itemize)
    (turn-on-orgtbl)))
 
