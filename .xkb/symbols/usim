@@ -15,7 +15,7 @@
 // can use it by selecting the "usim" layout from Xorg configuration file, or by
 // issuing the following command:
 //
-//   $ setxkbmap usex
+//   $ setxkbmap usim
 //
 // ┌─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┲━━━━━━━━━┓
 // │ ~ ~ │ ! ¡ │ @ ˝ │ # ¯ │ $ ¤ │ % ¢ │ ^ ^ │ & ¼ │ * ¾ │ ( ˘ │ ) ÷ │ _ × │ + ± ┃ ⌫ Back  ┃
@@ -48,23 +48,23 @@ partial alphanumeric_keys xkb_symbols "usim" {
     key <AE06> { [ 6,     asciicircum,     yen,                  dead_circumflex  ] };
     key <AE07> { [ 7,     ampersand,       onehalf,              onequarter       ] };
     key <AE08> { [ 8,     asterisk,        doublelowquotemark,   threequarters    ] };
-    key <AE09> { [ 9,     parenleft,       guillemotleft,  dead_breve             ] };
-    key <AE10> { [ 0,     parenright,      guillemotright, division               ] };
+    key <AE09> { [ 9,     parenleft,       leftdoublequotemark,  dead_breve       ] };
+    key <AE10> { [ 0,     parenright,      rightdoublequotemark, division         ] };
     key <AE11> { [ minus, underscore,      0x10022C5,            multiply         ] };
     key <AE12> { [ equal, plus,            notequal,             plusminus        ] };
 
-    key <AD01> { [ q,            Q,          agrave,         Agrave                     ] };
-    key <AD02> { [ w,            W,          egrave,         Egrave                     ] };
-    key <AD03> { [ e,            E,          eacute,         Eacute                     ] };
-    key <AD04> { [ r,            R,          registered,     registered                 ] };
-    key <AD05> { [ t,            T,          copyright,      trademark                  ] };
-    key <AD06> { [ y,            Y,          ugrave,         Ugrave                     ] };
-    key <AD07> { [ u,            U,          uacute,         Uacute                     ] };
-    key <AD08> { [ i,            I,          iacute,         Iacute                     ] };
-    key <AD09> { [ o,            O,          oacute,         Oacute                     ] };
-    key <AD10> { [ p,            P,          aring,          Aring                      ] };
-    key <AD11> { [ bracketleft,  braceleft,  leftsinglequotemark,  leftdoublequotemark  ] };
-    key <AD12> { [ bracketright, braceright, rightsinglequotemark, rightdoublequotemark ] };
+    key <AD01> { [ q,            Q,          agrave,         Agrave               ] };
+    key <AD02> { [ w,            W,          egrave,         Egrave               ] };
+    key <AD03> { [ e,            E,          eacute,         Eacute               ] };
+    key <AD04> { [ r,            R,          registered,     registered           ] };
+    key <AD05> { [ t,            T,          copyright,      trademark            ] };
+    key <AD06> { [ y,            Y,          ugrave,         Ugrave               ] };
+    key <AD07> { [ u,            U,          uacute,         Uacute               ] };
+    key <AD08> { [ i,            I,          iacute,         Iacute               ] };
+    key <AD09> { [ o,            O,          oacute,         Oacute               ] };
+    key <AD10> { [ p,            P,          aring,          Aring                ] };
+    key <AD11> { [ bracketleft,  braceleft,  guillemotleft,  leftsinglequotemark  ] };
+    key <AD12> { [ bracketright, braceright, guillemotright, rightsinglequotemark ] };
 
     key <AC01> { [ a,          A,        aacute,      Aacute         ] };
     key <AC02> { [ s,          S,        ssharp,      section        ] };
