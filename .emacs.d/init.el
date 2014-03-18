@@ -104,7 +104,7 @@ Example: to assign some-function to C-i, use
 (autoload 'guess-style-guess-variable "guess-style")
 (autoload 'guess-style-guess-all "guess-style" nil t)
 (setq guess-style-info-mode 1)
-(add-hook 'prog-mode-hook 'guess-style-guess-all)
+(add-hook 'prog-mode-hook (lambda () (ignore-errors (guess-style-guess-all))))
 
 (autoload 'pdf-view "tool-pdf" nil t)
 (autoload 'pdf-compress "tool-pdf" nil t)
@@ -123,19 +123,31 @@ Example: to assign some-function to C-i, use
   (define-key my-keys-minor-mode-map (kbd "C-x M-m") 'mc/mark-more-like-this-extended)
   (define-key my-keys-minor-mode-map (kbd "C-x M-l") 'mc/mark-all-like-this-dwim))
 
-(when (require 'xclip nil t)
-  (unless (executable-find "xclip")
-    (when (executable-find "xsel")
-      (setq xclip-program "xsel")))
-  (turn-on-xclip) ; Don't know why this is needed.
-  (xclip-mode 1))
+;; (when (require 'xclip nil t)
+;;   (unless (executable-find "xclip")
+;;     (when (executable-find "xsel")
+;;       (setq xclip-program "xsel")))
+;;   ;; TODO: something is wrong with xclip. `turn-on-xclip' is not always run?
+;;   ;; (when (>= emacs-major-version 24) (turn-on-xclip))
+;;   (xclip-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We need to put it at the end to make sure it doesn't get overriden by other
 ;; minor modes.
 (my-keys-minor-mode 1)
 
-;; Local hook.
+;; Local hook. You can use it to set system specific variables, such as the
+;; external web browser or pdf viewer. You can also backport feature for old
+;; Emacs. For instance:
+; (setq pdf-viewer "evince")
+; (setq pdf-viewer-args nil)
+; (mapcar
+;  (lambda (mode-hook)
+;    (add-hook mode-hook (lambda () (run-hooks 'prog-mode-hook))))
+;  '(asm-mode-hook awk-mode-hook c++-mode-hook c-mode-hook
+;                  emacs-lisp-mode-hook lisp-mode-hook lua-mode-hook
+;                  makefile-mode-hook octave-mode-hook perl-mode-hook
+;                  python-mode-hook scheme-mode-hook sh-mode-hook))
 (load "local" t t)
 
 ;; End of file
