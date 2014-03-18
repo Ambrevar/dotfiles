@@ -118,8 +118,9 @@ export EDITOR
 export GIT_EDITOR
 
 ## Internet Browser
-command -v luakit >/dev/null 2>&1 && export BROWSER="luakit"
-command -v dwb >/dev/null 2>&1 && export BROWSER="dwb"
+for i in dwb luakit google-chrome; do
+    command -v $i >/dev/null 2>&1 && export BROWSER=$i && break
+done
 
 ## SSH-Agent
 ## WARNING: this is insecure on machines where someone else has root access.
