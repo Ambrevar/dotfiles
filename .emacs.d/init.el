@@ -123,14 +123,6 @@ Example: to assign some-function to C-i, use
   (define-key my-keys-minor-mode-map (kbd "C-x M-m") 'mc/mark-more-like-this-extended)
   (define-key my-keys-minor-mode-map (kbd "C-x M-l") 'mc/mark-all-like-this-dwim))
 
-;; (when (require 'xclip nil t)
-;;   (unless (executable-find "xclip")
-;;     (when (executable-find "xsel")
-;;       (setq xclip-program "xsel")))
-;;   ;; TODO: something is wrong with xclip. `turn-on-xclip' is not always run?
-;;   ;; (when (>= emacs-major-version 24) (turn-on-xclip))
-;;   (xclip-mode 1))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We need to put it at the end to make sure it doesn't get overriden by other
 ;; minor modes.
