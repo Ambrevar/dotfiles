@@ -303,6 +303,10 @@
 ;; Disable prompt (but leave warning) on git symlink.
 (setq vc-follow-symlinks t)
 
+;; Clipboard and primary selection.
+(setq x-select-enable-clipboard t)
+(setq x-select-enable-primary t)
+
 ;; Git commit meessages.
 (add-to-list 'auto-mode-alist '("COMMIT_EDITMSG\\'" . conf-mode))
 
