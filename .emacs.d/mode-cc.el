@@ -178,22 +178,16 @@ restored."
   nil
   '(require 'functions)
   '(insert-and-indent "int opt;
-while ((opt = getopt (argc, argv, \":hp:V\")) != -1)
+while ((opt = getopt (argc, argv, \":hV\")) != -1)
 {
     switch (opt)
     {
         case 'h':
             usage (argv[0]);
             return 0;
-
-        case 'p':
-            png_output = optarg;
-            break;
-
-        case 'v':
+        case 'V':
             version ();
             return 0;
-
         case ':':
             fprintf (stderr, \"ERROR: -%c needs an argument.\\nTry '%s -h' for more information.\\n\", optopt, argv[0]);
             return EXIT_FAILURE;
