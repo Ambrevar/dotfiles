@@ -47,15 +47,16 @@ Example: to assign some-function to C-i, use
 ;; Vanilla modes
 
 ;; Major modes
-(add-hook 'awk-mode-hook     (lambda () (require 'mode-awk)))
-(add-hook 'c++-mode-hook     (lambda () (require 'mode-cc)))
-(add-hook 'c-mode-hook       (lambda () (require 'mode-cc)))
-(add-hook 'latex-mode-hook   (lambda () (require 'mode-latex)))
-(add-hook 'perl-mode-hook    (lambda () (require 'mode-perl)))
-(add-hook 'python-mode-hook  (lambda () (require 'mode-python)))
-(add-hook 'sh-mode-hook      (lambda () (require 'mode-sh)))
-(add-hook 'tex-mode-hook     (lambda () (require 'mode-tex)))
-(add-hook 'texinfo-mode-hook (lambda () (require 'mode-texinfo)))
+(add-hook 'awk-mode-hook      (lambda () (require 'mode-awk)))
+(add-hook 'c++-mode-hook      (lambda () (require 'mode-cc)))
+(add-hook 'c-mode-hook        (lambda () (require 'mode-cc)))
+(add-hook 'latex-mode-hook    (lambda () (require 'mode-latex)))
+(add-hook 'makefile-mode-hook (lambda () (require 'mode-makefile)))
+(add-hook 'perl-mode-hook     (lambda () (require 'mode-perl)))
+(add-hook 'python-mode-hook   (lambda () (require 'mode-python)))
+(add-hook 'sh-mode-hook       (lambda () (require 'mode-sh)))
+(add-hook 'tex-mode-hook      (lambda () (require 'mode-tex)))
+(add-hook 'texinfo-mode-hook  (lambda () (require 'mode-texinfo)))
 
 ;; Minor modes
 (add-hook 'dired-mode-hook  (lambda () (require 'mode-dired)))
