@@ -1,0 +1,17 @@
+#!/bin/sh
+
+ex "$1" <<'EOF'
+%s/@tie{}\([:;?!]\)/\1/g
+%s/@tie{}/\~/g
+%s/@c /%% /g
+%s/@unnumbered/\\section/g
+%s/@dfn/\\emph/g
+%s/@super/\\textsuperscript/g
+%s/«\~/«/g
+%s/\~»/»/g
+%s/@cindex \(.*\)/\\index{\1}/g
+%s/@quotation/\\begin{quotation}/g
+%s/@end quotation/\\end{quotation}/g
+%s/@/\\/g
+xit
+EOF
