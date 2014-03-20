@@ -4,12 +4,15 @@
 ## Note: '%s/@/\\/g' needs to be last.
 
 ex - "$1" <<'EOF' >/dev/null
-/^@node/d
+g/^@node/d
+g/@tex/d
+g/@end tex/d
 %s/@tie{}\([:;?!]\)/\1/g
 %s/@tie{}/\~/g
 %s/@c /%% /g
 %s/@unnumbered/\\section/g
 %s/@section \(.*\)/\\section{\1}/g
+%s/@subsection \(.*\)/\\subsection{\1}/g
 %s/@chapter \(.*\)/\\chapter{\1}/g
 %s/@sc/\\textsc/g
 %s/@dfn/\\emph/g
@@ -21,6 +24,9 @@ ex - "$1" <<'EOF' >/dev/null
 %s/@end quotation/\\end{quotation}/g
 %s/@itemize/\\begin{itemize}/g
 %s/@end itemize/\\end{itemize}/g
+%s/@cartouche/\\begin{center}\\noindent\\fbox{\\begin{minipage}{.95\\linewidth}/g
+%s/@end cartouche/\\end{minipage}}\\end{center}/g
+%s/@pxref/\\ref/g
 %s/@/\\/g
 xit
 EOF
