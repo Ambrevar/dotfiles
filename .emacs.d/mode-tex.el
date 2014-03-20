@@ -21,31 +21,40 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; CUSTOM
-
 (defcustom masterfile nil
   "The file that should be compiled. Useful for modular documents."
   :safe 'stringp)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; VARIABLES
-
 (defvar tex-extension-list nil
   "List of known TeX exentsions. This list is used by `tex-clean'
   to purge all matching files.")
+
+(defvar tex-index-compiler "makeindex"
+  "The TeX index file generator.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FUNCTIONS
 (defun tex-set-compiler ()
   "Set `compile-command' for TeX-based document."
   (hack-local-variables)
-  (let (;; Master file.
-        (local-master
-         (if masterfile masterfile (if buffer-file-name buffer-file-name (error "Buffer has no file name")))))
+  (let* (;; Master file.
+         (local-master
+
+          (if masterfile masterfile (if buffer-file-name buffer-file-name (error "Buffer has no file name"))))
+         (dir (file-name-directory local-master))
+         ;; Note: makeindex fails with absolute file names, we need relative names.
+         (idxfile (concat (file-name-nondirectory (file-name-sans-extension local-master)) ".idx" )))
     (set (make-local-variable 'compile-command)
-         (concat tex-command
-                 " " tex-start-options
-                 " " tex-start-commands
-                 " " (shell-quote-argument local-master)))))
+         (concat
+          "cd " (if dir dir ".") " && "
+          (when (and (file-exists-p idxfile) (executable-find tex-index-compiler))
+            (concat tex-index-compiler " " idxfile " && "))
+          tex-command
+          " " tex-start-options
+          " " tex-start-commands
+          " " (shell-quote-argument (file-name-nondirectory local-master))))))
 
 (defun tex-clean ()
   "Remove all TeX temporary files. This command should be safe,
