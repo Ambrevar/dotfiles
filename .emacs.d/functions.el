@@ -193,6 +193,14 @@ thing in presence of links."
              (and looping (not (equal current-dir "/")))))
     (if (equal current-dir "/") nil (expand-file-name makefile current-dir))))
 
+(defun insert-and-indent (text)
+  "Insert indented TEXT at point."
+  (interactive "s Text: ")
+  (let ((oldpoint  (point)))
+    (insert text)
+    (indent-region oldpoint (point))
+    (newline-and-indent)))
+
 (defun insert-file-name (filename &optional args)
   "Insert name of file FILENAME into buffer after point.
 Prefixed with \\[universal-argument], expand the file name to its

@@ -83,12 +83,13 @@ restored."
       (add-hook 'compilation-before-hook 'cc-set-compiler nil t)
       (local-set-key (kbd "<f9>") 'cc-clean)
       (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
-      (local-set-key (kbd "C-c C-f") 'cc-fori)
-      (local-set-key (kbd "C-c m") 'cc-main)
-      (local-set-key (kbd "C-c C-i") 'cc-if)
-      (local-set-key (kbd "C-c i") 'cc-include)
-      (local-set-key (kbd "C-c I") 'cc-include-local)
       (local-set-key (kbd "C-c (") 'cc-function)
+      (local-set-key (kbd "C-c C-f") 'cc-for)
+      (local-set-key (kbd "C-c C-i") 'cc-if)
+      (local-set-key (kbd "C-c C-p") 'cc-printf)
+      (local-set-key (kbd "C-c I") 'cc-include-local)
+      (local-set-key (kbd "C-c i") 'cc-include)
+      (local-set-key (kbd "C-c m") 'cc-main)
       ;; (local-set-key "." 'semantic-complete-self-insert) ; This is a bit slow.
       ;; (local-set-key ">" 'semantic-complete-self-insert)
       (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1))))))
@@ -156,18 +157,59 @@ restored."
     fprintf(stderr, \"\\n\"); \\
     )")
 
-(define-skeleton cc-fori
-  "for i loop."
+(define-skeleton cc-for
+  "for loop."
   nil
-  > "for (" @ (skeleton-read "" "i = 0") "; " @ (skeleton-read "" "i < N") "; " @ (skeleton-read "" "i++") ") {" \n
-  @ _ \n
-  "}" > )
+  '(setq str (skeleton-read "Variable: " "i"))
+  > "for (" @ (skeleton-read "" (concat str " = 0")) "; "
+  @ (skeleton-read "" (concat str " < N")) "; "
+    @ (skeleton-read "" (concat str "++")) ") {" \n
+      @ _ \n
+        "}" > )
 
 (define-skeleton cc-function
-  "Insert struction for function"
-  "Arguments: " "(" @ str ") {" \n
+  "Insert punctuation for function."
+  "Arguments: " '(just-one-space) "(" @ str ") {" \n
   > _ \n
   "}" > \n)
+
+(define-skeleton cc-getopt
+  "Insert a getopt template."
+  nil
+  '(require 'functions)
+  '(insert-and-indent "int opt;
+while ((opt = getopt (argc, argv, \":hp:V\")) != -1)
+{
+    switch (opt)
+    {
+        case 'h':
+            usage (argv[0]);
+            return 0;
+
+        case 'p':
+            png_output = optarg;
+            break;
+
+        case 'v':
+            version ();
+            return 0;
+
+        case ':':
+            fprintf (stderr, \"ERROR: -%c needs an argument.\\nTry '%s -h' for more information.\\n\", optopt, argv[0]);
+            return EXIT_FAILURE;
+        case '?':
+            fprintf (stderr, \"ERROR: Unknown argument %c.\\nTry '%s -h' for more information.\\n\", optopt, argv[0]);
+            return EXIT_FAILURE;
+        default:
+            usage (argv[0]);
+            return EXIT_SUCCESS;
+    }
+}
+
+if (optind >= argc) {
+    fprintf(stderr, \"Expected argument after options\\n\");
+    exit (EXIT_FAILURE);
+}"))
 
 (define-skeleton cc-if
   "Insert an if statement."
@@ -195,8 +237,7 @@ restored."
 (define-skeleton cc-loadfile
   "Insert loadfile function."
   nil
-  "unsigned long loadfile (const char * path, char ** buffer_ptr)
-{
+  "unsigned long loadfile (const char * path, char ** buffer_ptr) {
 #define MAX_FILESIZE 1073741824 /* One gigabyte */
 
     /* Handle variable. */
@@ -246,16 +287,17 @@ restored."
 (define-skeleton cc-main
   "Insert main function with basic includes."
   nil
-  > "#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+  > "#include <inttypes.h>
+#include <stdbool.h>
 #include <stdint.h>
-#include <inttypes.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
-int main(int argc, char** argv)
-{" \n
+int main(int argc, char** argv) {" \n
 > @ _ \n
-> "return 0;
+> "return EXIT_SUCCESS;
 }" \n)
 
 (define-skeleton cc-printf
@@ -274,5 +316,25 @@ Requires `count-percents'."
      (setq v1 (1+ v1))
      (skeleton-insert '(nil (concat ", " (skeleton-read "Value: ")))))
   @ ");")
+
+(define-skeleton cc-usage-version
+  "Insert usage() and version() functions."
+  "Synopsis"
+  > "static void usage (const char *executable) {
+    printf (\"Usage: %s [OPTIONS]\\n\\n\", executable);
+    puts (\"" str "\\n\");
+
+    puts (\"Options:\");
+    puts (\"  -h        Print this help.\");
+    puts (\"  -V        Print version information.\");
+
+    puts (\"\");
+    printf (\"See %s for more information.\\n\", MANPAGE);
+}
+
+static void version () {
+    printf (\"%s %s\\n\", APPNAME, VERSION);
+    printf (\"Copyright © %s %s\\n\", YEAR, AUTHOR);
+}" \n)
 
 (provide 'mode-cc)
