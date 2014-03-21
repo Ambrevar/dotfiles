@@ -3,7 +3,18 @@
 ## Resources: http://docstore.mik.ua/orelly/unix/vi/ch07_04.htm
 ## Note: '%s/@/\\/g' needs to be last.
 
-ex - "$1" <<'EOF' >/dev/null
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+    cat<<EOF
+Usage: ${0##*/} FILES
+
+Convert texinfo files to LaTeX.
+
+EOF
+    exit
+fi
+
+for i; do
+    ex - "$i" <<'EOF' >/dev/null
 g/^@node/d
 g/@tex/d
 g/@end tex/d
@@ -30,3 +41,4 @@ g/@end tex/d
 %s/@/\\/g
 xit
 EOF
+done
