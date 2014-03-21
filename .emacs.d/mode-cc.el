@@ -74,9 +74,12 @@ restored."
    (case-label . +)
    (statement-cont . +))))
 
+;; Note that Emacs 24 has a strange way to handle the cc-mode-hooks, such that
+;; on init (add-hook-and-eval) would execute the following code twise. No big
+;; deal since we only set some variables.
 (mapcar
  (lambda (mode-hook)
-   (add-hook
+   (add-hook-and-eval
     mode-hook
     (lambda ()
       (c-set-style "peter")
@@ -94,10 +97,6 @@ restored."
       ;; (local-set-key ">" 'semantic-complete-self-insert)
       (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1))))))
  '(c-mode-hook c++-mode-hook))
-
-;; WARNING: cc-modes do not need to run hooks for first buffer, since their hook
-;; are run twice already. This behaviour may change in future Emacs version, in
-;; which case we need to use add-hook-and-eval instead.
 
 ;;==============================================================================
 ;; Qt semantic support

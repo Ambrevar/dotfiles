@@ -3,7 +3,7 @@
 ;;==============================================================================
 
 (setq sh-indent-comment t)
-(setq-local sh-shell-file "/bin/sh") ; Useful for the first time this hook is loaded.
+(set (make-local-variable 'sh-shell-file) "/bin/sh") ; Useful for the first time this hook is loaded.
 (setq-default sh-shell-file sh-shell-file)
 ;; (setq-default sh-shell 'sh)
 
