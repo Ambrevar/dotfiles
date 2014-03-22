@@ -1,6 +1,6 @@
 # Unix Home Configuration
 ## Author: P. Neidhardt
-### 2013-12-10
+### 2014-03-22
 
 Description
 ===========
@@ -38,8 +38,6 @@ Custom "fast-forward" javascript.
 Emacs
 =====
 
-* Recommended packages: emacs-multiple-cursors emacs-xclip
-
 Emacs daemon is integrated flawlessly thanks to a small script -- see the
 scripts folder.  Because terminal and graphical clients do not behave the same
 way, it is sometimes useful to specify which version should be used. For mutt,
@@ -49,20 +47,16 @@ client to return, for which only the console client will work properly.
 Configuration for C programming. Bindings to compile either from makefile or
 from a custom command if no makefile is found.
 
-TeX and LaTeX full-featured home made environment: no AucTeX required, itemize
-function, snippets, templates, dynamic compilation with various engines, dynamic
-configuration, proper PDF view, temp files clean function, PDF compression,
-SyncTeX support.
+TeX and LaTeX full-featured home-made environment: no AucTeX required, itemize
+function, skeletons, dynamic compilation with various engines, dynamic
+configuration with automatic index generation if necessary, proper PDF view,
+temp files clean function, PDF compression, SyncTeX support.
 
 Custom theme with 256 colors, works for both text and graphical Emacs.
 
-Extended file support (shell files, Mutt mails, Arch Linux PKGBUILDs).
+A lot of functions.
 
-Some customization: columns, kill whole line, org-mode, semantic, etc.
-
-A lot of functions: duplicate line, unfill-paragraph, etc.
-
-A lot of code snippets for shell, C, LaTeX and others.
+A lot of skeletons for shell, C, LaTeX and others.
 
 Mutt
 ====
@@ -71,10 +65,10 @@ Mutt
 * Patch: sidebar.
 * Extra deps: antiword, ccrypt, fortune, sxiv, w3m.
 
-This one is not easy to get into it. I managed to get multiple accounts with
+Mutt is not easy to grasp at first. I managed to get multiple accounts with
 encrypted passwords working, which means there is no plain password stored on
 the disk. As a result, I just get prompted for a main password on Mutt startup,
-then everything works out of the box.  I use ccrypt for password management
+then everything works out of the box. I use ccrypt for password management
 because it is much simpler than gnupg.
 
 I'm using embedded IMAP and SMTP services which need appropriate compilation
@@ -104,8 +98,6 @@ Scripts
 
 Probably the most interesting part here.
 
-*clean: remove junk files from TeX projects, home folder, etc.
-
 archive: simple tar wrapper to create archive for files and folders.
 
 asciify: convert many non-ASCII characters to their nearest ASCII counterpart.
@@ -119,17 +111,30 @@ dataindex: create index of hierarchies. Useful to keep track of folder content
 
 ediff: diff with Emacs.
 
-einfo: info viewer with Emacs
+einfo: info viewer with Emacs.
 
-formatc: wrapper for 'indent' to prettify C source code.
+elisp: Emacs Lisp interpreter using Emacs.
+
+extract: simple tar wrapper to extract archives. Atool should be preferred if
+  available.
 
 git-*: some git helper functions for sync and so on.
 
 homeinit: initialize a new home configuration, i.e. get needed files, create
   symlinks, etc.
 
+hsync: hierarchy synchronizer. Can prove very handy to sync large audio/video
+  folders.
+
+imagemount: an CDEmu/fuseiso wrapper that creates/deletes virtual drives
+  automatically.
+
+mover: move and merge folder into destination.
+
 netinit: network setup. Works with wpa_supplicant. May replace any network
   manager.
+
+pacsize: print pacman package size.
 
 pdf*: PDF manipulation, e.g. extract pages, compress, resize to A4.
 

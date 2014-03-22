@@ -72,6 +72,7 @@ Example: to assign some-function to C-i, use
 (when (require 'package nil t)
   (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+  (setq package-user-dir (concat emacs-cache-folder "elpa"))
   (package-initialize))
 
 (load-external "\\.l\\'" 'flex-mode nil 'c-mode)

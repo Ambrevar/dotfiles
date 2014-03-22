@@ -74,9 +74,10 @@ restored."
    (case-label . +)
    (statement-cont . +))))
 
-;; Note that Emacs 24 has a strange way to handle the cc-mode-hooks, such that
-;; on init (add-hook-and-eval) would execute the following code twise. No big
-;; deal since we only set some variables.
+;; Note that in Emacs 24, cc-mode calls its hooks manually in each mode init
+;; function. Since cc modes belong to prog-mode, each hook is called another
+;; time at the end of the initialization. No big deal since we only set some
+;; variables.
 (mapcar
  (lambda (mode-hook)
    (add-hook-and-eval
