@@ -53,12 +53,15 @@ do so, do not forget to set the LOCAL flag to t."
   "Hide compilation window after the specified seconds.
 If nil, do not hide.")
 
-(defun compile-custom ()
-  "Run hooks in `compilation-before-hook', then `recompile', then `compilation-after-hook'."
-  (interactive)
-  (run-hooks 'compilation-before-hook)
+(defun compile-custom (&optional runhooks)
+  "Call `recompile'.
+If RUNHOOKS is non-nil (or with universal argument), run hooks in
+`compilation-before-hook', then `recompile', then
+`compilation-after-hook'."
+  (interactive "P")
+  (when (or runhooks (string= compile-command "make -k ")) (run-hooks 'compilation-before-hook))
   (recompile)
-  (run-hooks 'compilation-after-hook))
+  (when (or runhooks (string= compile-command "make -k ")) (run-hooks 'compilation-after-hook)))
 
 (defun count-occurences (regex string)
   "Return number of times regex occurs in string.
