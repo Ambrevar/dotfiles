@@ -13,16 +13,18 @@
   :safe 'stringp)
 (make-variable-buffer-local 'cc-ldflags)
 
-(defun cc-set-compiler ()
-  "Set compile command to be nearest Makefile.
+(defun cc-set-compiler (&optional nomakefile)
+  "Set compile command to be nearest Makefile or a generic command.
 The Makefile is looked up in parent folders. If no Makefile is
-found, then a configurable command line is provided.\n
-Requires `get-closest-pathname'."
-  (interactive)
+found (or if NOMAKEFILE is non-nil or if function was called with
+universal argument), then a configurable command line is
+provided.\n Requires `get-closest-pathname'."
+  (interactive "P")
   (require 'functions)
   (hack-local-variables)
   (let ((makefile (get-closest-pathname)))
-    (if makefile
+    (if (and makefile
+            (not nomakefile))
         (set (make-local-variable 'compile-command) (format "make -k -C %s" (file-name-directory makefile)))
       (set (make-local-variable 'compile-command)
            (let
