@@ -42,7 +42,7 @@ filter () {
 }
 $0 ~ "^Installed Size" {
 	split($2, a, " ")
-	printf ("%4d%s %s\n", a[1], a[2], pkg)
+	printf ("%4d%-3s %s\n", a[1], a[2], pkg)
 }'
 }
 
@@ -139,7 +139,7 @@ $0 == "%SIZE%" {
 		size /= 1024
 		i++
 	}
-	printf ("%4d%s %s\n", size, unit[i], pkg)
+	printf ("%4d%-3s %s\n", size, unit[i], pkg)
 }' "$DBPath"/local/*/desc | { $opt_sort || cat ;} | { $opt_total || cat ;}
 	exit
 fi
