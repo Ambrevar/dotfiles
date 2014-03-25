@@ -1,10 +1,10 @@
 ;;==============================================================================
-;; Perl
+;; Lua
 ;;==============================================================================
 
 (add-hook-and-eval
- 'perl-mode-hook
+ 'lua-mode-hook
  (lambda ()
-   (set (make-local-variable 'compile-command) (concat "perl " buffer-file-name))))
+   (set (make-local-variable 'compile-command) (concat "lua " buffer-file-name))))
 
-(provide 'mode-perl)
+(provide 'mode-lua)

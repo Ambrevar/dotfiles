@@ -86,6 +86,7 @@ Example: to assign some-function to C-i, use
 (add-hook 'graphviz-dot-mode-hook (lambda () (require 'mode-dot)))
 
 (load-external "\\.lua\\'" 'lua-mode nil 'sh-mode)
+(add-hook 'lua-mode-hook (lambda () (require 'mode-lua)))
 
 (load-external "\\.md\\'\\|\\.markdown\\'" 'markdown-mode)
 ;; If we need more option, add it to a dedicated file.
