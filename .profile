@@ -155,6 +155,7 @@ export WINEDLLOVERRIDES="mscoree,mshtml="
 #
 # appendpath "${HOME}/local/usr/lib/" LD_LIBRARY_PATH
 # appendpath "$HOME/local/usr/lib/python2.7/dist-packages/" PYTHONPATH
+# export LUA_CPATH="$HOME/local/usr/lib/lib?.so;$(lua -e "print(package.cpath)")"
 #
 # umask 077
 ################################################################################
