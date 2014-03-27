@@ -4,8 +4,7 @@ if [ "$1" = "-h" ]; then
     cat<<EOF
 Usage: ${0##*/} PATH
 
-Display PATH one entry per line. If PATH is not provided, use \$PATH by
-default. PATH must be a ':' separated list.
+Display PATH one entry per line. If PATH is not provided, use \$PATH by default.
 
 EOF
 
@@ -18,4 +17,13 @@ else
     ARG="$PATH"
 fi
 
-echo "$ARG" | sed 's/:/\n/g'
+case "$ARG" in
+    *:*)  SEP=':';;
+    *\;*) SEP=';';;
+    */*)  SEP='/';;
+    *,*)  SEP=',';;
+    *\|*) SEP='|';;
+    *)    SEP=':';;
+esac
+
+echo "$ARG" |  awk -v RS=$SEP '1'
