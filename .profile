@@ -54,6 +54,7 @@ if [ -d "${TEXDIR}" ]; then
     unset TEXFOLDER
 fi
 unset TEXDIR
+export BIBINPUTS=~/personal/dataperso/bibliography
 
 ## Plan9
 PLAN9DIR="/opt/plan9"
