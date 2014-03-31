@@ -308,6 +308,10 @@
 (setq x-select-enable-clipboard t)
 (setq x-select-enable-primary t)
 
+;; Bibtex
+(setq bibtex-entry-format '(opts-or-alts required-fields numerical-fields whitespace realign last-comma delimiters braces sort-fields))
+(setq bibtex-field-delimiters 'double-quotes)
+
 ;; Git commit meessages.
 (add-to-list 'auto-mode-alist '("COMMIT_EDITMSG\\'" . conf-mode))
 
