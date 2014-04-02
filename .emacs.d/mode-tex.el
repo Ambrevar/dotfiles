@@ -31,30 +31,41 @@
   "List of known TeX exentsions. This list is used by `tex-clean'
   to purge all matching files.")
 
-(defvar tex-index-compiler "makeindex"
+(defvar tex-index-command "makeindex"
   "The TeX index file generator.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FUNCTIONS
 (defun tex-set-compiler ()
   "Set `compile-command' for TeX-based document."
+  (interactive)
   (hack-local-variables)
   (let* (;; Master file.
          (local-master
 
           (if masterfile masterfile (if buffer-file-name buffer-file-name (error "Buffer has no file name"))))
-         (dir (file-name-directory local-master))
+         (dirname (file-name-directory local-master))
+         (basename (file-name-sans-extension (file-name-nondirectory local-master)))
          ;; Note: makeindex fails with absolute file names, we need relative names.
-         (idxfile (concat (file-name-nondirectory (file-name-sans-extension local-master)) ".idx" )))
+         (idxfile (concat basename ".idx" )))
     (set (make-local-variable 'compile-command)
          (concat
-          "cd " (if dir dir ".") " && "
-          (when (and (file-exists-p idxfile) (executable-find tex-index-compiler))
-            (concat tex-index-compiler " " idxfile " && "))
+          "cd " (if dirname dirname ".") " && "
+          (when (and (file-exists-p idxfile) (executable-find tex-index-command))
+            (concat tex-index-command " " idxfile " && "))
+          (when (and
+                 (file-exists-p (concat basename ".aux"))
+                 (executable-find tex-bibtex-command)
+                 (save-excursion
+                   (beginning-of-buffer)
+                   (re-search-forward "^[^%]*\\\\bibliography{" nil t))
+                 )
+            (concat tex-bibtex-command " " basename " && ")
+            )
           tex-command
           " " tex-start-options
           " " tex-start-commands
-          " " (shell-quote-argument (file-name-nondirectory local-master))))))
+          " " (shell-quote-argument basename)))))
 
 (defun tex-clean ()
   "Remove all TeX temporary files. This command should be safe,
