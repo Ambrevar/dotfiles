@@ -47,21 +47,14 @@
          (dirname (file-name-directory local-master))
          (basename (file-name-sans-extension (file-name-nondirectory local-master)))
          ;; Note: makeindex fails with absolute file names, we need relative names.
-         (idxfile (concat basename ".idx" )))
+         (idxfile ))
     (set (make-local-variable 'compile-command)
          (concat
           "cd " (if dirname dirname ".") " && "
-          (when (and (file-exists-p idxfile) (executable-find tex-index-command))
-            (concat tex-index-command " " idxfile " && "))
-          (when (and
-                 (file-exists-p (concat basename ".aux"))
-                 (executable-find tex-bibtex-command)
-                 (save-excursion
-                   (beginning-of-buffer)
-                   (re-search-forward "^[^%]*\\\\bibliography{" nil t))
-                 )
-            (concat tex-bibtex-command " " basename " && ")
-            )
+          (when (executable-find tex-index-command)
+            (concat tex-index-command " " (concat basename ".idx" ) " ; "))
+          (when (executable-find tex-bibtex-command)
+            (concat tex-bibtex-command " " basename " ; "))
           tex-command
           " " tex-start-options
           " " tex-start-commands
