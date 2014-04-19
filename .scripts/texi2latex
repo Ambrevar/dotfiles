@@ -1,0 +1,44 @@
+#!/bin/sh
+
+## Resources: http://docstore.mik.ua/orelly/unix/vi/ch07_04.htm
+## Note: '%s/@/\\/g' needs to be last.
+
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+    cat<<EOF
+Usage: ${0##*/} FILES
+
+Convert texinfo files to LaTeX.
+
+EOF
+    exit
+fi
+
+for i; do
+    ex - "$i" <<'EOF' >/dev/null
+g/^@node/d
+g/@tex/d
+g/@end tex/d
+%s/@tie{}\([:;?!]\)/\1/g
+%s/@tie{}/\~/g
+%s/@c /%% /g
+%s/@unnumbered/\\section/g
+%s/@section \(.*\)/\\section{\1}/g
+%s/@subsection \(.*\)/\\subsection{\1}/g
+%s/@chapter \(.*\)/\\chapter{\1}/g
+%s/@sc/\\textsc/g
+%s/@dfn/\\emph/g
+%s/@super/\\textsuperscript/g
+%s/«\~/«/g
+%s/\~»/»/g
+%s/@cindex \(.*\)/\\index{\1}/g
+%s/@quotation/\\begin{quotation}/g
+%s/@end quotation/\\end{quotation}/g
+%s/@itemize/\\begin{itemize}/g
+%s/@end itemize/\\end{itemize}/g
+%s/@cartouche/\\begin{center}\\noindent\\fbox{\\begin{minipage}{.95\\linewidth}/g
+%s/@end cartouche/\\end{minipage}}\\end{center}/g
+%s/@pxref/\\ref/g
+%s/@/\\/g
+xit
+EOF
+done

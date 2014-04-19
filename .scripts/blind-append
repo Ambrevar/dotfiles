@@ -12,6 +12,8 @@ ignored.
 This requires 'read -s'. As of Oct 6 2013 it will not work for strictly
 POSIX-compliant shells.
 
+This is a stupid program, don't use it.
+
 EOF
     exit
 fi
@@ -38,6 +40,6 @@ fi
 if [ $# -eq 1 ]; then
     echo "$DUMMY" >> "$FILE"
 else
-    sed -i "s/${STRING}/${STRING}${DUMMY}/g" "${FILE}"
+    ex -sc "%s/${STRING}/${STRING}${DUMMY}/g|xit" "${FILE}"
 fi
 echo "Secret appended to ${FILE}."

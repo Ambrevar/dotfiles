@@ -19,7 +19,7 @@ the Bourne Shell.
 
 WARNING: this script is rather weak, most notably regarding existing files.
 
-Synopsis.
+Options.
 
   -f:  Remove archive if extraction was succesful.
   -p:  Ask for password.
@@ -32,18 +32,17 @@ PASS=''
 
 while getopts ":hfp" opt; do
     case $opt in
-        h) _printhelp "$0"
+        h)
+            _printhelp "$0"
             exit 1 ;;
-        f) OPT_DELAFTER=true ;;
+        f)
+            OPT_DELAFTER=true ;;
         p)
             echo -n "Password: "
             read -s PASS
-            PASS="-p$PASS"
-            ;;
+            PASS="-p$PASS" ;;
         ?)
             _printhelp "$0"
-            exit 1 ;;
-        :) _printhelp "$0"
             exit 1 ;;
     esac
 done
@@ -55,7 +54,7 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-command -v atool >/dev/null && echo "You should use atool instead." && echo
+command -v atool >/dev/null 2>&1 && echo "You should use atool instead." && echo
 
 _extract()
 {

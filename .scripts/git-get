@@ -7,7 +7,7 @@ Usage: ${1##*/} [OPTIONS] REPOS
 
 Clone multiple git repos from \$DOMAIN:\$USER.
 
-Synopsis:
+Options:
 
   -h:        Show this help.
   -d DOMAIN: Set domain.
@@ -30,9 +30,6 @@ while getopts ":hd:u:" opt; do
         ?)
             _printhelp "$0"
             exit 1 ;;
-        :)
-            _printhelp "$0"
-            exit 1 ;;
     esac
 done
 
@@ -43,12 +40,10 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-
-if ! command -v git >/dev/null; then
-    echo >&2 "git required."
-    exit
+if ! command -v git >/dev/null 2>&1; then
+    echo >&2 "'git' not found in PATH. Exiting."
+    exit 1
 fi
-
 
 for i; do
     git clone git@$DOMAIN:/$USER/$i

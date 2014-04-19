@@ -1,5 +1,6 @@
 #!/bin/sh
-## Start zsh in the directory specified as first argument.
+## Start zsh in the directory specified as first argument. Useful for file
+## browsers to start shell in pointed folder.
 
 if [ ! -d "$1" ]; then
     zsh
@@ -17,7 +18,7 @@ fi
 
 ## We need realpath to prevent us from adding duplicates to the zsh
 ## DIRSTACKFILE.
-if ! command -v realpath; then
+if ! command -v realpath >/dev/null 2>&1; then
     echo "'realpath' not found. Exiting."
     exit 1
 fi

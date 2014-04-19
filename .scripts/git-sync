@@ -17,11 +17,11 @@ fi
 for i; do
     while IFS= read -r FOLDER; do
         ROOT="${FOLDER%/*}"
-        STATUS="$(cd "$ROOT" && git status -uno | grep "Your branch is ahead of")"
+        STATUS="$(cd -- "$ROOT" && git status -uno | grep "Your branch is ahead of")"
         if [ -n "$STATUS" ]; then
             echo "$ROOT"
             echo "$STATUS"
-            (cd "$ROOT" && git push)
+            (cd -- "$ROOT" && git push)
             echo
         fi
     done <<EOF

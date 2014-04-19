@@ -16,41 +16,15 @@ EOF
 fi
 
 for i ; do
-    while IFS= read -r FILE; do
+    while read -r FILE; do
         FILE_NOEXT="${FILE##*/}"
         FILE_NOEXT="${FILE_NOEXT%.*}"
         FILE_PATH="${FILE%/*}"
-        find "$FILE_PATH" -maxdepth 1 -type f \( \
-	        -name "$FILE_NOEXT.aux" -o \
-            -name "$FILE_NOEXT.cp" -o \
-            -name "$FILE_NOEXT.cps" -o \
-            -name "$FILE_NOEXT.fn" -o \
-            -name "$FILE_NOEXT.glg" -o \
-            -name "$FILE_NOEXT.glo" -o \
-            -name "$FILE_NOEXT.gls" -o \
-            -name "$FILE_NOEXT.idx" -o \
-            -name "$FILE_NOEXT.ilg" -o \
-            -name "$FILE_NOEXT.ind" -o \
-            -name "$FILE_NOEXT.ky" -o \
-            -name "$FILE_NOEXT.lof" -o \
-            -name "$FILE_NOEXT.log" -o \
-            -name "$FILE_NOEXT.maf" -o \
-            -name "$FILE_NOEXT.mtc?" -o \
-            -name "$FILE_NOEXT.mtc" -o \
-            -name "$FILE_NOEXT.nav" -o \
-            -name "$FILE_NOEXT.out" -o \
-            -name "$FILE_NOEXT.pg" -o \
-            -name "$FILE_NOEXT.snm" -o \
-            -name "$FILE_NOEXT.synctex.gz" -o \
-            -name "$FILE_NOEXT.synctex" -o \
-            -name "$FILE_NOEXT.tns" -o \
-            -name "$FILE_NOEXT.toc" -o \
-            -name "$FILE_NOEXT.tp" -o \
-            -name "$FILE_NOEXT.vr" -o \
-            -name "$FILE_NOEXT.vrs" -o \
-            -name "$FILE_NOEXT.xdy" \) \
-            -print \
-            -delete
+        rm -v "@@@" $(for j in \
+            aux bbl blg cp cps fn glg glo gls idx ilg ind ky lof log maf mt mtc nav out pg snm synctex.gz synctex tns toc tp vr vrs xdy
+    do
+        echo "$FILE_NOEXT.$j"
+        done) 2>/dev/null
     done <<EOF
 $(find "$i" -type f \( -name "*.tex" -o -name "*.texi" \) )
 EOF

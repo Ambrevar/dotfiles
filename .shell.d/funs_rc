@@ -45,7 +45,7 @@ search()
 
 ## Vim-only: search the vim reference manual for a keyword.
 ## Usage: :h <keyword>
-if command -v vim >/dev/null; then
+if command -v vim >/dev/null 2>&1; then
     :h()
     {
         vim --cmd ":silent help $@" --cmd "only";
@@ -100,7 +100,7 @@ termsupport()
     done | sort -nk2
 }
 
-if command -v highlight >/dev/null ; then
+if command -v highlight >/dev/null 2>&1; then
     hlt-viewer ()
     {
         local SAMPLE DUMMY
@@ -153,22 +153,22 @@ fi
 echokeymap ()
 {
     if [ $# -ne 1 ]; then
-        1="$HOME/.xkb/symbols/usex"
+        1="$HOME/.xkb/symbols/usim"
     fi
 
-    awk '/━|┃|│|─/ {gsub(/^\/\/ /, ""); print $0}' "$1"
+    awk '/━|┃|│|─/ {line=substr($0,4); print line}' "$1"
 }
 
 ## Extended info
 typex()
 {
     local xpath
-    if [ $# -ne 1 ] || ! command -v "$1" >/dev/null; then
+    if [ $# -ne 1 ] || ! command -v "$1" >/dev/null 2>&1; then
         echo "Provide an existing command as parameter."
         return
     fi
 
-    if [ -z "$(command -v "$1" | grep ^/)" ]; then
+    if [ -z "$(command -v "$1" 2>/dev/null | grep ^/)" ]; then
         type "$1"
         return
     fi
@@ -191,7 +191,7 @@ bindatasearch()
         return
     fi
 
-    if [ $(du -b Cover.jpg | awk '{print $1}') -gt 1048576 ]; then
+    if [ $(wc -c Cover.jpg | cut -f1 -d' ') -gt 1048576 ]; then
         echo "[$1] file size must not exceed 1MB."
         return
     fi
@@ -276,7 +276,7 @@ xmultioff ()
 ## Pacman functions
 ##==============================================================================
 
-if command -v pacman >/dev/null; then
+if command -v pacman >/dev/null 2>&1; then
     ## Get detailed file list for the specified packages, omitting folders.
     pql ()
     {
@@ -314,7 +314,7 @@ if [ "$(uname)" = FreeBSD ]; then
     mcd()
     {
         local DEST=$(pkg_search -r "$@" | head -n1 | awk '{print $2}')
-        cd "$DEST"
+        cd -- "$DEST"
     }
 
 fi

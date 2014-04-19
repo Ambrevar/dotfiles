@@ -5,16 +5,14 @@ if [ $# -ne 1 ] || [ "$1" = "-h" ] ; then
 Usage: ${1##*/} IP
 
 Print the map of the network associated to the provided IP.
-
 EOF
-
     exit
 fi
 
 ## Network operations
-if ! command -v nmap >/dev/null; then
-    echo "nmap required."
-    exit
+if ! command -v nmap >/dev/null 2>&1; then
+    echo >&2 "'nmap' not found in PATH. Exiting."
+    exit 1
 fi
 
 echo "$1"

@@ -1,10 +1,20 @@
 #!/bin/sh
 
+if [ "${0##*/}" = "obsdman" ]; then
+    OS=OpenBSD
+    DOMAIN="http://www.openbsd.org/cgi-bin"
+    MANPATH="OpenBSD+Current"
+else
+    OS=FreeBSD
+    DOMAIN="http://www.freebsd.org/cgi"
+    MANPATH="FreeBSD+10-current"
+fi
+
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
     cat<<EOF
 Usage: ${0##*/} [SECTION] PAGE
 
-Fetch FreeBSD man page PAGE from the official website and display it.
+Fetch $OS man page PAGE from the official website and display it.
 
 EOF
     exit
@@ -19,8 +29,9 @@ fi
 
 
 AGENT="curl -s"
-if ! command -v curl >/dev/null; then
+if ! command -v curl >/dev/null 2>&1; then
     AGENT="wget -q -O - "
 fi
 
-$AGENT "http://www.freebsd.org/cgi/man.cgi?query=$PAGE&apropos=0&sektion=$SECTION&manpath=FreeBSD+10-current&arch=default&format=ascii" | less
+$AGENT "$DOMAIN/man.cgi?query=$PAGE&apropos=0&sektion=$SECTION&manpath=$MANPATH&arch=default&format=ascii" | less
+

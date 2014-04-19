@@ -1,5 +1,14 @@
 #!/bin/sh
 
+## Some JPEG options
+# -sDEVICE=jpeg
+# -dUseCIEColor
+# -dJPEGQ=100
+# -r300
+# -dTextAlphaBits=4
+# -dGraphicsAlphaBits=4
+# -dMaxStripSize=8192
+
 _printhelp ()
 {
     cat <<EOF
@@ -7,33 +16,42 @@ Usage: ${1##*/} [OPTIONS] PDFFILES
 
 All PDF files will be compressed to a PDF file with "-compressed" appended in its name.
 
-WARNING: use this function with caution.  It may drastically improve compression
-of some PDF files, but in some case, the output filesize will be greater! You
-should not use it over PDF files embedding raster graphics.
-
 Options:
 
+  -c:  Compress raster graphics at the expense of a quality loss.
   -f:  Overwrite existing files.
+  -h:  Show this help.
   -i:  In-place compression.
+  -n:  Do not compress raster graphics at all. Output size is usually greater.
+
+For more details:
+
+  $ gs -sDEVICE=pdfwrite -o /dev/null \\
+    -c "currentpagedevice { exch ==only ( ) print == } forall"
+
+  http://partners.adobe.com/public/developer/en/acrobat/sdk/pdf/pdf_creation_apis_and_specs/DistillerParameters.pdf
 
 EOF
 }
 
 OPT_INPLACE=false
 OPT_OVERWRITE=false
-while getopts ":ifh" opt; do
+OPT_COMPRESSION="-dColorConversionStrategy=/LeaveColorUnchanged -dDownsampleMonoImages=false -dDownsampleGrayImages=false -dDownsampleColorImages=false -dAutoFilterColorImages=false -dAutoFilterGrayImages=false -dColorImageFilter=/FlateEncode -dGrayImageFilter=/FlateEncode"
+
+while getopts ":cfhin" opt; do
     case $opt in
+        c)
+            OPT_COMPRESSION="" ;;
+        f)
+            OPT_OVERWRITE=true ;;
         h)
             _printhelp "$0"
             exit 1 ;;
         i)
             OPT_INPLACE=true ;;
-        f)
-            OPT_OVERWRITE=true ;;
+        n)
+            OPT_COMPRESSION="-dColorConversionStrategy=/LeaveColorUnchanged -dEncodeColorImages=false -dEncodeGrayImages=false -dEncodeMonoImages=false" ;;
         ?)
-            _printhelp "$0"
-            exit 1 ;;
-        :)
             _printhelp "$0"
             exit 1 ;;
     esac
@@ -60,7 +78,8 @@ for i ; do
     fi
 
     echo "$i"
-    gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="$OUTPUT" "$i"
+
+    gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite $OPT_COMPRESSION -sOutputFile="$OUTPUT" "$i"
     if $OPT_INPLACE; then
         rm -f "$i"
         mv "$OUTPUT" "$i"

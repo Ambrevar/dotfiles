@@ -1,10 +1,11 @@
 #!/bin/sh
-## This is a compatibility wrapper for 'realpath'.
+## This is a compatibility wrapper for 'realpath'. This script is not seen if
+## the parent folder is after /usr/{local/}bin in PATH.
 
-if command -v greadlink >/dev/null; then
+if command -v greadlink >/dev/null 2>&1; then
     ## On BSD systems, we might have greadlink
     greadlink -f "$@"
-elif command -v readlink >/dev/null && [ "$(uname)" = "Linux" ]; then
+elif command -v readlink >/dev/null 2>&1 && [ "$(uname)" = "Linux" ]; then
     readlink -f "$@"
 else
     ## Dirty fallback

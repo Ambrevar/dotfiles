@@ -19,10 +19,10 @@ if [ $(pacman -Qi catalyst-utils 2>/dev/null |wc -l) -ge 2 ]; then
     pacman -S --noconfirm mesa-libgl lib32-mesa-libgl
     pacman -S --noconfirm libcl lib32-libcl
     if [ -f "/boot/syslinux/syslinux.cfg" ]; then
-        sed -i 's/ nomodeset//' "/boot/syslinux/syslinux.cfg"
+        ex -sc '/^LABEL arch$/+3 s/ nomodeset//|xit' '/boot/syslinux/syslinux.cfg'
         echo
         echo "#### Syslinux entry:"
-        grep -A4 "^LABEL arch$" "/boot/syslinux/syslinux.cfg"
+        grep -A4 '^LABEL arch$' '/boot/syslinux/syslinux.cfg'
     else
         echo "You do not seem to use Syslinux. No configuration done."
         echo "You have to remove 'nomodeset' kernel parameter manually."
@@ -33,8 +33,8 @@ else
     pacman -Rdd --noconfirm libcl lib32-libcl
     pacman -S  --noconfirm catalyst catalyst-utils lib32-catalyst-utils
     aticonfig --initial
-    if [ $? -eq 0 ] && [ -f "/boot/syslinux/syslinux.cfg" ]; then
-        sed -i '/^LABEL arch$/{n;n;n;s/$/ nomodeset/}' "/boot/syslinux/syslinux.cfg"
+    if [ $? -eq 0 ] && [ -f '/boot/syslinux/syslinux.cfg' ]; then
+        ex -sc '/^LABEL arch$/+3 s/$/ nomodeset/|xit' '/boot/syslinux/syslinux.cfg'
         echo
         echo "#### Syslinux entry:"
         grep -A4 "^LABEL arch$" "/boot/syslinux/syslinux.cfg"

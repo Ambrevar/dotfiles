@@ -4,29 +4,22 @@ if [ $# -eq 0 ] || [ "$1" = "-h" ] ; then
     cat<<EOF
 Usage: ${1##*/} FILES
 
-Rename FILES to lowercase.
+Rename FILES to lowercase if destination does not exist.
 
 EOF
 
     exit
 fi
 
-for FILE ; do
-	FILENAME=${FILE##*/}
+for f ; do
+    filename=${f##*/}
 
-	case "$FILENAME" in
-	    */*) DIRNAME="${FILE%/*}" ;;
-	    *) DIRNAME="." ;;
+    case "$f" in
+        */*) dirname="${f%/*}" ;;
+        *) dirname="." ;;
     esac
 
-    NF="$(echo $FILENAME | tr '[:upper:]' '[:lower:]')"
-    NEWNAME="${DIRNAME}/${NF}"
-    if [ "$NF" != "$FILENAME" ]; then
-        if [ -e "$NEWNAME" ]; then
-            echo >&2 "$NEWNAME already exists, not overwriting."
-        else
-	        mv "$FILE" "$NEWNAME"
-	        echo "'$FILE' '$NEWNAME'"
-        fi
-    fi
+    nf="$(echo "$filename" | awk '{print tolower($0)}')"
+    newname="${dirname}/${nf}"
+    mv -nv "$f" "$newname" 2>/dev/null
 done

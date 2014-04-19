@@ -1,2 +1,0 @@
-#!/bin/sh
-emacs -q -l ~/.emacs.d/init-light.el "$@"

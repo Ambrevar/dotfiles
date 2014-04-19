@@ -1,0 +1,77 @@
+% pie chart generator
+
+\newcounter{pieSlicePercentage}
+\newcounter{pieCounterCurrent}
+\newcounter{pieCounterNext}
+\newcounter{pieCounterTotal}
+
+\newcommand{\pieslice}[3]{
+  \pgfmathparse{0.5*#1+0.5*#2}
+  \let\midangle\pgfmathresult
+
+  \setcounter{pieSlicePercentage}{\p*100/\thepieCounterTotal}
+
+  % slice
+  \draw[thick,fill=#3!\thepieSlicePercentage] (0,0) -- (#1:1) arc (#1:#2:1) -- cycle;
+}
+
+\newcommand{\pieslicelabel}[3]{
+  \pgfmathparse{0.5*#1+0.5*#2}
+  \let\midangle\pgfmathresult
+
+  \setcounter{pieSlicePercentage}{\p*100/\thepieCounterTotal}
+
+  % Outer label.
+  \pgfmathparse{min((#2-#1-10)/110*(-0.3),0)}
+  \let\temp\pgfmathresult
+  \pgfmathparse{max(\temp,-0.5) + 1.55}
+  \let\outerpos\pgfmathresult
+  \node at (\midangle:\outerpos) {\textbf{#3}};
+
+  % Inner label.
+  \pgfmathparse{min((#2-#1-10)/110*(-0.3),0)}
+  \let\temp\pgfmathresult
+  \pgfmathparse{max(\temp,-0.5) + 0.8}
+  \let\innerpos\pgfmathresult
+
+  \node at (\midangle:\innerpos) {\thepieSlicePercentage \%};
+}
+
+\newcommand{\piechart}[3]{
+  \setcounter{pieCounterCurrent}{0}
+  \setcounter{pieCounterNext}{0}
+  \setcounter{pieCounterTotal}{0}
+
+  \begin{center}
+    
+    \begin{tikzpicture}[scale=#2]
+
+      %% Get the total to turn the values into percentages.
+      \foreach \p/\t in {#3} {
+        \setcounter{pieCounterTotal}{\thepieCounterTotal+\p}
+      }
+
+      %% Draw the slices.
+      \foreach \p/\t in {#3} {
+        \setcounter{pieCounterCurrent}{\value{pieCounterNext}}
+        \addtocounter{pieCounterNext}{\p}
+        \pieslice{\thepieCounterCurrent/\thepieCounterTotal*360}
+                 {\thepieCounterNext/\thepieCounterTotal*360}
+                 {#1}
+      }
+
+      \setcounter{pieCounterCurrent}{0}
+      \setcounter{pieCounterNext}{0}
+
+      %% Write the labels.
+      \foreach \p/\t in {#3}{
+        \setcounter{pieCounterCurrent}{\value{pieCounterNext}}
+        \addtocounter{pieCounterNext}{\p}
+        \pieslicelabel{\thepieCounterCurrent/\thepieCounterTotal*360}
+                      {\thepieCounterNext/\thepieCounterTotal*360}
+                      {\t}
+      }
+
+    \end{tikzpicture}
+  \end{center}
+}

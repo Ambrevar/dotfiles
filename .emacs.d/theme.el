@@ -163,11 +163,15 @@
        '(("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
          ("\\<\\(TODO\\):" 1 font-lock-warning-face prepend)
          ("\\<\\(WARNING\\):" 1 font-lock-warning-face prepend))))))
- '(lua-mode-hook prog-mode-hook tex-mode-hook texinfo-mode-hook))
+ '(prog-mode-hook tex-mode-hook texinfo-mode-hook))
 ;; Digits regex are not perfect, and may make emacs slow. Sure?
 ;; ("[^[:digit:][:space:]][[:space:]]*\\(-\\)[[:digit:]]+" 1 font-lock-constant-face)
 ;; ("\\(0x[[:digit:]a-fA-F]+\\)[^[:alnum:]_]" 1 font-lock-constant-face)
 ;; ("[^[:alnum:]_]\\([[:digit:]]*\\.?[[:digit:]]+\\)[^[:alnum:]_.]" 1 font-lock-constant-face)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(provide 'theme)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; C-mode printf highlight.
 ;; (defvar font-lock-format-specifier-face		'font-lock-format-specifier-face

@@ -48,10 +48,7 @@ alias grep='grep --color=auto'
 alias nox='find . -type f -exec chmod a-x {} +'
 
 ## Get your external IP.
-command -v curl >/dev/null && alias myip='curl ifconfig.me'
-
-## Network discovery.
-command -v nmap >/dev/null && alias network-discover='nmap -sP "192.168.0.*"'
+command -v curl >/dev/null 2>&1 && alias myip='curl ifconfig.me'
 
 ## Prevents accidentally clobbering files.
 alias mkdir='mkdir -p'
@@ -59,20 +56,12 @@ alias mkdir='mkdir -p'
 ## Reset terminal -- Faster alternative of 'reset'.
 alias cls='printf "\ec"'
 
-## Shutdown / Reboot.
-## If you do not want to get prompted for your password, configure sudo properly.
-if command -v systemctl >/dev/null; then
-    alias halt='systemctl poweroff'
-else
-    alias halt='sudo halt -p'
-fi
-
 ## Start X and lock current terminal (press ENTER when back in terminal to
 ## prompt for password). Useless if X is running on the same TTY.
-command -v vlock >/dev/null && alias sx='startx & vlock'
+command -v vlock >/dev/null 2>&1 && alias sx='startx & vlock'
 
 ## Zathura -- Fork to background.
-command -v zathura >/dev/null && alias zat='zathura --fork'
+command -v zathura >/dev/null 2>&1 && alias zat='zathura --fork'
 
 ## Xrandr
 alias xmorphnone='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --transform none'
@@ -83,10 +72,10 @@ alias xmorphzi='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ")
 alias xres='xrandr --output $(xrandr | awk '"'"'NR==2 {print $1;exit}'"'"') --auto && xrandr -s $(xrandr | awk '"'"'/^ / {print $1;exit}'"'"')'
 
 ## Udiskie
-command -v udiskie-umount >/dev/null && alias uua='udiskie-umount -a'
+command -v udiskie-umount >/dev/null 2>&1 && alias uua='udiskie-umount -a'
 
 ## Emacs
-command -v em >/dev/null && alias emacs-reload="emacsclient -e '(kill-emacs)' >/dev/null 2>&1; emacs --daemon"
+command -v emacsclient >/dev/null 2>&1 && alias emacs-kill="emacsclient -e '(kill-emacs)' >/dev/null 2>&1"
 
 ##==============================================================================
 ## Zsh power aliases
@@ -105,19 +94,16 @@ command -v em >/dev/null && alias emacs-reload="emacsclient -e '(kill-emacs)' >/
 ##==============================================================================
 ## Pacman aliases
 ##==============================================================================
-if command -v "pacman" >/dev/null; then
-    PACMAN_FRONTEND='pacman'
-
-    ## The eval trick lets us define the alias after the variable has been expanded.
-    eval 'alias pc="sudo $PACMAN_FRONTEND -Sc"'
-    eval 'alias pi="sudo $PACMAN_FRONTEND -S --needed"'
-    eval 'alias pqi="$PACMAN_FRONTEND -Qi"'
-    eval 'alias pqo="$PACMAN_FRONTEND -Qo"'
-    eval 'alias pqs="$PACMAN_FRONTEND -Qs"'
-    eval 'alias pr="sudo $PACMAN_FRONTEND -Rs"'
-    eval 'alias psi="$PACMAN_FRONTEND -Si"'
-    eval 'alias pss="$PACMAN_FRONTEND -Ss"'
-    eval 'alias pu="sudo $PACMAN_FRONTEND -Syu"'
+if command -v "pacman" >/dev/null 2>&1; then
+    alias pc='sudo pacman -Sc'
+    alias pi='sudo pacman -S --needed'
+    alias pqi='pacman -Qi'
+    alias pqo='pacman -Qo'
+    alias pqs='pacman -Qs'
+    alias pr='sudo pacman -Rs'
+    alias psi='pacman -Si'
+    alias pss='pacman -Ss'
+    alias pu='sudo pacman -Syu'
 fi
 
 ##==============================================================================

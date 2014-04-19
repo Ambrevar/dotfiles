@@ -1,7 +1,0 @@
-# name: for ( var in array ) statement
-# key: forin
-# --
-for ( ${1:var} in ${2:array})
-{
-    $0
-}

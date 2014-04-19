@@ -52,7 +52,7 @@ fi
 ## Clean trash if possible.
 echo
 echo "==> Emptying trash."
-if ! command -v trash-empty >/dev/null; then
+if ! command -v trash-empty >/dev/null 2>&1; then
     echo ":: 'trash-empty' not installed, you have to clean other drives manually."
     rm -rvf "$HOME/.local/share/Trash"
 else
@@ -67,11 +67,11 @@ rm -rvf "$@"
 ## Wipe data
 echo
 echo "==> Remove critical data."
-if [ $(echo "$HOME" | grep -c ' ') -ne 0 ]; then
+if [ "$(echo "$HOME" | grep -c' ')" -ne 0 ]; then
     echo 'WARNING: $HOME contains spaces, skipping.'
 else
     # shred -zuv $RMLIST_CRITICAL
-    wipe -rdZx2 -p2 $RMLIST_CRITICAL
+    wipe -rdzp2 $RMLIST_CRITICAL
 fi
 
 echo

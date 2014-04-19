@@ -1,38 +1,36 @@
 #!/bin/sh
 
-unset DATE
-
 _printhelp ()
 {
     cat<<EOF
-Usage: ${1##*/} [-f] FOLDERS
+Usage: ${1##*/} [OPTIONS] FOLDERS
 
-Create index of folder hierarchies. This is used as a small "backup" purpose. In
-case of data loss, it is still possible to get the full file list thanks to the
-indexes.
+Output index of folder hierarchies to stdout. This is used as a small "backup"
+purpose. In case of data loss, it is still possible to get the full file list
+thanks to the indexes.
 
- -f: Overwrite if output exists.
+Options:
+
+ -f: When outputting to a file, overwrite if it exists.
+ -w: Output each index to individual files in current folder. It uses the folder
+     name as basename.
 EOF
 }
 
-OPT_NOCLOBBER=true
-while getopts ":dfh" opt; do
+opt_noclobber=true
+opt_file=false
+while getopts ":fhw" opt; do
     case $opt in
+        f)
+            opt_noclobber=false ;;
         h)
             _printhelp "$0"
-            exit 0
-            ;;
-        f)
-            OPT_NOCLOBBER=false
-            ;;
+            exit 0 ;;
+        w)
+            opt_file=true ;;
         ?)
             _printhelp "$0"
-            exit 1
-            ;;
-        :)
-            _printhelp "$0"
-            exit 1
-            ;;
+            exit 1 ;;
     esac
 done
 
@@ -43,19 +41,33 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-for i ; do
-    base="$(basename "$i")"
-    [ ! -d "$i" ] && continue
-    OUTPUT="$base.index"
-    [ -e "$OUTPUT" ] && $OPT_NOCLOBBER && OUTPUT="$base-$(date +%F-%T).index"
-    echo "$OUTPUT"
+## 'realpath' is required in case argument is ending with '.' or '..'.
+if ! command -v realpath >/dev/null 2>&1; then
+    echo "'realpath' not found in PATH. Exiting." >&2
+    exit 1
+fi
 
-    ## Find over '.*' and '*', is bad practice since if will fail if no existing
-    ## files or for files beginning with a dash. The 'printf' command in find is
-    ## for GNU find only.
+for i ; do
+    ## Find over '.*' and '*', is bad practice since if will fail on
+    ## non-existing files or for files beginning with a dash. The 'printf'
+    ## command in find is for GNU find only.
 
     ## The two following lines do the same for the same time cost. The former is shorter.
-    (cd "$i" && find . -type f) | sed 's/^.\///' | sort > "$OUTPUT"
     # find "$i" -type f | awk -v str="$i" '{l=length(str)+2; print substr($0, l)}' | sort > "$OUTPUT"
+
+    ## 'LC_ALL=C sort' is required to make sure to output is consistent across
+    ## different systems.
+    (cd -- "$i" && find . -type f) | sed 's/^.\///' | LC_ALL=C sort | \
+    if $opt_file; then
+        i="$(realpath -- "$i")"
+        base="${i##*/}"
+        [ ! -d "$i" ] && continue
+        output="$base.index"
+        [ -e "$OUTPUT" ] && $opt_noclobber && output="$base-$(date +%F-%T).index"
+        echo "$output"
+        cat > "$output"
+    else
+        cat
+    fi
 done
 

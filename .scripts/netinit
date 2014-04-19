@@ -27,7 +27,7 @@ Usage: ${1##*/} [OPTIONS]
 
 Connect to a wireless network.
 
-  -c:       Decrypt $WSFILE with ccrypt.
+  -c:       Decrypt $WSFILE with ccrypt's ccat command'.
   -d:       Use DHCP.
   -h:       Show this help.
   -t ITER:  Timeout (default: $TIMEOUT_LIMIT).
@@ -40,28 +40,18 @@ while getopts ":cdht:w:" opt; do
     case $opt in
         h)
             _printhelp "$0"
-            return 1
-            ;;
+            return 1 ;;
         c)
-            USE_CRYPT=1
-            ;;
+            USE_CRYPT=1 ;;
         d)
-            USE_DHCP=1
-            ;;
+            USE_DHCP=1 ;;
         t)
-            TIMEOUT_LIMIT=$OPTARG
-            ;;
+            TIMEOUT_LIMIT=$OPTARG ;;
         w)
-            WSFILE="$OPTARG"
-            ;;
+            WSFILE="$OPTARG" ;;
         ?)
             _printhelp "$0"
-            return 1
-            ;;
-        :)
-            _printhelp "$0"
-            return 1
-            ;;
+            return 1 ;;
     esac
 done
 
@@ -73,10 +63,11 @@ if [ $(id -u) -ne 0 ]; then
 fi
 
 if [ $USE_CRYPT -eq 1 ]; then
-    if ! command -v ccrypt >/dev/null; then
-        echo "You need to have 'ccrypt' installed."
-        exit
+    if ! command -v ccat >/dev/null 2>&1; then
+        echo >&2 "'ccat' not found in PATH. Exiting."
+        exit 1
     fi
+
     WPA_SUPPLICANT_CONF="$(ccat "$WSFILE")"
     if [ $? -ne 0 ]; then
         echo "Failed to decrypt wpa_supplicant config from $WSFILE."

@@ -7,7 +7,7 @@ Usage: ${1##*/} [OPTIONS] FILES
 
 Dump optical disc to ISOFILE (without extension).
 
-Synopsis:
+Options:
 
   -h:       Show this help.
   -d DRIVE: Set optical drive to use (e.g. 'sr1').
@@ -26,9 +26,6 @@ while getopts ":hd:" opt; do
         ?)
             _printhelp "$0"
             exit 1 ;;
-        :)
-            _printhelp "$0"
-            exit 1 ;;
     esac
 done
 
@@ -39,13 +36,10 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-
-if ! command -v readcd >/dev/null; then
-    echo >&2 "readcd required."
-    exit
+if ! command -v readcd >/dev/null 2>&1; then
+    echo >&2 "'readcd' not found in PATH. Exiting."
+    exit 1
 fi
-
-
 
 ## Fast?
 readcd dev=$DRIVE f="$1.iso" -v retries=5 timeout=30 -noerror

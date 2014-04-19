@@ -34,7 +34,7 @@ _mount ()
     fi
 
     cdemu load $DEVICE "$1"
-    if [ $? -ne 0 ] && command -v fuseiso >/dev/null; then
+    if [ $? -ne 0 ] && command -v fuseiso >/dev/null 2>&1; then
         echo "Falling back to fuseiso."
 
         # LIST="$(mount | awk -v root="$FUSEROOT" '$1 == "fuseiso" && $3 ~ root {print $3}')"
@@ -56,7 +56,7 @@ _mount ()
 
     else
         NODE="$(cdemu device-mapping | awk -v devnum=$DEVICE 'NR>2 && $1==devnum {print $2}')"
-        ## TODO: This is terrible,but checking cdemu status does not work. Maybe
+        ## TODO: This is terrible, but checking cdemu status does not work. Maybe
         ## a kernel limitation.
         echo "Mounting..."
         sleep 2
@@ -83,16 +83,6 @@ _umount ()
     fi
 }
 
-
-if ! command -v udiskie >/dev/null; then
-    echo "udiskie required."
-    exit
-fi
-if ! command -v cdemu >/dev/null; then
-    echo "cdemu required."
-    exit
-fi
-
 _printhelp ()
 {
     cat<<EOF
@@ -102,7 +92,7 @@ Usage: ${1##*/} FILES
 Mount image files using CDEmu or fall back to fuseriso if available.  It will
 not mount an image if already mounted.
 
-Synopsis:
+Options:
 
   -h:  Show this help.
   -u:  Unmount folders.
@@ -121,9 +111,6 @@ while getopts ":hu" opt; do
         ?)
             _printhelp "$0"
             exit 1 ;;
-        :)
-            _printhelp "$0"
-            exit 1 ;;
     esac
 done
 
@@ -134,13 +121,18 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-if ! command -v realpath >/dev/null; then
-    echo >&2 "'realpath' is required."
-    exit 1
-fi
-
-
+check()
+{
+    for i ; do
+        if ! command -v $i >/dev/null 2>&1; then
+            echo >&2 "'$i' not found in PATH. Exiting."
+            exit 1
+        fi
+    done
+}
 ## realpath is needed to check if image was already mounted or not.
+check udiskie cdemu realpath
+
 if $OPT_UNMOUNT; then
     for i ; do
         _umount "$(realpath "$i")"

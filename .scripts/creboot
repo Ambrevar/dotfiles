@@ -1,0 +1,39 @@
+#!/bin/sh
+
+rawname=${0##*/}
+rawname=${rawname#c}
+
+usage() {
+    cat <<EOF
+Usage: ${1##*/}
+
+Run `sessionclean' if available and $rawname the system.
+
+EOF
+}
+
+
+if [ "$1" = "-h" ]; then
+    usage "$0"
+    exit
+fi
+
+## Check values.
+case $rawname in
+    poweroff) ;;
+    reboot) ;;
+    halt) ;;
+    *)
+        usage "$0"
+        exit ;;
+esac
+
+command -v sessionclean >/dev/null 2>&1 && sessionclean
+
+if command -v systemctl >/dev/null 2>&1; then
+    $rawname
+then
+    ## If you do not want to get prompted for your password, configure sudo
+    ## properly.
+    sudo $rawname
+fi

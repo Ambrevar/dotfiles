@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [  "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    cat <<EOF
+Usage: ${0##*/} [FILES]
+
+Grep non-ascii characters. If no files are provided, use stdin.
+
+EOF
+    exit
+fi
+
+perl -ne 'chomp; print $_, "\n" if /[[:^ascii:]]/'

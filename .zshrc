@@ -2,8 +2,9 @@
 ## Shell Config -- Master File
 ################################################################################
 
-readonly SHELL_CURRENT="$(ps -o command="" $$)"
-readonly SHELL_DIR="$HOME/.shell.d"
+## Note that 'ps -o command= $$' gives the same result with parameters.
+[ -z "$SHELL_CURRENT" ] && readonly SHELL_CURRENT="$(ps -o comm= $$)"
+[ -z "$SHELL_DIR" ] && readonly SHELL_DIR="$HOME/.shell.d"
 
 ## .profile is sourced automatically by most login managers, but we need to
 ## source it manually to TTY.

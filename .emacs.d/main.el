@@ -2,10 +2,28 @@
 ;; MAIN
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Minimal UI. Load early to hide as soon as possible.
+(setq inhibit-startup-screen t)
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(menu-bar-mode -1)
+(when (fboundp 'set-scroll-bar-mode)
+  (set-scroll-bar-mode 'left)
+  (scroll-bar-mode -1)
+  (define-key my-keys-minor-mode-map (kbd "C-<f6>") 'toggle-scroll-bar))
+
 ;; Remember last cursor position.
 (require 'saveplace)
 (setq save-place-file (concat emacs-cache-folder "saveplace"))
 (setq-default save-place t)
+;; When the daemon is killed abruptly, places are not saved. Adding this hook
+;; allows to save places at a strategic moment.
+(add-hook 'before-save-hook 'save-place-kill-emacs-hook)
+
+;; url-cookie
+(setq url-cookie-file (concat emacs-cache-folder "url.cookies"))
+
+;; Bookmark file to cache folder.
+(setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
 
 ;; Disable autosave features.
 (setq auto-save-default nil)
@@ -27,21 +45,13 @@
 (global-unset-key (kbd "C-z"))
 (global-unset-key (kbd "C-x C-z"))
 
-;; For convenience.
-(setq inhibit-startup-screen t)
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-(menu-bar-mode -1)
-(when (fboundp 'set-scroll-bar-mode)
-  (set-scroll-bar-mode 'left)
-  (scroll-bar-mode -1)
-  (define-key my-keys-minor-mode-map (kbd "C-<f6>") 'toggle-scroll-bar))
-
 ;; Make questions less annoying.
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; Allow some protected functions.
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
+(put 'narrow-to-page 'disabled nil)
 
 ;; Print column number in mode line.
 (column-number-mode 1)
@@ -67,9 +77,11 @@
       (condition-case nil (scroll-down)
         (beginning-of-buffer (goto-char (point-min)))))))
 
+(define-key my-keys-minor-mode-map (kbd "C-x M-n") (lambda () (interactive) (narrow-to-page 1)))
+(define-key my-keys-minor-mode-map (kbd "C-x M-p") (lambda () (interactive) (narrow-to-page -1)))
+
 ;; Line numbers
-;; TODO: This mode is slow on  big files when using beginning-of-buffer binding.
-(autoload 'linum-mode "linum" "toggle line numbers on/off" t)
+;; TODO: This mode is slow on big files when using beginning-of-buffer binding.
 (add-hook 'find-file-hook (lambda () (linum-mode 1)))
 (define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode)
 (add-hook
@@ -79,36 +91,45 @@
 ;; Indentation
 (setq-default tab-width 4)
 (setq-default standard-indent 4)
-(setq-default c-basic-offset 4)
 (setq-default indent-tabs-mode nil) ;; Indentation cannot insert tabs
 
 ;; Line by line scrolling
 (setq scroll-step 1)
 
+;; Useful of autofill.
+(setq sentence-end-double-space nil)
+
 ;; Highlight selections -- not activated by default on old Emacs.
 (transient-mark-mode 1)
 
-;; No trailing whitespace
+;; Whitespace, tabs, and other frivolities.  Highlight trailing whitespaces. For
+;; programming languages only, so that it does not affect buffer like calendar
+;; and so on. There is no prog-mode-hook on Emacs<24.
+(require 'functions) ; for page-number-mode
+(add-hook
+ 'prog-mode-hook
+ (lambda ()
+   (page-number-mode t)
+   (whitespace-mode)))
+(define-key my-keys-minor-mode-map (kbd "C-<f7>") 'whitespace-mode)
+
 ;; WARNING: this can break some configuration files needing whitespaces at the
 ;; end.
-;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-;; Highlight trailing whitespaces. For programming languages only, so that it
-;; does not affect buffer like calendar and so on. There is no prog-mode-hook on
-;; Emacs<24.
-(mapcar
- (lambda (mode-hook)
-   (add-hook
-    mode-hook
-    (lambda () (interactive)
-      (setq show-trailing-whitespace t))))
- '(prog-mode-hook lua-mode-hook))
+; (add-hook 'before-save-hook 'delete-trailing-whitespace)
+(setq whitespace-style (quote (face trailing tab-mark)))
+;; TODO: whitespace report-on-bogus and cleanup do not seem to work properly.
+;; Empty lines seems to be always true. Report is shown even when style is not
+;; matching the errors.
+; (setq whitespace-action '(report-on-bogus))
 
 ;; Remove whitespaces on region, or whole file.
 (define-key my-keys-minor-mode-map (kbd "C-\\") 'delete-trailing-whitespace)
 
+;; Hippie expand.
+(define-key my-keys-minor-mode-map (kbd "M-/") 'hippie-expand)
+
 ;; Abbreviation support
-(setq default-abbrev-mode t)
+(setq-default abbrev-mode t)
 
 ;; Set Fill Column
 (setq-default fill-column 80)
@@ -129,17 +150,17 @@
       browse-url-browser-function 'browse-url-generic)
 (define-key my-keys-minor-mode-map (kbd "C-M-u") 'browse-url)
 
-;; Default ispell dictionnay
-;; (setq ispell-dictionary "fr")
+;; Default ispell dictionnay. If not set, Emacs uses the current locale.
+(setq ispell-dictionary "en")
 (define-key my-keys-minor-mode-map
-  (kbd "C-<f7>")
+  (kbd "<f5>")
   (lambda () (interactive) (ispell-change-dictionary "en")))
 (define-key my-keys-minor-mode-map
-  (kbd "C-<f8>")
+  (kbd "<f6>")
   (lambda () (interactive) (ispell-change-dictionary "fr")))
-
-;; Use color escape sequences. Only use if needed.
-;; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+(define-key my-keys-minor-mode-map
+  (kbd "<f7>")
+  (lambda () (interactive) (ispell-change-dictionary "sv")))
 
 ;; Long paragraphs. Useful for quick navigation with backward-paragraph and
 ;; forward-paragraph.
@@ -156,7 +177,7 @@
 (if (not (fboundp 'tool-bar-mode)) (define-key my-keys-minor-mode-map (kbd "C-M-y") 'query-replace-regexp))
 
 ;; Semantic options.
-(semantic-mode 1)
+(semantic-mode 0)
 (setq semanticdb-default-save-directory (concat emacs-cache-folder "semanticdb"))
 (define-key my-keys-minor-mode-map (kbd "C-c , d") 'semantic-ia-show-summary)
 (define-key my-keys-minor-mode-map (kbd "C-, d") 'semantic-ia-show-summary)
@@ -177,8 +198,9 @@
 ;; Run ranger asynchronously.
 (define-key my-keys-minor-mode-map (kbd "C-x D")
   (lambda () (interactive)
-    (shell-command "urxvt -e ranger &")
-    (delete-windows-on "*Async Shell Command*")))
+    (let ((term (getenv "TERMCMD")))
+      (when (and (executable-find "ranger") (executable-find term))
+        (start-process "dummy" nil term "-e" "ranger")))))
 
 ;; Calendar ISO display.
 (setq calendar-week-start-day 1)
@@ -194,6 +216,9 @@
 ;; IDO.
 ;; (ffap-bindings)
 
+;; Icomplete
+(icomplete-mode)
+
 ;; Quick buffer switching.
 (define-key my-keys-minor-mode-map (kbd "C-<prior>") 'previous-buffer)
 (define-key my-keys-minor-mode-map (kbd "C-<next>") 'next-buffer)
@@ -202,76 +227,6 @@
 (define-key my-keys-minor-mode-map (kbd "C-x C-b")
   (lambda () (interactive)
     (buffer-menu 1)))
-
-;; Disable prompt (but leave warning) on git symlink.
-(setq vc-follow-symlinks t)
-
-;; Org mode config.
-;; Move annoying babel folder. This move does not seem to work properly.
-(setq org-babel-temporary-directory (concat emacs-cache-folder "babel"))
-;; Disable line splitting on M-RET
-(setq org-M-RET-may-split-line '((default)))
-(add-hook
- 'org-mode-hook
- (lambda ()
-   (setq org-agenda-files '("~/todo.org"))
-   (auto-fill-mode -1)
-   (setq org-enforce-todo-dependencies t)))
-;; Set PDF association in Org-mode (was Evince by default).
-(eval-after-load "org"
-  '(progn
-     ;; Change .pdf association directly within the alist
-     (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura --fork %s")))
-
-;; Ediff in one frame.
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-
-;; Set GUD to display many windows by default.
-;; (setq gdb-show-main t)
-(setq gdb-many-windows t)
-;; Change GUD many-windows layout.
-(add-hook
- 'gud-mode-hook
- (lambda ()
-   (defun gdb-setup-windows ()
-     "Layout the window pattern for `gdb-many-windows'."
-     (setq gdb-source-window (selected-window))
-     (gdb-display-locals-buffer)
-     (delete-other-windows)
-     (gdb-display-stack-buffer)
-     (delete-other-windows)
-     (gdb-display-breakpoints-buffer)
-     (delete-other-windows)
-
-     ;; TODO: this does not behave the same on Emacs 23 and 24.
-     (switch-to-buffer
-      (if gud-last-last-frame
-          (gud-find-file (car gud-last-last-frame))
-        (if gdb-main-file
-            (gud-find-file gdb-main-file)
-          ;; Put buffer list in window if we can't find a source file.
-          (list-buffers-noselect))))
-
-     (split-window-horizontally)
-     (other-window 1)
-     (split-window nil ( / ( * (window-height) 3) 4))
-     (split-window nil ( / (window-height) 3))
-     (gdb-set-window-buffer (gdb-locals-buffer-name))
-     (other-window 1)
-     (gdb-set-window-buffer gud-comint-buffer)
-     (when (and
-            (boundp 'gdb-use-separate-io-buffer)
-            gdb-use-separate-io-buffer)
-       (split-window-horizontally)
-       (other-window 1)
-       (gdb-set-window-buffer
-        (gdb-get-buffer-create 'gdb-inferior-io)))
-     (other-window 1)
-     (gdb-set-window-buffer (gdb-stack-buffer-name))
-     (split-window-horizontally)
-     (other-window 1)
-     (gdb-set-window-buffer (gdb-breakpoints-buffer-name))
-     (other-window 1))))
 
 ;; Remove auto-fill in dwb edit because wikis and forums do not like it.
 (add-hook
@@ -287,16 +242,19 @@
    (speedbar-toggle-updates)))
 
 ;; Compilation bindings and conveniences.
-(setq compilation-hide-window nil)
-(define-key my-keys-minor-mode-map (kbd "<f10>")
-  (lambda () (interactive)
-    (save-buffer)
-    (compile compile-command)
-    (when compilation-hide-window
-      (sit-for 2)
-      (delete-windows-on "*compilation*"))))
+(require 'functions)
+(setq compilation-ask-about-save nil)
+(autoload 'recompile "compile" nil t)
+(define-key my-keys-minor-mode-map (kbd "<f10>") 'compile-custom)
 (define-key my-keys-minor-mode-map (kbd "<f11>") 'previous-error)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
+(add-hook
+ 'compilation-after-hook
+ (lambda ()
+   (when compilation-time-before-hide-window
+     (sit-for compilation-time-before-hide-window)
+     (delete-windows-on "*compilation*"))))
+
 ;; Code browsing: make C-M-e jump to next function instead of the end of the current function.
 (define-key my-keys-minor-mode-map (kbd "C-M-e") (lambda () (interactive) (beginning-of-defun -1)))
 
@@ -310,100 +268,6 @@
 ;; Common LISP
 (setq inferior-lisp-program "clisp")
 
-;; Flymake has a bug that prevents menu from spawning in a console. We redefine
-;; the function to spawn the error message in the mini-buffer.
-(defun flymake-display-err-message-for-current-line ()
-  "Display a message with errors/warnings for current line if it
-has errors and/or warnings."
-  (interactive)
-  (let* ((line-no             (flymake-current-line-no))
-         (line-err-info-list  (nth 0 (flymake-find-err-info flymake-err-info line-no)))
-         (menu-data           (flymake-make-err-menu-data line-no line-err-info-list)))
-    (if menu-data
-        (let ((messages))
-          (push (concat (car menu-data) ":") messages)
-          (dolist (error-or-warning (cadr menu-data))
-            (push (car error-or-warning) messages))
-          (message "%s" (mapconcat #'identity (reverse messages) "\n"))))))
-
-(define-key my-keys-minor-mode-map (kbd "C-<f10>")
-  'flymake-display-err-message-for-current-line)
-
-;; Ediff split horizontally by default.
-;; TODO: does not seem to work.
-(add-hook
- 'ediff-mode-hook
- (lambda ()
-   (setq ediff-merge-split-window-function 'split-window-horizontally)))
-
-;; Eshell
-(setq eshell-directory-name (concat emacs-cache-folder "eshell"))
-;; (setq eshell-aliases-file (concat user-emacs-directory "eshell-alias"))
-;; TODO: this breaks eshell completion and history.
-;; (setq eshell-prompt-function
-;;       (lambda nil
-;;         (let ((path (abbreviate-file-name (eshell/pwd))))
-;;           (concat ".-(" path ")"
-;;                   (make-string (- (window-body-width) 5 (length path)) ?-)
-;;                   "\n`--"
-;;                   (if (= (user-uid) 0) "# " "> ")))))
-
-(add-hook
- 'eshell-mode-hook
- (lambda ()
-   (nconc eshell-visual-commands
-          '("abook" "cmus" "htop" "mutt" "ncdu" "newsbeuter" "ranger"
-            "rtorrent" "task" "tig"))
-   (when (file-executable-p "/usr/bin/pacman")
-     (map-on-pair 'eshell/alias
-                  '(("pc" "sudo pacman -Sc")
-                    ("pi" "sudo pacman -S --needed")
-                    ("pqi" "pacman -Qi")
-                    ("pqo" "pacman -Qo")
-                    ("pqs" "pacman -Qs")
-                    ("pr" "sudo pacman -Rs")
-                    ("psi" "pacman -Si")
-                    ("pss" "pacman -Ss")
-                    ("pu" "sudo pacman -Syu"))))
-   (map-on-pair 'eshell/alias
-                '(("mkdir" "mkdir -p")
-                  ("lx" "ls -lXh")
-                  ("lx" "ls -lXh")
-                  ("lk" "ls -lSrh")
-                  ("lc" "ls -lrc")
-                  ("ll" "ls -hl")
-                  ("la" "ls -ahl")))))
-
-;; Zlc - Zsh style completion.
-;; (if (require 'zlc nil t)
-;;     (let ((map minibuffer-local-map))
-;;       ;; Like Zsh menu select.  Should not use arrows directly because it overrides
-;;       ;; default controls like previous entry, or previous/next char.
-;;       (define-key map (kbd "M-<down>")  'zlc-select-next-vertical)
-;;       (define-key map (kbd "M-<up>")    'zlc-select-previous-vertical)
-;;       (define-key map (kbd "M-<right>") 'zlc-select-next)
-;;       (define-key map (kbd "M-<left>")  'zlc-select-previous)
-;;       ;; Reset selection.
-;;       (define-key map (kbd "C-c") 'zlc-reset)
-;;       ;; (setq zlc-select-completion-immediately t)
-;;       ;; To change style, M-x customize-face and input zlc-selected-completion-face.
-;;       ))
-
-;; xclip
-(if (require 'xclip nil t)
-    (turn-on-xclip))
-
-;; Multiple-Cursors
-;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/multiple-cursors")
-(if (require 'multiple-cursors nil t)
-    (progn
-      (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
-      (global-unset-key (kbd "C-<down-mouse-1>"))
-      (define-key my-keys-minor-mode-map (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
-      (define-key my-keys-minor-mode-map (kbd "C-c C-r") 'mc/edit-lines)
-      (define-key my-keys-minor-mode-map (kbd "C-c C-m") 'mc/mark-more-like-this-extended)
-      (define-key my-keys-minor-mode-map (kbd "C-c C-l") 'mc/mark-all-like-this-dwim)))
-
 ;; Let Emacs auto-load/save sessions.
 (when (boundp 'server-running-p)
   (desktop-save-mode 1)
@@ -414,150 +278,42 @@ has errors and/or warnings."
   (setq desktop-path `(,desktop-dirname))
   (add-to-list 'desktop-globals-to-save 'compile-command))
 
-(defadvice pop-to-buffer (before cancel-other-window first)
-  (ad-set-arg 1 nil))
-
-(ad-activate 'pop-to-buffer)
-
-;; Toggle window dedication
-(defun toggle-window-dedicated ()
-  "Toggle whether the current active window is dedicated or not"
-  (interactive)
-  (message
-   (if (let (window (get-buffer-window (current-buffer)))
-         (set-window-dedicated-p window
-                                 (not (window-dedicated-p window))))
-       "Window '%s' is dedicated"
-     "Window '%s' is normal")
-   (current-buffer)))
-
-;; Press [pause] key in each window you want to "freeze", i.e. prevent Emacs
-;; from acting on it.
-(global-set-key [pause] 'toggle-window-dedicated)
-
-;; Dired options
-;; On a GNU system, ls has the option to sort folders first.
-(if (string-match "^gnu.*" (prin1-to-string system-type))
-    (setq dired-listing-switches "--group-directories-first -lh")
-  (setq dired-listing-switches "-lh"))
-(setq wdired-allow-to-change-permissions t)
-
-(defvar dired-showing-hidden nil "If dired is displaying hidden files or not.")
-(defvar dired-showing-humansize t "If dired is displaying humansize or not.")
-
-(defun dired-toggle-hidden ()
-  "Toggle displaying hidden files in dired."
-  (interactive)
-  (let (;; Regexp for finding (possibly embedded) -a switches.
-        (switch-regexp "\\(\\`\\| \\)-\\([b-zA-Z]*\\)\\(a\\)\\([^ ]*\\)")
-        case-fold-search)
-    ;; Remove the -a switch.
-    (while (string-match switch-regexp dired-actual-switches)
-      (if (and (equal (match-string 2 dired-actual-switches) "")
-               (equal (match-string 4 dired-actual-switches) ""))
-          ;; Remove a stand-alone -a switch.
-          (setq dired-actual-switches
-                (replace-match "" t t dired-actual-switches))
-        ;; Remove a switch of the form -XaY for some X and Y.
-        (setq dired-actual-switches
-              (replace-match "" t t dired-actual-switches 3))))
-    ;; Now, if we weren't sorting by date before, add the -a switch.  Some
-    ;; simple-minded ls implementations (eg ftp servers) only allow a single
-    ;; option string, so try not to add " -a" if possible.
-    (if dired-showing-hidden
-        (setq dired-showing-hidden nil)
-      (progn
-        (setq dired-actual-switches
-              (concat dired-actual-switches
-                      (if (string-match-p "\\`-[[:alnum:]]+\\'"
-                                          dired-actual-switches)
-                          "a" " -a")))
-        (setq dired-showing-hidden t))))
-  ;; (dired-sort-set-mode-line)
-  (revert-buffer))
-
-(defun dired-toggle-humansize ()
-  "Toggle displaying humansize in dired."
-  (interactive)
-  (let ((switch-regexp "\\(\\`\\| \\)-\\([a-gi-zA-Z]*\\)\\(h\\)\\([^ ]*\\)")
-        case-fold-search)
-    (while (string-match switch-regexp dired-actual-switches)
-      (if (and (equal (match-string 2 dired-actual-switches) "")
-               (equal (match-string 4 dired-actual-switches) ""))
-          (setq dired-actual-switches
-                (replace-match "" t t dired-actual-switches))
-        (setq dired-actual-switches
-              (replace-match "" t t dired-actual-switches 3))))
-    (if dired-showing-humansize
-        (setq dired-showing-humansize nil)
-      (progn
-        (setq dired-actual-switches
-              (concat dired-actual-switches
-                      (if (string-match-p "\\`-[[:alnum:]]+\\'"
-                                          dired-actual-switches)
-                          "h" " -h")))
-        (setq dired-showing-humansize t))))
-  (revert-buffer))
-
-(add-hook
- 'dired-mode-hook
- (lambda ()
-   (local-set-key (kbd "C-c a") 'dired-toggle-hidden)
-   (local-set-key (kbd "C-c h") 'dired-toggle-humansize)
-   (local-set-key (kbd "<left>") 'dired-up-directory)
-   (local-set-key (kbd "<right>") 'dired-find-file)
-   (local-set-key (kbd "SPC") 'dired-mark)
-   (local-set-key (kbd "<backspace>") 'dired-up-directory)
-   (local-set-key (kbd "b") 'dired-up-directory)))
-
-;; GMP
+;; GMP documentation
 (eval-after-load "info-look"
   '(let ((mode-value (assoc 'c-mode (assoc 'symbol info-lookup-alist))))
      (setcar (nthcdr 3 mode-value)
              (cons '("(gmp)Function Index" nil "^ -.* " "\\>")
                    (nth 3 mode-value)))))
 
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
 
-;; Bookmark file to cache folder
-(setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
+;; Skeleton settings
+(require 'functions)
+;; Do not expand abbrevs in skeletons.
+(setq-default skeleton-further-elements '((abbrev-mode nil)))
+(add-hook 'skeleton-end-hook 'skeleton-make-markers)
+(define-key my-keys-minor-mode-map (kbd "C->") 'skeleton-next-position)
+(define-key my-keys-minor-mode-map (kbd "C-<") (lambda () (interactive) (skeleton-next-position t)))
 
-;; GLSL fallback to C mode.
-(add-to-list 'auto-mode-alist '("\\.vert\\'" . c-mode))
-(add-to-list 'auto-mode-alist '("\\.frag\\'" . c-mode))
-(add-to-list 'auto-mode-alist '("\\.glsl\\'" . c-mode))
-(autoload 'glsl-mode "glsl-mode" nil t)
-(when (boundp 'glsl-mode)
-  (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
-  (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
-  (add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode)))
+;; Alternate focus.
+(add-hook 'occur-hook (lambda () (pop-to-buffer occur-buf)))
+;; (add-hook 'help-mode-hook (lambda () (pop-to-buffer (get-buffer "*Help*"))))
+(add-hook 'grep-mode-hook (lambda () (pop-to-buffer (get-buffer "*grep*"))))
 
-;; Lua
-(add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
-(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+;; Disable prompt (but leave warning) on git symlink.
+(setq vc-follow-symlinks t)
 
-;; Go
-(require 'go-mode-load nil t)
+;; Clipboard and primary selection.
+(setq x-select-enable-clipboard t)
+(setq x-select-enable-primary t)
 
-;; Bison/flex -- Fallback to c-mode.
-(add-to-list 'auto-mode-alist '("\\.yy?\\'" . c-mode))
-(add-to-list 'auto-mode-alist '("\\.l\\'" . c-mode))
-(if (require 'bison-mode nil t)
-    (add-to-list 'auto-mode-alist '("\\.yy?\\'" . bison-mode)))
-(if (require 'flex-mode nil t)
-    (add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode)))
+;; Bibtex
+(setq bibtex-entry-format '(opts-or-alts required-fields numerical-fields whitespace realign last-comma delimiters braces sort-fields))
+(setq bibtex-field-delimiters 'double-quotes)
 
-;; Markdown
-(autoload 'markdown-mode "markdown-mode" "Markdown mode" t)
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-hook
- 'markdown-mode-hook
- (lambda ()
-   (set (make-local-variable 'paragraph-start) "
-")))
-
-;; Read Matlab files in Octave mode.
-(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+;; Git commit meessages.
+(add-to-list 'auto-mode-alist '("COMMIT_EDITMSG\\'" . conf-mode))
 
 ;; Mutt support.
 (add-to-list 'auto-mode-alist '("/tmp/mutt.*" . mail-mode))
@@ -573,5 +329,35 @@ has errors and/or warnings."
 ;; Subtitles support.
 (add-to-list 'auto-mode-alist '("\\.srt\\'" . text-mode))
 
-;; Git commit meessages.
-(add-to-list 'auto-mode-alist '("COMMIT_EDITMSG\\'" . conf-mode))
+;; Read Matlab files in Octave mode.
+(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(provide 'main)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; This may be needed for gud/pdb.
+; (defadvice pop-to-buffer (before cancel-other-window first)
+;   (ad-set-arg 1 nil))
+; (ad-activate 'pop-to-buffer)
+
+;; Use color escape sequences. Only use if needed.
+; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+
+;; Flymake has a bug that prevents menu from spawning in a console. We redefine
+;; the function to spawn the error message in the mini-buffer.
+; (defun flymake-display-err-message-for-current-line ()
+;   "Display a message with errors/warnings for current line if it
+; has errors and/or warnings."
+;   (interactive)
+;   (let* ((line-no             (flymake-current-line-no))
+;          (line-err-info-list  (nth 0 (flymake-find-err-info flymake-err-info line-no)))
+;          (menu-data           (flymake-make-err-menu-data line-no line-err-info-list)))
+;     (if menu-data
+;         (let ((messages))
+;           (push (concat (car menu-data) ":") messages)
+;           (dolist (error-or-warning (cadr menu-data))
+;             (push (car error-or-warning) messages))
+;           (message "%s" (mapconcat #'identity (reverse messages) "\n"))))))
+; (define-key my-keys-minor-mode-map (kbd "C-<f10>")
+;  'flymake-display-err-message-for-current-line)

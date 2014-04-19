@@ -1,14 +1,12 @@
 #!/bin/sh
 
-if [ "$1" = "-h" ]; then
+if [ "$1" = "-h" ] || [ $# -gt 1 ]; then
     cat<<EOF
 Usage: ${0##*/} [INTERFACE]
 
 Return up and down transmission speed on given interface. If not given, use the
-first online interface returned by ifconfig.
-
+first online interface returned by ifconfig (lo is ignored).
 EOF
-
     exit
 fi
 
@@ -19,15 +17,16 @@ else
 fi
 
 
-INTERFACE="$(ifconfig | awk -F: '{print $1; exit}')"
-if [ -n "$1" ]; then
-    INTERFACE="$1"
-fi
+INTERFACE="$(ifconfig | grep -vm1 '^lo\|^ \|^$' | cut -f1 -d':')"
+## AWK alternative
+# ifconfig | awk -F: '!/^ / && !/^$/ && $1!="lo" {print $1;exit}'
+[ -n "$1" ] && INTERFACE="$1"
 
 if [ ! -d "/sys/class/net/${INTERFACE}" ]; then
     echo "Error: no such interface (${INTERFACE})."
     exit
 fi
+echo "$INTERFACE"
 
 RX_BEFORE=$(cat /sys/class/net/${INTERFACE}/statistics/rx_bytes)
 TX_BEFORE=$(cat /sys/class/net/${INTERFACE}/statistics/tx_bytes)
@@ -40,4 +39,3 @@ TX_RESULT=$(((${TX_AFTER:-0}-${TX_BEFORE:-0})/1024))
 
 echo "RX $RX_RESULT KiB/s"
 echo "TX $TX_RESULT KiB/s"
-

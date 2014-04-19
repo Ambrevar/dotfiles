@@ -31,7 +31,7 @@ prependpath()
 
 appendpath "${HOME}/.launchers/"
 appendpath "${HOME}/.scripts/"
-appendpath "${HOME}/.hackpool/"
+prependpath "${HOME}/.hackpool/"
 [ -d /usr/lib/surfraw ] && appendpath "/usr/lib/surfraw"
 
 ## TeXlive
@@ -54,9 +54,20 @@ if [ -d "${TEXDIR}" ]; then
     unset TEXFOLDER
 fi
 unset TEXDIR
+export BIBINPUTS=~/personal/dataperso/bibliography
+
+## Plan9
+PLAN9DIR="/opt/plan9"
+if [ -d "$PLAN9DIR" ]; then
+    appendpath "$PLAN9DIR/bin"
+    if [ "$OSTYPE" = "linux-gnu" ]; then
+        appendpath "$PLAN9DIR/share/man" MANPATH
+    fi
+fi
+unset PLAN9DIR
 
 ## Make 'less' more friendly for non-text input files, see lesspipe(1).
-command -v lesspipe >/dev/null && eval "$(lesspipe)"
+command -v lesspipe >/dev/null 2>&1 && eval "$(lesspipe)"
 
 ## Manpage.
 export MANPAGER="less -s"
@@ -94,12 +105,12 @@ fi
 
 ## Default text editor
 EDITOR="nano"
-command -v vim >/dev/null && EDITOR="vim"
-command -v emacs >/dev/null && EDITOR="emacs"
+command -v vim >/dev/null 2>&1 && EDITOR="vim"
+command -v emacs >/dev/null 2>&1 && EDITOR="emacs"
 GIT_EDITOR="$EDITOR"
 
-## 'em' is a script for emacsclient. See 'homeinit'.
-if command -v em >/dev/null; then
+## 'em' is a script for emacsclient. See '.scripts/em'.
+if command -v em >/dev/null 2>&1; then
     EDITOR='em'
     GIT_EDITOR='emc'
 fi
@@ -108,16 +119,15 @@ export EDITOR
 export GIT_EDITOR
 
 ## Internet Browser
-command -v luakit >/dev/null && export BROWSER="luakit"
-command -v dwb >/dev/null && export BROWSER="dwb"
+for i in dwb luakit google-chrome; do
+    command -v $i >/dev/null 2>&1 && export BROWSER=$i && break
+done
 
 ## SSH-Agent
 ## WARNING: this is insecure on machines where someone else has root access.
-if command -v ssh-agent >/dev/null; then
-    eval "$(ssh-agent)"
-fi
-## Kill ssh-agent on session end.
-trap 'test -n "$SSH_AGENT_PID" && eval $(ssh-agent -k)' 0
+command -v ssh-agent >/dev/null 2>&1 && eval "$(ssh-agent)"
+## Kill ssh-agent on session end. Console login only.
+command -v sessionclean >/dev/null 2>&1 && trap 'sessionclean' 0
 
 ## Set TEMP dir if you want to override /tmp for some applications that check
 ## for this variable. Usually not a good idea since some applications will write
@@ -146,6 +156,7 @@ export WINEDLLOVERRIDES="mscoree,mshtml="
 #
 # appendpath "${HOME}/local/usr/lib/" LD_LIBRARY_PATH
 # appendpath "$HOME/local/usr/lib/python2.7/dist-packages/" PYTHONPATH
+# export LUA_CPATH="$HOME/local/usr/lib/lib?.so;$(lua -e "print(package.cpath)")"
 #
 # umask 077
 ################################################################################

@@ -1,7 +1,6 @@
 #!/bin/sh
 
-_printhelp()
-{
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
     cat<<EOF
 Usage: ${0##*/} FILES|FOLDERS
 
@@ -10,18 +9,12 @@ Prettify C source code using 'indent'.
 Alternative to indent: astyle, uncrustify.
 
 EOF
-
-}
-
-if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-    _printhelp
     exit
 fi
 
-
-if ! command -v indent >/dev/null; then
-    echo "Please install 'indent'."
-    exit
+if ! command -v indent >/dev/null 2>&1; then
+    echo >&2 "'indent' not found in PATH. Exiting."
+    exit 1
 fi
 
 CMD="indent -i4 -ppi4 -bli0 -cli4 -nut"

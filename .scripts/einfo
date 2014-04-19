@@ -1,0 +1,15 @@
+#!/bin/sh
+
+check()
+{
+    for i ; do
+        if ! command -v $i >/dev/null 2>&1; then
+            echo "'$i' not found in PATH. Exiting." >&2
+            exit 1
+        fi
+    done
+}
+check emacs realpath
+
+[ -f "$1" ] && node="$(realpath "$1")" || node="$1"
+emacs --eval '(progn (info "'"$node"'")(delete-other-windows))'

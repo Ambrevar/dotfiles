@@ -21,7 +21,7 @@ echo "==> $CC \"$INPUT\" -o \"$FILE\" $FLAGS"
 
 ## Zsh compatibility. We need it otherwise word splitting of parameter will not
 ## work.
-STATUS="$(set -o | grep 'shwordsplit' | awk '{print $2}')"
+STATUS="$(set -o | awk '/shwordsplit / {print $2}')"
 [ "$STATUS" = "off" ] && set -o shwordsplit
 
 $CC "$INPUT" -o "$FILE" $FLAGS

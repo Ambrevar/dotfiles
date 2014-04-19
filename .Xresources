@@ -28,8 +28,9 @@ URxvt.keysym.C-M-Escape:    perl:keyboard-select:activate
 URxvt.keysym.C-M-v:         perl:clipboard:paste
 URxvt.keysym.C-M-c:         perl:clipboard:paste_escaped
 ! URxvt.clipboard.pastecmd:   xclip -o -selection clipboard -quiet -d locahost:0
-URxvt.clipboard.pastecmd:   xclip -o -quiet
-! URxvt.clipboard.copycmd:  xclip -i -selection clipboard
+URxvt.clipboard.autocopy:   true
+URxvt.clipboard.pastecmd:   xclip -o -selection primary -quiet
+URxvt.clipboard.copycmd:    xclip -i -selection primary
 
 !!==============================================================================
 !! Font

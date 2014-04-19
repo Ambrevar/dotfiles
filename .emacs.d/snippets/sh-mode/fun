@@ -1,7 +1,0 @@
-# name: function
-# key: fun
-# --
-${1:function} ()
-{
-    $0
-}

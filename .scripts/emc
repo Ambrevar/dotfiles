@@ -1,2 +1,1 @@
-#!/bin/sh
-emacsclient -a "" -t "$@"
+em
