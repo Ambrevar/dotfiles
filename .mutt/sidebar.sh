@@ -7,6 +7,7 @@ set sidebar_visible = yes
 set sidebar_width = 24
 set sidebar_sort = yes
 set sidebar_delim=' '
+set sidebar_shortpath = yes
 # set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%4S"
 # set sidebar_folderindent = yes
 
