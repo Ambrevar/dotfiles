@@ -54,53 +54,6 @@ previousPatterns : "prev,previous,back,<,\u2190,\xab,\u226a,<<"
 });
 //>navtools___SCRIPT
 //<autoquvi___SCRIPT
-/*<autoquvi___DISABLED
-extensions.load("autoquvi", {
-//<autoquvi___CONFIG
-  // The quvi command
-  quvi      : "quvi",
-
-  // External player command
-  player    : "mplayer %u",
-
-  // Whether to automatically play videos when quvi find a playable
-  // video
-  autoPlay  : true,
-
-  // Whether to choose the quality before quvi starts
-  chooseQuality : true,
-
-  // A shortcut that spawns quvi for the current website
-  shortcut  : "",
-
-  // A command that spawns quvi for the current website
-  command  : "autoquvi"
-
-//>autoquvi___CONFIG
-});
-autoquvi___DISABLED>*/
-//>autoquvi___SCRIPT
-//<downloadhandler___SCRIPT
-extensions.load("downloadhandler", {
-//<downloadhandler___CONFIG
-   handler : [
-     // Each handler must have 2 or 3 properties:
-     //
-     // command : command to execute, must contain %f which will be replaced with
-     //           the filepath, this property is mandatory
-     //
-     // extension : a filename extension, optional
-     //
-     // mimeType  : a mimetype, optional
-     //
-
-     // { command : "xpdf %f", mimeType : "application/pdf" }
-     // { command : "xdvi %f", extension : "dvi" }
-
-   ]
-//>downloadhandler___CONFIG
-});
-//>downloadhandler___SCRIPT
 //<contenthandler___SCRIPT
 extensions.load("contenthandler", {
 //<contenthandler___CONFIG

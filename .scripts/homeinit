@@ -72,12 +72,15 @@ if command -v luakit >/dev/null 2>&1; then
 fi
 
 ## dwb -- Install extensions.
-if command -v dwb >/dev/null 2>&1 && [ ! -f "$XDG_DATA_HOME/dwb/extensions/adblock_subscriptions" ] ; then
+if command -v dwbem >/dev/null 2>&1; then
     echo "==> dwb"
-    dwbem -Ni adblock_subscriptions
-    dwbem -Ni navtools
-    dwbem -Ni contenthandler
+
+    [ $(dwbem -l | grep -c "adblock_subscriptions") -eq 0 ] && dwbem -Ni adblock_subscriptions
+    [ $(dwbem -l | grep -c "navtools") -eq 0 ] && dwbem -Ni navtools
+    [ $(dwbem -l | grep -c "contenthandler") -eq 0 ] && dwbem -Ni contenthandler
     # dwbem -Ni youtube_html5
+
+    (cd ~/.config/dwb/userscripts/ && git checkout extension_loader.js)
     echo
 fi
 
