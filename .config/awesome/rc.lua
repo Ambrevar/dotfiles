@@ -7,6 +7,10 @@ local f = io.popen("uname")
 local ostype = f:read("*l")
 f:close()
 
+local userf = io.popen("id -u")
+local uid = userf:read("*l")
+userf:close()
+
 local gears = require("gears")
 local awful = require("awful")
 awful.rules = require("awful.rules")
@@ -352,8 +356,8 @@ globalkeys = awful.util.table.join(
    awful.key({ }, "XF86Mail",   function () awful.util.spawn(termcmd .. "mutt") end),
 
    -- Web browser
-   awful.key({ modkey, }, "w",       function () awful.util.spawn_with_shell("dwb 2>>/tmp/dwb.log") end),
-   awful.key({         }, "XF86WWW", function () awful.util.spawn_with_shell("dwb 2>>/tmp/dwb.log") end),
+   awful.key({ modkey, }, "w",       function () awful.util.spawn_with_shell("dwb 2>>/tmp/dwb" .. uid .. ".log") end),
+   awful.key({         }, "XF86WWW", function () awful.util.spawn_with_shell("dwb 2>>/tmp/dwb" .. uid .. ".log") end),
 
    -- Music player
    awful.key({ modkey,           }, "a", function () awful.util.spawn(termcmd .. "cmus") end),

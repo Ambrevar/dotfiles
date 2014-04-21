@@ -88,7 +88,7 @@ set sleep_time = 0
 # macro index,pager <f2> '<enter-command>source ~/.mutt.d/$my_ac_personal<enter><change-folder>!<enter>'
 # macro index,pager <f3> '<enter-command>source ~/.mutt.d/$my_ac_work<enter><change-folder>!<enter>'
 
-## Store passwords as follows in .mutt-pwds:
+## Store passwords as follows in .mutt.pwds:
 # set my_pw_account = foo
 ##
 ## CCRYPT:
