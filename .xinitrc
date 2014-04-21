@@ -12,7 +12,7 @@
 
 ## Note: we do not 'exec' as we want to clean the session when the session is
 ## exited.
-if [ $# -eq 1 ] && command -v $1 >/dev/null; then
+if [ $# -eq 1 ] && command -v $1 >/dev/null 2>&1; then
     $1
 else
     awesome

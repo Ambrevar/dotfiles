@@ -2,10 +2,8 @@
 ## Note: we do not use the (-a "") parameters of emacsclient to auto start the
 ## daemon since we want to pass additional parameters to emacs.
 
-if [ "${0##*/}" = "emc" ]; then
+if [ "${0##*/}" = "emc" ] || [ -z "$DISPLAY" ]; then
     param="-t"
-elif [ -z "$DISPLAY" ]; then
-    param="-nc"
 else
     param=$(emacs --batch -Q --eval='(if (fboundp '"'"'tool-bar-mode) (message "-nc") (message "-t"))' 2>&1)
 fi
