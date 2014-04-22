@@ -2,10 +2,34 @@
 ## Note: we do not use the (-a "") parameters of emacsclient to auto start the
 ## daemon since we want to pass additional parameters to emacs.
 
-if [ "${0##*/}" = "emc" ] || [ -z "$DISPLAY" ]; then
+if [  "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    cat <<EOF
+Usage: ${0##*/} [FILES]
+
+Start emacsclient in terminal or in X window if possible. If server is not
+found, it is started with --no-site-file parameter.
+
+Calling script can have different names.
+* emc: emacs instance is opened in current terminal.
+* emw: if graphical, tell client to wait.
+
+All emacsclient(1) options are supported.
+
+$(emacsclient --help)
+
+EOF
+    exit
+fi
+
+if [ "${0##*/}" = "emc" ] || [ -z "$DISPLAY" ] || \
+    [ "$(emacs --batch -Q --eval='(if (fboundp '"'"'tool-bar-mode) (message "X") (message "TTY"))' 2>&1)" = TTY ]; then
     param="-t"
 else
-    param=$(emacs --batch -Q --eval='(if (fboundp '"'"'tool-bar-mode) (message "-nc") (message "-t"))' 2>&1)
+    if [ "${0##*/}" = "emw" ]; then
+        param="-c"
+    else
+        param="-nc"
+    fi
 fi
 
 [ ! -e /tmp/emacs$(id -u)/server ] && emacs --daemon --no-site-file
