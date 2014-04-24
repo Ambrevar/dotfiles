@@ -67,7 +67,7 @@ rm -rvf "$@"
 ## Wipe data
 echo
 echo "==> Remove critical data."
-if [ "$(echo "$HOME" | grep -c' ')" -ne 0 ]; then
+if [ "$(echo "$HOME" | grep -c ' ')" -ne 0 ]; then
     echo 'WARNING: $HOME contains spaces, skipping.'
 else
     # shred -zuv $RMLIST_CRITICAL
