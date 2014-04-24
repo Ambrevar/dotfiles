@@ -341,3 +341,14 @@ if [ -d "/usr/local/texlive" ]; then
         sudo sh -c 'umask 022 && tlmgr remove $0 $@' "$@"
     }
 fi
+
+##==============================================================================
+## Luarocks functions
+##==============================================================================
+
+if command -v luarocks >/dev/null 2>&1; then
+    lri ()
+    {
+        sudo sh -c 'umask 022 && luarocks install $0 $@' "$@"
+    }
+fi
