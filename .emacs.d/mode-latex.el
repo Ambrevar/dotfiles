@@ -192,6 +192,7 @@ The table type is any value found in `latex-table-names'."
 \\usepackage{geometry}
 % \\usepackage{lipsum}
 % \\usepackage{needspace}
+\\usepackage[svgnames]{xcolor}
 \\usepackage{xspace}
 
 %%=============================================================================
@@ -231,6 +232,7 @@ The table type is any value found in `latex-table-names'."
 \\usepackage[]{hyperref}
 \\hypersetup{
   colorlinks=true,
+  citecolor=DarkRed,
   linkcolor=DarkRed,
   linktoc=page,
   urlcolor=blue,
@@ -301,8 +303,6 @@ The table type is any value found in `latex-table-names'."
   > "%%==============================================================================
 %% Graphics
 
-%% Load TikZ after xcolor.
-\\usepackage[svgnames]{xcolor}
 \\usepackage{graphicx}
 \\usepackage{tikz}
 
