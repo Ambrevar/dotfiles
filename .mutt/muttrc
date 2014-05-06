@@ -34,7 +34,7 @@ set header_cache = "~/.cache/mutt"
 set imap_check_subscribed
 
 ## Keep imap connection alive by polling intermittently (time in seconds).
-set imap_keepalive = 300
+set imap_keepalive = 30
 
 ## Allow mutt to open new imap connection automatically.
 unset imap_passive
