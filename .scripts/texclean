@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh
 
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
     cat <<EOF
