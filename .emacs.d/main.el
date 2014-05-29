@@ -248,12 +248,6 @@
 (define-key my-keys-minor-mode-map (kbd "<f10>") 'compile-custom)
 (define-key my-keys-minor-mode-map (kbd "<f11>") 'previous-error)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
-(add-hook
- 'compilation-after-hook
- (lambda ()
-   (when compilation-time-before-hide-window
-     (sit-for compilation-time-before-hide-window)
-     (delete-windows-on "*compilation*"))))
 
 ;; Code browsing: make C-M-e jump to next function instead of the end of the current function.
 (define-key my-keys-minor-mode-map (kbd "C-M-e") (lambda () (interactive) (beginning-of-defun -1)))

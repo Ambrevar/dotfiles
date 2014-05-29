@@ -37,10 +37,10 @@ Regular math expression can be computed with calc."
        (progn (goto-char max) (line-end-position))))))
 (define-key my-keys-minor-mode-map "\M-;" 'comment-or-uncomment-current-line-or-region)
 
-(defcustom compilation-after-hook nil
-  "List of hook functions run by `compile-custom'."
-  :type 'hook
-  :group 'compilation)
+;; (defcustom compilation-after-hook nil
+;;   "List of hook functions run by `compile-custom'."
+;;   :type 'hook
+;;   :group 'compilation)
 
 (defcustom compilation-before-hook nil
   "List of hook functions run by `compile-custom'.
@@ -61,7 +61,10 @@ If RUNHOOKS is non-nil (or with universal argument), run hooks in
   (interactive "P")
   (when (or runhooks (string= compile-command "make -k ")) (run-hooks 'compilation-before-hook))
   (recompile)
-  (when (or runhooks (string= compile-command "make -k ")) (run-hooks 'compilation-after-hook)))
+  (when compilation-time-before-hide-window
+    (sit-for compilation-time-before-hide-window)
+    (delete-windows-on "*compilation*")))
+  ;; (when (or runhooks (string= compile-command "make -k ")) (run-hooks 'compilation-after-hook)))
 
 (defun count-occurences (regex string)
   "Return number of times regex occurs in string.
