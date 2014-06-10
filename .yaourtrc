@@ -1,0 +1,11 @@
+## General
+EDITOR="emc"
+
+## Build
+## Export to 1: EXPORTDIR or PKGDEST
+## 2: pacman cache (as root)
+EXPORT=2
+## Need EXPORT>0 to be used
+# EXPORTSRC=1
+## If empty, use makepkg's connfiguration (see makepkg.conf)
+# EXPORTDIR="$HOME/abs"
