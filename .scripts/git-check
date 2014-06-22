@@ -15,9 +15,8 @@ if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
 fi
 
 for i; do
-
     while IFS= read -r FOLDER; do
-        if [ -z "$(cd -- "${FOLDER%/*}" && git status -uno | grep "nothing to commit")" ]; then
+        if [ -z "$(cd -- "${FOLDER%/*}" && LC_ALL=C git status -uno | grep "nothing to commit")" ]; then
             echo "${FOLDER%/*}"
         fi
     done <<EOF
