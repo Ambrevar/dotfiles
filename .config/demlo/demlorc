@@ -1,0 +1,56 @@
+-- Musila configuration file.
+
+-- Clear unknown tags.
+cleartags = true
+
+-- Remove embedded covers.
+clearcovers = true
+
+-- We do not use colors by default since it may not work properly on all
+-- terminals. Feel free to turn it on if it works well on your system.
+colors = true
+
+-- Words that will be written as is and will not be turned to titlecase.
+constants = ''
+-- French
+constants = constants .. ' un une de du le la les et mais pour ni ou à a où contre entre chez dans sur que qui '
+-- German
+constants = constants .. ' der die das den dem des ein eine einen eines einer wo an am in bei aus mit nach seit von zu vom zur zum durch für gegen ohne um '
+-- Music
+constants = constants .. " d'Acide JBX "
+
+-- If true, extract covers from tags, copy covers in current folder, exclude those
+-- outside the size boundaries.
+covers = true
+
+-- Default format.
+format = 'ogg'
+
+-- Use human readable output instead of machine-friendly output.
+graphical = true
+
+-- Root folder for output files.
+library = os.getenv('HOME') .. '/musics'
+
+-- What to do if file exists.
+overwrite = false
+
+-- If false, show preview and exit before processing.
+process = false
+
+-- Re-encode.
+recode = true
+
+-- Shall we recurse into subfolders when walking tree.
+recursive = true
+
+-- Default search/replace script applied to all tags by the 'cleantags' function.
+replace = [[{
+   ['[{%[]'] = '(',
+   ['[%]}]'] = ')',
+}]]
+
+-- You might want to set one of the official scripts by default.
+script = 'default'
+
+-- End of configuration file.
