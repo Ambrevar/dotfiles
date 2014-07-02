@@ -70,22 +70,23 @@ case "$extension" in
         ;; # fall back to highlight/cat if the text browsers fail
 
     ## CUSTOM SUPPORT
-	ogg)
+    ogg)
         try mediainfo "$path" && { dump | sed 's/  \+:/: /;' | trim | fmt -s -w $width; exit 4; } ;;
-	mkv)
+    mkv)
         try mediainfo "$path" && { dump | sed 's/  \+:/: /;' | trim | fmt -s -w $width; exit 4; } ;;
-	doc)
-        try antiword "$path" && { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
+    doc)
+        try antiword "$path" && { dump | trim | fmt -s -w $width; exit 0; }
         try catdoc "$path" && { dump | trim | fmt -s -w $width; exit 0; }
-	docx)
+        exit 1;;
+    docx)
         try docx2txt.pl "$path" - && { dump | trim | fmt -s -w $width; exit 0; }
         try catdoc "$path" && { dump | trim | fmt -s -w $width; exit 0; }
         exit 1;;
-	rtf)
+    rtf)
         try unrtf --text "$path" && { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
-	odt)
+    odt)
         try odt2txt "$path" && { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
-	tga)
+    tga)
         try mediainfo "$path" && { dump | trim | sed 's/  \+:/: /;';  exit 5; } || exit 1;;
 esac
 
