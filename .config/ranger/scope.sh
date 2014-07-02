@@ -76,6 +76,7 @@ case "$extension" in
         try mediainfo "$path" && { dump | sed 's/  \+:/: /;' | trim | fmt -s -w $width; exit 4; } ;;
 	doc)
         try antiword "$path" && { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
+        try catdoc "$path" && { dump | trim | fmt -s -w $width; exit 0; }
 	docx)
         try docx2txt.pl "$path" - && { dump | trim | fmt -s -w $width; exit 0; }
         try catdoc "$path" && { dump | trim | fmt -s -w $width; exit 0; }
