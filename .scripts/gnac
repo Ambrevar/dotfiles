@@ -10,4 +10,4 @@ EOF
     exit
 fi
 
-perl -ne 'chomp; print $_, "\n" if /[[:^ascii:]]/'
+perl -ne 'chomp; print $_, "\n" if /[[:^ascii:]]/' "$@"
