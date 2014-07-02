@@ -3,7 +3,7 @@
 _printhelp ()
 {
     cat<<EOF
-Usage: ${1##*/} [OPTIONS] FILES
+Usage: ${1##*/} [OPTIONS] ISOFILE
 
 Dump optical disc to ISOFILE (without extension).
 
