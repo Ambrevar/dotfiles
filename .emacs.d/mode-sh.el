@@ -45,6 +45,15 @@ The advantages of this function over the vanilla code are:
   (setq sh-shell-file (concat "/bin/" (symbol-name sh-shell)))
   (set (make-local-variable 'compile-command) (concat sh-shell-file " " buffer-file-name)))
 
+;; sh-set-shell partly resets some of the font-lock config. We use this
+;; workaround to restore it.
+(add-hook-and-eval 'sh-set-shell-hook
+          (lambda () (font-lock-add-keywords
+           'sh-mode
+           '(("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
+             ("\\<\\(TODO\\):" 1 font-lock-warning-face prepend)
+             ("\\<\\(WARNING\\):" 1 font-lock-warning-face prepend)))))
+
 (add-hook-and-eval
  'sh-mode-hook
  (lambda ()
