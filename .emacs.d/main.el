@@ -110,7 +110,8 @@
  'prog-mode-hook
  (lambda ()
    (page-number-mode t)
-   (whitespace-mode)))
+   ;; (whitespace-mode) ; This mode is very performance hungry.
+   ))
 (define-key my-keys-minor-mode-map (kbd "C-<f7>") 'whitespace-mode)
 
 ;; WARNING: this can break some configuration files needing whitespaces at the
