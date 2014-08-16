@@ -1,4 +1,4 @@
--- Musila configuration file.
+-- Demlorc configuration file.
 
 -- Clear unknown tags.
 cleartags = true
