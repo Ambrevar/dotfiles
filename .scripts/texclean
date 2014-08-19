@@ -17,13 +17,18 @@ fi
 
 for i ; do
     while read -r FILE; do
-        FILE_NOEXT="${FILE##*/}"
-        FILE_NOEXT="${FILE_NOEXT%.*}"
-        FILE_PATH="${FILE%/*}"
+        case FILE in
+            */*) ;;
+            *)
+                FILE="./$FILE" ;;
+        esac
+        DIRNAME="${FILE%/*}"
+        BASENAME="${FILE##*/}"
+        BASENAME="${BASENAME%.*}"
         rm -v $(for j in \
             aux bbl blg cp cps fn glg glo gls idx ilg ind ky lof log maf mt mtc nav out pg snm synctex.gz synctex tns toc tp vr vrs xdy
     do
-        echo "$FILE_PATH/$FILE_NOEXT.$j"
+        echo "$DIRNAME/$BASENAME.$j"
         done) 2>/dev/null
     done <<EOF
 $(find "$i" -type f \( -name "*.tex" -o -name "*.texi" \) )

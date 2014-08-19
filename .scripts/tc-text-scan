@@ -10,7 +10,7 @@ or "oe" instead of "œ".
 EOF
 fi
 
-if ! command -v recode >/dev/null; then
+if ! command -v recode >/dev/null 2>&1; then
     echo "recode needed."
     exit
 fi

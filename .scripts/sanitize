@@ -5,7 +5,7 @@ if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
 Usage: ${0##*/} FOLDERS
 
 Set file/directory owner and permissions according to current umask for current
-used.
+user.
 EOF
     exit
 fi

@@ -1,5 +1,10 @@
 #!/usr/bin/env zsh
 
+## This is a home-made network manager. Systems running systemd and dhcpcd are
+## better off running the dhcpcd daemon with
+## /etc/wpa_supplicant/wpa_supplicant.conf configured if needed. See
+## dhcpcd-run-hooks(8).
+
 ## Deps: wpa_supplicant, ccrypt (optional)
 
 ## We need to use wpa_supplicant's unencrypted config file. We store it in a

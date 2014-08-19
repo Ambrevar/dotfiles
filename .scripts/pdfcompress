@@ -71,7 +71,15 @@ for i ; do
         continue
     fi
 
-    OUTPUT="${i%.*}-compressed.pdf"
+    case "$i" in
+        */*) ;;
+        *)   i="./$i" ;;
+    esac
+    DIRNAME="${i%/*}"
+    BASENAME="${i##*/}"
+    EXTNAME="${BASENAME##*.}"
+    BASENAME="${BASENAME%.*}"
+    OUTPUT="$DIRNAME/$BASENAME-compressed.pdf"
     if [ -e "$OUTPUT" ] && ! $OPT_OVERWRITE; then
         echo "$OUTPUT alredy present. Skipping."
         continue
