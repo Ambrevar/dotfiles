@@ -10,15 +10,16 @@
 ## Launch session
 ##==============================================================================
 
-## Note: we do not 'exec' as we want to clean the session when the session is
-## exited.
+## Note: we do not 'exec' as we want to clean the session on exit.
 if [ $# -eq 1 ] && command -v $1 >/dev/null 2>&1; then
     $1
 else
     awesome
 fi
 
-command -v sessionclean >/dev/null 2>&1 && sessionclean
+## TODO: This is not needed since all forked processes will be killed anyway
+## when 'exec' is not called. But why?
+# command -v sessionclean >/dev/null 2>&1 && sessionclean
 
 ## Crappy desktops
 # exec openbox-session
