@@ -3,7 +3,7 @@
 ;;==============================================================================
 
 (add-hook-and-eval
- 'sh-mode-hook
+ 'awk-mode-hook
  (lambda ()
    (local-set-key (kbd "C-c C-f") 'awk-fori)
    (local-set-key (kbd "C-c f") 'awk-forin)
