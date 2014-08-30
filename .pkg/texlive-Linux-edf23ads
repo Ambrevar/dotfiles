@@ -4,12 +4,17 @@ babel
 babel-english
 babel-french
 babel-german
+babel-russian
 babel-swedish
+beamer
 bigfoot
 caption
 carlisle
+cm-super
 comment
 courier
+cyrillic
+cyrillic-bin
 dvipng
 easylist
 ec
@@ -26,6 +31,7 @@ graphics
 graphics-pln
 hyperref
 hyphen-french
+IEEEtran
 l3kernel
 l3packages
 latex
@@ -33,6 +39,7 @@ latex-bin
 latexconfig
 latex-fonts
 layouts
+lh
 lipsum
 listings
 lm

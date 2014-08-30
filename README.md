@@ -255,6 +255,7 @@ Noteworthy apps
 * awk
 * bashmount
 * bc
+* bmake
 * cabextract
 * cal
 * calc
@@ -269,6 +270,7 @@ Noteworthy apps
 * comm
 * cppcheck
 * cut
+* darktable
 * dash
 * dcraw
 * diff
@@ -307,6 +309,7 @@ Noteworthy apps
 * hdparm
 * highlight
 * htop
+* hugin
 * id3v2
 * imagemagick
 * indent
@@ -321,6 +324,9 @@ Noteworthy apps
 * ltrace
 * lua
 * luakit
+* luarocks
+* lyvi
+* mcomix
 * mediainfo
 * mkfs
 * mkvtoolnix
@@ -351,6 +357,7 @@ Noteworthy apps
 * pwgen
 * qemu
 * ranger
+* rawtherapee
 * re2c
 * rsync
 * rtorrent
