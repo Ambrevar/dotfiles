@@ -328,6 +328,7 @@ Noteworthy apps
 * lyvi
 * mcomix
 * mediainfo
+* minidlna
 * mkfs
 * mkvtoolnix
 * mplayer2
