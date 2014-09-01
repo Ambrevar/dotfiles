@@ -112,6 +112,8 @@ This does not interfere with `subword-mode'."
 ;; TeX setup
 
 (setq tex-start-options "-file-line-error-style -interaction=nonstopmode -synctex=1 ")
+;; Use the following variable to append file local commands without erasing
+;; default options.
 (setq tex-start-commands nil)
 
 (add-hook-and-eval
