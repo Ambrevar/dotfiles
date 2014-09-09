@@ -74,9 +74,9 @@ set sleep_time = 0
 # set my_ac_work=work
 #
 ## Fetch passwords
-# source "ccat ~/.mutt-pwds.cpt |"
+# source "ccat ~/.mutt.pwds.cpt |"
 ## Or
-# source "gpg2 -dq ~/.mutt-pwds.gpg |"
+# source "gpg2 -dq ~/.mutt.pwds.gpg |"
 ##
 ## Folder hooks, one per account.
 # source "~/.mutt.d/$my_ac_personal"
@@ -92,12 +92,12 @@ set sleep_time = 0
 # set my_pw_account = foo
 ##
 ## CCRYPT:
-## $ ccencrypt .mutt-pwds
+## $ ccencrypt .mutt.pwds
 ##
 ## GNUPG: Generate a key pair with:
 ## $ gpg2 --gen-key
 ## Encrypt them with:
-## $ gpg2 -e -r <user> ".mutt-pwds"
+## $ gpg2 -e -r <user> ".mutt.pwds"
 
 source "~/.mutt.d/accountrc"
 
