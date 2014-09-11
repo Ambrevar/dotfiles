@@ -75,6 +75,9 @@ Example: to assign some-function to C-i, use
   (setq package-user-dir (concat emacs-cache-folder "elpa"))
   (package-initialize))
 
+(load-external "\\.bbcode\\'" 'bbcode-mode)
+(add-hook 'bbcode-mode-hook (lambda () (require 'mode-bbcode)))
+
 (load-external "\\.l\\'" 'flex-mode nil 'c-mode)
 (load-external "\\.yy?\\'" 'bison-mode nil 'c-mode)
 
