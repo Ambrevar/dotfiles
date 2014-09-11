@@ -28,7 +28,7 @@ check transmission-daemon transmission-remote-cli
 
 [ $(ps -U $USER | grep -c transmission-da) -eq 0 ] && transmission-daemon
 if [ $# -eq 0 ]; then
-    transmission-remote-cli
+    exec transmission-remote-cli
 else
     ## The 'sleep' is needed here to give the daemon some time to start. 1 sec
     ## should be enough on most system.
