@@ -23,7 +23,7 @@ scUpdate : null,
 cmdUpdate : "adblock_update", 
 
 // Path to the filterlist directory, will be created if it doesn't exist. 
-filterListDir : data.configDir + "/adblock_lists"
+filterListDir : "~/.config/dwb/adblock_lists"
 //>adblock_subscriptions___CONFIG
 });
 //>adblock_subscriptions___SCRIPT
