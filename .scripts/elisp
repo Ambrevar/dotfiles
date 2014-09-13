@@ -42,7 +42,7 @@ fi
 script="$1"
 if $OPT_BYTE && [ "${1##*.}" = "el" ]; then
     script="${1%.*}.elc"
-    emacs -Q --batch -f batch-byte-compile "$1"
+    emacs -Q --batch -f batch-byte-compile "$1" 2>/dev/null
 fi
 shift
 
