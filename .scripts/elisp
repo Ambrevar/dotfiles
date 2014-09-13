@@ -3,7 +3,7 @@
 _printhelp ()
 {
     cat<<EOF
-Usage: ${1##*/} [OPTIONS] SCRIPT
+Usage: ${1##*/} [OPTIONS] SCRIPT [ARGS...]
 
 Run Emacs Lisp SCRIPT.
 
@@ -34,14 +34,18 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
+if ! command -v emacs >/dev/null 2>&1; then
+    echo 'emacs not found in PATH. Exiting.' >&2
+    exit 1
+fi
+
+script="$1"
 if $OPT_BYTE && [ "${1##*.}" = "el" ]; then
     script="${1%.*}.elc"
     emacs -Q --batch -f batch-byte-compile "$1"
-else
-    script="$1"
-    OPT_CLEAN=false
 fi
+shift
 
-emacs -Q --script "$script"
+emacs -Q --script "$script" "$@"
 
 $OPT_CLEAN && rm "$script"
