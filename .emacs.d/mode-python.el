@@ -2,6 +2,8 @@
 ;; Python
 ;;==============================================================================
 
+;; TODO: guess-style has some variable/alias conflict with Python mode.
+
 (defun python-version ()
   "Returns \"python2\" or \"python3\" according to the shabang.
 `python-shell-interpreter' is assumed by default."
