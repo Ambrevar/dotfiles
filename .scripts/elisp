@@ -46,7 +46,7 @@ if $OPT_BYTE && [ "${1##*.}" = "el" ]; then
 fi
 shift
 
-emacs -Q --script "$script" "$@"
+emacs -Q --script "$script" "$@" 2>&1
 $OPT_CLEAN && rm "$script"
 
 ## WARNING: never leave a script on a condition, return code be unexpectedly != 0.
