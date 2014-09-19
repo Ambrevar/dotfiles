@@ -223,7 +223,11 @@ CPPFLAGS += -DHAVE_INLINE
 ## USER SETTINGS
 
 ## Optional compilation flags.
-CFLAGS ?= -pedantic -std=c99 -Wall -Wextra -Wshadow
+CFLAGS ?= -pedantic -std=c99 \
+ -Wall -Wextra \
+ -Wshadow -Wfloat-equal -Wpointer-arith -Winline -Wcast-qual -Wcast-align -Wconversion -Wdouble-promotion -Wfloat-equal
+
+CXXFLAGS ?= -Woverloaded-virtual -Weffc++ -Wold-style-cast
 
 ## END OF USER SETTINGS
 " > \n)
