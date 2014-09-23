@@ -35,6 +35,12 @@ bindkey -e
 autoload -U select-word-style
 select-word-style bash
 
+## Portable key codes: you can use
+# ${terminfo[<capname>]}
+## or
+# echotc <TCap Code>
+## See terminfo(5)
+
 ## Note that double brackets are needed to expand wildcards properly.
 if [[ $TERM = *xterm* ]] ; then
     bindkey "\e[3~" delete-char
@@ -47,7 +53,6 @@ if [[ $TERM = *xterm* ]] ; then
 fi
 
 if [[ $TERM = *rxvt* ]] ; then
-    bindkey -s "\e^B" "browse\n"
     bindkey "^w"    kill-region
     bindkey "\e[3~" delete-char
     bindkey "\eOd"  backward-word
@@ -57,12 +62,10 @@ if [[ $TERM = *rxvt* ]] ; then
     bindkey "\e[7~" beginning-of-line
     bindkey "\e[8~" end-of-line
 
+    bindkey -s "\e^B" "^A^Kbrowse\n"
+
     bindkey "\e[Z" reverse-menu-complete # Shift+Tab
 fi
-
-## For rxvt.
-# bindkey "\e[7~" beginning-of-line # Home
-# bindkey "\e[8~" end-of-line # End
 
 ## For FreeBSD console.
 # bindkey "\e[H" beginning-of-line
