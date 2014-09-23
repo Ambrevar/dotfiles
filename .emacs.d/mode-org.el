@@ -9,7 +9,13 @@
 (setq org-agenda-default-appointment-duration 60)
 (setq org-agenda-columns-add-appointments-to-effort-sum t)
 
-(setq org-agenda-files '("~/todo.org"))
+;; Agendas.
+;; If you want to add other agendas in a local file, use the following code:
+; (eval-after-load "org"
+;   '(progn
+;      (add-to-list 'org-agenda-files "/path/to/agenda.org")))
+(add-to-list 'org-agenda-files "~/todo.org")
+
 (setq org-enforce-todo-dependencies t)
 ;; Set PDF association in Org-mode (was Evince by default).
 (eval-after-load "org"
