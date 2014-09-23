@@ -13,20 +13,6 @@ echo "==> 'temp' folder"
 mkdir -p "$HOME/temp"
 echo
 
-## Advanced keymaps. They need to be in X11 shared dir to be loaded.
-installkeymap ()
-{
-    if [ -f "$HOME/.xkb/symbols/$1" ] && ( [ ! -f "/usr/share/X11/xkb/symbols/$1" ] || \
-        [ ! "$(sha1sum "$HOME/.xkb/symbols/$1" | cut -f1 -d' ')" = "$(sha1sum /usr/share/X11/xkb/symbols/$1 | cut -f1 -d ' ')" ] ); then
-        echo "==> '$1' keymap (press Ctrl-D to skip)"
-        sudo sh -c "install -m644 $HOME/.xkb/symbols/$1 /usr/share/X11/xkb/symbols/"
-        echo
-    fi
-}
-installkeymap frex
-installkeymap usex
-
-
 if [ -d "$SOURCEDIR/contacts" ]; then
     echo "==> Abook"
     ln -snf "$SOURCEDIR/contacts" "$HOME/.abook"
