@@ -112,13 +112,15 @@ Example: to assign some-function to C-i, use
 (autoload 'guess-style-guess-all "guess-style" nil t)
 (setq guess-style-info-mode 1)
 ;; TODO: guess-style has some variable/alias conflict with Python mode.
-;; Workaround: Remove 'python' from guess list.
+;; Workaround: use `python-indent-offset` instead of the deprecated
+;; `python-indent`.
 (setq guess-style-guesser-alist
   '((indent-tabs-mode . guess-style-guess-tabs-mode)
     (tab-width . guess-style-guess-tab-width)
     (c-basic-offset . guess-style-guess-c-basic-offset)
     (nxml-child-indent . guess-style-guess-indent)
-    (css-indent-offset . guess-style-guess-indent)))
+    (css-indent-offset . guess-style-guess-indent)
+    (python-indent-offset . guess-style-guess-indent)))
 (add-hook 'prog-mode-hook (lambda () (ignore-errors (guess-style-guess-all))))
 
 (autoload 'pdf-view "tool-pdf" nil t)
