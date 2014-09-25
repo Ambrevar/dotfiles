@@ -137,6 +137,10 @@ command -v sessionclean >/dev/null 2>&1 && trap 'sessionclean' 0
 ## Wine DLL override. This removes the annoying messages for Mono and Gecko.
 export WINEDLLOVERRIDES="mscoree,mshtml="
 
+## Go
+export GOPATH=~/.go
+appendpath "$GOPATH/bin"
+
 ## Hook. Should be sourced last
 [ -f ~/.profile_hook ] && . ~/.profile_hook
 ################################################################################
