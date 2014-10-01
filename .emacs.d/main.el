@@ -127,7 +127,7 @@
 (define-key my-keys-minor-mode-map (kbd "C-\\") 'delete-trailing-whitespace)
 
 ;; Hippie expand.
-(define-key my-keys-minor-mode-map (kbd "M-/") 'hippie-expand)
+;; (define-key my-keys-minor-mode-map (kbd "M-/") 'hippie-expand)
 
 ;; Abbreviation support
 (setq-default abbrev-mode t)
