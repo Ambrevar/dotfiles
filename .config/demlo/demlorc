@@ -19,6 +19,10 @@ constants = constants .. ' der die das den dem des ein eine einen eines einer wo
 -- Music
 constants = constants .. " d'Acide JBX "
 
+-- Extension support for external covers. This is a pattern-matching string. For
+-- instance 'jpe?g' will match both 'jpg' and 'jpeg'. Case is ignored.
+cover_extlist = { gif = true }
+
 -- If true, extract covers from tags, copy covers in current folder, exclude those
 -- outside the size boundaries.
 covers = true

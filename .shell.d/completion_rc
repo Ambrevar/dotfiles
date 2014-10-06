@@ -1,7 +1,5 @@
 ## -*- mode:sh -*- #
-##==============================================================================
-## Completion
-##==============================================================================
+
 if [ "zsh" = "$SHELL_CURRENT" ]; then
     compdef _gcc crun
     compdef _gcc formatc
@@ -9,9 +7,8 @@ if [ "zsh" = "$SHELL_CURRENT" ]; then
     compdef _gs pdfextract
     compdef _gs pdfresize
     compdef _pacman pacman-color
-    compdef _pcc pacman-deps
-    compdef _pcc pacman-files
-    compdef _pcc pacman-size
+    compdef _pcc pacfiles
+    compdef _pcc pacsize
     compdef _pcc pql
     compdef _tex ltx
     compdef _path_commands typex

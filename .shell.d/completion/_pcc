@@ -11,20 +11,7 @@ fi
 _pcc()
 {
     case $words[1] in
-        pacman-deps)
-            case $words[2] in
-                -*q*)
-                    _pacman_action_query
-                    return ;;
-                -)
-                    return 1;;
-                *)
-                    _pacman_action_sync
-                    return ;;
-            esac
-            return ;;
-
-        pacman-files)
+        pacfiles)
             _pacman_action_query
             return ;;
 
@@ -32,7 +19,7 @@ _pcc()
             _pacman_action_query
             return ;;
 
-        pacman-size)
+        pacsize)
             case $words[2] in
                 -*q*)
                     _pacman_action_query
