@@ -52,6 +52,7 @@ Example: to assign some-function to C-i, use
 (add-hook 'c-mode-hook        (lambda () (require 'mode-cc)))
 (add-hook 'latex-mode-hook    (lambda () (require 'mode-latex)))
 (add-hook 'makefile-mode-hook (lambda () (require 'mode-makefile)))
+(add-hook 'nroff-mode-hook    (lambda () (require 'mode-nroff)))
 (add-hook 'perl-mode-hook     (lambda () (require 'mode-perl)))
 (add-hook 'python-mode-hook   (lambda () (require 'mode-python)))
 (add-hook 'sh-mode-hook       (lambda () (require 'mode-sh)))
