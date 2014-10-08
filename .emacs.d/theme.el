@@ -169,9 +169,19 @@
 ;; ("\\(0x[[:digit:]a-fA-F]+\\)[^[:alnum:]_]" 1 font-lock-constant-face)
 ;; ("[^[:alnum:]_]\\([[:digit:]]*\\.?[[:digit:]]+\\)[^[:alnum:]_.]" 1 font-lock-constant-face)
 
+;; Man pages
+(add-hook
+ 'Man-mode-hook
+ (lambda ()
+   (set-face-foreground 'Man-underline "yellow")
+   (set-face-foreground 'Man-overstrike "cyan")
+   (set-face-bold-p 'Man-overstrike nil)))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'theme)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Old attempts.
 
 ;; C-mode printf highlight.
 ;; (defvar font-lock-format-specifier-face		'font-lock-format-specifier-face
@@ -190,15 +200,3 @@
 ;;        1 font-lock-format-specifier-face t)
 ;;       ("\\(%%\\)"
 ;;        1 font-lock-format-specifier-face t)) )))
-
-;; Man pages
-;; TODO: man mode does not get colored because the hook does not exist.
-;; (make-face 'man-bold-face)
-;; (make-face 'man-underline-face)
-;; (set-face-foreground 'man-bold-face "red")
-;; (set-face-foreground 'man-underline-face "green")
-;; (add-hook
-;;  'man-mode-hook
-;;  (lambda ()
-;;    (set (make-local-variable 'bold) 'man-bold-face)
-;;    (set (make-local-variable 'underline) 'man-underline-face)))
