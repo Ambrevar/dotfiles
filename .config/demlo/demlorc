@@ -1,7 +1,4 @@
--- Demlorc configuration file.
-
--- Clear unknown tags.
-cleartags = true
+-- Demlo configuration file.
 
 -- Remove embedded covers.
 clearcovers = true
@@ -20,11 +17,12 @@ constants = constants .. ' der die das den dem des ein eine einen eines einer wo
 constants = constants .. " d'Acide JBX "
 
 -- Extension support for external covers. This is a pattern-matching string. For
--- instance 'jpe?g' will match both 'jpg' and 'jpeg'. Case is ignored.
-cover_extlist = { gif = true }
+-- instance 'jpe?g' will match both 'jpg' and 'jpeg'. Case is ignored. The value
+-- is ignored, use 'true' or anything else.
+cover_extlist = { gif=true }
 
--- If true, extract covers from tags, copy covers in current folder, exclude those
--- outside the size boundaries.
+-- If true, extract covers from tags, copy covers in current folder, exclude
+-- those outside the size boundaries.
 covers = true
 
 -- Default format.
@@ -36,6 +34,9 @@ graphical = true
 -- Root folder for output files.
 library = os.getenv('HOME') .. '/musics'
 
+-- Do not complete tags with online database.
+online = false
+
 -- What to do if file exists.
 overwrite = false
 
@@ -45,16 +46,13 @@ process = false
 -- Re-encode.
 recode = true
 
--- Shall we recurse into subfolders when walking tree.
+-- We recurse into subfolders when walking tree.
 recursive = true
 
--- Default search/replace script applied to all tags by the 'cleantags' function.
-replace = [[{
-   ['[{%[]'] = '(',
-   ['[%]}]'] = ')',
-}]]
+-- We copy file when the content is not modified.
+rename = false
 
 -- You might want to set one of the official scripts by default.
-script = 'default'
+scripts = 'tag case sub filename cover format'
 
 -- End of configuration file.
