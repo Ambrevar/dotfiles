@@ -53,6 +53,6 @@ recursive = true
 rename = false
 
 -- You might want to set one of the official scripts by default.
-scripts = 'tag case sub filename cover format'
+scripts = 'tag sub case filename cover format'
 
 -- End of configuration file.
