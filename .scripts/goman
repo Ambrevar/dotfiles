@@ -1,0 +1,3 @@
+#!/bin/sh
+## TODO: auto-completion
+godoc "$1" | less

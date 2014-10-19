@@ -1,0 +1,25 @@
+#!/bin/sh
+
+if [ $# -lt 1 ]; then
+    cat<<EOF
+Usage: ${0##*/} FILE [FLAGS]
+
+Simulate a C interpreter by compiling, executing and removing file in one run.
+EOF
+    exit
+fi
+
+GC="go build"
+INPUT="$1"
+
+shift
+[ $# -ne 0 ] && FLAGS="$@"
+
+FILE="$(mktemp)"
+echo "==> $GC -o \"$FILE\" $FLAGS \"$INPUT\""
+
+$GC -o "$FILE" $FLAGS "$INPUT"
+
+echo "==> $FILE"
+"$FILE"
+rm "$FILE"
