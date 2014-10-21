@@ -385,10 +385,6 @@ globalkeys = awful.util.table.join(
    -- Bind ''Meta4+Ctrl+m'' to move the mouse to the coordinates set above.
    -- This is useful if you needed the mouse for something and now want it out of the way.
    awful.key({ modkey, "Control" }, "m", function() moveMouseAway(safeCoords.x, safeCoords.y) end),
-   -- awful.key({ modkey, "Control" }, "h", function() moveMouse(-5, 0) end),
-   -- awful.key({ modkey, "Control" }, "j", function() moveMouse(0, 5) end),
-   -- awful.key({ modkey, "Control" }, "k", function() moveMouse(0, -5) end),
-   -- awful.key({ modkey, "Control" }, "l", function() moveMouse(5, 0) end),
 
    --------------------------------------------------------------------------------
    -- Awesome specific
@@ -431,10 +427,6 @@ globalkeys = awful.util.table.join(
    awful.key({ modkey, "Mod1" }, "l",  function () awful.tag.incmwfact(0.05)   end),
    awful.key({ modkey, "Mod1" }, "k",  function () awful.client.incwfact(0.05) end),
    awful.key({ modkey, "Mod1" }, "j", function () awful.client.incwfact(-0.05) end),
-
-   -- Floating clients resize
-   awful.key({ modkey , "Mod1"}, "Down", function () awful.client.moveresize( 20,  20, -40, -40) end),
-   awful.key({ modkey , "Mod1"}, "Up", function () awful.client.moveresize(-20, -20,  40,  40) end),
 
    -- Layout organization
    awful.key({ modkey, "Control" }, "Left", function () awful.tag.incnmaster( 1) end),
@@ -503,20 +495,6 @@ clientkeys = awful.util.table.join(
    awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
    awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
    -- awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
-
-   -- Floating clients move
-   awful.key({ modkey }, "Down",         function () awful.client.moveresize(  0,  20,   0,   0) end),
-   awful.key({ modkey }, "Up",         function () awful.client.moveresize(  0, -20,   0,   0) end),
-   awful.key({ modkey }, "Left",         function () awful.client.moveresize(-20,   0,   0,   0) end),
-   awful.key({ modkey }, "Right",         function () awful.client.moveresize( 20,   0,   0,   0) end),
-
-   -- awful.key({ modkey,           }, "n",
-   --     function (c)
-   --         -- The client currently has the input focus, so it cannot be
-   --         -- minimized, since minimized clients can't have the focus.
-   --         c.minimized = true
-   --     end),
-   -- awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
    awful.key({ modkey, "Mod1" }, "m",
              function (c)
