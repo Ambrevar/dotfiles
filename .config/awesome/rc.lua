@@ -396,7 +396,7 @@ globalkeys = awful.util.table.join(
 
    -- Standard program
    awful.key({ modkey, "Control" }, "r", awesome.restart),
-   awful.key({ modkey, "Shift"   }, "q", awesome.quit),
+   -- awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
    -- Tags
    awful.key({ modkey }, "Prior",  awful.tag.viewprev       ),
@@ -404,8 +404,8 @@ globalkeys = awful.util.table.join(
    awful.key({ modkey }, "Escape", awful.tag.history.restore),
 
    -- Layout select and switch
-   awful.key({ modkey }, "Up", function () awful.client.swap.byidx(  1)    end),
-   awful.key({ modkey }, "Down", function () awful.client.swap.byidx( -1)    end),
+   awful.key({ modkey }, "l", function () awful.client.swap.byidx(  1)    end),
+   awful.key({ modkey }, "h", function () awful.client.swap.byidx( -1)    end),
    -- awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
    awful.key({ modkey }, "Tab",
              function ()
@@ -415,26 +415,26 @@ globalkeys = awful.util.table.join(
                 end
              end),
 
-   awful.key({ modkey }, "Right",
+   awful.key({ modkey }, "k",
              function ()
                 awful.client.focus.byidx( 1)
                 if client.focus then client.focus:raise() end
              end),
-   awful.key({ modkey }, "Left",
+   awful.key({ modkey }, "j",
              function ()
                 awful.client.focus.byidx(-1)
                 if client.focus then client.focus:raise() end
              end),
 
    -- Layout resize
-   awful.key({ modkey, "Mod1" }, "Left",    function () awful.tag.incmwfact(-0.05)   end),
-   awful.key({ modkey, "Mod1" }, "Right",  function () awful.tag.incmwfact(0.05)   end),
-   awful.key({ modkey, "Mod1" }, "Up",  function () awful.client.incwfact(0.05) end),
-   awful.key({ modkey, "Mod1" }, "Down", function () awful.client.incwfact(-0.05) end),
+   awful.key({ modkey, "Mod1" }, "h",    function () awful.tag.incmwfact(-0.05)   end),
+   awful.key({ modkey, "Mod1" }, "l",  function () awful.tag.incmwfact(0.05)   end),
+   awful.key({ modkey, "Mod1" }, "k",  function () awful.client.incwfact(0.05) end),
+   awful.key({ modkey, "Mod1" }, "j", function () awful.client.incwfact(-0.05) end),
 
    -- Floating clients resize
-   awful.key({ modkey , "Mod1"}, "j", function () awful.client.moveresize( 20,  20, -40, -40) end),
-   awful.key({ modkey , "Mod1"}, "k", function () awful.client.moveresize(-20, -20,  40,  40) end),
+   awful.key({ modkey , "Mod1"}, "Down", function () awful.client.moveresize( 20,  20, -40, -40) end),
+   awful.key({ modkey , "Mod1"}, "Up", function () awful.client.moveresize(-20, -20,  40,  40) end),
 
    -- Layout organization
    awful.key({ modkey, "Control" }, "Left", function () awful.tag.incnmaster( 1) end),
@@ -505,10 +505,10 @@ clientkeys = awful.util.table.join(
    -- awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
 
    -- Floating clients move
-   awful.key({ modkey }, "j",         function () awful.client.moveresize(  0,  20,   0,   0) end),
-   awful.key({ modkey }, "k",         function () awful.client.moveresize(  0, -20,   0,   0) end),
-   awful.key({ modkey }, "h",         function () awful.client.moveresize(-20,   0,   0,   0) end),
-   awful.key({ modkey }, "l",         function () awful.client.moveresize( 20,   0,   0,   0) end),
+   awful.key({ modkey }, "Down",         function () awful.client.moveresize(  0,  20,   0,   0) end),
+   awful.key({ modkey }, "Up",         function () awful.client.moveresize(  0, -20,   0,   0) end),
+   awful.key({ modkey }, "Left",         function () awful.client.moveresize(-20,   0,   0,   0) end),
+   awful.key({ modkey }, "Right",         function () awful.client.moveresize( 20,   0,   0,   0) end),
 
    -- awful.key({ modkey,           }, "n",
    --     function (c)
