@@ -273,6 +273,7 @@ Noteworthy apps
 * darktable
 * dash
 * dcraw
+* demlo
 * diff
 * dosbox
 * doxygen
@@ -310,6 +311,7 @@ Noteworthy apps
 * highlight
 * htop
 * hugin
+* i3
 * id3v2
 * imagemagick
 * indent
@@ -333,6 +335,7 @@ Noteworthy apps
 * mkvtoolnix
 * mplayer2
 * mpv
+* musl
 * mutt
 * nasm
 * nawk
