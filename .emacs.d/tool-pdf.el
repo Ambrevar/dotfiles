@@ -4,8 +4,9 @@
 
 (defvar pdf-viewer "zathura" "PDF viewer.")
 
+
 (defvar pdf-viewer-args
-  '("--fork" "-s"
+  '("--fork"
     "-x" "emacsclient --eval '(progn (switch-to-buffer  (file-name-nondirectory \"%{input}\")) (goto-line %{line}))'")
   "List of arguments passed to `pdf-viewer' when called.
 You may want to fork the viewer so that it detects when the same
