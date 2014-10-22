@@ -435,12 +435,11 @@ Hook function for skeletons."
        (t (goto-char (car skeleton-markers)))))))
 
 (defun sort-lines-unique ()
-  "Remove duplicate lines using shell command `sort -u'."
+  "Remove trailing white space, then duplicate lines, then sort the result."
   (interactive)
-  (let ((lcall (getenv "LC_ALL")))
-    (setenv "LC_ALL" "C")
-    (call-process-region (point) (mark) "sort" t t nil "-u")
-    (setenv "LC_ALL" lcall)))
+  (delete-trailing-whitespace (point) (mark))
+  (delete-duplicate-lines (point) (mark))
+  (sort-lines nil (point) (mark)))
 
 (defun swap-windows ()
   "If you have 2 windows, it swaps them."
