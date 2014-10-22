@@ -66,8 +66,12 @@ if [ -d "$PLAN9DIR" ]; then
 fi
 unset PLAN9DIR
 
+## Less config. -R is needed for lesspipe.
+export LESS=' -R '
 ## Make 'less' more friendly for non-text input files, see lesspipe(1).
 command -v lesspipe >/dev/null 2>&1 && eval "$(lesspipe)"
+## Remove less history.
+LESSHISTFILE='-'
 
 ## Manpage.
 export MANPAGER="less -s"
@@ -76,8 +80,6 @@ export MANWIDTH=80
 ## an empty prompt. Sadly this gets messy with 'apropos'.
 # export MANPAGER="less -sP '?f%f .?m(file %i of %m) .?ltlines %lt-%lb?L/%L. .byte %bB?s/%s. ?e(END) :?pB%pB\%..%t'"
 
-## Less config. -R is needed for lesspipe.
-export LESS=' -R '
 
 ## Time display (with ls command for example)
 ## TODO: BSD version?
@@ -138,8 +140,10 @@ command -v sessionclean >/dev/null 2>&1 && trap 'sessionclean' 0
 export WINEDLLOVERRIDES="mscoree,mshtml="
 
 ## Go
-export GOPATH=~/.go
-appendpath "$GOPATH/bin"
+if [ -d "$HOME/.go" ]; then
+   export GOPATH=~/.go
+   appendpath "$GOPATH/bin"
+fi
 
 ## Hook. Should be sourced last
 [ -f ~/.profile_hook ] && . ~/.profile_hook
