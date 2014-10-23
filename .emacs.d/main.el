@@ -91,7 +91,7 @@
 ;; Indentation
 (setq-default tab-width 4)
 (setq-default standard-indent 4)
-(setq-default indent-tabs-mode nil) ;; Indentation cannot insert tabs
+(setq-default indent-tabs-mode t) ;; Indentation cannot insert tabs
 
 ;; Line by line scrolling
 (setq scroll-step 1)
@@ -178,7 +178,7 @@
 (if (not (fboundp 'tool-bar-mode)) (define-key my-keys-minor-mode-map (kbd "C-M-y") 'query-replace-regexp))
 
 ;; Semantic options.
-(semantic-mode 0)
+;; (semantic-mode 1)
 (setq semanticdb-default-save-directory (concat emacs-cache-folder "semanticdb"))
 (define-key my-keys-minor-mode-map (kbd "C-c , d") 'semantic-ia-show-summary)
 (define-key my-keys-minor-mode-map (kbd "C-, d") 'semantic-ia-show-summary)
@@ -257,6 +257,7 @@
 (add-hook
  'html-mode-hook
  (lambda ()
+   (setq sgml-xml-mode t)
    (turn-off-auto-fill)
    (toggle-truncate-lines)))
 
