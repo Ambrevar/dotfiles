@@ -85,6 +85,7 @@ Example: to assign some-function to C-i, use
 (load-external "\\.vert\\'\\|\\.frag\\'\\|\\.glsl\\'" 'glsl-mode nil 'c-mode)
 
 (load-external "\\.go\\'" 'go-mode)
+(add-hook 'go-mode-hook (lambda () (require 'mode-go)))
 
 (load-external "\\.dot\\'" 'graphviz-dot-mode)
 (add-hook 'graphviz-dot-mode-hook (lambda () (require 'mode-dot)))
