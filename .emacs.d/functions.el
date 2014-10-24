@@ -102,6 +102,7 @@ there's a region, all lines that region covers will be duplicated."
         end
         (origin (point))
         (auto-fill-p (symbol-value 'auto-fill-function)))
+    ;; TODO: use (region-active-p) instead. Test when transient-mode is off.
     (if (and mark-active (> (point) (mark)))
         (exchange-point-and-mark))
     (setq beg (line-beginning-position))
@@ -384,6 +385,7 @@ WARNING: this may slow down editing on big files."
                (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
 (define-key my-keys-minor-mode-map (kbd "C-x w") 'rename-buffer-and-file)
 
+;; TODO: change this to untabify if indent-tabs-mode is nil, tabify otherwise.
 (defun sanitize ()
   "Untabifies, indents and deletes trailing whitespace.
 Works on buffer or region."
@@ -434,6 +436,7 @@ Hook function for skeletons."
        (pos (goto-char pos))
        (t (goto-char (car skeleton-markers)))))))
 
+;; TODO: test when no region is selected.
 (defun sort-lines-unique ()
   "Remove trailing white space, then duplicate lines, then sort the result."
   (interactive)
@@ -460,6 +463,21 @@ Hook function for skeletons."
   (other-window 1))
 (define-key my-keys-minor-mode-map (kbd "C-x M-s") 'swap-windows)
 
+(defun tabify-leading ()
+  "Call `tabify' on leading spaces only.
+Works on whole buffer if region is unactive."
+  (interactive)
+  (require 'tabify) ; Need this to initialize `tabify-regexp'.
+  (let ((tabify-regexp-old tabify-regexp) start end)
+	(if (region-active-p)
+		(setq start (region-beginning) end (region-end))
+	  (setq start (point-min) end (point-max)))
+	(unwind-protect
+		(progn
+		  (setq tabify-regexp "^\t* [ \t]+")
+		  (tabify start end))
+	  (setq tabify-regexp tabify-regexp-old))))
+  
 (defun toggle-indent-tabs ()
   "Indent with tabs or spaces."
   (interactive)
