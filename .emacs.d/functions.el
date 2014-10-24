@@ -2,6 +2,13 @@
 ;; FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Note on mark and region: to get a consistent behaviour whether transient mode
+;; is on or off, check `mark-active' to know if the region is active. It will
+;; work as expected if transient. If not, it will always be true as soon as the
+;; mark has been set once; so you need to make sure the mark is set as you want
+;; beforehand (e.g. whole buffer, single line...). This is the behaviour of
+;; `sort-lines'.
+
 (defun add-hook-and-eval (hook function)
   "Add FUNCTION to HOOK and evaluate it.
 This can be useful when called from a hooked function to make
@@ -29,7 +36,7 @@ Regular math expression can be computed with calc."
   (interactive)
   (save-excursion
     (let (min max)
-      (if (region-active-p)
+      (if mark-active
           (setq min (region-beginning) max (region-end))
         (setq min (point) max (point)))
       (comment-or-uncomment-region
@@ -102,7 +109,6 @@ there's a region, all lines that region covers will be duplicated."
         end
         (origin (point))
         (auto-fill-p (symbol-value 'auto-fill-function)))
-    ;; TODO: use (region-active-p) instead. Test when transient-mode is off.
     (if (and mark-active (> (point) (mark)))
         (exchange-point-and-mark))
     (setq beg (line-beginning-position))
@@ -390,7 +396,7 @@ WARNING: this may slow down editing on big files."
 Works on buffer or region. Requires `tabify-leading'."
   (interactive)
   (save-excursion
-    (unless (region-active-p)
+    (unless mark-active
       (mark-whole-buffer))
     (if indent-tabs-mode
         (tabify-leading)
@@ -437,10 +443,13 @@ Hook function for skeletons."
        (pos (goto-char pos))
        (t (goto-char (car skeleton-markers)))))))
 
-;; TODO: test when no region is selected.
 (defun sort-lines-unique ()
   "Remove trailing white space, then duplicate lines, then sort the result."
   (interactive)
+  (unless mark-active
+    (mark-whole-buffer))
+  (when (> (point) (mark))
+    (exchange-point-and-mark))
   (delete-trailing-whitespace (point) (mark))
   (delete-duplicate-lines (point) (mark))
   (sort-lines nil (point) (mark)))
@@ -470,7 +479,7 @@ Works on whole buffer if region is unactive."
   (interactive)
   (require 'tabify) ; Need this to initialize `tabify-regexp'.
   (let ((tabify-regexp-old tabify-regexp) start end)
-    (if (region-active-p)
+    (if mark-active
         (setq start (region-beginning) end (region-end))
       (setq start (point-min) end (point-max)))
     (unwind-protect
