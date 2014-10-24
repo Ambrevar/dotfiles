@@ -2,6 +2,8 @@
 ;; Perl
 ;;==============================================================================
 
+(defvaralias 'perl-indent-level 'tab-width)
+
 (add-hook-and-eval
  'perl-mode-hook
  (lambda ()

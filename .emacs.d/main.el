@@ -89,9 +89,10 @@
  (lambda () (if (display-graphic-p) (setq linum-format "%d") (setq linum-format "%d "))))
 
 ;; Indentation
-(setq-default tab-width 4)
-(setq-default standard-indent 4)
-(setq-default indent-tabs-mode t) ;; Indentation cannot insert tabs
+(setq-default tab-width 2)
+(defvaralias 'standard-indent 'tab-width)
+(setq-default indent-tabs-mode t)
+(defvaralias 'c-basic-offset 'tab-width) ;; This needs to be set globally.
 
 ;; Line by line scrolling
 (setq scroll-step 1)

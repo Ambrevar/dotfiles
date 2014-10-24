@@ -2,6 +2,8 @@
 ;; Lua
 ;;==============================================================================
 
+(defvaralias 'lua-indent-level 'tab-width)
+
 (add-hook-and-eval
  'lua-mode-hook
  (lambda ()

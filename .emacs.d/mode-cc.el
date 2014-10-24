@@ -58,8 +58,7 @@ restored."
 
 (c-add-style
  "peter"
- '((c-basic-offset . 4)
-  (c-comment-only-line-offset . 0)
+ '((c-comment-only-line-offset . 0)
   (c-hanging-braces-alist
    (brace-list-open)
    (brace-entry-open)
@@ -85,7 +84,7 @@ restored."
    (add-hook-and-eval
     mode-hook
     (lambda ()
-      (c-set-style "peter")
+      (c-set-style "peter" t)
       (add-hook 'compilation-before-hook 'cc-set-compiler nil t)
       (local-set-key (kbd "<f9>") 'cc-clean)
       (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
