@@ -64,7 +64,7 @@ If RUNHOOKS is non-nil (or with universal argument), run hooks in
   (when compilation-time-before-hide-window
     (sit-for compilation-time-before-hide-window)
     (delete-windows-on "*compilation*")))
-  ;; (when (or runhooks (string= compile-command "make -k ")) (run-hooks 'compilation-after-hook)))
+;; (when (or runhooks (string= compile-command "make -k ")) (run-hooks 'compilation-after-hook)))
 
 (defun count-occurences (regex string)
   "Return number of times regex occurs in string.
@@ -343,22 +343,22 @@ page-delimiter.\n
 WARNING: this may slow down editing on big files."
   (interactive (list (not (equal current-prefix-arg '(4)))))
   (setq mode-line-format
- `("%e"
-   mode-line-front-space
-   mode-line-mule-info
-   mode-line-client
-   mode-line-modified
-   mode-line-remote
-   mode-line-frame-identification
-   mode-line-buffer-identification
-   "   "
-   mode-line-position
-   ,(when activate '(:eval (when (> (page-count) 1) (format "%d/%d" (page-number) (page-count)))))
-   (vc-mode vc-mode)
-   "  "
-   mode-line-modes
-   mode-line-misc-info
-   mode-line-end-spaces)))
+        `("%e"
+          mode-line-front-space
+          mode-line-mule-info
+          mode-line-client
+          mode-line-modified
+          mode-line-remote
+          mode-line-frame-identification
+          mode-line-buffer-identification
+          "   "
+          mode-line-position
+          ,(when activate '(:eval (when (> (page-count) 1) (format "%d/%d" (page-number) (page-count)))))
+          (vc-mode vc-mode)
+          "  "
+          mode-line-modes
+          mode-line-misc-info
+          mode-line-end-spaces)))
 
 (defun pos-at-line (arg)
   "Return the position at beginning of line."
@@ -385,15 +385,16 @@ WARNING: this may slow down editing on big files."
                (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
 (define-key my-keys-minor-mode-map (kbd "C-x w") 'rename-buffer-and-file)
 
-;; TODO: change this to untabify if indent-tabs-mode is nil, tabify otherwise.
 (defun sanitize ()
   "Untabifies, indents and deletes trailing whitespace.
-Works on buffer or region."
+Works on buffer or region. Requires `tabify-leading'."
   (interactive)
   (save-excursion
     (unless (region-active-p)
       (mark-whole-buffer))
-    (untabify (region-beginning) (region-end))
+    (if indent-tabs-mode
+        (tabify-leading)
+      (untabify (region-beginning) (region-end)))
     (indent-region (region-beginning) (region-end))
     (save-restriction
       (narrow-to-region (region-beginning) (region-end))
@@ -469,15 +470,15 @@ Works on whole buffer if region is unactive."
   (interactive)
   (require 'tabify) ; Need this to initialize `tabify-regexp'.
   (let ((tabify-regexp-old tabify-regexp) start end)
-	(if (region-active-p)
-		(setq start (region-beginning) end (region-end))
-	  (setq start (point-min) end (point-max)))
-	(unwind-protect
-		(progn
-		  (setq tabify-regexp "^\t* [ \t]+")
-		  (tabify start end))
-	  (setq tabify-regexp tabify-regexp-old))))
-  
+    (if (region-active-p)
+        (setq start (region-beginning) end (region-end))
+      (setq start (point-min) end (point-max)))
+    (unwind-protect
+        (progn
+          (setq tabify-regexp "^\t* [ \t]+")
+          (tabify start end))
+      (setq tabify-regexp tabify-regexp-old))))
+
 (defun toggle-indent-tabs ()
   "Indent with tabs or spaces."
   (interactive)
