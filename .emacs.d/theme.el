@@ -44,6 +44,12 @@
     (set-face-background  'shadow                      "black" )
   (set-face-background  'shadow                      "#1c1c1c" ))
 
+;; Whitespace mode
+(add-hook
+ 'whitespace-load-hook
+ (lambda ()
+	 (set-face-background  'whitespace-indentation           "#696969" )))
+
 ;; Programming
 (set-face-foreground  'font-lock-builtin-face           "#d2691e" )
 (set-face-bold-p      'font-lock-builtin-face           t )

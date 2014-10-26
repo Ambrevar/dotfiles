@@ -56,24 +56,24 @@ restored."
 ;; C-mode
 ;;==============================================================================
 
+;; WARNING: this style is a work-in-progress.
 (c-add-style
  "peter"
- '((c-comment-only-line-offset . 0)
-  (c-hanging-braces-alist
-   (brace-list-open)
-   (brace-entry-open)
-   (substatement-open after)
-   (block-close . c-snug-do-while)
-   (arglist-cont-nonempty))
-  (c-cleanup-list brace-else-brace)
-  (c-offsets-alist
-   (statement-block-intro . +)
-   (knr-argdecl-intro . 0)
-   (substatement-open . 0)
-   (substatement-label . 0)
-   (label . 0)
-   (case-label . +)
-   (statement-cont . +))))
+ `((c-comment-only-line-offset . 0)
+	 (c-auto-align-backslashes . nil)
+	 (c-basic-offset . ,tab-width)
+	 (c-offsets-alist
+		(arglist-cont-nonempty . +)
+		(arglist-intro . +)
+		(c . 0)
+		(case-label . +)
+		(knr-argdecl-intro . 0)
+		(label . 0)
+		(statement-block-intro . +)
+		(statement-cont . +)
+		(substatement-label . 0)
+		(substatement-open . 0)
+		)))
 
 ;; Note that in Emacs 24, cc-mode calls its hooks manually in each mode init
 ;; function. Since cc modes belong to prog-mode, each hook is called another
@@ -84,7 +84,7 @@ restored."
    (add-hook-and-eval
     mode-hook
     (lambda ()
-      (c-set-style "peter" t)
+      (c-set-style "peter") ;; We override existing values.
       (add-hook 'compilation-before-hook 'cc-set-compiler nil t)
       (local-set-key (kbd "<f9>") 'cc-clean)
       (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)

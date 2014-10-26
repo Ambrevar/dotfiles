@@ -115,14 +115,15 @@
    ))
 (define-key my-keys-minor-mode-map (kbd "C-<f7>") 'whitespace-mode)
 
-;; WARNING: this can break some configuration files needing whitespaces at the
-;; end.
-; (add-hook 'before-save-hook 'delete-trailing-whitespace)
-(setq whitespace-style (quote (face trailing tab-mark)))
+(setq whitespace-style (quote (face trailing tab-mark space-after-tab space-before-tab indentation::space)))
 ;; TODO: whitespace report-on-bogus and cleanup do not seem to work properly.
 ;; Empty lines seems to be always true. Report is shown even when style is not
 ;; matching the errors.
 ; (setq whitespace-action '(report-on-bogus))
+
+;; WARNING: this can break some configuration files needing whitespaces at the
+;; end.
+; (add-hook 'before-save-hook 'sanitize)
 
 ;; Remove whitespaces on region, or whole file.
 (define-key my-keys-minor-mode-map (kbd "C-\\") 'delete-trailing-whitespace)
