@@ -285,6 +285,7 @@ Noteworthy apps
 * ecryptfs-simple
 * emacs
 * encfs
+* evince
 * fbpdf
 * fbv
 * fdisk
@@ -348,7 +349,6 @@ Noteworthy apps
 * octave
 * od
 * odt2txt
-* okular
 * openshot
 * openssh
 * p7zip
