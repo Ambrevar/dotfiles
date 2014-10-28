@@ -32,7 +32,7 @@ format = 'ogg'
 graphical = true
 
 -- Root folder for output files.
-library = os.getenv('HOME') .. '/musics'
+library = os.getenv('HOME') .. '/music'
 
 -- Do not complete tags with online database.
 online = false
