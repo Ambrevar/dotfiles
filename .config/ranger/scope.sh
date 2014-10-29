@@ -44,8 +44,10 @@ highlight() { command highlight "$@"; test $? = 0 -o $? = 141; }
 
 case "$extension" in
     # Archive extensions:
-    a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|\
-    rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)
+    # We ignore compressed tared files as it is too slow.
+    # bz|bz2|t7z|tbz|tbz2|tgz|tlz|txz|tZ|xz|gz|
+    a|ace|alz|arc|arj|cab|cpio|deb|jar|lha|lz|lzh|lzma|lzo|\
+    rpm|rz|tar|tzo|war|xpi|Z|zip)
         try als "$path" && { dump | trim; exit 0; }
         try acat "$path" && { dump | trim; exit 3; }
         try bsdtar -lf "$path" && { dump | trim; exit 0; }
