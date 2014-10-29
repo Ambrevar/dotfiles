@@ -51,21 +51,21 @@
 %%==============================================================================
 
 %% Recipient gender. Can be male, female, org.
-\def\gender{${1:male}}
+\def\gender{male}
 
 %% Recipient
-\def\recipientfirstname{${2:Firstname}}
-\def\recipientfamilyname{${3:Familyname}}
-\def\recipientinstitute{${4:Institute}}
-\def\recipientstreet{${5:Street}}
-\def\recipientcity{${6:City}}
-\def\recipientpostcode{${7:Postcode}}
+\def\recipientfirstname{John}
+\def\recipientfamilyname{Doe}
+\def\recipientinstitute{Institute}
+\def\recipientstreet{Street}
+\def\recipientcity{City}
+\def\recipientpostcode{Postcode}
 
 %%==============================================================================
 %% Subject
 %%==============================================================================
 
-\def\subject{${9:Subject}}
+\def\subject{Subject}
 
 %%==============================================================================
 %% PDF Metadata
@@ -201,15 +201,15 @@
 \begin{minipage}{\mpwidth}
   \edef\fullname{\firstname{} \familyname{}}
   \pinex{\fullname}{\textbf{\fullname}
-  \vspace{0.5em}\\\\
+  \vspace{0.5em}\\
   }
   \small\itshape%
-  \pinex{\street}{\street \\\\}
+  \pinex{\street}{\street \\}
   \pinex{\city}{\postcode{} \city\pinex{\country}{ -- \country{}}
-    \vspace{0.5em}\\\\
+    \vspace{0.5em}\\
   }
-  \pinex{\mobile}{\Mobilefone~\mobile \\\\}
-  \pinex{\phone}{\Telefon~\phone \\\\}
+  \pinex{\mobile}{\Mobilefone~\mobile \\}
+  \pinex{\phone}{\Telefon~\phone \\}
   \pinex{\mail}{\Letter~\href{mailto:\mail}{\mail}}
 \end{minipage}
 \vspace{\baselineskip}
@@ -222,12 +222,12 @@
 \fr{\hfill}%
 \begin{minipage}{\mpwidth}
   \edef\recipientfullname{\recipientfirstname{} \recipientfamilyname}
-  \pinex{\recipientfullname}{\textbf{\recipientfullname}\\\\[0.5\baselineskip]}
-  \pinex{\recipientinstitute}{\recipientinstitute{}\\\\[0.5\baselineskip]}
+  \pinex{\recipientfullname}{\textbf{\recipientfullname}\\[0.5\baselineskip]}
+  \pinex{\recipientinstitute}{\recipientinstitute{}\\[0.5\baselineskip]}
   \pinex{\recipientcity}{
     {\small\itshape
-      \recipientstreet{} \\\\
-      \pine{\recipientpostcode} \recipientcity{} \\\\
+      \recipientstreet{} \\
+      \pine{\recipientpostcode} \recipientcity{} \\
     }
   }
 \end{minipage}
@@ -243,7 +243,7 @@
 \begin{minipage}{\mpwidth}
   \en{\today}
   \fr{\city, le \weekdaylower\ \today}
-\end{minipage}\\\\
+\end{minipage}\\
 
 %%==============================================================================
 %% Object
@@ -264,7 +264,7 @@
 }
 
 \noindent
-$0
+
 Common blah.
 I thank you for your consideration; I am looking forward to hearing from you soon!
 
