@@ -119,6 +119,10 @@ This does not interfere with `subword-mode'."
 (add-hook-and-eval
  'tex-mode-hook
  (lambda ()
+	 ;; `tex-mode' sets `indent-tabs-mode' to nil, invoking the following
+	 ;; argument: "TABs in verbatim environments don't do what you think." Not
+	 ;; sure how relevant this bad comment is. We revert it.
+	 (setq indent-tabs-mode t)
    (dolist (key '("\C-c\C-f" "\C-c\C-b"))
      (local-unset-key key))
    (set-face-attribute 'tex-verbatim nil :family "freemono")
