@@ -92,7 +92,11 @@
 (setq-default tab-width 2)
 (defvaralias 'standard-indent 'tab-width)
 (setq-default indent-tabs-mode t)
-(defvaralias 'c-basic-offset 'tab-width) ;; This needs to be set globally.
+
+;; This needs to be set globally since they are defined as local variable and
+;; Emacs does not know how to set an alias on a local variable.
+(defvaralias 'c-basic-offset 'tab-width)
+(defvaralias 'sh-basic-offset 'tab-width)
 
 ;; Line by line scrolling
 (setq scroll-step 1)
