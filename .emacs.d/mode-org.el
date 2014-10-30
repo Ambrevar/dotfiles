@@ -20,6 +20,7 @@
 ;; Set PDF association in Org-mode (was Evince by default).
 (eval-after-load "org"
   '(progn
+		 (setq indent-tab-mode nil) ; Org-mode aligns text.
      (require 'tool-pdf)
      ;; Change .pdf association directly within the alist
      (setcdr (assoc "\\.pdf\\'" org-file-apps)
