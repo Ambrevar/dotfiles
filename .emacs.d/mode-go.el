@@ -12,15 +12,12 @@
 (define-skeleton go-main
   "Insert main function with basic includes."
   nil
-  > "package main
-
-import (
-	\"fmt\"
-)
-
-func main () {" \n
-> @ _ \n
-"}" > \n)
-
+  > "package main" "\n" \n
+  "import (" \n
+  "\"fmt\"" \n
+  ")" > "\n" \n
+  "func main () {" \n
+  > @ _ \n
+  "}" > \n)
 
 (provide 'mode-go)
