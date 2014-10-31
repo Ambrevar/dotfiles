@@ -60,20 +60,21 @@ restored."
 (c-add-style
  "peter"
  `((c-comment-only-line-offset . 0)
-	 (c-auto-align-backslashes . nil)
-	 (c-basic-offset . ,tab-width)
-	 (c-offsets-alist
-		(arglist-cont-nonempty . +)
-		(arglist-intro . +)
-		(c . 0)
-		(case-label . +)
-		(knr-argdecl-intro . 0)
-		(label . 0)
-		(statement-block-intro . +)
-		(statement-cont . +)
-		(substatement-label . 0)
-		(substatement-open . 0)
-		)))
+   (c-auto-align-backslashes . nil)
+   (c-basic-offset . ,tab-width)
+   (c-offsets-alist
+    (arglist-cont-nonempty . +)
+    (arglist-intro . +)
+    (c . 0)
+    (case-label . 0)
+    (cpp-define-intro . 0)
+    (knr-argdecl-intro . 0)
+    (label . 0)
+    (statement-block-intro . +)
+    (statement-cont . +)
+    (substatement-label . 0)
+    (substatement-open . 0)
+    )))
 
 ;; Note that in Emacs 24, cc-mode calls its hooks manually in each mode init
 ;; function. Since cc modes belong to prog-mode, each hook is called another
@@ -131,10 +132,9 @@ restored."
 (define-skeleton cc-case
   "Insert a case/switch statement."
   "expression: "
-  > "switch (" str ") {" \n
+  > "switch(" str ") {" \n
   ( "Value, %s: "
     > "case " > str ":" \n
-    > _ \n
     "break;" \n)
   "default:" > \n
   > _ \n
@@ -145,18 +145,20 @@ restored."
 (define-skeleton cc-debug
   "Insert debug macros."
   nil
-  "#ifdef DEBUG
+  > "#ifdef DEBUG
 #define DEBUG_CMD(CMD) do {CMD;} while(0)
 #else
 #define DEBUG_CMD(CMD) do {} while(0)
 #endif
 
-#define DEBUG_STR(STR) DEBUG_CMD(fprintf(stderr, \":: %s\\n\", STR))
-#define DEBUG_PRINT(...) DEBUG_CMD ( \\
-    fprintf(stderr, \"\\n\\033[31;1mDEBUG:\\033[0m %s:%d:%s()\\t\", __FILE__, __LINE__, __func__); \\
-    fprintf(stderr, __VA_ARGS__);\\
-    fprintf(stderr, \"\\n\"); \\
-    )")
+"
+  '(insert-and-indent
+    "#define DEBUG_STR(STR) DEBUG_CMD(fprintf(stderr, \":: %s\\n\", STR))
+#define DEBUG_PRINT(...) DEBUG_CMD( \\
+fprintf(stderr, \"\\n\\033[31;1mDEBUG:\\033[0m %s:%d:%s()\\t\", __FILE__, __LINE__, __func__); \\
+fprintf(stderr, __VA_ARGS__); \\
+fprintf(stderr, \"\\n\"); \\
+)"))
 
 (define-skeleton cc-for
   "for loop."
@@ -177,34 +179,30 @@ restored."
 (define-skeleton cc-getopt
   "Insert a getopt template."
   nil
-  '(require 'functions)
-  '(insert-and-indent "int opt;
-while ((opt = getopt (argc, argv, \":hV\")) != -1)
-{
-    switch (opt)
-    {
-        case 'h':
-            usage (argv[0]);
-            return 0;
-        case 'V':
-            version ();
-            return 0;
-        case ':':
-            fprintf (stderr, \"ERROR: -%c needs an argument.\\nTry '%s -h' for more information.\\n\", optopt, argv[0]);
-            return EXIT_FAILURE;
-        case '?':
-            fprintf (stderr, \"ERROR: Unknown argument %c.\\nTry '%s -h' for more information.\\n\", optopt, argv[0]);
-            return EXIT_FAILURE;
-        default:
-            usage (argv[0]);
-            return EXIT_SUCCESS;
-    }
-}
-
-if (optind >= argc) {
-    fprintf(stderr, \"Expected argument after options\\n\");
-    exit (EXIT_FAILURE);
-}"))
+  > "int opt;" \n
+  "while((opt = getopt(argc, argv, \":hV\")) != -1) {" \n
+  "switch(opt) {" \n
+  "case 'h':" \n
+  "usage(argv[0]);" \n
+  "return 0;" \n
+  "case 'V':" > \n
+  "version();" \n
+  "return 0;" \n
+  "case ':':" > \n
+  "fprintf(stderr, \"ERROR: -%c needs an argument.\\nTry '%s -h' for more information.\\n\", optopt, argv[0]);" \n
+  "return EXIT_FAILURE;" \n
+  "case '?':" > \n
+  "fprintf(stderr, \"ERROR: Unknown argument %c.\\nTry '%s -h' for more information.\\n\", optopt, argv[0]);" \n
+  "return EXIT_FAILURE;" \n
+  "default:" > \n
+  "usage(argv[0]);" \n
+  "return EXIT_SUCCESS;" \n
+  "}" > \n
+  "}" > "\n" \n
+  "if(optind >= argc) {" \n
+  "fprintf(stderr, \"Expected argument after options\\n\");" \n
+  "exit(EXIT_FAILURE);" \n
+  "}" > \n)
 
 (define-skeleton cc-if
   "Insert an if statement."
@@ -232,52 +230,39 @@ if (optind >= argc) {
 (define-skeleton cc-loadfile
   "Insert loadfile function."
   nil
-  "unsigned long loadfile (const char * path, char ** buffer_ptr) {
-#define MAX_FILESIZE 1073741824 /* One gigabyte */
-
-    /* Handle variable. */
-    char* buffer;
-
-    FILE* file = fopen(path, \"rb\");
-    if (file == NULL)
-    {
-        perror(path);
-        return 0;
-    }
-
-    fseek(file, 0, SEEK_END);
-    long length = ftell(file);
-    /* fprintf (stdout, \"Note: file %s is %u bytes long.\\n\", path, length); */
-
-    if (length > MAX_FILESIZE)
-    {
-        fprintf (stderr, \"%s size %ld is bigger than %d bytes.\\n\", path, length, MAX_FILESIZE);
-        fclose(file);
-        return 0;
-    }
-
-    fseek(file, 0, SEEK_SET);
-    buffer = (char*)malloc(length + 1);
-    if (buffer == NULL)
-    {
-        perror(\"malloc\");
-        fclose(file);
-        return 0;
-    }
-
-
-    if(fread(buffer, 1, length, file) == 0)
-    {
-        fclose(file);
-        return 0;
-    }
-
-    buffer[length] = '\\0';
-    fclose(file);
-
-    *buffer_ptr = buffer;
-    return length;
-}")
+  "unsigned long loadfile (const char * path, char ** buffer_ptr) {" \n
+  "#define MAX_FILESIZE 1073741824 /* One gigabyte */" > "\n" \n
+  "/* Handle variable. */" \n
+  "char* buffer;" "\n" \n
+  "FILE* file = fopen (path, \"rb\");" \n
+  "if (file == NULL) {" \n
+  "perror (path);" \n
+  "return 0;" \n
+  "}" > "\n" \n
+  "fseek (file, 0, SEEK_END);" \n
+  "long length = ftell (file);" \n
+  "/* fprintf (stdout, \"Note: file %s is %u bytes long.\\n\", path, length); */" "\n" \n
+  "if (length > MAX_FILESIZE) {" \n
+  "fprintf (stderr, \"%s size %ld is bigger than %d bytes.\\n\", path, length, MAX_FILESIZE);" \n
+  "fclose (file);" \n
+  "return 0;" \n
+  "}" > "\n" \n
+  "fseek (file, 0, SEEK_SET);" \n
+  "buffer = (char*) malloc (length + 1);" \n
+  "if (buffer == NULL) {" \n
+  "perror (\"malloc\");" \n
+  "fclose (file);" \n
+  "return 0;" \n
+  "}" > "\n" \n
+  "if (fread (buffer, 1, length, file) == 0) {" \n
+  "fclose (file);" \n
+  "return 0;" \n
+  "}" > "\n" \n
+  "buffer[length] = '\\0';" \n
+  "fclose (file);" "\n" \n
+  "*buffer_ptr = buffer;" \n
+  "return length;" \n
+  "}" > \n)
 
 (define-skeleton cc-main
   "Insert main function with basic includes."
@@ -292,7 +277,7 @@ if (optind >= argc) {
 
 int main(int argc, char** argv) {" \n
 > @ _ \n
-> "return EXIT_SUCCESS;
+> "return 0;
 }" \n)
 
 (define-skeleton cc-printf
@@ -314,22 +299,22 @@ Requires `count-percents'."
 
 (define-skeleton cc-usage-version
   "Insert usage() and version() functions."
-  "Synopsis"
-  > "static void usage (const char *executable) {
-    printf (\"Usage: %s [OPTIONS]\\n\\n\", executable);
-    puts (\"" str "\\n\");
+  "Synopsis: "
+  > "static void usage(const char *executable) {" \n
+  "printf (\"Usage: %s [OPTIONS]\\n\\n\", executable);" \n
+  "puts (\"" str "\\n\");" "\n" \n
 
-    puts (\"Options:\");
-    puts (\"  -h        Print this help.\");
-    puts (\"  -V        Print version information.\");
+  "puts (\"Options:\");" \n
+  "puts (\"  -h        Print this help.\");" \n
+  "puts (\"  -V        Print version information.\");" "\n" \n
 
-    puts (\"\");
-    printf (\"See %s for more information.\\n\", MANPAGE);
-}
+  "puts (\"\");" \n
+  "printf (\"See %s for more information.\\n\", MANPAGE);" \n
+  "}" > "\n" \n
 
-static void version () {
-    printf (\"%s %s\\n\", APPNAME, VERSION);
-    printf (\"Copyright © %s %s\\n\", YEAR, AUTHOR);
-}" \n)
+  "static void version() {" \n
+  "printf (\"%s %s\\n\", APPNAME, VERSION);" \n
+  "printf (\"Copyright © %s %s\\n\", YEAR, AUTHOR);" \n
+  "}" > \n)
 
 (provide 'mode-cc)
