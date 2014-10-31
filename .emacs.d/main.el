@@ -268,14 +268,6 @@
 ;; Code browsing: make C-M-e jump to next function instead of the end of the current function.
 (define-key my-keys-minor-mode-map (kbd "C-M-e") (lambda () (interactive) (beginning-of-defun -1)))
 
-;; Just because XML is ugly.
-(add-hook
- 'html-mode-hook
- (lambda ()
-   (setq sgml-xml-mode t)
-   (turn-off-auto-fill)
-   (toggle-truncate-lines)))
-
 ;; Common LISP
 (setq inferior-lisp-program "clisp")
 
