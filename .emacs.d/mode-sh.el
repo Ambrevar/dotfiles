@@ -68,16 +68,14 @@ The advantages of this function over the vanilla code are:
 (define-skeleton sh-check
   "Insert a function checking for presence in PATH."
   nil
-  "check()
-{
-    for i ; do
-        if ! command -v $i >/dev/null 2>&1; then
-            echo \"'$i' not found in PATH. Exiting.\" >&2
-            exit 1
-        fi
-    done
-}
-")
+  "check() {" \n
+  "for i ; do" \n
+  "if ! command -v $i >/dev/null 2>&1; then" \n
+  "echo \"'$i' not found in PATH. Exiting.\" >&2" \n
+  "exit 1" \n
+  "fi" \n
+  "done" \n
+  "}" > \n)
 
 (define-skeleton sh-command
   "Insert a line that executes if command is found in path."
@@ -118,10 +116,9 @@ The advantages of this function over the vanilla code are:
 (define-skeleton sh-while-getopts
   "Insert a getops prototype."
   "optstring: "
-  > "usage ()
-{
-    cat<<EOF
-Usage: ${1##*/} [OPTIONS] FILES
+  > "usage() {" \n
+  "cat<<EOF" > \n ; TODO: Why is '>' necessary here?
+  "Usage: ${1##*/} [OPTIONS] FILES
 
 Options:
 
@@ -147,10 +144,10 @@ EOF
 "esac" > \n
 "done" > \n \n
 "shift $(($OPTIND - 1))" \n
-"if [ $# -eq 0 ]; then
-    usage \"$0\"
-    exit 1
-fi" \n)
+"if [ $# -eq 0 ]; then" \n
+"usage \"$0\"" > \n ; TODO: Why is '>' necessary here?
+"exit 1" \n
+"fi" > \n)
 
 (define-skeleton sh-while-read
   "Insert a while read loop."
