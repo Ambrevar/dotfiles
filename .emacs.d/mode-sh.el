@@ -5,6 +5,7 @@
 (defvaralias 'sh-indentation 'sh-basic-offset)
 
 (setq sh-indent-comment t)
+
 (set (make-local-variable 'sh-shell-file) "/bin/sh") ; Useful for the first time this hook is loaded.
 (setq-default sh-shell-file sh-shell-file)
 ;; (setq-default sh-shell 'sh)
@@ -49,16 +50,20 @@ The advantages of this function over the vanilla code are:
 
 ;; sh-set-shell partly resets some of the font-lock config. We use this
 ;; workaround to restore it.
-(add-hook-and-eval 'sh-set-shell-hook
-          (lambda () (font-lock-add-keywords
-           'sh-mode
-           '(("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
-             ("\\<\\(TODO\\):" 1 font-lock-warning-face prepend)
-             ("\\<\\(WARNING\\):" 1 font-lock-warning-face prepend)))))
+(add-hook-and-eval
+ 'sh-set-shell-hook
+ (lambda ()
+   (font-lock-add-keywords
+    'sh-mode
+    '(("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
+      ("\\<\\(TODO\\):" 1 font-lock-warning-face prepend)
+      ("\\<\\(WARNING\\):" 1 font-lock-warning-face prepend)))))
 
 (add-hook-and-eval
  'sh-mode-hook
  (lambda ()
+   (setq sh-indent-for-case-label 0)
+   (setq sh-indent-for-case-alt '+)
    (set (make-local-variable 'defun-prompt-regexp)
         (concat "^\\(function[ \t]\\|[[:alnum:]_]+[ \t]+()[ \t]+\\)"))
    (sh-set-interpreter)))
