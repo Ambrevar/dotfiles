@@ -143,7 +143,7 @@ EOF
             v2 nil)))
   > str ")" \n
   > _ v2 " ;;" \n)
-> "?)" \n
+> "\\?)" \n
 > "usage \"$0\"" \n
 "exit 1 ;;"  > \n
 "esac" > \n
