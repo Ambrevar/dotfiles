@@ -16,7 +16,7 @@
   "import (" \n
   "\"fmt\"" \n
   ")" > "\n" \n
-  "func main () {" \n
+  "func main() {" \n
   > @ _ \n
   "}" > \n)
 
