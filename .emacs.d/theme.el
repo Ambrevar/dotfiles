@@ -48,7 +48,7 @@
 (add-hook
  'whitespace-load-hook
  (lambda ()
-	 (set-face-background  'whitespace-indentation           "#696969" )))
+   (set-face-background  'whitespace-indentation           "#696969" )))
 
 ;; Programming
 (set-face-foreground  'font-lock-builtin-face           "#d2691e" )
@@ -190,7 +190,7 @@
 ;; Old attempts.
 
 ;; C-mode printf highlight.
-;; (defvar font-lock-format-specifier-face		'font-lock-format-specifier-face
+;; (defvar font-lock-format-specifier-face 'font-lock-format-specifier-face
 ;;   "Face name to use for format specifiers.")
 ;; (defface font-lock-format-specifier-face
 ;;   '((t (:foreground "OrangeRed1")))
