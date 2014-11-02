@@ -64,11 +64,17 @@ This is function has been overloaded from `lua-mode'."
    ;; indentation back to the matching block opener.
    ((member found-token (list ")" "}" "]" "end"))
     (save-excursion
-      (let ((line (line-number-at-pos)))
-        (lua-goto-matching-block-token nil found-pos 'backward)
-        (if (/= line (line-number-at-pos))
-            (lua-calculate-indentation-info (point))
-          (cons 'remove-matching 0)))))
+      (let ((line (line-number-at-pos))
+            (cur-point (point)))
+        (back-to-indentation)
+        (lua-find-regexp 'forward lua-indentation-modifier-regexp (line-end-position))
+        (back-to-indentation)
+        (let ((first-token-p (and (= (match-beginning 0) (point))
+                                  (= (lua-find-regexp 'forward lua-indentation-modifier-regexp (line-end-position)) cur-point))))
+          (lua-goto-matching-block-token nil found-pos 'backward)
+          (if (and (/= line (line-number-at-pos)) (not first-token-p))
+              (cons 'relative (- lua-indent-level))
+            (cons 'remove-matching 0))))))
 
    ;; Everything else. This is from the original code: If opening a block
    ;; (match-data 1 exists), then push indentation one level up, if it is
@@ -94,13 +100,13 @@ This is function has been overloaded from `lua-mode'."
       (if parse-start (goto-char parse-start))
       ;; Look for the last block closing token
       (back-to-indentation)
-      (if (and (not (lua-comment-or-string-p))
-               (looking-at lua-indentation-modifier-regexp)
-               (let ((token-info (lua-get-block-token-info (match-string 0))))
-                 (and token-info
-                      (not (eq 'open (lua-get-token-type token-info))))))
-          (when (lua-goto-matching-block-token nil nil 'backward)
-            ;; WARNING: changed here, remove exception.
-            (current-indentation)))))))
+      (when (and (not (lua-comment-or-string-p))
+                 (looking-at lua-indentation-modifier-regexp)
+                 (let ((token-info (lua-get-block-token-info (match-string 0))))
+                   (and token-info
+                        (not (eq 'open (lua-get-token-type token-info))))))
+        (lua-forward-line-skip-blanks 'back)
+        (- (+ (cdr (lua-accumulate-indentation-info (lua-calculate-indentation-info-1 indentation-info (line-end-position)))) (current-indentation)) lua-indent-level)))))
+
 
 (provide 'mode-lua)
