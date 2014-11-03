@@ -10,32 +10,22 @@
    (set (make-local-variable 'compile-command) (concat "lua " buffer-file-name))))
 
 
+;; The following hacks up lua-mode indentation.
+
 (defun lua-make-indentation-info-pair (found-token found-pos)
   "This is a helper function to lua-calculate-indentation-info. Don't
-use standalone.
-
-This is function has been overloaded from `lua-mode'."
+use standalone."
   (cond
-   ;; function is a bit tricky to indent right. They can appear in a lot ot
-   ;; different contexts. Until I find a shortcut, I'll leave it with a simple
-   ;; relative indentation.
-   ;; The special cases are for indenting according to the location of the
-   ;; function. i.e.:
-   ;;       (cons 'absolute (+ (current-column) lua-indent-level))
-   ;; TODO: Fix this. It causes really ugly indentations for in-line functions.
-   ((string-equal found-token "function")
-    (cons 'relative lua-indent-level))
-
-   ;; block openers
-   ((member found-token (list "{" "(" "["))
-    ;; WARNING: Changed here: remove alignment.
+   ;; Block openers.
+   ((member found-token (list "{" "(" "[" "function"))
     (cons 'relative lua-indent-level))
 
    ;; These are not really block starters. They should not add to indentation.
    ;; The corresponding "then" and "do" handle the indentation.
    ((member found-token (list "if" "for" "while"))
     (cons 'relative 0))
-   ;; closing tokens follow: These are usually taken care of by
+
+   ;; Closing tokens follow: These are usually taken care of by
    ;; lua-calculate-indentation-override.
    ;; elseif is a bit of a hack. It is not handled separately, but it needs to
    ;; nullify a previous then if on the same line.
@@ -47,7 +37,7 @@ This is function has been overloaded from `lua-mode'."
             (cons 'remove-matching 0)
           (cons 'relative 0)))))
 
-   ;; else is a special case; if its matching block token is on the same line,
+   ;; 'else' is a special case; if its matching block token is on the same line,
    ;; instead of removing the matching token, it has to replace it, so that
    ;; either the next line will be indented correctly, or the end on the same
    ;; line will remove the effect of the else.
@@ -86,14 +76,23 @@ This is function has been overloaded from `lua-mode'."
                       ;; end of a block matched
                       (- lua-indent-level))))))
 
+(defun lua-calculate-indentation-info (&optional parse-end)
+  "For each block token on the line, computes how it affects the indentation.
+The effect of each token can be either a shift relative to the current
+indentation level, or indentation to some absolute column. This information
+is collected in a list of indentation info pairs, which denote absolute
+and relative each, and the shift/column to indent to."
+  (lua-calculate-indentation-info-1
+   (list (cons 'absolute (current-indentation)))
+   (min parse-end (line-end-position))))
+
 (defun lua-calculate-indentation-override (&optional parse-start)
   "Return overriding indentation amount for special cases.
 Look for an uninterrupted sequence of block-closing tokens that starts
 at the beginning of the line. For each of these tokens, shift indentation
-to the left by the amount specified in lua-indent-level.
-
-This is function has been overloaded from `lua-mode'."
+to the left by the amount specified in lua-indent-level."
   (let ((indentation-modifier 0)
+        (indentation-info nil)
         (case-fold-search nil)
         (block-token nil))
     (save-excursion
@@ -105,8 +104,48 @@ This is function has been overloaded from `lua-mode'."
                  (let ((token-info (lua-get-block-token-info (match-string 0))))
                    (and token-info
                         (not (eq 'open (lua-get-token-type token-info))))))
+        ;; Current line indentation is:
+        ;; previous line indentation + indentation changes induced by previous line - indent-level - indent-level if previous line was a continuation.
         (lua-forward-line-skip-blanks 'back)
-        (- (+ (cdr (lua-accumulate-indentation-info (lua-calculate-indentation-info-1 indentation-info (line-end-position)))) (current-indentation)) lua-indent-level)))))
+        (setq indentation-info (list (cons 'absolute 0)))
+        (- (+ (cdr (lua-accumulate-indentation-info (lua-calculate-indentation-info-1 indentation-info (line-end-position))))
+              (current-indentation))
+           ;; Previous line is a continuing statement, but not current.
+           (if (lua-is-continuing-statement-p)
+               lua-indent-level
+             0)
+           lua-indent-level)))))
 
+
+(defun lua-calculate-indentation (&optional parse-start)
+  "Return appropriate indentation for current line as Lua code."
+  (save-excursion
+    (let ((continuing-p (lua-is-continuing-statement-p))
+          (cur-line-begin-pos (line-beginning-position)))
+      (or
+       ;; First, check if the line starts with a closer. If so, it should be
+       ;; indented/unindented in special way
+       (lua-calculate-indentation-override)
+
+       (when (lua-forward-line-skip-blanks 'back)
+         ;; The order of function calls here is important. Block modifier
+         ;; call may change the point to another line.
+         (let ((modifier
+                 (lua-calculate-indentation-block-modifier cur-line-begin-pos)))
+           (+ (current-indentation)
+              modifier
+
+              ;; Previous line is a continuing statement, but not current.
+              (if (and (lua-is-continuing-statement-p) (not continuing-p))
+                  (- lua-indent-level)
+                0)
+              
+              ;; Current line is a continuing statement, but not previous.
+              (if (and (not (lua-is-continuing-statement-p)) continuing-p)
+                  lua-indent-level
+                0))))
+
+       ;; If there's no previous line, indentation is 0.
+       0))))
 
 (provide 'mode-lua)
