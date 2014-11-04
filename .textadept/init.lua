@@ -11,8 +11,8 @@ args.register('-vm', '--view-mode', 0, function()
 	end, 'View-only mode')
 
 keys.ch = buffer.char_left
-keys.cj = buffer.line_up
-keys.ck = buffer.line_down
+keys.cj = buffer.line_down
+keys.ck = buffer.line_up
 keys.cl = buffer.char_right
 
 -- TODO: Test when file gets more than 10000 lines while editing.
