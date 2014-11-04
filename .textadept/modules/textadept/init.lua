@@ -20,6 +20,6 @@ M.snippets = require('textadept.snippets')
 
 -- These need to be loaded last.
 M.keys = require('textadept.keys')
--- M.menu = require('textadept.menu')
+M.menu = require('textadept.menu')
 
 return M
