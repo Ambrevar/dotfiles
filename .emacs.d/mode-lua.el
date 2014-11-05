@@ -50,8 +50,11 @@ use standalone."
           (cons 'relative lua-indent-level)))))
 
    ;; Block closers. If they are on the same line as their openers, they simply
-   ;; eat up the matching indentation modifier. Otherwise, they pull
-   ;; indentation back to the matching block opener.
+   ;; eat up the matching indentation modifier. Otherwise, they pull indentation
+   ;; back to the matching block opener. Special case if the token is at
+   ;; beginning of line: since `lua-calculate-indentation-override' unindented
+   ;; the line by one level already, then it only eats up the matching
+   ;; indentation midifier.
    ((member found-token (list ")" "}" "]" "end"))
     (save-excursion
       (let ((line (line-number-at-pos))
@@ -92,9 +95,8 @@ Look for an uninterrupted sequence of block-closing tokens that starts
 at the beginning of the line. For each of these tokens, shift indentation
 to the left by the amount specified in lua-indent-level."
   (let ((indentation-modifier 0)
-        (indentation-info nil)
-        (case-fold-search nil)
-        (block-token nil))
+        (indentation-info (list (cons 'absolute 0)))
+        (case-fold-search nil))
     (save-excursion
       (if parse-start (goto-char parse-start))
       ;; Look for the last block closing token
@@ -104,18 +106,29 @@ to the left by the amount specified in lua-indent-level."
                  (let ((token-info (lua-get-block-token-info (match-string 0))))
                    (and token-info
                         (not (eq 'open (lua-get-token-type token-info))))))
+        ;; Compute indentation changes induced by unmatched closers on current line.
+        (while (lua-find-regexp 'forward lua-indentation-modifier-regexp (line-end-position))
+          (when (and (not (lua-comment-or-string-p))
+                     (looking-at lua-indentation-modifier-regexp)
+                     (let ((token-info (lua-get-block-token-info (match-string 0))))
+                       (and token-info
+                            (not (eq 'open (lua-get-token-type token-info))))))
+            (setq indentation-modifier (- indentation-modifier lua-indent-level))))
         ;; Current line indentation is:
-        ;; previous line indentation + indentation changes induced by previous line - indent-level - indent-level if previous line was a continuation.
+        ;; + indentation changes induced by unmatched closers on current line
+        ;; + indentation changes induced by previous line
+        ;; + previous line indentation
+        ;; - indent-level if previous line was a continuation.
+        ;; - indent-level
         (lua-forward-line-skip-blanks 'back)
-        (setq indentation-info (list (cons 'absolute 0)))
-        (- (+ (cdr (lua-accumulate-indentation-info (lua-calculate-indentation-info-1 indentation-info (line-end-position))))
+        (- (+ indentation-modifier
+              (cdr (lua-accumulate-indentation-info (lua-calculate-indentation-info-1 indentation-info (line-end-position))))
               (current-indentation))
            ;; Previous line is a continuing statement, but not current.
            (if (lua-is-continuing-statement-p)
                lua-indent-level
              0)
            lua-indent-level)))))
-
 
 (defun lua-calculate-indentation (&optional parse-start)
   "Return appropriate indentation for current line as Lua code."
