@@ -249,7 +249,6 @@ Noteworthy apps
 * antiword
 * apvlv
 * asciidoc
-* astyle
 * atool
 * awesome
 * awk
@@ -315,7 +314,6 @@ Noteworthy apps
 * i3
 * id3v2
 * imagemagick
-* indent
 * inkscape
 * iotop
 * irssi
@@ -394,6 +392,7 @@ Noteworthy apps
 * trash-cli
 * tree
 * udiskie
+* uncrustify
 * unrtf
 * unshield
 * upx
