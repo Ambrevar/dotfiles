@@ -52,6 +52,19 @@ restored."
       (compile (format "make -k -f '%s' clean" (get-closest-pathname)))
       (setq compile-command compile-command-backup))))
 
+(defun cc-fmt ()
+  "Run uncrustify(1) on current buffer."
+  (interactive)
+  (let ((status)
+        (formatbuf (get-buffer-create "*C format buffer*")))
+    (setq status
+          (call-process-region (point-min) (point-max) "uncrustify" nil formatbuf nil "-lc" "-q"))
+    (if (/= status 0)
+        (error "Bad formatted C file")
+      (delete-region (point-min) (point-max))
+      (insert-buffer formatbuf)
+      (kill-buffer formatbuf))))
+
 ;;==============================================================================
 ;; C-mode
 ;;==============================================================================
@@ -85,6 +98,9 @@ restored."
    (add-hook-and-eval
     mode-hook
     (lambda ()
+      ;; The cc-fmt hook is disable since there is no standard C formatting,
+      ;; unlike for Go.
+      ; (add-hook 'before-save-hook 'cc-fmt nil t)
       (c-set-style "peter") ;; We override existing values.
       (add-hook 'compilation-before-hook 'cc-set-compiler nil t)
       (local-set-key (kbd "<f9>") 'cc-clean)
