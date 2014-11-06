@@ -32,7 +32,7 @@ use standalone."
    ((member found-token (list "until" "elseif"))
     (save-excursion
       (let ((line (line-number-at-pos)))
-        (if (and (lua-goto-matching-block-token nil found-pos 'backward)
+        (if (and (lua-goto-matching-block-token found-pos 'backward)
                  (= line (line-number-at-pos)))
             (cons 'remove-matching 0)
           (cons 'relative 0)))))
@@ -44,7 +44,7 @@ use standalone."
    ((string-equal found-token "else")
     (save-excursion
       (let ((line (line-number-at-pos)))
-        (if (and (lua-goto-matching-block-token nil found-pos 'backward)
+        (if (and (lua-goto-matching-block-token found-pos 'backward)
                  (= line (line-number-at-pos)))
             (cons 'replace-matching (cons 'relative lua-indent-level))
           (cons 'relative lua-indent-level)))))
@@ -64,7 +64,7 @@ use standalone."
         (back-to-indentation)
         (let ((first-token-p (and (= (match-beginning 0) (point))
                                   (= (lua-find-regexp 'forward lua-indentation-modifier-regexp (line-end-position)) cur-point))))
-          (lua-goto-matching-block-token nil found-pos 'backward)
+          (lua-goto-matching-block-token found-pos 'backward)
           (if (and (/= line (line-number-at-pos)) (not first-token-p))
               (cons 'relative (- lua-indent-level))
             (cons 'remove-matching 0))))))
