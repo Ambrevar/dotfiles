@@ -1,3 +1,4 @@
+-- -*- mode:lua -*-
 -- Demlo configuration file.
 
 -- Remove embedded covers.
@@ -53,6 +54,7 @@ recursive = true
 rename = false
 
 -- You might want to set one of the official scripts by default.
-scripts = 'tag sub case filename cover format'
+-- scripts = 'tag sub case filename cover format'
+scripts = 'tag sub case filename cover'
 
 -- End of configuration file.
