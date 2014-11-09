@@ -102,6 +102,12 @@
       (setq indent-tabs-mode nil))))
  '(lisp-mode-hook emacs-lisp-mode-hook))
 
+(add-hook
+ 'change-log-mode-hook
+ (lambda ()
+   (setq tab-width 2)
+   (setq left-margin 2)))
+
 ;; This needs to be set globally since they are defined as local variable and
 ;; Emacs does not know how to set an alias on a local variable.
 (defvaralias 'c-basic-offset 'tab-width)
