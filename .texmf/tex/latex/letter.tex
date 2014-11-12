@@ -21,10 +21,10 @@
 \usepackage{ifthen}
 \def\localedef#1#2{
 \ifthenelse{\equal{\locale}{#1}}{
-  \usepackage[#2]{babel}
-  \expandafter\def\csname#1\endcsname ##1{##1}
+	\usepackage[#2]{babel}
+	\expandafter\def\csname#1\endcsname ##1{##1}
 }{
-  \expandafter\def\csname#1\endcsname ##1{}}
+	\expandafter\def\csname#1\endcsname ##1{}}
 }
 
 %% Supported locales: en, fr.
@@ -106,9 +106,9 @@
 %% Gender commands.
 \def\genderdef#1{
 \ifthenelse{\equal{\gender}{#1}}{
-  \expandafter\def\csname#1\endcsname ##1{##1}
+	\expandafter\def\csname#1\endcsname ##1{##1}
 }{
-  \expandafter\def\csname#1\endcsname ##1{}}
+	\expandafter\def\csname#1\endcsname ##1{}}
 }
 
 \genderdef{male}
@@ -116,25 +116,25 @@
 \genderdef{org}
 
 \def\civility{%
-  \en{\male{M.}\female{Mrs.}}%
-  \fr{\male{Monsieur}\female{Madame}\org{Madame, Monsieur}}%
+	\en{\male{M.}\female{Mrs.}}%
+	\fr{\male{Monsieur}\female{Madame}\org{Madame, Monsieur}}%
 }
 
 %% Greetings toggle.
 \def\greetings #1{}
 \ifthenelse{
-  \equal{\gender}{org}
+	\equal{\gender}{org}
 }{}{\def\greetings #1{#1}}
 
 %% Day-of-week translation
 \makeatletter
 \fr{
-  \renewcommand\weekday{%
-    \ifcase\theeuk@date Samedi\or Dimanche\or Lundi\or
-    Mardi\or Mercredi\or Jeudi\or Vendredi\fi}
-  \newcommand\weekdaylower{%
-    \ifcase\theeuk@date samedi\or dimanche\or lundi\or
-    mardi\or mercredi\or jeudi\or vendredi\fi}
+	\renewcommand\weekday{%
+		\ifcase\theeuk@date Samedi\or Dimanche\or Lundi\or
+		Mardi\or Mercredi\or Jeudi\or Vendredi\fi}
+	\newcommand\weekdaylower{%
+		\ifcase\theeuk@date samedi\or dimanche\or lundi\or
+		mardi\or mercredi\or jeudi\or vendredi\fi}
 }
 \makeatother
 
@@ -142,7 +142,7 @@
 \usepackage[scale=0.8]{geometry}
 % \en{\setlength{\parindent}{0pt}}
 \fr{
-  \setlength{\parindent}{4ex}
+	\setlength{\parindent}{4ex}
 }
 \addtolength{\parskip}{6pt}
 
@@ -169,21 +169,21 @@
 \ifpdf
 \usepackage[]{hyperref}
 \hypersetup{
-  pdfauthor   = \FileAuthor,
-  pdftitle    = \FileTitle,
-  pdfsubject  = \FileSubject,
-  %% pdfkeywords = \FileKeyWords,
-  pdfcreator  = \LaTeX,
-  pdfproducer = \LaTeX,
-  pdftex,
-  pdfborder=0,
-  breaklinks,
-  baseurl=http://,
-  pdfpagemode=None,
-  pdfstartview=XYZ,
-  pdfstartpage=1,
-  colorlinks=true,
-  urlcolor=black
+	pdfauthor   = \FileAuthor,
+	pdftitle    = \FileTitle,
+	pdfsubject  = \FileSubject,
+	%% pdfkeywords = \FileKeyWords,
+	pdfcreator  = \LaTeX,
+	pdfproducer = \LaTeX,
+	pdftex,
+	pdfborder=0,
+	breaklinks,
+	baseurl=http://,
+	pdfpagemode=None,
+	pdfstartview=XYZ,
+	pdfstartpage=1,
+	colorlinks=true,
+	urlcolor=black
 }
 \else
 \usepackage[dvips]{hyperref}
@@ -199,18 +199,18 @@
 
 \en{\hfill}
 \begin{minipage}{\mpwidth}
-  \edef\fullname{\firstname{} \familyname{}}
-  \pinex{\fullname}{\textbf{\fullname}
-  \vspace{0.5em}\\
-  }
-  \small\itshape%
-  \pinex{\street}{\street \\}
-  \pinex{\city}{\postcode{} \city\pinex{\country}{ -- \country{}}
-    \vspace{0.5em}\\
-  }
-  \pinex{\mobile}{\Mobilefone~\mobile \\}
-  \pinex{\phone}{\Telefon~\phone \\}
-  \pinex{\mail}{\Letter~\href{mailto:\mail}{\mail}}
+	\edef\fullname{\firstname{} \familyname{}}
+	\pinex{\fullname}{\textbf{\fullname}
+	\vspace{0.5em}\\
+	}
+	\small\itshape%
+	\pinex{\street}{\street \\}
+	\pinex{\city}{\postcode{} \city\pinex{\country}{ -- \country{}}
+		\vspace{0.5em}\\
+	}
+	\pinex{\mobile}{\Mobilefone~\mobile \\}
+	\pinex{\phone}{\Telefon~\phone \\}
+	\pinex{\mail}{\Letter~\href{mailto:\mail}{\mail}}
 \end{minipage}
 \vspace{\baselineskip}
 
@@ -221,15 +221,15 @@
 \en{\noindent}%
 \fr{\hfill}%
 \begin{minipage}{\mpwidth}
-  \edef\recipientfullname{\recipientfirstname{} \recipientfamilyname}
-  \pinex{\recipientfullname}{\textbf{\recipientfullname}\\[0.5\baselineskip]}
-  \pinex{\recipientinstitute}{\recipientinstitute{}\\[0.5\baselineskip]}
-  \pinex{\recipientcity}{
-    {\small\itshape
-      \recipientstreet{} \\
-      \pine{\recipientpostcode} \recipientcity{} \\
-    }
-  }
+	\edef\recipientfullname{\recipientfirstname{} \recipientfamilyname}
+	\pinex{\recipientfullname}{\textbf{\recipientfullname}\\[0.5\baselineskip]}
+	\pinex{\recipientinstitute}{\recipientinstitute{}\\[0.5\baselineskip]}
+	\pinex{\recipientcity}{
+		{\small\itshape
+			\recipientstreet{} \\
+			\pine{\recipientpostcode} \recipientcity{} \\
+		}
+	}
 \end{minipage}
 
 %%==============================================================================
@@ -241,18 +241,18 @@
 
 \hfill
 \begin{minipage}{\mpwidth}
-  \en{\today}
-  \fr{\city, le \weekdaylower\ \today}
+	\en{\today}
+	\fr{\city, le \weekdaylower\ \today}
 \end{minipage}\\
 
 %%==============================================================================
 %% Object
 %%==============================================================================
 \pinex{\subject}{
-  \noindent
-  \textbf{\en{Object}\fr{Objet}~:}
-  \subject{}.
-  \vspace{1\baselineskip}
+	\noindent
+	\textbf{\en{Object}\fr{Objet}~:}
+	\subject{}.
+	\vspace{1\baselineskip}
 }
 
 
@@ -260,7 +260,7 @@
 %% Content
 %%==============================================================================
 \greetings{
-  \en{Dear}\fr{\male{Cher}\female{Chère}} \civility{} \recipientfamilyname,
+	\en{Dear}\fr{\male{Cher}\female{Chère}} \civility{} \recipientfamilyname,
 }
 
 \noindent
@@ -275,19 +275,19 @@ I thank you for your consideration; I am looking forward to hearing from you soo
 \vfill
 
 \en{
-  Best regards.
-  %% Yours sincerely,
+	Best regards.
+	%% Yours sincerely,
 }
 \fr{
-  %% Cordialement,
-  Veuillez agréer, \civility{}, l'expression de mes sentiments les meilleurs.
+	%% Cordialement,
+	Veuillez agréer, \civility{}, l'expression de mes sentiments les meilleurs.
 }
 
 \vspace{\baselineskip}
 \hfill
 \begin{minipage}{\mpwidth}
-  \textbf{\firstname\ \familyname}\newline
-  %\includegraphics[scale=0.75]{signature_blue}
+	\textbf{\firstname\ \familyname}\newline
+	%\includegraphics[scale=0.75]{signature_blue}
 \end{minipage}
 
 %%==============================================================================
@@ -297,9 +297,9 @@ I thank you for your consideration; I am looking forward to hearing from you soo
 \vfill
 
 \noindent{
-  \scriptsize
-  \emph{\fr{Pièce(s) joint(es)~:}\en{Attachment:}}
-  Curriculum Vitæ
+	\scriptsize
+	\emph{\fr{Pièce(s) joint(es)~:}\en{Attachment:}}
+	Curriculum Vitæ
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
