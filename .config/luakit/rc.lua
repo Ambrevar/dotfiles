@@ -5,19 +5,19 @@
 require "lfs"
 
 if unique then
-    unique.new("org.luakit")
-    -- Check for a running luakit instance
-    if unique.is_running() then
-        if uris[1] then
-            for _, uri in ipairs(uris) do
-                if lfs.attributes(uri) then uri = os.abspath(uri) end
-                unique.send_message("tabopen " .. uri)
-            end
-        else
-            unique.send_message("winopen")
-        end
-        luakit.quit()
-    end
+	unique.new("org.luakit")
+	-- Check for a running luakit instance
+	if unique.is_running() then
+		if uris[1] then
+			for _, uri in ipairs(uris) do
+				if lfs.attributes(uri) then uri = os.abspath(uri) end
+				unique.send_message("tabopen " .. uri)
+			end
+		else
+			unique.send_message("winopen")
+		end
+		luakit.quit()
+	end
 end
 
 -- Load library of useful functions for luakit
@@ -25,7 +25,11 @@ require "lousy"
 
 -- Small util functions to print output (info prints only when luakit.verbose is true)
 function warn(...) io.stderr:write(string.format(...) .. "\n") end
-function info(...) if luakit.verbose then io.stdout:write(string.format(...) .. "\n") end end
+function info(...)
+	if luakit.verbose then
+		io.stdout:write(string.format(...) .. "\n")
+	end
+end
 
 -- Load users global config
 -- ("$XDG_CONFIG_HOME/luakit/globals.lua" or "/etc/xdg/luakit/globals.lua")
@@ -152,12 +156,12 @@ require "go_up"
 -- Restore last saved session
 local w = (session and session.restore())
 if w then
-    for i, uri in ipairs(uris) do
-        w:new_tab(uri, i == 1)
-    end
+	for i, uri in ipairs(uris) do
+		w:new_tab(uri, i == 1)
+	end
 else
-    -- Or open new window
-    window.new(uris)
+	-- Or open new window
+	window.new(uris)
 end
 
 -------------------------------------------
@@ -165,17 +169,17 @@ end
 -------------------------------------------
 
 if unique then
-    unique.add_signal("message", function (msg, screen)
-        local cmd, arg = string.match(msg, "^(%S+)%s*(.*)")
-        local w = lousy.util.table.values(window.bywidget)[1]
-        if cmd == "tabopen" then
-            w:new_tab(arg)
-        elseif cmd == "winopen" then
-            w = window.new((arg ~= "") and { arg } or {})
-        end
-        w.win.screen = screen
-        w.win.urgency_hint = true
-    end)
+	unique.add_signal("message", function (msg, screen)
+			local cmd, arg = string.match(msg, "^(%S+)%s*(.*)")
+			local w = lousy.util.table.values(window.bywidget)[1]
+			if cmd == "tabopen" then
+				w:new_tab(arg)
+			elseif cmd == "winopen" then
+				w = window.new((arg ~= "") and { arg } or {})
+			end
+			w.win.screen = screen
+			w.win.urgency_hint = true
+	end)
 end
 
 --------------------------------------------------------------------------------
@@ -184,16 +188,16 @@ end
 -- Always save tabs before closing
 local close_win = window.methods.close_win
 window.methods.close_win = function (w, ...)
-   session.save{w}
-   close_win(w, ...)
+	session.save{w}
+	close_win(w, ...)
 end
 
 -- Always open in a new tab in current instance.
 webview.init_funcs.window_decision = function (view, w)
-    view:add_signal("new-window-decision", function (v, uri, reason)
-        w:new_tab(uri)
-        return true
-    end)
+	view:add_signal("new-window-decision", function (v, uri, reason)
+			w:new_tab(uri)
+			return true
+	end)
 end
 
 -- Download folder.
@@ -202,14 +206,14 @@ downloads.default_dir = os.getenv("HOME") .. "/temp"
 --    downloads.default_dir = os.getenv("HOME")
 -- end
 downloads.add_signal("download-location", function (uri, file)
-    if not file or file == "" then
-        file = (string.match(uri, "/([^/]+)$") 
-            or string.match(uri, "^%w+://(.+)") 
-            or string.gsub(uri, "/", "_")
-            or "untitled")
-    end 
-    return downloads.default_dir .. "/" .. file
-end)  
+		if not file or file == "" then
+			file = (string.match(uri, "/([^/]+)$")
+					or string.match(uri, "^%w+://(.+)")
+					or string.gsub(uri, "/", "_")
+					or "untitled")
+		end
+		return downloads.default_dir .. "/" .. file
+end)
 
 -- Adblock
 require("adblock")
