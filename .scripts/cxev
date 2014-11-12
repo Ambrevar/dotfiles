@@ -1,18 +1,18 @@
 #!/bin/sh
 
 xev | awk '/KeyPress|KeyRelease/ {
-    if ($1 == "KeyPress")
-        event="pressed";
-    else
-        event="released";
+	if ($1 == "KeyPress")
+		event="pressed";
+	else
+		event="released";
 
-    getline; getline;
-    state = substr($2,1,length($2)-2);
-    keycode = $4;
-    keysym = substr($7, 1, length($7)-2);
+	getline; getline;
+	state = substr($2,1,length($2)-2);
+	keycode = $4;
+	keysym = substr($7, 1, length($7)-2);
 
-    getline;
-    string=$6;
+	getline;
+	string=$6;
 
-    printf "%-10s: code=%-3s state=%s event=%-8s string=%s\n", keysym, keycode, state, event, string
+	printf "%-10s: code=%-3s state=%s event=%-8s string=%s\n", keysym, keycode, state, event, string
 }'

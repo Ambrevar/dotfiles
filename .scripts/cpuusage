@@ -1,19 +1,19 @@
 #!/bin/sh
 
 if [ "$1" = "-h" ]; then
-    cat<<EOF
+	cat<<EOF
 Usage: ${0##*/}
 
 Return the CPU usage. Linux only.
 
 EOF
 
-    exit
+	exit
 fi
 
 if [ ! "$(uname)" = "Linux" ]; then
-    echo "Linux only."
-    exit
+	echo "Linux only."
+	exit
 fi
 
 
@@ -58,7 +58,7 @@ idleB=$f4
 totaldiff=$((${totalB:-0}-${totalA:-0}))
 
 if [ $totaldiff -eq 0 ]; then
-    echo 0
+	echo 0
 else
-    echo "$((100 - 100 * ($idleB-$idleA) / $totaldiff ))"
+	echo "$((100 - 100 * ($idleB-$idleA) / $totaldiff ))"
 fi

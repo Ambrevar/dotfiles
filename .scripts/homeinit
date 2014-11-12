@@ -1,8 +1,6 @@
 #!/bin/sh
-################################################################################
 ## Home session initialization.
-## 2013-06-14
-################################################################################
+
 SOURCEDIR="$HOME/personal/dataperso"
 [ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
 [ -z "$XDG_DATA_HOME" ] && XDG_DATA_HOME="$HOME/.local/share"
@@ -14,97 +12,97 @@ mkdir -p "$HOME/temp"
 echo
 
 if [ -d "$SOURCEDIR/contacts" ]; then
-    echo "==> Abook"
-    ln -snf "$SOURCEDIR/contacts" "$HOME/.abook"
-    echo
+	echo "==> Abook"
+	ln -snf "$SOURCEDIR/contacts" "$HOME/.abook"
+	echo
 fi
 
 if command -v mutt >/dev/null 2>&1; then
-    echo "==> Mutt"
-    [ -d "$SOURCEDIR" ] && ln -snf "$SOURCEDIR/mails" "$HOME/.mutt.d"
-    mkdir -p "$HOME/.cache/mutt/hcache"
-    echo
+	echo "==> Mutt"
+	[ -d "$SOURCEDIR" ] && ln -snf "$SOURCEDIR/mails" "$HOME/.mutt.d"
+	mkdir -p "$HOME/.cache/mutt/hcache"
+	echo
 fi
 
 if [ -d "$SOURCEDIR/todo" ]; then
-    echo "==> To-Do"
-    ln -snf "$SOURCEDIR/todo/todo.org" "$HOME/todo.org"
-    echo
+	echo "==> To-Do"
+	ln -snf "$SOURCEDIR/todo/todo.org" "$HOME/todo.org"
+	echo
 fi
 
 if command -v rtorrent >/dev/null 2>&1; then
-    echo "==> rtorrent"
-    ## We need the evaluation of the result, otherwise the variables will not
-    ## get expanded, should it be '~' or "$HOME".
-    mkdir -p "$(eval echo $(awk -F'=' '/^session *= */{gsub(/^ +| +$/,"",$2); res=$2} END {printf res}' ~/.rtorrent.rc))"
-    echo
+	echo "==> rtorrent"
+	## We need the evaluation of the result, otherwise the variables will not
+	## get expanded, should it be '~' or "$HOME".
+	mkdir -p "$(eval echo $(awk -F'=' '/^session *= */{gsub(/^ +| +$/,"",$2); res=$2} END {printf res}' ~/.rtorrent.rc))"
+	echo
 fi
 
 ## Luakit -- Install the adblock modules
 if command -v luakit >/dev/null 2>&1; then
-    echo "==> Luakit"
-    git clone https://github.com/Plaque-fcc/luakit-adblock/ "$HOME/luakit-adblock"
-    cp -fv ~/luakit-adblock/*.lua "$XDG_CONFIG_HOME/luakit"
-    rm -rvf "$HOME/luakit-adblock"
+	echo "==> Luakit"
+	git clone https://github.com/Plaque-fcc/luakit-adblock/ "$HOME/luakit-adblock"
+	cp -fv ~/luakit-adblock/*.lua "$XDG_CONFIG_HOME/luakit"
+	rm -rvf "$HOME/luakit-adblock"
 
-    ## Update the adblock lists
-    mkdir -p "$XDG_DATA_HOME/luakit/adblock"
-    wget https://easylist-downloads.adblockplus.org/easylist.txt \
-        https://easylist-downloads.adblockplus.org/easyprivacy.txt \
-        https://easylist-downloads.adblockplus.org/easylistgermany.txt \
-        http://lian.info.tm/liste_fr.txt \
-        -P "$XDG_DATA_HOME/luakit/adblock"
-    echo
+	## Update the adblock lists
+	mkdir -p "$XDG_DATA_HOME/luakit/adblock"
+	wget https://easylist-downloads.adblockplus.org/easylist.txt \
+		https://easylist-downloads.adblockplus.org/easyprivacy.txt \
+		https://easylist-downloads.adblockplus.org/easylistgermany.txt \
+		http://lian.info.tm/liste_fr.txt \
+		-P "$XDG_DATA_HOME/luakit/adblock"
+	echo
 fi
 
 ## dwb -- Install extensions.
 if command -v dwbem >/dev/null 2>&1; then
-    echo "==> dwb"
+	echo "==> dwb"
 
-    [ $(dwbem -l | grep -c "adblock_subscriptions") -eq 0 ] && dwbem -Ni adblock_subscriptions
-    [ $(dwbem -l | grep -c "navtools") -eq 0 ] && dwbem -Ni navtools
-    [ $(dwbem -l | grep -c "contenthandler") -eq 0 ] && dwbem -Ni contenthandler
-    # dwbem -Ni youtube_html5
+	[ $(dwbem -l | grep -c "adblock_subscriptions") -eq 0 ] && dwbem -Ni adblock_subscriptions
+	[ $(dwbem -l | grep -c "navtools") -eq 0 ] && dwbem -Ni navtools
+	[ $(dwbem -l | grep -c "contenthandler") -eq 0 ] && dwbem -Ni contenthandler
+	# dwbem -Ni youtube_html5
 
-    (cd ~/.config/dwb/userscripts/ && git checkout extension_loader.js)
-    echo
+	(cd ~/.config/dwb/userscripts/ && git checkout extension_loader.js)
+	echo
 fi
 
 ## Bookmarks
 if [ -d "$SOURCEDIR" ]; then
-    echo "==> Bookmarks"
-    if [ -z "$BROWSER" ]; then
-        echo "Variable BROWSER is not set."
-    else
-        BROWSER_DATA_DIR="$XDG_DATA_HOME/$BROWSER/"
-        [ "$BROWSER" = "dwb" ] && BROWSER_DATA_DIR="$XDG_CONFIG_HOME/$BROWSER/default/"
+	echo "==> Bookmarks"
+	if [ -z "$BROWSER" ]; then
+		echo "Variable BROWSER is not set."
+	else
+		BROWSER_DATA_DIR="$XDG_DATA_HOME/$BROWSER/"
+		[ "$BROWSER" = "dwb" ] && BROWSER_DATA_DIR="$XDG_CONFIG_HOME/$BROWSER/default/"
 
-        [ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/bookmarks/bookmarks" "$BROWSER_DATA_DIR"
-        [ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/bookmarks/quickmarks" "$BROWSER_DATA_DIR"
-        [ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/bookmarks/cookies.allow" "$BROWSER_DATA_DIR"
-    fi
-    echo
+		[ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/bookmarks/bookmarks" "$BROWSER_DATA_DIR"
+		[ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/bookmarks/quickmarks" "$BROWSER_DATA_DIR"
+		[ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/bookmarks/cookies.allow" "$BROWSER_DATA_DIR"
+	fi
+	echo
 fi
 
 ## News
 if command -v newsbeuter >/dev/null 2>&1; then
-    echo "==> Newsbeuter"
-    mkdir -p "$XDG_DATA_HOME/newsbeuter"
-    [ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
-    [ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/news/news_starred" "$XDG_CONFIG_HOME/newsbeuter/"
-    echo
+	echo "==> Newsbeuter"
+	mkdir -p "$XDG_DATA_HOME/newsbeuter"
+	[ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
+	[ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/news/news_starred" "$XDG_CONFIG_HOME/newsbeuter/"
+	echo
 fi
 
 ## Launchers
 if [ -d "$SOURCEDIR" ]; then
-    echo "==> Launchers"
-    ln -snf "$SOURCEDIR/launchers" "$HOME/.launchers"
-    echo
+	echo "==> Launchers"
+	ln -snf "$SOURCEDIR/launchers" "$HOME/.launchers"
+	echo
 fi
 
 ## Temp scripts
 if [ -d "$SOURCEDIR" ]; then
-    echo "==> Hackpool"
-    ln -snf "$SOURCEDIR/hackpool" "$HOME/.hackpool"
-    echo
+	echo "==> Hackpool"
+	ln -snf "$SOURCEDIR/hackpool" "$HOME/.hackpool"
+	echo
 fi

@@ -4,17 +4,17 @@
 ## Note: '%s/@/\\/g' needs to be last.
 
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-    cat<<EOF
+	cat<<EOF
 Usage: ${0##*/} FILES
 
 Convert texinfo files to LaTeX.
 
 EOF
-    exit
+	exit
 fi
 
 for i; do
-    ex - "$i" <<'EOF' >/dev/null
+	ex - "$i" <<'EOF' >/dev/null
 g/^@node/d
 g/@tex/d
 g/@end tex/d

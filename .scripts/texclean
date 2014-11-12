@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-    cat <<EOF
+	cat <<EOF
 Usage: ${0##*/} FOLDERS
 
 Clean TeX/LaTeX/Texinfo project folders recursively.
@@ -12,25 +12,25 @@ remove files matching these extensions if they are not linked to a TeX file in
 any manner.
 
 EOF
-    exit
+	exit
 fi
 
 for i ; do
-    while read -r FILE; do
-        case FILE in
-            */*) ;;
-            *)
-                FILE="./$FILE" ;;
-        esac
-        DIRNAME="${FILE%/*}"
-        BASENAME="${FILE##*/}"
-        BASENAME="${BASENAME%.*}"
-        rm -v $(for j in \
-            aux bbl blg cp cps fn glg glo gls idx ilg ind ky lof log maf mt mtc nav out pg snm synctex.gz synctex tns toc tp vr vrs xdy
-    do
-        echo "$DIRNAME/$BASENAME.$j"
-        done) 2>/dev/null
-    done <<EOF
+	while read -r FILE; do
+		case FILE in
+		*/*) ;;
+		*)
+			FILE="./$FILE" ;;
+		esac
+		DIRNAME="${FILE%/*}"
+		BASENAME="${FILE##*/}"
+		BASENAME="${BASENAME%.*}"
+		rm -v $(
+			for j in aux bbl blg cp cps fn glg glo gls idx ilg ind ky lof log maf mt mtc nav out pg snm synctex.gz synctex tns toc tp vr vrs xdy
+			do
+				echo "$DIRNAME/$BASENAME.$j"
+			done) 2>/dev/null
+	done <<EOF
 $(find "$i" -type f \( -name "*.tex" -o -name "*.texi" \) )
 EOF
 done

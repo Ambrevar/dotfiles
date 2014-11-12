@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [  "$1" = "--help" ] || [ "$1" = "-h" ]; then
-    cat <<EOF
+	cat <<EOF
 Usage: ${0##*/} [FILES]
 
 Convert non-ASCII characters to their ASCII equivalent. If no files are
@@ -12,66 +12,66 @@ Options:
   -i: If files are provided, convert them in-place.
 
 EOF
-    exit
+	exit
 fi
 
 unset OPT
 if [ "$1" = "-i" ]; then
-    OPT=-i
-    shift
+	OPT=-i
+	shift
 fi
 
 ## Note that we also use 'sed -i' to edit files instead of 'ex'. Otherwise the
 ## code looks ugly if we try to handle both stdin and files with only one
 ## call. Besides, ex does not support multiple file editing.
 sed $OPT \
-    -e 's/[áàâä]/a/g' \
-    -e 's/[éèêë]/e/g' \
-    -e 's/[íìîï]/i/g' \
-    -e 's/[óòôö]/o/g' \
-    -e 's/[úùûü]/u/g' \
-    -e 's/[ýỳŷÿ]/y/g' \
-    -e 's/[ÁÀÂÄ]/A/g' \
-    -e 's/[ÉÈÊË]/E/g' \
-    -e 's/[ÍÌÎÏ]/I/g' \
-    -e 's/[ÓÒÔÖ]/O/g' \
-    -e 's/[ÚÙÛÜ]/U/g' \
-    -e 's/[ÝỲŶŸ]/Y/g' \
-    -e 's/[ñ]/n/g' \
-    -e 's/[œ]/oe/g' \
-    -e 's/[Œ]/Oe/g' \
-    -e 's/[æ]/ae/g' \
-    -e 's/[Æ]/Ae/g' \
-    -e 's/[ç]/c/g' \
-    -e 's/[Ç]/C/g' \
-    -e 's/[ß]/ss/g' \
-    -e 's/[«»„“”‚‘’]/"/g' \
-    -e 's/[©]/(C)/g' \
-    -e 's/[®]/(R)/g' \
-    -e 's/[™]/(TM)/g' \
-    -e 's/[¥]/Y/g' \
-    -e 's/[Ð]/D/g' \
-    -e 's/[ŀ]/l/g' \
-    -e 's/[Ŀ]/L/g' \
-    -e 's/[€]/euro/g' \
-    -e 's/[¢]/cent/g' \
-    -e 's/[£]/pound/g' \
-    -e 's/[µ]/mu/g' \
-    -e 's/[²]/^2/g' \
-    -e 's/[³]/^3/g' \
-    -e 's/[¡]/!/g' \
-    -e 's/[¿]/?/g' \
-    -e 's/[–‑]/-/g' \
-    -e 's/[…]/.../g' \
-    -e 's/[≤]/<=/g' \
-    -e 's/[≥]/>=/g' \
-    -e 's/[±]/+\/-/g' \
-    -e 's/[≠]/!=/g' \
-    -e 's/[⋅]/./g' \
-    -e 's/[×]/x/g' \
-    -e 's/[÷]/\//g' \
-    -e 's/[↓]/|/g' \
-    -e 's/[↑]/^/g' \
-    -e 's/[←]/<=/g' \
-    -e 's/[→]/=>/g' \
-    "$@"
+		-e 's/[áàâä]/a/g' \
+		-e 's/[éèêë]/e/g' \
+		-e 's/[íìîï]/i/g' \
+		-e 's/[óòôö]/o/g' \
+		-e 's/[úùûü]/u/g' \
+		-e 's/[ýỳŷÿ]/y/g' \
+		-e 's/[ÁÀÂÄ]/A/g' \
+		-e 's/[ÉÈÊË]/E/g' \
+		-e 's/[ÍÌÎÏ]/I/g' \
+		-e 's/[ÓÒÔÖ]/O/g' \
+		-e 's/[ÚÙÛÜ]/U/g' \
+		-e 's/[ÝỲŶŸ]/Y/g' \
+		-e 's/[ñ]/n/g' \
+		-e 's/[œ]/oe/g' \
+		-e 's/[Œ]/Oe/g' \
+		-e 's/[æ]/ae/g' \
+		-e 's/[Æ]/Ae/g' \
+		-e 's/[ç]/c/g' \
+		-e 's/[Ç]/C/g' \
+		-e 's/[ß]/ss/g' \
+		-e 's/[«»„“”‚‘’]/"/g' \
+		-e 's/[©]/(C)/g' \
+		-e 's/[®]/(R)/g' \
+		-e 's/[™]/(TM)/g' \
+		-e 's/[¥]/Y/g' \
+		-e 's/[Ð]/D/g' \
+		-e 's/[ŀ]/l/g' \
+		-e 's/[Ŀ]/L/g' \
+		-e 's/[€]/euro/g' \
+		-e 's/[¢]/cent/g' \
+		-e 's/[£]/pound/g' \
+		-e 's/[µ]/mu/g' \
+		-e 's/[²]/^2/g' \
+		-e 's/[³]/^3/g' \
+		-e 's/[¡]/!/g' \
+		-e 's/[¿]/?/g' \
+		-e 's/[–‑]/-/g' \
+		-e 's/[…]/.../g' \
+		-e 's/[≤]/<=/g' \
+		-e 's/[≥]/>=/g' \
+		-e 's/[±]/+\/-/g' \
+		-e 's/[≠]/!=/g' \
+		-e 's/[⋅]/./g' \
+		-e 's/[×]/x/g' \
+		-e 's/[÷]/\//g' \
+		-e 's/[↓]/|/g' \
+		-e 's/[↑]/^/g' \
+		-e 's/[←]/<=/g' \
+		-e 's/[→]/=>/g' \
+		"$@"

@@ -1,13 +1,13 @@
 #!/bin/sh
 
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-    cat <<EOF
+	cat <<EOF
 Usage: ${0##*/} FOLDERS
 
 Set file/directory owner and permissions according to current umask for current
 user.
 EOF
-    exit
+	exit
 fi
 
 FMASK=$(umask -S | sed 's/x//g')
@@ -16,7 +16,7 @@ DMASK=$(umask -S)
 [ -z "$GID" ] && GID=$(id -g)
 
 for i ; do
-    find "$i" -exec chown -R ${UID}:${GID} {} \;
-    find "$i" -type d -exec chmod ${DMASK} {} \;
-    find "$i" -type f -exec chmod ${FMASK} {} \;
+	find "$i" -exec chown -R ${UID}:${GID} {} \;
+	find "$i" -type d -exec chmod ${DMASK} {} \;
+	find "$i" -type f -exec chmod ${FMASK} {} \;
 done

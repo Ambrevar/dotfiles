@@ -14,8 +14,8 @@
 ##   radeon.audio=1
 
 if [ $(id -u) -ne 0 ]; then
-    echo "You must be root to run this script."
-    exit
+	echo "You must be root to run this script."
+	exit
 fi
 
 ALSACONF="/etc/asound.conf"
@@ -24,7 +24,7 @@ HDMI_STATUS="$(cat /sys/class/drm/card0-HDMI-A-1/status)"
 
 BUF="$(aplay -l | grep HDMI)"
 _getprop() {
-    echo "$BUF" | awk -v prop="$1" '{for(i=1; i<NF; i++) if ($i == prop) { print substr($(i+1), 1,1); exit}}'
+	echo "$BUF" | awk -v prop="$1" '{for(i=1; i<NF; i++) if ($i == prop) { print substr($(i+1), 1,1); exit}}'
 }
 
 CARD="$(_getprop card)"
@@ -34,22 +34,21 @@ udevadm settle --quiet --timeout=2
 
 ## Video
 for i in $(xrandr | awk '/^[[:alnum:]-]+ connected/ {print $1}'); do
-    xrandr --output "$i" --auto
+	xrandr --output "$i" --auto
 done
 
 ## Sound
 if [ "$HDMI_STATUS" = "connected" ]; then
-    cat<<EOF > "$ALSACONF"
+	cat<<EOF > "$ALSACONF"
 pcm.!default {
-  type hw
-  card $CARD
-  device $DEVICE
+	type hw
+	card $CARD
+	device $DEVICE
 }
 EOF
-    chmod 644 "${ALSACONF}"
-    echo "HDMI sound enabled"
+	chmod 644 "${ALSACONF}"
+	echo "HDMI sound enabled"
 else
-    rm -f "$ALSACONF"
-    echo "HDMI sound disabled"
+	rm -f "$ALSACONF"
+	echo "HDMI sound disabled"
 fi
-

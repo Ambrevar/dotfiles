@@ -6,13 +6,13 @@
 BEGIN { FS=":" }
 
 /^    "title" :/ {
-    title=$2
-    gsub(/ "|",/,"",title)
+	title=$2
+	gsub(/ "|",/,"",title)
 }
 
 /^      "href" :/ {
-    link=$2 ":" $3
-    gsub(/ "|",/,"",link)
+	link=$2 ":" $3
+	gsub(/ "|",/,"",link)
 }
 
 /\}, \{/ { print link " " title }

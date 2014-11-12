@@ -1,45 +1,45 @@
 #!/bin/sh
 
 set -- "$HOME/.cache/dwb" \
-    "$HOME/.cache/emacs" \
-    "$HOME/.cache/mutt" \
-    "$HOME/.cache/rtorrent" \
-    "$HOME/.cache/zsh" \
-    "$HOME/.cmus/autosave" \
-    "$HOME/.cmus/cache" \
-    "$HOME/.cmus/lib.pl" \
-    "$HOME/.cmus/playlist.pl" \
-    "$HOME/.cmus/queue.pl" \
-    "$HOME/.cmus/resume" \
-    "$HOME/.cmus/search-history" \
-    "$HOME/.config/dwb/default/commands.history" \
-    "$HOME/.config/dwb/default/cookies" \
-    "$HOME/.config/dwb/default/cookies_session.allow" \
-    "$HOME/.config/dwb/default/dwb-uni.fifo" \
-    "$HOME/.config/dwb/default/history" \
-    "$HOME/.config/dwb/default/hsts" \
-    "$HOME/.config/dwb/default/navigate.history" \
-    "$HOME/.config/dwb/default/plugindb" \
-    "$HOME/.config/dwb/default/plugins.allow" \
-    "$HOME/.config/dwb/default/scripts.allow" \
-    "$HOME/.config/dwb/default/search.history" \
-    "$HOME/.config/dwb/default/session" \
-    "$HOME/.config/gtk-2.0" \
-    "$HOME/.config/gtk-3.0" \
-    "$HOME/.config/ranger/bookmarks" \
-    "$HOME/.config/ranger/history" \
-    "$HOME/.config/ranger/tagged" \
-    "$HOME/.fehbg" \
-    "$HOME/.gtk-bookmarks" \
-    "$HOME/.lesshst" \
-    "$HOME/.local/share/newsbeuter" \
-    "$HOME/.local/share/webkit" \
-    "$HOME/.mpv/watch_later" \
-    "$HOME/.mtap.fuseiso" \
-    "$HOME/.pulse-cookie" \
-    "$HOME/.viminfo" \
-    "$HOME/.w3m" \
-    "$HOME/.zcompdump"
+	"$HOME/.cache/emacs" \
+	"$HOME/.cache/mutt" \
+	"$HOME/.cache/rtorrent" \
+	"$HOME/.cache/zsh" \
+	"$HOME/.cmus/autosave" \
+	"$HOME/.cmus/cache" \
+	"$HOME/.cmus/lib.pl" \
+	"$HOME/.cmus/playlist.pl" \
+	"$HOME/.cmus/queue.pl" \
+	"$HOME/.cmus/resume" \
+	"$HOME/.cmus/search-history" \
+	"$HOME/.config/dwb/default/commands.history" \
+	"$HOME/.config/dwb/default/cookies" \
+	"$HOME/.config/dwb/default/cookies_session.allow" \
+	"$HOME/.config/dwb/default/dwb-uni.fifo" \
+	"$HOME/.config/dwb/default/history" \
+	"$HOME/.config/dwb/default/hsts" \
+	"$HOME/.config/dwb/default/navigate.history" \
+	"$HOME/.config/dwb/default/plugindb" \
+	"$HOME/.config/dwb/default/plugins.allow" \
+	"$HOME/.config/dwb/default/scripts.allow" \
+	"$HOME/.config/dwb/default/search.history" \
+	"$HOME/.config/dwb/default/session" \
+	"$HOME/.config/gtk-2.0" \
+	"$HOME/.config/gtk-3.0" \
+	"$HOME/.config/ranger/bookmarks" \
+	"$HOME/.config/ranger/history" \
+	"$HOME/.config/ranger/tagged" \
+	"$HOME/.fehbg" \
+	"$HOME/.gtk-bookmarks" \
+	"$HOME/.lesshst" \
+	"$HOME/.local/share/newsbeuter" \
+	"$HOME/.local/share/webkit" \
+	"$HOME/.mpv/watch_later" \
+	"$HOME/.mtap.fuseiso" \
+	"$HOME/.pulse-cookie" \
+	"$HOME/.viminfo" \
+	"$HOME/.w3m" \
+	"$HOME/.zcompdump"
 
 ## POSIX can store only one list at a time. Here we rely on the fact there is no
 ## space in the file names.
@@ -58,18 +58,18 @@ echo "==> Clean home? [y/N]"
 read CHOICE
 CHOICE="$(echo $CHOICE | tr [:lower:] [:upper:])"
 if [ "$CHOICE" != "Y" ]; then
-    echo "Nothing done."
-    exit
+	echo "Nothing done."
+	exit
 fi
 
 ## Clean trash if possible.
 echo
 echo "==> Emptying trash."
 if ! command -v trash-empty >/dev/null 2>&1; then
-    echo ":: 'trash-empty' not installed, you have to clean other drives manually."
-    rm -rvf "$HOME/.local/share/Trash"
+	echo ":: 'trash-empty' not installed, you have to clean other drives manually."
+	rm -rvf "$HOME/.local/share/Trash"
 else
-    trash-empty
+	trash-empty
 fi
 
 ## Remove data.
@@ -81,10 +81,10 @@ rm -rvf "$@"
 echo
 echo "==> Remove critical data."
 if [ "$(echo "$HOME" | grep -c ' ')" -ne 0 ]; then
-    echo 'WARNING: $HOME contains spaces, skipping.'
+	echo 'WARNING: $HOME contains spaces, skipping.'
 else
-    shred -zuv $RMLIST_CRITICAL
-    # wipe -rdzp2 $RMLIST_CRITICAL
+	shred -zuv $RMLIST_CRITICAL
+	# wipe -rdzp2 $RMLIST_CRITICAL
 fi
 
 echo

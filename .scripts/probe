@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "$#" -eq 0 ] || [ "$1" = "-h" ]; then
-    cat<<EOF
+	cat<<EOF
 Usage: ${1##*/} FILE
        ${1##*/} ENTRIES FILE
 
@@ -9,12 +9,12 @@ Run ffprobe on FILE using shell print format. If no entry is specified, print
 format and streams.
 
 EOF
-    exit
+	exit
 fi
 
 
 if [ $# -gt 1 ]; then
-    ffprobe -v quiet -print_format flat=s=_ -show_entries "$@"
+	ffprobe -v quiet -print_format flat=s=_ -show_entries "$@"
 else
-    ffprobe -v quiet -print_format flat=s=_ -show_format -show_streams "$1"
+	ffprobe -v quiet -print_format flat=s=_ -show_format -show_streams "$1"
 fi

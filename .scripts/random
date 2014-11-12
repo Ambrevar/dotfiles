@@ -1,14 +1,14 @@
 #!/bin/sh
 
 if [  "$1" = "--help" ] || [ "$1" = "-h" ]; then
-    cat <<EOF
+	cat <<EOF
 Usage: ${0##*/} [FILES]
 
 Shuffle letters randomly and print result to stdout. If no file is provided,
 stdin is used.
 
 EOF
-    exit
+	exit
 fi
 
 fold -w 1 "$@" | shuf | tr -d '\n' && echo

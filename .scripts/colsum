@@ -4,14 +4,14 @@ COLUMN="1"
 FORMAT="TOTAL: %s\n"
 
 if [ "$1" = "-h" ]; then
-    cat<<EOF
+	cat<<EOF
 Usage: ${0##*/} [COLUMN] [FORMAT]
 
 Sum COLUMN (default to column $COLUMN) and output result with format FORMAT
 (default to $FORMAT).
 
 EOF
-    exit
+	exit
 fi
 
 [ $# -ge 1 ] && COLUMN="$1" && shift

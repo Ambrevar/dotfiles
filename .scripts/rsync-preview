@@ -1,14 +1,14 @@
 #!/bin/sh
 
 if [ "$1" = "-h" ] || [ $# -ne 2 ]; then
-    cat<<EOF
+	cat<<EOF
 Usage: ${0##*/} FOLDER1 FOLDER2
 
 Dry-run of rsync over two folders.
 
 EOF
 
-    exit
+	exit
 fi
 
 rsync -nivr --size-only --delete-excluded "$1"/ "$2"

@@ -4,9 +4,8 @@
 UPSTREAM_SOURCE="srcdir"
 ## End of user config
 
-_printhelp ()
-{
-    cat <<EOF
+_usage () {
+	cat <<EOF
 Usage: ${1##*/} [OPTIONS] PACKAGES
 
 WARNING: development version. Not reliable for AUR-dependency resolution.
@@ -39,15 +38,15 @@ Options:
 Example:
   ${1##*/} -icf \$(pacman -Qmq)
 
-     For all foreign installed packages, force fetch PKGBUILD, fetch source code
-     if not available, build if not already build, force installing and clean
-     build folder.
+    For all foreign installed packages, force fetch PKGBUILD, fetch source code
+    if not available, build if not already build, force installing and clean
+    build folder.
 
   ${1##*/} -sbicf nawk ncdu
 
-     For all foreign installed packages, fetch PKGBUILD and source code if not
-     available, force build if not already build, force installing and clean
-     build folder.
+    For all foreign installed packages, fetch PKGBUILD and source code if not
+    available, force build if not already build, force installing and clean
+    build folder.
 
 EOF
 }
@@ -63,46 +62,60 @@ OPT_INSTALL=false
 OPT_SOURCE=false
 
 while getopts ":bcCfhis" opt; do
-    case $opt in
-        b)
-            OPT_BUILD=true ;;
-        c)
-            MAKEPKG_OPT="$MAKEPKG_OPT -c"
-            OPT_CLEAN=true ;;
-        C)
-            OPT_MRPROPER=true ;;
-        f)
-            MAKEPKG_OPT="$MAKEPKG_OPT -f"
-            PACMAN_OPT=""
-            OPT_FORCE=true ;;
-        h)
-            _printhelp "$0"
-            exit 1 ;;
-        i)
-            OPT_INSTALL=true ;;
-        s)
-            OPT_SOURCE=true ;;
-        ?)
-            _printhelp "$0"
-            exit 1 ;;
-        :)
-            echo "Missing argument."
-            _printhelp "$0"
-            exit 1 ;;
-    esac
+	case $opt in
+	b)
+		OPT_BUILD=true ;;
+	c)
+		MAKEPKG_OPT="$MAKEPKG_OPT -c"
+		OPT_CLEAN=true ;;
+	C)
+		OPT_MRPROPER=true ;;
+	f)
+		MAKEPKG_OPT="$MAKEPKG_OPT -f"
+		PACMAN_OPT=""
+		OPT_FORCE=true ;;
+	h)
+		_usage "$0"
+		exit 1 ;;
+	i)
+		OPT_INSTALL=true ;;
+	s)
+		OPT_SOURCE=true ;;
+	\?)
+		echo 'HO'
+		_usage "$0"
+		exit 1 ;;
+	esac
 done
+
+usage () {
+	cat<<EOF
+Usage: ${1##*/} [OPTIONS] FILES
+
+Options:
+
+  -h:  Show this help.
+
+EOF
+}
+
+shift $(($OPTIND - 1))
+if [ $# -eq 0 ]; then
+	usage "$0"
+	exit 1
+fi
 
 shift $(($OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-    echo "Missing argument."
-    _printhelp "$0"
-    exit 1
+	echo "Missing argument."
+	_usage "$0"
+	exit 1
 fi
 
 if ! command -v makepkg >/dev/null; then
-    echo "You need makepkg to run this script."
-    exit 1
+	echo "You need makepkg to run this script."
+	exit 1
 fi
 
 HAS_ABS=false
@@ -111,123 +124,115 @@ command -v abs >/dev/null && HAS_ABS=true
 command -v yaourt >/dev/null && HAS_YAOURT=true
 
 if ! $HAS_ABS && ! $HAS_YAOURT; then
-    echo "Please install either an ABS-tree or yaourt."
-    exit 1
+	echo "Please install either an ABS-tree or yaourt."
+	exit 1
 fi
 
 if $HAS_ABS && [ -f "/etc/abs.conf" ]; then
-    . "/etc/abs.conf"
-    [ "$ABSROOT" = "" ] && ABSROOT="/var/abs/"
+	. "/etc/abs.conf"
+	[ "$ABSROOT" = "" ] && ABSROOT="/var/abs/"
 fi
 
 ################################################################################
 
-abs_pkgbuild ()
-{
-    pacman -Si $1 >/dev/null 2>&1
-    if [ $? -eq 0 ] && $HAS_ABS && [ -d "$ABSROOT" ]; then
-        cp -r /var/abs/*/$1 .
-    else
-        yaourt -G "$1" --noconfirm
-    fi
+abs_pkgbuild () {
+	pacman -Si $1 >/dev/null 2>&1
+	if [ $? -eq 0 ] && $HAS_ABS && [ -d "$ABSROOT" ]; then
+		cp -r /var/abs/*/$1 .
+	else
+		yaourt -G "$1" --noconfirm
+	fi
 }
 
-abs_source ()
-{
-    (cd "$1" && \
-        mkdir -p "$UPSTREAM_SOURCE" && \
-        SRCDEST="$UPSTREAM_SOURCE" makepkg -o)
+abs_source () {
+	(cd "$1" && \
+			mkdir -p "$UPSTREAM_SOURCE" && \
+			SRCDEST="$UPSTREAM_SOURCE" makepkg -o)
 }
 
 ## TODO: unused function. Add 'build all deps from source' parameter?
-abs_builddeps ()
-{
-    DEPLIST=$(awk -F"'" '/^(make)?depends *= *\(/,/\)/ {for (n=2 ; n<NF; n++) res=res $n " "} END {gsub(/ +/, " ", res); print res}' PKGBUILD)
-    (cd .. && abs-wrapper $DEPLIST)
+abs_builddeps () {
+	DEPLIST=$(awk -F"'" '/^(make)?depends *= *\(/,/\)/ {for (n=2 ; n<NF; n++) res=res $n " "} END {gsub(/ +/, " ", res); print res}' PKGBUILD)
+	(cd .. && abs-wrapper $DEPLIST)
 }
 
-abs_buildmissing ()
-{
-    DEPLIST="$(makepkg -s 2>&1 | awk -F: '/target not found/ {print $3}')"
-    cd ..
-    while IFS= read -r p; do
-        abs_pkgbuild $p
-        abs_build $p
-        abs_install $p
-    done <<EOF
-    ${DEPLIST}
+abs_buildmissing () {
+	DEPLIST="$(makepkg -s 2>&1 | awk -F: '/target not found/ {print $3}')"
+	cd ..
+	while IFS= read -r p; do
+		abs_pkgbuild $p
+		abs_build $p
+		abs_install $p
+	done <<EOF
+		${DEPLIST}
 EOF
-    cd $1
+	cd $1
 }
 
-abs_build ()
-{
-    (cd "$1" && \
-        mkdir -p "$UPSTREAM_SOURCE" && \
-        (makepkg -s || \
-        if [ $? -ne 0 ]; then abs_buildmissing $1; fi ) && \
-        SRCDEST="$UPSTREAM_SOURCE" makepkg -r $MAKEPKG_OPT --nocheck --noconfirm)
+abs_build () {
+	(cd "$1" && \
+			mkdir -p "$UPSTREAM_SOURCE" && \
+			(makepkg -s || \
+					if [ $? -ne 0 ]; then abs_buildmissing $1; fi ) && \
+			SRCDEST="$UPSTREAM_SOURCE" makepkg -r $MAKEPKG_OPT --nocheck --noconfirm)
 }
 
-abs_clean ()
-{
-    (cd "$1" && \
-        echo "Removing src/ and pkg/ folders." && \
-        rm -rf "src" "pkg")
+abs_clean () {
+	(cd "$1" && \
+			echo "Removing src/ and pkg/ folders." && \
+			rm -rf "src" "pkg")
 }
 
 
-abs_mrproper ()
-{
-    (cd "$1" && \
-        echo "Removing archives." && \
-        rm -v *.tar.gz *.tar.xz *.tar.bz *.tar.bz2 *.tgz *.txz *.tbz *.tbz2 2>/dev/null)
+abs_mrproper () {
+	(cd "$1" && \
+			echo "Removing archives." && \
+			rm -v *.tar.gz *.tar.xz *.tar.bz *.tar.bz2 *.tgz *.txz *.tbz *.tbz2 2>/dev/null)
 }
 
-abs_install ()
-{
-    sudo sh -c '
-        (cd "$0" && pacman '$PACMAN_OPT' --noconfirm -U *.pkg.tar.xz)
-        for i; do
-            (cd "$i" && pacman '$PACMAN_OPT' --noconfirm -U *.pkg.tar.xz)
-        done
+abs_install () {
+	sudo sh -c '
+		(cd "$0" && pacman '$PACMAN_OPT' --noconfirm -U *.pkg.tar.xz)
+		for i; do
+			(cd "$i" && pacman '$PACMAN_OPT' --noconfirm -U *.pkg.tar.xz)
+		done
 ' "$@"
 }
 
 for i ; do
-    echo "==> Processing $i."
+	echo "==> Processing $i."
 
-    ## Fetch PKGBUILD.
-    if [ ! -f "$i/PKGBUILD" ] || $OPT_FORCE; then
-        abs_pkgbuild "$i"
-    fi
+	## Fetch PKGBUILD.
+	if [ ! -f "$i/PKGBUILD" ] || $OPT_FORCE; then
+		abs_pkgbuild "$i"
+	fi
 
-    ## Skip because $i does not exist.
-    [ ! -d "$i" ] && continue
+	## Skip because $i does not exist.
+	[ ! -d "$i" ] && continue
 
-    ## Fetch source code.
-    if $OPT_SOURCE; then
-        abs_source "$i"
-    fi
+	## Fetch source code.
+	if $OPT_SOURCE; then
+		abs_source "$i"
+	fi
 
-    ## Build.
-    if $OPT_BUILD || ($OPT_INSTALL && [ ! -f $i/*.pkg.tar.xz ]); then
-        abs_build "$i"
-    fi
+	## Build.
+	if $OPT_BUILD || ($OPT_INSTALL && [ ! -f $i/*.pkg.tar.xz ]); then
+		abs_build "$i"
+	fi
 
-    ## Clean build folder.
-    if $OPT_CLEAN; then
-        abs_clean "$i"
-    fi
+	## Clean build folder.
+	if $OPT_CLEAN; then
+		abs_clean "$i"
+	fi
 
-    ## Remove archives.
-    if $OPT_MRPROPER; then
-        abs_mrproper "$i"
-    fi
+	## Remove archives.
+	if $OPT_MRPROPER; then
+		abs_mrproper "$i"
+	fi
 done
 
 ## Install packages. We put the install part outside the loop so that we prompt
 ## for password one time only.
 if $OPT_INSTALL; then
-    abs_install "$@"
+	abs_install "$@"
 fi

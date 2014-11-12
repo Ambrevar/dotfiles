@@ -1,9 +1,8 @@
 #!/usr/bin/env zsh
 ## zsh is needed for the password.
 
-_printhelp ()
-{
-    cat<<EOF
+_usage () {
+cat<<EOF
 Usage: ${1##*/} [OPTIONS] FILES|FOLDERS
 
 Wrapper around various archive extraction tools. The archives are recognized
@@ -31,56 +30,55 @@ OPT_DELAFTER=false
 PASS=''
 
 while getopts ":hfp" opt; do
-    case $opt in
-        h)
-            _printhelp "$0"
-            exit 1 ;;
-        f)
-            OPT_DELAFTER=true ;;
-        p)
-            echo -n "Password: "
-            read -s PASS
-            PASS="-p$PASS" ;;
-        ?)
-            _printhelp "$0"
-            exit 1 ;;
-    esac
+	case $opt in
+	h)
+		_usage "$0"
+		exit 1 ;;
+	f)
+		OPT_DELAFTER=true ;;
+	p)
+		echo -n "Password: "
+		read -s PASS
+		PASS="-p$PASS" ;;
+	\?)
+		_usage "$0"
+		exit 1 ;;
+	esac
 done
 
 shift $(($OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-    _printhelp "$0"
-    exit 1
+	_usage "$0"
+	exit 1
 fi
 
 command -v atool >/dev/null 2>&1 && echo "You should use atool instead." && echo
 
-_extract()
-{
-    echo "[$1]"
-    case "$1" in
-        */*) FOLDER="${1%/*}";;
-        *) FOLDER="." ;;
-    esac
+_extract () {
+	echo "[$1]"
+	case "$1" in
+	*/*) FOLDER="${1%/*}";;
+	*) FOLDER="." ;;
+	esac
 
 	case "$1" in
-		*.tar*|*.tbz2|*.tbz|*.tgz|*.txz) tar xf "$1" -C "$FOLDER" ;;
-		*.7z)      7z x "$PASS" -o"$FOLDER" "$1";;
-		*.bz2)     bunzip2 "$1" ;;
-		*.rar)     unrar x "$1" ;;
-		*.gz)      gunzip "$1" ;;
-		*.zip)     unzip "$1" ;;
-		*.Z)       uncompress "$1" ;;
-		*.xz)      unxz "$1" ;;
-		*.exe)     cabextract "$1" ;;
+	*.tar*|*.tbz2|*.tbz|*.tgz|*.txz) tar xf "$1" -C "$FOLDER" ;;
+	*.7z)      7z x "$PASS" -o"$FOLDER" "$1";;
+	*.bz2)     bunzip2 "$1" ;;
+	*.rar)     unrar x "$1" ;;
+	*.gz)      gunzip "$1" ;;
+	*.zip)     unzip "$1" ;;
+	*.Z)       uncompress "$1" ;;
+	*.xz)      unxz "$1" ;;
+	*.exe)     cabextract "$1" ;;
+	*)
+		case "$(file "$1")" in
+		*7-zip*) 7z x "$PASS" -o"$FOLDER" "$1" ;;
+		*gzip*|*bzip2*|*XZ*) tar xf "$1" -C "$FOLDER" ;;
 		*)
-            case "$(file "$1")" in
-                *7-zip*) 7z x "$PASS" -o"$FOLDER" "$1" ;;
-                *gzip*|*bzip2*|*XZ*) tar xf "$1" -C "$FOLDER" ;;
-                *)
-                    echo "[$1]: unrecognized archive format." ;;
-            esac
+			echo "[$1]: unrecognized archive format." ;;
+		esac
 	esac
 
 	$OPT_DELAFTER && rm -v "$1"
@@ -88,13 +86,13 @@ _extract()
 
 for i ; do
 
-    if [ -d "$i" ]; then
-        while IFS= read -r FILE; do
-            _extract "$FILE"
-        done <<EOF
+	if [ -d "$i" ]; then
+		while IFS= read -r FILE; do
+			_extract "$FILE"
+		done <<EOF
 $(find "$i" -type f)
 EOF
-    else
-        _extract "$i"
-    fi
+	else
+		_extract "$i"
+	fi
 done

@@ -8,25 +8,24 @@
 ## to use shell comment delimiters.
 
 BEGIN {
-    ## Since 'begin' and 'end' are regexes, we need to escape some sequences.
-    if(begin == "")
-        begin="/\\*"
-    if(end == "")
-        end="\\*/"
+	## Since 'begin' and 'end' are regexes, we need to escape some sequences.
+	if(begin == "")
+		begin="/\\*"
+	if(end == "")
+		end="\\*/"
 }
 
 {
-    while (match ($0, begin))
-    {
-        before = substr ($0, 1, RSTART-1)
-        $0 = substr($0, RSTART)
-        printf("%s", before)
+	while (match ($0, begin)) {
+		before = substr ($0, 1, RSTART-1)
+		$0 = substr($0, RSTART)
+		printf("%s", before)
 
-        ## Reach line where first 'end' is found.
-        while (! match($0, end) )
-            getline
+		## Reach line where first 'end' is found.
+		while (! match($0, end) )
+			getline
 
-        $0 = substr($0, RSTART + length(end) -1)
-    }
-    print
+		$0 = substr($0, RSTART + length(end) -1)
+	}
+	print
 }

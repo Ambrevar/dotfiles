@@ -1,21 +1,21 @@
 #!/bin/sh
 
 if [ "$1" = "-h" ]; then
-    cat <<EOF
+	cat <<EOF
 Usage: ${0##*/}
 
 Clean various running processes. Run it before exiting a session.
 
 EOF
-    exit
+	exit
 fi
 
 if command -v emacsclient >/dev/null 2>&1; then
-    if emacsclient -e '(kill-emacs)' >/dev/null 2>&1; then
-        echo "Emacs terminated." >&2
-    fi
+	if emacsclient -e '(kill-emacs)' >/dev/null 2>&1; then
+		echo "Emacs terminated." >&2
+	fi
 fi
 if [ -S "$SSH_AUTH_SOCK" ]; then
-    echo "SSH agent terminated." >&2
-    eval "$(ssh-agent -k)"
+	echo "SSH agent terminated." >&2
+	eval "$(ssh-agent -k)"
 fi

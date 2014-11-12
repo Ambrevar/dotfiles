@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "$1" = "-h" ]; then
-    cat<<EOF
+	cat<<EOF
 Usage: ${0##*/} [OPTIONS]
 
 With no argument, start transmission-remote-cli. Otherwise, run
@@ -11,28 +11,27 @@ In both cases if transmission-daemon is not running it will be started
 beforehand.
 
 EOF
-    exit
+	exit
 fi
 
 
-check()
-{
-    for i ; do
-        if ! command -v $i >/dev/null 2>&1; then
-            echo >&2 "'$i' not found in PATH. Exiting."
-            exit 1
-        fi
-    done
+check () {
+	for i ; do
+		if ! command -v $i >/dev/null 2>&1; then
+			echo >&2 "'$i' not found in PATH. Exiting."
+			exit 1
+		fi
+	done
 }
+
 check transmission-daemon transmission-remote-cli
 
 [ $(ps -U $USER | grep -c transmission-da) -eq 0 ] && transmission-daemon
 if [ $# -eq 0 ]; then
-    exec transmission-remote-cli
+	exec transmission-remote-cli
 else
-    ## The 'sleep' is needed here to give the daemon some time to start. 1 sec
-    ## should be enough on most system.
-    sleep 1
-    transmission-remote "$@"
+	## The 'sleep' is needed here to give the daemon some time to start. 1 sec
+	## should be enough on most system.
+	sleep 1
+	transmission-remote "$@"
 fi
-

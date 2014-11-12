@@ -1,26 +1,25 @@
 #!/bin/sh
 
 if ! command -v mediainfo >/dev/null 2>&1; then
-    echo "mediainfo required."
-    exit
+	echo "mediainfo required."
+	exit
 fi
 
 ## This will check for badly encoded audio.
 while IFS= read -r i; do
-    BUFFER="$(mediainfo "$i")"
-    [ -n "$(echo "$BUFFER" | grep "Bit rate mode *: Constant")" ] && echo "$i : CBR"
+	BUFFER="$(mediainfo "$i")"
+	[ -n "$(echo "$BUFFER" | grep "Bit rate mode *: Constant")" ] && echo "$i : CBR"
 
-    [ -n "$(echo "$BUFFER" | grep "Cover *: Yes")" ] && echo "$i : Cover"
+	[ -n "$(echo "$BUFFER" | grep "Cover *: Yes")" ] && echo "$i : Cover"
 
-    [ -n "$(echo "$BUFFER" | grep "Track name/Position *: 0+")" ] && echo "$i : Leading zeros"
+	[ -n "$(echo "$BUFFER" | grep "Track name/Position *: 0+")" ] && echo "$i : Leading zeros"
 done <<EOF
 $(find "."  \( \
-        -iname '*.mp3'  -o \
-        -iname '*.flac' -o \
-        -iname '*.wv'   -o \
-        -iname '*.aac'  -o \
-        -iname '*.wav'  -o \
-        -iname '*.ape'  -o \
-        -iname '*.mpc' \) )
+		-iname '*.mp3'  -o \
+		-iname '*.flac' -o \
+		-iname '*.wv'   -o \
+		-iname '*.aac'  -o \
+		-iname '*.wav'  -o \
+		-iname '*.ape'  -o \
+		-iname '*.mpc' \) )
 EOF
-

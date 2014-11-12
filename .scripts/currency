@@ -1,17 +1,15 @@
 #!/bin/sh
 
 if [ $# -ne 3 ] || [ "$1" = "-h" ]; then
-    cat <<EOF
+	cat <<EOF
 Usage: ${0##*/} VALUE IN-CURRENCY OUT-CURRENCY
 
 Convert VALUE from IN-CURRENCY to OUT-CURRENCY.
 CURRENCY is a 3-letters code like EUR, SEK, USD, etc.
 
 EOF
-    exit
+	exit
 fi
 
 curl -sA "Mozilla/5.0" "http://www.google.com/finance?q=$2$3" | \
-    awk -v value=$1 -F '<|>' '/^1 / {print value * substr($3, 1, index($3," "))}'
-
-
+	awk -v value=$1 -F '<|>' '/^1 / {print value * substr($3, 1, index($3," "))}'

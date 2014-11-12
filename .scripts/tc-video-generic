@@ -2,9 +2,8 @@
 
 ## TODO: handle srt encoding?
 
-_printhelp()
-{
-    cat <<EOF
+_usage () {
+	cat <<EOF
 Usage: ${1##*/} [OPTIONS] FILES|FOLDERS
 
 Transcode FILES or files found in FOLDERS to desired format (default to .mkv
@@ -89,71 +88,69 @@ OPT_PREVIEW=false
 OPT_COPY=false
 
 while getopts ":a:b:cCe:fho:pPsS:tv:" opt; do
-    case $opt in
-        a)
-            AUDIO_CODEC=$OPTARG ;;
-        b)
-            AUDIO_DEFAULT_RATE=$OPTARG ;;
-        c)
-            VIDEO_PARAM="-c:v copy"
-            AUDIO_PARAM="-c:a copy"
-            OPT_COPY=true;;
-        C)
-            OPT_CROP=true;;
-        e)
-            EXT=$OPTARG;;
-        f)
-            OVERWRITE="-y"
-            OPT_OVERWRITE=true;;
-        h)
-            _printhelp "$0"
-            exit 1 ;;
-        o)
-            TC_VIDEO_OPT="$OPTARG" ;;
-        p)
-            OPT_PREVIEW=true ;;
-        P)
-            OPT_CROP=true
-            OPT_PREVIEW=true
-            OPT_CROPPREVIEW=true ;;
-        s)
-            SAMPLE="-ss 60 -t 360" ;;
-        S)
-            SAMPLE="-ss 60 -t $((60*$OPTARG))" ;;
-        t)
-            OPT_REMOVE_TITLE=true ;;
-        v)
-            VIDEO_PARAM="-c:v $OPTARG" ;;
-        ?)
-            _printhelp "$0"
-            exit 1 ;;
-    esac
+	case $opt in
+	a)
+		AUDIO_CODEC=$OPTARG ;;
+	b)
+		AUDIO_DEFAULT_RATE=$OPTARG ;;
+	c)
+		VIDEO_PARAM="-c:v copy"
+		AUDIO_PARAM="-c:a copy"
+		OPT_COPY=true;;
+	C)
+		OPT_CROP=true;;
+	e)
+		EXT=$OPTARG;;
+	f)
+		OVERWRITE="-y"
+		OPT_OVERWRITE=true;;
+	h)
+		_usage "$0"
+		exit 1 ;;
+	o)
+		TC_VIDEO_OPT="$OPTARG" ;;
+	p)
+		OPT_PREVIEW=true ;;
+	P)
+		OPT_CROP=true
+		OPT_PREVIEW=true
+		OPT_CROPPREVIEW=true ;;
+	s)
+		SAMPLE="-ss 60 -t 360" ;;
+	S)
+		SAMPLE="-ss 60 -t $((60*$OPTARG))" ;;
+	t)
+		OPT_REMOVE_TITLE=true ;;
+	v)
+		VIDEO_PARAM="-c:v $OPTARG" ;;
+	\?)
+		_usage "$0"
+		exit 1 ;;
+	esac
 done
 
 shift $(($OPTIND - 1))
 if [ $# -eq 0 ]; then
-    _printhelp "$0"
-    exit
+	_usage "$0"
+	exit
 fi
 
 if ! command -v ffmpeg >/dev/null; then
-    echo "ffmpeg required."
-    exit
+	echo "ffmpeg required."
+	exit
 fi
 
-_highfreq()
-{
-    awk 'BEGIN{max=0} /crop=/ {t[$NF]++; if (t[$NF]>max) {max=t[$NF]; val=$NF}} END{print val}'
+_highfreq() {
+	awk 'BEGIN{max=0} /crop=/ {t[$NF]++; if (t[$NF]>max) {max=t[$NF]; val=$NF}} END{print val}'
 }
 
 ## Usage: _cropvalue FILE STEP
 ## Return the crop values as ffmpeg output them.
-_cropvalue()
-{
-    local step=$2
-    for i in $(seq $step $step $((5*$step))); do
-        ffmpeg -nostdin -ss $i -i "$1"  -t 10 -vf "cropdetect=24:2:0" -f null - 2>&1
-    done | _highfreq
+_cropvalue() {
+	local step=$2
+	for i in $(seq $step $step $((5*$step))); do
+		ffmpeg -nostdin -ss $i -i "$1"  -t 10 -vf "cropdetect=24:2:0" -f null - 2>&1
+	done | _highfreq
 }
 
 ## Return the audio encoding parameters. For instance
@@ -161,81 +158,79 @@ _cropvalue()
 ## If input codec is $AUDIO_CODEC, we copy. If some stream bitrates are missing
 ## or 0, we encode it to a default value. If default value is 0, then we copy
 ## stream.
-_audiobitrate()
-{
-    local bitrate
+_audiobitrate() {
+	local bitrate
 
-    for i in $(seq 0 $(($format_nb_streams-1)) ); do
-        ## Skip non audio tracks.
-        [ "$(eval echo \$streams_stream_${i}_codec_type)" != "audio" ] && continue
+	for i in $(seq 0 $(($format_nb_streams-1)) ); do
+		## Skip non audio tracks.
+		[ "$(eval echo \$streams_stream_${i}_codec_type)" != "audio" ] && continue
 
-        bitrate=$(eval echo \$streams_stream_${i}_bit_rate)
-        if [ -n "$bitrate" ] && [ "$bitrate" -gt 0 ] 2>/dev/null; then
-            ## If non-empty and a positive number.
-            bitrate=$(( $bitrate / 1000))
-        else
-            bitrate="$AUDIO_DEFAULT_RATE"
-        fi
-        if [ "$bitrate" -le 0 ] || \
-            [ "$AUDIO_CODEC" = "$(eval echo \$streams_stream_${i}_codec_name)" ] || \
-            [ "$AUDIO_CODEC" = "lib$(eval echo \$streams_stream_${i}_codec_name)" ]; then
-            printf -- "-c:%s copy " $i
-        else
-            [ $bitrate -gt 500 ] && bitrate=500
-            printf -- "-c:%s %s -b:%s %sk " $i "$AUDIO_CODEC" $i "$bitrate"
-        fi
-    done
+		bitrate=$(eval echo \$streams_stream_${i}_bit_rate)
+		if [ -n "$bitrate" ] && [ "$bitrate" -gt 0 ] 2>/dev/null; then
+			## If non-empty and a positive number.
+			bitrate=$(( $bitrate / 1000))
+		else
+			bitrate="$AUDIO_DEFAULT_RATE"
+		fi
+		if [ "$bitrate" -le 0 ] || \
+				 [ "$AUDIO_CODEC" = "$(eval echo \$streams_stream_${i}_codec_name)" ] || \
+				 [ "$AUDIO_CODEC" = "lib$(eval echo \$streams_stream_${i}_codec_name)" ]; then
+			printf -- "-c:%s copy " $i
+		else
+			[ $bitrate -gt 500 ] && bitrate=500
+			printf -- "-c:%s %s -b:%s %sk " $i "$AUDIO_CODEC" $i "$bitrate"
+		fi
+	done
 }
 
-_transcode()
-{
-    echo "==> [$1]"
-    OUTPUT="${1%.*}.$EXT"
-    [ -e "$OUTPUT" ] && OUTPUT="${1%.*}-$(date '+%F-%H%M%S').$EXT"
+_transcode() {
+	echo "==> [$1]"
+	OUTPUT="${1%.*}.$EXT"
+	[ -e "$OUTPUT" ] && OUTPUT="${1%.*}-$(date '+%F-%H%M%S').$EXT"
 
-    ## Metadata (i.e. tags + technical data).
-    _buffer="$(ffprobe -v quiet -print_format flat=s=_ -show_streams -show_format "$1")"
-    if [ $? -ne 0 ]; then
-        _error "File [$1] is unsupported by FFmpeg."
-        return
-    fi
-    eval "$_buffer"
-    unset _buffer
+	## Metadata (i.e. tags + technical data).
+	_buffer="$(ffprobe -v quiet -print_format flat=s=_ -show_streams -show_format "$1")"
+	if [ $? -ne 0 ]; then
+		_error "File [$1] is unsupported by FFmpeg."
+		return
+	fi
+	eval "$_buffer"
+	unset _buffer
 
-    STREAM_TITLE=""
-    if $OPT_REMOVE_TITLE; then
-        for i in $(seq 0 $(($format_nb_streams-1)) ); do
-            STREAM_TITLE="${STREAM_TITLE}-metadata:s:$i title= "
-        done
-    fi
+	STREAM_TITLE=""
+	if $OPT_REMOVE_TITLE; then
+		for i in $(seq 0 $(($format_nb_streams-1)) ); do
+			STREAM_TITLE="${STREAM_TITLE}-metadata:s:$i title= "
+		done
+	fi
 
-    if $OPT_CROP; then
-        echo "Computing crop values... "
-        ## For 5 different timeslices of 1 second at every 1/6th of the video,
-        ## we sample the crop values. We keep the values with highest
-        ## frequency. This is much faster than encoding in one pass with low
-        ## framerate.
-        STEP=${format_duration:-$streams_stream_0_duration}
-        STEP="${STEP%%.*}"
-        STEP=$(($STEP/6))
-        VIDEO_FILTER="-vf $(_cropvalue "$1" "$STEP")"
-        if $OPT_CROPPREVIEW; then
-            echo "Generating preview... "
-            for i in $(seq  $STEP $STEP $((5*$STEP))); do
-                ffmpeg -nostdin -v warning -y -ss $i -i "$1" \
-                    -f image2 -vframes 1 $VIDEO_FILTER "${1%.*}-preview-$i-cropped.png" \
-                    -f image2 -vframes 1 "${1%.*}-preview-$i-uncropped.png"
-            done
-        fi
-    fi
+	if $OPT_CROP; then
+		echo "Computing crop values... "
+		## For 5 different timeslices of 1 second at every 1/6th of the video,
+		## we sample the crop values. We keep the values with highest
+		## frequency. This is much faster than encoding in one pass with low
+		## framerate.
+		STEP=${format_duration:-$streams_stream_0_duration}
+		STEP="${STEP%%.*}"
+		STEP=$(($STEP/6))
+		VIDEO_FILTER="-vf $(_cropvalue "$1" "$STEP")"
+		if $OPT_CROPPREVIEW; then
+			echo "Generating preview... "
+			for i in $(seq  $STEP $STEP $((5*$STEP))); do
+				ffmpeg -nostdin -v warning -y -ss $i -i "$1" \
+					-f image2 -vframes 1 $VIDEO_FILTER "${1%.*}-preview-$i-cropped.png" \
+					-f image2 -vframes 1 "${1%.*}-preview-$i-uncropped.png"
+			done
+		fi
+	fi
 
-    ## WARNING: we mix down audio to 2 channels with '-ac 2'. This greatly
-    ## reduce file size and avoid any confusion for playback, which is often the
-    ## case when converting DTS to any other format because DTS has embedded
-    ## channel description which is not available in these formats.
-    ! $OPT_COPY && AUDIO_PARAM="$(_audiobitrate "$1") -ac 2"
+	## WARNING: we mix down audio to 2 channels with '-ac 2'. This greatly
+	## reduce file size and avoid any confusion for playback, which is often the
+	## case when converting DTS to any other format because DTS has embedded
+	## channel description which is not available in these formats.
+	! $OPT_COPY && AUDIO_PARAM="$(_audiobitrate "$1") -ac 2"
 
-    cat<<EOF
+	cat<<EOF
 ================================================================================
 User options:  ${TC_VIDEO_OPT:-none}
 Sample:        ${SAMPLE:-no}
@@ -249,47 +244,47 @@ Output file:   $OUTPUT
 ================================================================================
 EOF
 
-    $OPT_PREVIEW && return
+	$OPT_PREVIEW && return
 
-    ffmpeg -nostdin $OVERWRITE -i "$1" \
-        $VIDEO_PARAM $VIDEO_FILTER \
-        $AUDIO_PARAM \
-        -c:s copy \
-        -map 0 $STREAM_TITLE \
-        $SAMPLE $TC_VIDEO_OPT "$OUTPUT"
+	ffmpeg -nostdin $OVERWRITE -i "$1" \
+		$VIDEO_PARAM $VIDEO_FILTER \
+		$AUDIO_PARAM \
+		-c:s copy \
+		-map 0 $STREAM_TITLE \
+		$SAMPLE $TC_VIDEO_OPT "$OUTPUT"
 
-    if $OPT_OVERWRITE; then
-        rm "$1"
-        mv -f "$OUTPUT" "${1%.*}.$EXT"
-    fi
-    echo
+	if $OPT_OVERWRITE; then
+		rm "$1"
+		mv -f "$OUTPUT" "${1%.*}.$EXT"
+	fi
+	echo
 }
 
 for i in "$@"; do
 
-    ## Argument is a folder. We search for all video files in there.
-    if [ -d "$i" ]; then
+	## Argument is a folder. We search for all video files in there.
+	if [ -d "$i" ]; then
 
-        ## WARNING: ffmpeg continues to read stdin once it has started, so it should
-        ## not be called from within a while<<EOF loop without disabling stdin.
-        while IFS= read -r j; do
-            _transcode "$j"
-            done<<EOF
+		## WARNING: ffmpeg continues to read stdin once it has started, so it should
+		## not be called from within a while<<EOF loop without disabling stdin.
+		while IFS= read -r j; do
+			_transcode "$j"
+		done<<EOF
 $(find "$i"  \( \
-            -iname '*.avi' -o \
-            -iname '*.flv' -o \
-            -iname '*.mkv' -o \
-            -iname '*.mov' -o \
-            -iname '*.mp4' -o \
-            -iname '*.mpeg' -o \
-            -iname '*.mpg' -o \
-            -iname '*.webm' -o \
-            -iname '*.wmv' \) )
+		-iname '*.avi' -o \
+		-iname '*.flv' -o \
+		-iname '*.mkv' -o \
+		-iname '*.mov' -o \
+		-iname '*.mp4' -o \
+		-iname '*.mpeg' -o \
+		-iname '*.mpg' -o \
+		-iname '*.webm' -o \
+		-iname '*.wmv' \) )
 EOF
 
-    else
-        ## Argument is a regular file.
-        _transcode "$i"
-    fi
+	else
+		## Argument is a regular file.
+		_transcode "$i"
+	fi
 
 done

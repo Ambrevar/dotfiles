@@ -6,86 +6,83 @@
 FUSEROOT="$HOME/fuse"
 ################################################################################
 
-_mount ()
-{
-    [ ! -f "$1" ] && return
+_mount () {
+	[ ! -f "$1" ] && return
 
-    DEVICE="$(cdemu status | awk 'NR>2 && $2==0 {print $1; found=1; exit}  END {if(! found)print NR-2}')"
-    DEV_COUNT="$(cdemu device-mapping | awk 'END {print NR-3}')"
+	DEVICE="$(cdemu status | awk 'NR>2 && $2==0 {print $1; found=1; exit}  END {if(! found)print NR-2}')"
+	DEV_COUNT="$(cdemu device-mapping | awk 'END {print NR-3}')"
 
-    if [  $(cdemu status |  grep -c "$1") -gt 0 ]; then
-        echo "Image alredy mounted."
-        return
-    fi
+	if [  $(cdemu status |  grep -c "$1") -gt 0 ]; then
+		echo "Image alredy mounted."
+		return
+	fi
 
-    if [ $DEVICE -gt $DEV_COUNT ]; then
-        while [ $DEVICE -gt $DEV_COUNT ]; do
-            cdemu add-device
-            DEV_COUNT="$(cdemu device-mapping | awk 'END {print NR-3}')"
-        done
+	if [ $DEVICE -gt $DEV_COUNT ]; then
+		while [ $DEVICE -gt $DEV_COUNT ]; do
+			cdemu add-device
+			DEV_COUNT="$(cdemu device-mapping | awk 'END {print NR-3}')"
+		done
 
-        ## WARNING: adding a new device takes some time. If we want to avoid errors,
-        ## we need to sleep until it is ready.
-        echo "Waiting until ready..."
-        while [ -z "$(cdemu device-mapping | awk -v devnum=$DEV_COUNT 'NR>2 && $1==devnum {print $2}')" ]; do
-            sleep 1
-        done
+		## WARNING: adding a new device takes some time. If we want to avoid errors,
+		## we need to sleep until it is ready.
+		echo "Waiting until ready..."
+		while [ -z "$(cdemu device-mapping | awk -v devnum=$DEV_COUNT 'NR>2 && $1==devnum {print $2}')" ]; do
+			sleep 1
+		done
 
-    fi
+	fi
 
-    cdemu load $DEVICE "$1"
-    if [ $? -ne 0 ] && command -v fuseiso >/dev/null 2>&1; then
-        echo "Falling back to fuseiso."
+	cdemu load $DEVICE "$1"
+	if [ $? -ne 0 ] && command -v fuseiso >/dev/null 2>&1; then
+		echo "Falling back to fuseiso."
 
-        # LIST="$(mount | awk -v root="$FUSEROOT" '$1 == "fuseiso" && $3 ~ root {print $3}')"
-        LIST=$(mount | awk -v root="$FUSEROOT" '$1 == "fuseiso" && $3 ~ root {sub(/^fuseiso on /,"");sub(/ type fuse.fuseiso [^ ]*$/, ""); print $0}')
-        ALREADY="$(lsof -c fuseiso -F n | grep "$1")"
+		# LIST="$(mount | awk -v root="$FUSEROOT" '$1 == "fuseiso" && $3 ~ root {print $3}')"
+		LIST=$(mount | awk -v root="$FUSEROOT" '$1 == "fuseiso" && $3 ~ root {sub(/^fuseiso on /,"");sub(/ type fuse.fuseiso [^ ]*$/, ""); print $0}')
+		ALREADY="$(lsof -c fuseiso -F n | grep "$1")"
 
-        if [ -n "$ALREADY" ]; then
-            echo "Image alredy mounted."
-            return
-        fi
+		if [ -n "$ALREADY" ]; then
+			echo "Image alredy mounted."
+			return
+		fi
 
-        COUNT=0
-        while [ -n "$(echo "$LIST" | grep "$FUSEROOT/drive-$COUNT" )" ]; do
-            COUNT=$(($COUNT+1))
-        done
+		COUNT=0
+		while [ -n "$(echo "$LIST" | grep "$FUSEROOT/drive-$COUNT" )" ]; do
+			COUNT=$(($COUNT+1))
+		done
 
-        mkdir -p "$FUSEROOT/drive-$COUNT"
-        fuseiso -p "$1" "$FUSEROOT/drive-$COUNT"
+		mkdir -p "$FUSEROOT/drive-$COUNT"
+		fuseiso -p "$1" "$FUSEROOT/drive-$COUNT"
 
-    else
-        NODE="$(cdemu device-mapping | awk -v devnum=$DEVICE 'NR>2 && $1==devnum {print $2}')"
-        ## TODO: This is terrible, but checking cdemu status does not work. Maybe
-        ## a kernel limitation.
-        echo "Mounting..."
-        sleep 2
-        udiskie-mount "$NODE"
-    fi
+	else
+		NODE="$(cdemu device-mapping | awk -v devnum=$DEVICE 'NR>2 && $1==devnum {print $2}')"
+		## TODO: This is terrible, but checking cdemu status does not work. Maybe
+		## a kernel limitation.
+		echo "Mounting..."
+		sleep 2
+		udiskie-mount "$NODE"
+	fi
 
 }
 
 
-_umount ()
-{
-    [ ! -d "$1" ] && return
+_umount () {
+	[ ! -d "$1" ] && return
 
-    NODE="$(df | awk -v mount="$1" '$0 ~ mount {node=$1; gsub(/[^%]+% /, ""); if ($0 ~ mount){print node; exit}}')"
+	NODE="$(df | awk -v mount="$1" '$0 ~ mount {node=$1; gsub(/[^%]+% /, ""); if ($0 ~ mount){print node; exit}}')"
 
-    if [ -n "$NODE" ]; then
-        udiskie-umount "$1"
+	if [ -n "$NODE" ]; then
+		udiskie-umount "$1"
 
-        DEVICE=$(cdemu device-mapping | awk -v node="$NODE" '$2 == node {print $1; exit}')
-        cdemu unload $DEVICE
-    elif command -v fuseiso >/dev/null; then
-        fusermount -u "$1"
-        rmdir "$1" >/dev/null 2>&1
-    fi
+		DEVICE=$(cdemu device-mapping | awk -v node="$NODE" '$2 == node {print $1; exit}')
+		cdemu unload $DEVICE
+	elif command -v fuseiso >/dev/null; then
+		fusermount -u "$1"
+		rmdir "$1" >/dev/null 2>&1
+	fi
 }
 
-_printhelp ()
-{
-    cat<<EOF
+_usage () {
+	cat<<EOF
 Usage: ${1##*/} FILES
        ${1##*/} -u FOLDERS
 
@@ -102,43 +99,42 @@ EOF
 
 OPT_UNMOUNT=false
 while getopts ":hu" opt; do
-    case $opt in
-        h)
-            _printhelp "$0"
-            exit 1 ;;
-        u)
-            OPT_UNMOUNT=true ;;
-        ?)
-            _printhelp "$0"
-            exit 1 ;;
-    esac
+	case $opt in
+	h)
+		_usage "$0"
+		exit 1 ;;
+	u)
+		OPT_UNMOUNT=true ;;
+	\?)
+		_usage "$0"
+		exit 1 ;;
+	esac
 done
 
 shift $(($OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-    _printhelp "$0"
-    exit 1
+	_usage "$0"
+	exit 1
 fi
 
-check()
-{
-    for i ; do
-        if ! command -v $i >/dev/null 2>&1; then
-            echo >&2 "'$i' not found in PATH. Exiting."
-            exit 1
-        fi
-    done
+check () {
+	for i ; do
+		if ! command -v $i >/dev/null 2>&1; then
+			echo >&2 "'$i' not found in PATH. Exiting."
+			exit 1
+		fi
+	done
 }
 ## realpath is needed to check if image was already mounted or not.
 check udiskie cdemu realpath
 
 if $OPT_UNMOUNT; then
-    for i ; do
-        _umount "$(realpath "$i")"
-    done
+	for i ; do
+		_umount "$(realpath "$i")"
+	done
 else
-    for i ; do
-        _mount "$(realpath "$i")"
-    done
+	for i ; do
+		_mount "$(realpath "$i")"
+	done
 fi

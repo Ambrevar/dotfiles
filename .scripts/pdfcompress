@@ -9,9 +9,8 @@
 # -dGraphicsAlphaBits=4
 # -dMaxStripSize=8192
 
-_printhelp ()
-{
-    cat <<EOF
+_usage () {
+	cat <<EOF
 Usage: ${1##*/} [OPTIONS] PDFFILES
 
 All PDF files will be compressed to a PDF file with "-compressed" appended in its name.
@@ -39,57 +38,57 @@ OPT_OVERWRITE=false
 OPT_COMPRESSION="-dColorConversionStrategy=/LeaveColorUnchanged -dDownsampleMonoImages=false -dDownsampleGrayImages=false -dDownsampleColorImages=false -dAutoFilterColorImages=false -dAutoFilterGrayImages=false -dColorImageFilter=/FlateEncode -dGrayImageFilter=/FlateEncode"
 
 while getopts ":cfhin" opt; do
-    case $opt in
-        c)
-            OPT_COMPRESSION="" ;;
-        f)
-            OPT_OVERWRITE=true ;;
-        h)
-            _printhelp "$0"
-            exit 1 ;;
-        i)
-            OPT_INPLACE=true ;;
-        n)
-            OPT_COMPRESSION="-dColorConversionStrategy=/LeaveColorUnchanged -dEncodeColorImages=false -dEncodeGrayImages=false -dEncodeMonoImages=false" ;;
-        ?)
-            _printhelp "$0"
-            exit 1 ;;
-    esac
+	case $opt in
+	c)
+		OPT_COMPRESSION="" ;;
+	f)
+		OPT_OVERWRITE=true ;;
+	h)
+		_usage "$0"
+		exit 1 ;;
+	i)
+		OPT_INPLACE=true ;;
+	n)
+		OPT_COMPRESSION="-dColorConversionStrategy=/LeaveColorUnchanged -dEncodeColorImages=false -dEncodeGrayImages=false -dEncodeMonoImages=false" ;;
+	\?)
+		_usage "$0"
+		exit 1 ;;
+	esac
 done
 
 shift $(($OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-    _printhelp "$0"
-    exit 1
+	_usage "$0"
+	exit 1
 fi
 
 for i ; do
 
-    if [ ! -f "$i" ]; then
-        echo "$i is not a valid file."
-        continue
-    fi
+	if [ ! -f "$i" ]; then
+		echo "$i is not a valid file."
+		continue
+	fi
 
-    case "$i" in
-        */*) ;;
-        *)   i="./$i" ;;
-    esac
-    DIRNAME="${i%/*}"
-    BASENAME="${i##*/}"
-    EXTNAME="${BASENAME##*.}"
-    BASENAME="${BASENAME%.*}"
-    OUTPUT="$DIRNAME/$BASENAME-compressed.pdf"
-    if [ -e "$OUTPUT" ] && ! $OPT_OVERWRITE; then
-        echo "$OUTPUT alredy present. Skipping."
-        continue
-    fi
+	case "$i" in
+	*/*) ;;
+	*)   i="./$i" ;;
+	esac
+	DIRNAME="${i%/*}"
+	BASENAME="${i##*/}"
+	EXTNAME="${BASENAME##*.}"
+	BASENAME="${BASENAME%.*}"
+	OUTPUT="$DIRNAME/$BASENAME-compressed.pdf"
+	if [ -e "$OUTPUT" ] && ! $OPT_OVERWRITE; then
+		echo "$OUTPUT alredy present. Skipping."
+		continue
+	fi
 
-    echo "$i"
+	echo "$i"
 
-    gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite $OPT_COMPRESSION -sOutputFile="$OUTPUT" "$i"
-    if $OPT_INPLACE; then
-        rm -f "$i"
-        mv "$OUTPUT" "$i"
-    fi
+	gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite $OPT_COMPRESSION -sOutputFile="$OUTPUT" "$i"
+	if $OPT_INPLACE; then
+		rm -f "$i"
+		mv "$OUTPUT" "$i"
+	fi
 done

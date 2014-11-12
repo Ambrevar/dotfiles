@@ -1,30 +1,25 @@
 #!/bin/sh
 
-_printhelp()
-{
-    cat<<EOF
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+	cat<<EOF
 Usage: ${0##*/} FOLDERS
 
 Sync all git repos found in FOLDERS.
 EOF
-}
-
-if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-    _printhelp
-    exit
+	exit
 fi
 
 for i; do
-    while IFS= read -r FOLDER; do
-        ROOT="${FOLDER%/*}"
-        STATUS="$(cd -- "$ROOT" && git status -uno | grep "Your branch is ahead of")"
-        if [ -n "$STATUS" ]; then
-            echo "$ROOT"
-            echo "$STATUS"
-            (cd -- "$ROOT" && git push)
-            echo
-        fi
-    done <<EOF
+	while IFS= read -r FOLDER; do
+		ROOT="${FOLDER%/*}"
+		STATUS="$(cd -- "$ROOT" && git status -uno | grep "Your branch is ahead of")"
+		if [ -n "$STATUS" ]; then
+			echo "$ROOT"
+			echo "$STATUS"
+			(cd -- "$ROOT" && git push)
+			echo
+		fi
+	done <<EOF
 $(find "$i" -type d -name ".git")
 EOF
 done

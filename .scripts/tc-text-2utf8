@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-    cat<<EOF
+	cat<<EOF
 Usage: ${1##*/} FOLDERS
 
 Convert all 'bad' encoding to UTF-8/LF.
@@ -12,42 +12,42 @@ EOF
 fi
 
 if ! command -v recode >/dev/null 2>&1; then
-    echo "recode needed."
-    exit
+	echo "recode needed."
+	exit
 fi
 
 for i ; do
-    while IFS= read -r j; do
-        CODING=$(file "$j")
+	while IFS= read -r j; do
+		CODING=$(file "$j")
 
-        if [ -n "$(echo $CODING | grep 'ISO-8859')" ]; then
-            echo "ISO-8859:   [$j]"
-            recode latin1..utf-8 "$j"
+		if [ -n "$(echo $CODING | grep 'ISO-8859')" ]; then
+			echo "ISO-8859:   [$j]"
+			recode latin1..utf-8 "$j"
 
-        elif [ -n "$(echo $CODING | grep 'Non-ISO extended-ASCII')" ]; then
-            echo "cp1252:     [$j]"
-            recode cp1252..utf-8 "$j"
+		elif [ -n "$(echo $CODING | grep 'Non-ISO extended-ASCII')" ]; then
+			echo "cp1252:     [$j]"
+			recode cp1252..utf-8 "$j"
 
-        elif [ -n "$(echo $CODING | grep 'UTF-16 Unicode text')" ]; then
-            echo "UTF-16:     [$j]"
-            recode utf-16..utf-8 "$j"
+		elif [ -n "$(echo $CODING | grep 'UTF-16 Unicode text')" ]; then
+			echo "UTF-16:     [$j]"
+			recode utf-16..utf-8 "$j"
 
-        elif [ -n "$(echo $CODING | grep 'UTF-8 Unicode (with BOM)')" ]; then
-            echo "UTF-8 BOM:  [$j]"
-            ex -sc '1s/^.//|xit' "$j"
-            ## The following commands are funny alternatives, but are completely
-            ## overkill.
-            # dd iflag=skip_bytes skip=3 if=file.srt of=temp.srt
-            # dd bs=1 skip=3 if=file.srt of=temp.srt
-            # tail -c +32 file.srt > temp.srt
-        fi
+		elif [ -n "$(echo $CODING | grep 'UTF-8 Unicode (with BOM)')" ]; then
+			echo "UTF-8 BOM:  [$j]"
+			ex -sc '1s/^.//|xit' "$j"
+			## The following commands are funny alternatives, but are completely
+			## overkill.
+			# dd iflag=skip_bytes skip=3 if=file.srt of=temp.srt
+			# dd bs=1 skip=3 if=file.srt of=temp.srt
+			# tail -c +32 file.srt > temp.srt
+		fi
 
-        if [ -n "$(echo $CODING | grep 'CRLF')" ]; then
-            echo "CRLF:       [$j]"
-            ex -sc '%s///g|xit' "$j"
-        fi
+		if [ -n "$(echo $CODING | grep 'CRLF')" ]; then
+			echo "CRLF:       [$j]"
+			ex -sc '%s///g|xit' "$j"
+		fi
 
-    done <<EOF
+	done <<EOF
 $(find "$i" -type f -size -50M -print)
 EOF
 done

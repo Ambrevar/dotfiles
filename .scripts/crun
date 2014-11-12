@@ -1,12 +1,12 @@
 #!/bin/sh
 
 if [ $# -lt 1 ]; then
-    cat<<EOF
+	cat<<EOF
 Usage: ${0##*/} FILE [FLAGS]
 
 Simulate a C interpreter by compiling, executing and removing file in one run.
 EOF
-    exit
+	exit
 fi
 
 [ -z "$CC" ] && CC=gcc

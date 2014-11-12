@@ -3,7 +3,7 @@
 ## daemon since we want to pass additional parameters to emacs.
 
 if [  "$1" = "--help" ] || [ "$1" = "-h" ]; then
-    cat <<EOF
+	cat <<EOF
 Usage: ${0##*/} [FILES]
 
 Start emacsclient in terminal or in X window if possible. If server is not
@@ -18,18 +18,18 @@ All emacsclient(1) options are supported.
 $(emacsclient --help)
 
 EOF
-    exit
+	exit
 fi
 
 if [ "${0##*/}" = "emc" ] || [ -z "$DISPLAY" ] || \
-    [ "$(emacs --batch -Q --eval='(if (fboundp '"'"'tool-bar-mode) (message "X") (message "TTY"))' 2>&1)" = TTY ]; then
-    param="-t"
+		 [ "$(emacs --batch -Q --eval='(if (fboundp '"'"'tool-bar-mode) (message "X") (message "TTY"))' 2>&1)" = TTY ]; then
+	param="-t"
 else
-    if [ "${0##*/}" = "emw" ]; then
-        param="-c"
-    else
-        param="-nc"
-    fi
+	if [ "${0##*/}" = "emw" ]; then
+		param="-c"
+	else
+		param="-nc"
+	fi
 fi
 
 [ ! -e /tmp/emacs$(id -u)/server ] && emacs --daemon --no-site-file

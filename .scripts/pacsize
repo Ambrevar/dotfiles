@@ -51,7 +51,7 @@ remove_duplicates () {
 }
 
 usage () {
-    cat <<EOF
+	cat <<EOF
 Usage: ${1##*/} [OPTIONS] PACKAGES
        ${1##*/} -a [OPTIONS]
 
@@ -92,23 +92,23 @@ opt_total=false
 
 while getopts ":ahnstV" opt; do
 	case $opt in
-		a)
-			opt_all=true ;;
-		h)
-			usage "$0"
-			exit ;;
-		n)
-			opt_sort="sort -k3" ;;
-		s)
-			opt_sort="sort -h" ;;
-		t)
-			opt_total="calc_total" ;;
-		V)
-			version "$0"
-			exit ;;
-		?)
-			usage "$0"
-			exit 1 ;;
+	a)
+		opt_all=true ;;
+	h)
+		usage "$0"
+		exit ;;
+	n)
+		opt_sort="sort -k3" ;;
+	s)
+		opt_sort="sort -h" ;;
+	t)
+		opt_total="calc_total" ;;
+	V)
+		version "$0"
+		exit ;;
+	\?)
+		usage "$0"
+		exit 1 ;;
 	esac
 done
 

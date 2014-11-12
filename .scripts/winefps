@@ -1,26 +1,25 @@
 #!/bin/sh
 
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-    cat<<EOF
+	cat<<EOF
 Usage: ${0##*/} WIN32EXE PARAMS"
 
 Run Wine application while displaying FPS onscreen.
 EOF
-    exit
+	exit
 fi
 
 if ! command -v osd_cat >/dev/null; then
-    echo "You need osd_cat."
-    exit
+	echo "You need osd_cat."
+	exit
 fi
 
 ## The unbuffered option is -u on GNU and OpenBSD, -l on others.
 OPT_UNBUF=-l
 if [ "$(uname)" = "Linux" ] || [ "$(uname)" = "OpenBSD" ]; then
-    OPT_UNBUF=-u
+	OPT_UNBUF=-u
 fi
 
 WINEDEBUG=fps wine "$@" 2>&1 | tee /dev/stderr | \
-    sed $OPT_UNBUF -n '/^trace:fps:/{s/.* \([^ ]*\)fps/\1/;p}' | \
-    osd_cat -l1 -f  "-*-*-*-*-*-*-32-*-*-*-*-*-*-*" -O1 -c "yellow"
-
+	sed $OPT_UNBUF -n '/^trace:fps:/{s/.* \([^ ]*\)fps/\1/;p}' | \
+	osd_cat -l1 -f  "-*-*-*-*-*-*-32-*-*-*-*-*-*-*" -O1 -c "yellow"

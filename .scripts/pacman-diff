@@ -1,8 +1,7 @@
 #!/bin/sh
 
-_printhelp()
-{
-    cat <<EOF
+_usage () {
+	cat <<EOF
 Usage: ${1##*/} [-m|-e] [-q] FILE
 
 Display packages listed in FILE but not installed.
@@ -19,33 +18,33 @@ OPTION_FOREIGN=""
 OPTION_LOCAL="-1"
 
 while getopts ":hmqe" opt; do
-    case $opt in
-        e)
-            OPTION_EXPLICIT="e" ;;
-        h)
-            _printhelp "$0"
-            exit 1 ;;
-        m)
-            OPTION_FOREIGN="m" ;;
-        q)
-            OPTION_LOCAL="-2" ;;
-        ?)
-            _printhelp "$0"
-            exit 1 ;;
-    esac
+	case $opt in
+	e)
+		OPTION_EXPLICIT="e" ;;
+	h)
+		_usage "$0"
+		exit 1 ;;
+	m)
+		OPTION_FOREIGN="m" ;;
+	q)
+		OPTION_LOCAL="-2" ;;
+	\?)
+		_usage "$0"
+		exit 1 ;;
+	esac
 done
 
 shift $(($OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-    echo "Missing argument."
-    _printhelp "$0"
-    exit 1
+	echo "Missing argument."
+	_usage "$0"
+	exit 1
 fi
 
 if ! command -v pacman >/dev/null 2>&1; then
-    echo >&2 "'pacman' not found in PATH. Exiting."
-    exit 1
+	echo >&2 "'pacman' not found in PATH. Exiting."
+	exit 1
 fi
 
 PKGLIST="$(mktemp)"
@@ -57,4 +56,3 @@ rm -f "$PKGLIST" "$FILE"
 
 ## Zsh version.
 # comm -3 ${OPTION_LOCAL} <(pacman -Qq${OPTION_FOREIGN}${OPTION_EXPLICIT} | sort) <(sort "$*")
-

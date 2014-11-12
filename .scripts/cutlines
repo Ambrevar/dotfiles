@@ -1,8 +1,7 @@
 #!/bin/sh
 
-_printhelp ()
-{
-    cat<<EOF
+_usage () {
+	cat<<EOF
 Usage: ${1##*/} [OPTIONS] [FILES]
 
 Cut out last 10 lines from stdin. If FILES are provided, cut files instead of
@@ -26,27 +25,27 @@ OPT_CUTFIRST=false
 OPT_LINES=10
 OPT_INPLACE=""
 while getopts ":fhin:" opt; do
-    case $opt in
-        f)
-            OPT_CUTFIRST=true ;;
-        h)
-            _printhelp "$0"
-            exit 1 ;;
-        i)
-            OPT_INPLACE="-i" ;;
-        n)
-            OPT_LINES=$OPTARG ;;
-        ?)
-            _printhelp "$0"
-            exit 1 ;;
-    esac
+	case $opt in
+	f)
+		OPT_CUTFIRST=true ;;
+	h)
+		_usage "$0"
+		exit 1 ;;
+	i)
+		OPT_INPLACE="-i" ;;
+	n)
+		OPT_LINES=$OPTARG ;;
+	\?)
+		_usage "$0"
+		exit 1 ;;
+	esac
 done
 
 shift $(($OPTIND - 1))
 
 if $OPT_CUTFIRST; then
-    sed $OPT_INPLACE -n "1,${OPT_LINES}!p" "$@"
+	sed $OPT_INPLACE -n "1,${OPT_LINES}!p" "$@"
 else
-    echo CUTLAST
-    sed $OPT_INPLACE -n ":begin ; 1,${OPT_LINES}!{P;N;D}; N; b begin" "$@"
+	echo CUTLAST
+	sed $OPT_INPLACE -n ":begin ; 1,${OPT_LINES}!{P;N;D}; N; b begin" "$@"
 fi

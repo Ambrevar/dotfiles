@@ -1,8 +1,7 @@
 #!/bin/sh
 
-_printhelp ()
-{
-    cat<<EOF
+_usage () {
+	cat<<EOF
 Usage: ${1##*/} [OPTIONS] REPOS
 
 Clone multiple git repos from \$DOMAIN:\$USER.
@@ -19,32 +18,32 @@ EOF
 DOMAIN=bitbucket.org
 USER=ambrevar
 while getopts ":hd:u:" opt; do
-    case $opt in
-        h)
-            _printhelp "$0"
-            exit 1 ;;
-        d)
-            DOMAIN=$OPTARG ;;
-        u)
-            USER=$OPTARG ;;
-        ?)
-            _printhelp "$0"
-            exit 1 ;;
-    esac
+	case $opt in
+	h)
+		_usage "$0"
+		exit 1 ;;
+	d)
+		DOMAIN=$OPTARG ;;
+	u)
+		USER=$OPTARG ;;
+	\?)
+		_usage "$0"
+		exit 1 ;;
+	esac
 done
 
 shift $(($OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-    _printhelp "$0"
-    exit 1
+	_usage "$0"
+	exit 1
 fi
 
 if ! command -v git >/dev/null 2>&1; then
-    echo >&2 "'git' not found in PATH. Exiting."
-    exit 1
+	echo >&2 "'git' not found in PATH. Exiting."
+	exit 1
 fi
 
 for i; do
-    git clone git@$DOMAIN:/$USER/$i
+	git clone git@$DOMAIN:/$USER/$i
 done

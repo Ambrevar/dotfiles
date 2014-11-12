@@ -4,19 +4,19 @@
 ## better off running the dhcpcd daemon with
 ## /etc/wpa_supplicant/wpa_supplicant.conf configured if needed. See
 ## dhcpcd-run-hooks(8).
-
+##
 ## Deps: wpa_supplicant, ccrypt (optional)
-
+##
 ## We need to use wpa_supplicant's unencrypted config file. We store it in a
 ## variable to keep it secure, but the 'wpa_supplicant' command requires a
 ## file. We cannot use a pipe for that, because in that case the config would be
 ## accessible unencrypted. So we need to use an internal path with a syntax like
 ## <(...) which is not specified by POSIX. Ksh, bash and Zsh can handle it.
-
+##
 ## Use 'wpa_passphrase ESSID $PW >> /etc/wpa_supplicant.conf', where PW is a
 ## variable containing the password.  You can set PW securely by using a shell
 ## built-in like 'read -s PW'.
-
+##
 ## There is an Emacs plugin for editing crypted files directly. See 'man
 ## ccrypt'.
 
@@ -25,9 +25,8 @@ TIMEOUT_LIMIT=500
 USE_DHCP=0
 USE_CRYPT=0
 
-_printhelp ()
-{
-    cat<<EOF
+_usage () {
+	cat<<EOF
 Usage: ${1##*/} [OPTIONS]
 
 Connect to a wireless network.
@@ -42,48 +41,48 @@ EOF
 }
 
 while getopts ":cdht:w:" opt; do
-    case $opt in
-        h)
-            _printhelp "$0"
-            return 1 ;;
-        c)
-            USE_CRYPT=1 ;;
-        d)
-            USE_DHCP=1 ;;
-        t)
-            TIMEOUT_LIMIT=$OPTARG ;;
-        w)
-            WSFILE="$OPTARG" ;;
-        ?)
-            _printhelp "$0"
-            return 1 ;;
-    esac
+	case $opt in
+	h)
+		_usage "$0"
+		return 1 ;;
+	c)
+		USE_CRYPT=1 ;;
+	d)
+		USE_DHCP=1 ;;
+	t)
+		TIMEOUT_LIMIT=$OPTARG ;;
+	w)
+		WSFILE="$OPTARG" ;;
+	\?)
+		_usage "$0"
+		return 1 ;;
+	esac
 done
 
 shift $(($OPTIND - 1))
 
 if [ $(id -u) -ne 0 ]; then
-    echo "You must be root to run this script."
-    exit
+	echo "You must be root to run this script."
+	exit
 fi
 
 if [ $USE_CRYPT -eq 1 ]; then
-    if ! command -v ccat >/dev/null 2>&1; then
-        echo >&2 "'ccat' not found in PATH. Exiting."
-        exit 1
-    fi
+	if ! command -v ccat >/dev/null 2>&1; then
+		echo >&2 "'ccat' not found in PATH. Exiting."
+		exit 1
+	fi
 
-    WPA_SUPPLICANT_CONF="$(ccat "$WSFILE")"
-    if [ $? -ne 0 ]; then
-        echo "Failed to decrypt wpa_supplicant config from $WSFILE."
-        exit
-    fi
+	WPA_SUPPLICANT_CONF="$(ccat "$WSFILE")"
+	if [ $? -ne 0 ]; then
+		echo "Failed to decrypt wpa_supplicant config from $WSFILE."
+		exit
+	fi
 else
-    WPA_SUPPLICANT_CONF="$(cat "$WSFILE")"
-    if [ $? -ne 0 ]; then
-        echo "Failed to get wpa_supplicant config from $WSFILE."
-        exit
-    fi
+	WPA_SUPPLICANT_CONF="$(cat "$WSFILE")"
+	if [ $? -ne 0 ]; then
+		echo "Failed to get wpa_supplicant config from $WSFILE."
+		exit
+	fi
 fi
 
 ## Note: systemd-197 introduced Predictable Network Interface Names, so we need
@@ -94,41 +93,41 @@ NET_INTERFACE=$(ls -1 /sys/class/net | grep -m1 "^wl")
 pkill wpa_supplicant
 
 if [ "$OSTYPE" = "linux-gnu" ] ; then
-    ## Clean running processes if any.
-    pkill dhcpcd
+	## Clean running processes if any.
+	pkill dhcpcd
 
-    ## In case network inteface is not up.
-    ip link set ${NET_INTERFACE} up
+	## In case network inteface is not up.
+	ip link set ${NET_INTERFACE} up
 
-    # Associate if needed.
-    if [ "$1" = "-f" ] || [ -z "$(iw dev ${NET_INTERFACE} link | grep SSID)" ]; then
-        wpa_supplicant -B -i ${NET_INTERFACE} -D wext -c <(echo "${WPA_SUPPLICANT_CONF}")
-    fi
+	# Associate if needed.
+	if [ "$1" = "-f" ] || [ -z "$(iw dev ${NET_INTERFACE} link | grep SSID)" ]; then
+		wpa_supplicant -B -i ${NET_INTERFACE} -D wext -c <(echo "${WPA_SUPPLICANT_CONF}")
+	fi
 
-    ## Wait until wpa_supplicant has finished association.
-    i=0
-    while [ -z "$(iw dev ${NET_INTERFACE} link | grep SSID)" ] && [ $i -lt $TIMEOUT_LIMIT ] ; do
-        i=$(($i+1))
-    done
+	## Wait until wpa_supplicant has finished association.
+	i=0
+	while [ -z "$(iw dev ${NET_INTERFACE} link | grep SSID)" ] && [ $i -lt $TIMEOUT_LIMIT ] ; do
+		i=$(($i+1))
+	done
 
-    ## Get IP.
-    [ $USE_DHCP -eq 1 ] && dhcpcd ${NET_INTERFACE}
+	## Get IP.
+	[ $USE_DHCP -eq 1 ] && dhcpcd ${NET_INTERFACE}
 
 else
-## BSD
-## Same comments as for Linux.
+	## BSD
+	## Same comments as for Linux.
 
-    pkill dhclient
-    ifconfig wlan0 up
+	pkill dhclient
+	ifconfig wlan0 up
 
-    if [ -n "$(ifconfig ${NET_INTERFACE} | grep 'ssid ""')" ]; then
-        wpa_supplicant -B -i ${NET_INTERFACE} -c <(echo "${WPA_SUPPLICANT_CONF}")
-    fi
+	if [ -n "$(ifconfig ${NET_INTERFACE} | grep 'ssid ""')" ]; then
+		wpa_supplicant -B -i ${NET_INTERFACE} -c <(echo "${WPA_SUPPLICANT_CONF}")
+	fi
 
-    i=0
-    while [ -n "$(ifconfig ${NET_INTERFACE} | grep 'ssid ""')" ] && [ $i -lt $TIMEOUT_LIMIT ] ; do
-        i=$(($i+1))
-    done
+	i=0
+	while [ -n "$(ifconfig ${NET_INTERFACE} | grep 'ssid ""')" ] && [ $i -lt $TIMEOUT_LIMIT ] ; do
+		i=$(($i+1))
+	done
 
-    [ $USE_DHCP -eq 1 ] && dhclient ${NET_INTERFACE}
+	[ $USE_DHCP -eq 1 ] && dhclient ${NET_INTERFACE}
 fi

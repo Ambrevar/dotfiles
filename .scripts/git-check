@@ -1,8 +1,7 @@
 #!/bin/sh
 
-_printhelp()
-{
-    cat<<EOF
+_usage() {
+	cat<<EOF
 Usage: ${0##*/} FOLDERS
 
 Chack all git repos found in FOLDERS for non-commited file.
@@ -10,16 +9,16 @@ EOF
 }
 
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-    _printhelp
-    exit
+	_usage
+	exit
 fi
 
 for i; do
-    while IFS= read -r FOLDER; do
-        if [ -z "$(cd -- "${FOLDER%/*}" && LC_ALL=C git status -uno | grep "nothing to commit")" ]; then
-            echo "${FOLDER%/*}"
-        fi
-    done <<EOF
+	while IFS= read -r FOLDER; do
+		if [ -z "$(cd -- "${FOLDER%/*}" && LC_ALL=C git status -uno | grep "nothing to commit")" ]; then
+			echo "${FOLDER%/*}"
+		fi
+	done <<EOF
 $(find "$i" -type d -name ".git")
 EOF
 done

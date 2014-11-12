@@ -1,29 +1,29 @@
 #!/bin/sh
 
 if [ "$1" = "-h" ]; then
-    cat<<EOF
+	cat<<EOF
 Usage: ${0##*/} PATH
 
 Display PATH one entry per line. If PATH is not provided, use \$PATH by default.
 
 EOF
 
-    exit
+	exit
 fi
 
 if [ $# -ne 0 ]; then
-    ARG="$1"
+	ARG="$1"
 else
-    ARG="$PATH"
+	ARG="$PATH"
 fi
 
 case "$ARG" in
-    *:*)  SEP=':';;
-    *\;*) SEP=';';;
-    */*)  SEP='/';;
-    *,*)  SEP=',';;
-    *\|*) SEP='|';;
-    *)    SEP=':';;
+*:*)  SEP=':';;
+*\;*) SEP=';';;
+*/*)  SEP='/';;
+*,*)  SEP=',';;
+*\|*) SEP='|';;
+*)    SEP=':';;
 esac
 
 echo "$ARG" |  awk -v RS=$SEP '1'

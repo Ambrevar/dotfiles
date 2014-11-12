@@ -1,19 +1,19 @@
 #!/bin/sh
 
 if [ "$1" = "-h" ] || [ $# -gt 1 ]; then
-    cat<<EOF
+	cat<<EOF
 Usage: ${0##*/} [INTERFACE]
 
 Return up and down transmission speed on given interface. If not given, use the
 first online interface returned by ifconfig (lo is ignored).
 EOF
-    exit
+	exit
 fi
 
 if [ $# -ne 0 ]; then
-    ARG="$1"
+	ARG="$1"
 else
-    ARG="$PATH"
+	ARG="$PATH"
 fi
 
 
@@ -23,8 +23,8 @@ INTERFACE="$(ifconfig | grep -vm1 '^lo\|^ \|^$' | cut -f1 -d':')"
 [ -n "$1" ] && INTERFACE="$1"
 
 if [ ! -d "/sys/class/net/${INTERFACE}" ]; then
-    echo "Error: no such interface (${INTERFACE})."
-    exit
+	echo "Error: no such interface (${INTERFACE})."
+	exit
 fi
 echo "$INTERFACE"
 

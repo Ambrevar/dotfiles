@@ -2,9 +2,8 @@
 
 ## TODO: support for long texts.
 
-_printhelp ()
-{
-    cat<<EOF
+_usage () {
+	cat<<EOF
 Usage: ${1##*/} [-i source-language] target-language [text]
 
 Translate text from one language to another.  The languages are specified using
@@ -45,97 +44,95 @@ EOF
 unset SL
 OPT_LONG=false
 while getopts ":hi:l" opt; do
-    case $opt in
-        h)
-            _printhelp "$0"
-            exit 1
-            ;;
-        i)
-            SL="$OPTARG" ;;
-        l)
-            OPT_LONG=true ;;
-        ?)
-            _printhelp "$0"
-            exit 1
-            ;;
-    esac
+	case $opt in
+	h)
+		_usage "$0"
+		exit 1
+		;;
+	i)
+		SL="$OPTARG" ;;
+	l)
+		OPT_LONG=true ;;
+	\?)
+		_usage "$0"
+		exit 1
+		;;
+	esac
 done
 
 shift $(($OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-    _printhelp "$0"
-    exit 1
+	_usage "$0"
+	exit 1
 fi
 
 TL=$1
 
 shift
 
-_filter()
-{
-    if ! $OPT_LONG; then
-        sed -e 's/\[\[\["\([^"]*\).*/\1/' -e 's/"//g'
-        echo
-        return
-    fi
+_filter () {
+	if ! $OPT_LONG; then
+		sed -e 's/\[\[\["\([^"]*\).*/\1/' -e 's/"//g'
+		echo
+		return
+	fi
 
-    if command -v jshon >/dev/null 2>&1; then
-        ## Input may have empty fields, which is not normally allowed in
-        ## json. Let's fix this.
-        input="$(sed -e 's/,\+/,/g' -e 's/\[,\+/\[/g' -e 's/,\+\]/\]/g')"
+	if command -v jshon >/dev/null 2>&1; then
+		## Input may have empty fields, which is not normally allowed in
+		## json. Let's fix this.
+		input="$(sed -e 's/,\+/,/g' -e 's/\[,\+/\[/g' -e 's/,\+\]/\]/g')"
 
-        ## The use of jshon without checking the array size is unsafe. If the
-        ## size is not as expected, it probably means that source and target
-        ## languages are the same. Anyhow, we drop the error output.
+		## The use of jshon without checking the array size is unsafe. If the
+		## size is not as expected, it probably means that source and target
+		## languages are the same. Anyhow, we drop the error output.
 
-        ## Google Translate does not have the same structure when English is
-        ## involved. With English, the list of translations is in cell 1,
-        ## whitout English it is in cell 3. Without English, there is no
-        ## distinction on grammatical type.
-        if [ "$(echo "$input" | jshon -e 1 -t)" = "string" ]; then
-            ## No English
-            echo "$input" | jshon -e 3 -e 0 -e 2 -a -e 0 -u | tr '\n' ',' | sed 's/,$/\n/'
-        else
-            count=0
-            ## Fetch grammatical type in 'type'.
-            while read -r type; do
-                echo -n $type:
+		## Google Translate does not have the same structure when English is
+		## involved. With English, the list of translations is in cell 1,
+		## whitout English it is in cell 3. Without English, there is no
+		## distinction on grammatical type.
+		if [ "$(echo "$input" | jshon -e 1 -t)" = "string" ]; then
+			## No English
+			echo "$input" | jshon -e 3 -e 0 -e 2 -a -e 0 -u | tr '\n' ',' | sed 's/,$/\n/'
+		else
+			count=0
+			## Fetch grammatical type in 'type'.
+			while read -r type; do
+				echo -n $type:
 
-                ## Fetch translation alternative from count-th entry
-                echo "$input" | jshon -e 1 -e $count -e 1 -a -u | tr '\n' ',' | sed 's/,$/\n/'
-                count=$(($count+1))
+				## Fetch translation alternative from count-th entry
+				echo "$input" | jshon -e 1 -e $count -e 1 -a -u | tr '\n' ',' | sed 's/,$/\n/'
+				count=$(($count+1))
 
-                done<<EOF
+			done<<EOF
 $(echo "$input" | jshon -e 1 -a -e 0 -u)
 EOF
-        fi 2>/dev/null
+		fi 2>/dev/null
 
-    else
-        ## Use sed to fetch first entry only.
-        sed -e 's/\[\[\[[^[]*\[\[[^[]*\[\([^[]*\)\].*/\1/' -e 's/"//g'
-        echo
-    fi
+	else
+		## Use sed to fetch first entry only.
+		sed -e 's/\[\[\[[^[]*\[\[[^[]*\[\([^[]*\)\].*/\1/' -e 's/"//g'
+		echo
+	fi
 }
 
-_translate()
-{
-    TEXT="$(tr '\n' ' ' | sed 's/[\t ]\+/%20/g')"
-    ## If input is not a single word, disable alternative translations. We use a
-    ## point in the grep string to ignore any space at the end.
-    [ -n "$(echo $TEXT | grep '%20.')" ] && OPT_LONG=false
+_translate () {
+	TEXT="$(tr '\n' ' ' | sed 's/[\t ]\+/%20/g')"
+	## If input is not a single word, disable alternative translations. We use a
+	## point in the grep string to ignore any space at the end.
+	[ -n "$(echo $TEXT | grep '%20.')" ] && OPT_LONG=false
 
-    if [ "$SL" = "" ]; then
-        curl -A "Mozilla/5.0" 'http://translate.google.com/translate_a/t?client=t&text='$TEXT'&tl='$TL'&ie=UTF-8&oe=UTF-8'
-    else
-        curl -A "Mozilla/5.0" 'http://translate.google.com/translate_a/t?client=t&text='$TEXT'&sl='$SL'&tl='$TL'&ie=UTF-8&oe=UTF-8'
-    fi 2>/dev/null | _filter
+	if [ "$SL" = "" ]; then
+		curl -A "Mozilla/5.0" 'http://translate.google.com/translate_a/t?client=t&text='$TEXT'&tl='$TL'&ie=UTF-8&oe=UTF-8'
+	else
+		curl -A "Mozilla/5.0" 'http://translate.google.com/translate_a/t?client=t&text='$TEXT'&sl='$SL'&tl='$TL'&ie=UTF-8&oe=UTF-8'
+	fi 2>/dev/null | _filter
 }
 
 if [ $# -ne 0 ]; then
-    echo "$@" | _translate
+	echo "$@" | _translate
 else
-    _translate
+	_translate
 fi
 
 ## Original command:

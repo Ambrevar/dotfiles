@@ -1,21 +1,21 @@
 #!/bin/sh
 
 if [ "$1" = "-h" ]; then
-    cat<<EOF
+	cat<<EOF
 Usage: ${0##*/}
 
 Print number of open files per process.
 
 EOF
 
-    exit
+	exit
 fi
 
 LSOFOUT="$(lsof|awk '{print $1}')"
 
 while IFS= read -r i; do
-    echo -n "$i "
-    echo "$LSOFOUT" | grep -c "^$i"
-    done<<EOF
+	echo -n "$i "
+	echo "$LSOFOUT" | grep -c "^$i"
+done<<EOF
 $(echo "$LSOFOUT" | sort -u)
 EOF
