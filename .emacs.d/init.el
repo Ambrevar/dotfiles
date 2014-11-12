@@ -124,6 +124,8 @@ Example: to assign some-function to C-i, use
 (autoload 'itranslate-lines "tool-itranslate" nil t)
 (autoload 'itranslate-region "tool-itranslate" nil t)
 
+(require 'smiext "tool-smiext")
+
 (when (require 'multiple-cursors nil t)
   (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
   ;; Load the file at the new location.
