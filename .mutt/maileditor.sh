@@ -7,7 +7,7 @@
 ## If graphical emacs is used, we need to use a non-terminating client.
 
 if [ "$EDITOR" = "em" ]; then
-    cat <<EOF
+	cat <<EOF
 set editor="emc"
 EOF
 fi

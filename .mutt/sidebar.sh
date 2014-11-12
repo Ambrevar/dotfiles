@@ -2,7 +2,7 @@
 
 ## Set sidebar options only if sidebar patch is installed.
 if [ -n "$(man muttrc | grep sidebar)" ]; then
-    cat <<'EOF'
+	cat <<'EOF'
 set sidebar_visible = yes
 set sidebar_width = 24
 set sidebar_sort = yes

@@ -43,71 +43,71 @@ trim() { head -n "$maxln"; }
 highlight() { command highlight "$@"; test $? = 0 -o $? = 141; }
 
 case "$extension" in
-    # Archive extensions:
-    # We ignore compressed tared files as it is too slow.
-    # bz|bz2|t7z|tbz|tbz2|tgz|tlz|txz|tZ|xz|gz|
-    a|ace|alz|arc|arj|cab|cpio|deb|jar|lha|lz|lzh|lzma|lzo|\
-    rpm|rz|tar|tzo|war|xpi|Z|zip)
-        try als "$path" && { dump | trim; exit 0; }
-        try acat "$path" && { dump | trim; exit 3; }
-        try bsdtar -lf "$path" && { dump | trim; exit 0; }
-        exit 1;;
-    rar)
-        try unrar -p- lt "$path" && { dump | trim; exit 0; } || exit 1;;
+	# Archive extensions:
+	# We ignore compressed tared files as it is too slow.
+	# bz|bz2|t7z|tbz|tbz2|tgz|tlz|txz|tZ|xz|gz|
+	a|ace|alz|arc|arj|cab|cpio|deb|jar|lha|lz|lzh|lzma|lzo|\
+		rpm|rz|tar|tzo|war|xpi|Z|zip)
+		try als "$path" && { dump | trim; exit 0; }
+		try acat "$path" && { dump | trim; exit 3; }
+		try bsdtar -lf "$path" && { dump | trim; exit 0; }
+		exit 1;;
+	rar)
+		try unrar -p- lt "$path" && { dump | trim; exit 0; } || exit 1;;
 
-    # PDF documents:
-    pdf)
-        try pdftotext -l 10 -nopgbrk -q "$path" - && \
-            { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
+	# PDF documents:
+	pdf)
+		try pdftotext -l 10 -nopgbrk -q "$path" - && \
+			{ dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
 
-    # BitTorrent Files
-    torrent)
-        try transmission-show "$path" && { dump | trim; exit 5; } || exit 1;;
+	# BitTorrent Files
+	torrent)
+		try transmission-show "$path" && { dump | trim; exit 5; } || exit 1;;
 
-    # HTML Pages:
-    htm|html|xhtml)
-        try w3m    -dump "$path" && { dump | trim | fmt -s -w $width; exit 4; }
-        try lynx   -dump "$path" && { dump | trim | fmt -s -w $width; exit 4; }
-        try elinks -dump "$path" && { dump | trim | fmt -s -w $width; exit 4; }
-        ;; # fall back to highlight/cat if the text browsers fail
+	# HTML Pages:
+	htm|html|xhtml)
+		try w3m    -dump "$path" && { dump | trim | fmt -s -w $width; exit 4; }
+		try lynx   -dump "$path" && { dump | trim | fmt -s -w $width; exit 4; }
+		try elinks -dump "$path" && { dump | trim | fmt -s -w $width; exit 4; }
+		;; # fall back to highlight/cat if the text browsers fail
 
-    ## CUSTOM SUPPORT
-    ogg)
-        try mediainfo "$path" && { dump | sed 's/  \+:/: /;' | trim | fmt -s -w $width; exit 4; } ;;
-    mkv)
-        try mediainfo "$path" && { dump | sed 's/  \+:/: /;' | trim | fmt -s -w $width; exit 4; } ;;
-    doc)
-        try antiword "$path" && { dump | trim | fmt -s -w $width; exit 0; }
-        try catdoc "$path" && { dump | trim | fmt -s -w $width; exit 0; }
-        exit 1;;
-    docx)
-        try docx2txt.pl "$path" - && { dump | trim | fmt -s -w $width; exit 0; }
-        try catdoc "$path" && { dump | trim | fmt -s -w $width; exit 0; }
-        exit 1;;
-    rtf)
-        try unrtf --text "$path" && { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
-    odt)
-        try odt2txt "$path" && { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
-    tga)
-        try mediainfo "$path" && { dump | trim | sed 's/  \+:/: /;';  exit 5; } || exit 1;;
+	## CUSTOM SUPPORT
+	ogg)
+		try mediainfo "$path" && { dump | sed 's/  \+:/: /;' | trim | fmt -s -w $width; exit 4; } ;;
+	mkv)
+		try mediainfo "$path" && { dump | sed 's/  \+:/: /;' | trim | fmt -s -w $width; exit 4; } ;;
+	doc)
+		try antiword "$path" && { dump | trim | fmt -s -w $width; exit 0; }
+		try catdoc "$path" && { dump | trim | fmt -s -w $width; exit 0; }
+		exit 1;;
+	docx)
+		try docx2txt.pl "$path" - && { dump | trim | fmt -s -w $width; exit 0; }
+		try catdoc "$path" && { dump | trim | fmt -s -w $width; exit 0; }
+		exit 1;;
+	rtf)
+		try unrtf --text "$path" && { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
+	odt)
+		try odt2txt "$path" && { dump | trim | fmt -s -w $width; exit 0; } || exit 1;;
+	tga)
+		try mediainfo "$path" && { dump | trim | sed 's/  \+:/: /;';  exit 5; } || exit 1;;
 esac
 
 case "$mimetype" in
-    # Syntax highlight for text files:
-    text/* | */xml)
-        try highlight --out-format=xterm256 -s clarity "$path" && { dump | trim; exit 5; } || exit 2;;
+	# Syntax highlight for text files:
+	text/* | */xml)
+		try highlight --out-format=xterm256 -s clarity "$path" && { dump | trim; exit 5; } || exit 2;;
 
-    # Ascii-previews of images:
-    image/*)
-        exiftool "$path" && exit 5
-        # # Use sed to remove spaces so the output fits into the narrow window
-        try mediainfo "$path" && { dump | trim | sed 's/  \+:/: /;';  exit 5; } || exit 1;;
+	# Ascii-previews of images:
+	image/*)
+		exiftool "$path" && exit 5
+		# # Use sed to remove spaces so the output fits into the narrow window
+		try mediainfo "$path" && { dump | trim | sed 's/  \+:/: /;';  exit 5; } || exit 1;;
 
-    # Display information about media files:
-    video/* | audio/*)
-        exiftool "$path" && exit 5
-        # Use sed to remove spaces so the output fits into the narrow window
-        try mediainfo "$path" && { dump | trim | sed 's/  \+:/: /;';  exit 5; } || exit 1;;
+	# Display information about media files:
+	video/* | audio/*)
+		exiftool "$path" && exit 5
+		# Use sed to remove spaces so the output fits into the narrow window
+		try mediainfo "$path" && { dump | trim | sed 's/  \+:/: /;';  exit 5; } || exit 1;;
 esac
 
 exit 1

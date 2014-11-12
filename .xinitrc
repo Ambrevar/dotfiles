@@ -1,20 +1,14 @@
 #!/bin/sh
-################################################################################
-## XINITRC
-################################################################################
 
 ## Source environment config.
 [ -f ~/.xprofile ] && . ~/.xprofile
 
-##==============================================================================
 ## Launch session
-##==============================================================================
-
 ## Note: we do not 'exec' as we want to clean the session on exit.
 if [ $# -eq 1 ] && command -v $1 >/dev/null 2>&1; then
-    $1
+	$1
 else
-    awesome
+	awesome
 fi
 
 ## TODO: This is not needed since all forked processes will be killed anyway

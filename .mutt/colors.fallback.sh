@@ -2,7 +2,7 @@
 ## 8/16 colors
 
 if [ $(tput colors) -ne 256 ]; then
-    cat <<EOF
+	cat <<EOF
 set my_bg = default
 set my_new = brightwhite
 set my_old = red

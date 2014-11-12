@@ -16,17 +16,17 @@ umask 027
 ## to PATH, not prepend them.
 appendpath()
 {
-    [ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
-    if [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
-        eval export $PATHVAR="\$$PATHVAR:$1"
-    fi
+	[ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
+	if [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
+		eval export $PATHVAR="\$$PATHVAR:$1"
+	fi
 }
 prependpath()
 {
-    [ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
-    if [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
-        eval export $PATHVAR="$1:\$$PATHVAR"
-    fi
+	[ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
+	if [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
+		eval export $PATHVAR="$1:\$$PATHVAR"
+	fi
 }
 
 appendpath "${HOME}/.launchers/"
@@ -37,21 +37,21 @@ prependpath "${HOME}/.hackpool/"
 ## TeXlive
 TEXDIR="${TEXDIR:-/usr/local/texlive}"
 if [ -d "${TEXDIR}" ]; then
-    TEXYEAR=$(/bin/ls -1r "${TEXDIR}" | grep -m1 "[0-9]\{4\}")
-    TEXDISTRO=$(uname -m)-$(uname | tr "[[:upper:]]" "[[:lower:]]")
-    TEXFOLDER="${TEXDIR}/${TEXYEAR}/bin/${TEXDISTRO}/"
-    if [ -d "${TEXFOLDER}" ]; then
-        appendpath $TEXFOLDER
-        prependpath ${TEXDIR}/${TEXYEAR}/texmf/doc/info INFOPATH
+	TEXYEAR=$(/bin/ls -1r "${TEXDIR}" | grep -m1 "[0-9]\{4\}")
+	TEXDISTRO=$(uname -m)-$(uname | tr "[[:upper:]]" "[[:lower:]]")
+	TEXFOLDER="${TEXDIR}/${TEXYEAR}/bin/${TEXDISTRO}/"
+	if [ -d "${TEXFOLDER}" ]; then
+		appendpath $TEXFOLDER
+		prependpath ${TEXDIR}/${TEXYEAR}/texmf/doc/info INFOPATH
 
-        ## BSD uses 'manpath' utility, so MANPATH variable may be empty.
-        if [ "$OSTYPE" = "linux-gnu" ]; then
-            prependpath ${TEXDIR}/${TEXYEAR}/texmf/doc/man MANPATH
-        fi
-    fi
-    unset TEXYEAR
-    unset TEXDISTRO
-    unset TEXFOLDER
+		## BSD uses 'manpath' utility, so MANPATH variable may be empty.
+		if [ "$OSTYPE" = "linux-gnu" ]; then
+			prependpath ${TEXDIR}/${TEXYEAR}/texmf/doc/man MANPATH
+		fi
+	fi
+	unset TEXYEAR
+	unset TEXDISTRO
+	unset TEXFOLDER
 fi
 unset TEXDIR
 export BIBINPUTS=~/personal/dataperso/bibliography
@@ -59,10 +59,10 @@ export BIBINPUTS=~/personal/dataperso/bibliography
 ## Plan9
 PLAN9DIR="/opt/plan9"
 if [ -d "$PLAN9DIR" ]; then
-    appendpath "$PLAN9DIR/bin"
-    if [ "$OSTYPE" = "linux-gnu" ]; then
-        appendpath "$PLAN9DIR/share/man" MANPATH
-    fi
+	appendpath "$PLAN9DIR/bin"
+	if [ "$OSTYPE" = "linux-gnu" ]; then
+		appendpath "$PLAN9DIR/share/man" MANPATH
+	fi
 fi
 unset PLAN9DIR
 
@@ -87,22 +87,22 @@ export TIME_STYLE=+"|%Y-%m-%d %H:%M:%S|"
 
 ## System locale
 if [ "$USER" = "peter" ]; then
-    LANG=sv_SE.UTF-8
-    LC_CTYPE="sv_SE.UTF-8"
-    LC_NUMERIC="sv_SE.UTF-8"
-    LC_TIME="sv_SE.UTF-8"
-    LC_COLLATE="sv_SE.UTF-8"
-    LC_MONETARY="sv_SE.UTF-8"
-    LC_MESSAGES=sv_SE.UTF-8
-    LC_PAPER="sv_SE.UTF-8"
-    LC_NAME="sv_SE.UTF-8"
-    LC_ADDRESS="sv_SE.UTF-8"
-    LC_TELEPHONE="sv_SE.UTF-8"
-    LC_MEASUREMENT="sv_SE.UTF-8"
-    LC_IDENTIFICATION="sv_SE.UTF-8"
+	LANG=sv_SE.UTF-8
+	LC_CTYPE="sv_SE.UTF-8"
+	LC_NUMERIC="sv_SE.UTF-8"
+	LC_TIME="sv_SE.UTF-8"
+	LC_COLLATE="sv_SE.UTF-8"
+	LC_MONETARY="sv_SE.UTF-8"
+	LC_MESSAGES=sv_SE.UTF-8
+	LC_PAPER="sv_SE.UTF-8"
+	LC_NAME="sv_SE.UTF-8"
+	LC_ADDRESS="sv_SE.UTF-8"
+	LC_TELEPHONE="sv_SE.UTF-8"
+	LC_MEASUREMENT="sv_SE.UTF-8"
+	LC_IDENTIFICATION="sv_SE.UTF-8"
 
-    # LC_ALL=
-    LC_ALL=sv_SE.UTF-8
+	# LC_ALL=
+	LC_ALL=sv_SE.UTF-8
 fi
 
 ## Default text editor
@@ -113,8 +113,8 @@ GIT_EDITOR="$EDITOR"
 
 ## 'em' is a script for emacsclient. See '.scripts/em'.
 if command -v em >/dev/null 2>&1; then
-    EDITOR='em'
-    GIT_EDITOR='emc'
+	EDITOR='em'
+	GIT_EDITOR='emc'
 fi
 
 export EDITOR
@@ -122,7 +122,7 @@ export GIT_EDITOR
 
 ## Internet Browser
 for i in dwb luakit google-chrome; do
-    command -v $i >/dev/null 2>&1 && export BROWSER=$i && break
+	command -v $i >/dev/null 2>&1 && export BROWSER=$i && break
 done
 
 ## SSH-Agent
@@ -141,8 +141,8 @@ export WINEDLLOVERRIDES="mscoree,mshtml="
 
 ## Go
 if [ -d "$HOME/.go" ]; then
-   export GOPATH=~/.go
-   appendpath "$GOPATH/bin"
+	export GOPATH=~/.go
+	appendpath "$GOPATH/bin"
 fi
 
 ## Hook. Should be sourced last

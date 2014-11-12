@@ -1,20 +1,17 @@
-################################################################################
 ## Shell Config -- Master File
-################################################################################
 
 ## Note that 'ps -o command= $$' gives the same result with parameters.
 [ -z "$SHELL_CURRENT" ] && readonly SHELL_CURRENT="$(ps -o comm= $$)"
 [ -z "$SHELL_DIR" ] && readonly SHELL_DIR="$HOME/.shell.d"
 
 ## .profile is sourced automatically by most login managers, but we need to
-## source it manually to TTY.
+## source it manually if in TTY.
 [ -z "$DISPLAY" ] && [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
-loadrc()
-{
-    for i; do
-        [ -f "${SHELL_DIR}/$i" ] && . "${SHELL_DIR}/$i"
-    done
+loadrc () {
+	for i; do
+		[ -f "${SHELL_DIR}/$i" ] && . "${SHELL_DIR}/$i"
+	done
 }
 
 ## main and options should be sourced first.
