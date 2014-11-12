@@ -48,7 +48,8 @@
 (add-hook
  'whitespace-load-hook
  (lambda ()
-   (set-face-background  'whitespace-indentation           "#696969" )))
+   (set-face-background  'whitespace-space-after-tab       "#a9a9a9")
+   (set-face-background  'whitespace-indentation           "#696969")))
 
 ;; Programming
 (set-face-foreground  'font-lock-builtin-face           "#d2691e" )

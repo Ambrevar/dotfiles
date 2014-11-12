@@ -134,7 +134,9 @@
    ))
 (define-key my-keys-minor-mode-map (kbd "C-<f7>") 'whitespace-mode)
 
-(setq whitespace-style (quote (face trailing tab-mark space-after-tab space-before-tab indentation::space)))
+(setq
+ whitespace-style
+ '(face indentation::space space-after-tab space-before-tab tab-mark trailing))
 ;; TODO: whitespace report-on-bogus and cleanup do not seem to work properly.
 ;; Empty lines seems to be always true. Report is shown even when style is not
 ;; matching the errors.
