@@ -1,7 +1,4 @@
-################################################################################
 ## Zsh Key bindings
-## 2012-08-11
-################################################################################
 
 ## References:
 ## http://mundy.yazzy.org/unix/zsh.php
@@ -43,31 +40,30 @@ select-word-style bash
 
 ## Note that double brackets are needed to expand wildcards properly.
 if [[ $TERM = *xterm* ]] ; then
-    bindkey "\e[3~" delete-char
-    bindkey "\e[1;5D" backward-word
-    bindkey "\e[1;5C" forward-word
-    bindkey "\eOH" beginning-of-line
-    bindkey "\eOF" end-of-line
+	bindkey "\e[3~" delete-char
+	bindkey "\e[1;5D" backward-word
+	bindkey "\e[1;5C" forward-word
+	bindkey "\eOH" beginning-of-line
+	bindkey "\eOF" end-of-line
 
-    bindkey "\e[Z" reverse-menu-complete # Shift+Tab
+	bindkey "\e[Z" reverse-menu-complete # Shift+Tab
 fi
 
 if [[ $TERM = *rxvt* ]] ; then
-    bindkey "^w"    kill-region
-    bindkey "\e[3~" delete-char
-    bindkey "\eOd"  backward-word
-    bindkey "\eOc"  forward-word
-    bindkey "\e[5~" beginning-of-history
-    bindkey "\e[6~" end-of-history
-    bindkey "\e[7~" beginning-of-line
-    bindkey "\e[8~" end-of-line
+	bindkey "^w"    kill-region
+	bindkey "\e[3~" delete-char
+	bindkey "\eOd"  backward-word
+	bindkey "\eOc"  forward-word
+	bindkey "\e[5~" beginning-of-history
+	bindkey "\e[6~" end-of-history
+	bindkey "\e[7~" beginning-of-line
+	bindkey "\e[8~" end-of-line
 
-    bindkey -s "\e^B" "^A^Kbrowse\n"
+	bindkey -s "\e^B" "^A^Kbrowse\n"
 
-    bindkey "\e[Z" reverse-menu-complete # Shift+Tab
+	bindkey "\e[Z" reverse-menu-complete # Shift+Tab
 fi
 
 ## For FreeBSD console.
 # bindkey "\e[H" beginning-of-line
 # bindkey "\e[F" end-of-line
-

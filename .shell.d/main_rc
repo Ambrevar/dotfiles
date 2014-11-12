@@ -1,27 +1,25 @@
 ## -*- mode:sh -*- #
-################################################################################
 ## Shell configuration
-################################################################################
 
 ## Terminal
 ## WARNING: this is often a bad idea!
 ## FreeBSD urxvt $TERM variable is not set properly for some reasons.
 if [ ! "$(uname -o)" = "GNU/Linux" ]; then
-    case "$TERM" in
-        *rxvt*) export TERM="rxvt-unicode-256color";;
-    esac
+	case "$TERM" in
+	*rxvt*) export TERM="rxvt-unicode-256color";;
+	esac
 fi
 ## Most xterm-based terminals support 256 colors, so let's turn this on.
 if [ "$TERM" = "xterm" ]; then
-    export TERM="xterm-256color"
+	export TERM="xterm-256color"
 fi
 
 ## Enable color support of ls.
 if [ "$TERM" != "dumb" ] && [ "$OSTYPE" = "linux-gnu" ]; then
-    eval "$(dircolors "$HOME/.shell.d/dircolorsdb")"
+	eval "$(dircolors "$HOME/.shell.d/dircolorsdb")"
 elif [ "$TERM" != "dumb" ]; then
-    export LSCOLORS="Ex"
-    # export LSCOLORS="ExfxcxDxCxdxdxCxCxECEh"
+	export LSCOLORS="Ex"
+	# export LSCOLORS="ExfxcxDxCxdxdxCxCxECEh"
 fi
 
 ## Title

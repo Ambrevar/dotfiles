@@ -1,14 +1,12 @@
 ## -*- mode:sh -*- #
-################################################################################
 ## Zsh specific options
-################################################################################
 
 ZCACHE=~/.cache/zsh/
 [ ! -e "$ZCACHE" ] && mkdir -p "$ZCACHE"
 
 ##==============================================================================
 ## History options
-##==============================================================================
+
 HISTFILE="$ZCACHE/history"
 HISTSIZE=1000
 SAVEHIST=1000
@@ -18,7 +16,7 @@ setopt appendhistory
 
 ##==============================================================================
 ## Misc
-##==============================================================================
+
 ## Not recommended.
 # setopt completealiases
 
@@ -35,14 +33,13 @@ unsetopt flowcontrol
 
 ##==============================================================================
 ## VCS
-##==============================================================================
-## TODO: to be continued...
+
+## TODO: Configure vcs style for zsh.
 # autoload -Uz vcs_info zstyle ':vcs_info:*' enable git hg
 # autoload -Uz vcs_info
 
 ##==============================================================================
 ## Directory stack
-##==============================================================================
 
 ## We use expanded path for DIRSTACKFILE since we need to locate it for the
 ## zshcd script.
@@ -64,13 +61,8 @@ setopt pushdignoredups
 setopt pushdminus
 
 ##==============================================================================
-## ???
-##==============================================================================
-# zstyle :compinstall filename "$HOME/.zshrc"
-
-##==============================================================================
 ## Completion
-##==============================================================================
+
 ## Custom completion
 ## TODO: this is quite slow. Why?
 fpath=(~/.shell.d/completion $fpath)
@@ -91,9 +83,11 @@ zstyle ':completion:*:approximate:*' max-errors 1 numeric
 # zstyle ':completion:*:*:kill:*' menu yes select
 # zstyle ':completion:*:kill:*' force-list always
 
+## ???
+# zstyle :compinstall filename "$HOME/.zshrc"
+
 ##==============================================================================
 ## TESTING
-##==============================================================================
 
 ## Remove RPS1 after <enter>
 setopt transient_rprompt
@@ -107,7 +101,7 @@ autoload -U zargs
 
 ##==============================================================================
 ## Prompt
-##==============================================================================
+
 autoload -U promptinit
 promptinit
 prompt adam2

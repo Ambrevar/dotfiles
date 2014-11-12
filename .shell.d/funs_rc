@@ -1,24 +1,22 @@
 ## -*- mode:sh -*- #
 ################################################################################
 ## Shell -- Functions.
-################################################################################
 
 ## Functions that can be useful outside a shell (like in Emacs or Ranger) should
 ## be written in stand-alone scripts instead.
 
 ## Colored man pager.
-man()
-{
-    local BUF
+man () {
+	local BUF
 
-    # Justify man pager to current window size.
-    BUF=$(tput cols)
-    [ $BUF -gt $MANWIDTH ] && BUF=$MANWIDTH
+	# Justify man pager to current window size.
+	BUF=$(tput cols)
+	[ $BUF -gt $MANWIDTH ] && BUF=$MANWIDTH
 
-    # mb = ?
-    # md = bold (titles, commands)
-    # so = status bar
-    # us = italic (arguments, files)
+	# mb = ?
+	# md = bold (titles, commands)
+	# so = status bar
+	# us = italic (arguments, files)
 	env \
 		MANWIDTH=$BUF \
 		LESS_TERMCAP_mb=$(printf "\e[1;31m") \
@@ -33,81 +31,76 @@ man()
 
 ## Make directories and change into the first one.
 mkcd () {
-    mkdir -p "$@"
-    cd "$1"
+	mkdir -p "$@"
+	cd "$1"
 }
 
 ## Quick search.
-search()
-{
-    find . -iname "*$1*"
+search () {
+	find . -iname "*$1*"
 }
 
 ## Vim-only: search the vim reference manual for a keyword.
 ## Usage: :h <keyword>
 if command -v vim >/dev/null 2>&1; then
-    :h()
-    {
-        vim --cmd ":silent help $@" --cmd "only";
-    }
+	:h ()
+	{
+		vim --cmd ":silent help $@" --cmd "only";
+	}
 fi
 
 ## Term properties
-termcolors256()
-{
-    local x y o
-    x=$(tput op)
-    y=$(printf %76s)
-    for i in {0..256}; do
-        o=00$i
-        echo -e "${o:${#o}-3:3} $(tput setaf $i;tput setab $i)${y// /=}$x"
-    done
+termcolors256 () {
+	local x y o
+	x=$(tput op)
+	y=$(printf %76s)
+	for i in {0..256}; do
+		o=00$i
+		echo -e "${o:${#o}-3:3} $(tput setaf $i;tput setab $i)${y// /=}$x"
+	done
 }
 
 ## Will not work for Bourne Shell.
-termcolors()
-{
-    local T
+termcolors () {
+	local T
 
-    # The test text. Must be 3 letters.
-    T='Doh'
+	# The test text. Must be 3 letters.
+	T='Doh'
 
-    echo -e "\n                 40m     41m     42m     43m\
+	echo -e "\n                 40m     41m     42m     43m\
      44m     45m     46m     47m";
 
-    for FGs in '    m' '   1m' '  30m' '1;30m' '  31m' '1;31m' '  32m' \
-        '1;32m' '  33m' '1;33m' '  34m' '1;34m' '  35m' '1;35m' \
-        '  36m' '1;36m' '  37m' '1;37m';
-    do FG=${FGs// /}
-        echo -en " $FGs \033[$FG  $T  "
-        for BG in 40m 41m 42m 43m 44m 45m 46m 47m;
-        do echo -en "$EINS \033[$FG\033[$BG  $T  \033[0m";
-        done
-        echo;
-    done
-    echo
+	for FGs in \
+	'    m' '   1m' '  30m' '1;30m' '  31m' '1;31m' '  32m' \
+		'1;32m' '  33m' '1;33m' '  34m' '1;34m' '  35m' '1;35m' \
+		'  36m' '1;36m' '  37m' '1;37m'; do
+		FG=${FGs// /}
+		echo -en " $FGs \033[$FG  $T  "
+		for BG in 40m 41m 42m 43m 44m 45m 46m 47m; do
+			echo -en "$EINS \033[$FG\033[$BG  $T  \033[0m";
+		done
+		echo;
+	done
+	echo
 }
 
-termprop()
-{
-    infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'| column -c80
+termprop () {
+	infocmp -1 | sed -nu 's/^[ \000\t]*//;s/[ \000\t]*$//;/[^ \t\000]\{1,\}/!d;/acsc/d;s/=.*,//p'| column -c80
 }
 
-termsupport()
-{
-    for T in `find "/usr/share/terminfo" -type f -printf '%f\n'`;do
-        echo "$T `tput -T $T colors`"
-    done | sort -nk2
+termsupport () {
+	for T in `find "/usr/share/terminfo" -type f -printf '%f\n'`;do
+		echo "$T `tput -T $T colors`"
+	done | sort -nk2
 }
 
 if command -v highlight >/dev/null 2>&1; then
-    hlt-viewer ()
-    {
-        local SAMPLE DUMMY
+	hlt-viewer () {
+		local SAMPLE DUMMY
 
-        _printhelp()
-        {
-            cat<<EOF
+		_usage ()
+		{
+			cat<<EOF
 Usage: $1
 
 Highlight themes viewer for 256-colors terminals.
@@ -116,160 +109,151 @@ highlight is a tool for listing printing. This script displays a preview for
 every highlight's theme.  Press ENTER to display next preview. Press anything
 else then ENTER to quit.
 EOF
-        }
+		}
 
-        if [ $# -gt 0 ]; then
-            _printhelp "$0"
-            return
-        fi
+		if [ $# -gt 0 ]; then
+			_usage "$0"
+			return
+		fi
 
-        SAMPLE="$(cat <<EOF
-void function(char* pointer, int &ref)
-{
-  int integer=3;
-  char* string="Hello!";
+		SAMPLE="$(cat <<EOF
+void function(char *pointer, int &ref) {
+	int integer=3;
+	char* string="Hello!";
 
-  // Line comment
-  for ( i=0; i<10; i++)
-  {
-    printf("Sum: %d\n", i*( integer+14 ) );
-  }
+	// Line comment
+	for (i=0; i<10; i++)
+	{
+		printf("Sum: %d\n", i*( integer+14 ) );
+	}
 }
 EOF
 )"
 
-        for i in $(highlight -w | grep -v "\s\|^$"); do
-            echo "******************** $i ********************"
-            highlight -S c -O xterm256 <(echo "$SAMPLE") -s "$i"
-            read DUMMY
-            if [ -n "$DUMMY" ]; then
-                return
-            fi
-        done
-    }
+		for i in $(highlight -w | grep -v "\s\|^$"); do
+			echo "******************** $i ********************"
+			highlight -S c -O xterm256 <(echo "$SAMPLE") -s "$i"
+			read DUMMY
+			if [ -n "$DUMMY" ]; then
+				return
+			fi
+		done
+	}
 fi
 
 ## Keymap view in terminal
-echokeymap ()
-{
-    if [ $# -ne 1 ]; then
-        1="$HOME/.xkb/symbols/usim"
-    fi
+echokeymap () {
+	if [ $# -ne 1 ]; then
+		1="$HOME/.xkb/symbols/usim"
+	fi
 
-    awk '/━|┃|│|─/ {line=substr($0,4); print line}' "$1"
+	awk '/━|┃|│|─/ {line=substr($0,4); print line}' "$1"
 }
 
 ## Extended info
-typex()
-{
-    local xpath
-    if [ $# -ne 1 ] || ! command -v "$1" >/dev/null 2>&1; then
-        echo "Provide an existing command as parameter."
-        return
-    fi
+typex () {
+	local xpath
+	if [ $# -ne 1 ] || ! command -v "$1" >/dev/null 2>&1; then
+		echo "Provide an existing command as parameter."
+		return
+	fi
 
-    if [ -z "$(command -v "$1" 2>/dev/null | grep ^/)" ]; then
-        type "$1"
-        return
-    fi
+	if [ -z "$(command -v "$1" 2>/dev/null | grep ^/)" ]; then
+		type "$1"
+		return
+	fi
 
-    xpath="$(type $1 | cut -d' ' -f3)"
-    ls -l "$xpath"
-    file "$xpath" | cut -d':' -f2 | cut -b 2-
+	xpath="$(type $1 | cut -d' ' -f3)"
+	ls -l "$xpath"
+	file "$xpath" | cut -d':' -f2 | cut -b 2-
 }
 
 ## BAD CODE. This function will try to find an input binary file in the content
 ## of binary files in current folder. It does not work on big file because
 ## 'find' and 'grep' have an argument length limit.
-bindatasearch()
-{
-    echo "Deprecated function."
-    return
+bindatasearch () {
+	echo "Deprecated function."
+	return
 
-    if [ $# -ne 2 ] -; then
-        echo "Usage: $0 FILECHUNK BIGFILE"
-        return
-    fi
+	if [ $# -ne 2 ] -; then
+		echo "Usage: $0 FILECHUNK BIGFILE"
+		return
+	fi
 
-    if [ $(wc -c Cover.jpg | cut -f1 -d' ') -gt 1048576 ]; then
-        echo "[$1] file size must not exceed 1MB."
-        return
-    fi
+	if [ $(wc -c Cover.jpg | cut -f1 -d' ') -gt 1048576 ]; then
+		echo "[$1] file size must not exceed 1MB."
+		return
+	fi
 
-    ## The awk command suppresses first column, spaces and line breaks.
-    local SOURCE
-    SOURCE=$(od -tx8 "$1" | awk '($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }')
+	## The awk command suppresses first column, spaces and line breaks.
+	local SOURCE
+	SOURCE=$(od -tx8 "$1" | awk '($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }')
 
-    local FILEDUMP
-    FILEDUMP=$(od -tx8 "$1" | awk '($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }')
+	local FILEDUMP
+	FILEDUMP=$(od -tx8 "$1" | awk '($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }')
 
-    # grep -q "$SOURCE" <(echo "$FILEDUMP")
+	# grep -q "$SOURCE" <(echo "$FILEDUMP")
 
-    ## This special, not well-known syntax allows us to execute a set of
-    ## functions upon the result of find.  Since everything MUST be between
-    ## simple quotes, we cannot use external variables directly. So we pass the
-    ## $SOURCE variable as argument. The underscore at the end allows the use of
-    ## arguments. Note it will not work
-#     find "$TARGET" -type f -exec sh -c '
-#           # FILEDUMP=$(od -tx8 "$1" | awk '"'"'($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }'"'"')
-#           # grep -q "$2" <(echo $FILEDUMP)
+	## This special, not well-known syntax allows us to execute a set of
+	## functions upon the result of find.  Since everything MUST be between
+	## simple quotes, we cannot use external variables directly. So we pass the
+	## $SOURCE variable as argument. The underscore at the end allows the use of
+	## arguments. Note it will not work
+	#     find "$TARGET" -type f -exec sh -c '
+	#           # FILEDUMP=$(od -tx8 "$1" | awk '"'"'($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }'"'"')
+	#           # grep -q "$2" <(echo $FILEDUMP)
 
-#           # [ $? -eq 0 ] && echo "$1"
-# ' _ {} "$SOURCE" \;
+	#           # [ $? -eq 0 ] && echo "$1"
+	# ' _ {} "$SOURCE" \;
 }
 
-browse ()
-{
-    # Compatible with ranger 1.4.2 through 1.6.*
-    #
-    # Automatically change the directory in bash after closing ranger.
-    #
-    # This is a shell wrapper script to automatically change the directory to the
-    # last visited one after ranger quits. To undo the effect of this function, you
-    # can type "cd -" to return to the original directory.
+browse () {
+	# Compatible with ranger 1.4.2 through 1.6.*
+	#
+	# Automatically change the directory in bash after closing ranger.
+	#
+	# This is a shell wrapper script to automatically change the directory to the
+	# last visited one after ranger quits. To undo the effect of this function, you
+	# can type "cd -" to return to the original directory.
 
-    tempfile="$(mktemp)"
-    ranger --choosedir="$tempfile" "${@:-$(pwd)}"
-    if [ -f "$tempfile" ] && [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
-        cd -- "$(cat "$tempfile")"
-    fi
-    rm -f -- "$tempfile"
+	tempfile="$(mktemp)"
+	ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+	if [ -f "$tempfile" ] && [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
+		cd -- "$(cat "$tempfile")"
+	fi
+	rm -f -- "$tempfile"
 }
 
 ## Webcam testing
-webcam ()
-{
-    ## With mplayer-like player.
-    mpv --tv driver=v4l2:width=640:height=480:device=/dev/video0 tv://
+webcam () {
+	## With mplayer-like player.
+	mpv --tv driver=v4l2:width=640:height=480:device=/dev/video0 tv://
 }
 
-xscreen ()
-{
-    ## Does not work?
-    cvt $1 $2
-    echo  "$(cvt $1 $2 | tail -1 | cut -d' ' -f2-)"
-    xrandr --newmode "$(cvt $1 $2 | tail -1 | cut -d' ' -f2-)"
+xscreen () {
+	## Does not work?
+	cvt $1 $2
+	echo  "$(cvt $1 $2 | tail -1 | cut -d' ' -f2-)"
+	xrandr --newmode "$(cvt $1 $2 | tail -1 | cut -d' ' -f2-)"
 }
 
 ## Xrandr
-xmulti ()
-{
-    if [ $# -ne 1 ]; then
-        echo "Usage: $0 VIDEOPORT"
-        return
-    fi
+xmulti () {
+	if [ $# -ne 1 ]; then
+		echo "Usage: $0 VIDEOPORT"
+		return
+	fi
 
-    xrandr --output "$1" --auto --right-of $(xrandr | sed -n "/current/{n;p;q}" | cut -f1 -d" ")
+	xrandr --output "$1" --auto --right-of $(xrandr | sed -n "/current/{n;p;q}" | cut -f1 -d" ")
 }
 
-xmultioff ()
-{
-    if [ $# -ne 1 ]; then
-        echo "Usage: $0 VIDEOPORT"
-        return
-    fi
+xmultioff () {
+	if [ $# -ne 1 ]; then
+		echo "Usage: $0 VIDEOPORT"
+		return
+	fi
 
-    xrandr --output "$1" --off
+	xrandr --output "$1" --off
 }
 
 ##==============================================================================
@@ -277,16 +261,14 @@ xmultioff ()
 ##==============================================================================
 
 if command -v pacman >/dev/null 2>&1; then
-    ## Get detailed file list for the specified packages, omitting folders.
-    pql ()
-    {
-        pacman -Ql "$@" | grep -v "/$"
-    }
+	## Get detailed file list for the specified packages, omitting folders.
+	pql () {
+		pacman -Ql "$@" | grep -v "/$"
+	}
 
-    pli ()
-    {
-        expac -t %F-%T '%-8l %n' | sort -rn | head -${1:-30}
-    }
+	pli () {
+		expac -t %F-%T '%-8l %n' | sort -rn | head -${1:-30}
+	}
 fi
 
 ##==============================================================================
@@ -294,28 +276,24 @@ fi
 ##==============================================================================
 
 if [ "$(uname)" = FreeBSD ]; then
-    ## TODO: useless ?
-    # mqs()
-    # {
-    #     local str="$(echo "$@" | sed -E 's/[ \t]+/\\|/g')"
-    #     (cd /usr/ports && make quicksearch name="$str")
-    # }
+	## TODO: useless ?
+	# mqs () {
+	#     local str="$(echo "$@" | sed -E 's/[ \t]+/\\|/g')"
+	#     (cd /usr/ports && make quicksearch name="$str")
+	# }
 
-    port-list()
-    {
-        pkg_info | cut -f1 -d' '
-    }
+	port-list () {
+		pkg_info | cut -f1 -d' '
+	}
 
-    port-size()
-    {
-        pkg_info -Qsb "$@" | sed 's/\([^:]*\):\(.*\)/\2 KiB	\1/g'
-    }
+	port-size () {
+		pkg_info -Qsb "$@" | sed 's/\([^:]*\):\(.*\)/\2 KiB	\1/g'
+	}
 
-    mcd()
-    {
-        local DEST=$(pkg_search -r "$@" | head -n1 | awk '{print $2}')
-        cd -- "$DEST"
-    }
+	mcd () {
+		local DEST=$(pkg_search -r "$@" | head -n1 | awk '{print $2}')
+		cd -- "$DEST"
+	}
 
 fi
 
@@ -325,21 +303,19 @@ fi
 
 ## TeXlive
 if [ -d "/usr/local/texlive" ]; then
-    ## WARNING: it is important to set umask properly, otherwise users might
-    ## not have authorization to use the packages.
+	## WARNING: it is important to set umask properly, otherwise users might
+	## not have authorization to use the packages.
 
-    ## This is bad pratice to write args without double quotes, but since we
-    ## are sure there is no space in TeX Live packages, it is OK here.
+	## It is bad pratice to write args without double quotes, but since we are
+	## sure there is no space in TeX Live packages, it is OK here.
 
-    tli ()
-    {
-        sudo sh -c 'umask 022 && tlmgr install $0 $@' "$@"
-    }
+	tli () {
+		sudo sh -c 'umask 022 && tlmgr install $0 $@' "$@"
+	}
 
-    tlr ()
-    {
-        sudo sh -c 'umask 022 && tlmgr remove $0 $@' "$@"
-    }
+	tlr () {
+		sudo sh -c 'umask 022 && tlmgr remove $0 $@' "$@"
+	}
 fi
 
 ##==============================================================================
@@ -347,8 +323,7 @@ fi
 ##==============================================================================
 
 if command -v luarocks >/dev/null 2>&1; then
-    lri ()
-    {
-        sudo sh -c 'umask 022 && luarocks install $0 $@' "$@"
-    }
+	lri () {
+		sudo sh -c 'umask 022 && luarocks install $0 $@' "$@"
+	}
 fi
