@@ -1,9 +1,7 @@
 # Unix Home Configuration
-## Author: P. Neidhardt
-### 2014-03-22
+### Author: P. Neidhardt
 
-Description
-===========
+## Overview
 
 This repository contains scripts and configuration files for various Unix
 programs.  It targets Arch Linux and FreeBSD, but since these are "fundamental"
@@ -15,8 +13,9 @@ Most interesting parts include advanced configuration for Emacs, Mutt, and some
 interesting shell scripts like a video transcoding wrapper using FFmpeg.
 
 --------------------------------------------------------------------------------
-Awesome
-=======
+## Description
+
+### Awesome
 
 * Extra deps: Vicious (Linux only)
 
@@ -29,16 +28,15 @@ Vicious plugin, it is quite straightforward.
 This configuration is for now very version-sensitive, so you should make sure to
 use latest build.
 
-dwb
-===
+### dwb
 
 Some custom options, download location, search engines, plugins, etc.
 Custom "fast-forward" javascript.
 
-Emacs
-=====
 
-Emacs daemon is integrated flawlessly thanks to a small script -- see the
+### Emacs
+
+Emacs daemon is flawlessly integrated thanks to a small script -- see the
 scripts folder.  Because terminal and graphical clients do not behave the same
 way, it is sometimes useful to specify which version should be used. For mutt,
 ranger bulkrename, git commit message and dwb, it is required to wait for the
@@ -58,8 +56,8 @@ A lot of functions.
 
 A lot of skeletons for shell, C, LaTeX and others.
 
-Mutt
-====
+
+### Mutt
 
 * Compile options: IMAP and SMTP support.
 * Patch: sidebar.
@@ -84,8 +82,8 @@ terminal, should it have 256-colors support or not.
 URxvt has an URL support that works also for Mutt. For other terminals, you
 might consider using the 'urlview' plugin for Mutt.
 
-Ranger
-======
+
+### Ranger
 
 * Extra deps: antiword, atool, highlight, img2txt, mediainfo, odt2txt, pdftotext,
 unrtf, w3m.
@@ -93,83 +91,82 @@ unrtf, w3m.
 Custom bindings, file association, tweaked a few options, additional functions
 (mkcd, extracthere...).
 
-Scripts
-=======
+
+### Scripts
 
 Probably the most interesting part here.
 
-archive: simple tar wrapper to create archive for files and folders.
+* archive: simple tar wrapper to create archive for files and folders.
 
-asciify: convert many non-ASCII characters to their nearest ASCII counterpart.
+* asciify: convert many non-ASCII characters to their nearest ASCII counterpart.
 
-bsdman: read *BSD man pages.
+* bsdman: read *BSD man pages.
 
-crun: quick way to execute C files.
+* crun: quick way to execute C files.
 
-dataindex: create index of hierarchies. Useful to keep track of folder content
+* dataindex: create index of hierarchies. Useful to keep track of folder content
   and structure.
 
-ediff: diff with Emacs.
+* ediff: diff with Emacs.
 
-einfo: info viewer with Emacs.
+* einfo: info viewer with Emacs.
 
-elisp: Emacs Lisp interpreter using Emacs.
+* elisp: Emacs Lisp interpreter using Emacs.
 
-extract: simple tar wrapper to extract archives. Atool should be preferred if
+* extract: simple tar wrapper to extract archives. Atool should be preferred if
   available.
 
-git-*: some git helper functions for sync and so on.
+* git-*: some git helper functions for sync and so on.
 
-homeinit: initialize a new home configuration, i.e. get needed files, create
+* homeinit: initialize a new home configuration, i.e. get needed files, create
   symlinks, etc.
 
-hsync: hierarchy synchronizer. Can prove very handy to sync large audio/video
+* hsync: hierarchy synchronizer. Can prove very handy to sync large audio/video
   folders.
 
-imagemount: an CDEmu/fuseiso wrapper that creates/deletes virtual drives
+* imagemount: a CDEmu/fuseiso wrapper that creates/deletes virtual drives
   automatically.
 
-mover: move and merge folder into destination.
+* mover: move and merge folder into destination.
 
-netinit: network setup. Works with wpa_supplicant. May replace any network
+* netinit: network setup. Works with wpa_supplicant. May replace any network
   manager.
 
-pacsize: print pacman package size.
+* pac*: pacman helper functions.
 
-pdf*: PDF manipulation, e.g. extract pages, compress, resize to A4.
+* pdf*: PDF manipulation, e.g. extract pages, compress, resize to A4.
 
-pkggen: generate lists of installed with pacman, FreeBSD's pkg and tlmgr (TeX
+* pkggen: generate lists of installed with pacman, FreeBSD's pkg and tlmgr (TeX
   Live manager).
 
-tc-video-*: batch conversion of any kind of videos. Using FFmpeg.
+* tc-video-*: batch conversion of any kind of videos. Using FFmpeg.
 
-translate: a translation frontend to Internet services. Default to stdin and
+* translate: a translation frontend to Internet services. Default to stdin and
   stdout (the Unix way), thus usable from your favorite text editor.
 
-Shell
-=====
+
+### Shell
 
 * Target: POSIX shell, dash, zsh
 
-A lot of stuff: aliases, functions, shell options, etc.
+A lot of content: aliases, functions, shell options, etc.
 
-Please note that this config is mainly intended -- and tested -- for zsh.  I
-removed bash support since it is really a scourge to shell scripting. However
-most of the scripts and the shell configuration are POSIX shell compatible
-(tested with dash).
+Please note that this config is mainly intended -- and tested -- for zsh.
+However most of the scripts and the shell configuration are POSIX shell
+compatible (tested with dash).
 
-TeX
-===
+
+### TeX
 
 Plain TeX macros, most importantly a partial UTF-8 support (taken from LaTeX).
 
-A lot of LaTeX macros. Among others: pie charts, dynamic plots with
-input file and trend.
+A lot of LaTeX macros. Among others: pie charts, dynamic plots with input file
+and trend.
 
 Plain TeX macros are in the '.texmf' folder.
 
-URxvt
-=====
+
+### URxvt
 
 * Extra deps: Muennich's perl extensions (keyboard-select, clipboard, url-matcher)
 
@@ -177,53 +174,24 @@ Custom font and colors, no scroll bar, url-matcher, clipboard, and
 keyboard-select.
 
 --------------------------------------------------------------------------------
-Usage
-=====
-
-The only purpose is to be a source of inspiration. Examples are always a good
-technical support. (Especially for applications that do not provide examples in
-their documentation.)  There is no use in blind-copying the content of any file
-into your personal home folder. At best it might break things.
-
-In case you still want to copy some files -- for quick and dirty testing purpose
--- do not forget that most of the files are in hidden folders.  Also note that
-in some shells, the '*' joker will NOT match hidden files, that is
-
-    cp -r source-dir/* dest-dir/
-
-will copy non-hidden folders only.  To match all folders, use the following
-joker instead:
-
-    cp -r source-dir/{.*,*} dest-dir/
-
-Still, the solution will not work for bash. A more convenient solution for bash:
-
-    shopt -s dotglob
-    cp -r source-dir/* dest-dir/
-
-Versioning
-==========
+## Versioning
 
 Git makes it possible to use your home folder as a git repo, thus versioning
-all files directly. To do so:
+all files directly.
 
-    cd
-    git init
-    git remote add origin <repo>
-    git fetch
-    git branch master origin/master
-    git checkout master
+	cd
+	git init
+	git remote add origin <repo>
+	git fetch
+	git branch master origin/master
+	git checkout master
 
 Some applications will need extra dependencies other than the default ones. You
-might have a look at the lists in the .pkg/ folder to know what software I've
+might have a look at the lists in the `.pkg/` folder to know what software I've
 been using.
 
 --------------------------------------------------------------------------------
-Known issues
-============
-
-Scripts
--------
+## Known issues
 
 * All scripts take a strong point at being POSIX. However, there is no POSIX way
   (at least to my knowledge) to execute a shell function on the result of a
@@ -232,16 +200,8 @@ Scripts
   variables.  For now we assume no input file has newline, which is quite a
   strong assumption and not safe at all.
 
-URxvt
------
-
-* There is a bug with Xft anti-aliased font that prevent w3m image preview from
-  working (too bad for ranger). Use non-Xft fonts as a workaround.
-
 --------------------------------------------------------------------------------
-
-Noteworthy apps
-===============
+## Noteworthy apps
 
 * aalib
 * abook
