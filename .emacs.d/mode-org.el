@@ -29,6 +29,7 @@
 (add-hook
  'org-mode-hook
  (lambda ()
+   (setq indent-tabs-mode nil)
    (local-set-key (kbd "C-c C-a") 'org-agenda)
    (auto-fill-mode -1)))
 
