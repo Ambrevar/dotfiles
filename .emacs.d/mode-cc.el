@@ -28,15 +28,15 @@ provided.\n Requires `get-closest-pathname'."
         (set (make-local-variable 'compile-command) (format "make -k -C %s" (file-name-directory makefile)))
       (set (make-local-variable 'compile-command)
            (let
-               ((cppp (eq major-mode 'c++-mode))
+               ((c++-p (eq major-mode 'c++-mode))
                 (file (file-name-nondirectory buffer-file-name)))
              (format "%s %s -o %s %s %s %s"
-                     (if cppp
+                     (if c++-p
                          (or (getenv "CXX") "g++")
                        (or (getenv "CC") "gcc"))
                      file
                      (file-name-sans-extension file)
-                     (if cppp
+                     (if c++-p
                          (or (getenv "CPPFLAGS") "-Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0")
                        (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0"))
                      (or (getenv "LDFLAGS") cc-ldflags)
@@ -81,6 +81,7 @@ restored."
     (c . 0)
     (case-label . 0)
     (cpp-define-intro . 0)
+    (cpp-macro . 0)
     (knr-argdecl-intro . 0)
     (label . 0)
     (statement-block-intro . +)
@@ -148,7 +149,7 @@ restored."
 (define-skeleton cc-case
   "Insert a case/switch statement."
   "expression: "
-  > "switch(" str ") {" \n
+  > "switch (" str ") {" \n
   ( "Value, %s: "
     > "case " > str ":" \n
     "break;" \n)
@@ -196,9 +197,9 @@ fprintf(stderr, \"\\n\"); \\
   "Insert a getopt template."
   nil
   > "int opt;" \n
-  "while((opt = getopt(argc, argv, \":hV\")) != -1) {" \n
+  "while ((opt = getopt(argc, argv, \":hV\")) != -1) {" \n
   "switch(opt) {" \n
-  "case 'h':" \n
+  "case 'h':" > \n
   "usage(argv[0]);" \n
   "return 0;" \n
   "case 'V':" > \n
@@ -215,7 +216,7 @@ fprintf(stderr, \"\\n\"); \\
   "return EXIT_SUCCESS;" \n
   "}" > \n
   "}" > "\n" \n
-  "if(optind >= argc) {" \n
+  "if (optind >= argc) {" \n
   "fprintf(stderr, \"Expected argument after options\\n\");" \n
   "exit(EXIT_FAILURE);" \n
   "}" > \n)
@@ -246,36 +247,36 @@ fprintf(stderr, \"\\n\"); \\
 (define-skeleton cc-loadfile
   "Insert loadfile function."
   nil
-  "unsigned long loadfile (const char * path, char ** buffer_ptr) {" \n
+  "unsigned long loadfile(const char *path, char **buffer_ptr) {" \n
   "#define MAX_FILESIZE 1073741824 /* One gigabyte */" > "\n" \n
   "/* Handle variable. */" \n
-  "char* buffer;" "\n" \n
-  "FILE* file = fopen (path, \"rb\");" \n
+  "char *buffer;" "\n" \n
+  "FILE *file = fopen(path, \"rb\");" \n
   "if (file == NULL) {" \n
-  "perror (path);" \n
+  "perror(path);" \n
   "return 0;" \n
   "}" > "\n" \n
-  "fseek (file, 0, SEEK_END);" \n
-  "long length = ftell (file);" \n
-  "/* fprintf (stdout, \"Note: file %s is %u bytes long.\\n\", path, length); */" "\n" \n
+  "fseek(file, 0, SEEK_END);" \n
+  "long length = ftell(file);" \n
+  "/* fprintf(stdout, \"Note: file %s is %u bytes long.\\n\", path, length); */" "\n" \n
   "if (length > MAX_FILESIZE) {" \n
-  "fprintf (stderr, \"%s size %ld is bigger than %d bytes.\\n\", path, length, MAX_FILESIZE);" \n
-  "fclose (file);" \n
+  "fprintf(stderr, \"%s size %ld is bigger than %d bytes.\\n\", path, length, MAX_FILESIZE);" \n
+  "fclose(file);" \n
   "return 0;" \n
   "}" > "\n" \n
-  "fseek (file, 0, SEEK_SET);" \n
-  "buffer = (char*) malloc (length + 1);" \n
+  "fseek(file, 0, SEEK_SET);" \n
+  "buffer = (char *)malloc(length + 1);" \n
   "if (buffer == NULL) {" \n
-  "perror (\"malloc\");" \n
-  "fclose (file);" \n
+  "perror(\"malloc\");" \n
+  "fclose(file);" \n
   "return 0;" \n
   "}" > "\n" \n
-  "if (fread (buffer, 1, length, file) == 0) {" \n
-  "fclose (file);" \n
+  "if (fread(buffer, 1, length, file) == 0) {" \n
+  "fclose(file);" \n
   "return 0;" \n
   "}" > "\n" \n
   "buffer[length] = '\\0';" \n
-  "fclose (file);" "\n" \n
+  "fclose(file);" "\n" \n
   "*buffer_ptr = buffer;" \n
   "return length;" \n
   "}" > \n)
@@ -291,7 +292,7 @@ fprintf(stderr, \"\\n\"); \\
 #include <string.h>
 #include <unistd.h>
 
-int main(int argc, char** argv) {" \n
+int main(int argc, char **argv) {" \n
 > @ _ \n
 > "return 0;
 }" \n)
@@ -304,7 +305,7 @@ Requires `count-percents'."
   nil
   '(require 'functions)
   '(setq v1 (skeleton-read "File desc: " "stderr"))
-  (if (string= v1 "") "printf (" (concat "fprintf (" v1 ", "))
+  (if (string= v1 "") "printf(" (concat "fprintf(" v1 ", "))
   "\"" (setq v1 (skeleton-read "Format string: " "%s\\n")) "\""
   '(setq v2 (count-percents v1))
   '(setq v1 0)
@@ -317,20 +318,20 @@ Requires `count-percents'."
   "Insert usage() and version() functions."
   "Synopsis: "
   > "static void usage(const char *executable) {" \n
-  "printf (\"Usage: %s [OPTIONS]\\n\\n\", executable);" \n
-  "puts (\"" str "\\n\");" "\n" \n
+  "printf(\"Usage: %s [OPTIONS]\\n\\n\", executable);" \n
+  "puts(\"" str "\\n\");" "\n" \n
 
-  "puts (\"Options:\");" \n
-  "puts (\"  -h        Print this help.\");" \n
-  "puts (\"  -V        Print version information.\");" "\n" \n
+  "puts(\"Options:\");" \n
+  "puts(\"  -h        Print this help.\");" \n
+  "puts(\"  -V        Print version information.\");" "\n" \n
 
-  "puts (\"\");" \n
-  "printf (\"See %s for more information.\\n\", MANPAGE);" \n
+  "puts(\"\");" \n
+  "printf(\"See %s for more information.\\n\", MANPAGE);" \n
   "}" > "\n" \n
 
   "static void version() {" \n
-  "printf (\"%s %s\\n\", APPNAME, VERSION);" \n
-  "printf (\"Copyright © %s %s\\n\", YEAR, AUTHOR);" \n
+  "printf(\"%s %s\\n\", APPNAME, VERSION);" \n
+  "printf(\"Copyright © %s %s\\n\", YEAR, AUTHOR);" \n
   "}" > \n)
 
 (provide 'mode-cc)
