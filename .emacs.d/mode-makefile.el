@@ -6,15 +6,12 @@
    (local-set-key (kbd "C-c c") 'makefile-config)
    (local-set-key (kbd "C-c d") 'makefile-doc)
    (local-set-key (kbd "C-c m") 'makefile-main)
-   (local-set-key (kbd "C-c s") 'makefile-c)
-   ))
+   (local-set-key (kbd "C-c s") 'makefile-c)))
 
 (define-skeleton makefile-main
   "Insert root Makefile." nil
-  "SHELL = /bin/sh
-.POSIX:
-
-include config.mk
+  "ROOT = .
+include ${ROOT}/config.mk
 
 ################################################################################
 ## Build.
@@ -28,183 +25,139 @@ app:
 
 .PHONY: doc
 doc:
-	${MAKE} -C ${docsdir}
+	${MAKE} -C ${docsrcdir}
 
 .PHONY: debug
 debug:
 	CFLAGS+=\"-g3 -O0 -DDEBUG=9\" ${MAKE}
 
-.PHONY: check
-check:
-	CFLAGS+=\"-g3 -O0 -DDEBUG=9\" ${MAKE} -C ${testdir}
+.PHONY: test
+test:
+	${MAKE} -C ${testdir}
 
 .PHONY: clean
 clean:
 	${MAKE} -C ${srcdir} clean
-	${MAKE} -C ${docsdir} clean
+	${MAKE} -C ${docsrcdir} clean
 	${MAKE} -C ${testdir} clean
 
 ################################################################################
 ## Install / Uninstall.
-## Cf. the info page of GNU Make for a proper use of these variables.
 
-INSTALL_PROGRAM ?= ${INSTALL}
+INSTALL ?= install
 INSTALL_DATA ?= ${INSTALL} -m644
+INSTALL_DIR ?= ${INSTALL} -d
 
 prefix ?= /usr/local
 exec_prefix ?= ${prefix}
-bindir ?= ${exec_prefix}/bin
-sbindir ?= ${exec_prefix}/sbin
-libexecdir ?= ${exec_prefix}/libexecdir
 datarootdir ?= ${prefix}/share
+
+bindir ?= ${exec_prefix}/bin
 datadir ?= ${datarootdir}
-sysconfdir ?= ${perfix}/etc
-sharedstatedir ?= ${prefix}/com
-localstatedir ?= ${prefix}/var
-runstatedir ?= ${prefix}/run
+docdir ?= ${datarootdir}/doc
 includedir ?= ${prefix}/include
-
-docdir ?= ${datarootdir}/doc/${cmdname}
 infodir ?= ${datarootdir}/info
-htmldir ?= ${docdir}
-dvidir ?= ${docdir}
-pdfdir ?= ${docdir}
-psdir ?= ${docdir}
-
 libdir ?= ${exec_prefix}/lib
-lispdir ?= ${datarootdir}/emacs/site-lisp
-
+libexecdir ?= ${exec_prefix}/libexecdir
+licensedir ?= ${datarootdir}/licenses
 localedir ?= ${datarootdir}/locale
-
+localstatedir ?= ${prefix}/var
 mandir ?= ${datarootdir}/man
-man1dir ?= ${mandir}/man1
-man2dir ?= ${mandir}/man2
-man3dir ?= ${mandir}/man3
-man4dir ?= ${mandir}/man4
-man5dir ?= ${mandir}/man5
-man6dir ?= ${mandir}/man6
-man7dir ?= ${mandir}/man7
-man8dir ?= ${mandir}/man8
-man9dir ?= ${mandir}/man9
-
-manext ?= .1
-man1ext ?= .1
-man2ext ?= .2
-man3ext ?= .3
-man4ext ?= .4
-man5ext ?= .5
-man6ext ?= .6
-man7ext ?= .7
-man8ext ?= .8
-man9ext ?= .9
+runstatedir ?= ${prefix}/run
+sbindir ?= ${exec_prefix}/sbin
+sharedstatedir ?= ${prefix}/com
+sysconfdir ?= ${perfix}/etc
 
 .PHONY: install
-install: ${cmdname}
-	${INSTALL_PROGRAM} $^ ${DESTDIR}${bindir}/$^
+install:
+	${MAKE}
+	${INSTALL_DIR} ${DESTDIR}${bindir}
+	${INSTALL} ${srcdir}/${cmdname} ${DESTDIR}${bindir}/${cmdname}
+	${INSTALL_DIR} ${DESTDIR}${mandir}/man1
+	${INSTALL_DATA} ${docsrcdir}/${cmdname}.1 ${DESTDIR}${mandir}/man1/${cmdname}.1
+	${INSTALL_DIR}  ${DESTDIR}${licensedir}/${cmdname}
+	${INSTALL_DATA} LICENSE ${DESTDIR}${licensedir}/${cmdname}/LICENSE
 
 .PHONY: uninstall
 uninstall:
-	rm -f ${DESTDIR}${bindir}/${cmdname}
+	-rm -f ${DESTDIR}${bindir}/${cmdname}
+	-rmdir -p ${DESTDIR}${bindir}
+	-rm -f ${DESTDIR}${mandir}/${cmdname}.${mansection}.gz
+	-rmdir -p ${DESTDIR}${mandir}
 " > \n)
-
 
 (define-skeleton makefile-doc
   "Insert documentation Makefile." nil
-  "ROOT ?= ..
+  ".SUFFIXES: .in
+
+ROOT ?= ..
 include ${ROOT}/config.mk
 
-${manpage}.gz: ${manpage}.in
-	awk \\
-	'$$0 ~ \"^.ds appname\" {print $$1 \" \" $$2 \" '${appname}'\";next} \\
-	$$0 ~ \"^.ds cmdname\" {print $$1 \" \" $$2 \" '${cmdname}'\";next} \\
-	$$0 ~ \"^.ds manname\" {print $$1 \" \" $$2 \" '${manname}'\";next} \\
-	$$0 ~ \"^.ds version\" {print $$1 \" \" $$2 \" '${version}'\";next} \\
-	$$0 ~ \"^.ds year\" {print $$1 \" \" $$2 \" '${year}'\";next} \\
-	$$0 ~ \"^.ds author\" {print $$1 \" \" $$2 \" '${author}'\";next} 1' \\
-	${manpage}.in > ${manpage}
-	gzip -c ${manpage} > $@
+manpages = ${cmdname}.1
+
+all: ${manpages}
+
+.in:
+	awk -v date=`date '+%Y-%m-%d'` 'BEGIN {section=\"$@\"; sub (/.*\\./, \"\", section); manname=toupper(\"$@\"); sub(/\\.[^.]+$$/, \"\", manname); print \".ds appname ${appname}\\n.ds authors ${authors}\\n.ds cmdname ${cmdname}\\n.ds date \" date \"\\n.ds manname \" manname \"\\n.ds section \" section \"\\n.ds version ${version}\\n.ds year ${year}\\n.\"}' > $@
+	cat $< >> $@
 
 clean:
-	rm -f ${manpage} ${manpage}.gz
+	rm -f ${manpages}
 " > \n)
-
 
 (define-skeleton makefile-c
   "Insert Makefile for building c." nil
-"ROOT ?= ..
+  "ROOT ?= ..
 include ${ROOT}/config.mk
 
-CFLAGS += `pkg-config --cflags gtk+-3.0`
-LDLIBS += `pkg-config --libs gtk+-3.0`
-LDLIBS += -lgsl -lgslcblas
+CPPFLAGS += -DAUTHORS=\"${authors}\" -DVERSION=${version} -DYEAR=${year}
+CPPFLAGS += -D_POSIX_C_SOURCE=200809L
+CPPFLAGS += -DHAVE_INLINE
+LDLIBS += -lm
 
 ${cmdname}: ${cmdname}.o
-	${CC} ${LDFLAGS} ${TARGET_ARCH} ${cmdname}.o $(LOADLIBES) $(LDLIBS) -o $@
 
 .PHONY: debug
 debug:
 	CFLAGS+=\"-g3 -O0 -DDEBUG=9\" ${MAKE}
 
+.PHONY: clean
 clean:
-	rm -f ${cmdname} *.d ${cmdname}.o
+	rm -f ${cmdname} *.d *.o
 
-## Header auto-dependencies. (GNU only.)
-## WARNING: filenames cannot contain a comma.
+## Generate prerequisites automatically. GNU Make only.
+## The 'awk' part is used to add the .d file itself to the target, so that it
+## gets updated on changes. The -MQ option is to add full path to object files
+## in subfolders. (-MM strips parent directories.)
 %.d: %.c
-	${CC} -MM ${CPPFLAGS} $< > $@; \\
-	ex -sc '%s,$*\\.o[ :]*,$*.o $@ : ,g|xit' $@;
+	${CC} -MM -MQ ${<:.c=.o} ${CPPFLAGS} $< | awk -v stem=$* -v target=$@ '{gsub (stem \".o[ :]*\", stem \".o \" target \" : \")} 1' > $@
 
-srcfiles = ${cmdname}.c
-depfiles = ${srcfiles:.c=.d}
--include ${depfiles}
+sources = $(wildcard *.c)
+deps = ${sources:.c=.d}
+-include ${deps}
 " > \n)
-
-
 
 (define-skeleton makefile-config
   "Insert Makefile config." nil
-  "## This file is included by all the (sub-)makefiles.
+  "## This file is included by all (sub-)makefiles.
 
-ROOT ?= .
-BUILD = ${ROOT}/build
-
-################################################################################
 ## Properties.
-cmdname = " (progn (string-match "\\([^/]*\\)/$" (file-name-directory buffer-file-name)) (match-string 1 (file-name-directory buffer-file-name))) "
+appname = Name
+authors = Pierre Neidhardt
+cmdname = name
+url = http://ambrevar.bitbucket.org/
 version = 1.0
-author = \"Pierre Neidhardt\"
-year = " (format-time-string "%Y") "
-mansection = 1
-mail = \"<name [at] domain [dot] tld>\"
-url = \"www.example.org\"
+year = 2014
 
-################################################################################
 ## Folders.
 srcdir = src
-docsdir = doc
-testdir = check
+docsrcdir = doc
+testdir = tests
 
-################################################################################
-## Variables.
-appname = `echo ${cmdname} | awk '{printf toupper (substr($$0,1,1)) tolower (substr($$0,2)) \"\n\"}'`
-manname = `echo ${cmdname} | awk '{print toupper ($$0)}'`
-manpage = ${cmdname}.${mansection}
-
-################################################################################
-## Flags.
-CPPFLAGS += -DAPPNAME=${appname} -DVERSION=${version} -DAUTHOR=${author} -DYEAR=${year}
-CPPFLAGS += -D_POSIX_C_SOURCE=200809L
-CPPFLAGS += -DHAVE_INLINE
-
-################################################################################
 ## USER SETTINGS
 
 ## Optional compilation flags.
-CFLAGS ?= -pedantic -std=c99 \
- -Wall -Wextra \
- -Wshadow -Wfloat-equal -Wpointer-arith -Winline -Wcast-qual -Wcast-align -Wconversion -Wdouble-promotion -Wfloat-equal
-
-CXXFLAGS ?= -Woverloaded-virtual -Weffc++ -Wold-style-cast
+CFLAGS ?= -pedantic -std=c99 -Wall -Wextra -Wshadow
 
 ## END OF USER SETTINGS
 " > \n)
