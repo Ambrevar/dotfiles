@@ -84,6 +84,8 @@ uninstall:
 	-rmdir -p ${DESTDIR}${bindir}
 	-rm -f ${DESTDIR}${mandir}/${cmdname}.${mansection}.gz
 	-rmdir -p ${DESTDIR}${mandir}
+	-rm -f ${DESTDIR}${licensedir}/${cmdname}/LICENSE
+	-rmdir -p ${DESTDIR}${licensedir}/${cmdname}
 " > \n)
 
 (define-skeleton makefile-doc
