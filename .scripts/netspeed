@@ -10,32 +10,42 @@ EOF
 	exit
 fi
 
-if [ $# -ne 0 ]; then
-	ARG="$1"
+if [ -n "$1" ]; then
+	interface="$1"
 else
-	ARG="$PATH"
+	interface="$(ifconfig | grep -vm1 '^lo\|^ \|^$' | cut -f1 -d':')"
+	## AWK alternative
+	# ifconfig | awk -F: '!/^ / && !/^$/ && $1!="lo" {print $1;exit}'
 fi
 
+if [ ! -d "/sys/class/net/${interface}" ]; then
+	echo "Error: no such interface: ${interface}" >&2
+else
+	path="/dev/shm/netspeed"
+	time=$(date +%s)
 
-INTERFACE="$(ifconfig | grep -vm1 '^lo\|^ \|^$' | cut -f1 -d':')"
-## AWK alternative
-# ifconfig | awk -F: '!/^ / && !/^$/ && $1!="lo" {print $1;exit}'
-[ -n "$1" ] && INTERFACE="$1"
+	read rx < /sys/class/net/${interface}/statistics/rx_bytes
+	read tx < /sys/class/net/${interface}/statistics/tx_bytes
 
-if [ ! -d "/sys/class/net/${INTERFACE}" ]; then
-	echo "Error: no such interface (${INTERFACE})."
-	exit
+	if [ ! -f "$path" ]; then
+		echo "$time $rx $tx" > "$path"
+		chmod 0666 "$path"
+	fi
+
+	read time_old rx_old tx_old < "$path"
+	echo "$time $rx $tx" > "$path"
+	time_diff=$(($time - $time_old))
+
+	if [ "$time_diff" -gt 0 ]; then
+		rx_rate=$((($rx - $rx_old) / $time_diff))
+		tx_rate=$((($tx - $tx_old) / $time_diff))
+
+		[ "$rx_rate" -gt 1024 ] && rx_rate=$(($rx_rate / 1024)) && rx_unit=K
+		[ "$rx_rate" -gt 1024 ] && rx_rate=$(($rx_rate / 1024)) && rx_unit=M
+
+		[ "$tx_rate" -gt 1024 ] && tx_rate=$(($tx_rate / 1024)) && tx_unit=K
+		[ "$tx_rate" -gt 1024 ] && tx_rate=$(($tx_rate / 1024)) && tx_unit=M
+
+		echo -n "$rx_rate $rx_unit↓ $tx_rate $tx_unit↑"
+	fi
 fi
-echo "$INTERFACE"
-
-RX_BEFORE=$(cat /sys/class/net/${INTERFACE}/statistics/rx_bytes)
-TX_BEFORE=$(cat /sys/class/net/${INTERFACE}/statistics/tx_bytes)
-sleep 1
-RX_AFTER=$(cat /sys/class/net/${INTERFACE}/statistics/rx_bytes)
-TX_AFTER=$(cat /sys/class/net/${INTERFACE}/statistics/tx_bytes)
-
-RX_RESULT=$(((${RX_AFTER:-0}-${RX_BEFORE:-0})/1024))
-TX_RESULT=$(((${TX_AFTER:-0}-${TX_BEFORE:-0})/1024))
-
-echo "RX $RX_RESULT KiB/s"
-echo "TX $TX_RESULT KiB/s"
