@@ -7,6 +7,8 @@ gm             https://maps.google.com/maps?q=%s
 gt             http://translate.google.com/#en/fr/%s
 imdb           http://www.imdb.com/find?q=%s&s=all
 leo            http://dict.leo.org/frde/index_de.html#/search=%s
+mb             http://musicbrainz.org/search?query=%s&type=artist&method=indexed
+mbr            http://musicbrainz.org/search?query=%s&type=release&method=indexed
 so             http://stackoverflow.com/search?q=%s
 torrent        http://torrentz.eu/search?f=%s
 w              http://en.wikipedia.org/wiki/Special:Search?search=%s
