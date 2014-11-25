@@ -10,9 +10,12 @@ numlockx on
 ## Keymap
 xkbcomp -I"$HOME/.xkb" "$HOME/.xkb/usim.xkb" $DISPLAY
 
+## Disable Touchpad
+synclient TouchpadOff=1
+
 if [ "$OSTYPE" = "linux-gnu" ] ; then
 	## Set sound volume.
-	[ -n "$(amixer 2>/dev/null | grep PCM)" ] && amixer set PCM 80%
+	[ -n "$(amixer 2>/dev/null | grep PCM)" ] && amixer set PCM 100%
 
 	## External device auto-mounting.
 	command -v udiskie >/dev/null 2>&1 && udiskie &

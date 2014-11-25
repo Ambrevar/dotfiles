@@ -14,15 +14,13 @@ umask 027
 ## empty entry at the end, otherwise Emacs will not use standard locations. For
 ## security (and bad programming assumptions) you should always append entries
 ## to PATH, not prepend them.
-appendpath()
-{
+appendpath() {
 	[ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
 	if [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
 		eval export $PATHVAR="\$$PATHVAR:$1"
 	fi
 }
-prependpath()
-{
+prependpath() {
 	[ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
 	if [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
 		eval export $PATHVAR="$1:\$$PATHVAR"
