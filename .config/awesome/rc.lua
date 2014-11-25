@@ -3,7 +3,6 @@
 --------------------------------------------------------------------------------
 
 -- TODO: Update system bar on audio volume update.
--- TODO: Use Shift as a primary modifier.
 
 -- Get OS. Take care to read one line only, skipping end of line.
 local f = io.popen("uname")
@@ -65,13 +64,12 @@ end
 -- beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 beautiful.init(awful.util.getdir("config") .. "/themes/custom/theme.lua")
 
--- {{{ Wallpaper
+-- Wallpaper
 if beautiful.wallpaper then
 	for s = 1, screen.count() do
 		gears.wallpaper.maximized(beautiful.wallpaper, s, true)
 	end
 end
--- }}}
 
 --------------------------------------------------------------------------------
 -- General
@@ -292,16 +290,16 @@ globalkeys = awful.util.table.join(
 	-- Touchpad
 	awful.key({ }, "XF86TouchpadToggle", function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
 	awful.key({ }, "XF86Tools",          function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
-	awful.key({ modkey, "Shift" }, "m",  function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
+	awful.key({ modkey, "Control" }, "m",  function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end),
 	-- `move_mouse_away` is useful if the mouse is getting in your way.
-	awful.key({ modkey, "Control" }, "m", move_mouse_away),
+	awful.key({ modkey, "Shift" }, "m", move_mouse_away),
 
 	--------------------------------------------------------------------------------
 	-- Awesome specific
 	--------------------------------------------------------------------------------
 
 	-- Standard program
-	awful.key({ modkey, "Control" }, "r", awesome.restart),
+	awful.key({ modkey, "Shift" }, "r", awesome.restart),
 	-- Too risky, so we disable it. You can still quit by calling the Lua command manually (modkey+x by default).
 	-- awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
@@ -333,20 +331,20 @@ globalkeys = awful.util.table.join(
 	end),
 
 	-- Layout resize
-	awful.key({ modkey, "Mod1" }, "h",    function () awful.tag.incmwfact(-0.05)   end),
-	awful.key({ modkey, "Mod1" }, "l",  function () awful.tag.incmwfact(0.05)   end),
-	awful.key({ modkey, "Mod1" }, "k",  function () awful.client.incwfact(0.05) end),
-	awful.key({ modkey, "Mod1" }, "j", function () awful.client.incwfact(-0.05) end),
+	awful.key({ modkey, "Shift" }, "h",    function () awful.tag.incmwfact(-0.05)   end),
+	awful.key({ modkey, "Shift" }, "l",  function () awful.tag.incmwfact(0.05)   end),
+	awful.key({ modkey, "Shift" }, "k",  function () awful.client.incwfact(0.05) end),
+	awful.key({ modkey, "Shift" }, "j", function () awful.client.incwfact(-0.05) end),
 
 	-- Layout organization
-	awful.key({ modkey, "Control" }, "Left", function () awful.tag.incnmaster( 1) end),
-	awful.key({ modkey, "Control" }, "Right",  function () awful.tag.incnmaster(-1) end),
-	awful.key({ modkey, "Control" }, "Up",    function () awful.tag.incncol( 1)    end),
-	awful.key({ modkey, "Control" }, "Down",  function () awful.tag.incncol(-1)    end),
+	awful.key({ modkey, "Shift" }, "Left", function () awful.tag.incnmaster( 1) end),
+	awful.key({ modkey, "Shift" }, "Right",  function () awful.tag.incnmaster(-1) end),
+	awful.key({ modkey, "Shift" }, "Up",    function () awful.tag.incncol( 1)    end),
+	awful.key({ modkey, "Shift" }, "Down",  function () awful.tag.incncol(-1)    end),
 
 	-- Multi screen
-	awful.key({ modkey, "Control" }, "Next", function () awful.screen.focus_relative( 1) end),
-	awful.key({ modkey, "Control" }, "Prior", function () awful.screen.focus_relative(-1) end),
+	awful.key({ modkey, "Shift" }, "Next", function () awful.screen.focus_relative( 1) end),
+	awful.key({ modkey, "Shift" }, "Prior", function () awful.screen.focus_relative(-1) end),
 
 
 	-- Prompt
@@ -364,38 +362,37 @@ globalkeys = awful.util.table.join(
 -- Sound Volume
 if ostype == "Linux" then
 	globalkeys = awful.util.table.join (globalkeys,
-		awful.key({ modkey,        }, "KP_Subtract",   function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
-		awful.key({ modkey,        }, "KP_Add",        function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
-		awful.key({ modkey,        }, "KP_Enter",      function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
+		awful.key({ modkey }, "KP_Subtract",   function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
+		awful.key({ modkey }, "KP_Add",        function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
+		awful.key({ modkey }, "KP_Enter",      function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
 
-		awful.key({        }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
-		awful.key({        }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
-		awful.key({        }, "XF86AudioMute",        function () awful.util.spawn("amixer set Master toggle >/dev/null") end)
+		awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
+		awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
+		awful.key({ }, "XF86AudioMute",        function () awful.util.spawn("amixer set Master toggle >/dev/null") end)
 	)
 elseif ostype == "FreeBSD" then
 	globalkeys = awful.util.table.join (globalkeys,
-		awful.key({ modkey,        }, "KP_Subtract",   function () awful.util.spawn("mixer vol -5 >/dev/null") end),
-		awful.key({ modkey,        }, "KP_Add",        function () awful.util.spawn("mixer vol +5 >/dev/null") end),
-		awful.key({ modkey,        }, "KP_Enter",      function () awful.util.spawn("mixer vol ^ >/dev/null")  end),
+		awful.key({ modkey }, "KP_Subtract",   function () awful.util.spawn("mixer vol -5 >/dev/null") end),
+		awful.key({ modkey }, "KP_Add",        function () awful.util.spawn("mixer vol +5 >/dev/null") end),
+		awful.key({ modkey }, "KP_Enter",      function () awful.util.spawn("mixer vol ^ >/dev/null")  end),
 
-		awful.key({        }, "XF86AudioRaiseVolume", function () awful.util.spawn("mixer vol -5 >/dev/null") end),
-		awful.key({        }, "XF86AudioLowerVolume", function () awful.util.spawn("mixer vol +5 >/dev/null") end),
-		awful.key({        }, "XF86AudioMute",        function () awful.util.spawn("mixer vol ^ >/dev/null")  end)
+		awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("mixer vol -5 >/dev/null") end),
+		awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("mixer vol +5 >/dev/null") end),
+		awful.key({ }, "XF86AudioMute",        function () awful.util.spawn("mixer vol ^ >/dev/null")  end)
 	)
 end
 
 
 -- Client keys
 clientkeys = awful.util.table.join(
-	awful.key({ modkey,         }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
-	-- awful.key({ modkey, "Shift" }, "f",      function () awful.layout.inc(layouts, 1) end),
-	awful.key({ modkey, "Shift" }, "f",      function ()
+	awful.key({ modkey }, "f",      function ()
 		if awful.layout.getname() == 'tile' then
 			awful.layout.set(awful.layout.suit.max)
 		else
 			awful.layout.set(awful.layout.suit.tile)
 		end
 	end),
+	awful.key({ modkey, "Shift" }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
 	awful.key({ modkey, "Shift" }, "c",      function (c) c:kill()                         end),
 	awful.key({ modkey, "Shift" }, "space",  awful.client.floating.toggle                     ),
 	awful.key({ modkey, "Shift" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
@@ -422,7 +419,7 @@ for i = 1, keynumber do
 				end
 		end),
 
-		awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9, function ()
+		awful.key({ modkey, "Control" }, "#" .. i + 9, function ()
 				local screen = mouse.screen
 				if tags[screen][i] then
 					awful.tag.viewtoggle(tags[screen][i])
@@ -439,7 +436,7 @@ for i = 1, keynumber do
 		end),
 
 		-- Multi screen
-		awful.key({ modkey, "Control" }, "#" .. i + 9, function ()
+		awful.key({ modkey, "Shift", "Control" }, "#" .. i + 9, function ()
 				if client.focus then
 					if tags[client.focus.screen+1] and tags[client.focus.screen+1][i] then
 						awful.client.movetotag(tags[client.focus.screen+1][i])
