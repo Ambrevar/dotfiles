@@ -2,9 +2,7 @@
 -- Awesome configuration
 --------------------------------------------------------------------------------
 
--- TODO: Send signal to system bar on audio update.
--- TODO: Maximaized layout.
--- TODO: Remove PCM audio?
+-- TODO: Update system bar on audio volume update.
 -- TODO: Use Shift as a primary modifier.
 
 -- Get OS. Take care to read one line only, skipping end of line.
@@ -76,24 +74,19 @@ end
 -- }}}
 
 --------------------------------------------------------------------------------
--- Misc
+-- General
 --------------------------------------------------------------------------------
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 modkey = "Mod4"
 
--- Table of layouts to cover with awful.layout.inc, order matters.
-layouts =   {
-	awful.layout.suit.tile,
-}
-
 -- Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
 for s = 1, screen.count() do
 	-- Each screen has its own tag table.
-	tags[s] = awful.tag({ " 1 ", " 2 "," 3 "," 4 ", " 5 ⚒ ", " 6 ♫ ", "7 ✉ " }, s, layouts[1])
+	tags[s] = awful.tag({ " 1 ", " 2 "," 3 "," 4 ", " 5 ⚒ ", " 6 ♫ ", "7 ✉ " }, s, awful.layout.suit.tile)
 end
 
 --------------------------------------------------------------------------------
@@ -140,17 +133,7 @@ if ostype == "Linux" then
 	end, 3)
 
 	-- Volume
-	vicious.register(volmwidget, vicious.widgets.volume, separator .. "Master $1% $2 ", 1, "Master")
-	-- PCM may not be available all the time on every machine.  If PCM is toggled
-	-- after awesome has been started, you'll need to reload the configuration.
-	-- If 'amixer' is not installed, status will never display.
-	local volpf = io.popen("amixer | grep PCM 2>/dev/null")
-	local volpl = volpf:read("*a")
-	volpf:close()
-	if volpl ~= "" then
-		volpwidget = wibox.widget.textbox()
-		vicious.register(volpwidget, vicious.widgets.volume, "PCM $1%", 1, "PCM")
-	end
+	vicious.register(volmwidget, vicious.widgets.volume, separator .. "$2 $1%", 1, "Master")
 
 	-- Battery
 	local batf = io.popen("ls '/sys/class/power_supply' 2>/dev/null")
@@ -384,28 +367,20 @@ if ostype == "Linux" then
 		awful.key({ modkey,        }, "KP_Subtract",   function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
 		awful.key({ modkey,        }, "KP_Add",        function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
 		awful.key({ modkey,        }, "KP_Enter",      function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
-		awful.key({ modkey, "Mod1" }, "KP_Subtract",   function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end),
-		awful.key({ modkey, "Mod1" }, "KP_Add",        function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
 
 		awful.key({        }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 5%+ >/dev/null") end),
 		awful.key({        }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 5%- >/dev/null") end),
-		awful.key({        }, "XF86AudioMute",        function () awful.util.spawn("amixer set Master toggle >/dev/null") end),
-		awful.key({ "Mod1" }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set PCM 5%+ >/dev/null") end),
-		awful.key({ "Mod1" }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set PCM 5%- >/dev/null") end)
+		awful.key({        }, "XF86AudioMute",        function () awful.util.spawn("amixer set Master toggle >/dev/null") end)
 	)
 elseif ostype == "FreeBSD" then
 	globalkeys = awful.util.table.join (globalkeys,
 		awful.key({ modkey,        }, "KP_Subtract",   function () awful.util.spawn("mixer vol -5 >/dev/null") end),
 		awful.key({ modkey,        }, "KP_Add",        function () awful.util.spawn("mixer vol +5 >/dev/null") end),
 		awful.key({ modkey,        }, "KP_Enter",      function () awful.util.spawn("mixer vol ^ >/dev/null")  end),
-		awful.key({ modkey, "Mod1" }, "KP_Subtract",   function () awful.util.spawn("mixer pcm -5 >/dev/null") end),
-		awful.key({ modkey, "Mod1" }, "KP_Add",        function () awful.util.spawn("mixer pcm +5 >/dev/null") end),
 
 		awful.key({        }, "XF86AudioRaiseVolume", function () awful.util.spawn("mixer vol -5 >/dev/null") end),
 		awful.key({        }, "XF86AudioLowerVolume", function () awful.util.spawn("mixer vol +5 >/dev/null") end),
-		awful.key({        }, "XF86AudioMute",        function () awful.util.spawn("mixer vol ^ >/dev/null")  end),
-		awful.key({ "Mod1" }, "XF86AudioRaiseVolume", function () awful.util.spawn("mixer pcm -5 >/dev/null") end),
-		awful.key({ "Mod1" }, "XF86AudioLowerVolume", function () awful.util.spawn("mixer pcm +5 >/dev/null") end)
+		awful.key({        }, "XF86AudioMute",        function () awful.util.spawn("mixer vol ^ >/dev/null")  end)
 	)
 end
 
@@ -413,9 +388,13 @@ end
 -- Client keys
 clientkeys = awful.util.table.join(
 	awful.key({ modkey,         }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
-	awful.key({ modkey, "Shift" }, "f", function (c)
-			c.maximized_horizontal = not c.maximized_horizontal
-			c.maximized_vertical   = not c.maximized_vertical
+	-- awful.key({ modkey, "Shift" }, "f",      function () awful.layout.inc(layouts, 1) end),
+	awful.key({ modkey, "Shift" }, "f",      function ()
+		if awful.layout.getname() == 'tile' then
+			awful.layout.set(awful.layout.suit.max)
+		else
+			awful.layout.set(awful.layout.suit.tile)
+		end
 	end),
 	awful.key({ modkey, "Shift" }, "c",      function (c) c:kill()                         end),
 	awful.key({ modkey, "Shift" }, "space",  awful.client.floating.toggle                     ),
