@@ -27,7 +27,7 @@ Example: to assign some-function to C-i, use
     (make-directory emacs-cache-folder t))
 
 ;; Load config easily.
-(add-to-list 'load-path "~/.emacs.d")
+(add-to-list 'load-path "~/.emacs.d/lisp")
 
 ;; Local plugin folder for quick install. All files in this folder will be
 ;; accessible to Emacs config. This is done to separate the versioned config
