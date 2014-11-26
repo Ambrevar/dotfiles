@@ -1,8 +1,6 @@
----------------------------
--- Custom awesome theme --
----------------------------
+-- Occam theme for Awesome
 
-path = os.getenv ("HOME") .. "/.config/awesome/themes/custom/"
+path = os.getenv ("HOME") .. "/.config/awesome/themes/occam/"
 
 theme = {}
 

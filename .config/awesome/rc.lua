@@ -62,7 +62,7 @@ end
 -- Themes define colours, icons, and wallpapers
 --------------------------------------------------------------------------------
 -- beautiful.init("/usr/share/awesome/themes/default/theme.lua")
-beautiful.init(awful.util.getdir("config") .. "/themes/custom/theme.lua")
+beautiful.init(awful.util.getdir("config") .. "/themes/occam/theme.lua")
 
 -- Wallpaper
 if beautiful.wallpaper then
