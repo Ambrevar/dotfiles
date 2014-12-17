@@ -33,6 +33,7 @@ while getopts ":hef" opt; do
 	\?)
 		_usage "$0"
 		exit 1 ;;
+	esac
 done
 
 shift $(($OPTIND - 1))
