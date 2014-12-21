@@ -190,6 +190,7 @@ The table type is any value found in `latex-table-names'."
 \\usepackage{amsmath,amssymb,amsfonts}
 % \\usepackage{comment}
 \\usepackage{geometry}
+% \\usepackage{graphicx}
 % \\usepackage{lipsum}
 % \\usepackage{needspace}
 \\usepackage[svgnames]{xcolor}
@@ -207,7 +208,7 @@ The table type is any value found in `latex-table-names'."
 \\let\\thedate\\@date
 \\makeatother" \n
 
-'(setq latex-setup-list '(latex-preamble-aliases latex-preamble-formatting latex-preamble-tables latex-preamble-graphics latex-preamble-listing))
+'(setq latex-setup-list '(latex-preamble-aliases latex-preamble-tables latex-preamble-listing))
 '(while (and latex-setup-list
              (= (read-key (concat "Insert " (symbol-name (car latex-setup-list)) "? (y)")) ?y))
    (newline-and-indent)
@@ -215,7 +216,7 @@ The table type is any value found in `latex-table-names'."
    (newline-and-indent))
 \n
 "%%=============================================================================
-%% Babel (load last before 'hyperref')
+%% Babel (load near the end before 'hyperref')
 \\usepackage[french,ngerman,english]{babel}
 \\iflanguage{french}{
 }{"
@@ -226,6 +227,24 @@ The table type is any value found in `latex-table-names'."
 "\\let\\olditem\\item" \n
 "\\renewcommand{\\item}{\\setlength{\\itemsep}{\\wideitemsep}\\olditem}"\n
 "}" > \n
+"
+%%=============================================================================
+%% Formatting
+
+% \\usepackage{parskip}
+% \\setlength{\\parindent}{15pt}
+% \\setlength{\\parskip}{5pt plus 4pt}
+
+% \\renewcommand{\\thefigure}{\\arabic{section}.\\arabic{figure}}
+\\renewcommand{\\arraystretch}{1.4}
+% \\renewcommand{\\familydefault}{\\sfdefault}
+
+%% Header
+% \\usepackage{fancyhdr}
+% \\setlength{\\headheight}{15.2pt}
+% \\pagestyle{fancy}
+% \\lhead{\\thetitle}
+% \\rhead{\\theauthor}" > \n
 "
 %%==============================================================================
 %% Hyperref (load last)
@@ -240,12 +259,13 @@ The table type is any value found in `latex-table-names'."
 "
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \\begin{document}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \\maketitle
-% \\vfill
-% \\thispagestyle{empty}
-% \\tableofcontents
-" \n
+\\vfill
+\\thispagestyle{empty}
+
+\\tableofcontents
+\\clearpage" \n
 > @ _ \n \n
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \\end{document}
@@ -268,26 +288,6 @@ The table type is any value found in `latex-table-names'."
 \\def\\ie{\\textsl{i.e.}\\xspace}
 \\def\\eg{\\textsl{e.g.}\\xspace}" \n)
 
-(define-skeleton latex-preamble-formatting
-  "Insert setup template."
-  nil
-  > "%%=============================================================================
-%% Formatting
-
-% \\usepackage{parskip}
-% \\setlength{\\parindent}{15pt}
-
-% \\renewcommand{\\thefigure}{\\arabic{section}.\\arabic{figure}}
-\\renewcommand{\\arraystretch}{1.4}
-% \\renewcommand{\\familydefault}{\\sfdefault}
-
-%% Header
-% \\usepackage{fancyhdr}
-% \\setlength{\\headheight}{15.2pt}
-% \\pagestyle{fancy}
-% \\lhead{\\thetitle}
-% \\rhead{\\theauthor}" \n)
-
 (define-skeleton latex-preamble-tables
   "Insert setup template."
   nil
@@ -303,7 +303,6 @@ The table type is any value found in `latex-table-names'."
   > "%%==============================================================================
 %% Graphics
 
-\\usepackage{graphicx}
 \\usepackage{tikz}
 
 \\newcommand{\\fancybox}[1]{" \n
@@ -358,7 +357,9 @@ The table type is any value found in `latex-table-names'."
 "}" > \n
 "
 \\newcommand{\\includecode}[2][custom]{" \n
-"\\lstinputlisting[caption=#2, escapechar=, style=#1]{#2}}" > \n -)
+"\\lstinputlisting[caption=#2, escapechar=, style=#1]{#2}}" \n
+"\\let\\verbatim\\relax%" \n
+"\\lstnewenvironment{verbatim}[1][]{\\lstset{style=custom}}{}%" > \n -)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The magnificent latex-math-preview mode!
