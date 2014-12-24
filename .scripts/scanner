@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+	cat<<EOF
+Sample script for A3 scanner. It selects a scan area of A4, then converts the
+result to png while rotating the image apropriately. The date and time is
+appended to the output filename which is in the current folder.
+EOF
+	exit
+fi
+
+scanimage -x 297 -y 210 | convert -rotate 90 - scan-$(date "+%F_%T").png
