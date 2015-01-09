@@ -4,7 +4,7 @@
 UPSTREAM_SOURCE="srcdir"
 ## End of user config
 
-_usage () {
+usage () {
 	cat <<EOF
 Usage: ${1##*/} [OPTIONS] PACKAGES
 
@@ -87,17 +87,6 @@ while getopts ":bcCfhis" opt; do
 		exit 1 ;;
 	esac
 done
-
-usage () {
-	cat<<EOF
-Usage: ${1##*/} [OPTIONS] FILES
-
-Options:
-
-  -h:  Show this help.
-
-EOF
-}
 
 shift $(($OPTIND - 1))
 if [ $# -eq 0 ]; then
