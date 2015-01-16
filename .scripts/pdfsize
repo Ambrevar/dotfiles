@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+	cat<<EOF
+Usage: ${0##*/} [options] <PDF-file>
+
+Same as pdfinfo, but append size in milimeters.
+EOF
+	exit
+fi
+
+if ! command -v pdfinfo >/dev/null 2>&1; then
+	echo 'pdfinfo not found in PATH. Exiting.' >&2
+	exit 1
+fi
+
+pdfinfo "$@" | awk '/^Page size:/ {printf $0; print ", " $3*0.35278 " x " $5*0.35278 " mm"; next } 1'
