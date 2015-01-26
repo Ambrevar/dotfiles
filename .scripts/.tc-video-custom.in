@@ -56,6 +56,7 @@ _transcode () {
 		-c:v libx264 -preset slow -crf 20 \
 		-c:a libvorbis -b:a 192k -ac 2 \
 		-c:s copy \
+		-dn \
 		-map 0 \
 		$SAMPLE \
 		"${1%.*}-$(date '+%F-%H%M%S').mkv"

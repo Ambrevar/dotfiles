@@ -250,6 +250,7 @@ EOF
 		$VIDEO_PARAM $VIDEO_FILTER \
 		$AUDIO_PARAM \
 		-c:s copy \
+		-dn \
 		-map 0 $STREAM_TITLE \
 		$SAMPLE $TC_VIDEO_OPT "$OUTPUT"
 
