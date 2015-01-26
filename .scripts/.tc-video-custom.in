@@ -97,9 +97,16 @@ done
 ## file1:
 ##   -i "file1" -i "file2" -map -0:a map 1:3 -map 0:a
 ##
-## Concatenate files. See
-## https://trac.ffmpeg.org/wiki/How%20to%20concatenate%20(join,%20merge)%20media%20files
-## for more details
+## Concatenate files. See <https://trac.ffmpeg.org/wiki/Concatenate> for more
+## details.
+##
+##   -f concat -i list.txt -c copy out.ext
+##
+## with `cat list.txt`:
+##   file 'file1'
+##   file 'file2'
+##
+## With different codecs:
 ##
 ##   -filter_complex '[0:0] [0:1] [1:0] [1:1] concat=n=2:v=1:a=1 [v] [a]' -map '[v]' -map '[a]'
 ##
