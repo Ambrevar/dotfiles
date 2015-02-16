@@ -20,8 +20,20 @@ readonly myname='pacsize'
 readonly myver='4.1.2'
 
 calc_total () {
-	awk '{
-	total += $1
+	awk 'BEGIN {
+	unit["B"] = 1/1024
+	unit["KiB"] = 1
+	unit["MiB"] = 1024
+	unit["GiB"] = 1048576
+	unit["TiB"] = 1073741824
+	unit["PiB"] = 1099511627776
+	unit["EiB"] = 1125899906842624
+	unit["ZiB"] = 1152921504606846976
+	unit["YiB"] = 1180591620717411303424
+}
+
+{
+	total += unit[$2]*$1
 	print
 }
 END {
@@ -42,7 +54,7 @@ filter () {
 }
 $0 ~ "^Installed Size" {
 	split($2, a, " ")
-	printf ("%4d%-3s %s\n", a[1], a[2], pkg)
+	printf ("%4d %-3s %s\n", a[1], a[2], pkg)
 }'
 }
 
@@ -139,7 +151,7 @@ $0 == "%SIZE%" {
 		size /= 1024
 		i++
 	}
-	printf ("%4d%-3s %s\n", size, unit[i], pkg)
+	printf ("%4d %-3s %s\n", size, unit[i], pkg)
 }' "$DBPath"/local/*/desc | { $opt_sort || cat ;} | { $opt_total || cat ;}
 	exit
 fi
