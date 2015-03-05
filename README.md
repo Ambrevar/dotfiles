@@ -224,6 +224,7 @@ been using.
 * cdrtools
 * centerim
 * chrpath
+* clyrics
 * cmus
 * column
 * comm
@@ -286,7 +287,6 @@ been using.
 * lua
 * luakit
 * luarocks
-* lyvi
 * mcomix
 * mediainfo
 * minidlna
