@@ -58,7 +58,7 @@ local p = io.popen('luac -p -l -- ' .. arg[1])
 
 for m in p:lines() do
 	if m:match('ETTABUP.*_ENV') then
-		local line, op, field = m:match('([%d]+).*(.)ETTABUP.*"([_%w]+)"')
+		local line, op, field = m:match('(%[[%d]+%]).*(.)ETTABUP.*"([_%w]+)"')
 		if not globals[field] then
 			if op == 'G' then
 				op = '<-'
