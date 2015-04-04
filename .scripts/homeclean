@@ -1,7 +1,11 @@
 #!/bin/sh
 
 set -- "$HOME/.cache/dwb" \
-	"$HOME/.cache/emacs" \
+	"$HOME/.cache/emacs/backups" \
+	"$HOME/.cache/emacs/elpa/archives" \
+	"$HOME/.cache/emacs/elpa/gnupg" \
+	"$HOME/.cache/emacs/ido.last" \
+	"$HOME/.cache/emacs/saveplace" \
 	"$HOME/.cache/mutt" \
 	"$HOME/.cache/rtorrent" \
 	"$HOME/.cache/zsh" \
