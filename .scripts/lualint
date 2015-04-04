@@ -54,20 +54,23 @@ local globals = {
 	table = true,
 }
 
-local p = io.popen('luac -p -l -- ' .. arg[1])
+for _, v in ipairs(arg) do
+	print('==> ' .. v)
+	local p = io.popen('luac -p -l -- ' .. v)
 
-for m in p:lines() do
-	if m:match('ETTABUP.*_ENV') then
-		local line, op, field = m:match('(%[[%d]+%]).*(.)ETTABUP.*"([_%w]+)"')
-		if not globals[field] then
-			if op == 'G' then
-				op = '<-'
-			else
-				op = '->'
+	for m in p:lines() do
+		if m:match('ETTABUP.*_ENV') then
+			local line, op, field = m:match('(%[[%d]+%]).*(.)ETTABUP.*"([_%w]+)"')
+			if not globals[field] then
+				if op == 'G' then
+					op = '<-'
+				else
+					op = '->'
+				end
+				print(line, op, field)
 			end
-			print(line, op, field)
 		end
 	end
-end
 
-p:close()
+	p:close()
+end
