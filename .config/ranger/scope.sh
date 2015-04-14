@@ -103,6 +103,9 @@ case "$mimetype" in
 		# # Use sed to remove spaces so the output fits into the narrow window
 		try mediainfo "$path" && { dump | trim | sed 's/  \+:/: /;';  exit 5; } || exit 1;;
 
+	# Image preview for videos, disabled by default:
+	# video/*)
+	# 	ffmpegthumbnailer -i "$path" -o "$cached" -s 0 && exit 6 || exit 1;;
 	# Display information about media files:
 	video/* | audio/*)
 		# Use sed to remove spaces so the output fits into the narrow window
