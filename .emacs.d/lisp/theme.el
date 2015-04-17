@@ -131,7 +131,7 @@
 ;; Show paren.
 (when (boundp 'show-paren-delay)
   ;; (set-face-background 'show-paren-match-face (face-background 'default)) ; Disable background color.
-  (set-face-background 'show-paren-match-face "#555555"))
+  (set-face-background 'show-paren-match-face "#555555")
   (set-face-foreground 'show-paren-match-face "#def")
   (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))
 
