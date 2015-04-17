@@ -280,7 +280,7 @@
 (setq inferior-lisp-program "clisp")
 
 ;; Let Emacs auto-load/save sessions.
-(when (boundp 'server-running-p)
+(when (and (fboundp 'server-running-p) (server-running-p))
   (desktop-save-mode 1)
   (setq history-length 250)
   (setq desktop-dirname (concat emacs-cache-folder "desktop"))
