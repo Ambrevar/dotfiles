@@ -284,8 +284,8 @@
   (desktop-save-mode 1)
   (setq history-length 250)
   (setq desktop-dirname (concat emacs-cache-folder "desktop"))
-  (if (not (file-directory-p desktop-dirname))
-      (make-directory desktop-dirname t))
+  (unless (file-directory-p desktop-dirname)
+    (make-directory desktop-dirname t))
   (setq desktop-path `(,desktop-dirname))
   (add-to-list 'desktop-globals-to-save 'compile-command))
 
@@ -342,6 +342,13 @@
 
 ;; Read Matlab files in Octave mode.
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+
+;; hs
+(add-hook 'prog-mode-hook 'hs-minor-mode)
+(add-hook 'prog-mode-hook (lambda () (local-set-key (kbd "C-c h") 'hs-toggle-hiding)))
+
+;; ff
+(define-key my-keys-minor-mode-map (kbd "C-c o") 'ff-find-other-file)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'main)
