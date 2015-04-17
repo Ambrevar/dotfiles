@@ -175,16 +175,16 @@
 (define-key my-keys-minor-mode-map (kbd "C-M-u") 'browse-url)
 
 ;; Default ispell dictionnay. If not set, Emacs uses the current locale.
-(setq ispell-dictionary "en")
+(setq ispell-dictionary "english")
 (define-key my-keys-minor-mode-map
   (kbd "<f5>")
-  (lambda () (interactive) (ispell-change-dictionary "en")))
+  (lambda () (interactive) (ispell-change-dictionary "english")))
 (define-key my-keys-minor-mode-map
   (kbd "<f6>")
-  (lambda () (interactive) (ispell-change-dictionary "fr")))
+  (lambda () (interactive) (ispell-change-dictionary "francais")))
 (define-key my-keys-minor-mode-map
   (kbd "<f7>")
-  (lambda () (interactive) (ispell-change-dictionary "sv")))
+  (lambda () (interactive) (ispell-change-dictionary "svenska")))
 
 ;; Long paragraphs. Useful for quick navigation with backward-paragraph and
 ;; forward-paragraph.
