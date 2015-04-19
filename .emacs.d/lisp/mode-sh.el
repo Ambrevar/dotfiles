@@ -46,7 +46,7 @@ The advantages of this function over the vanilla code are:
   ; (setq sh-shell-file (executable-find (symbol-name sh-shell)))
   ;; Convenient version.
   (setq sh-shell-file (concat "/bin/" (symbol-name sh-shell)))
-  (set (make-local-variable 'compile-command) (concat sh-shell-file " " buffer-file-name)))
+  (set (make-local-variable 'compile-command) (concat sh-shell-file " " (shell-quote-argument buffer-file-name))))
 
 ;; sh-set-shell partly resets some of the font-lock config. We use this
 ;; workaround to restore it.

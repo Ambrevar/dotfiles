@@ -25,17 +25,17 @@ provided.\n Requires `get-closest-pathname'."
   (let ((makefile (get-closest-pathname)))
     (if (and makefile
             (not nomakefile))
-        (set (make-local-variable 'compile-command) (format "make -k -C %s" (file-name-directory makefile)))
+        (set (make-local-variable 'compile-command) (concat "make -k -C " (shell-quote-argument (file-name-directory makefile))))
       (set (make-local-variable 'compile-command)
            (let
                ((c++-p (eq major-mode 'c++-mode))
                 (file (file-name-nondirectory buffer-file-name)))
-             (format "%s %s -o %s %s %s %s"
+             (format "%s %s -o '%s' %s %s %s"
                      (if c++-p
                          (or (getenv "CXX") "g++")
                        (or (getenv "CC") "gcc"))
-                     file
-                     (file-name-sans-extension file)
+                     (shell-quote-argument file)
+                     (shell-quote-argument (file-name-sans-extension file))
                      (if c++-p
                          (or (getenv "CPPFLAGS") "-Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0")
                        (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0"))

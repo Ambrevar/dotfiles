@@ -50,11 +50,11 @@
          (idxfile ))
     (set (make-local-variable 'compile-command)
          (concat
-          "cd " (if dirname dirname ".") " && "
+          "cd " (if dirname (shell-quote-argument dirname) ".") " && "
           (when (executable-find tex-index-command)
-            (concat tex-index-command " " (concat basename ".idx" ) " ; "))
+            (concat tex-index-command " " (shell-quote-argument (concat basename ".idx")) " ; "))
           (when (executable-find tex-bibtex-command)
-            (concat tex-bibtex-command " " basename " ; "))
+            (concat tex-bibtex-command " " (shell-quote-argument basename) " ; "))
           tex-command
           " " tex-start-options
           " " tex-start-commands

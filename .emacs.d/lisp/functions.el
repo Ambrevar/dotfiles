@@ -67,6 +67,7 @@ If RUNHOOKS is non-nil (or with universal argument), run hooks in
 `compilation-after-hook'."
   (interactive "P")
   (when (or runhooks (string= compile-command "make -k ")) (run-hooks 'compilation-before-hook))
+  (setq-default compilation-directory default-directory)
   (recompile)
   (when compilation-time-before-hide-window
     (sit-for compilation-time-before-hide-window)

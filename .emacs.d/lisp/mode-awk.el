@@ -10,7 +10,7 @@
    (local-set-key (kbd "C-c C-i") 'awk-if)
    (local-set-key (kbd "C-c (") 'awk-function)
    (local-set-key (kbd "C-c C-p") 'awk-printf)
-   (set (make-local-variable 'compile-command) (concat "awk " buffer-file-name))))
+   (set (make-local-variable 'compile-command) (concat "awk " (shell-quote-argument buffer-file-name)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

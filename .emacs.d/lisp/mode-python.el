@@ -19,7 +19,7 @@
   "Use compile to run python programs."
   (interactive)
   (set (make-local-variable 'compile-command)
-       (concat (python-version) " " buffer-file-name)))
+       (concat (python-version) " " (shell-quote-argument buffer-file-name))))
 
 (add-hook-and-eval
  'python-mode-hook
