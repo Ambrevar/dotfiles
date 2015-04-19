@@ -35,7 +35,7 @@
       (set-face-bold-p      'error                       t))
 
 ;; Blinking cursor is on only when Emacs is not daemonized.
-(when (not (boundp 'server-running-p))
+(unless (getenv "EMACS_SERVER")
   (blink-cursor-mode -1))
 
 ;; Line numbers. Graphic version has a gray bar separating text from line

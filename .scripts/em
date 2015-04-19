@@ -13,6 +13,9 @@ Calling script can have different names.
 * emc: emacs instance is opened in current terminal.
 * emw: if graphical, tell client to wait.
 
+When starting the server, the EMACS_SERVER variable is set so that Emacs can
+know in its initialization file whether the server is going to be started.
+
 All emacsclient(1) options are supported.
 
 $(emacsclient --help)
@@ -32,5 +35,5 @@ else
 	fi
 fi
 
-[ ! -e /tmp/emacs$(id -u)/server ] && emacs --daemon --no-site-file
+[ ! -e /tmp/emacs$(id -u)/server ] && EMACS_SERVER=t emacs --daemon --no-site-file
 emacsclient $param "$@"
