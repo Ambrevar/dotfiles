@@ -27,7 +27,6 @@ Requires `call-process-to-string' from `functions'."
      " *\n$" ""
      (call-process-to-string
       itranslate-program
-      "-i"
       in out str))))
 
 ;;;###autoload
