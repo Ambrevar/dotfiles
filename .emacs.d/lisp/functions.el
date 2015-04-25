@@ -127,6 +127,16 @@ there's a region, all lines that region covers will be duplicated."
       (goto-char (+ origin (* (length region) arg) arg)))))
 (define-key my-keys-minor-mode-map (kbd "C-x M-d") 'duplicate)
 
+(defun emacs-process-p (pid)
+  "If pid is the process ID of an emacs process, return t, else nil.
+Also returns nil if pid is nil."
+  (when pid
+    (let ((attributes (process-attributes pid)) (cmd))
+      (dolist (attr attributes)
+        (if (string= "comm" (car attr))
+            (setq cmd (cdr attr))))
+      (if (and cmd (or (string= "emacs" cmd) (string= "emacs.exe" cmd))) t))))
+
 (defun escape-region (&optional regex to-string)
   "Escape double-quotes and backslashes.
 You can control the regex replacement with the two optional

@@ -279,6 +279,11 @@
 ;; Common LISP
 (setq inferior-lisp-program "clisp")
 
+(defadvice desktop-owner (after pry-from-cold-dead-hands activate)
+  "Don't allow dead emacsen to own the desktop file."
+  (when (not (emacs-process-p ad-return-value))
+    (setq ad-return-value nil)))
+
 ;; Let Emacs auto-load/save sessions.
 (when (getenv "EMACS_SERVER")
   (desktop-save-mode 1)
