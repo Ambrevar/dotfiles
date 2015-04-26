@@ -116,7 +116,7 @@
 ;; Line by line scrolling
 (setq scroll-step 1)
 
-;; Useful of autofill.
+;; Autofill tweak.
 (setq sentence-end-double-space nil)
 
 ;; Highlight selections -- not activated by default on old Emacs.

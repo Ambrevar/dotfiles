@@ -18,7 +18,7 @@ Example: to assign some-function to C-i, use
 
   (define-key my-keys-minor-mode-map (kbd \"C-i\") 'some-function)"
   t " my-keys" 'my-keys-minor-mode-map)
-(add-hook 'minibuffer-setup-hook (lambda () (my-keys-minor-mode 0) ) )
+(add-hook 'minibuffer-setup-hook (lambda () (my-keys-minor-mode 0)))
 
 (defvar emacs-cache-folder "~/.cache/emacs/"
   "Cache folder is everything we do not want to track along with

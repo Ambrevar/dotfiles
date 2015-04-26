@@ -327,8 +327,8 @@ If DIR is t, then move left, otherwise move right."
 (define-key my-keys-minor-mode-map (kbd "M-)") 'move-border-right)
 
 (defun page-count ()
-  "Return page count.
-Requires `count-occurences'."
+  "Return page count."
+  ;; TODO: Requires `count-occurences'?
   (save-restriction
     (widen)
     (save-excursion
