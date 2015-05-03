@@ -26,7 +26,7 @@
      (setcdr (assoc "\\.pdf\\'" org-file-apps)
              (concat pdf-viewer " " (mapconcat 'identity pdf-viewer-args " ")))))
 
-(add-hook
+(add-hook-and-eval
  'org-mode-hook
  (lambda ()
    (setq indent-tabs-mode nil)
