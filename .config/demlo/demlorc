@@ -14,6 +14,8 @@ constants = ''
 constants = constants .. ' un une de du des le la les et mais pour ni ou à a où contre entre chez dans sur que qui  quoi comment quand '
 -- German
 constants = constants .. ' der die das den dem des ein eine einen eines einer einem im wo an am in bei aus mit nach seit von zu vom zur zum durch für gegen ohne um '
+-- Spanish
+constants = constants .. ' y '
 -- Music
 constants = constants .. " d'Acide JBX "
 
