@@ -4,8 +4,8 @@
 
 ;; I've tried to group colors with some consistency:
 ;; * doc, here-doc, comments, strings
-;; * variables, types, constants
-;; * preprocessor, functions, keywords, builtins
+;; * variables, types, functions
+;; * preprocessor, constants, keywords, builtins
 ;; * search highlight, search lazy
 
 ;; To find the variable associated to a currently used color, place the cursor
@@ -56,10 +56,11 @@
 (set-face-bold-p      'font-lock-builtin-face           t )
 (set-face-foreground  'font-lock-comment-delimiter-face "#008b8b" )
 (set-face-foreground  'font-lock-comment-face           "#008b8b" )
-(set-face-foreground  'font-lock-constant-face          "#d2691e" )
+(set-face-foreground  'font-lock-constant-face          "#9400d3" )
+;; (set-face-foreground  'font-lock-constant-face          "#1e90ff" )
+;; (set-face-bold-p      'font-lock-constant-face          t )
 (set-face-foreground  'font-lock-doc-face               "#00bfff" )
-(set-face-foreground  'font-lock-function-name-face     "#1e90ff" )
-(set-face-bold-p      'font-lock-function-name-face     t )
+(set-face-foreground  'font-lock-function-name-face     "#d2691e" )
 (set-face-foreground  'font-lock-keyword-face           "#3cb371" )
 (set-face-bold-p      'font-lock-keyword-face           t )
 (set-face-foreground  'font-lock-preprocessor-face      "#9400d3" )
@@ -91,10 +92,16 @@
 ))
 
 ;; C additional keywords.
-(font-lock-add-keywords
- 'c-mode
- '(("&" . font-lock-keyword-face)
-   ("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)))
+(mapcar
+ (lambda (mode)
+   (font-lock-add-keywords
+    mode
+    '(("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)
+      ; ("&" . font-lock-keyword-face)
+      ;; Colour function calls.
+      ("\\<\\(\\sw+\\)(" 1 'font-lock-function-name-face)
+      ("\\<\\(\\sw+\\)<\\sw+>(" 1 'font-lock-function-name-face))))
+ '(c-mode c++-mode))
 
 ;; Ediff
 (add-hook
