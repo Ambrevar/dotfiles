@@ -51,7 +51,6 @@
         (setq dired-showing-humansize t))))
   (revert-buffer))
 
-(local-set-key (kbd "C-c a") 'dired-toggle-hidden)
 (local-set-key (kbd "C-c h") 'dired-toggle-humansize)
 (local-set-key (kbd "<left>") 'dired-up-directory)
 (local-set-key (kbd "<right>") 'dired-find-file)

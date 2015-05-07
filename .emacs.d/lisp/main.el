@@ -248,9 +248,7 @@
 (define-key my-keys-minor-mode-map (kbd "C-<next>") 'next-buffer)
 
 ;; Do not open other window for buffer menu, plus hide non-file buffers.
-(define-key my-keys-minor-mode-map (kbd "C-x C-b")
-  (lambda () (interactive)
-    (buffer-menu 1)))
+(define-key my-keys-minor-mode-map (kbd "C-x C-b") 'bs-show)
 
 ;; Remove auto-fill in dwb edit because wikis and forums do not like it.
 (add-hook
