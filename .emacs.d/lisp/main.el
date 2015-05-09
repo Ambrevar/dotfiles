@@ -290,7 +290,7 @@
   (unless (file-directory-p desktop-dirname)
     (make-directory desktop-dirname t))
   (setq desktop-path `(,desktop-dirname))
-  (add-to-list 'desktop-globals-to-save 'compile-command))
+  (add-to-list 'desktop-locals-to-save 'compile-command))
 
 ;; GMP documentation
 (eval-after-load "info-look"
