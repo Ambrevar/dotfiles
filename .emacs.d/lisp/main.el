@@ -346,12 +346,15 @@
 ;; Read Matlab files in Octave mode.
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
 
-;; hs
+;; Easy code folding toggle.
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 (add-hook 'prog-mode-hook (lambda () (local-set-key (kbd "C-c h") 'hs-toggle-hiding)))
 
-;; ff
+;; Toggle between source file and header.
 (define-key my-keys-minor-mode-map (kbd "C-c o") 'ff-find-other-file)
+
+;; Move mouse away.
+(mouse-avoidance-mode 'banish)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'main)

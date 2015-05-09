@@ -12,11 +12,13 @@
 (dired-internal-noselect dired-directory dired-listing-switches)
 
 (setq wdired-allow-to-change-permissions t)
+(put 'dired-find-alternate-file 'disabled nil)
 
+;; omit-mode needs to be started _after_ omit-files redefinition.
 (require 'dired-x)
 (setq dired-omit-files "^\\.")
-;; omit-mode needs to be start _after_ omit-files redefinition.
 (dired-omit-mode)
+(add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
 
 (require 'tool-pdf) ; for `pdf-viewer'
 (setq dired-guess-shell-alist-user

@@ -246,6 +246,12 @@ it appears in the minibuffer prompt."
          (insert filename))))
 (define-key my-keys-minor-mode-map "\C-x\M-f" 'insert-file-name)
 
+(defun insert-symbol-at-point-in-regexp-search-ring ()
+  "Insert symbol at point in regexp search ring."
+  (interactive)
+  (add-to-list 'regexp-search-ring (find-tag-default-as-symbol-regexp)))
+(define-key my-keys-minor-mode-map "\M-#" 'insert-symbol-at-point-in-regexp-search-ring)
+
 (defun kill-all-buffers ()
   "Kill all buffers, leaving *scratch* only."
   (interactive)
