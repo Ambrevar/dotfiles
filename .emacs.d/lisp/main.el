@@ -356,6 +356,12 @@
 ;; Move mouse away.
 (mouse-avoidance-mode 'banish)
 
+;; Display defun in mode line.
+(which-function-mode)
+
+;; Replace maximized binding for fullscreen.
+(define-key my-keys-minor-mode-map (kbd "M-<f10>") 'toggle-frame-fullscreen)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'main)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
