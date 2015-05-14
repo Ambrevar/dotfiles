@@ -4,7 +4,10 @@ local function usage()
 	print ([[Lua static checker
 Usage: ]] .. arg[0]:match('/?([^/]+)$') .. [[ LUASOURCE
 
-Detects read/write accesses to undeclared globals.]])
+Reports globals.
+
+Warning: it does not report false negative, but is not exhaustive either.
+]])
 end
 
 if #arg < 1 then
@@ -12,7 +15,7 @@ if #arg < 1 then
 	os.exit()
 end
 
-local globals = {
+local builtins = {
 	assert = true,
 	collectgarbage = true,
 	dofile = true,
@@ -54,23 +57,65 @@ local globals = {
 	table = true,
 }
 
-for _, v in ipairs(arg) do
-	print('==> ' .. v)
-	local p = io.popen('luac -p -l -- ' .. v)
 
+for _, file in ipairs(arg) do
+	local p = io.popen('luac -p -l -- ' .. file)
+
+	local globals = {}
 	for m in p:lines() do
 		if m:match('ETTABUP.*_ENV') then
-			local line, op, field = m:match('(%[[%d]+%]).*(.)ETTABUP.*"([_%w]+)"')
-			if not globals[field] then
+			local line, op, field = m:match('%[([%d]+)%].*(.)ETTABUP.*"([_%w]+)"')
+			if not builtins[field] then
 				if op == 'G' then
-					op = '<-'
+					-- Global is used.
+					if not globals[field] then globals[field] = {set = false, used = false, lines={}} end
+					globals[field].used = true
+					globals[field].lines[#globals[field].lines+1] = tonumber(line)
 				else
-					op = '->'
+					-- Global is set.
+					if not globals[field] then globals[field] = {set = false, used = false, lines={}} end
+					globals[field].set = true
+					globals[field].lines[#globals[field].lines+1] = tonumber(line)
 				end
-				print(line, op, field)
+			end
+		end
+	end
+	p:close()
+
+	local sorted = {}
+	local out = {}
+	for field, v in pairs(globals) do
+		if v.set and v.used then
+			-- Report only first appearance.
+			sorted[#sorted+1] = v.lines[1]
+			if not out[v.lines[1]] then out[v.lines[1]] = {} end
+			out[v.lines[1]][#out[v.lines[1]]+1] = field
+		else
+			for _, line in ipairs(v.lines) do
+				sorted[#sorted+1] = line
+				if not out[line] then out[line] = {} end
+				out[line][#out[line]+1] = field
+			end
+		end
+		-- Free some memory.
+		v.lines = nil
+	end
+	table.sort(sorted)
+
+
+	for k, line in ipairs(sorted) do
+		-- Sorted can contain the same line several times.
+		if k == 1 or line ~= sorted[k-1] then
+			for _, field in pairs(out[line]) do
+				if globals[field].set and globals[field].used then
+					io.stderr:write(string.format("%s:%s: global '%s' set and used\n", file, line, field))
+				elseif globals[field].set and not globals[field].used then
+					io.stderr:write(string.format("%s:%s: global '%s' set but not used\n", file, line, field))
+				else
+					io.stderr:write(string.format("%s:%s: global '%s' used but not set\n", file, line, field))
+				end
 			end
 		end
 	end
 
-	p:close()
 end
