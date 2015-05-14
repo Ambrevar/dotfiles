@@ -354,7 +354,7 @@
 (define-key my-keys-minor-mode-map (kbd "C-c o") 'ff-find-other-file)
 
 ;; Move mouse away.
-(mouse-avoidance-mode 'banish)
+; (mouse-avoidance-mode 'banish)
 
 ;; Display defun in mode line.
 (which-function-mode)
