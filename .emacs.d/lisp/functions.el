@@ -249,7 +249,7 @@ it appears in the minibuffer prompt."
 (defun insert-symbol-at-point-in-regexp-search-ring ()
   "Insert symbol at point in regexp search ring."
   (interactive)
-  (add-to-list 'regexp-search-ring (find-tag-default-as-symbol-regexp)))
+  (add-to-history 'regexp-search-ring (find-tag-default-as-symbol-regexp)))
 (define-key my-keys-minor-mode-map "\M-#" 'insert-symbol-at-point-in-regexp-search-ring)
 
 (defun kill-all-buffers ()
