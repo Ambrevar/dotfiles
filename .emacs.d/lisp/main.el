@@ -362,6 +362,11 @@
 ;; Replace maximized binding for fullscreen.
 (define-key my-keys-minor-mode-map (kbd "M-<f10>") 'toggle-frame-fullscreen)
 
+;; Scroll zooming. 
+(define-key my-keys-minor-mode-map (kbd "C-<wheel-down>") 'text-scale-decrease)
+(define-key my-keys-minor-mode-map (kbd "C-<wheel-up>") 'text-scale-increase)
+(setq text-scale-mode-step 1.1)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'main)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
