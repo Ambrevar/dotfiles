@@ -145,6 +145,9 @@ Example: to assign some-function to C-i, use
 (when (require 'dired+ nil t)
   (toggle-diredp-find-file-reuse-dir 1))
 
+(when (require 'powerline nil t)
+  (powerline-default-theme))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We need to put it at the end to make sure it doesn't get overriden by other
 ;; minor modes.
