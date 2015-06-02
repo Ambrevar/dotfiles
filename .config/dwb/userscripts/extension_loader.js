@@ -53,7 +53,7 @@ previousPatterns : "prev,previous,back,<,\u2190,\xab,\u226a,<<"
 //>navtools___CONFIG
 });
 //>navtools___SCRIPT
-//<autoquvi___SCRIPT
+
 //<contenthandler___SCRIPT
 extensions.load("contenthandler", {
 //<contenthandler___CONFIG

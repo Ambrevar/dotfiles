@@ -81,7 +81,6 @@
 (define-key my-keys-minor-mode-map (kbd "C-x M-p") (lambda () (interactive) (narrow-to-page -1)))
 
 ;; Line numbers
-;; TODO: This mode is slow on big files when using beginning-of-buffer binding.
 (add-hook 'find-file-hook (lambda () (linum-mode 1)))
 (define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode)
 (add-hook

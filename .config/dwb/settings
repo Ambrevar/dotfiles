@@ -122,7 +122,7 @@ minimum-font-size=5
 font-completion=
 enable-spatial-navigation=false
 download-directory=~/temp
-adblocker=true
+adblocker=false
 download-external-command=urxvt -e wget dwb_uri -O dwb_output --load-cookies dwb_cookies
 user-stylesheet-uri=
 auto-load-images=true
@@ -163,4 +163,8 @@ block-insecure-content=false
 enable-ipc=true
 
 adblocker-element-hider=true
+
+tabbar-height=0
+statusbar-height=0
+favicon-size=0
 
