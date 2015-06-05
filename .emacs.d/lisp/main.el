@@ -363,7 +363,9 @@
 
 ;; Scroll zooming. 
 (define-key my-keys-minor-mode-map (kbd "C-<wheel-down>") 'text-scale-decrease)
+(define-key my-keys-minor-mode-map (kbd "C-<mouse-5>") 'text-scale-decrease)
 (define-key my-keys-minor-mode-map (kbd "C-<wheel-up>") 'text-scale-increase)
+(define-key my-keys-minor-mode-map (kbd "C-<mouse-4>") 'text-scale-increase)
 (setq text-scale-mode-step 1.1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
