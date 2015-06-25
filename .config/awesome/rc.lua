@@ -477,13 +477,14 @@ awful.rules.rules = {
 		properties = { floating = true } },
 	{ rule = { class = "mpv" },
 		properties = { floating = true } },
-	{ rule = { class = "pinentry" },
+	{ rule = { class = "mupen64plus" },
 		properties = { floating = true } },
-	{ rule = { class = "Steam" },
+	{ rule = { class = "pinentry" },
 		properties = { floating = true } },
 	{ rule = { name = "QEMU" },
 		properties = { floating = true } },
-
+	{ rule = { class = "Steam" },
+		properties = { floating = true } },
 
 	-- Flash workaround. Does not work?
 	{ rule = { instance = "plugin-container" },
@@ -498,7 +499,7 @@ awful.rules.rules = {
 		properties = { tag = tags[1][6] } },
 	{ rule = { name = "mutt" },
 		properties = { tag = tags[1][7] } },
-
+	
 	-- { rule = { class = "Gimp" },
 	--   properties = { floating = false } },
 
