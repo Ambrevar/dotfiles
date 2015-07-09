@@ -159,12 +159,8 @@ compatible (tested with dash).
 ### TeX
 
 Plain TeX macros, most importantly a partial UTF-8 support (taken from LaTeX).
-
-A lot of LaTeX macros. Among others: pie charts, dynamic plots with input file
-and trend.
-
 Plain TeX macros are in the '.texmf' folder.
-
+Some Asymptote functions.
 
 ### URxvt
 

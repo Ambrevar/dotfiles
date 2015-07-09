@@ -1,6 +1,5 @@
 asmutils
 aspell-sv
-bunnykill-git
 chromium-pepper-flash
 clyrics
 demlo
@@ -10,7 +9,6 @@ emacs-guess-style
 emacs-latex-math-preview
 emacs-po-mode
 gitstats-git
-glyr-git
 gnuplot-notk
 google-talkplugin
 lib32-libpng12
@@ -28,16 +26,12 @@ peg-multimarkdown-latex-support-git
 perspector
 pkgtools
 popcorntime-bin
-python-glyr-git
-python-pafy
 sdlmame-wout-toolkits
 slnunicode-git
-speedtest-cli
 streetsofrageremake
 texlive-dummy
 textadept
 trash-cli
 uncrustify
-unperspect
 wikiex
 wine-stable

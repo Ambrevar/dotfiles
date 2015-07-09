@@ -6,9 +6,9 @@ antiword
 aspell
 aspell-en
 aspell-fr
-astyle
 atool
 awesome
+base-devel
 bc
 calc
 ccrypt
@@ -25,6 +25,7 @@ djvulibre
 elfutils
 emacs-lua-mode
 emacs
+expac
 feh
 ffmpeg
 file
@@ -45,7 +46,7 @@ gimp
 git
 glew
 gmp
-gnuplot
+go
 graphviz
 grep
 groff
@@ -62,7 +63,6 @@ hwids
 ifplugd
 iftop
 imagemagick
-indent
 inetutils
 inkscape
 iotop
@@ -70,10 +70,8 @@ iproute2
 iptables
 iputils
 iw
-json-c
 kbd
 lame
-laptop-mode-tools
 less
 lesspipe
 linux
@@ -90,6 +88,9 @@ lsof
 ltrace
 lua
 lua-lgi
+lua-socket
+luajit
+luarocks
 lvm2
 lzo2
 m4
@@ -97,9 +98,6 @@ make
 man-db
 man-pages
 mediainfo
-mesa
-mesa-demos
-mesa-libgl
 mime-types
 mjpegtools
 mkinitcpio
@@ -134,12 +132,11 @@ patch
 pdf2svg
 pkgfile
 pkgstats
-pkgtools
 procps-ng
 psmisc
 pwgen
 ranger
-rtorrent
+rsync
 scrot
 sdparm
 sed
@@ -157,9 +154,10 @@ sysstat
 systemd
 tar
 tcpdump
-tcsh
 texi2html
 texinfo
+transmission-cli
+transmission-cli-remote
 tree
 ttf-dejavu
 ttf-freefont
