@@ -1,7 +1,7 @@
 #!/bin/sh
 ## Home session initialization.
 
-SOURCEDIR="$HOME/personal/dataperso"
+SOURCEDIR="$HOME/dataperso"
 [ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
 [ -z "$XDG_DATA_HOME" ] && XDG_DATA_HOME="$HOME/.local/share"
 [ -z "$XDG_DATA_DIRS" ] && XDG_DATA_DIRS="/usr/local/share"
@@ -30,36 +30,11 @@ if [ -d "$SOURCEDIR/todo" ]; then
 	echo
 fi
 
-if command -v rtorrent >/dev/null 2>&1; then
-	echo "==> rtorrent"
-	## We need the evaluation of the result, otherwise the variables will not
-	## get expanded, should it be '~' or "$HOME".
-	mkdir -p "$(eval echo $(awk -F'=' '/^session *= */{gsub(/^ +| +$/,"",$2); res=$2} END {printf res}' ~/.rtorrent.rc))"
-	echo
-fi
-
-## Luakit -- Install the adblock modules
-if command -v luakit >/dev/null 2>&1; then
-	echo "==> Luakit"
-	git clone https://github.com/Plaque-fcc/luakit-adblock/ "$HOME/luakit-adblock"
-	cp -fv ~/luakit-adblock/*.lua "$XDG_CONFIG_HOME/luakit"
-	rm -rvf "$HOME/luakit-adblock"
-
-	## Update the adblock lists
-	mkdir -p "$XDG_DATA_HOME/luakit/adblock"
-	wget https://easylist-downloads.adblockplus.org/easylist.txt \
-		https://easylist-downloads.adblockplus.org/easyprivacy.txt \
-		https://easylist-downloads.adblockplus.org/easylistgermany.txt \
-		http://lian.info.tm/liste_fr.txt \
-		-P "$XDG_DATA_HOME/luakit/adblock"
-	echo
-fi
-
 ## dwb -- Install extensions.
 if command -v dwbem >/dev/null 2>&1; then
 	echo "==> dwb"
 
-	[ $(dwbem -l | grep -c "adblock_subscriptions") -eq 0 ] && dwbem -Ni adblock_subscriptions
+	# [ $(dwbem -l | grep -c "adblock_subscriptions") -eq 0 ] && dwbem -Ni adblock_subscriptions
 	[ $(dwbem -l | grep -c "navtools") -eq 0 ] && dwbem -Ni navtools
 	[ $(dwbem -l | grep -c "contenthandler") -eq 0 ] && dwbem -Ni contenthandler
 	# dwbem -Ni youtube_html5
