@@ -5,6 +5,6 @@ if ! command -v nmap >/dev/null 2>&1; then
 	exit 1
 fi
 
-SUBNET="$(ifconfig | awk '/inet/ && $0 !~ "127.0.0.1" {gsub(/\.[0-9]+$/, ".*", $2) ; print $2}')"
+SUBNET="$(ifconfig | awk '/inet / && $0 !~ "127.0.0.1" {gsub(/\.[0-9]+$/, ".*", $2) ; print $2}')"
 echo "Scanning '$SUBNET'..."
 nmap -sP "$SUBNET"
