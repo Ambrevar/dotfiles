@@ -71,7 +71,7 @@ restored."
 
 ;; WARNING: this style is a work-in-progress.
 (c-add-style
- "peter"
+ "ambrevar"
  `((c-comment-only-line-offset . 0)
    (c-auto-align-backslashes . nil)
    (c-basic-offset . ,tab-width)
@@ -102,7 +102,7 @@ restored."
       ;; The cc-fmt hook is disable since there is no standard C formatting,
       ;; unlike for Go.
       ; (add-hook 'before-save-hook 'cc-fmt nil t)
-      (c-set-style "peter") ;; We override existing values.
+      (c-set-style "ambrevar") ;; We override existing values.
       (add-hook 'compilation-before-hook 'cc-set-compiler nil t)
       (local-set-key (kbd "<f9>") 'cc-clean)
       (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
