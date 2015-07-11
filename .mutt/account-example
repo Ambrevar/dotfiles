@@ -2,7 +2,7 @@
 ## Mutt -- Personal account
 set imap_user=user@gmail.com
 set imap_pass=$my_pw_personal
-set from=user@gmail.com
+set from=$imap_user
 set hostname="gmail.com"
 
 set folder = imaps://user@imap.gmail.com/
@@ -25,6 +25,9 @@ mailboxes "+A-- User -----------"
 
 ## Hooks
 account-hook $folder "set imap_user=user@gmail.com imap_pass=$my_pw_personal"
+
+## Remove your e-mail from group-reply.
+alternates $imap_user
 
 ## Gmail-specific macros
 ## Prevent Gmail from deleting to 'All Mail', move it to Trash instead.
