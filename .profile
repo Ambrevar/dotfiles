@@ -123,6 +123,20 @@ if [ -d "$HOME/.go" ]; then
 	appendpath "$GOPATH/bin"
 fi
 
+## Startup error log.
+## dmesg
+log_dmesg="$(dmesg | grep -i error)"
+[ -n "$log_dmesg" ] && echo "$log_dmesg" > "$HOME/errors-dmesg.log" || rm -f "$HOME/errors-dmesg.log"
+## systemd
+if command -v systemctl >/dev/null 2>&1; then
+	count="$(systemctl -l --failed | awk '{print $1;exit}')"
+	if [ $count -ne 0 ]; then
+		systemctl -l --failed > "$HOME/errors-systemd.log"
+	else
+		rm -f "$HOME/errors-systemd.log"
+	fi
+fi
+
 ## Hook. Should be sourced last
 [ -f ~/.profile_hook ] && . ~/.profile_hook
 ################################################################################

@@ -31,6 +31,11 @@ if ostype == "Linux" then
 	vicious = require("vicious")
 end
 
+-- Custom variables.
+local termcmd = os.getenv("TERMCMD") or "urxvt"
+local term = termcmd .. " -e "
+local home = os.getenv("HOME")
+
 --------------------------------------------------------------------------------
 -- Error handling
 --------------------------------------------------------------------------------
@@ -56,6 +61,19 @@ do
 					text = err })
 			in_error = false
 	end)
+end
+
+-- Notify system startup errors.
+do
+	for _, file in pairs({home .. "/errors-dmesg.log", home .. "/errors-systemd.log"}) do
+		local f = io.open (file,'r')
+		if f ~= nil then
+			f:close ()
+			naughty.notify({ preset = naughty.config.presets.critical,
+					title = "System startup error!",
+					text = "See " .. file })
+		end
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -231,9 +249,6 @@ move_mouse_away()
 -- Note that some laptop will not work when pressing Super+Fn.
 -- Therefore we only use Fn and Mod1+Fn.
 --------------------------------------------------------------------------------
-termcmd = os.getenv("TERMCMD") or "urxvt"
-term = termcmd .. " -e "
-home = os.getenv("HOME")
 
 globalkeys = awful.util.table.join(
 	-- Terminal
