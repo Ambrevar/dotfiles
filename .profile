@@ -129,7 +129,7 @@ log_dmesg="$(dmesg | grep -i error)"
 [ -n "$log_dmesg" ] && echo "$log_dmesg" > "$HOME/errors-dmesg.log" || rm -f "$HOME/errors-dmesg.log"
 ## systemd
 if command -v systemctl >/dev/null 2>&1; then
-	count="$(systemctl -l --failed | awk '{print $1;exit}')"
+	count="$(systemctl show | awk -F= '$1=="NFailedUnits" {print $2; exit}')"
 	if [ $count -ne 0 ]; then
 		systemctl -l --failed > "$HOME/errors-systemd.log"
 	else
