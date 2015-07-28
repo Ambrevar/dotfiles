@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if [ "$1" = "-h" ] || [ $# -lt 2 ]; then
+	cat<<EOF
+Usage: ${0##*/} SOURCE... DEST
+
+Use rsync to copy SOURCE to DEST while showing progress and allowing resuming.
+
+SOURCE can be multiple files or folder. A trailing slash in a source folder will
+copy the content of it, not the folder itself. If DEST does not exist, it will
+be created. If DEST has files not present in SOURCE, they will remain untouched.
+
+EOF
+
+	exit
+fi
+
+rsync -ivr --append-verify --progress -- "$@"
