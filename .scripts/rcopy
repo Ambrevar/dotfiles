@@ -15,4 +15,4 @@ EOF
 	exit
 fi
 
-rsync -ivr --append-verify --progress -- "$@"
+rsync -livr --append-verify --progress -- "$@"

@@ -1,0 +1,26 @@
+#!/bin/sh
+
+opt_dry=""
+if [ "$1" = "-n" ]; then
+	opt_dry="-n"
+	shift
+fi
+
+if [ "$1" = "-h" ] || [ $# -ne 2 ]; then
+	cat<<EOF
+Usage: ${0##*/} SOURCE DEST
+
+Use rsync to mirror SOURCE to DEST while showing progress and allowing resuming.
+SOURCE does not need to be ending with a trailing slash. Only size is used for
+comparison.
+
+Options:
+
+  -n: Dry-run.
+
+EOF
+
+	exit
+fi
+
+rsync "$opt_dry" -livr --size-only --delete-excluded --append-verify --progress -- "$1"/ "$2"
