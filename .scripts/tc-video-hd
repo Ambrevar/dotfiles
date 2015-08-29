@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if [ "$1" = "" ]; then
+	cat<<EOF
+Usage: ${0##*/} FOLDER
+
+Print subfolders in FOLDER which have no file with either "720" or "1080" in their name.
+EOF
+	exit
+fi
+
+while IFS= read -r i; do
+	if [ "$(find "$i" -type f \( -name '*720*' -o -name '*1080*' \))" = "" ]; then
+		echo "$i"
+	fi
+done <<EOF
+$(find "$1" -maxdepth 1 -type d)
+EOF
