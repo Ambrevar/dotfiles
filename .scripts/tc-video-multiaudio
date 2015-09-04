@@ -1,0 +1,21 @@
+#!/bin/sh
+
+if [ "$1" = "" ]; then
+	cat<<EOF
+Usage: ${0##*/} FOLDER
+
+Print movies in FOLDER which have strictly more than 1 audio channel.
+EOF
+	exit
+fi
+
+while IFS= read -r i; do
+	## Some formats (e.g. m2ts) will also return an "audio" channel in the
+	## "programs" section. We skip that.
+	stream_count=$(ffprobe -v quiet "$i" -print_format flat=s=_ -show_entries stream=codec_type | grep -v '^programs' | cut -f2 -d= | grep -c "audio")
+	if [ -n "$stream_count" ] && [ $stream_count -gt 1 ]; then
+		echo "$i"
+	fi
+done <<EOF
+$(find "$1" -type f)
+EOF
