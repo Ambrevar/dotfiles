@@ -8,7 +8,7 @@
 #AUTOSAVEBACKUPFILE=0
 DEVELSRCDIR="/var/abs/local/yaourtbuild"
 #DEVEL=0
-#EDITOR="$EDITOR"
+EDITOR="emc"
 #FORCEENGLISH=0
 #FORCE=0
 #TMPDIR="/tmp"
