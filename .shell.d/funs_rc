@@ -267,7 +267,7 @@ if command -v pacman >/dev/null 2>&1; then
 	}
 
 	pli () {
-		expac -t %F-%T '%-8l %n' | sort -rn | head -${1:-30}
+		expac -t '%F %T' '%-8l %n' | sort -rn | head -${1:-30}
 	}
 fi
 
