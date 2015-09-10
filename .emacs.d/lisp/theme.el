@@ -128,11 +128,11 @@
    (set-face-background 'ediff-even-diff-C "#303030")
    (set-face-foreground 'ediff-even-diff-C nil)
 
-   (set-face-background 'ediff-odd-diff-A "brightblack")
+   (set-face-background 'ediff-odd-diff-A "#696969")
    (set-face-foreground 'ediff-odd-diff-A nil)
-   (set-face-background 'ediff-odd-diff-B "brightblack")
+   (set-face-background 'ediff-odd-diff-B "#696969")
    (set-face-foreground 'ediff-odd-diff-B nil)
-   (set-face-background 'ediff-odd-diff-C "brightblack")
+   (set-face-background 'ediff-odd-diff-C "#696969")
    (set-face-foreground 'ediff-odd-diff-C nil)))
 
 ;; Show paren.

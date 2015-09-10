@@ -215,8 +215,8 @@
 ;; (setq semanticdb-find-default-throttle '(project unloaded system recursive))
 
 ;; Electric Pairs to auto-complete () [] {} "" etc. You can use it on regions.
-(if (>= emacs-major-version 24)
-    (electric-pair-mode 1))
+;; (if (>= emacs-major-version 24)
+;;     (electric-pair-mode 1))
 
 ;; Run ranger asynchronously.
 (define-key my-keys-minor-mode-map (kbd "C-x D")
