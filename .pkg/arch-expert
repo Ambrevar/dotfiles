@@ -23,7 +23,6 @@ diffutils
 dina-font
 djvulibre
 elfutils
-emacs-lua-mode
 emacs
 expac
 feh
@@ -140,7 +139,6 @@ rsync
 scrot
 sdparm
 sed
-slim
 slock
 smpeg
 speex
@@ -158,13 +156,13 @@ tcpdump
 texi2html
 texinfo
 transmission-cli
-transmission-cli-remote
+transmission-remote-cli
 tree
 ttf-dejavu
 ttf-freefont
 ttf-liberation
 udiskie
-udisks
+udisks2
 unrar
 unrtf
 unzip
@@ -189,7 +187,7 @@ xz
 youtube-dl
 zathura
 zathura-djvu
-zathura-pdf-mupdf
+zathura-pdf-poppler
 zathura-ps
 zlib
 zsh
