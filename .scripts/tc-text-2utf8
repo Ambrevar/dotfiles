@@ -2,7 +2,7 @@
 
 if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
 	cat<<EOF
-Usage: ${1##*/} FOLDERS
+Usage: ${0##*/} FOLDERS
 
 Convert all 'bad' encoding to UTF-8/LF.
 
