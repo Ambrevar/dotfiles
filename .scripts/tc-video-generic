@@ -6,35 +6,44 @@ _usage () {
 	cat <<EOF
 Usage: ${1##*/} [OPTIONS] FILES|FOLDERS
 
-Transcode FILES or files found in FOLDERS to desired format (default to .mkv
-with x264 and ogg vorbis). Black stripes are *not* cropped by default since it
-may be sometimes inaccurate. By default output filenames are the same as the
-original, with time appended.
+Transcode FILES or files found in FOLDERS to x264 and ogg vorbis in a MKV container.
+Black stripes are *not* cropped by default since it may be sometimes inaccurate.
+A time stamp is appended to the output filenames.
 
-Options:
-  -a CODEC: Audio codec supported by ffmpeg. (Default: libvorbis).
-  -b:       Default bitrate for audio stream with unidentifiable bitrate. If 0,
-            copy stream (default).
-  -c:       Copy streams (no reencoding).
-  -C:       Enable auto-crop (needs video reencoding).
-  -e EXT:   Set output container by specifying the extension. Defaults to mkv.
-  -f:       Remove source when done.
-  -h:       Display this help.
-  -o OPT:   Additional options.
-  -p:       Preview changes, do not encode.
-  -P:       Generate two thumbnails, one cropped, the other not. Enable
-            auto-crop, do not encode.
-  -s:       Sample of 5 minutes.
-  -S MIN:   Sample of MIN minutes.
-  -t:       Remove all "title" metadata.
-  -v CODEC: Video codec supported by ffmpeg. Defaults to libx264.
+CRF encoding is performed by default. It targets a desired quality. CRF 20 is
+usually a good factor, 18 is higher quality, 22 is lower. The 18-22 range is
+reasonable. The quality loss is usually noticeable above 22 and the size
+increase is significant below 18 for a barely noticeable quality change.
+
+2-pass encoding can achieve best compression, if the given bitrate is
+appropriate. A sample in CRF encoding can give a good bitrate estimate for the
+desired quality. Bitrates for 1080p movies are found within the 1000k-10000k
+range.
 
 You can get a list of supported codecs with
 
   $ ffmpeg -codecs
 
-User options are read from variable TC_VIDEO_OPT. This can be useful if you
+User options are read from the TC_VIDEO_OPT variable. This can be useful if you
 often use the same options.
+
+Options:
+  -a CODEC: Audio codec supported by ffmpeg. (Default: libvorbis).
+  -b:       Default bitrate for audio stream with unidentifiable bitrate.
+            If 0, copy stream (default).
+  -c:       Copy streams (no reencoding).
+  -C:       Enable auto-crop (needs video reencoding).
+  -d BR:    Perform a 2-pass video encoding at bitrate BR and set '-tune film'.
+  -f:       Remove source when done.
+  -h:       Display this help.
+  -o OPT:   Additional options.
+  -p:       Preview changes, do not encode.
+  -P:       Generate two sequence of thumbnails, one cropped, the other not.
+            Enable auto-crop, do not encode.
+  -q QUAL:  x264 CRF quality (default 20).
+  -s:       Sample of 5 minutes.
+  -S MIN:   Sample of MIN minutes.
+  -t:       Remove all "title" metadata.
 
 Examples:
 
@@ -46,10 +55,6 @@ Examples:
 
   ${1##*/} input-folder input.video
 
-* Convert to .avi container with xvid (quality 3) video and mp3 audio.
-
-  ${1##*/} -e avi -v "libxvid -qscale:v 3" -a mp3 input.video
-
 * Preview black stripes cropping.
 
   ${1##*/} -P input.video
@@ -58,7 +63,7 @@ Examples:
 
   ${1##*/} -C input.video
 
-* Exchange stream 1 an 2 by first removing them, then reading them in the
+* Exchange streams 1 and 2 by first removing them, then adding them in the
   desired order.
 
   ${1##*/} -o '-map -0:1 -map -0:2 -map 0:2 -map 0:1' input.video
@@ -67,12 +72,13 @@ Examples:
 
   ${1##*/} -o '-metadata:s:a:0 title="FR: OGG Stereo" -metadata:s:a:1 title=' input.video
 
+See <https://trac.ffmpeg.org/wiki/Encode/H.264>, 'ffmpeg -h encoder=libx264' and 'x264 --fullhelp'.
 EOF
 }
 
 EXT="mkv"
 AUDIO_CODEC="libvorbis"
-VIDEO_PARAM="-c:v libx264 -preset slow -crf 20"
+VIDEO_PARAM="-c:v libx264 -preset slower -crf 20"
 AUDIO_PARAM=""
 
 VIDEO_FILTER=""
@@ -86,8 +92,9 @@ OPT_CROP=false
 OPT_CROPPREVIEW=false
 OPT_PREVIEW=false
 OPT_COPY=false
+OPT_2PASS=false
 
-while getopts ":a:b:cCe:fho:pPsS:tv:" opt; do
+while getopts ":a:b:cCd:fho:pPq:sS:t" opt; do
 	case $opt in
 	a)
 		AUDIO_CODEC=$OPTARG ;;
@@ -99,8 +106,9 @@ while getopts ":a:b:cCe:fho:pPsS:tv:" opt; do
 		OPT_COPY=true;;
 	C)
 		OPT_CROP=true;;
-	e)
-		EXT=$OPTARG;;
+	d)
+		VIDEO_PARAM="-c:v libx264 -preset slower -b:v ${OPTARG}k"
+		OPT_2PASS=true;;
 	f)
 		OVERWRITE="-y"
 		OPT_OVERWRITE=true;;
@@ -115,14 +123,14 @@ while getopts ":a:b:cCe:fho:pPsS:tv:" opt; do
 		OPT_CROP=true
 		OPT_PREVIEW=true
 		OPT_CROPPREVIEW=true ;;
+	q)
+		VIDEO_PARAM="-c:v libx264 -preset slower -crf $OPTARG";;
 	s)
 		SAMPLE="-ss 60 -t 360" ;;
 	S)
 		SAMPLE="-ss 60 -t $((60*$OPTARG))" ;;
 	t)
 		OPT_REMOVE_TITLE=true ;;
-	v)
-		VIDEO_PARAM="-c:v $OPTARG" ;;
 	\?)
 		_usage "$0"
 		exit 1 ;;
@@ -224,27 +232,37 @@ _transcode() {
 		fi
 	fi
 
-	## WARNING: we mix down audio to 2 channels with '-ac 2'. This greatly
-	## reduce file size and avoid any confusion for playback, which is often the
-	## case when converting DTS to any other format because DTS has embedded
-	## channel description which is not available in these formats.
+	## WARNING: We mix down audio to 2 channels with '-ac 2'. This greatly reduce
+	## file size and avoid any confusion for playback, which is often the case
+	## when converting DTS to any other format. (DTS has embedded channel
+	## description which is not always available in other formats.)
 	! $OPT_COPY && AUDIO_PARAM="$(_audiobitrate "$1") -ac 2"
 
 	cat<<EOF
-================================================================================
 User options:  ${TC_VIDEO_OPT:-none}
 Sample:        ${SAMPLE:-no}
 Clear tags:    $OPT_REMOVE_TITLE
 In place:      $OPT_OVERWRITE
 Crop:          $OPT_CROP
-Video codec:   $VIDEO_PARAM
+Video params:  $VIDEO_PARAM
 Video filter:  $VIDEO_FILTER
-Audio codec:   $AUDIO_PARAM
+Audio params:  $AUDIO_PARAM
 Output file:   $OUTPUT
-================================================================================
+
 EOF
 
 	$OPT_PREVIEW && return
+
+	if $OPT_2PASS; then
+		ffmpeg -nostdin -y $SAMPLE -i "$1" \
+			$VIDEO_PARAM -pass 1 -tune film $VIDEO_FILTER \
+			$AUDIO_PARAM \
+			-c:s copy \
+			-dn \
+			-map 0 $STREAM_TITLE \
+			$TC_VIDEO_OPT -f matroska /dev/null
+		VIDEO_PARAM="$VIDEO_PARAM -pass 2 -tune film"
+	fi
 
 	ffmpeg -nostdin $OVERWRITE -i "$1" \
 		$VIDEO_PARAM $VIDEO_FILTER \
@@ -254,6 +272,8 @@ EOF
 		-map 0 $STREAM_TITLE \
 		$SAMPLE $TC_VIDEO_OPT "$OUTPUT"
 
+	$OPT_2PASS && rm -v ffmpeg2pass-0.log ffmpeg2pass-0.log.mbtree
+	
 	if $OPT_OVERWRITE; then
 		rm "$1"
 		mv -f "$OUTPUT" "${1%.*}.$EXT"
@@ -279,6 +299,7 @@ $(find "$i"  \( \
 		-iname '*.mp4' -o \
 		-iname '*.mpeg' -o \
 		-iname '*.mpg' -o \
+		-iname '*.ogm' -o \
 		-iname '*.webm' -o \
 		-iname '*.wmv' \) )
 EOF
