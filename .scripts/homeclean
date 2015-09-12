@@ -47,7 +47,7 @@ set -- "$HOME/.cache/dwb" \
 
 ## POSIX can store only one list at a time. Here we rely on the fact there is no
 ## space in the file names.
-RMLIST_CRITICAL="$HOME/.mutt.pwds.cpt $HOME/.ssh"
+RMLIST_CRITICAL="$HOME/.mutt.pwds.cpt $HOME/.ssh/"
 
 echo "==> List of files to be removed."
 echo "$@" | sed 's/ /\n/g'

@@ -10,8 +10,8 @@ EOF
 fi
 
 if ! command -v osd_cat >/dev/null; then
-	echo "You need osd_cat."
-	exit
+	echo >&2 "You need osd_cat."
+	exit 1
 fi
 
 ## The unbuffered option is -u on GNU and OpenBSD, -l on others.
