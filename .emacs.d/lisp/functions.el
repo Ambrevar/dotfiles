@@ -460,16 +460,18 @@ Hook function for skeletons."
        (pos (goto-char pos))
        (t (goto-char (car skeleton-markers)))))))
 
-(defun sort-lines-unique ()
-  "Remove trailing white space, then duplicate lines, then sort the result."
-  (interactive)
+(defun sort-lines-unique (arg)
+  "Remove trailing white space, then duplicate lines, then sort the result.
+Do not folder case with universal argument or non-nil ARG."
+  (interactive "P")
   (unless mark-active
     (mark-whole-buffer))
   (when (> (point) (mark))
     (exchange-point-and-mark))
   (delete-trailing-whitespace (point) (mark))
   (delete-duplicate-lines (point) (mark))
-  (sort-lines nil (point) (mark)))
+  (let ((sort-fold-case (if arg nil t)))
+    (sort-lines nil (point) (mark))))
 
 (defun swap-windows ()
   "If you have 2 windows, it swaps them."
