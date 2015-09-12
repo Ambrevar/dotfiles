@@ -52,13 +52,12 @@ _transcode () {
 	## You can choose here to process all files at the same time. Useful if you
 	## need to remux streams or to concatenate.
 	# ffmpeg -i ###FILELIST \
-	ffmpeg -nostdin -i "$@" \
+	ffmpeg -nostdin $SAMPLE -i "$@" \
 		-c:v libx264 -preset slow -crf 20 \
 		-c:a libvorbis -b:a 192k -ac 2 \
 		-c:s copy \
 		-dn \
 		-map 0 \
-		$SAMPLE \
 		"${1%.*}-$(date '+%F-%H%M%S').mkv"
 }
 
