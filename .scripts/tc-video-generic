@@ -126,7 +126,7 @@ while getopts ":a:b:cCd:fho:pPq:sS:t" opt; do
 	q)
 		VIDEO_PARAM="-c:v libx264 -preset slower -crf $OPTARG";;
 	s)
-		SAMPLE="-ss 60 -t 360" ;;
+		SAMPLE="-ss 60 -t 300" ;;
 	S)
 		SAMPLE="-ss 60 -t $((60*$OPTARG))" ;;
 	t)

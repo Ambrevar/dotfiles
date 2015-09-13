@@ -12,23 +12,27 @@ FFmpeg.
 
 Modes:
 
-  -e:  Excerpt of 1 minute starting at 1 minute.
-  -f:  Full video.
+  -f:   Full video.
+  -s:   Sample of 5 minute starting at 1 minute.
+  -S N: Sample of N minutes starting at 1 minute.
 
 EOF
 }
 
 SAMPLE=""
 OPT_PROCESS=false
-while getopts ":hef" opt; do
+while getopts ":hfsS:" opt; do
 	case $opt in
 	h)
 		_usage "$0"
 		exit 1 ;;
-	e)
-		SAMPLE="-ss 60 -t 60"
-		OPT_PROCESS=true ;;
 	f)
+		OPT_PROCESS=true ;;
+	s)
+		SAMPLE="-ss 60 -t 300"
+		OPT_PROCESS=true ;;
+	S)
+		SAMPLE="-ss 60 -t $((60*$OPTARG))"
 		OPT_PROCESS=true ;;
 	\?)
 		_usage "$0"
