@@ -1,33 +1,34 @@
 #!/bin/sh
 
-_usage () {
+DOMAIN=bitbucket.org
+USER=ambrevar
+
+usage() {
 	cat<<EOF
 Usage: ${1##*/} [OPTIONS] REPOS
 
-Clone multiple git repos from \$DOMAIN:\$USER.
+Clone git repo(s) from $DOMAIN:$USER.
 
 Options:
 
   -h:        Show this help.
   -d DOMAIN: Set domain.
-  -u USER:   Set the repository owner.
+  -u USER:   Set repository owner.
 
 EOF
 }
 
-DOMAIN=bitbucket.org
-USER=ambrevar
 while getopts ":hd:u:" opt; do
 	case $opt in
 	h)
-		_usage "$0"
+		usage "$0"
 		exit 1 ;;
 	d)
 		DOMAIN=$OPTARG ;;
 	u)
 		USER=$OPTARG ;;
 	\?)
-		_usage "$0"
+		usage "$0"
 		exit 1 ;;
 	esac
 done
@@ -35,7 +36,7 @@ done
 shift $(($OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-	_usage "$0"
+	usage "$0"
 	exit 1
 fi
 
