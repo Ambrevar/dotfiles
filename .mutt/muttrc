@@ -1,7 +1,5 @@
 ## -*- mode:sh -*- #
-################################################################################
 ## Mutt Configuration
-################################################################################
 
 ## Note on folders:
 ## These folders are assumed to exist:
@@ -9,9 +7,8 @@
 ## ~/.mutt: public stuff (theme, mailcap).
 ## ~/.cache/mutt: header cache.
 
-##------------------------------------------------------------------------------
+################################################################################
 ## General options
-##------------------------------------------------------------------------------
 
 ## Beep on new incoming mails.
 set beep_new = "yes"
@@ -63,9 +60,8 @@ set send_charset="us-ascii:utf-8"
 ## Remove delay between mailbox switches.
 set sleep_time = 0
 
-##------------------------------------------------------------------------------
+################################################################################
 ## Multiple accounts
-##------------------------------------------------------------------------------
 
 ## accountrc should contain the following config:
 
@@ -101,9 +97,8 @@ set sleep_time = 0
 
 source "~/.mutt.d/accountrc"
 
-##------------------------------------------------------------------------------
+################################################################################
 ## Aliases
-##------------------------------------------------------------------------------
 
 ## Mutt native support
 # set alias_file = "~/.mutt.d/aliases"
@@ -118,9 +113,8 @@ set query_command= "abook --mutt-query '%s' 2>/dev/null"
 macro index,pager  a "<pipe-message>abook --add-email-quiet<return>" "Add this sender to Abook"
 bind editor        <Tab> complete-query
 
-##------------------------------------------------------------------------------
+################################################################################
 ## Keys
-##------------------------------------------------------------------------------
 
 ## Security issue: if enter-command is available from the GUI, it is possible to
 ## see the password unencrypted. We disable it for this reason. Every command
@@ -150,9 +144,8 @@ bind index "^" imap-fetch-mail
 ## Changed kbs=^H to kbs=\177, then:
 ##   $ tic -x termbs.src
 
-##------------------------------------------------------------------------------
+################################################################################
 ## Custom headers for outgoing mail
-##------------------------------------------------------------------------------
 
 ## Undo any custom headers that may have been put in by the global Muttrc
 # unmy_hdr *
@@ -176,9 +169,8 @@ my_hdr X-Info: Simplicity is the ultimate sophistication.
 set user_agent = yes
 # my_hdr User-Agent: Every email client sucks, this one just sucks less.
 
-##------------------------------------------------------------------------------
+################################################################################
 ## Themes
-##------------------------------------------------------------------------------
 
 ## Index format
 ## We use my_col_* to get dynamic column size.
@@ -206,9 +198,8 @@ source "~/.mutt/colors.zenburn.sh|"
 source "~/.mutt/colors.fallback.sh|"
 source "~/.mutt/mutt.colors"
 
-##------------------------------------------------------------------------------
+################################################################################
 ## Sidebar
-##------------------------------------------------------------------------------
 
 ## We use a script to test if sidebar is installed. Needs to be loaded _after_
 ## the theme.
