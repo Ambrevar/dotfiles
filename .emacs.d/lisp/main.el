@@ -324,6 +324,10 @@
 ;; Bibtex
 (setq bibtex-entry-format '(opts-or-alts required-fields numerical-fields whitespace realign last-comma delimiters braces sort-fields))
 (setq bibtex-field-delimiters 'double-quotes)
+(add-hook
+ 'bibtex-mode-hook
+ (lambda ()
+   (setq indent-tabs-mode nil)))
 
 ;; Git commit meessages.
 (add-to-list 'auto-mode-alist '("COMMIT_EDITMSG\\'" . conf-mode))
