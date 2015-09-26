@@ -33,7 +33,11 @@ calc_total () {
 }
 
 {
-	total += unit[$2]*$1
+	u=$1
+	gsub(/[[:digit:]]*/, "", u)
+	n=$1
+	gsub(/[[:alpha:]]*/, "", n)
+	total += unit[u]*n
 	print
 }
 END {
