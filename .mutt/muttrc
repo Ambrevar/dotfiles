@@ -204,3 +204,13 @@ source "~/.mutt/mutt.colors"
 ## We use a script to test if sidebar is installed. Needs to be loaded _after_
 ## the theme.
 source "~/.mutt/sidebar.sh|"
+
+################################################################################
+## PGP
+
+# set pgp_use_gpg_agent = yes
+set crypt_replyencrypt = yes
+set crypt_replysign = yes
+set crypt_replysignencrypted = yes
+set crypt_use_gpgme = yes
+set pgp_timeout = 3600
