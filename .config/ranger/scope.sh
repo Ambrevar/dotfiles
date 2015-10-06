@@ -72,9 +72,7 @@ case "$extension" in
 		;; # fall back to highlight/cat if the text browsers fail
 
 	## CUSTOM SUPPORT
-	ogg)
-		try mediainfo "$path" && { dump | sed 's/  \+:/: /;' | trim | fmt -s -w $width; exit 4; } ;;
-	mkv)
+	mts|m2ts|mkv|ogg)
 		try mediainfo "$path" && { dump | sed 's/  \+:/: /;' | trim | fmt -s -w $width; exit 4; } ;;
 	doc)
 		try antiword "$path" && { dump | trim | fmt -s -w $width; exit 0; }
