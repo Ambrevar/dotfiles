@@ -12,4 +12,4 @@ EOF
 fi
 
 curl -sA "Mozilla/5.0" "http://www.google.com/finance?q=$2$3" | \
-	awk -v value=$1 -F '<|>' '/^1 / {print value * substr($3, 1, index($3," "))}'
+	awk -v value="$1" -F '<|>' '/^1 / {print value * substr($3, 1, index($3," "))}'

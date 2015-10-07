@@ -1,6 +1,11 @@
 #!/bin/sh
 
-xev | awk '/KeyPress|KeyRelease/ {
+compat=""
+if [ $(awk --version | grep -c GNU) -gt 0 ]; then
+	# This is for hex-to-decimal conversion.
+	compat="--non-decimal"
+fi
+xev "$@" | awk $compat '/KeyPress|KeyRelease/ {
 	if ($1 == "KeyPress")
 		event="pressed";
 	else
@@ -11,8 +16,15 @@ xev | awk '/KeyPress|KeyRelease/ {
 	keycode = $4;
 	keysym = substr($7, 1, length($7)-2);
 
-	getline;
-	string=$6;
+	printf "%-16s code=%-3s state=%s event=%-8s", keysym, keycode, state, event
 
-	printf "%-10s: code=%-3s state=%s event=%-8s string=%s\n", keysym, keycode, state, event, string
+	getline;
+	gsub(/\(|\)/, "", $5)
+	code=int(sprintf("%d", "0x" $5))
+	if (code > 32 && code != 127) {
+		/* Ignore non-printable characters" */
+		gsub(/"/, "", $NF)
+		printf " string=%s", $NF
+	}
+	print ""
 }'

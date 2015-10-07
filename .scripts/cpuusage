@@ -35,22 +35,22 @@ fi
 ##
 ## Only the first 4 values are interesting here.
 
-cpuarray="$(grep 'cpu ' /proc/stat)"
-f1=$(echo $cpuarray | cut -f3 -d' ')
-f2=$(echo $cpuarray | cut -f4 -d' ')
-f3=$(echo $cpuarray | cut -f5 -d' ')
-f4=$(echo $cpuarray | cut -f6 -d' ')
+cpuarray="$(grep '^cpu ' /proc/stat)"
+## We start at field #3 since there are 2 spaces after 'cpu'.
+f1=$(echo "$cpuarray" | cut -f3 -d' ')
+f2=$(echo "$cpuarray" | cut -f4 -d' ')
+f3=$(echo "$cpuarray" | cut -f5 -d' ')
+f4=$(echo "$cpuarray" | cut -f6 -d' ')
 
 totalA=$(($f1+$f2+$f3+$f4))
 idleA=$f4
-
 sleep 1
 
-cpuarray="$(grep 'cpu ' /proc/stat)"
-f1=$(echo $cpuarray | cut -f3 -d' ')
-f2=$(echo $cpuarray | cut -f4 -d' ')
-f3=$(echo $cpuarray | cut -f5 -d' ')
-f4=$(echo $cpuarray | cut -f6 -d' ')
+cpuarray="$(grep '^cpu ' /proc/stat)"
+f1=$(echo "$cpuarray" | cut -f3 -d' ')
+f2=$(echo "$cpuarray" | cut -f4 -d' ')
+f3=$(echo "$cpuarray" | cut -f5 -d' ')
+f4=$(echo "$cpuarray" | cut -f6 -d' ')
 
 totalB=$(($f1+$f2+$f3+$f4))
 idleB=$f4

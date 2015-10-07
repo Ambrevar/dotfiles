@@ -1,2 +1,0 @@
-#!/bin/sh
-zenity --info --text "IP: $(curl -s 192.168.1.1 | awk -F'>: |<' '/Adresse IP/{getline;print $3;exit}')"
