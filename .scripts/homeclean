@@ -7,6 +7,7 @@ set -- "$HOME/.cache/dwb" \
 	"$HOME/.cache/emacs/ido.last" \
 	"$HOME/.cache/emacs/saveplace" \
 	"$HOME/.cache/mutt" \
+	"$HOME/.cache/mutt_msg" \
 	"$HOME/.cache/rtorrent" \
 	"$HOME/.cache/zsh" \
 	"$HOME/.cmus/autosave" \
