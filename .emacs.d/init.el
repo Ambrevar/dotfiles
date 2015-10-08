@@ -148,6 +148,9 @@ Example: to assign some-function to C-i, use
 (when (require 'powerline nil t)
   (powerline-default-theme))
 
+(when (require 'sr-speedbar nil t)
+  (define-key my-keys-minor-mode-map (kbd "M-S M-S") 'sr-speedbar-toggle))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We need to put it at the end to make sure it doesn't get overriden by other
 ;; minor modes.
