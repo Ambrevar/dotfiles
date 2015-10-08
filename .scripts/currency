@@ -8,23 +8,46 @@ if [ "$1" = "-l" ]; then
 	exit
 fi
 
-if [ $# -lt 2 ] || [ $# -gt 3 ] || [ "$1" = "-h" ]; then
+usage() {
 	cat <<EOF
-Usage: ${0##*/} IN-CURRENCY OUT-CURRENCY VALUE
+Usage: ${0##*/} IN-CURRENCY OUT-CURRENCY [VALUES...]
        ${0##*/} -l
 
-Convert VALUE from IN-CURRENCY to OUT-CURRENCY.
-If VALUE is not provided it is read from stdin.
+Convert VALUES from IN-CURRENCY to OUT-CURRENCY.
+VALUES are read from stdin if not provided.
 
 CURRENCY is a 3-letters code like EUR, SEK, USD, etc.
 See the list of codes with the '-l' option.
 
 The download agent is specified from environment variable AGENT='$AGENT'.
 EOF
+}
+
+if [ $# -lt 2 ]; then
+	usage
 	exit
 fi
 
-v="$3"
-[ -z "$v" ] && read v
-$AGENT "http://www.google.com/finance?q=$1$2" | \
-	awk -v value="$v" -F '<|>' '/^1 / {print value * substr($3, 1, index($3," "))}'
+change="$($AGENT "http://www.google.com/finance?q=$1$2" | \
+	awk -F '<|>' '/^1 / {print substr($3, 1, index($3, " "))}')"
+
+if [ -z "$change" ]; then
+	usage
+	exit
+fi	
+
+shift 2
+
+mul() {
+	[ -n "$1" ] && [ -n "$2" ] && awk "BEGIN {print $1*$2}"
+}
+
+if [ -z "$1" ]; then
+	while read v; do
+		mul $v $change
+	done
+else
+	for v; do
+		mul $v $change
+	done
+fi
