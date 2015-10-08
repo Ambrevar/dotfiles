@@ -30,6 +30,8 @@ source "~/.mutt/maileditor.sh|"
 ## folder is specified, it is even faster. If no folder exists, the cache will
 ## be a single file.
 set header_cache = "~/.cache/mutt"
+set message_cachedir = "~/.cache/mutt_msg"
+source "~/.mutt/cachepurge.sh|"
 
 ## Tell Mutt to check all IMAP folders. This will add all of them to the
 ## sidebar. Contrary to the manu 'mailboxes' way, order cannot be controlled, so
