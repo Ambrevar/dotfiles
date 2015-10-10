@@ -1,4 +1,3 @@
-
 [default]
 javascript-can-access-clipboard=false
 complete-userscripts=false
