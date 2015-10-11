@@ -1,0 +1,19 @@
+#!/bin/sh
+
+[ -z "$VIEWER" ] && VIEWER="zathura --fork"
+
+for i; do
+	basename=${i##*/}
+	ext=${basename##*.}
+
+	case "$ext" in
+	bz2) bzcat "$i" ;;
+	bz) bzcat "$i" ;;
+	gz) zcat "$i" ;;
+	lrz) lrzcat "$i" ;;
+	lz) lzcat "$i" ;;
+	lz4) lz4cat "$i" ;;
+	xz) xzcat "$i" ;;
+	*) cat "$i" ;;
+	esac | $VIEWER -
+done

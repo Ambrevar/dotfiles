@@ -58,9 +58,6 @@ alias cls='printf "\ec"'
 ## prompt for password). Useless if X is running on the same TTY.
 command -v vlock >/dev/null 2>&1 && alias sx='startx & vlock'
 
-## Zathura -- Fork to background.
-command -v zathura >/dev/null 2>&1 && alias zat='zathura --fork'
-
 ## Xrandr
 alias xmorphnone='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --transform none'
 alias xmorphsw='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --transform 1.24,0.16,-124,0,1.24,0,0,0.000316,1'
