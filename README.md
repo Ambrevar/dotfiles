@@ -4,13 +4,12 @@
 ## Overview
 
 This repository contains scripts and configuration files for various Unix
-programs.  It targets Arch Linux and FreeBSD, but since these are "fundamental"
-Unix distributions, it might work for most other Unices as well. I tried hard to
-maintain universality: it should work anywhere (whatever the versions of the
-programs are installed) with as few modifications as possible.
+programs. I tried hard to maintain universality: it should work anywhere (Arch
+Linux, FreeBSD...), with whichever version of the programs. In the worst case,
+very few modifications will be necessary.
 
-Most interesting parts include advanced configuration for Emacs, Mutt, and some
-interesting shell scripts like a video transcoding wrapper using FFmpeg.
+Most interesting parts include advanced configuration for Awesome, Emacs, Mutt,
+ranger, Zsh and some shell scripts.
 
 --------------------------------------------------------------------------------
 ## Description
@@ -19,43 +18,35 @@ interesting shell scripts like a video transcoding wrapper using FFmpeg.
 
 * Extra deps: Vicious (Linux only)
 
-Configuration is very close to the default one, which mostly fits my needs.
-Most of the work I've done is for the status bar:  dynamic network speed (it
-checks for different interfaces), CPU speed, dynamic battery that will not show
-up if no battery is detected, and sound volume. But since I'm using the
-Vicious plugin, it is quite straightforward.
+Configuration is very close to the default one with some features removed
+(bindings, mouse control, context menu). The main new feature is the status bar:
+dynamic network speed (it checks for different interfaces), CPU speed, a battery
+indicator that will not show up if no battery is detected, and sound volume. The
+implementation is straightforward since I am using the Vicious plugin.
 
-This configuration is for now very version-sensitive, so you should make sure to
-use latest build.
+This configuration is very version-sensitive, so make sure to use the latest
+build.
 
 ### dwb
 
 Some custom options, download location, search engines, plugins, etc.
 Custom "fast-forward" javascript.
 
-
 ### Emacs
 
-Emacs daemon is flawlessly integrated thanks to a small script -- see the
-scripts folder.  Because terminal and graphical clients do not behave the same
-way, it is sometimes useful to specify which version should be used. For mutt,
-ranger bulkrename, git commit message and dwb, it is required to wait for the
-client to return, for which only the console client will work properly.
+Emacs daemon is flawlessly integrated thanks to a small _em_ script -- see the
+scripts folder. Unlike the terminal client, the graphical client does not return
+and spawns a new window. For these reasons the terminal client can prove useful
+in some contexts: Mutt, ranger bulkrename, git and dwb. I wrote a lot of Lisp
+helper functions and a custom theme with 256 colors, works for both text and
+graphical Emacs.
 
-Configuration for C programming. Bindings to compile either from makefile or
-from a custom command if no makefile is found.
+C-based modes: bindings to compile either from makefile or from a custom command
+if no makefile is found, formatting with Uncrustify, skeletons.
 
-TeX and LaTeX full-featured home-made environment: no AucTeX required, itemize
-function, skeletons, dynamic compilation with various engines, dynamic
-configuration with automatic index generation if necessary, proper PDF view,
-temp files clean function, PDF compression, SyncTeX support.
-
-Custom theme with 256 colors, works for both text and graphical Emacs.
-
-A lot of functions.
-
-A lot of skeletons for shell, C, LaTeX and others.
-
+TeX and LaTeX full-featured environment: no AucTeX, itemize function, skeletons,
+compilation with various engines and index support, external PDF view with
+SyncTeX support, temp files clean function, PDF compression.
 
 ### Mutt
 
@@ -63,25 +54,23 @@ A lot of skeletons for shell, C, LaTeX and others.
 * Patch: sidebar.
 * Extra deps: antiword, ccrypt, fortune, sxiv, w3m.
 
-Mutt is not easy to grasp at first. I managed to get multiple accounts with
-encrypted passwords working, which means there is no plain password stored on
-the disk. As a result, I just get prompted for a main password on Mutt startup,
-then everything works out of the box. I use ccrypt for password management
-because it is much simpler than gnupg.
+Support for multiple accounts with encrypted passwords. (Mutt will prompt for
+the master password only once.) I use ccrypt for password management because it
+is much simpler than gnupg.
 
-I'm using embedded IMAP and SMTP services which need appropriate compilation
-options.
+I use embedded IMAP and SMTP services which need appropriate compilation
+options. Embedded IMAP does not need to store e-mails locally. To speed-up
+e-mail queries, I cache them on disk. When the disk usage limit is reached, the
+older cached e-mails are erased until the cache shrink below the limit again.
 
-Some customization: custom index view, good Emacs integration (see .emacs),
+Some customization: custom index view, good Emacs integration (see .emacs.d),
 custom theme (matches Emacs colors), various tweaks.
 
-Thanks to the colorset.sh script, Mutt will check terminal color support and
-load colors appropriately. Therefore this configuration should work on any
-terminal, should it have 256-colors support or not.
+For universal terminal support, the colorset.sh script will check terminal
+capabilities and load colors appropriately.
 
 URxvt has an URL support that works also for Mutt. For other terminals, you
 might consider using the 'urlview' plugin for Mutt.
-
 
 ### Ranger
 
@@ -90,7 +79,6 @@ unrtf, w3m.
 
 Custom bindings, file association, tweaked a few options, additional functions
 (mkcd, extracthere...).
-
 
 ### Scripts
 
@@ -103,6 +91,8 @@ Probably the most interesting part here.
 * bsdman: read *BSD man pages.
 
 * crun: quick way to execute C files.
+
+* currency: currency converter.
 
 * dataindex: create index of hierarchies. Useful to keep track of folder content
   and structure.
@@ -121,9 +111,6 @@ Probably the most interesting part here.
 * homeinit: initialize a new home configuration, i.e. get needed files, create
   symlinks, etc.
 
-* hsync: hierarchy synchronizer. Can prove very handy to sync large audio/video
-  folders.
-
 * imagemount: a CDEmu/fuseiso wrapper that creates/deletes virtual drives
   automatically.
 
@@ -141,26 +128,17 @@ Probably the most interesting part here.
 
 * tc-video-*: batch conversion of any kind of videos. Using FFmpeg.
 
-* translate: a translation frontend to Internet services. Default to stdin and
-  stdout (the Unix way), thus usable from your favorite text editor.
-
-
 ### Shell
 
 * Target: POSIX shell, dash, zsh
 
-A lot of content: aliases, functions, shell options, etc.
-
-Please note that this config is mainly intended -- and tested -- for zsh.
-However most of the scripts and the shell configuration are POSIX shell
-compatible (tested with dash).
-
+Features: aliases, functions, shell options, etc.
+Most of the shell configuration is POSIX and works with dash.
 
 ### TeX
 
 Plain TeX macros, most importantly a partial UTF-8 support (taken from LaTeX).
-Plain TeX macros are in the '.texmf' folder.
-Some Asymptote functions.
+Plain TeX macros are in the '.texmf' folder. Some Asymptote functions.
 
 ### URxvt
 
@@ -183,8 +161,8 @@ all files directly.
 	git checkout master
 
 Some applications will need extra dependencies other than the default ones. You
-might have a look at the lists in the `.pkg/` folder to know what software I've
-been using.
+might have a look at the lists in the `.pkg/` folder to know what software I
+have ve been using.
 
 --------------------------------------------------------------------------------
 ## Known issues
@@ -195,179 +173,3 @@ been using.
   to this would be to call an external script, but then we lose all global
   variables.  For now we assume no input file has newline, which is quite a
   strong assumption and not safe at all.
-
---------------------------------------------------------------------------------
-## Noteworthy apps
-
-* aalib
-* abook
-* aircrack-ng
-* antiword
-* apvlv
-* asciidoc
-* atool
-* awesome
-* awk
-* bashmount
-* bc
-* bmake
-* cabextract
-* cal
-* calc
-* catdvi
-* ccrypt
-* cdrkit
-* cdrtools
-* centerim
-* chrpath
-* clyrics
-* cmus
-* column
-* comm
-* cppcheck
-* cut
-* darktable
-* dash
-* dcraw
-* demlo
-* diff
-* dosbox
-* doxygen
-* driconf
-* dtach
-* dvtm
-* dwb
-* ecryptfs
-* ecryptfs-simple
-* emacs
-* encfs
-* evince
-* fbpdf
-* fbv
-* fdisk
-* feh
-* ffmpeg
-* file
-* finch
-* fmt
-* fortune
-* gaupol
-* gcolor2
-* gdb
-* gimp
-* gnuplot
-* gparted
-* graphicsmagick
-* graphviz
-* grep
-* grip
-* groff
-* gtypist
-* guile
-* hdparm
-* highlight
-* htop
-* hugin
-* i3
-* id3v2
-* imagemagick
-* inkscape
-* iotop
-* irssi
-* latex2html
-* latex2rtf
-* lrzip
-* lsb-release
-* lshw
-* ltrace
-* lua
-* luakit
-* luarocks
-* mcomix
-* mediainfo
-* minidlna
-* mkfs
-* mkvtoolnix
-* mplayer2
-* mpv
-* musl
-* mutt
-* nasm
-* nawk
-* ncdu
-* nethogs
-* newsbeuter
-* ngrep
-* nmap
-* numlockx
-* octave
-* od
-* odt2txt
-* openshot
-* openssh
-* p7zip
-* parallel
-* pari
-* parted
-* patch
-* poppler
-* pstotext
-* pwgen
-* qemu
-* ranger
-* rawtherapee
-* re2c
-* rsync
-* rtorrent
-* rxvt-unicode
-* scrot
-* sdlmame
-* sdparm
-* sed
-* shred
-* slock
-* sort
-* splint
-* strace
-* subdl
-* submarine
-* sudo
-* surfraw
-* sxiv
-* sxlock
-* syslinux
-* task
-* tcc
-* tcpdump
-* texi2html
-* texinfo
-* texlive
-* textadept
-* tig
-* transmission
-* trash-cli
-* tree
-* udiskie
-* uncrustify
-* unrtf
-* unshield
-* upx
-* valgrind
-* vim
-* vlock
-* vsftpd
-* w3m
-* weechat
-* wipe
-* wireshark
-* wmfs
-* wv
-* x264
-* xchm
-* xclip
-* xlockmore
-* xosd
-* yasm
-* youtube-dl
-* zathura
-* zsh
