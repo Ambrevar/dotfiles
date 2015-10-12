@@ -12,6 +12,6 @@ if [ "zsh" = "$SHELL_CURRENT" ]; then
 	compdef _pcc pql
 	compdef _tex ltx
 	compdef _path_commands typex
-	compdef _zathura zat
+	compdef _pspdf zat
 	compdef _pcc abs-wrapper
 fi
