@@ -140,7 +140,9 @@ Example: to assign some-function to C-i, use
   (define-key my-keys-minor-mode-map (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
   (define-key my-keys-minor-mode-map (kbd "C-x M-r") 'mc/edit-lines)
   (define-key my-keys-minor-mode-map (kbd "C-x M-m") 'mc/mark-more-like-this-extended)
-  (define-key my-keys-minor-mode-map (kbd "C-x M-l") 'mc/mark-all-like-this-dwim))
+  (define-key my-keys-minor-mode-map (kbd "C-x M-l") 'mc/mark-all-like-this-dwim)
+  ;; Search compatible with mc.
+  (when (require 'phi-search) nil t))
 
 (when (require 'dired+ nil t)
   (toggle-diredp-find-file-reuse-dir 1))
@@ -150,6 +152,15 @@ Example: to assign some-function to C-i, use
 
 (when (require 'sr-speedbar nil t)
   (define-key my-keys-minor-mode-map (kbd "M-S M-S") 'sr-speedbar-toggle))
+
+(when (require 'helm-fuzzy-find nil t)
+  (define-key my-keys-minor-mode-map (kbd "C-c C-/") 'helm-fuzzy-find))
+
+(require 'swiper nil t)
+
+(when (require 'find-things-fast nil t)
+  ;; Make ftf work on every file.
+  (setq 'ftf-filetypes '("*")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We need to put it at the end to make sure it doesn't get overriden by other
