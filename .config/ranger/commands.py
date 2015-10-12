@@ -17,48 +17,71 @@ class bulkrename(Command):
         import tempfile
         from ranger.container.file import File
         from ranger.ext.shell_escape import shell_escape as esc
-        py3 = sys.version > "3"
+        py3 = sys.version_info[0] >= 3
 
         ## CUSTOM: change editor here.
         local_ed='emc'
 
         # Create and edit the file list
-        filenames = [f.basename for f in self.fm.thistab.get_selection()]
-        listfile = tempfile.NamedTemporaryFile()
+        filenames = [f.relative_path for f in self.fm.thistab.get_selection()]
+        listfile = tempfile.NamedTemporaryFile(delete=False)
+        listpath = listfile.name
 
         if py3:
             listfile.write("\n".join(filenames).encode("utf-8"))
         else:
             listfile.write("\n".join(filenames))
-        listfile.flush()
-        self.fm.execute_file([File(listfile.name)], app=local_ed)
-        listfile.seek(0)
-        if py3:
-            new_filenames = listfile.read().decode("utf-8").split("\n")
-        else:
-            new_filenames = listfile.read().split("\n")
         listfile.close()
+        self.fm.execute_file([File(listpath)], app=local_ed)
+        listfile = open(listpath, 'r')
+        new_filenames = listfile.read().split("\n")
+        listfile.close()
+        os.unlink(listpath)
         if all(a == b for a, b in zip(filenames, new_filenames)):
             self.fm.notify("No renaming to be done!")
             return
 
-        # Generate and execute script
+        # Generate script
         cmdfile = tempfile.NamedTemporaryFile()
-        cmdfile.write(b"# This file will be executed when you close the editor.\n")
-        cmdfile.write(b"# Please double-check everything, clear the file to abort.\n")
+        script_lines = []
+        script_lines.append("# This file will be executed when you close the editor.\n")
+        script_lines.append("# Please double-check everything, clear the file to abort.\n")
+        script_lines.extend("mv -vi -- %s %s\n" % (esc(old), esc(new)) \
+                for old, new in zip(filenames, new_filenames) if old != new)
+        script_content = "".join(script_lines)
         if py3:
-            cmdfile.write("\n".join("mv -vi -- " + esc(old) + " " + esc(new) \
-                for old, new in zip(filenames, new_filenames) \
-                if old != new).encode("utf-8"))
+            cmdfile.write(script_content.encode("utf-8"))
         else:
-            cmdfile.write("\n".join("mv -vi -- " + esc(old) + " " + esc(new) \
-                for old, new in zip(filenames, new_filenames) if old != new))
+            cmdfile.write(script_content)
         cmdfile.flush()
+
+        # Open the script and let the user review it, then check if the script
+        # was modified by the user
         self.fm.execute_file([File(cmdfile.name)], app=local_ed)
+        cmdfile.seek(0)
+        script_was_edited = (script_content != cmdfile.read())
+
+        # Do the renaming
         self.fm.run(['/bin/sh', cmdfile.name], flags='w')
         cmdfile.close()
 
-
+        # Retag the files, but only if the script wasn't changed during review,
+        # because only then we know which are the source and destination files.
+        if not script_was_edited:
+            tags_changed = False
+            for old, new in zip(filenames, new_filenames):
+                if old != new:
+                    oldpath = self.fm.thisdir.path + '/' + old
+                    newpath = self.fm.thisdir.path + '/' + new
+                    if oldpath in self.fm.tags:
+                        old_tag = self.fm.tags.tags[oldpath]
+                        self.fm.tags.remove(oldpath)
+                        self.fm.tags.tags[newpath] = old_tag
+                        tags_changed = True
+            if tags_changed:
+                self.fm.tags.dump()
+        else:
+            fm.notify("files have not been retagged")
 
 import os
 from ranger.core.loader import CommandLoader
