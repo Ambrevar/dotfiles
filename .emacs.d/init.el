@@ -160,7 +160,7 @@ Example: to assign some-function to C-i, use
 
 (when (require 'find-things-fast nil t)
   ;; Make ftf work on every file.
-  (setq 'ftf-filetypes '("*")))
+  (setq ftf-filetypes '("*")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We need to put it at the end to make sure it doesn't get overriden by other
