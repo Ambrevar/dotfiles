@@ -26,6 +26,11 @@ set edit_headers=yes
 ## Set EDITOR dynamically.
 source "~/.mutt/maileditor.sh|"
 
+## Reply fast
+set fast_reply=yes
+set include=ask-no
+set include_onlyfirst=yes
+
 ## Store message headers locally to speed things up. Gentoo wiki says that if a
 ## folder is specified, it is even faster. If no folder exists, the cache will
 ## be a single file.
@@ -140,6 +145,9 @@ macro attach 'V' "<pipe-entry>cat >~/.cache/mutt/mutt-attach.mail && $BROWSER ~/
 
 ## Remap bounce-message function to "B"
 bind index B bounce-message
+
+## Always reply to group
+bind index,pager r group-reply
 
 ## Fix the 'change-dir' issue with multiple accounts. When change-dir was called
 ## with account A, then use switched to account B, change-dir will still point
