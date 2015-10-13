@@ -67,6 +67,8 @@ set mime_forward_rest=yes
 
 ## Keep showing the list of mails while in pager.
 set pager_index_lines=8
+set pager_context=3
+set pager_stop=yes
 
 ## Encoding
 set rfc2047_parameters=yes
