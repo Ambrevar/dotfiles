@@ -1,0 +1,29 @@
+#!/bin/sh
+
+readonly KEY="$1"; shift
+
+orient() {
+	for file in "$@"; do
+		mogrify -auto-orient "$file"
+	done
+}
+
+rotate() {
+	degree="$1"; shift
+	for file in "$@"; do
+		case "$(file -b -i "$file")" in
+		image/jpeg*) jpegtran -rotate "$degree" -copy all -outfile "$file" "$file" ;;
+		*) mogrify -rotate "$degree" "$file" ;;
+		esac
+	done
+}
+
+case "$KEY" in
+"C-c")      echo -n "$@" | xsel -i ;;
+"C-e")      for file in "$@"; do urxvt -bg "#444" -fg "#eee" -sl 0 -title "$file" -e sh -c "exiv2 pr -q -pa '$file' | less" & done ;;
+"C-g")      gimp "$@" & ;;
+"C-o")      orient ;;
+"C-comma")  rotate 270 "$@" ;;
+"C-period") rotate  90 "$@" ;;
+"C-slash")  rotate 180 "$@" ;;
+esac
