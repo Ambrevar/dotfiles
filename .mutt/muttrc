@@ -69,6 +69,7 @@ set mime_forward_rest=yes
 set pager_index_lines=8
 
 ## Encoding
+set rfc2047_parameters=yes
 set send_charset="us-ascii:utf-8"
 
 ## Remove delay between mailbox switches.
