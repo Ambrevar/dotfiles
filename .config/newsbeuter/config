@@ -9,4 +9,7 @@ highlight article "^Author:" blue default bold
 highlight article "^Links?:" yellow default bold
 highlight article "^Date:" magenta default bold
 
+bind-key j down
+bind-key k up
+
 ## End
