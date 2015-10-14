@@ -1,14 +1,12 @@
-#!/bin/sh
-## 256 colors Zenburn theme
+## 256 colors classic theme
 
-cat <<EOF
-set my_bg = color237
-set my_new = color142
-set my_old = color172
-set my_uri = color108
-set my_flag = color116
-set my_tag = color116
-set my_tag_bg = color238
+set my_bg = black
+set my_new = brightcyan
+set my_old = brightred
+set my_uri = brightgreen
+set my_flag = brightyellow
+set my_tag = brightmagenta
+set my_tag_bg = $my_bg
 
 set my_address = color69
 set my_from = color201
@@ -21,12 +19,12 @@ set my_inreplyto = green
 set my_date = yellow
 set my_x = blue
 set my_sig = brightblack
-set my_attach = color116
-set my_attach_bg = color238
-set my_status = color174
-set my_status_bg = color235
-set my_indicator = color223
-set my_indicator_bg = color235
+set my_attach = white
+set my_attach_bg = $my_bg
+set my_status = brightwhite
+set my_status_bg = color240
+set my_indicator = white
+set my_indicator_bg = color69
 
 set my_quote0 = color28
 set my_quote1 = color29
@@ -36,4 +34,3 @@ set my_quote4 = color32
 set my_quote5 = color33
 set my_quote6 = color39
 set my_quote7 = color38
-EOF

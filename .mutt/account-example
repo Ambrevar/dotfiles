@@ -1,41 +1,40 @@
-# -*- mode:sh -*-
-## Mutt -- Personal account
+## Mutt -- Gmail account sample
 set imap_user=user@gmail.com
 set imap_pass=$my_pw_personal
 set from=$imap_user
 set hostname="gmail.com"
 
-set folder = imaps://user@imap.gmail.com/
-set spoolfile = +INBOX
-set postponed = +[Google Mail]/Drafts
+set folder=imaps://user@imap.gmail.com/
+set spoolfile=+INBOX
+set postponed=+[Gmail]/Drafts
 unset record ## Google does it automatically, so we do not want duplicates.
 
 ## Send options.
-set realname='User X'
+set realname='John Doe'
 set smtp_url=smtps://user:$imap_pass@smtp.gmail.com
-set ssl_force_tls = yes
+set ssl_force_tls=yes
 unset ssl_starttls
 
-## Signatures
-## Note that fortune-mod must be installed to use fortune command.
-set signature="cat ~/.mutt/real_name && cat ~/.mutt/asciiribbon && fortune -s|"
+## Signature with a random 'fortune'.
+set signature="cat ~/.mutt/real_name && fortune -s |"
 
 ## Sidebar mailboxes separator workaround.
-mailboxes "+A-- User -----------"
+mailboxes "+A-- Personal -------"
 
 ## Hooks
 account-hook $folder "set imap_user=user@gmail.com imap_pass=$my_pw_personal"
 ## Reset PGP send-hooks.
 ## TODO: unhook does not seem to be working.
 unhook send-hook
+send-hook . 'unset pgp_autosign; unset pgp_autoencrypt'
 
-## Remove your e-mail from group-reply.
+## Remove own e-mail address from group-reply.
 alternates $imap_user
 
 ## Gmail-specific macros:
 ## Prevent Gmail from deleting to 'All Mail', move it to Trash instead.
-# macro index d ";s+[Gmail]/Trash<enter><enter>" "Move to Gmail's Trash"
-# macro pager d "s+[Gmail]/Trash<enter><enter>" "Move to Gmail's Trash"
+macro index d ";s+[Gmail]/Trash<enter><enter>" "Move to Gmail's Trash"
+macro pager d "s+[Gmail]/Trash<enter><enter>" "Move to Gmail's Trash"
 ## Undelete messages.
-# macro index u ";s+INBOX<enter><enter>" "Move to Gmail's INBOX"
-# macro pager u "s+INBOX<enter><enter>" "Move to Gmail's INBOX"
+macro index u ";s+INBOX<enter><enter>" "Move to Gmail's INBOX"
+macro pager u "s+INBOX<enter><enter>" "Move to Gmail's INBOX"

@@ -276,8 +276,9 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey,  }, "p", function () awful.util.spawn("zathura") end),
 
 	-- Mail user agent
-	awful.key({ modkey,  }, "m", function () awful.util.spawn(term .. "mutt") end),
-	awful.key({ }, "XF86Mail",   function () awful.util.spawn(term .. "mutt") end),
+	-- Mutt needs to be started in the folder where you want to save attachments.
+	awful.key({ modkey,  }, "m", function () awful.util.spawn(term .. "sh -c 'cd ~/temp && mutt'") end),
+	awful.key({ }, "XF86Mail",   function () awful.util.spawn(term .. "sh -c 'cd ~/temp && mutt'") end),
 
 	-- Web browser
 	awful.key({ modkey, }, "w",       function () awful.util.spawn_with_shell("dwb 2>>/tmp/dwb" .. uid .. ".log") end),

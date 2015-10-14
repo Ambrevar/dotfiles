@@ -20,10 +20,7 @@ bind index,pager \CP sidebar-prev
 bind index,pager \CN sidebar-next
 bind index,pager \CO sidebar-open
 
-## Toggle sidebar visibility
-# macro index b '<enter-command>toggle sidebar_visible<enter>'
-# macro pager b '<enter-command>toggle sidebar_visible<enter>'
-## Prevent messy output
+## Toggle sidebar visibility. Screen might get messed up, hence the refresh.
 macro index b '<enter-command>toggle sidebar_visible<enter><refresh>'
 macro pager b '<enter-command>toggle sidebar_visible<enter><redraw-screen>'
 EOF

@@ -20,7 +20,8 @@ fi
 if command -v mutt >/dev/null 2>&1; then
 	echo "==> Mutt"
 	[ -d "$SOURCEDIR" ] && ln -snf "$SOURCEDIR/mails" "$HOME/.mutt.d"
-	mkdir -p "$HOME/.cache/mutt/"
+	mkdir -p "$HOME/.cache/mutt/headers"
+	mkdir -p "$HOME/.cache/mutt/messages"
 	echo
 fi
 
