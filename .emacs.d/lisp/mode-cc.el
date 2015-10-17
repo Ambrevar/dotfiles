@@ -55,13 +55,17 @@ restored."
 (defun cc-fmt ()
   "Run uncrustify(1) on current buffer."
   (interactive)
+  (unless mark-active
+    (mark-whole-buffer))
+  (when (> (point) (mark))
+    (exchange-point-and-mark))
   (let ((status)
         (formatbuf (get-buffer-create "*C format buffer*")))
     (setq status
-          (call-process-region (point-min) (point-max) "uncrustify" nil formatbuf nil "-lc" "-q"))
+          (call-process-region (point) (mark) "uncrustify" nil formatbuf nil "-lc" "-q"))
     (if (/= status 0)
         (error "Bad formatted C file")
-      (delete-region (point-min) (point-max))
+      (delete-region (point) (mark))
       (insert-buffer formatbuf)
       (kill-buffer formatbuf))))
 
