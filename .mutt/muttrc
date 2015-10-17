@@ -169,6 +169,9 @@ bind index "^" imap-fetch-mail
 ## Changed kbs=^H to kbs=\177, then:
 ##   $ tic -x termbs.src
 
+## Remove N/O flag in one key stroke.
+macro index <Esc>n '<clear-flag>N'
+
 ## Vi/Emacs bindings.
 bind pager j next-line
 bind pager k previous-line
@@ -178,8 +181,6 @@ bind attach,index,pager ? search-reverse
 bind attach,index,pager h help
 bind attach,index,pager \Ch display-toggle-weed
 bind attach,index,pager N search-opposite
-bind index <Esc>n toggle-new
-bind pager <Esc>n mark-as-new
 bind index <Esc>x collapse-thread
 bind index <Esc>X collapse-all
 bind attach,index,pager \CV next-page
