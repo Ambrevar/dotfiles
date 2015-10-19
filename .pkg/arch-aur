@@ -4,7 +4,6 @@ clyrics-git
 cppcheck-nox
 demlo
 docx2txt
-dwb-git
 emacs-guess-style-git
 ff-git
 freds-imagemagick-scripts
@@ -16,6 +15,7 @@ multimarkdown
 mutt-sidebar
 peg-multimarkdown-latex-support-git
 pkgtools
+qutebrowser
 sdlmame-wout-toolkits
 tespeed-git
 texlive-dummy

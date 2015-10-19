@@ -1,13 +1,13 @@
 [Default Applications]
 application/pdf=zathura.desktop
-text/html=dwb.desktop
-x-scheme-handler/http=dwb.desktop
-x-scheme-handler/https=dwb.desktop
-x-scheme-handler/ftp=dwb.desktop
-x-scheme-handler/chrome=dwb.desktop
-application/x-extension-htm=dwb.desktop
-application/x-extension-html=dwb.desktop
-application/x-extension-shtml=dwb.desktop
-application/xhtml+xml=dwb.desktop
-application/x-extension-xhtml=dwb.desktop
-application/x-extension-xht=dwb.desktop
+text/html=qutebrowser.desktop
+x-scheme-handler/http=qutebrowser.desktop
+x-scheme-handler/https=qutebrowser.desktop
+x-scheme-handler/ftp=qutebrowser.desktop
+x-scheme-handler/chrome=qutebrowser.desktop
+application/x-extension-htm=qutebrowser.desktop
+application/x-extension-html=qutebrowser.desktop
+application/x-extension-shtml=qutebrowser.desktop
+application/xhtml+xml=qutebrowser.desktop
+application/x-extension-xhtml=qutebrowser.desktop
+application/x-extension-xht=qutebrowser.desktop

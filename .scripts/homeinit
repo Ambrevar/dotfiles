@@ -31,31 +31,26 @@ if [ -d "$SOURCEDIR/todo" ]; then
 	echo
 fi
 
-## dwb -- Install extensions.
-if command -v dwbem >/dev/null 2>&1; then
-	echo "==> dwb"
-
-	# [ $(dwbem -l | grep -c "adblock_subscriptions") -eq 0 ] && dwbem -Ni adblock_subscriptions
-	[ $(dwbem -l | grep -c "navtools") -eq 0 ] && dwbem -Ni navtools
-	[ $(dwbem -l | grep -c "contenthandler") -eq 0 ] && dwbem -Ni contenthandler
-	# dwbem -Ni youtube_html5
-
-	(cd ~/.config/dwb/userscripts/ && git checkout extension_loader.js)
-	echo
-fi
-
 ## Bookmarks
 if [ -d "$SOURCEDIR" ]; then
 	echo "==> Bookmarks"
 	if [ -z "$BROWSER" ]; then
 		echo "Variable BROWSER is not set."
 	else
-		BROWSER_DATA_DIR="$XDG_DATA_HOME/$BROWSER/"
-		[ "$BROWSER" = "dwb" ] && BROWSER_DATA_DIR="$XDG_CONFIG_HOME/$BROWSER/default/"
-
-		[ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/bookmarks/bookmarks" "$BROWSER_DATA_DIR"
-		[ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/bookmarks/quickmarks" "$BROWSER_DATA_DIR"
-		[ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/bookmarks/cookies.allow" "$BROWSER_DATA_DIR"
+		case "$BROWSER" in
+		dwb)
+			BOOKMARKS="$XDG_CONFIG_HOME/$BROWSER/default/"
+			QUICKMARKS="$XDG_CONFIG_HOME/$BROWSER/default/" ;;
+		qutebrowser)
+			mkdir -p "$XDG_CONFIG_HOME/$BROWSER/bookmarks"
+			BOOKMARKS="$XDG_CONFIG_HOME/$BROWSER/bookmarks/urls"
+			QUICKMARKS="$XDG_CONFIG_HOME/$BROWSER/" ;;
+		*)
+			BOOKMARKS="$XDG_CONFIG_HOME/$BROWSER/"
+			QUICKMARKS="$XDG_CONFIG_HOME/$BROWSER/" ;;
+		esac
+		ln -sf "$SOURCEDIR/bookmarks/bookmarks" "$BOOKMARKS"
+		ln -sf "$SOURCEDIR/bookmarks/quickmarks" "$QUICKMARKS"
 	fi
 	echo
 fi

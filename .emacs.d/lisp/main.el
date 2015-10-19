@@ -249,11 +249,12 @@
 ;; Do not open other window for buffer menu, plus hide non-file buffers.
 (define-key my-keys-minor-mode-map (kbd "C-x C-b") 'bs-show)
 
-;; Remove auto-fill in dwb edit because wikis and forums do not like it.
+;; Remove auto-fill in web edits because wikis and forums do not like it.
+;; This works for qutebrowser, but may need changes for other browsers.
 (add-hook
  'find-file-hook
  (lambda ()
-   (if (string-match "edit*" (buffer-name))
+   (if (string-match (concat (getenv "BROWSER") "-editor-*") (buffer-name))
        (auto-fill-mode -1))))
 
 ;; Speedbar options.

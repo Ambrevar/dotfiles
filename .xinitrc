@@ -15,11 +15,3 @@ fi
 ## when 'exec' is not called. But why?
 # command -v sessionclean >/dev/null 2>&1 && sessionclean
 
-## Crappy desktops
-# exec openbox-session
-# exec razor-session
-# exec cinnamon-session
-# exec startkde
-# exec startlxde
-# exec gnome-session
-

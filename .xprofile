@@ -1,16 +1,22 @@
 #!/bin/sh
 ## This file is sourced by some DM and should not contain any desktop execution.
 
-## X config (for URxvt, etc.)
-[ -f "${HOME}/.Xresources" ] && xrdb -merge "${HOME}/.Xresources"
+## Internet browsers. They need X to run.
+for i in qutebrowser dwb luakit chromium google-chrome; do
+	command -v $i >/dev/null 2>&1 && export BROWSER=$i && break
+done
 
-## Numlock
-numlockx on
+## X resources for URxvt et al.
+[ -f "$HOME/.Xresources" ] && xrdb -merge "$HOME/.Xresources"
+## Dynamic values. We could have defined the value from a variable in
+## .Xresources which we would have set with the preprocessor. But the login
+## manager may merge after sourcing this file without setting the preprocessor
+## variable, thus overwriting the value with the variable name.
+echo "URxvt.url-select.launcher: $BROWSER" | xrdb -merge
 
-## Keymap
+## Load custom keymap and configure input devices.
 xkbcomp -I"$HOME/.xkb" "$HOME/.xkb/usim.xkb" $DISPLAY
-
-## Disable Touchpad
+numlockx on
 synclient TouchpadOff=1
 
 if [ "$OSTYPE" = "linux-gnu" ] ; then
@@ -21,9 +27,9 @@ if [ "$OSTYPE" = "linux-gnu" ] ; then
 	command -v udiskie >/dev/null 2>&1 && udiskie &
 fi
 
-## This env variable is used by some programs (like ranger and awesome) to get
+## This env variable is used by some programs (e.g. ranger, awesome) to get the
 ## terminal executable name.
 export TERMCMD="urxvt"
 
-## Hook. Should be sourced last
+## Hook. Should be sourced last.
 [ -f ~/.xprofile_hook ] && . ~/.xprofile_hook

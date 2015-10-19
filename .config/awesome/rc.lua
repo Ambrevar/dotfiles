@@ -32,7 +32,7 @@ if ostype == "Linux" then
 end
 
 -- Custom variables.
-local termcmd = os.getenv("TERMCMD") or "urxvt"
+local termcmd = os.getenv("TERMCMD")
 local term = termcmd .. " -e "
 local home = os.getenv("HOME")
 
@@ -281,8 +281,8 @@ globalkeys = awful.util.table.join(
 	awful.key({ }, "XF86Mail",   function () awful.util.spawn(term .. "sh -c 'cd ~/temp && mutt'") end),
 
 	-- Web browser
-	awful.key({ modkey, }, "w",       function () awful.util.spawn_with_shell("dwb 2>>/tmp/dwb" .. uid .. ".log") end),
-	awful.key({         }, "XF86WWW", function () awful.util.spawn_with_shell("dwb 2>>/tmp/dwb" .. uid .. ".log") end),
+	awful.key({ modkey, }, "w", function () awful.util.spawn(os.getenv("BROWSER")) end),
+	awful.key({ }, "XF86WWW",   function () awful.util.spawn(os.getenv("BROWSER")) end),
 
 	-- Music player
 	awful.key({ modkey,           }, "a", function () awful.util.spawn(term .. "cmus") end),

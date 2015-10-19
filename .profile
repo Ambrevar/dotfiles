@@ -1,9 +1,6 @@
 #!/bin/sh
-################################################################################
-## .profile
-################################################################################
-## This file is sourced by .xprofile and shell rc files to make sure it work in
-## TTY as well as under X.
+## This file should be automatically sourced by the login manager. We source it
+## manually from shell rc files to make sure it works in TTY as well
 
 ## Mask
 ## Result for 027 is: rwxr-x---
@@ -98,13 +95,7 @@ fi
 export EDITOR
 export GIT_EDITOR
 
-## Internet Browser
-for i in dwb luakit google-chrome; do
-	command -v $i >/dev/null 2>&1 && export BROWSER=$i && break
-done
-
 ## SSH-Agent
-## WARNING: this is insecure on machines where someone else has root access.
 command -v ssh-agent >/dev/null 2>&1 && eval "$(ssh-agent)"
 ## Kill ssh-agent on session end. Console login only.
 command -v sessionclean >/dev/null 2>&1 && trap 'sessionclean' 0

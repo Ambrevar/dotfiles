@@ -27,19 +27,17 @@ implementation is straightforward since I am using the Vicious plugin.
 This configuration is very version-sensitive, so make sure to use the latest
 build.
 
-### dwb
-
-Some custom options, download location, search engines, plugins, etc.
-Custom "fast-forward" javascript.
-
 ### Emacs
 
 Emacs daemon is flawlessly integrated thanks to a small _em_ script -- see the
-scripts folder. Unlike the terminal client, the graphical client does not return
-and spawns a new window. For these reasons the terminal client can prove useful
-in some contexts: Mutt, ranger bulkrename, git and dwb. I wrote a lot of Lisp
-helper functions and a custom theme with 256 colors, works for both text and
-graphical Emacs.
+scripts folder. _em_ forks and does not return. _emw_ and _emc_ (windowed and
+console version respectively) return to their caller. This can be useful in some
+contexts: Mutt, ranger bulkrename, git and web editing. The windowed version of
+Emacs is not limited to terminal capabilities. The console version has the
+advantage of not spawning a new window when already running in console.
+
+I wrote a lot of Lisp helper functions and a custom theme with 256 colors, works
+for both text and graphical Emacs.
 
 C-based modes: bindings to compile either from makefile or from a custom command
 if no makefile is found, formatting with Uncrustify, skeletons.

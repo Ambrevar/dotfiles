@@ -1,7 +1,6 @@
 # $Id$
 
 text/html; w3m -I %{charset} -T text/html; copiousoutput;
-# text/html; dwb %s; nametemplate=%s.html
 
 image/*; sxiv -- %s
 

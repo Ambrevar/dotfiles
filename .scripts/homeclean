@@ -1,13 +1,13 @@
 #!/bin/sh
 
-set -- "$HOME/.cache/dwb" \
-	"$HOME/.cache/emacs/backups" \
+set -- "$HOME/.cache/emacs/backups" \
 	"$HOME/.cache/emacs/elpa/archives" \
 	"$HOME/.cache/emacs/elpa/gnupg" \
 	"$HOME/.cache/emacs/ido.last" \
 	"$HOME/.cache/emacs/saveplace" \
 	"$HOME/.cache/mutt" \
 	"$HOME/.cache/rtorrent" \
+	"$HOME/.cache/qutebrowser" \
 	"$HOME/.cache/zsh" \
 	"$HOME/.cmus/autosave" \
 	"$HOME/.cmus/cache" \
@@ -16,18 +16,6 @@ set -- "$HOME/.cache/dwb" \
 	"$HOME/.cmus/queue.pl" \
 	"$HOME/.cmus/resume" \
 	"$HOME/.cmus/search-history" \
-	"$HOME/.config/dwb/default/commands.history" \
-	"$HOME/.config/dwb/default/cookies" \
-	"$HOME/.config/dwb/default/cookies_session.allow" \
-	"$HOME/.config/dwb/default/dwb-uni.fifo" \
-	"$HOME/.config/dwb/default/history" \
-	"$HOME/.config/dwb/default/hsts" \
-	"$HOME/.config/dwb/default/navigate.history" \
-	"$HOME/.config/dwb/default/plugindb" \
-	"$HOME/.config/dwb/default/plugins.allow" \
-	"$HOME/.config/dwb/default/scripts.allow" \
-	"$HOME/.config/dwb/default/search.history" \
-	"$HOME/.config/dwb/default/session" \
 	"$HOME/.config/gtk-2.0" \
 	"$HOME/.config/gtk-3.0" \
 	"$HOME/.config/ranger/bookmarks" \
@@ -37,6 +25,7 @@ set -- "$HOME/.cache/dwb" \
 	"$HOME/.gtk-bookmarks" \
 	"$HOME/.lesshst" \
 	"$HOME/.local/share/newsbeuter" \
+	"$HOME/.local/share/qutebrowser" \
 	"$HOME/.local/share/webkit" \
 	"$HOME/.mpv/watch_later" \
 	"$HOME/.mtap.fuseiso" \

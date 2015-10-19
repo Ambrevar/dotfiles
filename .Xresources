@@ -1,11 +1,5 @@
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!! Xresources
-!! 2013-08-04
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-!!------------------------------------------------------------------------------
-!! URxvt
-!! ------------------------------------------------------------------------------
+!!==============================================================================
+!! URxvt.
 !! url-select, clipboard and keyboard-select are provided in Muennich perl
 !! plugins.
 
@@ -17,10 +11,9 @@ URxvt.iso14755: False
 URxvt*saveLines: 5000
 URxvt*scrollBar: false
 
-!! URL Support
+!! URL Support.
 URxvt.perl-ext:             url-select
 URxvt.keysym.C-M-u:         perl:url-select:select_next
-URxvt.url-select.launcher:  dwb
 URxvt.url-select.underline: true
 
 URxvt.perl-ext-common:      keyboard-select,clipboard
@@ -32,9 +25,9 @@ URxvt.clipboard.autocopy:   true
 URxvt.clipboard.pastecmd:   xclip -o -selection primary -quiet
 URxvt.clipboard.copycmd:    xclip -i -selection primary
 
-!!==============================================================================
-!! Font
-!!==============================================================================
+!!------------------------------------------------------------------------------
+!! Fonts.
+
 !! WARNING: some Xft fonts (DejaVu, Liberation) seem to be messy with w3m image preview.
 ! URxvt*font: xft:Liberation Mono:pixelsize=14
 ! URxvt*font: xft:Dejavu Sans Mono:pixelsize=14
@@ -59,9 +52,9 @@ Xft.rgba: rgb
 !! If not patched for letter spacing, this option might help.
 ! URxvt*letterSpace: -1
 
-!!==============================================================================
-!! Styles
-!!==============================================================================
+!!------------------------------------------------------------------------------
+!! Styles.
+
 !! Find more styles on:
 !! http://xcolors.net/
 !! http://xcolors.net/dl/derp
@@ -91,9 +84,7 @@ URxvt.color15 : white
 
 !!==============================================================================
 !! Xterm
-!!==============================================================================
 
-*VT100*translations: #override Meta <Btn1Up>: exec-formatted("dwb '%t'", PRIMARY)
 ! XTerm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
 ! xterm.font:              xft:Dina:pixelsize=18
 ! xterm*font       : -*-dejavu sans-medium-r-*-*-14-*-*-*-*-*-*-*
