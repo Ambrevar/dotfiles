@@ -145,7 +145,7 @@ bind editor <Tab> complete-query
 bind generic,alias,attach,browser,editor,index,compose,pager,pgp,postpone ':' noop
 
 ## HTML mail view with graphical Internet browser.
-macro attach 'V' "<pipe-entry>cat >~/.cache/mutt/mutt-attach.mail && $BROWSER ~/.cache/mutt/mutt-attach.mail && rm ~/.cache/mutt/mutt-attach.mail<enter>"
+macro attach 'V' "<pipe-entry>~/.mutt/view-html.sh<enter>"
 
 ## Remap bounce-message function to "B"
 bind index B bounce-message
