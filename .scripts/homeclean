@@ -34,30 +34,26 @@ set -- "$HOME/.cache/emacs/backups" \
 	"$HOME/.w3m" \
 	"$HOME/.zcompdump"
 
-## POSIX can store only one list at a time. Here we rely on the fact there is no
-## space in the file names.
-RMLIST_CRITICAL="$HOME/.mutt.pwds.cpt $HOME/.ssh/"
-
-echo "==> List of files to be removed."
+echo "==> Files to be removed"
 echo "$@" | sed 's/ /\n/g'
 echo
-echo "==> List of files to be wiped."
-echo "$RMLIST_CRITICAL" | sed 's/ /\n/g'
+echo "==> Files to be wiped:"
+echo "Mutt passwords and ssh keys."
 
 CHOICE="N"
 echo
-echo ":: Remember to close all applications for cleaning."
+echo ":: Close all applications before cleaning."
 echo "==> Clean home? [y/N]"
 read CHOICE
-CHOICE="$(echo $CHOICE | tr [:lower:] [:upper:])"
-if [ "$CHOICE" != "Y" ]; then
+case "$CHOICE" in
+Y|y) ;;
+*)
 	echo "Nothing done."
-	exit
-fi
+	exit ;;
+esac
 
-## Clean trash if possible.
 echo
-echo "==> Emptying trash."
+echo "==> Empty trash."
 if ! command -v trash-empty >/dev/null 2>&1; then
 	echo ":: 'trash-empty' not installed, you have to clean other drives manually."
 	rm -rvf "$HOME/.local/share/Trash"
@@ -65,20 +61,16 @@ else
 	trash-empty
 fi
 
-## Remove data.
 echo
 echo "==> Remove dotfiles."
 rm -rvf "$@"
 
-## Wipe data
 echo
-echo "==> Remove critical data."
-if [ "$(echo "$HOME" | grep -c ' ')" -ne 0 ]; then
-	echo 'WARNING: $HOME contains spaces, skipping.'
-else
-	shred -zuv $RMLIST_CRITICAL
-	# wipe -rdzp2 $RMLIST_CRITICAL
+echo "==> Wipe critical data."
+shred -zuv ~/.mutt.pwds.cpt
+for key in ~/.ssh/*.pub; do
+	shred -zuv "$key" "${key%.pub}"
+done
+if [ -n "$(gpg --list-secret-keys)" ]; then
+	echo "WARNING: Found PGP secret keys."
 fi
-
-echo
-echo "==> Cleaning done."
