@@ -16,5 +16,5 @@ while IFS= read -r i; do
 	rm "$i"
 	[ $(du -s . | cut -f1 -d'	') -lt $CACHE_LIMIT ] && exit
 done <<EOF
-$(ls -rt "$(find . -type f)")
+$(find . -type f -exec ls -rt1 {} +)
 EOF
