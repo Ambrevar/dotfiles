@@ -1,15 +1,14 @@
 asmutils
 brainfuck
-chromium-pepper-flash
 clyrics-git
 cppcheck-nox
 demlo
 docx2txt
-dwb-git
 emacs-guess-style-git
 ff-git
 freds-imagemagick-scripts
 fzf
+getver
 google-talkplugin
 lib32-libpng12
 lib32-sdl_mixer
@@ -28,6 +27,8 @@ mutt-sidebar
 peg-multimarkdown-latex-support-git
 perspector
 pkgtools
+python-pypeg2
+qutebrowser-git
 sdlmame-wout-toolkits
 slnunicode-git
 streetsofrageremake

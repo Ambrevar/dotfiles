@@ -66,7 +66,6 @@ cdrtools
 chicken
 chmlib
 chromaprint
-chromium
 chrpath
 cloc
 cmus
@@ -107,7 +106,6 @@ dnsmasq
 dnssec-anchors
 dosbox
 dosfstools
-dotconf
 driconf
 dtach
 dvtm
@@ -165,6 +163,7 @@ gdbm
 gdk-pixbuf2
 gegl02
 gens-gs
+geoclue
 geoclue2
 gettext
 ghostscript
@@ -223,6 +222,7 @@ gtypist
 guile
 guile1.8
 guvcview
+gv
 gzip
 harfbuzz
 harfbuzz-icu
@@ -236,6 +236,7 @@ hspell
 htop
 hunspell
 hwids
+hyphen
 iana-etc
 icu
 ifplugd
@@ -306,6 +307,7 @@ lib32-icu
 lib32-json-c
 lib32-keyutils
 lib32-krb5
+lib32-lcms2
 lib32-libasyncns
 lib32-libcap
 lib32-libcups
@@ -353,6 +355,7 @@ lib32-libxmu
 lib32-libxrandr
 lib32-libxrender
 lib32-libxshmfence
+lib32-libxss
 lib32-libxt
 lib32-libxtst
 lib32-libxxf86vm
@@ -394,6 +397,7 @@ libcap-ng
 libcdaudio
 libcddb
 libcdio
+libcdio-paranoia
 libcgns-paraview
 libcroco
 libcue
@@ -431,6 +435,7 @@ libid3tag
 libidn
 libiec61883
 libieee1284
+libinput
 libiptcdata
 libjpeg-turbo
 libksba
@@ -521,6 +526,7 @@ libxft
 libxi
 libxinerama
 libxkbcommon
+libxkbcommon-x11
 libxkbfile
 libxml2
 libxmu
@@ -671,7 +677,6 @@ perl-dbi
 perl-digest-sha1
 perl-encode-locale
 perl-error
-perl-file-basedir
 perl-file-listing
 perl-file-next
 perl-file-slurp-tiny
@@ -688,7 +693,6 @@ perl-http-server-simple
 perl-image-exiftool
 perl-io-html
 perl-io-socket-ssl
-perl-ipc-system-simple
 perl-libwww
 perl-lwp-mediatypes
 perl-lwp-protocol-https
@@ -733,6 +737,7 @@ pyalpm
 pygobject2-devel
 pygobject-devel
 pygtk
+pyqt5-common
 python
 python2
 python2-cairo
@@ -759,17 +764,30 @@ python-dbus-common
 python-docopt
 python-docutils
 python-gobject
+python-jinja
+python-markupsafe
 python-packaging
 python-pafy
 python-pillow
 python-pyelftools
 python-pygments
+python-pyqt5
 python-requests
 python-setuptools
+python-sip
+python-unidecode
 python-urllib3
-python-xdg
 python-yaml
 qpdf
+qt5-base
+qt5-declarative
+qt5-location
+qt5-sensors
+qt5-webchannel
+qt5-webkit
+qt5-xmlpatterns
+qtchooser
+ragel
 randrproto
 ranger
 raptor
@@ -803,22 +821,23 @@ sdparm
 sed
 serd
 serf
+setconf
 shadow
 shared-mime-info
+sip
 slock
 smpeg
 s-nail
-snappy
 sord
 sound-theme-freedesktop
 soundtouch
-speech-dispatcher
 speex
 speexdsp
 splint
 sqlite
 squashfs-tools
 sratom
+srcpac
 startup-notification
 steam
 stfl
@@ -826,6 +845,7 @@ strace
 subdl
 subversion
 sudo
+surf
 sxiv
 sysfsutils
 syslinux
@@ -863,6 +883,7 @@ txt2man
 tzdata
 udiskie
 udisks2
+units
 unrar
 unrtf
 unshield
@@ -884,7 +905,9 @@ vsftpd
 w3m
 wavpack
 wayland
+webkit2gtk
 webkitgtk2
+weechat
 wget
 which
 wildmidi
@@ -899,6 +922,7 @@ wpa_supplicant
 wxgtk2.8
 x264
 x265
+xaw3d
 xbitmaps
 xcb-proto
 xcb-util
@@ -922,6 +946,7 @@ xfsprogs
 xine-lib
 xineramaproto
 xkeyboard-config
+xloadimage
 xorg-bdftopcf
 xorg-fonts-alias
 xorg-fonts-encodings
