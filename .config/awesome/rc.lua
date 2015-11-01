@@ -163,7 +163,7 @@ if ostype == "Linux" then
 		vicious.register(batwidget, vicious.widgets.bat,
 			function (widget, args)
 				-- We check if time is displayed (otherwise it's 'N/A'), and if minutes are less than limit.
-				if args[1] == "-"
+				if args[1] == "−"
 					and string.len(args[3]) == 5
 					and tonumber(string.sub(args[3],1,2)) == 0
 					and tonumber(string.sub(args[3],4,5)) <= batlimit
