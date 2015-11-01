@@ -353,10 +353,10 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey, "Shift" }, "j", function () awful.client.incwfact(-0.05) end),
 
 	-- Layout organization
-	awful.key({ modkey, "Shift" }, "Left", function () awful.tag.incnmaster( 1) end),
-	awful.key({ modkey, "Shift" }, "Right",  function () awful.tag.incnmaster(-1) end),
-	awful.key({ modkey, "Shift" }, "Up",    function () awful.tag.incncol( 1)    end),
-	awful.key({ modkey, "Shift" }, "Down",  function () awful.tag.incncol(-1)    end),
+	awful.key({ modkey }, "Left", function () awful.tag.incnmaster( 1) end),
+	awful.key({ modkey }, "Right",  function () awful.tag.incnmaster(-1) end),
+	awful.key({ modkey }, "Up",    function () awful.tag.incncol( 1)    end),
+	awful.key({ modkey }, "Down",  function () awful.tag.incncol(-1)    end),
 
 	-- Multi screen
 	awful.key({ modkey, "Shift" }, "Next", function () awful.screen.focus_relative( 1) end),
