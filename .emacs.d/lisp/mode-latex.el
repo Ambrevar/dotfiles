@@ -55,7 +55,7 @@
    (set (make-local-variable 'tex-command) "pdflatex")
    ;; For some unknown reasons, `skeleton-end-hook' is set to nil in tex-mode.
    (add-hook 'skeleton-end-hook 'skeleton-make-markers)
-   (local-set-key (kbd "C-c a") 'latex-article)
+   (local-set-key (kbd "C-c m") 'latex-article)
    (local-set-key (kbd "C-c C-a") 'latex-insert-table)
    (local-set-key (kbd "C-c C-c") 'latex-smallcaps)
    (local-set-key (kbd "C-c C-e") 'latex-emph)
