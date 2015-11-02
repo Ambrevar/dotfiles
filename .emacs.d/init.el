@@ -84,6 +84,10 @@ Example: to assign some-function to C-i, use
 (autoload 'asy-insinuate-latex "asy-mode.el" "Asymptote insinuate LaTeX." t)
 (add-to-list 'auto-mode-alist '("\\.asy$" . asy-mode))
 
+(autoload 'maxima-mode "maxima" "Maxima mode" t)
+(autoload 'maxima "maxima" "Maxima interaction" t)
+(setq auto-mode-alist (cons '("\\.mac" . maxima-mode) auto-mode-alist))
+
 (load-external "\\.bbcode\\'" 'bbcode-mode)
 (add-hook 'bbcode-mode-hook (lambda () (require 'mode-bbcode)))
 
