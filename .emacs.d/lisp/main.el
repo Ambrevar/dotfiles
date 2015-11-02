@@ -373,6 +373,9 @@
 (define-key my-keys-minor-mode-map (kbd "C-<mouse-4>") 'text-scale-increase)
 (setq text-scale-mode-step 1.1)
 
+;; Sort
+(setq sort-fold-case t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'main)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
