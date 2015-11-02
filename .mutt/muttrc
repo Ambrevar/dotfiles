@@ -172,6 +172,10 @@ bind index "^" imap-fetch-mail
 ## Remove N/O flag in one key stroke.
 macro index <Esc>n '<clear-flag>N'
 
+## Do not quit accidentally
+bind index "Q" quit
+bind index "q" query
+
 ## Vi/Emacs bindings.
 bind pager j next-line
 bind pager k previous-line
