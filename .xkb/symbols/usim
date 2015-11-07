@@ -27,8 +27,8 @@
 // ┃        ┃ A Á │ S § │ D Â │ F Ê │ G Î │ H Ô │ J Û │ K Œ │ L Æ │ : ° │ " ¨ │ | ¦ ┃      ┃
 // ┃Ctrl    ┃ a á │ s ß │ d â │ f ê │ g î │ h ô │ j û │ k œ │ l æ │ ; ° │ ' ´ │ \ ¬ ┃      ┃
 // ┣━━━━━━━┳┹────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┲┷━━━━━┻━━━━━━┫
-// ┃       ┃ > ≥ │ Z Ä │ X Ë │ C Ï │ V Ö │ B Ü │ N Ñ │ M µ │ < Ç │ >   │ ? ¿ ┃             ┃
-// ┃Shift ⇧┃ < ≤ │ z ä │ x ë │ c ï │ v ö │ b ü │ n ñ │ m µ │ , ç │ . … │ / ¶ ┃Shift ⇧      ┃
+// ┃       ┃ > ≥ │ Z Ä │ X Ë │ C Ï │ V Ö │ B Ü │ N Ñ │ M Ø │ < Ç │ > µ │ ? ¿ ┃             ┃
+// ┃Shift ⇧┃ < ≤ │ z ä │ x ë │ c ï │ v ö │ b ü │ n ñ │ m ø │ , ç │ . … │ / ¶ ┃Shift ⇧      ┃
 // ┣━━━━━━━╋━━━━━┷━┳━━━┷━━━┱─┴─────┴─────┴─────┴─────┴─────┴───┲━┷━━━━━╈━━━━━┻━┳━━━━━━━┳━━━┛
 // ┃Caps   ┃       ┃       ┃ ␣            Non-breaking space ⍽ ┃       ┃       ┃       ┃
 // ┃Lock ⇬ ┃Meta   ┃Alt    ┃ ␣ Space                         ⍽ ┃AltGr ⇮┃Menu   ┃Ctrl   ┃
@@ -84,9 +84,9 @@ partial alphanumeric_keys xkb_symbols "usim" {
 	key <AB04> { [ v,         V,        odiaeresis, Odiaeresis   ] };
 	key <AB05> { [ b,         B,        udiaeresis, Udiaeresis   ] };
 	key <AB06> { [ n,         N,        ntilde,     Ntilde       ] };
-	key <AB07> { [ m,         M,        mu,         mu           ] };
+	key <AB07> { [ m,         M,        oslash,     Ooblique     ] };
 	key <AB08> { [ comma,     less,     ccedilla,   Ccedilla     ] };
-	key <AB09> { [ period,    greater,  0x1002026,   0x1002026   ] };
+	key <AB09> { [ period,    greater,  0x1002026,  mu           ] };
 	key <AB10> { [ slash,     question, paragraph,  questiondown ] };
 	key <BKSL> { [ backslash, bar,      notsign,    brokenbar    ] };
 
