@@ -106,3 +106,7 @@ autoload -U promptinit
 promptinit
 prompt adam2
 
+##==============================================================================
+## fzf (external)
+
+[ -f /etc/profile.d/fzf.zsh ] && . /etc/profile.d/fzf.zsh
