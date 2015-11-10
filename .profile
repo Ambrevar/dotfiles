@@ -128,6 +128,11 @@ if command -v systemctl >/dev/null 2>&1; then
 	fi
 fi
 
+## fzf
+if command -v fzf >/dev/null 2>&1; then
+	export FZF_DEFAULT_OPTS="--cycle --extended --multi"
+fi
+
 ## Hook. Should be sourced last
 [ -f ~/.profile_hook ] && . ~/.profile_hook
 ################################################################################
