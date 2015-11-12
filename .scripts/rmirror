@@ -1,8 +1,8 @@
 #!/bin/sh
 
-opt_dry=""
-if [ "$1" = "-n" ]; then
-	opt_dry="-n"
+opt_dry="-n"
+if [ "$1" = "-p" ]; then
+	opt_dry=""
 	shift
 fi
 
@@ -14,9 +14,11 @@ Use rsync to mirror SOURCE to DEST while showing progress and allowing resuming.
 SOURCE does not need to be ending with a trailing slash. Only size is used for
 comparison.
 
+A dry-run is made by default.
+
 Options:
 
-  -n: Dry-run.
+  -p: Process.
 
 EOF
 
