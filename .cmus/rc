@@ -32,3 +32,4 @@ fset mp3=filename="*.mp3"
 fset ogg=filename="*.ogg"
 fset ogg-or-mp3=ogg|mp3
 factivate
+colorscheme night
