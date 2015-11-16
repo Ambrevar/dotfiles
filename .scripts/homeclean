@@ -1,16 +1,19 @@
 #!/bin/sh
 
-set -- "$HOME/.cache/emacs/backups" \
+set -- "$HOME/.cache/awesome" \
+	"$HOME/.cache/emacs/backups" \
+	"$HOME/.cache/emacs/desktop" \
 	"$HOME/.cache/emacs/elpa/archives" \
 	"$HOME/.cache/emacs/elpa/gnupg" \
+	"$HOME/.cache/emacs/emacs.bmk" \
 	"$HOME/.cache/emacs/ido.last" \
 	"$HOME/.cache/emacs/saveplace" \
 	"$HOME/.cache/mutt" \
-	"$HOME/.cache/rtorrent" \
 	"$HOME/.cache/qutebrowser" \
 	"$HOME/.cache/zsh" \
 	"$HOME/.cmus/autosave" \
 	"$HOME/.cmus/cache" \
+	"$HOME/.cmus/command-history" \
 	"$HOME/.cmus/lib.pl" \
 	"$HOME/.cmus/playlist.pl" \
 	"$HOME/.cmus/queue.pl" \
@@ -18,6 +21,8 @@ set -- "$HOME/.cache/emacs/backups" \
 	"$HOME/.cmus/search-history" \
 	"$HOME/.config/gtk-2.0" \
 	"$HOME/.config/gtk-3.0" \
+	"$HOME/.config/qutebrowser/bookmarks" \
+	"$HOME/.config/qutebrowser/quickmarks" \
 	"$HOME/.config/ranger/bookmarks" \
 	"$HOME/.config/ranger/history" \
 	"$HOME/.config/ranger/tagged" \
@@ -30,6 +35,7 @@ set -- "$HOME/.cache/emacs/backups" \
 	"$HOME/.mpv/watch_later" \
 	"$HOME/.mtap.fuseiso" \
 	"$HOME/.pulse-cookie" \
+	"$HOME/.thumbnails" \
 	"$HOME/.viminfo" \
 	"$HOME/.w3m" \
 	"$HOME/.zcompdump"
