@@ -7,6 +7,7 @@
  (lambda ()
    (add-hook 'before-save-hook #'gofmt-before-save nil t)
    (local-set-key (kbd "C-c m") 'go-main)
+   (local-set-key (kbd "C-c C-d") 'godoc)
    (set (make-local-variable 'compile-command) (concat "go run " (shell-quote-argument buffer-file-name)))))
 
 (define-skeleton go-main
