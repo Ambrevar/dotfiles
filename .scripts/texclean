@@ -16,20 +16,22 @@ EOF
 fi
 
 for i ; do
-	while read -r FILE; do
-		case FILE in
+	while read -r file; do
+		case "$file" in
 		*/*) ;;
 		*)
-			FILE="./$FILE" ;;
+			file="./$file" ;;
 		esac
-		DIRNAME="${FILE%/*}"
-		BASENAME="${FILE##*/}"
-		BASENAME="${BASENAME%.*}"
-		rm -v $(
-			for j in aux bbl blg cp cps fn glg glo gls idx ilg ind ky lof log maf mt mtc nav out pg snm synctex.gz synctex tns toc tp vr vrs xdy
-			do
-				echo "$DIRNAME/$BASENAME.$j"
-			done) 2>/dev/null
+		dirname="${file%/*}"
+		basename="${file##*/}"
+		basename="${basename%.*}"
+		## Reset arg list (big performance boost).
+		set -- 
+		for j in aux bbl blg cp cps fn glg glo gls idx ilg ind ky lof log maf mt mtc nav out pg snm synctex.gz synctex tns toc tp vr vrs xdy
+		do
+			set -- "$@" "$dirname/$basename.$j"
+		done
+		rm -v "$@" 2>/dev/null
 	done <<EOF
 $(find "$i" -type f \( -name "*.tex" -o -name "*.texi" \) )
 EOF
