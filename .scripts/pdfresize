@@ -11,6 +11,12 @@ fi
 
 if [ ! -f "$1" ]; then
 	echo "$1 is not a valid file."
+	exit
+fi
+
+if [ -e "$2" ]; then
+	echo "$2 exists."
+	exit
 fi
 
 gs  -q -o "$2" -sDEVICE=pdfwrite -sPAPERSIZE=a4 -dFIXEDMEDIA -dPDFFitPage -dCompatibilityLevel=1.4 "$1"
