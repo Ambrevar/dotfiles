@@ -33,20 +33,30 @@ ALSACONF="/etc/asound.conf"
 HDMI_STATUS="$(cat /sys/class/drm/card0-HDMI-A-1/status)"
 [ -z "$HDMI_STATUS" ] && exit
 
-BUF="$(aplay -l | grep HDMI)"
+APLAY_BUF="$(aplay -l | grep HDMI)"
 _getprop() {
-	echo "$BUF" | awk -v prop="$1" '{for(i=1; i<NF; i++) if ($i == prop) { print substr($(i+1), 1,1); exit}}'
+	echo "$APLAY_BUF" | awk -v prop="$1" '{for(i=1; i<NF; i++) if ($i == prop) { print substr($(i+1), 1,1); exit}}'
 }
 
 CARD="$(_getprop card)"
 DEVICE="$(_getprop device)"
 
-udevadm settle --quiet --timeout=2
+udevadm settle --timeout=2
+
+XRANDR_BUF="$(xrandr)"
+
+PRIMARY="$(echo "$XRANDR_BUF" | awk '/^[[:alnum:]-]+ connected/ {print $1; exit}')"
+HDMI="$(echo "$XRANDR_BUF" | awk '/^HDMI-[[:digit:]]+ connected/ {print $1; exit}')"
+
+echo "PRIMARY=[$PRIMARY], HDMI=[$HDMI]"
 
 ## Video
-for i in $(xrandr | awk '/^[[:alnum:]-]+ connected/ {print $1}'); do
-	xrandr --output "$i" --auto
-done
+if [ -n "$HDMI" ]; then
+	# xrandr --output "$PRIMARY" --auto --primary --output "$HDMI" --auto --noprimary --right-of "$PRIMARY"
+	xrandr --output "$HDMI" --auto --noprimary --right-of "$PRIMARY"
+# else
+# 	xrandr --output "$HDMI" --off
+fi
 
 ## Sound
 if [ "$HDMI_STATUS" = "connected" ]; then
