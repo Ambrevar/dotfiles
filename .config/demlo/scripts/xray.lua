@@ -11,21 +11,21 @@ tags.date = ''
 tags.genre = ''
 
 -- Extract album code, assuming parent folder is 'XRCD## - $album'.
-XRCD = output.filename:match('/[^/]*(XRCD%d*)[^/]*/[^/]*$')
+XRCD = output.filename:match('/[^/]*(XRCD\d*)[^/]*/[^/]*$')
 
 -- Append the album code to the constants array, other it will be capitalized.
 constants [XRCD:upper()] = XRCD
 
-tags.album = not empty (o.album) and o.album:gsub ('XRCD - (%d+)', 'XRCD%1 - ') or 'Unknown album'
+tags.album = not empty (o.album) and o.album:gsub ('XRCD - (\d+)', 'XRCD$1 - ') or 'Unknown album'
 
 tags.title = o.title
 if empty(tags.title) then
-	tags.title = output.filename:match('[^/]+$'):gsub('%..+$', ''):gsub('X-Ray Dog[%s-]*', '')
+	tags.title = output.filename:match('[^/]+$'):gsub('\..+$', ''):gsub('X-Ray Dog[\s*?]*', '')
 end
 
 tags.track = o.track
 if empty(tags.track) then
-	tags.track = o.title:match('%d+')
+	tags.track = o.title:match('\d+')
 end
 
 output.tags = tags

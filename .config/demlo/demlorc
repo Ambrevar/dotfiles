@@ -1,62 +1,34 @@
--- -*- mode:lua -*-
--- Demlo configuration file.
+-- Demlo configuration file (Lua)
 
--- Remove embedded covers.
-clearcovers = true
+-- No colors by default since it may not work on all terminals.
+color = true
 
--- We do not use colors by default since it may not work properly on all
--- terminals. Feel free to turn it on if it works well on your system.
-colors = true
+-- Number of cores to use (0 for all).
+cores = 0
 
--- Words that will be written as is and will not be turned to titlecase.
-constants = ''
--- French
-constants = constants .. ' un une de du des le la les et mais pour ni ou à a où contre entre chez dans sur que qui  quoi comment quand '
--- German
-constants = constants .. ' der die das den dem des ein eine einen eines einer einem im wo an am in bei aus mit nach seit von zu vom zur zum durch für gegen ohne um '
--- Spanish
-constants = constants .. ' y '
--- Music
-constants = constants .. " d'Acide JBX "
+-- Extensions to look for when a folder is browsed.
+-- extensions = {'aac', 'mkv'}
 
--- Extension support for external covers. This is a pattern-matching string. For
--- instance 'jpe?g' will match both 'jpg' and 'jpeg'. Case is ignored. The value
--- is ignored, use 'true' or anything else.
-cover_extlist = { gif=true }
+-- Fetch cover from an online database.
+getcover = false
 
--- If true, extract covers from tags, copy covers in current folder, exclude
--- those outside the size boundaries.
-covers = true
-
--- Default format.
-format = 'ogg'
+-- Fetch tags from an online database.
+gettags = false
 
 -- Use human readable output instead of machine-friendly output.
 graphical = true
 
--- Root folder for output files.
-library = os.getenv('HOME') .. '/music'
-
--- Do not complete tags with online database.
-online = false
-
--- What to do if file exists.
-overwrite = false
+-- Lua code to run before and after the other scripts, respectively.
+prescript = ''
+postscript = ''
 
 -- If false, show preview and exit before processing.
 process = false
 
--- Re-encode.
-recode = true
+-- Remove source after processing. This can speed up the process when not
+-- re-encoding.
+removesource = false
 
--- We recurse into subfolders when walking tree.
-recursive = true
-
--- We copy file when the content is not modified.
-rename = false
-
--- You might want to set one of the official scripts by default.
--- scripts = 'tag sub case filename cover format'
-scripts = 'tag sub case filename cover'
-
--- End of configuration file.
+-- Scripts to run by default.
+-- Order matters, e.g. 'path' can be influenced by the modifications made by 'tag'.
+scripts = {'const', 'tag', 'sub', 'case', 'punctuation', 'encoding', 'path', 'cover'}
