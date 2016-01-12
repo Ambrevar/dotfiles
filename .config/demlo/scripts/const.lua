@@ -1,6 +1,8 @@
 -- Constants
 
-const = {
+const = const or {}
+
+const_custom = {
 	'AC',
 	'BYOB',
 	'DC',
@@ -68,3 +70,7 @@ const = {
 	-- Spanish
 	'y',
 }
+
+for _, v in ipairs(const_custom) do
+	const[#const+1] = v
+end
