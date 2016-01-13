@@ -241,8 +241,14 @@ local function move_mouse_away()
 	mouse.coords({ x=corner_coords.x, y=corner_coords.y })
 end
 
--- Optionally move the mouse when rc.lua is read (startup)
+-- Move the mouse when rc.lua is read (startup)
 move_mouse_away()
+
+local function move_mouse(x, y)
+	pos = mouse.coords()
+	local fact = 10
+	mouse.coords({ x=pos.x + fact*x, y=pos.y + fact*y })
+end
 
 --------------------------------------------------------------------------------
 -- Key bindings
@@ -362,6 +368,12 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey, "Shift" }, "Next", function () awful.screen.focus_relative( 1) end),
 	awful.key({ modkey, "Shift" }, "Prior", function () awful.screen.focus_relative(-1) end),
 
+	-- Keyboard controlled mouse
+	-- awful.key({ modkey, "Control" }, "Left",  function () move_mouse(-1, 0) end),
+	-- awful.key({ modkey, "Control" }, "Right", function () move_mouse(1, 0) end),
+	-- awful.key({ modkey, "Control" }, "Up",    function () move_mouse(0, -1) end),
+	-- awful.key({ modkey, "Control" }, "Down",  function () move_mouse(0, 1) end),
+	-- awful.key({ modkey, "Control" }, "KP_Enter",  function () awful.util.spawn("xdotool click 1") end),
 
 	-- Prompt
 	awful.key({ modkey }, "r", function () mypromptbox[mouse.screen]:run() end),
