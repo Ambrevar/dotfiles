@@ -22,16 +22,21 @@ const_custom = {
 	"d'Acide",
 
 	--French
-	'contre',
-	'entre',
+	'avec',
 	'chez',
 	'dans',
-	'sur',
+	'de',
+	'des',
+	'du',
+	'le',
+	'la',
+	'les',
 	'que',
 	'qui',
 	'quoi',
-	'comment',
-	'quand',
+	'sur',
+	'un',
+	'une',
 
 	-- German
 	'der',
