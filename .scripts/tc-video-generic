@@ -254,6 +254,7 @@ EOF
 	$OPT_PREVIEW && return
 
 	if $OPT_2PASS; then
+		echo ":: FIRST PASS"
 		ffmpeg -nostdin -y $SAMPLE -i "$1" \
 			$VIDEO_PARAM -pass 1 -tune film $VIDEO_FILTER \
 			$AUDIO_PARAM \
@@ -262,6 +263,8 @@ EOF
 			-map 0 $STREAM_TITLE \
 			$TC_VIDEO_OPT -f matroska /dev/null
 		VIDEO_PARAM="$VIDEO_PARAM -pass 2 -tune film"
+		echo
+		echo ":: SECOND PASS"
 	fi
 
 	ffmpeg -nostdin $OVERWRITE -i "$1" \
