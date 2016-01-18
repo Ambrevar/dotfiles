@@ -1,15 +1,17 @@
-set altformat_current= %F 
+set altformat_current= %F
 set altformat_playlist= %f%= %d 
 set altformat_title=%f
 set altformat_trackwin= %f%= %d 
 set auto_reshuffle=true
 set continue=true
-set format_current= %y. %l - %n. %a - %t 
-set format_playlist= %-18%A %4y. %-25%l %3n. %t%= %d 
-set format_playlist_va= %-18%A %4y. %-25%l %3n. %a - %t%= %d 
-set format_title= %y. %l - %n. %t 
-set format_trackwin= %4y %3n. %t%= %d [%{codec} %{bitrate} kbps]
-set format_trackwin_va= %4y %3n. %a - %t%= %d [%{codec} %{bitrate} kbps]
+set format_current= %a: %{?y?%y. }%{?l?%l - }%{?n!=0?%n. }%t
+set format_playlist= %-18%A %{?y?%4y.?     } %-25%l %{?n!=0?%3n.?    } %t%= %d 
+set format_playlist_va= %-18%A %4y. %-25%l%{?D? - Disc %D} %{?n!=0?%3n.?    } %a - %t%= %d 
+set format_title= %a: %{?y?%y. }%{?l?%l - }%{?n!=0?%n. }%t
+set format_trackwin= %{?D?[Disc %D] }%{?n!=0?%3n. }%t%= %d [%{codec} %4{bitrate} kbps] 
+set format_trackwin_album= %{?y?%y. }%l
+set format_trackwin_va= %{?D?[Disc %D] }%{?n!=0?%3n. }%a - %t%= %d [%{codec} %4{bitrate} kbps] 
+set format_treewin= %{?y?%y. }%l
 set lib_sort=albumartist date album discnumber tracknumber title filename
 set play_library=false
 set play_sorted=false
