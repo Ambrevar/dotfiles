@@ -109,4 +109,8 @@ prompt adam2
 ##==============================================================================
 ## fzf (external)
 
-[ -f /etc/profile.d/fzf.zsh ] && . /etc/profile.d/fzf.zsh
+if [ -f /etc/profile.d/fzf.zsh ]; then
+	. /etc/profile.d/fzf.zsh
+	bindkey '^T' transpose-chars
+	bindkey '\er' fzf-file-widget
+fi
