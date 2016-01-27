@@ -5,8 +5,8 @@ set altformat_trackwin= %f%= %d
 set auto_reshuffle=true
 set continue=true
 set format_current= %a: %{?y?%y. }%{?l?%l - }%{?n!=0?%n. }%t
-set format_playlist= %-18%A %{?y?%4y.?     } %-25%l %{?n!=0?%3n.?    } %t%= %d 
-set format_playlist_va= %-18%A %4y. %-25%l%{?D? - Disc %D} %{?n!=0?%3n.?    } %a - %t%= %d 
+set format_playlist= %-18%A %{?y?%4y.?     } %-25%l %{?D?[Disc %D] ?         }%{?n!=0?%3n.?    } %t%= %d 
+set format_playlist_va= %-18%A %{?y?%4y.?     } %-25%l %{?D?[Disc %D] ?         }%{?n!=0?%3n.?    } %a - %t%= %d 
 set format_title= %a: %{?y?%y. }%{?l?%l - }%{?n!=0?%n. }%t
 set format_trackwin= %{?D?[Disc %D] }%{?n!=0?%3n. }%t%= %d [%{codec} %4{bitrate} kbps] 
 set format_trackwin_album= %{?y?%y. }%l
