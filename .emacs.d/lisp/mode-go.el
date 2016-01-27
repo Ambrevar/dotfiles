@@ -2,6 +2,8 @@
 ;; Go
 ;;==============================================================================
 
+(require 'go-autocomplete nil t)
+
 (defun go-eval-buffer ()
   "Eval buffer with `go run'."
   (interactive)

@@ -166,6 +166,14 @@ Example: to assign some-function to C-i, use
   ;; Make ftf work on every file.
   (setq ftf-filetypes '("*")))
 
+(when (require 'auto-complete-config nil t)
+  (ac-config-default))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Other packages.
+
+;; go-scratch, fuzzy (for auto-complete).
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We need to put it at the end to make sure it doesn't get overriden by other
 ;; minor modes.
