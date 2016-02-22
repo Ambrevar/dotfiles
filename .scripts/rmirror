@@ -10,7 +10,7 @@ if [ "$1" = "-h" ] || [ $# -ne 2 ]; then
 	cat<<EOF
 Usage: ${0##*/} SOURCE DEST
 
-Use rsync to mirror SOURCE to DEST while showing progress and allowing resuming.
+Use rsync to mirror SOURCE to DEST while showing progress.
 SOURCE does not need to be ending with a trailing slash. Only size is used for
 comparison.
 
@@ -25,4 +25,4 @@ EOF
 	exit
 fi
 
-rsync $opt_dry -livr --size-only --delete-excluded --append-verify --progress -- "$1"/ "$2"
+rsync $opt_dry -livr --size-only --delete-excluded --progress -- "$1"/ "$2"
