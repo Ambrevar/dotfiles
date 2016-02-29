@@ -77,3 +77,10 @@ if [ -d "$SOURCEDIR" ]; then
 	ln -snf "$SOURCEDIR/hackpool" "$HOME/.hackpool"
 	echo
 fi
+
+## Go workspace
+if [ ! -d "$HOME/.go" ]; then
+	echo "==> Go"
+	mkdir "$HOME/.go"
+	echo
+fi
