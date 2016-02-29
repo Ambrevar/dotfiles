@@ -85,7 +85,7 @@ beautiful.init(awful.util.getdir("config") .. "/themes/occam/theme.lua")
 -- Wallpaper
 if beautiful.wallpaper then
 	for s = 1, screen.count() do
-		gears.wallpaper.maximized(beautiful.wallpaper, s, true)
+		gears.wallpaper.fit(beautiful.wallpaper, s)
 	end
 end
 
