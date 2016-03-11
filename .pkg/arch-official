@@ -42,7 +42,6 @@ bison
 blas
 blender
 bmake
-boost
 boost-libs
 bridge-utils
 bullet
@@ -264,7 +263,6 @@ iotop
 iproute2
 iptables
 iputils
-irrlicht
 irssi
 iso-codes
 iw
@@ -551,6 +549,7 @@ libvisual
 libvoikko
 libvorbis
 libvpx
+libwacom
 libwbclient
 libwebp
 libwmf
@@ -590,6 +589,7 @@ libxxf86dga
 libxxf86vm
 libyaml
 libzen
+libzip
 licenses
 lilv
 lilypond
@@ -727,6 +727,7 @@ perl
 perl-algorithm-diff
 perl-authen-sasl
 perl-clone
+perl-crypt-passwdmd5
 perl-dbi
 perl-digest-sha1
 perl-encode-locale
@@ -788,6 +789,8 @@ psmisc
 pstotext
 ptex
 pth
+pulseaudio
+pulseaudio-alsa
 pwgen
 pyalpm
 pygobject2-devel
@@ -819,6 +822,7 @@ python2-urllib3
 python2-yaml
 python-cairo
 python-chardet
+python-dbus
 python-dbus-common
 python-docopt
 python-docutils
@@ -826,6 +830,7 @@ python-gobject
 python-jinja
 python-markupsafe
 python-packaging
+python-pafy
 python-pillow
 python-pyelftools
 python-pyenchant
@@ -866,11 +871,13 @@ rlog
 rmlint
 rpcbind
 rsync
+rtkit
 rtmpdump
 run-parts
 rxvt-unicode
 rxvt-unicode-terminfo
 sane
+sbc
 sbcl
 sbsms
 schroedinger
@@ -940,7 +947,6 @@ timidity-freepats
 tk
 tmux
 transmission-cli
-transmission-gtk
 transmission-remote-cli
 trash-cli
 tre
@@ -980,7 +986,7 @@ wavpack
 wayland
 webkit2gtk
 webkitgtk2
-weechat
+webrtc-audio-processing
 wget
 which
 wildmidi
