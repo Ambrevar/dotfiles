@@ -1,11 +1,13 @@
 #!/bin/sh
 
-if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
+if [ "$1" = "-h" ]; then
 	cat<<EOF
-Usage: ${0##*/} [OPTIONS] FILES
+Usage: ${0##*/} [OPTIONS] [FILES]
 
 LaTeX quick compiler. It adds the preambule and the "\end{document}"
 automatically.
+
+If no FILES are specified, use stdin.
 
 Options:
 
@@ -23,6 +25,18 @@ if [ "$1" = "-p" ]; then
 	shift 2
 fi
 
-for i ; do
-	pdflatex -file-line-error-style -interaction nonstopmode -jobname="${i%.tex}" "$PREAMBLE" "$PACKAGES" "\begin{document}\input" "$i" "\end{document}"
-done
+if [ $# -eq 0 ]; then
+	buf="$(cat)"
+cat<<EOF | pdflatex -file-line-error-style
+$PREAMBLE
+$PACKAGES
+\begin{document}
+$buf
+\end{document}
+EOF
+
+else
+	for i ; do
+		pdflatex -file-line-error-style -interaction nonstopmode -jobname="${i%.tex}" "$PREAMBLE" "$PACKAGES" "\begin{document}\input" "$i" "\end{document}"
+	done
+fi
