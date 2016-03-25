@@ -31,4 +31,4 @@ removesource = false
 
 -- Scripts to run by default.
 -- Order matters, e.g. 'path' can be influenced by the modifications made by 'tag'.
-scripts = {'const', 'tag', 'sub', 'case', 'punctuation', 'encoding', 'flac2ogg', 'humour', 'path', 'cover'}
+scripts = {'const', 'tag', 'sub', 'case', 'punctuation', 'encoding', 'flac2ogg', 'humour', 'path', 'cover', 'ffmpeg'}
