@@ -1,0 +1,14 @@
+#!/bin/sh
+
+if [ "$1" = "-h" ]; then
+	cat<<EOF
+Usage: ${0##*/} [OPTIONS]
+
+Display weather forecast.
+
+Use '${0##*/} :help' to list all options.
+EOF
+	exit
+fi
+
+curl wttr.in/"$1"
