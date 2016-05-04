@@ -54,7 +54,8 @@ export BIBINPUTS=~/dataperso/bibliography
 ## Plan9
 PLAN9DIR="/opt/plan9"
 if [ -d "$PLAN9DIR" ]; then
-	appendpath "$PLAN9DIR/bin"
+	## No need to add to path if /etc/profile.d/plan9.sh does it already.
+	# appendpath "$PLAN9DIR/bin"
 	if [ "$OSTYPE" = "linux-gnu" ]; then
 		appendpath "$PLAN9DIR/share/man" MANPATH
 	fi
