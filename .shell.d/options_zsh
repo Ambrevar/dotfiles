@@ -109,8 +109,8 @@ prompt adam2
 ##==============================================================================
 ## fzf (external)
 
-if [ -f /etc/profile.d/fzf.zsh ]; then
-	. /etc/profile.d/fzf.zsh
+if [ -f /usr/share/fzf/key-bindings.zsh ]; then
+	. /usr/share/fzf/key-bindings.zsh
 	bindkey '^T' transpose-chars
 	bindkey '\er' fzf-file-widget
 fi
