@@ -84,3 +84,15 @@ if [ ! -d "$HOME/.go" ]; then
 	mkdir "$HOME/.go"
 	echo
 fi
+if [ -d "$HOME/.go" ]; then
+	echo "==> Go extra dev tools"
+	## See https://dominik.honnef.co/posts/2014/12/an_incomplete_list_of_go_tools/.
+	## https://dominik.honnef.co/go/
+	go get -v \
+		github.com/nsf/gocode \
+		github.com/rogpeppe/godef \
+		honnef.co/go/unused/cmd/unused
+	go get -v github.com/alecthomas/gometalinter && gometalinter -i
+	strip -s "$HOME/.go/bin"/*
+	echo
+fi
