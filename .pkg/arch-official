@@ -16,6 +16,7 @@ apr-util
 apvlv
 arch-install-scripts
 archlinux-keyring
+arm
 aspell
 aspell-de
 aspell-en
@@ -41,6 +42,7 @@ binutils
 bison
 blas
 blender
+blosc
 bmake
 boost-libs
 bridge-utils
@@ -55,6 +57,7 @@ ca-certificates-utils
 cairo
 cairomm
 calc
+c-ares
 catdoc
 catdvi
 cblas
@@ -63,6 +66,7 @@ cdemu-client
 cdemu-daemon
 cdparanoia
 cdrtools
+celt
 chicken
 chmlib
 chromaprint
@@ -74,6 +78,7 @@ colord
 compositeproto
 coreutils
 cowsay
+cpupower
 cracklib
 cronie
 cryptsetup
@@ -145,6 +150,7 @@ flac
 flashplugin
 flex
 fltk
+fluidsynth
 fontconfig
 fontsproto
 foomatic-db
@@ -170,8 +176,9 @@ gdbm
 gdk-pixbuf2
 gegl02
 gens-gs
-geoclue
 geoclue2
+geoip
+geoip-database
 gettext
 ghostscript
 giblib
@@ -198,6 +205,7 @@ gparted
 gpgme
 gpm
 gptfdisk
+graphene
 graphicsmagick
 graphite
 graphviz
@@ -208,6 +216,7 @@ gsfonts
 gsl
 gsm
 gssproxy
+gst-plugins-bad
 gst-plugins-base
 gst-plugins-base-libs
 gst-plugins-good
@@ -237,6 +246,7 @@ gv
 gzip
 harfbuzz
 harfbuzz-icu
+hddtemp
 hdf5
 hdparm
 hfsprogs
@@ -259,6 +269,7 @@ inetutils
 inkscape
 inputproto
 intel-tbb
+inxi
 iotop
 iproute2
 iptables
@@ -300,6 +311,7 @@ lib32-bzip2
 lib32-cairo
 lib32-colord
 lib32-cracklib
+lib32-db
 lib32-dconf
 lib32-e2fsprogs
 lib32-elfutils
@@ -321,6 +333,7 @@ lib32-gtk2
 lib32-gtk3
 lib32-harfbuzz
 lib32-icu
+lib32-jack
 lib32-js17
 lib32-json-c
 lib32-json-glib
@@ -356,6 +369,7 @@ lib32-libpng
 lib32-libproxy
 lib32-libpulse
 lib32-librsvg
+lib32-libsamplerate
 lib32-libsm
 lib32-libsndfile
 lib32-libsoup
@@ -443,6 +457,7 @@ libdaemon
 libdatrie
 libdbus
 libdc1394
+libdca
 libdiscid
 libdmx
 libdrm
@@ -489,11 +504,13 @@ libmirage
 libmm-glib
 libmms
 libmng
+libmnl
 libmodplug
 libmp4v2
 libmpc
 libmpeg2
 libmtp
+libnftnl
 libnl
 libnm-glib
 libnotify
@@ -526,6 +543,7 @@ libsoxr
 libspectre
 libspiro
 libspnav
+libsrtp
 libssh
 libssh2
 libstdc++5
@@ -602,6 +620,7 @@ linux-lts
 linux-manpages
 llvm-libs
 lm_sensors
+log4cplus
 logrotate
 lrzip
 lsb-release
@@ -647,6 +666,7 @@ mesa-demos
 mesa-libgl
 metapixel
 mime-types
+mjpegtools
 mkinitcpio
 mkinitcpio-busybox
 mkvtoolnix-cli
@@ -667,6 +687,8 @@ nawk
 ncdu
 ncftp
 ncurses
+neon
+netcdf
 netctl
 nethack
 nethogs
@@ -694,12 +716,14 @@ openexr
 opengl-man-pages
 openimageio
 openjpeg
+openmw
 openresolv
 openscenegraph
 openshadinglanguage
 openssh
 openssl
 opensubdiv
+openvdb
 opus
 opusfile
 opus-tools
@@ -803,19 +827,25 @@ python2-cairo
 python2-chardet
 python2-dbus
 python2-enum34
+python2-gevent
 python2-gobject
 python2-gobject2
+python2-greenlet
 python2-jellyfish
 python2-lxml
+python2-msgpack
 python2-munkres
 python2-musicbrainzngs
 python2-notify
 python2-numpy
+python2-opengl
 python2-packaging
 python2-pillow
 python2-pyparsing
+python2-pyqt5
 python2-requests
 python2-setuptools
+python2-sip
 python2-six
 python2-unidecode
 python2-urllib3
@@ -829,6 +859,7 @@ python-docutils
 python-gobject
 python-jinja
 python-markupsafe
+python-opengl
 python-packaging
 python-pafy
 python-pillow
@@ -851,7 +882,11 @@ qt4
 qt5-base
 qt5-declarative
 qt5-location
+qt5-multimedia
 qt5-sensors
+qt5-serialport
+qt5-svg
+qt5-tools
 qt5-webchannel
 qt5-webkit
 qt5-xmlpatterns
@@ -885,6 +920,7 @@ scrnsaverproto
 scrot
 sdl
 sdl2
+sdl2_image
 sdl_image
 sdl_mixer
 sdl_net
@@ -906,6 +942,7 @@ snappy
 sord
 sound-theme-freedesktop
 soundtouch
+spandsp
 speech-dispatcher
 speex
 speexdsp
@@ -946,11 +983,13 @@ timidity++
 timidity-freepats
 tk
 tmux
+tor
 transmission-cli
 transmission-remote-cli
 trash-cli
 tre
 tree
+tslib
 ttf-dejavu
 ttf-freefont
 ttf-liberation
@@ -984,6 +1023,7 @@ vsftpd
 w3m
 wavpack
 wayland
+wayland-protocols
 webkit2gtk
 webkitgtk2
 webrtc-audio-processing
@@ -1055,6 +1095,7 @@ xorg-xinput
 xorg-xkbcomp
 xorg-xkill
 xorg-xmessage
+xorg-xmodmap
 xorg-xprop
 xorg-xrandr
 xorg-xrdb
