@@ -19,7 +19,7 @@
    (local-set-key (kbd "C-c d") 'godoc)
    (local-set-key (kbd "M-.") #'godef-jump)
    (local-set-key (kbd "C-<f10>") 'go-eval-buffer)
-   (set (make-local-variable 'compile-command) "go build")))
+   (set (make-local-variable 'compile-command) "go install")))
 
 (define-skeleton go-main
   "Insert main function with basic includes."
