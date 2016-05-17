@@ -13,13 +13,13 @@ umask 027
 ## to PATH, not prepend them.
 appendpath() {
 	[ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
-	if [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
+	if [ -d "$1" ] && [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
 		eval export $PATHVAR="\$$PATHVAR:$1"
 	fi
 }
 prependpath() {
 	[ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
-	if [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
+	if [ -d "$1" ] && [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
 		eval export $PATHVAR="$1:\$$PATHVAR"
 	fi
 }
@@ -33,7 +33,7 @@ prependpath "${HOME}/.hackpool/"
 TEXDIR="${TEXDIR:-/usr/local/texlive}"
 if [ -d "${TEXDIR}" ]; then
 	TEXYEAR=$(/bin/ls -1r "${TEXDIR}" | grep -m1 "[0-9]\{4\}")
-	TEXDISTRO=$(uname -m)-$(uname | tr "[[:upper:]]" "[[:lower:]]")
+	TEXDISTRO=$(uname -m)-$(uname | awk '{print tolower($0)}')
 	TEXFOLDER="${TEXDIR}/${TEXYEAR}/bin/${TEXDISTRO}/"
 	if [ -d "${TEXFOLDER}" ]; then
 		appendpath $TEXFOLDER
