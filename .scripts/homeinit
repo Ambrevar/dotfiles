@@ -6,86 +6,56 @@ SOURCEDIR="$HOME/dataperso"
 [ -z "$XDG_DATA_HOME" ] && XDG_DATA_HOME="$HOME/.local/share"
 [ -z "$XDG_DATA_DIRS" ] && XDG_DATA_DIRS="/usr/local/share"
 
-## Temp folder
 echo "==> 'temp' folder"
 mkdir -p "$HOME/temp"
-echo
 
-if [ -d "$SOURCEDIR/contacts" ]; then
-	echo "==> Abook"
-	ln -snf "$SOURCEDIR/contacts" "$HOME/.abook"
-	echo
+echo "==> Abook"
+ln -snf "$SOURCEDIR/contacts" "$HOME/.abook"
+
+echo "==> Mutt"
+[ -d "$SOURCEDIR/mails" ] && ln -snf "$SOURCEDIR/mails" "$HOME/.mutt.d"
+mkdir -p "$HOME/.cache/mutt/headers"
+mkdir -p "$HOME/.cache/mutt/messages"
+
+echo "==> To-Do"
+ln -sf "$SOURCEDIR/todo/todo.org" "$HOME/todo.org"
+
+echo "==> Bookmarks"
+if [ -z "$BROWSER" ]; then
+	echo "Cannot proceed when variable BROWSER is not set."
+else
+	case "$BROWSER" in
+	dwb)
+		BOOKMARKS="$XDG_CONFIG_HOME/$BROWSER/default/"
+		QUICKMARKS="$XDG_CONFIG_HOME/$BROWSER/default/" ;;
+	qutebrowser)
+		mkdir -p "$XDG_CONFIG_HOME/$BROWSER/bookmarks"
+		BOOKMARKS="$XDG_CONFIG_HOME/$BROWSER/bookmarks/urls"
+		QUICKMARKS="$XDG_CONFIG_HOME/$BROWSER/" ;;
+	*)
+		BOOKMARKS="$XDG_CONFIG_HOME/$BROWSER/"
+		QUICKMARKS="$XDG_CONFIG_HOME/$BROWSER/" ;;
+	esac
+	ln -sf "$SOURCEDIR/bookmarks/bookmarks" "$BOOKMARKS"
+	ln -sf "$SOURCEDIR/bookmarks/quickmarks" "$QUICKMARKS"
 fi
 
-if command -v mutt >/dev/null 2>&1; then
-	echo "==> Mutt"
-	[ -d "$SOURCEDIR" ] && ln -snf "$SOURCEDIR/mails" "$HOME/.mutt.d"
-	mkdir -p "$HOME/.cache/mutt/headers"
-	mkdir -p "$HOME/.cache/mutt/messages"
-	echo
-fi
+echo "==> Newsbeuter"
+mkdir -p "$XDG_DATA_HOME/newsbeuter"
+ln -sf "$SOURCEDIR/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
+ln -sf "$SOURCEDIR/news/news_starred" "$XDG_CONFIG_HOME/newsbeuter/"
 
-if [ -d "$SOURCEDIR/todo" ]; then
-	echo "==> To-Do"
-	ln -snf "$SOURCEDIR/todo/todo.org" "$HOME/todo.org"
-	echo
-fi
+echo "==> Launchers"
+ln -snf "$SOURCEDIR/launchers" "$HOME/.launchers"
 
-## Bookmarks
-if [ -d "$SOURCEDIR" ]; then
-	echo "==> Bookmarks"
-	if [ -z "$BROWSER" ]; then
-		echo "Variable BROWSER is not set."
-	else
-		case "$BROWSER" in
-		dwb)
-			BOOKMARKS="$XDG_CONFIG_HOME/$BROWSER/default/"
-			QUICKMARKS="$XDG_CONFIG_HOME/$BROWSER/default/" ;;
-		qutebrowser)
-			mkdir -p "$XDG_CONFIG_HOME/$BROWSER/bookmarks"
-			BOOKMARKS="$XDG_CONFIG_HOME/$BROWSER/bookmarks/urls"
-			QUICKMARKS="$XDG_CONFIG_HOME/$BROWSER/" ;;
-		*)
-			BOOKMARKS="$XDG_CONFIG_HOME/$BROWSER/"
-			QUICKMARKS="$XDG_CONFIG_HOME/$BROWSER/" ;;
-		esac
-		ln -sf "$SOURCEDIR/bookmarks/bookmarks" "$BOOKMARKS"
-		ln -sf "$SOURCEDIR/bookmarks/quickmarks" "$QUICKMARKS"
-	fi
-	echo
-fi
+echo "==> Hackpool"
+ln -snf "$SOURCEDIR/hackpool" "$HOME/.hackpool"
 
-## News
-if command -v newsbeuter >/dev/null 2>&1; then
-	echo "==> Newsbeuter"
-	mkdir -p "$XDG_DATA_HOME/newsbeuter"
-	[ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
-	[ -d "$SOURCEDIR" ] && ln -sf "$SOURCEDIR/news/news_starred" "$XDG_CONFIG_HOME/newsbeuter/"
-	echo
-fi
-
-## Launchers
-if [ -d "$SOURCEDIR" ]; then
-	echo "==> Launchers"
-	ln -snf "$SOURCEDIR/launchers" "$HOME/.launchers"
-	echo
-fi
-
-## Temp scripts
-if [ -d "$SOURCEDIR" ]; then
-	echo "==> Hackpool"
-	ln -snf "$SOURCEDIR/hackpool" "$HOME/.hackpool"
-	echo
-fi
-
-## Go workspace
-if [ ! -d "$HOME/.go" ]; then
-	echo "==> Go"
-	mkdir "$HOME/.go"
-	echo
-fi
-if [ -d "$HOME/.go" ]; then
-	echo "==> Go extra dev tools"
+echo "==> Go extra dev tools"
+mkdir -p "$HOME/.go"
+if command -v go >/dev/null 2>&1; then
+	export GOPATH=~/.go
+	export PATH="$PATH:$GOPATH/bin"
 	## See https://dominik.honnef.co/posts/2014/12/an_incomplete_list_of_go_tools/.
 	## https://dominik.honnef.co/go/
 	go get -v \
@@ -95,5 +65,4 @@ if [ -d "$HOME/.go" ]; then
 		honnef.co/go/unused/cmd/unused
 	go get -v github.com/alecthomas/gometalinter && gometalinter -i
 	strip -s "$HOME/.go/bin"/*
-	echo
 fi
