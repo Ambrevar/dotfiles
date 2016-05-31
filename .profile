@@ -97,9 +97,11 @@ export EDITOR
 export GIT_EDITOR
 
 ## SSH-Agent
-command -v ssh-agent >/dev/null 2>&1 && eval "$(ssh-agent)"
-## Kill ssh-agent on session end. Console login only.
-command -v sessionclean >/dev/null 2>&1 && trap 'sessionclean' 0
+if command -v ssh-agent >/dev/null 2>&1 && [ -z "$SSH_AGENT_PID" ]; then
+	 eval "$(ssh-agent)"
+	 ## Kill ssh-agent on session end. Console login only.
+	 command -v sessionclean >/dev/null 2>&1 && trap 'sessionclean' 0
+fi
 
 ## Set TEMP dir if you want to override /tmp for some applications that check
 ## for this variable. Usually not a good idea since some applications will write
