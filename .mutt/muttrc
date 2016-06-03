@@ -37,7 +37,7 @@ set include_onlyfirst=yes
 ## be a single file.
 set header_cache=~/.cache/mutt/headers
 set message_cachedir=~/.cache/mutt/messages
-source "~/.mutt/purgecache.sh '$message_cachedir'|"
+source "~/.mutt/purgecache.sh $message_cachedir|"
 
 ## Tell Mutt to check all IMAP folders. This will add all of them to the sidebar
 ## (if used). Contrary to the 'mailboxes' menu, sorting order cannot be
