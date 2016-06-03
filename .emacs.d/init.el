@@ -146,7 +146,7 @@ Example: to assign some-function to C-i, use
   (define-key my-keys-minor-mode-map (kbd "C-x M-m") 'mc/mark-more-like-this-extended)
   (define-key my-keys-minor-mode-map (kbd "C-x M-l") 'mc/mark-all-like-this-dwim)
   ;; Search compatible with mc.
-  (when (require 'phi-search) nil t))
+  (require 'phi-search nil t))
 
 (when (require 'dired+ nil t)
   (toggle-diredp-find-file-reuse-dir 1))
