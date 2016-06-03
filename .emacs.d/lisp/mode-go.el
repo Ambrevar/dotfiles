@@ -11,7 +11,7 @@
     (compile (concat "go run " (shell-quote-argument buffer-file-name)))
     (setq compile-command compile-command-backup)))
 
-(defun go-file-in-gopath-p ()
+(defun go-buffer-in-gopath-p ()
   (let ((dir (expand-file-name (file-name-directory buffer-file-name))) (looping t) (gopath (getenv "GOPATH")))
     (while (progn
              (if (string= dir gopath)
@@ -29,7 +29,11 @@
    (local-set-key (kbd "C-c d") 'godoc)
    (local-set-key (kbd "M-.") #'godef-jump)
    (local-set-key (kbd "C-<f10>") 'go-eval-buffer)
-   (set (make-local-variable 'compile-command) (if (go-file-in-gopath-p) "go install" "go build"))))
+   (local-set-key (kbd "<f9>")
+                  (lambda () (interactive)
+                    (let ((compile-command "gometalinter --cyclo-over=20 --deadline=20s -e 'declaration of err shadows' -e 'error return value not checked \\(.*\\.Close\\(\\)'"))
+                      (compile compile-command))))
+   (set (make-local-variable 'compile-command) (if (go-buffer-in-gopath-p) "go install" "go build"))))
 
 (define-skeleton go-main
   "Insert main function with basic includes."
