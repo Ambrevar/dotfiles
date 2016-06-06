@@ -24,9 +24,9 @@ prependpath() {
 	fi
 }
 
-appendpath "${HOME}/.launchers/"
-appendpath "${HOME}/.scripts/"
-prependpath "${HOME}/.hackpool/"
+appendpath "${HOME}/.launchers"
+appendpath "${HOME}/.scripts"
+prependpath "${HOME}/.hackpool"
 [ -d /usr/lib/surfraw ] && appendpath "/usr/lib/surfraw"
 
 ## TeXlive
@@ -34,7 +34,7 @@ TEXDIR="${TEXDIR:-/usr/local/texlive}"
 if [ -d "${TEXDIR}" ]; then
 	TEXYEAR=$(/bin/ls -1r "${TEXDIR}" | grep -m1 "[0-9]\{4\}")
 	TEXDISTRO=$(uname -m)-$(uname | awk '{print tolower($0)}')
-	TEXFOLDER="${TEXDIR}/${TEXYEAR}/bin/${TEXDISTRO}/"
+	TEXFOLDER="${TEXDIR}/${TEXYEAR}/bin/${TEXDISTRO}"
 	if [ -d "${TEXFOLDER}" ]; then
 		appendpath $TEXFOLDER
 		prependpath ${TEXDIR}/${TEXYEAR}/texmf/doc/info INFOPATH
