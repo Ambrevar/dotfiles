@@ -20,13 +20,21 @@
              (and looping (not (string= dir "/")))))
     (if (string= dir "/") nil t)))
 
-(add-hook-and-eval
+(add-hook
+ 'godoc-mode-hook
+ (lambda ()
+   (setq tab-width 8)))
+
+ (add-hook-and-eval
  'go-mode-hook
  (lambda ()
    (setq gofmt-command "goimports")
+   (setq godoc-command "godoc -ex")
+   (setq godoc-and-godef-command "godoc -ex")
    (add-hook 'before-save-hook #'gofmt-before-save nil t)
    (local-set-key (kbd "C-c m") 'go-main)
-   (local-set-key (kbd "C-c d") 'godoc)
+   (local-set-key (kbd "C-c D") 'godoc)
+   (local-set-key (kbd "C-c d") 'godoc-at-point)
    (local-set-key (kbd "M-.") #'godef-jump)
    (local-set-key (kbd "C-<f10>") 'go-eval-buffer)
    (local-set-key (kbd "<f9>")
