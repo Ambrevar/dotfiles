@@ -41,7 +41,8 @@
                   (lambda () (interactive)
                     (let ((compile-command "gometalinter --cyclo-over=20 --deadline=20s -e 'declaration of err shadows' -e 'error return value not checked \\(.*\\.Close\\(\\)'"))
                       (compile compile-command))))
-   (set (make-local-variable 'compile-command) (if (go-buffer-in-gopath-p) "go install" "go build"))))
+   (set (make-local-variable 'compile-command)
+        (if (go-buffer-in-gopath-p) (if (string-match "_test.[gG][oO]$" buffer-file-name) "go test" "go install")  "go build"))))
 
 (define-skeleton go-main
   "Insert main function with basic includes."
