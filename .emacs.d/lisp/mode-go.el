@@ -2,6 +2,7 @@
 ;; Go
 ;;==============================================================================
 (add-to-list 'package-pinned-packages 'go-rename)
+(add-to-list 'package-pinned-packages 'helm-go-package)
 ;; Optional packages: go-autocomplete, go-guru
 
 (defun go-eval-buffer ()
@@ -34,6 +35,8 @@
    (add-hook 'before-save-hook #'gofmt-before-save nil t)
    (local-set-key (kbd "C-c m") 'go-main)
    (local-set-key (kbd "C-c D") 'godoc)
+   (when (require 'helm-go-package nil t)
+     (local-set-key (kbd "C-c D") 'helm-go-package))
    (local-set-key (kbd "C-c d") 'godoc-at-point)
    (local-set-key (kbd "M-.") #'godef-jump)
    (local-set-key (kbd "C-<f10>") 'go-eval-buffer)

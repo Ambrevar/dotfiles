@@ -169,14 +169,42 @@ Example: to assign some-function to C-i, use
   ;; Search compatible with mc.
   (require 'phi-search nil t))
 
+(add-to-list 'package-pinned-packages 'helm)
+(add-to-list 'package-pinned-packages 'helm-descbinds)
+(add-to-list 'package-pinned-packages 'helm-fuzzy-find)
+(add-to-list 'package-pinned-packages 'helm-ls-git)
+(when (require 'helm-config nil t)
+  (when (require 'helm-descbinds nil t)
+    (helm-descbinds-mode))
+  (require 'helm-ls-git nil t)
+  (helm-mode 1)
+  ; (helm-autoresize-mode 1)
+  (setq helm-apropos-fuzzy-match t)
+  (setq helm-buffers-fuzzy-matching t)
+  (setq helm-imenu-fuzzy-match t)
+  (setq helm-M-x-fuzzy-match t)
+  (define-key my-keys-minor-mode-map (kbd "M-x") 'helm-M-x)
+  (define-key my-keys-minor-mode-map (kbd "C-x M-f") 'helm-imenu)
+  (define-key my-keys-minor-mode-map (kbd "C-x C-/") 'helm-find)
+  (when (require 'helm-fuzzy-find nil t)
+    (define-key my-keys-minor-mode-map (kbd "C-c C-/") 'helm-fuzzy-find))
+  (define-key my-keys-minor-mode-map (kbd "C-x C-f") 'helm-find-files)
+  (define-key my-keys-minor-mode-map (kbd "C-x C-d") 'helm-browse-project)
+  (define-key my-keys-minor-mode-map (kbd "C-x b") 'helm-buffers-list)
+  (define-key my-keys-minor-mode-map (kbd "C-x C-b") 'helm-mini)
+  (define-key my-keys-minor-mode-map (kbd "M-y") 'helm-show-kill-ring)
+  (define-key my-keys-minor-mode-map (kbd "C-x C-x") 'helm-all-mark-rings)
+  (define-key my-keys-minor-mode-map (kbd "C-x x") 'helm-mark-ring)
+  (define-key my-keys-minor-mode-map (kbd "M-s o") 'helm-occur)
+  (define-key my-keys-minor-mode-map (kbd "C-h a") 'helm-apropos)
+  (setq helm-follow-mode-persistent t)
+  (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages))
+
 (when (require 'dired+ nil t)
   (toggle-diredp-find-file-reuse-dir 1))
 
 (when (require 'powerline nil t)
   (powerline-default-theme))
-
-(when (require 'helm-fuzzy-find nil t)
-  (define-key my-keys-minor-mode-map (kbd "C-c C-/") 'helm-fuzzy-find))
 
 ;; TODO: fzf and helm-fuzzy-find are in direct competition. Test and pick the best.
 ;; helm-ff has better integration, but does not print anything initially.
