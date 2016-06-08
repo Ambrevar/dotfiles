@@ -172,7 +172,6 @@
        (let ((b (getenv "BROWSER")))
          (if b b "w3m" )))
       browse-url-browser-function 'browse-url-generic)
-(define-key my-keys-minor-mode-map (kbd "C-M-u") 'browse-url)
 
 ;; Default ispell dictionnay. If not set, Emacs uses the current locale.
 (setq ispell-dictionary "english")
@@ -230,25 +229,9 @@
 (setq calendar-week-start-day 1)
 (setq calendar-date-style 'iso)
 
-;; IDO (Interactively Do Thing) for finding files and buffers. Incompatible with
-;; FFAP.
-(require 'ido)
-(ido-mode t)
-(setq ido-enable-flex-matching t)
-(setq ido-save-directory-list-file (concat emacs-cache-folder "ido.last"))
-;; All file finding operation defaults to what is at point. Incompatible with
-;; IDO.
-;; (ffap-bindings)
-
-;; Icomplete
-(icomplete-mode)
-
 ;; Quick buffer switching.
 (define-key my-keys-minor-mode-map (kbd "C-<prior>") 'previous-buffer)
 (define-key my-keys-minor-mode-map (kbd "C-<next>") 'next-buffer)
-
-;; Do not open other window for buffer menu, plus hide non-file buffers.
-(define-key my-keys-minor-mode-map (kbd "C-x C-b") 'bs-show)
 
 ;; Remove auto-fill in web edits because wikis and forums do not like it.
 ;; This works for qutebrowser, but may need changes for other browsers.
