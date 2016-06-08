@@ -245,7 +245,7 @@ it appears in the minibuffer prompt."
          (insert (expand-file-name filename)))
         (t
          (insert filename))))
-(define-key my-keys-minor-mode-map "\C-x\M-f" 'insert-file-name)
+; (define-key my-keys-minor-mode-map "\C-x\M-f" 'insert-file-name)
 
 (defun insert-symbol-at-point-in-regexp-search-ring ()
   "Insert symbol at point in regexp search ring."
@@ -473,23 +473,22 @@ Do not fold case with \\[universal-argument] or non-nil ARG."
     (sort-lines nil (point) (mark))))
 
 (defun swap-windows ()
-  "If you have 2 windows, it swaps them."
+  "If 2 windows are up, swap them."
   (interactive)
-  (cond ((/= (count-windows) 2)
-         (message "You need exactly 2 windows to do this."))
-        (t
-         (let* ((w1 (first (window-list)))
-                (w2 (second (window-list)))
-                (b1 (window-buffer w1))
-                (b2 (window-buffer w2))
-                (s1 (window-start w1))
-                (s2 (window-start w2)))
-           (set-window-buffer w1 b2)
-           (set-window-buffer w2 b1)
-           (set-window-start w1 s2)
-           (set-window-start w2 s1))))
+  (unless (= 2 (count-windows))
+    (error "There are not 2 windows"))
+  (let* ((w1 (car (window-list)))
+         (w2 (nth 1 (window-list)))
+         (b1 (window-buffer w1))
+         (b2 (window-buffer w2))
+         (s1 (window-start w1))
+         (s2 (window-start w2)))
+    (set-window-buffer w1 b2)
+    (set-window-buffer w2 b1)
+    (set-window-start w1 s2)
+    (set-window-start w2 s1))
   (other-window 1))
-(define-key my-keys-minor-mode-map (kbd "C-x M-s") 'swap-windows)
+(define-key my-keys-minor-mode-map (kbd "C-x \\") 'swap-windows)
 
 (defun tabify-leading ()
   "Call `tabify' on leading spaces only.
@@ -515,7 +514,7 @@ Works on whole buffer if region is unactive."
         (setq indent-tabs-mode nil))
     (message "Indent using tabs")
     (setq indent-tabs-mode t)))
-(define-key my-keys-minor-mode-map (kbd "C-x M-i") 'toggle-indent-tabs)
+; (define-key my-keys-minor-mode-map (kbd "C-x M-i") 'toggle-indent-tabs)
 
 (defun toggle-trailing-whitespace ()
   "Show trailing whitespace or not."
@@ -564,7 +563,7 @@ It only works for frames with exactly two windows."
           (set-window-buffer (next-window) next-win-buffer)
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
-(define-key my-keys-minor-mode-map [(control x) (|)] 'toggle-window-split)
+(define-key my-keys-minor-mode-map (kbd "C-x C-\\") 'toggle-window-split)
 
 (defun toggle-word-delim ()
   "Make underscore part of the word syntax or not.
