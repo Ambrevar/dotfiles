@@ -174,7 +174,8 @@ parameters."
 ;;    (if (string= page-delimiter "")
 ;;
 ;; I do not know why the (bolp) condition was used since it does not match the
-;; above comment. TODO: report this fix!
+;; above comment.
+;; DONE: Fix reported to http://debbugs.gnu.org/cgi/bugreport.cgi?bug=20663.
 (defun forward-page (&optional count)
   "Move forward to page boundary.  With arg, repeat, or go back if negative.
 A page boundary is any line whose beginning matches the regexp
@@ -334,7 +335,6 @@ If DIR is t, then move left, otherwise move right."
 
 (defun page-count ()
   "Return page count."
-  ;; TODO: Requires `count-occurences'?
   (save-restriction
     (widen)
     (save-excursion
