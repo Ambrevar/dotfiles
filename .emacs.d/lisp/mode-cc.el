@@ -117,6 +117,8 @@ restored."
       (local-set-key (kbd "C-c I") 'cc-include-local)
       (local-set-key (kbd "C-c i") 'cc-include)
       (local-set-key (kbd "C-c m") 'cc-main)
+      ;; Toggle between source file and header.
+      (local-set-key (kbd "C-c o") 'ff-find-other-file)
       ;; (local-set-key "." 'semantic-complete-self-insert) ; This is a bit slow.
       ;; (local-set-key ">" 'semantic-complete-self-insert)
       (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1))))))

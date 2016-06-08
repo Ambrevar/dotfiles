@@ -124,12 +124,12 @@
 ;; Whitespace, tabs, and other frivolities.  Highlight trailing whitespaces. For
 ;; programming languages only, so that it does not affect buffer like calendar
 ;; and so on. There is no prog-mode-hook on Emacs<24.
-(require 'functions) ; for page-number-mode
+(require 'functions) ; for `page-number-mode'
 (add-hook
  'prog-mode-hook
  (lambda ()
    (page-number-mode t)
-   ;; (whitespace-mode) ; This mode is very performance hungry.
+   ;; (whitespace-mode) ; This mode is a performance killer.
    ))
 (define-key my-keys-minor-mode-map (kbd "C-<f7>") 'whitespace-mode)
 
@@ -143,6 +143,7 @@
 
 ;; WARNING: this can break some configuration files needing whitespaces at the
 ;; end.
+; (require 'functions) ; for `sanitize'
 ; (add-hook 'before-save-hook 'sanitize)
 
 ;; Remove whitespaces on region, or whole file.
@@ -264,7 +265,7 @@
    (speedbar-toggle-updates)))
 
 ;; Compilation bindings and conveniences.
-(require 'functions)
+(require 'functions) ; for `compile-custom'
 (setq compilation-ask-about-save nil)
 (autoload 'recompile "compile" nil t)
 (define-key my-keys-minor-mode-map (kbd "<f10>") 'compile-custom)
@@ -353,9 +354,6 @@
 ;; Easy code folding toggle.
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 (add-hook 'prog-mode-hook (lambda () (local-set-key (kbd "C-c h") 'hs-toggle-hiding)))
-
-;; Toggle between source file and header.
-(define-key my-keys-minor-mode-map (kbd "C-c o") 'ff-find-other-file)
 
 ;; Move mouse away.
 ; (mouse-avoidance-mode 'banish)
