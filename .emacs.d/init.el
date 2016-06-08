@@ -175,21 +175,12 @@ Example: to assign some-function to C-i, use
 (when (require 'powerline nil t)
   (powerline-default-theme))
 
-(when (require 'sr-speedbar nil t)
-  (define-key my-keys-minor-mode-map (kbd "M-S M-S") 'sr-speedbar-toggle))
-
 (when (require 'helm-fuzzy-find nil t)
   (define-key my-keys-minor-mode-map (kbd "C-c C-/") 'helm-fuzzy-find))
 
 ;; TODO: fzf and helm-fuzzy-find are in direct competition. Test and pick the best.
 ;; helm-ff has better integration, but does not print anything initially.
 (require 'fzf nil t)
-
-(require 'swiper nil t)
-
-(when (require 'find-things-fast nil t)
-  ;; Make ftf work on every file.
-  (setq ftf-filetypes '("*")))
 
 (when (require 'auto-complete-config nil t)
   (ac-config-default))
