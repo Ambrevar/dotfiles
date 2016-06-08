@@ -62,7 +62,7 @@ If nil, do not hide.")
 
 (defun compile-custom (&optional runhooks)
   "Call `recompile'.
-If RUNHOOKS is non-nil (or with universal argument), run hooks in
+If RUNHOOKS is non-nil (or with \\[universal-argument]), run hooks in
 `compilation-before-hook', then `recompile', then
 `compilation-after-hook'."
   (interactive "P")
@@ -229,7 +229,7 @@ thing in presence of links."
 (defun insert-file-name (filename &optional args)
   "Insert name of file FILENAME into buffer after point.
 Prefixed with \\[universal-argument], expand the file name to its
-fully canocalized path. See `expand-file-name'.
+fully canonicalized path. See `expand-file-name'.
 
 Prefixed with \\[negative-argument], use relative path to file
 name from current directory, `default-directory'. See
@@ -342,7 +342,7 @@ If DIR is t, then move left, otherwise move right."
             page-delimiter 1 (point-max))))))
 
 (defun page-number ()
-  "Reurn page number."
+  "Return page number."
   (save-restriction
     (widen)
     (save-excursion
@@ -353,13 +353,12 @@ If DIR is t, then move left, otherwise move right."
           (if (= (match-beginning 0) (match-end 0))
               (forward-char 1))
           (setq count (1+ count)))
-        count)
-      )))
+        count))))
 
 (defun page-number-mode (activate)
   "Display of page number in mode line.
 If ACTIVATE is non-nil, enable, disable otherwise. Interactively,
-activate unless called with universal argument.\n\nThis adds
+activate unless called with \\[universal-argument].\n\nThis adds
 page-number/page-count to mode line. It will only display if
 there is more than one page. A page is delimited by
 page-delimiter.\n
@@ -409,7 +408,7 @@ WARNING: this may slow down editing on big files."
 (define-key my-keys-minor-mode-map (kbd "C-x w") 'rename-buffer-and-file)
 
 (defun sanitize ()
-  "Untabifies, indents and deletes trailing whitespace.
+  "(Un)tabifies according to `indent-tabs-mode', indents and deletes trailing whitespace.
 Works on buffer or region. Requires `tabify-leading'."
   (interactive)
   (save-excursion
@@ -462,7 +461,7 @@ Hook function for skeletons."
 
 (defun sort-lines-unique (arg)
   "Remove trailing white space, then duplicate lines, then sort the result.
-Do not folder case with universal argument or non-nil ARG."
+Do not fold case with \\[universal-argument] or non-nil ARG."
   (interactive "P")
   (unless mark-active
     (mark-whole-buffer))
