@@ -44,7 +44,7 @@ Example: to assign some-function to C-i, use
 (require 'personal nil t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Vanilla modes
+;; Vanilla
 
 ;; Major modes
 (add-hook 'awk-mode-hook      (lambda () (require 'mode-awk)))
@@ -69,14 +69,39 @@ Example: to assign some-function to C-i, use
 (add-hook 'octave-mode-hook (lambda () (require 'mode-octave)))
 (add-hook 'org-mode-hook    (lambda () (require 'mode-org)))
 
+;; Tools
+(autoload 'pdf-view "tool-pdf" nil t)
+(autoload 'pdf-compress "tool-pdf" nil t)
+
+(autoload 'itranslate "tool-itranslate" nil t)
+(autoload 'itranslate-lines "tool-itranslate" nil t)
+(autoload 'itranslate-region "tool-itranslate" nil t)
+
+(require 'smiext "tool-smiext")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Third-party modes
+;; External
 
 (when (require 'package nil t)
   ;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
   (setq package-user-dir (concat emacs-cache-folder "elpa"))
+  (setq package-pinned-packages '())
+
+  (defun init-extra-packages ()
+    (interactive)
+    (unless (file-exists-p package-user-dir)
+      (package-refresh-contents))
+    (let ((pkglist package-pinned-packages))
+      (while pkglist
+        (when (not (package-installed-p (car pkglist)))
+          (package-install (car pkglist)))
+        (setq pkglist (cdr pkglist)))))
+
   (package-initialize))
+
+;;------------------------------------------------------------------------------
+;; External modes
 
 (add-to-list 'load-path "/usr/share/asymptote")
 (autoload 'asy-mode "asy-mode.el" "Asymptote major mode." t)
@@ -96,15 +121,18 @@ Example: to assign some-function to C-i, use
 
 (load-external "\\.vert\\'\\|\\.frag\\'\\|\\.glsl\\'" 'glsl-mode nil 'c-mode)
 
+(add-to-list 'package-pinned-packages 'go-mode)
 (load-external "\\.go\\'" 'go-mode)
 (add-hook 'go-mode-hook (lambda () (require 'mode-go)))
 
 (load-external "\\.dot\\'" 'graphviz-dot-mode)
 (add-hook 'graphviz-dot-mode-hook (lambda () (require 'mode-dot)))
 
+(add-to-list 'package-pinned-packages 'lua-mode)
 (load-external "\\.lua\\'" 'lua-mode nil 'sh-mode)
 (add-hook 'lua-mode-hook (lambda () (require 'mode-lua)))
 
+(add-to-list 'package-pinned-packages 'markdown-mode)
 (load-external "\\.md\\'\\|\\.markdown\\'" 'markdown-mode)
 ;; If we need more option, add it to a dedicated file.
 (add-hook 'markdown-mode-hook (lambda () (set (make-local-variable 'paragraph-start) "
@@ -118,8 +146,8 @@ Example: to assign some-function to C-i, use
 (when (fboundp 'po-find-file-coding-system)
   (modify-coding-system-alist 'file "\\.po\\'\\|\\.po\\." 'po-find-file-coding-system))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Third-party tools
+;;------------------------------------------------------------------------------
+;; External tools
 
 ;; (autoload 'guess-style-set-variable "guess-style" nil t)
 ;; (autoload 'guess-style-guess-variable "guess-style")
@@ -127,15 +155,8 @@ Example: to assign some-function to C-i, use
 ;; (setq guess-style-info-mode 1)
 ;; (add-hook 'prog-mode-hook (lambda () (ignore-errors (guess-style-guess-all))))
 
-(autoload 'pdf-view "tool-pdf" nil t)
-(autoload 'pdf-compress "tool-pdf" nil t)
-
-(autoload 'itranslate "tool-itranslate" nil t)
-(autoload 'itranslate-lines "tool-itranslate" nil t)
-(autoload 'itranslate-region "tool-itranslate" nil t)
-
-(require 'smiext "tool-smiext")
-
+(add-to-list 'package-pinned-packages 'multiple-cursors)
+(add-to-list 'package-pinned-packages 'phi-search)
 (when (require 'multiple-cursors nil t)
   (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
   ;; Load the file at the new location.
@@ -160,6 +181,10 @@ Example: to assign some-function to C-i, use
 (when (require 'helm-fuzzy-find nil t)
   (define-key my-keys-minor-mode-map (kbd "C-c C-/") 'helm-fuzzy-find))
 
+;; TODO: fzf and helm-fuzzy-find are in direct competition. Test and pick the best.
+;; helm-ff has better integration, but does not print anything initially.
+(require 'fzf nil t)
+
 (require 'swiper nil t)
 
 (when (require 'find-things-fast nil t)
@@ -169,9 +194,7 @@ Example: to assign some-function to C-i, use
 (when (require 'auto-complete-config nil t)
   (ac-config-default))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Other packages.
-
+;; Other:
 ;; go-scratch, fuzzy (for auto-complete).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

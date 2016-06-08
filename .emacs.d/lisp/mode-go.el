@@ -1,7 +1,7 @@
 ;;==============================================================================
 ;; Go
 ;;==============================================================================
-;; Packages: go-rename,
+(add-to-list 'package-pinned-packages 'go-rename)
 ;; Optional packages: go-autocomplete, go-guru
 
 (defun go-eval-buffer ()
