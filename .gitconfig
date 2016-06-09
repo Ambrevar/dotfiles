@@ -42,17 +42,3 @@ suppresscc = author
 # sendemail.confir = auto
 aliasfiletype = mutt
 # aliasesfile = ~/.mutt.d/aliases
-
-[tig]
-line-graphics = "utf-8"
-author-width = 12
-show-author = "abbreviated"
-show-date = "short"
-show-id = true
-line-number-interval = 1
-[tig "bind"]
-main = C !git checkout %(commit)
-main = ^D !git diff %(prompt) %(commit)
-[tig "color"]
-date = yellow default
-date = yellow default

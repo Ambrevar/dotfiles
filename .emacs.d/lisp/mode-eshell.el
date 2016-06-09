@@ -12,8 +12,7 @@
 ;;                   (if (= (user-uid) 0) "# " "> ")))))
 
 (nconc eshell-visual-commands
-       '("abook" "cmus" "htop" "mutt" "ncdu" "newsbeuter" "ranger"
-         "rtorrent" "task" "tig"))
+       '("abook" "cmus" "htop" "mutt" "ncdu" "newsbeuter" "ranger" "task"))
 (when (file-executable-p "/usr/bin/pacman")
   (map-on-pair 'eshell/alias
                '(("pc" "sudo pacman -Sc")
