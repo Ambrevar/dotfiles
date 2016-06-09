@@ -211,6 +211,10 @@ To view where the bindings are set in your config files, lookup
 (when (require 'auto-complete-config nil t)
   (ac-config-default))
 
+(add-to-list 'package-pinned-packages 'magit)
+(when (require 'magit nil t)
+  (global-set-key (kbd "C-x g") 'magit-status))
+
 ;; Other:
 ;; go-scratch, fuzzy (for auto-complete).
 
