@@ -26,7 +26,7 @@
  (lambda ()
    (setq tab-width 8)))
 
- (add-hook-and-eval
+(add-hook-and-eval
  'go-mode-hook
  (lambda ()
    (setq gofmt-command "goimports")

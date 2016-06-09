@@ -25,6 +25,9 @@
 ;; Bookmark file to cache folder.
 (setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
 
+;; Bookmark file to cache folder.
+(setq recentf-save-file (concat emacs-cache-folder "recentf"))
+
 ;; Disable autosave features.
 (setq auto-save-default nil)
 (setq auto-save-list-file-prefix nil)
