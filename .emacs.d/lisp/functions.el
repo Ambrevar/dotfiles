@@ -42,7 +42,7 @@ Regular math expression can be computed with calc."
       (comment-or-uncomment-region
        (progn (goto-char min) (line-beginning-position))
        (progn (goto-char max) (line-end-position))))))
-(define-key my-keys-minor-mode-map "\M-;" 'comment-or-uncomment-current-line-or-region)
+(define-key mickey-minor-mode-map "\M-;" 'comment-or-uncomment-current-line-or-region)
 
 ;; (defcustom compilation-after-hook nil
 ;;   "List of hook functions run by `compile-custom'."
@@ -125,7 +125,7 @@ there's a region, all lines that region covers will be duplicated."
         (setq end (point)))
       (if auto-fill-p (auto-fill-mode))
       (goto-char (+ origin (* (length region) arg) arg)))))
-(define-key my-keys-minor-mode-map (kbd "C-x M-d") 'duplicate)
+(define-key mickey-minor-mode-map (kbd "C-x M-d") 'duplicate)
 
 (defun emacs-process-p (pid)
   "If pid is the process ID of an emacs process, return t, else nil.
@@ -245,13 +245,13 @@ it appears in the minibuffer prompt."
          (insert (expand-file-name filename)))
         (t
          (insert filename))))
-; (define-key my-keys-minor-mode-map "\C-x\M-f" 'insert-file-name)
+; (define-key mickey-minor-mode-map "\C-x\M-f" 'insert-file-name)
 
 (defun insert-symbol-at-point-in-regexp-search-ring ()
   "Insert symbol at point in regexp search ring."
   (interactive)
   (add-to-history 'regexp-search-ring (find-tag-default-as-symbol-regexp)))
-(define-key my-keys-minor-mode-map "\M-#" 'insert-symbol-at-point-in-regexp-search-ring)
+(define-key mickey-minor-mode-map "\M-#" 'insert-symbol-at-point-in-regexp-search-ring)
 
 (defun kill-all-buffers ()
   "Kill all buffers, leaving *scratch* only."
@@ -302,7 +302,7 @@ fallback to the mode provided in symbol DEFAULT."
          (ignore-errors (forward-char))
          (backward-word)
          (mark-word arg allow-extend))))
-(define-key my-keys-minor-mode-map (kbd "M-@") 'mark-word-from-beginning)
+(define-key mickey-minor-mode-map (kbd "M-@") 'mark-word-from-beginning)
 
 (defun move-border-left (arg)
   "Move window border in a natural manner.
@@ -314,7 +314,7 @@ Enlarge/Shrink by ARG columns, or 5 if arg is nil."
   (interactive "P")
   (if (= (count-windows) 2)
       (move-border-left-or-right arg t)))
-(define-key my-keys-minor-mode-map (kbd "M-(") 'move-border-left)
+(define-key mickey-minor-mode-map (kbd "M-(") 'move-border-left)
 
 (defun move-border-left-or-right (arg dir)
   "Wrapper around move-border-left and move-border-right.
@@ -331,7 +331,7 @@ If DIR is t, then move left, otherwise move right."
   (interactive "P")
   (if (= (count-windows) 2)
       (move-border-left-or-right arg nil)))
-(define-key my-keys-minor-mode-map (kbd "M-)") 'move-border-right)
+(define-key mickey-minor-mode-map (kbd "M-)") 'move-border-right)
 
 (defun page-count ()
   "Return page count."
@@ -405,7 +405,7 @@ WARNING: this may slow down editing on big files."
                (set-visited-file-name new-name)
                (set-buffer-modified-p nil)
                (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
-(define-key my-keys-minor-mode-map (kbd "C-x w") 'rename-buffer-and-file)
+(define-key mickey-minor-mode-map (kbd "C-x w") 'rename-buffer-and-file)
 
 (defun sanitize ()
   "(Un)tabifies according to `indent-tabs-mode', indents and deletes trailing whitespace.
@@ -429,7 +429,7 @@ Works on buffer or region. Requires `tabify-leading'."
     (if last
         (shell-command last)
       (error "Shell command history is empty"))))
-(define-key my-keys-minor-mode-map (kbd "C-M-!") 'shell-last-command)
+(define-key mickey-minor-mode-map (kbd "C-M-!") 'shell-last-command)
 
 (defun skeleton-make-markers ()
   "Save last skeleton markers in a list.
@@ -488,7 +488,7 @@ Do not fold case with \\[universal-argument] or non-nil ARG."
     (set-window-start w1 s2)
     (set-window-start w2 s1))
   (other-window 1))
-(define-key my-keys-minor-mode-map (kbd "C-x \\") 'swap-windows)
+(define-key mickey-minor-mode-map (kbd "C-x \\") 'swap-windows)
 
 (defun tabify-leading ()
   "Call `tabify' on leading spaces only.
@@ -514,7 +514,7 @@ Works on whole buffer if region is unactive."
         (setq indent-tabs-mode nil))
     (message "Indent using tabs")
     (setq indent-tabs-mode t)))
-; (define-key my-keys-minor-mode-map (kbd "C-x M-i") 'toggle-indent-tabs)
+; (define-key mickey-minor-mode-map (kbd "C-x M-i") 'toggle-indent-tabs)
 
 (defun toggle-trailing-whitespace ()
   "Show trailing whitespace or not."
@@ -535,7 +535,7 @@ from acting on it."
        "Window '%s' is dedicated"
      "Window '%s' is normal")
    (current-buffer)))
-(define-key my-keys-minor-mode-map [pause] 'toggle-window-dedicated)
+(define-key mickey-minor-mode-map [pause] 'toggle-window-dedicated)
 
 (defun toggle-window-split ()
   "Switch between vertical and horizontal split.
@@ -563,7 +563,7 @@ It only works for frames with exactly two windows."
           (set-window-buffer (next-window) next-win-buffer)
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
-(define-key my-keys-minor-mode-map (kbd "C-x C-\\") 'toggle-window-split)
+(define-key mickey-minor-mode-map (kbd "C-x C-\\") 'toggle-window-split)
 
 (defun toggle-word-delim ()
   "Make underscore part of the word syntax or not.

@@ -9,7 +9,7 @@
 (when (fboundp 'set-scroll-bar-mode)
   (set-scroll-bar-mode 'left)
   (scroll-bar-mode -1)
-  (define-key my-keys-minor-mode-map (kbd "C-<f6>") 'toggle-scroll-bar))
+  (define-key mickey-minor-mode-map (kbd "C-<f6>") 'toggle-scroll-bar))
 
 ;; Remember last cursor position.
 (require 'saveplace)
@@ -63,26 +63,26 @@
 (setq kill-whole-line t)
 
 ;; Alternative scrolling
-(define-key my-keys-minor-mode-map [next]
+(define-key mickey-minor-mode-map [next]
   (lambda () (interactive)
     (if (string= major-mode "doc-view-mode")
         (doc-view-next-page)
       (condition-case nil (scroll-up)
         (end-of-buffer (goto-char (point-max)))))))
 
-(define-key my-keys-minor-mode-map [prior]
+(define-key mickey-minor-mode-map [prior]
   (lambda () (interactive)
     (if (string= major-mode "doc-view-mode")
         (doc-view-previous-page)
       (condition-case nil (scroll-down)
         (beginning-of-buffer (goto-char (point-min)))))))
 
-(define-key my-keys-minor-mode-map (kbd "C-x M-n") (lambda () (interactive) (narrow-to-page 1)))
-(define-key my-keys-minor-mode-map (kbd "C-x M-p") (lambda () (interactive) (narrow-to-page -1)))
+(define-key mickey-minor-mode-map (kbd "C-x M-n") (lambda () (interactive) (narrow-to-page 1)))
+(define-key mickey-minor-mode-map (kbd "C-x M-p") (lambda () (interactive) (narrow-to-page -1)))
 
 ;; Line numbers
 (add-hook 'find-file-hook (lambda () (linum-mode 1)))
-(define-key my-keys-minor-mode-map (kbd "C-<f5>") 'linum-mode)
+(define-key mickey-minor-mode-map (kbd "C-<f5>") 'linum-mode)
 (add-hook
  'linum-before-numbering-hook
  (lambda () (if (display-graphic-p) (setq linum-format "%d") (setq linum-format "%d "))))
@@ -131,7 +131,7 @@
    (page-number-mode t)
    ;; (whitespace-mode) ; This mode is a performance killer.
    ))
-(define-key my-keys-minor-mode-map (kbd "C-<f7>") 'whitespace-mode)
+(define-key mickey-minor-mode-map (kbd "C-<f7>") 'whitespace-mode)
 
 (setq
  whitespace-style
@@ -147,10 +147,10 @@
 ; (add-hook 'before-save-hook 'sanitize)
 
 ;; Remove whitespaces on region, or whole file.
-(define-key my-keys-minor-mode-map (kbd "C-\\") 'delete-trailing-whitespace)
+(define-key mickey-minor-mode-map (kbd "C-\\") 'delete-trailing-whitespace)
 
 ;; Hippie expand.
-;; (define-key my-keys-minor-mode-map (kbd "M-/") 'hippie-expand)
+;; (define-key mickey-minor-mode-map (kbd "M-/") 'hippie-expand)
 
 ;; Abbreviation support
 (setq-default abbrev-mode t)
@@ -175,13 +175,13 @@
 
 ;; Default ispell dictionnay. If not set, Emacs uses the current locale.
 (setq ispell-dictionary "english")
-(define-key my-keys-minor-mode-map
+(define-key mickey-minor-mode-map
   (kbd "<f5>")
   (lambda () (interactive) (ispell-change-dictionary "english")))
-(define-key my-keys-minor-mode-map
+(define-key mickey-minor-mode-map
   (kbd "<f6>")
   (lambda () (interactive) (ispell-change-dictionary "francais")))
-(define-key my-keys-minor-mode-map
+(define-key mickey-minor-mode-map
   (kbd "<f7>")
   (lambda () (interactive) (ispell-change-dictionary "svenska")))
 
@@ -197,18 +197,18 @@
 (setq show-paren-delay 0)
 
 ;; query-replace-regex fix on terminals.
-(if (not (fboundp 'tool-bar-mode)) (define-key my-keys-minor-mode-map (kbd "C-M-y") 'query-replace-regexp))
+(if (not (fboundp 'tool-bar-mode)) (define-key mickey-minor-mode-map (kbd "C-M-y") 'query-replace-regexp))
 
 ;; Semantic options.
 ;; (semantic-mode 1)
 (setq semanticdb-default-save-directory (concat emacs-cache-folder "semanticdb"))
-(define-key my-keys-minor-mode-map (kbd "C-c , d") 'semantic-ia-show-summary)
-(define-key my-keys-minor-mode-map (kbd "C-, d") 'semantic-ia-show-summary)
-(define-key my-keys-minor-mode-map (kbd "C-, g") 'semantic-symref-symbol)
-(define-key my-keys-minor-mode-map (kbd "C-, G") 'semantic-symref)
-(define-key my-keys-minor-mode-map (kbd "C-, j") 'semantic-complete-jump-local)
-(define-key my-keys-minor-mode-map (kbd "C-, J") 'semantic-complete-jump)
-(define-key my-keys-minor-mode-map (kbd "C-, l") 'semantic-analyze-possible-completions)
+(define-key mickey-minor-mode-map (kbd "C-c , d") 'semantic-ia-show-summary)
+(define-key mickey-minor-mode-map (kbd "C-, d") 'semantic-ia-show-summary)
+(define-key mickey-minor-mode-map (kbd "C-, g") 'semantic-symref-symbol)
+(define-key mickey-minor-mode-map (kbd "C-, G") 'semantic-symref)
+(define-key mickey-minor-mode-map (kbd "C-, j") 'semantic-complete-jump-local)
+(define-key mickey-minor-mode-map (kbd "C-, J") 'semantic-complete-jump)
+(define-key mickey-minor-mode-map (kbd "C-, l") 'semantic-analyze-possible-completions)
 ;; Semantic with ghost display (allows M-n and M-p to browse completion).
 ;; (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-ghost)
 ;; (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-tooltip)
@@ -219,7 +219,7 @@
 ;;     (electric-pair-mode 1))
 
 ;; Run ranger asynchronously.
-(define-key my-keys-minor-mode-map (kbd "C-x D")
+(define-key mickey-minor-mode-map (kbd "C-x D")
   (lambda () (interactive)
     (let ((term (getenv "TERMCMD")))
       (when (and (executable-find "ranger") (executable-find term))
@@ -230,8 +230,8 @@
 (setq calendar-date-style 'iso)
 
 ;; Quick buffer switching.
-(define-key my-keys-minor-mode-map (kbd "C-<prior>") 'previous-buffer)
-(define-key my-keys-minor-mode-map (kbd "C-<next>") 'next-buffer)
+(define-key mickey-minor-mode-map (kbd "C-<prior>") 'previous-buffer)
+(define-key mickey-minor-mode-map (kbd "C-<next>") 'next-buffer)
 
 ;; Remove auto-fill in web edits because wikis and forums do not like it.
 ;; This works for qutebrowser, but may need changes for other browsers.
@@ -251,12 +251,12 @@
 (require 'functions) ; for `compile-custom'
 (setq compilation-ask-about-save nil)
 (autoload 'recompile "compile" nil t)
-(define-key my-keys-minor-mode-map (kbd "<f10>") 'compile-custom)
-(define-key my-keys-minor-mode-map (kbd "<f11>") 'previous-error)
-(define-key my-keys-minor-mode-map (kbd "<f12>") 'next-error)
+(define-key mickey-minor-mode-map (kbd "<f10>") 'compile-custom)
+(define-key mickey-minor-mode-map (kbd "<f11>") 'previous-error)
+(define-key mickey-minor-mode-map (kbd "<f12>") 'next-error)
 
 ;; Code browsing: make C-M-e jump to next function instead of the end of the current function.
-(define-key my-keys-minor-mode-map (kbd "C-M-e") (lambda () (interactive) (beginning-of-defun -1)))
+(define-key mickey-minor-mode-map (kbd "C-M-e") (lambda () (interactive) (beginning-of-defun -1)))
 
 ;; Common LISP
 (setq inferior-lisp-program "clisp")
@@ -291,8 +291,8 @@
 ;; Do not expand abbrevs in skeletons.
 (setq-default skeleton-further-elements '((abbrev-mode nil)))
 (add-hook 'skeleton-end-hook 'skeleton-make-markers)
-(define-key my-keys-minor-mode-map (kbd "C->") 'skeleton-next-position)
-(define-key my-keys-minor-mode-map (kbd "C-<") (lambda () (interactive) (skeleton-next-position t)))
+(define-key mickey-minor-mode-map (kbd "C->") 'skeleton-next-position)
+(define-key mickey-minor-mode-map (kbd "C-<") (lambda () (interactive) (skeleton-next-position t)))
 
 ;; Alternate focus.
 (add-hook 'occur-hook (lambda () (pop-to-buffer occur-buf)))
@@ -345,13 +345,13 @@
 (which-function-mode)
 
 ;; Replace maximized binding for fullscreen.
-(define-key my-keys-minor-mode-map (kbd "M-<f10>") 'toggle-frame-fullscreen)
+(define-key mickey-minor-mode-map (kbd "M-<f10>") 'toggle-frame-fullscreen)
 
 ;; Scroll zooming. 
-(define-key my-keys-minor-mode-map (kbd "C-<wheel-down>") 'text-scale-decrease)
-(define-key my-keys-minor-mode-map (kbd "C-<mouse-5>") 'text-scale-decrease)
-(define-key my-keys-minor-mode-map (kbd "C-<wheel-up>") 'text-scale-increase)
-(define-key my-keys-minor-mode-map (kbd "C-<mouse-4>") 'text-scale-increase)
+(define-key mickey-minor-mode-map (kbd "C-<wheel-down>") 'text-scale-decrease)
+(define-key mickey-minor-mode-map (kbd "C-<mouse-5>") 'text-scale-decrease)
+(define-key mickey-minor-mode-map (kbd "C-<wheel-up>") 'text-scale-increase)
+(define-key mickey-minor-mode-map (kbd "C-<mouse-4>") 'text-scale-increase)
 (setq text-scale-mode-step 1.1)
 
 ;; Sort
@@ -384,5 +384,5 @@
 ;           (dolist (error-or-warning (cadr menu-data))
 ;             (push (car error-or-warning) messages))
 ;           (message "%s" (mapconcat #'identity (reverse messages) "\n"))))))
-; (define-key my-keys-minor-mode-map (kbd "C-<f10>")
+; (define-key mickey-minor-mode-map (kbd "C-<f10>")
 ;  'flymake-display-err-message-for-current-line)

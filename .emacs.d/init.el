@@ -3,22 +3,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Global variables.
 
-(defvar my-keys-minor-mode-map (make-keymap)
-  "Keymap for my-keys-minor-mode. See its docstring for more
+(defvar mickey-minor-mode-map (make-keymap)
+  "Keymap for mickey-minor-mode. See its docstring for more
 details.")
 
-(define-minor-mode my-keys-minor-mode
-  "A minor mode so that all bindings assingned on the
-my-keys-minor-mode-map override undesired major modes
-bindings. We use a minor mode to override global keys. This is
-also rather useful to list all personal global bindings: just
-rgrep `my-keys-minor-mode-map' over `~/.emacs.d'.
+(define-minor-mode mickey-minor-mode
+  "The mode's keymap allows for overriding all global and major mode keys.
+To view where the bindings are set in your config files, lookup
+`mickey-minor-mode-map' over it. Example:
 
-Example: to assign some-function to C-i, use
-
-  (define-key my-keys-minor-mode-map (kbd \"C-i\") 'some-function)"
-  t " my-keys" 'my-keys-minor-mode-map)
-(add-hook 'minibuffer-setup-hook (lambda () (my-keys-minor-mode 0)))
+  (define-key mickey-minor-mode-map (kbd \"C-i\") 'some-function)"
+  t " my-keys" 'mickey-minor-mode-map)
+(add-hook 'minibuffer-setup-hook (lambda () (mickey-minor-mode 0)))
 
 (defvar emacs-cache-folder "~/.cache/emacs/"
   "Cache folder is everything we do not want to track along with
@@ -162,10 +158,10 @@ Example: to assign some-function to C-i, use
   ;; Load the file at the new location.
   (load mc/list-file t)
   (global-unset-key (kbd "C-<down-mouse-1>"))
-  (define-key my-keys-minor-mode-map (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
-  (define-key my-keys-minor-mode-map (kbd "C-x M-r") 'mc/edit-lines)
-  (define-key my-keys-minor-mode-map (kbd "C-x M-m") 'mc/mark-more-like-this-extended)
-  (define-key my-keys-minor-mode-map (kbd "C-x M-l") 'mc/mark-all-like-this-dwim)
+  (define-key mickey-minor-mode-map (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
+  (define-key mickey-minor-mode-map (kbd "C-x M-r") 'mc/edit-lines)
+  (define-key mickey-minor-mode-map (kbd "C-x M-m") 'mc/mark-more-like-this-extended)
+  (define-key mickey-minor-mode-map (kbd "C-x M-l") 'mc/mark-all-like-this-dwim)
   ;; Search compatible with mc.
   (require 'phi-search nil t))
 
@@ -183,20 +179,20 @@ Example: to assign some-function to C-i, use
   (setq helm-buffers-fuzzy-matching t)
   (setq helm-imenu-fuzzy-match t)
   (setq helm-M-x-fuzzy-match t)
-  (define-key my-keys-minor-mode-map (kbd "M-x") 'helm-M-x)
-  (define-key my-keys-minor-mode-map (kbd "C-x M-f") 'helm-imenu)
-  (define-key my-keys-minor-mode-map (kbd "C-x C-/") 'helm-find)
+  (define-key mickey-minor-mode-map (kbd "M-x") 'helm-M-x)
+  (define-key mickey-minor-mode-map (kbd "C-x M-f") 'helm-imenu)
+  (define-key mickey-minor-mode-map (kbd "C-x C-/") 'helm-find)
   (when (require 'helm-fuzzy-find nil t)
-    (define-key my-keys-minor-mode-map (kbd "C-c C-/") 'helm-fuzzy-find))
-  (define-key my-keys-minor-mode-map (kbd "C-x C-f") 'helm-find-files)
-  (define-key my-keys-minor-mode-map (kbd "C-x C-d") 'helm-browse-project)
-  (define-key my-keys-minor-mode-map (kbd "C-x b") 'helm-buffers-list)
-  (define-key my-keys-minor-mode-map (kbd "C-x C-b") 'helm-mini)
-  (define-key my-keys-minor-mode-map (kbd "M-y") 'helm-show-kill-ring)
-  (define-key my-keys-minor-mode-map (kbd "C-x C-x") 'helm-all-mark-rings)
-  (define-key my-keys-minor-mode-map (kbd "C-x x") 'helm-mark-ring)
-  (define-key my-keys-minor-mode-map (kbd "M-s o") 'helm-occur)
-  (define-key my-keys-minor-mode-map (kbd "C-h a") 'helm-apropos)
+    (define-key mickey-minor-mode-map (kbd "C-c C-/") 'helm-fuzzy-find))
+  (define-key mickey-minor-mode-map (kbd "C-x C-f") 'helm-find-files)
+  (define-key mickey-minor-mode-map (kbd "C-x C-d") 'helm-browse-project)
+  (define-key mickey-minor-mode-map (kbd "C-x b") 'helm-buffers-list)
+  (define-key mickey-minor-mode-map (kbd "C-x C-b") 'helm-mini)
+  (define-key mickey-minor-mode-map (kbd "M-y") 'helm-show-kill-ring)
+  (define-key mickey-minor-mode-map (kbd "C-x C-x") 'helm-all-mark-rings)
+  (define-key mickey-minor-mode-map (kbd "C-x x") 'helm-mark-ring)
+  (define-key mickey-minor-mode-map (kbd "M-s o") 'helm-occur)
+  (define-key mickey-minor-mode-map (kbd "C-h a") 'helm-apropos)
   (setq helm-follow-mode-persistent t)
   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages))
 
@@ -219,7 +215,7 @@ Example: to assign some-function to C-i, use
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; We need to put it at the end to make sure it doesn't get overriden by other
 ;; minor modes.
-(my-keys-minor-mode 1)
+(mickey-minor-mode 1)
 
 ;; Local hook. You can use it to set system specific variables, such as the
 ;; external web browser or pdf viewer. You can also backport feature for old
