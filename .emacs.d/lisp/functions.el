@@ -164,6 +164,14 @@ parameters."
     (error (message "Invalid expression")
            (insert (current-kill 0)))))
 
+(defun find-symbol-at-point ()
+  "Find directly the symbol at point in the other window."
+  (interactive)
+  (let ((sym (symbol-at-point)))
+    (if (boundp sym)
+        (find-variable-at-point)
+      (find-function-at-point))))
+
 ;; Fix forward-page. Previously, when the point was at the end of the page,
 ;; going forward would skip 1 page.  Changed:
 ;;

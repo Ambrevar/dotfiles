@@ -105,6 +105,11 @@
  '(lisp-mode-hook emacs-lisp-mode-hook))
 
 (add-hook
+ 'emacs-lisp-mode-hook
+ (lambda ()
+   (local-set-key (kbd "M-.") 'find-symbol-at-point)))
+
+(add-hook
  'change-log-mode-hook
  (lambda ()
    (setq tab-width 2)
