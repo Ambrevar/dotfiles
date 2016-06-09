@@ -7,18 +7,18 @@ SOURCEDIR="$HOME/dataperso"
 [ -z "$XDG_DATA_DIRS" ] && XDG_DATA_DIRS="/usr/local/share"
 
 echo "==> 'temp' folder"
-mkdir -p "$HOME/temp"
+mkdir -pv "$HOME/temp"
 
 echo "==> Abook"
-ln -snf "$SOURCEDIR/contacts" "$HOME/.abook"
+ln -snfv "$SOURCEDIR/contacts" "$HOME/.abook"
 
 echo "==> Mutt"
 [ -d "$SOURCEDIR/mails" ] && ln -snf "$SOURCEDIR/mails" "$HOME/.mutt.d"
-mkdir -p "$HOME/.cache/mutt/headers"
-mkdir -p "$HOME/.cache/mutt/messages"
+mkdir -pv "$HOME/.cache/mutt/headers"
+mkdir -pv "$HOME/.cache/mutt/messages"
 
 echo "==> To-Do"
-ln -sf "$SOURCEDIR/todo/todo.org" "$HOME/todo.org"
+ln -sfv "$SOURCEDIR/todo/todo.org" "$HOME/todo.org"
 
 echo "==> Bookmarks"
 if [ -z "$BROWSER" ]; then
@@ -29,31 +29,32 @@ else
 		BOOKMARKS="$XDG_CONFIG_HOME/$BROWSER/default/"
 		QUICKMARKS="$XDG_CONFIG_HOME/$BROWSER/default/" ;;
 	qutebrowser)
-		mkdir -p "$XDG_CONFIG_HOME/$BROWSER/bookmarks"
+		mkdir -pv "$XDG_CONFIG_HOME/$BROWSER/bookmarks"
 		BOOKMARKS="$XDG_CONFIG_HOME/$BROWSER/bookmarks/urls"
 		QUICKMARKS="$XDG_CONFIG_HOME/$BROWSER/" ;;
 	*)
 		BOOKMARKS="$XDG_CONFIG_HOME/$BROWSER/"
 		QUICKMARKS="$XDG_CONFIG_HOME/$BROWSER/" ;;
 	esac
-	ln -sf "$SOURCEDIR/bookmarks/bookmarks" "$BOOKMARKS"
-	ln -sf "$SOURCEDIR/bookmarks/quickmarks" "$QUICKMARKS"
+	ln -sfv "$SOURCEDIR/bookmarks/bookmarks" "$BOOKMARKS"
+	ln -sfv "$SOURCEDIR/bookmarks/quickmarks" "$QUICKMARKS"
 fi
 
 echo "==> Newsbeuter"
-mkdir -p "$XDG_DATA_HOME/newsbeuter"
-ln -sf "$SOURCEDIR/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
-ln -sf "$SOURCEDIR/news/news_starred" "$XDG_CONFIG_HOME/newsbeuter/"
+mkdir -pv "$XDG_DATA_HOME/newsbeuter"
+ln -sfv "$SOURCEDIR/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
+ln -sfv "$SOURCEDIR/news/news_starred" "$XDG_CONFIG_HOME/newsbeuter/"
 
 echo "==> Launchers"
-ln -snf "$SOURCEDIR/launchers" "$HOME/.launchers"
+ln -snfv "$SOURCEDIR/launchers" "$HOME/.launchers"
 
 echo "==> Hackpool"
-ln -snf "$SOURCEDIR/hackpool" "$HOME/.hackpool"
+ln -snfv "$SOURCEDIR/hackpool" "$HOME/.hackpool"
 
-echo "==> Go extra dev tools"
-mkdir -p "$HOME/.go"
+echo "==> Go path"
+mkdir -pv "$HOME/.go"
 if command -v go >/dev/null 2>&1; then
+	echo "==> Go extra dev tools"
 	export GOPATH=~/.go
 	export PATH="$PATH:$GOPATH/bin"
 	## See https://dominik.honnef.co/posts/2014/12/an_incomplete_list_of_go_tools/.
@@ -65,4 +66,9 @@ if command -v go >/dev/null 2>&1; then
 		honnef.co/go/unused/cmd/unused
 	go get -v github.com/alecthomas/gometalinter && gometalinter -i
 	strip -s "$HOME/.go/bin"/*
+fi
+
+if command -v emacs >/dev/null 2>&1; then
+	echo "==> Emacs extra packages"
+	emacs --batch -l ~/.emacs.d/init.el --eval '(init-extra-packages)' 2>/dev/null
 fi
