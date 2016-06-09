@@ -96,7 +96,7 @@ if command -v highlight >/dev/null 2>&1; then
 	hlt-viewer () {
 		local SAMPLE DUMMY
 
-		_usage ()
+		local usage ()
 		{
 			cat<<EOF
 Usage: $1
@@ -110,7 +110,7 @@ EOF
 		}
 
 		if [ $# -gt 0 ]; then
-			_usage "$0"
+			usage "$0"
 			return
 		fi
 
@@ -166,55 +166,13 @@ typex () {
 	file "$xpath" | cut -d':' -f2 | cut -b 2-
 }
 
-## BAD CODE. This function will try to find an input binary file in the content
-## of binary files in current folder. It does not work on big file because
-## 'find' and 'grep' have an argument length limit.
-bindatasearch () {
-	echo "Deprecated function."
-	return
-
-	if [ $# -ne 2 ] -; then
-		echo "Usage: $0 FILECHUNK BIGFILE"
-		return
-	fi
-
-	if [ $(wc -c Cover.jpg | cut -f1 -d' ') -gt 1048576 ]; then
-		echo "[$1] file size must not exceed 1MB."
-		return
-	fi
-
-	## The awk command suppresses first column, spaces and line breaks.
-	local SOURCE
-	SOURCE=$(od -tx8 "$1" | awk '($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }')
-
-	local FILEDUMP
-	FILEDUMP=$(od -tx8 "$1" | awk '($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }')
-
-	# grep -q "$SOURCE" <(echo "$FILEDUMP")
-
-	## This special, not well-known syntax allows us to execute a set of
-	## functions upon the result of find.  Since everything MUST be between
-	## simple quotes, we cannot use external variables directly. So we pass the
-	## $SOURCE variable as argument. The underscore at the end allows the use of
-	## arguments. Note it will not work
-	#     find "$TARGET" -type f -exec sh -c '
-	#           # FILEDUMP=$(od -tx8 "$1" | awk '"'"'($1="")1 gsub ( /\s/,"") { printf ("%s", $0) }'"'"')
-	#           # grep -q "$2" <(echo $FILEDUMP)
-
-	#           # [ $? -eq 0 ] && echo "$1"
-	# ' _ {} "$SOURCE" \;
-}
-
+# Automatically change the directory in shell after closing ranger.
+# Compatible with ranger >= 1.4.2.
+#
+# To undo the effect of this function, you can type "cd -" to return to the
+# original directory.
 browse () {
-	# Compatible with ranger 1.4.2 through 1.6.*
-	#
-	# Automatically change the directory in bash after closing ranger.
-	#
-	# This is a shell wrapper script to automatically change the directory to the
-	# last visited one after ranger quits. To undo the effect of this function, you
-	# can type "cd -" to return to the original directory.
-
-	tempfile="$(mktemp)"
+	local tempfile="$(mktemp)"
 	ranger --choosedir="$tempfile" "${@:-$(pwd)}"
 	if [ -f "$tempfile" ] && [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
 		cd -- "$(cat "$tempfile")"
@@ -222,9 +180,8 @@ browse () {
 	rm -f -- "$tempfile"
 }
 
-## Webcam testing
+## Webcam testing with an mplayer-like player.
 webcam () {
-	## With mplayer-like player.
 	mpv --tv driver=v4l2:width=640:height=480:device=/dev/video0 tv://
 }
 
@@ -256,7 +213,6 @@ xmultioff () {
 
 ##==============================================================================
 ## Pacman functions
-##==============================================================================
 
 if command -v pacman >/dev/null 2>&1; then
 	## Get detailed file list for the specified packages, omitting folders.
@@ -271,10 +227,9 @@ fi
 
 ##==============================================================================
 ## FreeBSD functions
-##==============================================================================
 
 if [ "$(uname)" = FreeBSD ]; then
-	## TODO: useless ?
+	## TODO: Useless FreeBSD function?
 	# mqs () {
 	#     local str="$(echo "$@" | sed -E 's/[ \t]+/\\|/g')"
 	#     (cd /usr/ports && make quicksearch name="$str")
@@ -297,28 +252,22 @@ fi
 
 ##==============================================================================
 ## TeXlive functions
-##==============================================================================
 
-## TeXlive
+## It is important to set umask properly, otherwise users might not have
+## authorization to use the packages.
+
 if [ -d "/usr/local/texlive" ]; then
-	## WARNING: it is important to set umask properly, otherwise users might
-	## not have authorization to use the packages.
-
-	## It is bad pratice to write args without double quotes, but since we are
-	## sure there is no space in TeX Live packages, it is OK here.
-
 	tli () {
-		sudo sh -c 'umask 022 && tlmgr install $0 $@' "$@"
+		sudo sh -c 'umask 022 && tlmgr install $0 "$@"' "$@"
 	}
 
 	tlr () {
-		sudo sh -c 'umask 022 && tlmgr remove $0 $@' "$@"
+		sudo sh -c 'umask 022 && tlmgr remove $0 "$@"' "$@"
 	}
 fi
 
 ##==============================================================================
 ## Luarocks functions
-##==============================================================================
 
 if command -v luarocks >/dev/null 2>&1; then
 	lri () {

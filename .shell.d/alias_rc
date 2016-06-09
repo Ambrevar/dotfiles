@@ -31,7 +31,6 @@ alias ll='ls -lh'    # Detailed view with human readable values.
 alias lx='ls -lXh'   # Sort by extension
 
 ## Misc
-alias xlx='xrdb -load ~/.Xresources'
 alias grep='grep --color=auto'
 
 # List desktop applications.
@@ -65,19 +64,6 @@ command -v udiskie-umount >/dev/null 2>&1 && alias uua='udiskie-umount -a'
 
 ## Emacs
 command -v emacsclient >/dev/null 2>&1 && alias emacs-kill="emacsclient -e '(kill-emacs)' >/dev/null 2>&1"
-
-##==============================================================================
-## Zsh power aliases
-
-#if [ "zsh" = "$SHELL_CURRENT" ]; then
-## Inline aliases, zsh -g aliases can be anywhere in command line
-#alias -g G='| grep -'
-#alias -g L='| less'
-
-## Now just type the image name to launch your image preview
-#alias -s jpg='/usr/bin/sxiv'
-
-# fi
 
 ##==============================================================================
 ## Pacman aliases
@@ -133,6 +119,5 @@ if [ -d "/usr/local/texlive" ]; then
 	alias tll="comm -3 <(tlmgr info --only-installed | grep -v 'x86_64\|amd64' | cut -d' ' -f2 | cut -f1 -d':' | sort) \
 <(tlmgr info collection-basic --list | sed -n '/^	/{s/	//g;p;}' | sort) \
 | sed 's/	//g' | grep -vi 'collection-basic\|scheme-minimal\|texlive-common\|texlive-docindex\|texlive-en'"
-
 	alias tlf="tlmgr info --list"
 fi
