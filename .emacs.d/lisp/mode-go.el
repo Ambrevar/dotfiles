@@ -1,9 +1,7 @@
 ;;==============================================================================
 ;; Go
 ;;==============================================================================
-(add-to-list 'package-pinned-packages 'go-rename)
-(add-to-list 'package-pinned-packages 'helm-go-package)
-;; Optional packages: go-autocomplete, go-guru
+;; Optional packages: go-autocomplete?, go-complete?, go-guru
 
 (defun go-eval-buffer ()
   "Eval buffer with `go run'."
