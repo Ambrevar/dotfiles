@@ -6,7 +6,7 @@
 ## It should not output anything to stdout.
 
 ## In KB.
-CACHE_LIMIT=51200
+CACHE_LIMIT=102400
 
 cd "$1" 2>/dev/null
 [ $? -ne 0 ] && exit
