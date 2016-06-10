@@ -129,24 +129,21 @@
 ;; Highlight selections -- not activated by default on old Emacs.
 (transient-mark-mode 1)
 
-;; Whitespace, tabs, and other frivolities.  Highlight trailing whitespaces. For
-;; programming languages only, so that it does not affect buffer like calendar
-;; and so on. There is no prog-mode-hook on Emacs<24.
+;; There is no prog-mode-hook on Emacs<24.
 (require 'functions) ; for `page-number-mode'
 (add-hook
  'prog-mode-hook
  (lambda ()
-   (page-number-mode t)
-   ;; (whitespace-mode) ; This mode is a performance killer.
-   ))
-(define-key mickey-minor-mode-map (kbd "C-<f7>") 'whitespace-mode)
+   (page-number-mode t)))
 
+(define-key mickey-minor-mode-map (kbd "C-<f7>") 'whitespace-mode)
 (setq
  whitespace-style
- '(face indentation::space space-after-tab space-before-tab tab-mark trailing))
-;; TODO: whitespace report-on-bogus and cleanup do not seem to work properly.
-;; Empty lines seems to be always true. Report is shown even when style is not
-;; matching the errors.
+ '(face empty indentation space-after-tab space-before-tab tab-mark trailing))
+;; `whitespace-report' will mistakenly always report empty lines at
+;; beginning and end of buffer as long as there is at least one empty line.
+;; `whitespace-cleanup' works properly however.
+;; DONE: Reported at http://debbugs.gnu.org/cgi/bugreport.cgi?bug=23740.
 ; (setq whitespace-action '(report-on-bogus))
 
 ;; WARNING: this can break some configuration files needing whitespaces at the
@@ -355,7 +352,7 @@
 ;; Replace maximized binding for fullscreen.
 (define-key mickey-minor-mode-map (kbd "M-<f10>") 'toggle-frame-fullscreen)
 
-;; Scroll zooming. 
+;; Scroll zooming.
 (define-key mickey-minor-mode-map (kbd "C-<wheel-down>") 'text-scale-decrease)
 (define-key mickey-minor-mode-map (kbd "C-<mouse-5>") 'text-scale-decrease)
 (define-key mickey-minor-mode-map (kbd "C-<wheel-up>") 'text-scale-increase)
