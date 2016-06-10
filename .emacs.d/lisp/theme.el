@@ -12,27 +12,27 @@
 ;; on it and call 'describe-face'.
 
 ;; General
-(set-face-foreground  'default                     "white" )
-(set-face-background  'default                     "black" )
+(set-face-foreground  'default                     "white")
+(set-face-background  'default                     "black")
 ;; Font size
 (if (fboundp 'tool-bar-mode)
     ;; (set-face-attribute 'default nil :height 100)
     (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-10")))
-(if (string-match "^23.*" emacs-version )
+(if (string-match "^23.*" emacs-version)
     (set-face-background 'modeline "white")
   (set-face-background 'mode-line "white"))
 
-(set-face-foreground  'link                        "#00ffff" )
+(set-face-foreground  'link                        "#00ffff")
 (set-face-underline-p 'link                        t)
-(set-face-foreground  'minibuffer-prompt           "#00ffff" )
+(set-face-foreground  'minibuffer-prompt           "#00ffff")
 (set-face-background  'region                      "#191970")
-(set-face-background  'isearch                     "#8b0000" )
-(set-face-foreground  'isearch                     "white" )
-(set-face-background  'isearch-lazy-highlight-face "#8b4500" )
-(set-face-foreground  'isearch-lazy-highlight-face "white" )
+(set-face-background  'isearch                     "#8b0000")
+(set-face-foreground  'isearch                     "white")
+(set-face-background  'isearch-lazy-highlight-face "#8b4500")
+(set-face-foreground  'isearch-lazy-highlight-face "white")
 (when (>= emacs-major-version 24)
-      (set-face-foreground  'error                       "red")
-      (set-face-bold-p      'error                       t))
+      (set-face-foreground  'error "red")
+      (set-face-bold-p      'error t))
 
 ;; Blinking cursor is on only when Emacs is not daemonized.
 (unless (getenv "EMACS_SERVER")
@@ -41,33 +41,33 @@
 ;; Line numbers. Graphic version has a gray bar separating text from line
 ;; numbers, so we can leave the background black.
 (if (display-graphic-p)
-    (set-face-background  'shadow                      "black" )
-  (set-face-background  'shadow                      "#1c1c1c" ))
+    (set-face-background 'shadow "black")
+  (set-face-background 'shadow   "#1c1c1c"))
 
 ;; Whitespace mode
 (add-hook
  'whitespace-load-hook
  (lambda ()
-   (set-face-background  'whitespace-space-after-tab       "#a9a9a9")
-   (set-face-background  'whitespace-indentation           "#696969")))
+   (set-face-background 'whitespace-space-after-tab "#a9a9a9")
+   (set-face-background 'whitespace-indentation     "#696969")))
 
 ;; Programming
-(set-face-foreground  'font-lock-builtin-face           "#d2691e" )
-(set-face-bold-p      'font-lock-builtin-face           t )
-(set-face-foreground  'font-lock-comment-delimiter-face "#008b8b" )
-(set-face-foreground  'font-lock-comment-face           "#008b8b" )
-(set-face-foreground  'font-lock-constant-face          "#9400d3" )
-;; (set-face-foreground  'font-lock-constant-face          "#1e90ff" )
-;; (set-face-bold-p      'font-lock-constant-face          t )
-(set-face-foreground  'font-lock-doc-face               "#00bfff" )
-(set-face-foreground  'font-lock-function-name-face     "#d2691e" )
-(set-face-foreground  'font-lock-keyword-face           "#3cb371" )
-(set-face-bold-p      'font-lock-keyword-face           t )
-(set-face-foreground  'font-lock-preprocessor-face      "#9400d3" )
-(set-face-foreground  'font-lock-string-face            "#0080d4" )
-(set-face-foreground  'font-lock-type-face              "#aa2a00" )
-(set-face-foreground  'font-lock-variable-name-face     "#ffff00" )
-(set-face-foreground  'font-lock-warning-face           "DarkOrange" )
+(set-face-foreground  'font-lock-builtin-face           "#d2691e")
+(set-face-bold-p      'font-lock-builtin-face           t)
+(set-face-foreground  'font-lock-comment-delimiter-face "#008b8b")
+(set-face-foreground  'font-lock-comment-face           "#008b8b")
+(set-face-foreground  'font-lock-constant-face          "#9400d3")
+;; (set-face-foreground  'font-lock-constant-face          "#1e90ff")
+;; (set-face-bold-p      'font-lock-constant-face          t)
+(set-face-foreground  'font-lock-doc-face               "#00bfff")
+(set-face-foreground  'font-lock-function-name-face     "#d2691e")
+(set-face-foreground  'font-lock-keyword-face           "#3cb371")
+(set-face-bold-p      'font-lock-keyword-face           t)
+(set-face-foreground  'font-lock-preprocessor-face      "#9400d3")
+(set-face-foreground  'font-lock-string-face            "#0080d4")
+(set-face-foreground  'font-lock-type-face              "#aa2a00")
+(set-face-foreground  'font-lock-variable-name-face     "#ffff00")
+(set-face-foreground  'font-lock-warning-face           "DarkOrange")
 
 ;; Sh-mode
 (add-hook
@@ -88,8 +88,7 @@
    (set-face-foreground 'compilation-column-number "cyan")
    (set-face-foreground 'compilation-line-number "cyan")
    (set-face-foreground 'compilation-error "red")
-   (set-face-foreground 'compilation-info "green")
-))
+   (set-face-foreground 'compilation-info "green")))
 
 ;; C additional keywords.
 (mapcar
@@ -145,26 +144,25 @@
 ;; Make Emacs and Mutt colors fit.
 (font-lock-add-keywords
  'mail-mode
- '(
-      ("^From:" . font-lock-preprocessor-face)
-      ("^Subject:" . font-lock-warning-face)
-      ("^Reply-To:" . font-lock-type-face)
-      ("^In-Reply-To:" . font-lock-builtin-face)
-      ;; Mail addresses.
-      ("\\([[:alnum:]._-]+@[[:alnum:]._-]+\.[[:alnum:]._-]+\\)" 1 font-lock-string-face)
-      ;; Quote
-      ("^\> *\\([^\> ]\\).*$" . font-lock-doc-face)
-      ;; Quote+
-      ("^\> *\> *\\([^\> ]\\).*$" . font-lock-constant-face)
-      ("^\> *\> *\> *\\([^\> ]\\).*$" . font-lock-type-face)
-      ("^\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-variable-name-face)
-      ("^\> *\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-comment-face)
-      ("^\> *\> *\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-comment-face)
-      ("^\> *\> *\> *\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-comment-face)
-      ("^\> *\> *\> *\> *\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-comment-face)
-      ;; Signature
-      ;; TODO: mail signature face does not work properly.
-      ("^--.*\\(\n.*\\)*" . font-lock-comment-face)))
+ '(("^From:" . font-lock-preprocessor-face)
+   ("^Subject:" . font-lock-warning-face)
+   ("^Reply-To:" . font-lock-type-face)
+   ("^In-Reply-To:" . font-lock-builtin-face)
+   ;; Mail addresses.
+   ("\\([[:alnum:]._-]+@[[:alnum:]._-]+\.[[:alnum:]._-]+\\)" 1 font-lock-string-face)
+   ;; Quote
+   ("^\> *\\([^\> ]\\).*$" . font-lock-doc-face)
+   ;; Quote+
+   ("^\> *\> *\\([^\> ]\\).*$" . font-lock-constant-face)
+   ("^\> *\> *\> *\\([^\> ]\\).*$" . font-lock-type-face)
+   ("^\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-variable-name-face)
+   ("^\> *\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-comment-face)
+   ("^\> *\> *\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-comment-face)
+   ("^\> *\> *\> *\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-comment-face)
+   ("^\> *\> *\> *\> *\> *\> *\> *\> *\\([^\> ]\\).*$" . font-lock-comment-face)
+   ;; Signature
+   ;; TODO: mail signature face does not work properly.
+   ("^--.*\\(\n.*\\)*" . font-lock-comment-face)))
 
 ;; Key notes highlighting. We need to apply it to the mode hook since
 ;; font-lock-add-keywords has no inheritance support.
@@ -179,7 +177,7 @@
          ("\\<\\(TODO\\):" 1 font-lock-warning-face prepend)
          ("\\<\\(WARNING\\):" 1 font-lock-warning-face prepend))))))
  '(prog-mode-hook tex-mode-hook texinfo-mode-hook))
-;; Digits regex are not perfect, and may make emacs slow. Sure?
+;; Digits regex are not perfect. May make Emacs slow?
 ;; ("[^[:digit:][:space:]][[:space:]]*\\(-\\)[[:digit:]]+" 1 font-lock-constant-face)
 ;; ("\\(0x[[:digit:]a-fA-F]+\\)[^[:alnum:]_]" 1 font-lock-constant-face)
 ;; ("[^[:alnum:]_]\\([[:digit:]]*\\.?[[:digit:]]+\\)[^[:alnum:]_.]" 1 font-lock-constant-face)
@@ -192,26 +190,6 @@
    (set-face-foreground 'Man-overstrike "cyan")
    (set-face-bold-p 'Man-overstrike nil)))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'theme)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Old attempts.
-
-;; C-mode printf highlight.
-;; (defvar font-lock-format-specifier-face 'font-lock-format-specifier-face
-;;   "Face name to use for format specifiers.")
-;; (defface font-lock-format-specifier-face
-;;   '((t (:foreground "OrangeRed1")))
-;;   "Font Lock mode face used to highlight format specifiers."
-;;   :group 'font-lock-faces)
-;; TODO: disable highlighting outside of string.
-;; (add-hook
-;;  'c-mode-common-hook
-;;  (lambda ()
-;;    (font-lock-add-keywords
-;;     nil
-;;     '(("[^%]\\(%\\([[:digit:]]+\\$\\)?[-+' #0*]*\\([[:digit:]]*\\|\\*\\|\\*[[:digit:]]+\\$\\)\\(\\.\\([[:digit:]]*\\|\\*\\|\\*[[:digit:]]+\\$\\)\\)?\\([hlLjzt]\\|ll\\|hh\\)?\\([aAbdiuoxXDOUfFeEgGcCsSpn]\\|\\[\\^?.[^]]*\\]\\)\\)"
-;;        1 font-lock-format-specifier-face t)
-;;       ("\\(%%\\)"
-;;        1 font-lock-format-specifier-face t)) )))
