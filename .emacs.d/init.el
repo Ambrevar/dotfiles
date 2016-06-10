@@ -216,6 +216,7 @@ To view where the bindings are set in your config files, lookup
 
 (add-to-list 'favorite-packages 'magit)
 (when (require 'magit nil t)
+  (set-face-foreground  'magit-branch-remote "orange red")
   (setq git-commit-summary-max-length git-commit-fill-column)
   (global-set-key (kbd "C-x g") 'magit-status))
 
