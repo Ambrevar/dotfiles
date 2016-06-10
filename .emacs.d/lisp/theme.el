@@ -30,6 +30,7 @@
 (set-face-foreground  'isearch                     "white")
 (set-face-background  'isearch-lazy-highlight-face "#8b4500")
 (set-face-foreground  'isearch-lazy-highlight-face "white")
+(set-face-attribute 'highlight nil :background 'unspecified :box "white")
 (when (>= emacs-major-version 24)
       (set-face-foreground  'error "red")
       (set-face-bold-p      'error t))

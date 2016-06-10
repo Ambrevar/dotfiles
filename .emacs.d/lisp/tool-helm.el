@@ -36,11 +36,10 @@
 (set-face-background 'helm-selection "#4f4f4f")
 (set-face-background 'helm-visible-mark "#2f2f2f")
 (set-face-foreground 'helm-visible-mark nil)
+(set-face-foreground 'helm-match "red")
 (set-face-attribute 'helm-buffer-file nil :background 'unspecified :foreground "while" :weight 'normal)
 (set-face-attribute 'helm-buffer-file nil :background 'unspecified :foreground "while" :weight 'normal)
 (set-face-attribute 'helm-buffer-directory nil :background 'unspecified :foreground "#1e90ff" :weight 'bold)
-(set-face-foreground 'helm-match "red")
-(set-face-foreground 'helm-match-item "red")
 (set-face-attribute 'helm-ff-directory nil :background 'unspecified :foreground 'unspecified :weight 'unspecified :inherit 'helm-buffer-directory)
 (set-face-attribute 'helm-ff-file nil :background 'unspecified :foreground 'unspecified :weight 'unspecified :inherit 'helm-buffer-file)
 ;; Helm color for unsaved buffers? Dim special *buffers*?
