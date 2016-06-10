@@ -145,20 +145,25 @@ echokeymap () {
 
 ## Extended info
 typex () {
-	local xpath
-	if [ $# -ne 1 ] || ! command -v "$1" >/dev/null 2>&1; then
-		echo "Provide an existing command as parameter."
+	local xpath cmd
+
+	if [ $# -lt 1 ]; then
+		echo >&2 "Provide an existing command as parameter."
 		return
 	fi
 
-	if [ -z "$(command -v "$1" 2>/dev/null | grep ^/)" ]; then
-		type "$1"
-		return
-	fi
-
-	xpath="$(type $1 | cut -d' ' -f3)"
-	ls -l "$xpath"
-	file "$xpath" | cut -d':' -f2 | cut -b 2-
+	for i; do
+		cmd="$(command -v "$i" 2>/dev/null)"
+		if [ $? -ne 0 ]; then
+			echo "$i does not exist."
+		elif [ -z "$(echo "$cmd" | grep ^/)" ]; then
+			type "$i"
+		else
+			xpath="$(type $1 | cut -d' ' -f3)"
+			ls -l "$xpath"
+			file "$xpath" | cut -d':' -f2 | cut -b 2-
+		fi
+	done
 }
 
 # Automatically change the directory in shell after closing ranger.
