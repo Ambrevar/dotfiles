@@ -4,36 +4,30 @@
 
 ## Let's check if pacman completion is already loaded. If not, we parse the
 ## pacman completion file.
-if [ -n "$(type _pacman_action_none | grep "not found")" ]; then
+if [ $(type _pacman_action_none | grep -c "not found") -gt 0 ]; then
 	source "/usr/share/zsh/site-functions/_pacman"
 fi
 
 _pcc () {
 	case $words[1] in
-	pacfiles)
-		_pacman_action_query
-		return ;;
-
-	pql)
-		_pacman_action_query
-		return ;;
-
 	pacsize)
 		case $words[2] in
-		-*q*)
-			_pacman_action_query
-			return ;;
-		-)
-			return 1;;
+		-*)
+			return 1 ;;
 		*)
 			_pacman_action_sync
 			return ;;
 		esac
 		return ;;
 	*)
-		_pacman_action_sync
-		return 1
-		;;
+		case $words[2] in
+		-*)
+			return 1 ;;
+		*)
+			_pacman_action_query
+			return ;;
+		esac
+		return ;;
 	esac
 }
 

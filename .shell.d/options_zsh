@@ -64,7 +64,6 @@ setopt pushdminus
 ## Completion
 
 ## Custom completion
-## TODO: this is quite slow. Why?
 fpath=(~/.shell.d/completion $fpath)
 
 autoload -Uz compinit

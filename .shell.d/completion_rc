@@ -6,12 +6,10 @@ if [ "zsh" = "$SHELL_CURRENT" ]; then
 	compdef _gs pdfcompress
 	compdef _gs pdfextract
 	compdef _gs pdfresize
-	compdef _pacman pacman-color
 	compdef _pcc pacfiles
 	compdef _pcc pacsize
 	compdef _pcc pql
 	compdef _tex ltx
 	compdef _path_commands typex
 	compdef _pspdf zat
-	compdef _pcc abs-wrapper
 fi
