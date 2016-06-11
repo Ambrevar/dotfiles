@@ -76,14 +76,14 @@ The advantages of this function over the vanilla code are:
 (define-skeleton sh-check
   "Insert a function checking for presence in PATH."
   nil
-  "check() {" \n
-  "for i ; do" \n
-  "if ! command -v $i >/dev/null 2>&1; then" \n
-  "echo \"'$i' not found in PATH. Exiting.\" >&2" \n
-  "exit 1" \n
-  "fi" \n
-  "done" \n
-  "}" > \n)
+  > "check() {" \n
+  > "for i ; do" \n
+  > "if ! command -v $i >/dev/null 2>&1; then" \n
+  > "echo \"'$i' not found in PATH. Exiting.\" >&2" \n
+  > "exit 1" \n
+  "fi" > \n
+  "done" > \n
+  "}" > \n \n)
 
 (define-skeleton sh-command
   "Insert a line that executes if command is found in path."
@@ -96,7 +96,7 @@ The advantages of this function over the vanilla code are:
   > "if ! command -v " @ str " >/dev/null 2>&1; then" \n
   > "echo '" str " not found in PATH. Exiting.' >&2" \n
   > "exit 1" \n
-  "fi" > \n)
+  "fi" > \n \n)
 
 (define-skeleton sh-for
   "Insert a for loop.  See `sh-feature'. This overrides vanilla function."
@@ -125,7 +125,7 @@ The advantages of this function over the vanilla code are:
   "Insert a getops prototype."
   "optstring: "
   > "usage() {" \n
-  "cat<<EOF" > \n ; TODO: Why is '>' necessary here?
+  > "cat<<EOF" \n
   "Usage: ${1##*/} [OPTIONS] FILES
 
 Options:
@@ -133,27 +133,28 @@ Options:
   -h:  Show this help.
 
 EOF
-}" \n
+}" > \n
 \n
 > "while getopts :" str " OPT; do" \n
 > "case $OPT in" \n
 '(setq v1 (append (vconcat str) nil))
-( (prog1 (if v1 (char-to-string (car v1)))
-    (if (eq (nth 1 v1) ?:)
-        (setq v1 (nthcdr 2 v1)
-              v2 "\"$OPTARG\"")
-      (setq v1 (cdr v1)
-            v2 nil)))
-  > str ")" \n
-  > _ v2 " ;;" \n)
+((prog1 (if v1 (char-to-string (car v1)))
+   (if (eq (nth 1 v1) ?:)
+       (setq v1 (nthcdr 2 v1)
+             v2 "\"$OPTARG\"")
+     (setq v1 (cdr v1)
+           v2 nil)))
+ > str ")" \n
+ > _ v2 " ;;" \n)
 > "\\?)" \n
 > "usage \"$0\"" \n
 "exit 1 ;;"  > \n
 "esac" > \n
-"done" > \n \n
+"done" > \n
+\n
 "shift $(($OPTIND - 1))" \n
 "if [ $# -eq 0 ]; then" \n
-"usage \"$0\"" > \n ; TODO: Why is '>' necessary here?
+> "usage \"$0\"" \n
 "exit 1" \n
 "fi" > \n)
 
@@ -162,7 +163,7 @@ EOF
   nil
   > "while IFS= read -r i; do" \n
   > @ _ \n
-  > "done <<EOF" \n
-  > "EOF" \n)
+  "done <<EOF" > \n
+  "EOF" > \n)
 
 (provide 'mode-sh)
