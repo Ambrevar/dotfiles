@@ -31,8 +31,8 @@
 (define-key mickey-minor-mode-map (kbd "M-%") 'helm-regexp)
 (define-key mickey-minor-mode-map (kbd "C-M-%") 'helm-regexp)
 
-(set-face-background 'helm-source-header "#ffffff")
-(set-face-foreground 'helm-source-header nil)
+(set-face-background 'helm-source-header "white")
+(set-face-foreground 'helm-source-header "black")
 (set-face-background 'helm-selection "#4f4f4f")
 (set-face-background 'helm-visible-mark "#2f2f2f")
 (set-face-foreground 'helm-visible-mark nil)
