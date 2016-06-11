@@ -32,13 +32,6 @@ unsetopt beep
 unsetopt flowcontrol
 
 ##==============================================================================
-## VCS
-
-## TODO: Configure vcs style for zsh.
-# autoload -Uz vcs_info zstyle ':vcs_info:*' enable git hg
-# autoload -Uz vcs_info
-
-##==============================================================================
 ## Directory stack
 
 ## We use expanded path for DIRSTACKFILE since we need to locate it for the
