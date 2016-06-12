@@ -58,7 +58,10 @@
           ("pr" "sudo pacman -Rs $*")
           ("psi" "pacman -Si $*")
           ("pss" "pacman -Ss $*")
-          ("pu" "yes | sudo pacman -Sc && sudo pacman -Syu"))))
+          ("pu" "yes | sudo pacman -Sc && sudo pacman -Syu")
+          ("pql" "pacman -Ql $* | /usr/bin/grep -v '/$'")
+          ("pli" "expac -t '%F %T' '%-8l %n' | sort -rn | head -30")
+          ("pacfiles" "pacman -Qlq ncdu | /usr/bin/grep -v '/$' | xargs du -cbh | sort -h"))))
      (eshell-write-aliases-list)))
 
 (provide 'mode-eshell)
