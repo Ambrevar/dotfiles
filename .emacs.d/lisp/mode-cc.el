@@ -1,7 +1,7 @@
 ;;==============================================================================
 ;; C/C++
 ;;==============================================================================
-;; Note: maybe this should be split in mode-c and mode-c++.
+;; Should we split this in mode-c and mode-c++?
 
 (defcustom cc-ldlibs "-lm -pthread"
   "Custom linker flags for C/C++ linkage."
@@ -53,7 +53,7 @@ restored."
       (setq compile-command compile-command-backup))))
 
 (defun cc-fmt ()
-  "Run uncrustify(1) on current buffer."
+  "Run uncrustify(1) on current buffer or region."
   (interactive)
   (unless mark-active
     (mark-whole-buffer))
@@ -68,6 +68,29 @@ restored."
       (delete-region (point) (mark))
       (insert-buffer formatbuf)
       (kill-buffer formatbuf))))
+
+;;==============================================================================
+;; Semantic options.
+
+;; Semanticdb folders must be set before starting semantic.
+(setq semanticdb-default-save-directory (concat emacs-cache-folder "semanticdb"))
+(semantic-mode 1)
+
+;; Extra semantic support
+;; Example:
+; (when  (fboundp 'semantic-add-system-include)
+;   (setq qt4-base-dir "/usr/include/qt4")
+;   (setq qt4-gui-dir (concat qt4-base-dir "/QtGui"))
+;   (semantic-add-system-include qt4-base-dir 'c++-mode)
+;   (semantic-add-system-include qt4-gui-dir 'c++-mode)
+;   (add-to-list 'auto-mode-alist (cons qt4-base-dir 'c++-mode))
+;   (add-hook
+;    'c++-mode-hook
+;    (lambda ()
+;      (when semantic-mode
+;        (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig.h"))
+;        (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig-large.h"))
+;        (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qglobal.h"))))))
 
 ;;==============================================================================
 ;; C-mode
@@ -103,46 +126,28 @@ restored."
    (add-hook-and-eval
     mode-hook
     (lambda ()
-      ;; The cc-fmt hook is disable since there is no standard C formatting,
-      ;; unlike for Go.
-      ; (add-hook 'before-save-hook 'cc-fmt nil t)
       (c-set-style "ambrevar") ;; We override existing values.
       (add-hook 'compilation-before-hook 'cc-set-compiler nil t)
       (local-set-key (kbd "<f9>") 'cc-clean)
+      (local-set-key (kbd "M-.") 'semantic-ia-fast-jump)
+      (local-set-key (kbd "C-c C-d") 'semantic-ia-show-summary)
       (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
-      (local-set-key (kbd "C-c (") 'cc-function)
-      (local-set-key (kbd "C-c C-f") 'cc-for)
-      (local-set-key (kbd "C-c C-i") 'cc-if)
-      (local-set-key (kbd "C-c C-p") 'cc-printf)
-      (local-set-key (kbd "C-c I") 'cc-include-local)
-      (local-set-key (kbd "C-c i") 'cc-include)
-      (local-set-key (kbd "C-c m") 'cc-main)
-      ;; Toggle between source file and header.
+      (local-set-key (kbd "C-c a") 'cc-include-local)
+      (local-set-key (kbd "C-c C-a") 'cc-include)
       (local-set-key (kbd "C-c o") 'ff-find-other-file)
-      ;; (local-set-key "." 'semantic-complete-self-insert) ; This is a bit slow.
-      ;; (local-set-key ">" 'semantic-complete-self-insert)
+      (local-set-key (kbd "C-c m") 'cc-main)
+      ;; The cc-fmt hook is disable since there is no standard C formatting,
+      ;; unlike for Go.
+      ; (add-hook 'before-save-hook 'cc-fmt nil t)
+      ;; Annoying defaults?
+      ; (c-toggle-auto-newline)
+      ; (local-set-key (kbd "C-c (") 'cc-function)
+      ; (local-set-key (kbd "C-c C-f") 'cc-for)
+      ; (local-set-key (kbd "C-c C-i") 'cc-if)
+      ; (local-set-key (kbd "C-c C-p") 'cc-printf)
+      ;; Toggle between source file and header.
       (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1))))))
  '(c-mode-hook c++-mode-hook))
-
-;;==============================================================================
-;; Qt semantic support
-;;==============================================================================
-
-;; Qt base directory, meaning the directory where the 'Qt' directory can be found.
-;; Adapt accordingly.
-(when  (fboundp 'semantic-add-system-include)
-  (setq qt4-base-dir "/usr/include/qt4")
-  (setq qt4-gui-dir (concat qt4-base-dir "/QtGui"))
-  (semantic-add-system-include qt4-base-dir 'c++-mode)
-  (semantic-add-system-include qt4-gui-dir 'c++-mode)
-  (add-to-list 'auto-mode-alist (cons qt4-base-dir 'c++-mode))
-  (add-hook
-   'c++-mode-hook
-   (lambda ()
-     (when semantic-mode
-       (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig.h"))
-       (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig-large.h"))
-       (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qglobal.h"))))))
 
 ;;==============================================================================
 ;; Skel

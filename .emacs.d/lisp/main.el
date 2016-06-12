@@ -204,21 +204,6 @@
 ;; query-replace-regex fix on terminals.
 (if (not (fboundp 'tool-bar-mode)) (define-key mickey-minor-mode-map (kbd "C-M-y") 'query-replace-regexp))
 
-;; Semantic options.
-;; (semantic-mode 1)
-(setq semanticdb-default-save-directory (concat emacs-cache-folder "semanticdb"))
-(define-key mickey-minor-mode-map (kbd "C-c , d") 'semantic-ia-show-summary)
-(define-key mickey-minor-mode-map (kbd "C-, d") 'semantic-ia-show-summary)
-(define-key mickey-minor-mode-map (kbd "C-, g") 'semantic-symref-symbol)
-(define-key mickey-minor-mode-map (kbd "C-, G") 'semantic-symref)
-(define-key mickey-minor-mode-map (kbd "C-, j") 'semantic-complete-jump-local)
-(define-key mickey-minor-mode-map (kbd "C-, J") 'semantic-complete-jump)
-(define-key mickey-minor-mode-map (kbd "C-, l") 'semantic-analyze-possible-completions)
-;; Semantic with ghost display (allows M-n and M-p to browse completion).
-;; (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-ghost)
-;; (setq semantic-complete-inline-analyzer-displayor-class 'semantic-displayor-tooltip)
-;; (setq semanticdb-find-default-throttle '(project unloaded system recursive))
-
 ;; Electric Pairs to auto-complete () [] {} "" etc. You can use it on regions.
 ;; (if (>= emacs-major-version 24)
 ;;     (electric-pair-mode 1))
