@@ -15,7 +15,7 @@
 (setq helm-M-x-fuzzy-match t)
 
 (define-key mickey-minor-mode-map (kbd "M-x") 'helm-M-x)
-(define-key mickey-minor-mode-map (kbd "C-x M-f") 'helm-imenu)
+(define-key mickey-minor-mode-map (kbd "C-x M-f") 'helm-semantic-or-imenu)
 (define-key mickey-minor-mode-map (kbd "C-x C-/") 'helm-find)
 (when (require 'helm-fuzzy-find nil t)
   (define-key mickey-minor-mode-map (kbd "C-c C-/") 'helm-fuzzy-find))
@@ -37,8 +37,7 @@
 (set-face-background 'helm-visible-mark "#2f2f2f")
 (set-face-foreground 'helm-visible-mark nil)
 (set-face-foreground 'helm-match "red")
-(set-face-attribute 'helm-buffer-file nil :background 'unspecified :foreground "while" :weight 'normal)
-(set-face-attribute 'helm-buffer-file nil :background 'unspecified :foreground "while" :weight 'normal)
+(set-face-attribute 'helm-buffer-file nil :background 'unspecified :foreground "white" :weight 'normal)
 (set-face-attribute 'helm-buffer-directory nil :background 'unspecified :foreground "#1e90ff" :weight 'bold)
 (set-face-attribute 'helm-ff-directory nil :background 'unspecified :foreground 'unspecified :weight 'unspecified :inherit 'helm-buffer-directory)
 (set-face-attribute 'helm-ff-file nil :background 'unspecified :foreground 'unspecified :weight 'unspecified :inherit 'helm-buffer-file)
