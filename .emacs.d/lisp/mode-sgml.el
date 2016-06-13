@@ -112,8 +112,6 @@ LCON is the lexical context, if any."
             (* sgml-basic-offset (length context)))))))
 
     (_
-     (error "Unrecognized context %s" (car lcon)))
-
-    ))
+     (error "Unrecognized context %s" (car lcon)))))
 
 (provide 'mode-sgml)

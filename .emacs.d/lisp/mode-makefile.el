@@ -167,7 +167,7 @@ CFLAGS ?= -pedantic -std=c99 -Wall -Wextra -Wshadow
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Dist rules
 
-;; They are somewhat obsolete since VCS can go better. Here follows some
+;; They are somewhat obsolete since VCS can do better. Here follows some
 ;; examples for historical interest.
 
 ; arcdir = ${ROOT}/${cmdname}-${version}
@@ -201,5 +201,3 @@ CFLAGS ?= -pedantic -std=c99 -Wall -Wextra -Wshadow
 ; 	git ls-files -z | { pwd="$$(pwd)" ; sed -z "s/^/$${pwd##*/}\//" ; } | tar caf ${arc} -C .. --null -T -
 
 (provide 'mode-makefile)
-
-;; End of file.
