@@ -7,7 +7,11 @@ Color = true
 Cores = 0
 
 -- Extensions to look for when a folder is browsed.
--- extensions = {'aac', 'mkv'}
+Extensions = {}
+ext = {'aac', 'ape', 'flac', 'm4a', 'mp3', 'mp4', 'mpc', 'ogg', 'wav', 'webm', 'wv'}
+for _, v in ipairs(ext) do
+	Extensions[v]=true
+end
 
 -- Fetch cover from an online database.
 Getcover = false
