@@ -12,7 +12,7 @@ Usage: ${0##*/} SOURCE DEST
 
 Use rsync to mirror SOURCE to DEST while showing progress.
 SOURCE does not need to be ending with a trailing slash. Only size is used for
-comparison.
+comparison. File perms and dates are mirrored.
 
 A dry-run is made by default.
 
@@ -25,4 +25,7 @@ EOF
 	exit
 fi
 
-rsync $opt_dry -livr --size-only --delete-excluded --progress -- "$1"/ "$2"
+## We use archive mode '-a' which preserves perms and dates. On non-POSIX
+## filesystems, you might want to skip this and preserve symlinks only by
+## replacing -a with -lr.
+rsync $opt_dry -iv -a --size-only --delete --exclude="/lost+found" --progress -- "$1"/ "$2"
