@@ -35,5 +35,5 @@ else
 	fi
 fi
 
-[ ! -e /tmp/emacs$(id -u)/server ] && EMACS_SERVER=t emacs --daemon --no-site-file
+[ ! -e "/tmp/emacs$(id -u)/server" ] && EMACS_SERVER=t emacs --daemon --no-site-file
 emacsclient $param "$@"

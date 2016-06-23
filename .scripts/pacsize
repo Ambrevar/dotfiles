@@ -128,7 +128,7 @@ while getopts ":ahnstV" opt; do
 	esac
 done
 
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 
 ## All-packages mode.
 ## We use a dedicated algorithm which is much faster than per-package mode.
@@ -177,7 +177,7 @@ fi
 	## If package is not found locally (-Q), we use the sync database (-S). We
 	## use LC_ALL=C to make sure pacman output is not localized.
 	buffer=$(LC_ALL=C pacman -Qi "$@" 2>&1 1>&3 3>&- | cut -f2 -d "'")
-	[ -n "$buffer" ] && LC_ALL=C pacman -Si $buffer
+	[ -n "$buffer" ] && LC_ALL=C pacman -Si "$buffer"
 } 3>&1 | filter | { $opt_sort || remove_duplicates ;} | { $opt_total || cat ;}
 
 # vim: set noet:

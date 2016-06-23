@@ -9,4 +9,4 @@ EOF
 	exit
 fi
 
-scanimage -x 297 -y 210 | convert -rotate 90 - scan-$(date "+%F_%T").png
+scanimage -x 297 -y 210 | convert -rotate 90 - "scan-$(date "+%F_%T").png"

@@ -7,7 +7,7 @@ usage () {
 	cat <<EOF
 Usage: ${1##*/}
 
-Run `sessionclean' if available and $rawname the system.
+Run 'sessionclean' if available and $rawname the system.
 
 EOF
 }
@@ -32,8 +32,8 @@ command -v sessionclean >/dev/null 2>&1 && sessionclean
 
 if command -v systemctl >/dev/null 2>&1; then
 	$rawname
-then
+else
 	## If you do not want to get prompted for your password, configure sudo
 	## properly.
-	sudo $rawname
+	sudo "$rawname"
 fi

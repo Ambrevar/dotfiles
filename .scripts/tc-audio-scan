@@ -24,11 +24,9 @@ fi
 for j; do
 	while IFS= read -r i; do
 		BUFFER="$(mediainfo "$i")"
-		[ -n "$(echo "$BUFFER" | grep "Bit rate mode *: Constant")" ] && echo "$i : CBR"
-
-		[ -n "$(echo "$BUFFER" | grep "Cover *: Yes")" ] && echo "$i : Cover"
-
-		[ -n "$(echo "$BUFFER" | grep "Track name/Position *: 0+")" ] && echo "$i : Leading zeros"
+		echo "$BUFFER" | grep -q "Bit rate mode *: Constant" && echo "$i : CBR"
+		echo "$BUFFER" | grep -q "Cover *: Yes" && echo "$i : Cover"
+		echo "$BUFFER" | grep -q "Track name/Position *: 0+" && echo "$i : Leading zeros"
 	done <<EOF
 $(find "$j"  \( \
 		-iname '*.mp3'  -o \

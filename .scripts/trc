@@ -26,7 +26,7 @@ check () {
 
 check transmission-daemon transmission-remote-cli
 
-[ $(ps -U $USER | grep -c transmission-da) -eq 0 ] && transmission-daemon
+ps -U "$USER" | grep -q transmission-da || transmission-daemon
 if [ $# -eq 0 ]; then
 	exec transmission-remote-cli
 else

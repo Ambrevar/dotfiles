@@ -3,7 +3,6 @@
 ## Create lists of system- and TeX Live packages.
 
 ## Variables
-HOST="$(hostname)"
 PKG_ROOT="$HOME/.pkg"
 mkdir -p "$PKG_ROOT"
 

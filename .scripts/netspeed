@@ -24,28 +24,28 @@ else
 	path="/dev/shm/netspeed"
 	time=$(date +%s)
 
-	read rx < /sys/class/net/${interface}/statistics/rx_bytes
-	read tx < /sys/class/net/${interface}/statistics/tx_bytes
+	read -r rx < /sys/class/net/"$interface"/statistics/rx_bytes
+	read -r tx < /sys/class/net/"$interface"/statistics/tx_bytes
 
 	if [ ! -f "$path" ]; then
 		echo "$time $rx $tx" > "$path"
 		chmod 0666 "$path"
 	fi
 
-	read time_old rx_old tx_old < "$path"
+	read -r time_old rx_old tx_old < "$path"
 	echo "$time $rx $tx" > "$path"
-	time_diff=$(($time - $time_old))
+	time_diff=$((time - time_old))
 
 	if [ "$time_diff" -gt 0 ]; then
-		rx_rate=$((($rx - $rx_old) / $time_diff))
-		tx_rate=$((($tx - $tx_old) / $time_diff))
+		rx_rate=$(((rx - rx_old) / time_diff))
+		tx_rate=$(((tx - tx_old) / time_diff))
 
-		[ "$rx_rate" -gt 1024 ] && rx_rate=$(($rx_rate / 1024)) && rx_unit=K
-		[ "$rx_rate" -gt 1024 ] && rx_rate=$(($rx_rate / 1024)) && rx_unit=M
+		[ "$rx_rate" -gt 1024 ] && rx_rate=$((rx_rate / 1024)) && rx_unit=K
+		[ "$rx_rate" -gt 1024 ] && rx_rate=$((rx_rate / 1024)) && rx_unit=M
 
-		[ "$tx_rate" -gt 1024 ] && tx_rate=$(($tx_rate / 1024)) && tx_unit=K
-		[ "$tx_rate" -gt 1024 ] && tx_rate=$(($tx_rate / 1024)) && tx_unit=M
+		[ "$tx_rate" -gt 1024 ] && tx_rate=$((tx_rate / 1024)) && tx_unit=K
+		[ "$tx_rate" -gt 1024 ] && tx_rate=$((tx_rate / 1024)) && tx_unit=M
 
-		echo -n "$rx_rate $rx_unit↓ $tx_rate $tx_unit↑"
+		printf "%s %s↓ %s %s↑" "$rx_rate" "$rx_unit" "$tx_rate" "$tx_unit"
 	fi
 fi

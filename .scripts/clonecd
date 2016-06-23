@@ -28,7 +28,7 @@ while getopts ":hd:" opt; do
 	esac
 done
 
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 
 if [ $# -eq 0 ]; then
 	_usage "$0"
@@ -41,7 +41,7 @@ if ! command -v readcd >/dev/null 2>&1; then
 fi
 
 ## Fast?
-readcd dev=$DRIVE f="$1.iso" -v retries=5 timeout=30 -noerror
+readcd dev="$DRIVE" f="$1.iso" -v retries=5 timeout=30 -noerror
 
 ## Slow
 # readcd f="$1.iso" -v retries=32 timeout=30 -s speed=16 -noerror

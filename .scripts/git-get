@@ -33,7 +33,7 @@ while getopts ":hd:u:" opt; do
 	esac
 done
 
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 
 if [ $# -eq 0 ]; then
 	usage "$0"
@@ -46,5 +46,5 @@ if ! command -v git >/dev/null 2>&1; then
 fi
 
 for i; do
-	git clone git@$DOMAIN:/$USER/$i
+	git clone "git@$DOMAIN:/$USER/$i"
 done

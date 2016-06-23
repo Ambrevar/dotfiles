@@ -1,7 +1,7 @@
 #!/bin/sh
 
 compat=""
-if [ $(awk --version | grep -c GNU) -gt 0 ]; then
+if awk --version | grep -q GNU; then
 	# This is for hex-to-decimal conversion.
 	compat="--non-decimal"
 fi

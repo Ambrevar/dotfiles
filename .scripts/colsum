@@ -17,4 +17,4 @@ fi
 [ $# -ge 1 ] && COLUMN="$1" && shift
 [ $# -ge 1 ] && FORMAT="$1"
 
-awk -v format="$FORMAT" '{total += $'$COLUMN'; print} END {printf format, total}'
+awk -v format="$FORMAT" '{total += $'"$COLUMN"'; print} END {printf format, total}'

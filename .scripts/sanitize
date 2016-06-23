@@ -16,7 +16,7 @@ DMASK=$(umask -S)
 [ -z "$GID" ] && GID=$(id -g)
 
 for i ; do
-	find "$i" -exec chown -R ${UID}:${GID} {} \;
-	find "$i" -type d -exec chmod ${DMASK} {} \;
-	find "$i" -type f -exec chmod ${FMASK} {} \;
+	find "$i" -exec chown -R "$UID:$GID" {} \;
+	find "$i" -type d -exec chmod "$DMASK" {} \;
+	find "$i" -type f -exec chmod "$FMASK" {} \;
 done

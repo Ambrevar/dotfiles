@@ -9,13 +9,13 @@ _mount () {
 	DEVICE="$(cdemu status | awk 'NR>2 && $2==0 {print $1; found=1; exit}  END {if(! found)print NR-2}')"
 	DEV_COUNT="$(cdemu device-mapping | awk 'END {print NR-3}')"
 
-	if [  $(cdemu status |  grep -c "$1") -gt 0 ]; then
+	if cdemu status | grep -q "$1"; then
 		echo "Image alredy mounted."
 		return
 	fi
 
-	if [ $DEVICE -gt $DEV_COUNT ]; then
-		while [ $DEVICE -gt $DEV_COUNT ]; do
+	if [ "$DEVICE" -gt "$DEV_COUNT" ]; then
+		while [ "$DEVICE" -gt "$DEV_COUNT" ]; do
 			cdemu add-device
 			DEV_COUNT="$(cdemu device-mapping | awk 'END {print NR-3}')"
 		done
@@ -23,13 +23,13 @@ _mount () {
 		## WARNING: adding a new device takes some time. If we want to avoid errors,
 		## we need to sleep until it is ready.
 		echo "Waiting until ready..."
-		while [ -z "$(cdemu device-mapping | awk -v devnum=$DEV_COUNT 'NR>2 && $1==devnum {print $2}')" ]; do
+		while [ -z "$(cdemu device-mapping | awk -v devnum="$DEV_COUNT" 'NR>2 && $1==devnum {print $2}')" ]; do
 			sleep 1
 		done
 
 	fi
 
-	cdemu load $DEVICE "$1"
+	cdemu load "$DEVICE" "$1"
 	if [ $? -ne 0 ] && command -v fuseiso >/dev/null 2>&1; then
 		echo "Falling back to fuseiso."
 
@@ -43,15 +43,15 @@ _mount () {
 		fi
 
 		COUNT=0
-		while [ -n "$(echo "$LIST" | grep "$FUSEROOT/drive-$COUNT" )" ]; do
-			COUNT=$(($COUNT+1))
+		while echo "$LIST" | grep -q "$FUSEROOT/drive-$COUNT"; do
+			COUNT=$((COUNT+1))
 		done
 
 		mkdir -p "$FUSEROOT/drive-$COUNT"
 		fuseiso -p "$1" "$FUSEROOT/drive-$COUNT"
 
 	else
-		NODE="$(cdemu device-mapping | awk -v devnum=$DEVICE 'NR>2 && $1==devnum {print $2}')"
+		NODE="$(cdemu device-mapping | awk -v devnum="$DEVICE" 'NR>2 && $1==devnum {print $2}')"
 		## TODO: This is terrible, but checking cdemu status does not work. Maybe
 		## a kernel limitation.
 		echo "Mounting..."
@@ -71,7 +71,7 @@ _umount () {
 		udiskie-umount "$1"
 
 		DEVICE=$(cdemu device-mapping | awk -v node="$NODE" '$2 == node {print $1; exit}')
-		cdemu unload $DEVICE
+		cdemu unload "$DEVICE"
 	elif command -v fuseiso >/dev/null; then
 		fusermount -u "$1"
 		rmdir "$1" >/dev/null 2>&1
@@ -108,7 +108,7 @@ while getopts ":hu" opt; do
 	esac
 done
 
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 
 if [ $# -eq 0 ]; then
 	_usage "$0"

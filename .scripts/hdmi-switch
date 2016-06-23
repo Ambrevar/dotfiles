@@ -24,7 +24,7 @@ if [ "$(uname)" != "Linux" ]; then
 	exit 1
 fi
 
-if [ $(id -u) -ne 0 ]; then
+if [ "$(id -u)" -ne 0 ]; then
 	_usage
 	exit 1
 fi

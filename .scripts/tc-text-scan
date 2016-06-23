@@ -18,7 +18,7 @@ fi
 
 for i ; do
 	while IFS= read -r j; do
-		echo -n "# "
+		printf "# "
 		file "$j"
 		grep -m1 "\`" "$j"
 		grep -m1 "´"  "$j"

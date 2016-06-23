@@ -20,29 +20,27 @@ for i ; do
 	while IFS= read -r j; do
 		CODING=$(file "$j")
 
-		if [ -n "$(echo $CODING | grep 'ISO-8859')" ]; then
+		case "$CODING" in
+		*ISO-8859*)
 			echo "ISO-8859:   [$j]"
-			recode latin1..utf-8 "$j"
-
-		elif [ -n "$(echo $CODING | grep 'Non-ISO extended-ASCII')" ]; then
+			recode latin1..utf-8 "$j";;
+		*'Non-ISO extended-ASCII'*)
 			echo "cp1252:     [$j]"
-			recode cp1252..utf-8 "$j"
-
-		elif [ -n "$(echo $CODING | grep 'UTF-16 Unicode text')" ]; then
+			recode cp1252..utf-8 "$j";;
+		*'UTF-16 Unicode text'*)
 			echo "UTF-16:     [$j]"
-			recode utf-16..utf-8 "$j"
-
-		elif [ -n "$(echo $CODING | grep 'UTF-8 Unicode (with BOM)')" ]; then
+			recode utf-16..utf-8 "$j";;
+		*'UTF-8 Unicode (with BOM)'*)
 			echo "UTF-8 BOM:  [$j]"
-			ex -sc '1s/^.//|xit' "$j"
+			ex -sc '1s/^.//|xit' "$j";;
 			## The following commands are funny alternatives, but are completely
 			## overkill.
 			# dd iflag=skip_bytes skip=3 if=file.srt of=temp.srt
 			# dd bs=1 skip=3 if=file.srt of=temp.srt
 			# tail -c +32 file.srt > temp.srt
-		fi
+		esac
 
-		if [ -n "$(echo $CODING | grep 'CRLF')" ]; then
+		if echo "$CODING" | grep -q 'CRLF'; then
 			echo "CRLF:       [$j]"
 			ex -sc '%s///g|xit' "$j"
 		fi

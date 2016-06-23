@@ -10,4 +10,4 @@ description="$3"
 SEP=" "
 OUTPUT="$XDG_CONFIG_HOME/newsbeuter/news_starred"
 
-echo -e "${url}$SEP${title}$SEP${description}" >> "$OUTPUT"
+echo "${url}$SEP${title}$SEP${description}" >> "$OUTPUT"

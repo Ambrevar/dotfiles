@@ -35,7 +35,7 @@ while getopts ":fhr" opt; do
 	esac
 done
 
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 if [ $# -eq 0 ]; then
 	_usage "$0"
 	exit 1
@@ -48,7 +48,7 @@ DEST="$(eval "echo \$$#")"
 count=0
 
 for i ; do
-	count=$(($count+1))
+	count=$((count+1))
 	[ $count -eq $# ] && break
 
 	while IFS= read -r FILE; do

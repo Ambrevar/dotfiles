@@ -56,7 +56,7 @@ while getopts ":cfhin" opt; do
 	esac
 done
 
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 
 if [ $# -eq 0 ]; then
 	_usage "$0"
@@ -76,7 +76,6 @@ for i ; do
 	esac
 	DIRNAME="${i%/*}"
 	BASENAME="${i##*/}"
-	EXTNAME="${BASENAME##*.}"
 	BASENAME="${BASENAME%.*}"
 	OUTPUT="$DIRNAME/$BASENAME-compressed.pdf"
 	if [ -e "$OUTPUT" ] && ! $OPT_OVERWRITE; then
@@ -86,7 +85,7 @@ for i ; do
 
 	echo "$i"
 
-	gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite $OPT_COMPRESSION -sOutputFile="$OUTPUT" "$i"
+	gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite "$OPT_COMPRESSION" -sOutputFile="$OUTPUT" "$i"
 	if $OPT_INPLACE; then
 		rm -f "$i"
 		mv "$OUTPUT" "$i"

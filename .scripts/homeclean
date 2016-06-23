@@ -50,7 +50,7 @@ CHOICE="N"
 echo
 echo ":: Close all applications before cleaning."
 echo "==> Clean home? [y/N]"
-read CHOICE
+read -r CHOICE
 case "$CHOICE" in
 Y|y) ;;
 *)

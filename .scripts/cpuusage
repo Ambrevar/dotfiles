@@ -42,7 +42,7 @@ f2=$(echo "$cpuarray" | cut -f4 -d' ')
 f3=$(echo "$cpuarray" | cut -f5 -d' ')
 f4=$(echo "$cpuarray" | cut -f6 -d' ')
 
-totalA=$(($f1+$f2+$f3+$f4))
+totalA=$((f1+f2+f3+f4))
 idleA=$f4
 sleep 1
 
@@ -52,7 +52,7 @@ f2=$(echo "$cpuarray" | cut -f4 -d' ')
 f3=$(echo "$cpuarray" | cut -f5 -d' ')
 f4=$(echo "$cpuarray" | cut -f6 -d' ')
 
-totalB=$(($f1+$f2+$f3+$f4))
+totalB=$((f1+f2+f3+f4))
 idleB=$f4
 
 totaldiff=$((${totalB:-0}-${totalA:-0}))
@@ -60,5 +60,5 @@ totaldiff=$((${totalB:-0}-${totalA:-0}))
 if [ $totaldiff -eq 0 ]; then
 	echo 0
 else
-	echo "$((100 - 100 * ($idleB-$idleA) / $totaldiff ))"
+	echo "$((100 - 100 * (idleB-idleA) / totaldiff))"
 fi
