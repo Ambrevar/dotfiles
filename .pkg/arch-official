@@ -66,7 +66,6 @@ cdemu-client
 cdemu-daemon
 cdparanoia
 cdrtools
-celt
 chicken
 chmlib
 chromaprint
@@ -100,6 +99,7 @@ dcraw
 desktop-file-utils
 device-mapper
 devtools
+dgen-sdl
 dhclient
 dhcpcd
 dhex
@@ -187,7 +187,7 @@ gimp
 girara
 git
 glew
-glfw
+glfw-x11
 glib2
 glibc
 glibmm
@@ -205,7 +205,6 @@ gparted
 gpgme
 gpm
 gptfdisk
-graphene
 graphicsmagick
 graphite
 graphviz
@@ -216,7 +215,7 @@ gsfonts
 gsl
 gsm
 gssproxy
-gst-plugins-bad
+gst-libav
 gst-plugins-base
 gst-plugins-base-libs
 gst-plugins-good
@@ -457,7 +456,6 @@ libdaemon
 libdatrie
 libdbus
 libdc1394
-libdca
 libdiscid
 libdmx
 libdrm
@@ -510,6 +508,8 @@ libmp4v2
 libmpc
 libmpeg2
 libmtp
+libnetfilter_conntrack
+libnfnetlink
 libnftnl
 libnl
 libnm-glib
@@ -543,7 +543,6 @@ libsoxr
 libspectre
 libspiro
 libspnav
-libsrtp
 libssh
 libssh2
 libstdc++5
@@ -666,7 +665,6 @@ mesa-demos
 mesa-libgl
 metapixel
 mime-types
-mjpegtools
 mkinitcpio
 mkinitcpio-busybox
 mkvtoolnix-cli
@@ -687,7 +685,6 @@ nawk
 ncdu
 ncftp
 ncurses
-neon
 netcdf
 netctl
 nethack
@@ -709,6 +706,7 @@ ocl-icd
 odt2txt
 ogmtools
 openal
+openbsd-netcat
 opencollada
 opencolorio
 opencore-amr
@@ -716,7 +714,6 @@ openexr
 opengl-man-pages
 openimageio
 openjpeg
-openmw
 openresolv
 openscenegraph
 openshadinglanguage
@@ -795,7 +792,6 @@ pinentry
 pixman
 pkgbuild-introspection
 pkg-config
-pkgfile
 pkgstats
 plan9port
 polkit
@@ -896,6 +892,7 @@ randrproto
 ranger
 raptor
 rawtherapee
+rclone
 readline
 recode
 recordproto
@@ -933,6 +930,7 @@ serf
 setconf
 shadow
 shared-mime-info
+shellcheck
 sip
 skype
 slock
@@ -942,7 +940,6 @@ snappy
 sord
 sound-theme-freedesktop
 soundtouch
-spandsp
 speech-dispatcher
 speex
 speexdsp
@@ -951,6 +948,7 @@ sqlite
 squashfs-tools
 sratom
 srcpac
+sshfs
 startup-notification
 steam
 stfl
