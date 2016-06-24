@@ -353,16 +353,16 @@ globalkeys = awful.util.table.join(
 	end),
 
 	-- Layout resize
-	awful.key({ modkey, "Shift" }, "h",    function () awful.tag.incmwfact(-0.05)   end),
-	awful.key({ modkey, "Shift" }, "l",  function () awful.tag.incmwfact(0.05)   end),
-	awful.key({ modkey, "Shift" }, "k",  function () awful.client.incwfact(0.05) end),
-	awful.key({ modkey, "Shift" }, "j", function () awful.client.incwfact(-0.05) end),
+	awful.key({ modkey }, "Left",  function () awful.tag.incmwfact(-0.05) end),
+	awful.key({ modkey }, "Right", function () awful.tag.incmwfact(0.05) end),
+	awful.key({ modkey }, "Up",    function () awful.client.incwfact(0.05) end),
+	awful.key({ modkey }, "Down",  function () awful.client.incwfact(-0.05) end),
 
 	-- Layout organization
-	awful.key({ modkey }, "Left", function () awful.tag.incnmaster( 1) end),
-	awful.key({ modkey }, "Right",  function () awful.tag.incnmaster(-1) end),
-	awful.key({ modkey }, "Up",    function () awful.tag.incncol( 1)    end),
-	awful.key({ modkey }, "Down",  function () awful.tag.incncol(-1)    end),
+	awful.key({ modkey, "Shift" }, "h", function () awful.tag.incnmaster( 1) end),
+	awful.key({ modkey, "Shift" }, "l", function () awful.tag.incnmaster(-1) end),
+	awful.key({ modkey, "Shift" }, "k", function () awful.tag.incncol( 1) end),
+	awful.key({ modkey, "Shift" }, "j", function () awful.tag.incncol(-1) end),
 
 	-- Multi screen
 	awful.key({ modkey, "Shift" }, "Next", function () awful.screen.focus_relative( 1) end),
@@ -402,11 +402,11 @@ elseif ostype == "FreeBSD" then
 	globalkeys = awful.util.table.join (globalkeys,
 		awful.key({ modkey }, "KP_Subtract",   function () awful.util.spawn("mixer vol -5 >/dev/null") end),
 		awful.key({ modkey }, "KP_Add",        function () awful.util.spawn("mixer vol +5 >/dev/null") end),
-		awful.key({ modkey }, "KP_Enter",      function () awful.util.spawn("mixer vol ^ >/dev/null")  end),
+		awful.key({ modkey }, "KP_Enter",      function () awful.util.spawn("mixer vol ^ >/dev/null") end),
 
 		awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("mixer vol -5 >/dev/null") end),
 		awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("mixer vol +5 >/dev/null") end),
-		awful.key({ }, "XF86AudioMute",        function () awful.util.spawn("mixer vol ^ >/dev/null")  end)
+		awful.key({ }, "XF86AudioMute",        function () awful.util.spawn("mixer vol ^ >/dev/null") end)
 	)
 end
 
@@ -423,10 +423,10 @@ clientkeys = awful.util.table.join(
 
 	awful.key({ modkey }, "n", awful.client.restore),
 	awful.key({ modkey, "Shift" }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
-	awful.key({ modkey, "Shift" }, "c",      function (c) c:kill()                         end),
-	awful.key({ modkey, "Shift" }, "space",  awful.client.floating.toggle                     ),
-	awful.key({ modkey, "Shift" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-	awful.key({ modkey,         }, "o",      awful.client.movetoscreen                        )
+	awful.key({ modkey, "Shift" }, "c",      function (c) c:kill() end),
+	awful.key({ modkey,         }, "space",  awful.client.floating.toggle),
+	-- awful.key({ modkey, "Shift" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
+	awful.key({ modkey,         }, "o",      awful.client.movetoscreen)
 )
 
 -- Compute the maximum number of digit we need, limited to 9
