@@ -30,6 +30,7 @@
 (define-key mickey-minor-mode-map (kbd "C-h a") 'helm-apropos)
 (define-key mickey-minor-mode-map (kbd "M-%") 'helm-regexp)
 (define-key mickey-minor-mode-map (kbd "C-M-%") 'helm-regexp)
+(define-key mickey-minor-mode-map (kbd "C-x C-g") 'helm-grep-do-git-grep)
 
 (set-face-background 'helm-source-header "white")
 (set-face-foreground 'helm-source-header "black")
