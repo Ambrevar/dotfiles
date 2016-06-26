@@ -33,5 +33,5 @@ Removesource = false
 -- Scripts to run by default.
 -- Order matters, e.g. 'path' can be influenced by the modifications made by 'tag'.
 Scripts = {'10-tag', '20-sub', '30-case', '40-punctuation', '50-encoding', '60-path', '70-cover',
-	'00-const', '51-flac2ogg', '59-humour', '99-ffmpeg'}
+	'00-const', '51-flac2ogg', '59-humour'}
 
