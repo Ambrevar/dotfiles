@@ -1,7 +1,6 @@
 a52dec
 aalib
 abook
-abs
 ack
 acl
 acpi
@@ -16,6 +15,7 @@ apr-util
 apvlv
 arch-install-scripts
 archlinux-keyring
+aria2
 arm
 aspell
 aspell-de
@@ -86,7 +86,6 @@ ctags
 cups
 cups-filters
 curl
-customizepkg
 cyrus-sasl
 damageproto
 dash
@@ -147,10 +146,8 @@ filesystem
 findutils
 fixesproto
 flac
-flashplugin
 flex
 fltk
-fluidsynth
 fontconfig
 fontsproto
 foomatic-db
@@ -310,7 +307,6 @@ lib32-bzip2
 lib32-cairo
 lib32-colord
 lib32-cracklib
-lib32-db
 lib32-dconf
 lib32-e2fsprogs
 lib32-elfutils
@@ -332,7 +328,6 @@ lib32-gtk2
 lib32-gtk3
 lib32-harfbuzz
 lib32-icu
-lib32-jack
 lib32-js17
 lib32-json-c
 lib32-json-glib
@@ -368,7 +363,6 @@ lib32-libpng
 lib32-libproxy
 lib32-libpulse
 lib32-librsvg
-lib32-libsamplerate
 lib32-libsm
 lib32-libsndfile
 lib32-libsoup
@@ -654,7 +648,6 @@ make
 man-db
 man-pages
 man-pages-de
-markdown
 maxima
 mcomix
 mcpp
@@ -728,7 +721,6 @@ orc
 p11-kit
 p7zip
 pacgraph
-package-query
 pacman
 pacman-mirrorlist
 pam
@@ -947,7 +939,6 @@ splint
 sqlite
 squashfs-tools
 sratom
-srcpac
 sshfs
 startup-notification
 steam
@@ -1104,9 +1095,7 @@ xterm
 xvidcore
 xz
 yajl
-yaourt
 yasm
-youtube-dl
 zathura
 zathura-djvu
 zathura-pdf-poppler
