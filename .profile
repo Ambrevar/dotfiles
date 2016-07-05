@@ -136,6 +136,11 @@ if command -v fzf >/dev/null 2>&1; then
 	export FZF_DEFAULT_OPTS="--cycle --extended --multi"
 fi
 
+## pacman abs
+if command -v asp >/dev/null 2>&1; then
+	export ASPROOT="$HOME/.cache/asp"
+fi
+
 ## Hook. Should be sourced last
 [ -f ~/.profile_hook ] && . ~/.profile_hook
 ################################################################################
