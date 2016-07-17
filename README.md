@@ -6,7 +6,7 @@
 This repository contains scripts and configuration files for various Unix
 programs. I tried hard to maintain universality: it should work anywhere (Arch
 Linux, FreeBSD...), with whichever version of the programs. In the worst case,
-very few modifications will be necessary.
+only few modifications will be necessary.
 
 Most interesting parts include advanced configuration for Awesome, Emacs, Mutt,
 ranger, Zsh and some shell scripts.
@@ -46,6 +46,9 @@ TeX and LaTeX full-featured environment: no AucTeX, itemize function, skeletons,
 compilation with various engines and index support, external PDF view with
 SyncTeX support, temp files clean function, PDF compression.
 
+I make use of just a few unofficial packages. Use `init-extra-packages` to
+install/update them all at once.
+
 ### Mutt
 
 * Compile options: IMAP and SMTP support.
@@ -59,16 +62,16 @@ is much simpler than gnupg.
 I use embedded IMAP and SMTP services which need appropriate compilation
 options. Embedded IMAP does not need to store e-mails locally. To speed-up
 e-mail queries, I cache them on disk. When the disk usage limit is reached, the
-older cached e-mails are erased until the cache shrink below the limit again.
+older cached e-mails are erased until the cache shrinks below the limit again.
 
-Some customization: custom index view, good Emacs integration (see .emacs.d),
+Some customization: custom index view, good Emacs integration (see `.emacs.d`),
 custom theme (matches Emacs colors), various tweaks.
 
-For universal terminal support, the colorset.sh script will check terminal
+For universal terminal support, the `colorset.sh` script will check terminal
 capabilities and load colors appropriately.
 
-URxvt has an URL support that works also for Mutt. For other terminals, you
-might consider using the 'urlview' plugin for Mutt.
+URxvt has an URL support that works also from Mutt. For other terminals, you
+might consider using the `urlview` plugin for Mutt.
 
 ### Ranger
 
@@ -89,8 +92,6 @@ Probably the most interesting part here.
 * bsdman: read *BSD man pages.
 
 * crun: quick way to execute C files.
-
-* currency: currency converter.
 
 * dataindex: create index of hierarchies. Useful to keep track of folder content
   and structure.
@@ -159,15 +160,15 @@ all files directly.
 	git checkout master
 
 Some applications will need extra dependencies other than the default ones. You
-might have a look at the lists in the `.pkg/` folder to know what software I
-have ve been using.
+might have a look at the lists in the `.pkg/` folder to know what programs I am
+using.
 
 --------------------------------------------------------------------------------
 ## Known issues
 
 * All scripts take a strong point at being POSIX. However, there is no POSIX way
-  (at least to my knowledge) to execute a shell function on the result of a
-  'find'. Neither 'find' nor 'xargs' can execute shell functions. One solution
-  to this would be to call an external script, but then we lose all global
-  variables.  For now we assume no input file has newline, which is quite a
-  strong assumption and not safe at all.
+(at least to my knowledge) to execute a shell function on the result of a
+'find'. Neither 'find' nor 'xargs' can execute shell functions. One solution to
+this would be to call an external script, but then we lose all global variables.
+For now I assume no input file has newline, which is quite a strong assumption
+and not safe at all.
