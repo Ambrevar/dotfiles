@@ -103,6 +103,7 @@ prompt adam2
 
 if [ -f /usr/share/fzf/key-bindings.zsh ]; then
 	. /usr/share/fzf/key-bindings.zsh
+	. /usr/share/fzf/completion.zsh
 	bindkey '^T' transpose-chars
 	bindkey '\er' fzf-file-widget
 fi
