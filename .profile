@@ -115,6 +115,7 @@ export WINEDLLOVERRIDES="mscoree,mshtml="
 if [ -d "$HOME/.go" ]; then
 	export GOPATH=~/.go
 	appendpath "$GOPATH/bin"
+	command -v godoc >/dev/null 2>&1 && godoc -http :6060 -play &
 fi
 
 ## Startup error log.
