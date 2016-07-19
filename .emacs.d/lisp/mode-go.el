@@ -11,13 +11,15 @@
     (setq compile-command compile-command-backup)))
 
 (defun go-buffer-in-gopath-p ()
-  (let ((dir (expand-file-name (file-name-directory buffer-file-name))) (looping t) (gopath (getenv "GOPATH")))
-    (while (progn
-             (if (string= dir gopath)
-                 (setq looping nil)
-               (setq dir (expand-file-name ".." dir)))
-             (and looping (not (string= dir "/")))))
-    (if (string= dir "/") nil t)))
+  (if (not buffer-file-name)
+      nil
+    (let ((dir (expand-file-name (file-name-directory buffer-file-name))) (looping t) (gopath (getenv "GOPATH")))
+      (while (progn
+               (if (string= dir gopath)
+                   (setq looping nil)
+                 (setq dir (expand-file-name ".." dir)))
+               (and looping (not (string= dir "/")))))
+      (if (string= dir "/") nil t))))
 
 (add-hook
  'godoc-mode-hook
