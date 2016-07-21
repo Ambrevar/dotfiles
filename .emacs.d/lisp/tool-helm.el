@@ -8,6 +8,8 @@
 ; (helm-autoresize-mode 1)
 (setq helm-follow-mode-persistent t)
 (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+;; (setq helm-split-window-default-side 'right)
+(setq helm-reuse-last-window-split-state t)
 
 (setq helm-apropos-fuzzy-match t)
 (setq helm-buffers-fuzzy-matching t)

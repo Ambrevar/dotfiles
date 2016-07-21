@@ -167,6 +167,11 @@
 ;; Set man pages to display on a 80 character wide window.
 (setenv "MANWIDTH" "80")
 
+;; Enforce horizontal splitting. 140 means that the window is large enough to
+;; hold 2 other windows of 70 columns.
+(setq split-height-threshold nil)
+(setq split-width-threshold 140)
+
 ;; Windmove mode: easy window switching with Shift+arrows.
 (when (fboundp 'windmove-default-keybindings)
   (windmove-default-keybindings))
