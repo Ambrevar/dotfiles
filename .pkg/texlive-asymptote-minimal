@@ -1,3 +1,5 @@
+adjustbox
+collectbox
 graphics
 hyperref
 l3experimental
@@ -5,8 +7,8 @@ l3kernel
 l3packages
 latex
 latex-bin
-latexconfig
 latex-fonts
+latexconfig
 media9
 ms
 oberdiek
