@@ -1,15 +1,15 @@
 #!/bin/sh
 
-## Set sidebar options only if sidebar patch is installed.
+## Set sidebar options only if sidebar is builtin.
 if [ -n "$(man muttrc | grep sidebar)" ]; then
 	cat <<'EOF'
 set sidebar_visible = yes
 set sidebar_width = 24
-set sidebar_sort = yes
-set sidebar_delim=' '
-set sidebar_shortpath = yes
+set sidebar_sort_method = alpha
+set sidebar_divider_char=' '
+set sidebar_short_path = yes
 # set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%4S"
-# set sidebar_folderindent = yes
+set sidebar_folder_indent = yes
 
 ## Color of folders with new mail
 color sidebar_new $my_new $my_bg
