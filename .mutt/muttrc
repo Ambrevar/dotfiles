@@ -51,6 +51,7 @@ set imap_keepalive=30
 unset imap_passive
 ## How often to check for new mail (time in seconds).
 set mail_check=60
+set mail_check_stats=yes
 
 ## Mailcap
 set mailcap_path=~/.mutt/mailcap
@@ -232,7 +233,7 @@ set user_agent=yes
 # set index_format="%?M?_%M_ ?%Z %2C %.13d (%-68.68F) %-68.68s %?M?_%M_&(%c/%l?"
 set date_format="%y-%m-%d %T"
 
-set my_index_format_pre='set my_col_from = `echo $((30 * ($(tput cols)-35-24) / 100))`; set my_col_subject = `echo $((70 * ($(tput cols)-35-24) / 100))`; set index_format="%2C | %Z [%d] %-$my_col_from.${my_col_from}'
+set my_index_format_pre='set my_col_from = `echo $((30 * ($(tput cols)-35) / 100))`; set my_col_subject = `echo $((70 * ($(tput cols)-35) / 100))`; set index_format="%2C | %Z [%d] %-$my_col_from.${my_col_from}'
 set my_index_format_post=' (%-4.4c) %?M?<%M> ?%-$my_col_subject.${my_col_subject}s"'
 
 folder-hook .*[sS]ent.* "$my_index_format_pre"t"$my_index_format_post"

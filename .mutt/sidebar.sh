@@ -8,7 +8,7 @@ set sidebar_width = 24
 set sidebar_sort_method = alpha
 set sidebar_divider_char=' '
 set sidebar_short_path = yes
-# set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%4S"
+set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%S"
 set sidebar_folder_indent = yes
 
 ## Color of folders with new mail
