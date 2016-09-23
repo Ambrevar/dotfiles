@@ -44,6 +44,7 @@
 (define-key mickey-minor-mode-map (kbd "C-h a") 'helm-apropos)
 (define-key mickey-minor-mode-map (kbd "C-M-%") 'helm-regexp)
 (define-key mickey-minor-mode-map (kbd "C-x C-g") 'helm-grep-git-or-ag)
+(define-key mickey-minor-mode-map (kbd "C-x r b") 'helm-filtered-bookmarks)
 
 (set-face-background 'helm-source-header "white")
 (set-face-foreground 'helm-source-header "black")
