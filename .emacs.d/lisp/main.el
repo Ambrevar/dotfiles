@@ -236,12 +236,6 @@
    (if (string-match (concat (getenv "BROWSER") "-editor-*") (buffer-name))
        (auto-fill-mode -1))))
 
-;; Speedbar options.
-(add-hook
- 'speedbar-mode-hook
- (lambda ()
-   (speedbar-toggle-updates)))
-
 ;; Compilation bindings and conveniences.
 (require 'functions) ; for `compile-custom'
 (setq compilation-ask-about-save nil)
