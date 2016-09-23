@@ -171,6 +171,8 @@ To view where the bindings are set in your config files, lookup
 (add-to-list 'favorite-packages 'helm-descbinds)
 (add-to-list 'favorite-packages 'helm-fuzzy-find)
 (add-to-list 'favorite-packages 'helm-ls-git)
+(add-to-list 'favorite-packages 'wgrep-helm)
+(add-to-list 'favorite-packages 'wgrep-pt)
 (when (require 'helm-config nil t)
   (require 'tool-helm))
 
