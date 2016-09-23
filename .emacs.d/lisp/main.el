@@ -25,7 +25,7 @@
 ;; Bookmark file to cache folder.
 (setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
 
-;; Bookmark file to cache folder.
+;; Recent files.
 (setq recentf-save-file (concat emacs-cache-folder "recentf"))
 
 ;; Disable autosave features.
@@ -345,6 +345,9 @@
 
 ;; Sort
 (setq sort-fold-case t)
+
+;; Fix slow startup when network is slow. Most visible with Helm and Magit.
+(setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'main)
