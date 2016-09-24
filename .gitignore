@@ -10,7 +10,6 @@
 .lesshst
 .local/share/Trash
 .local/share/applications/wine*
-.local/share/dwb/extensions
 .local/share/icons
 .local/share/mime/*
 .local/share/newsbeuter
@@ -23,9 +22,8 @@
 .zcompdump
 .zdirs
 .zshistfile
-abs
 games
-musics
+music
 personal
 projects
 temp
