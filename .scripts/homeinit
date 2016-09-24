@@ -52,10 +52,10 @@ echo "==> Hackpool"
 ln -snfv "$SOURCEDIR/hackpool" "$HOME/.hackpool"
 
 echo "==> Go path"
-mkdir -pv "$HOME/.go"
+mkdir -pv "$HOME/go" "$HOME/.go-tools"
 if command -v go >/dev/null 2>&1; then
 	echo "==> Go extra dev tools"
-	export GOPATH=~/.go
+	export GOPATH="$HOME/.go-tools"
 	export PATH="$PATH:$GOPATH/bin"
 	## See https://dominik.honnef.co/posts/2014/12/an_incomplete_list_of_go_tools/.
 	## https://dominik.honnef.co/go/
@@ -64,8 +64,9 @@ if command -v go >/dev/null 2>&1; then
 		github.com/nsf/gocode \
 		github.com/rogpeppe/godef \
 		honnef.co/go/unused/cmd/unused
+	go get -v github.com/monochromegane/the_platinum_searcher/...
 	go get -v github.com/alecthomas/gometalinter && gometalinter -i
-	strip -s "$HOME/.go/bin"/*
+	strip -s "$GOPATH/bin"/*
 fi
 
 if command -v emacs >/dev/null 2>&1; then

@@ -112,9 +112,10 @@ fi
 export WINEDLLOVERRIDES="mscoree,mshtml="
 
 ## Go
-if [ -d "$HOME/.go" ]; then
-	export GOPATH=~/.go
-	appendpath "$GOPATH/bin"
+if [ -d "$HOME/go" ]; then
+	export GOPATH=~/go:~/.go-tools
+	appendpath "$HOME/.go-tools/bin"
+	appendpath "$HOME/go/bin"
 	command -v godoc >/dev/null 2>&1 && godoc -http :6060 -play &
 fi
 
