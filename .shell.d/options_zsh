@@ -105,5 +105,17 @@ if [ -f /usr/share/fzf/key-bindings.zsh ]; then
 	. /usr/share/fzf/key-bindings.zsh
 	. /usr/share/fzf/completion.zsh
 	bindkey '^T' transpose-chars
-	bindkey '\er' fzf-file-widget
+	bindkey '\e^t' fzf-file-widget
+	bindkey '\ec' capitalize-word
+	bindkey '\eC' fzf-cd-widget
+	fzf-bcd() {
+		setopt localoptions pipefail 2> /dev/null
+		cd "${$(pwd | nawk -v RS=/ '{sub("\n","");p=p $0 "/"; print p}' | fzf --tac):-.}"
+	  local ret=$?
+		zle redisplay
+		typeset -f zle-line-init >/dev/null && zle zle-line-init
+		return $ret
+	}
+	zle     -N   fzf-bcd
+	bindkey "\e^L" fzf-bcd
 fi
