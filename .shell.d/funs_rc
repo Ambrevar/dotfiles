@@ -215,6 +215,20 @@ xmultioff () {
 ## Pacman functions
 
 if command -v pacman >/dev/null 2>&1; then
+	if command -v fzf >/dev/null 2>&1; then
+		pel() {
+			local result count
+			count=$#
+			while IFS= read -r i; do
+				set "$@" "$i"
+			done <<EOF
+$(pacman -Qlq "$@" | grep -v "/$" | fzf)
+EOF
+			shift $count
+			[ -n "$1" ] && $EDITOR "$@"
+		}
+	fi
+
 	## Get detailed file list for the specified packages, omitting folders.
 	pql () {
 		pacman -Ql "$@" | grep -v "/$"
