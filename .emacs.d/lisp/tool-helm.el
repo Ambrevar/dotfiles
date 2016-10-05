@@ -28,6 +28,13 @@
       (helm-grep-do-git-grep arg)
     (helm-do-grep-ag arg)))
 
+(defun helm-mark-or-exchange-rect ()
+  "Run `helm-all-mark-rings' or `rectangle-exchange-point-and-mark' if in rectangle-mark-mode."
+  (interactive)
+  (if rectangle-mark-mode
+      (rectangle-exchange-point-and-mark)
+    (helm-all-mark-rings)))
+
 (define-key mickey-minor-mode-map (kbd "M-x") 'helm-M-x)
 (define-key mickey-minor-mode-map (kbd "C-x M-f") 'helm-semantic-or-imenu)
 (define-key mickey-minor-mode-map (kbd "C-x C-/") 'helm-find)
@@ -38,7 +45,7 @@
 (define-key mickey-minor-mode-map (kbd "C-x b") 'helm-buffers-list)
 (define-key mickey-minor-mode-map (kbd "C-x C-b") 'helm-mini)
 (define-key mickey-minor-mode-map (kbd "M-y") 'helm-show-kill-ring)
-(define-key mickey-minor-mode-map (kbd "C-x C-x") 'helm-all-mark-rings)
+(define-key mickey-minor-mode-map (kbd "C-x C-x") 'helm-mark-or-exchange-rect)
 (define-key mickey-minor-mode-map (kbd "C-x x") 'helm-mark-ring)
 (define-key mickey-minor-mode-map (kbd "M-s o") 'helm-occur)
 (define-key mickey-minor-mode-map (kbd "C-h a") 'helm-apropos)

@@ -14,7 +14,7 @@
 ;; Remember last cursor position.
 (require 'saveplace)
 (setq save-place-file (concat emacs-cache-folder "saveplace"))
-(setq-default save-place t)
+(setq-default save-place-mode t)
 ;; When the daemon is killed abruptly, places are not saved. Adding this hook
 ;; allows to save places at a strategic moment.
 (add-hook 'before-save-hook 'save-place-kill-emacs-hook)
@@ -126,9 +126,6 @@
 ;; Autofill tweak.
 (setq sentence-end-double-space nil)
 
-;; Highlight selections -- not activated by default on old Emacs.
-(transient-mark-mode 1)
-
 ;; There is no prog-mode-hook on Emacs<24.
 (require 'functions) ; for `page-number-mode'
 (add-hook
@@ -205,6 +202,7 @@
 ;; By default, there’s a small delay before showing a matching parenthesis. Set
 ;; it to 0 to deactivate.
 (setq show-paren-delay 0)
+(setq show-paren-when-point-inside-paren t)
 
 ;; query-replace-regex fix on terminals.
 (if (not (fboundp 'tool-bar-mode)) (define-key mickey-minor-mode-map (kbd "C-M-y") 'query-replace-regexp))
@@ -346,8 +344,9 @@
 ;; Sort
 (setq sort-fold-case t)
 
-;; Fix slow startup when network is slow. Most visible with Helm and Magit.
-(setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
+;; Replace not-so-useful comment-dwim binding.
+(define-key mickey-minor-mode-map "\M-;" 'comment-line)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'main)

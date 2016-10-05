@@ -31,19 +31,6 @@ Regular math expression can be computed with calc."
         standard-output
       (apply 'call-process program nil t nil args))))
 
-(defun comment-or-uncomment-current-line-or-region ()
-  "Comments or uncomments current current line or whole lines in region."
-  (interactive)
-  (save-excursion
-    (let (min max)
-      (if mark-active
-          (setq min (region-beginning) max (region-end))
-        (setq min (point) max (point)))
-      (comment-or-uncomment-region
-       (progn (goto-char min) (line-beginning-position))
-       (progn (goto-char max) (line-end-position))))))
-(define-key mickey-minor-mode-map "\M-;" 'comment-or-uncomment-current-line-or-region)
-
 ;; (defcustom compilation-after-hook nil
 ;;   "List of hook functions run by `compile-custom'."
 ;;   :type 'hook
