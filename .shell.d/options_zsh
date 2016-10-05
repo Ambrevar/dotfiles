@@ -45,7 +45,7 @@ chpwd() {
   print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
 }
 
-DIRSTACKSIZE=20
+DIRSTACKSIZE=100
 
 setopt autopushd pushdsilent pushdtohome
 setopt pushdignoredups
@@ -108,14 +108,28 @@ if [ -f /usr/share/fzf/key-bindings.zsh ]; then
 	bindkey '\e^t' fzf-file-widget
 	bindkey '\ec' capitalize-word
 	bindkey '\eC' fzf-cd-widget
+
 	fzf-bcd() {
 		setopt localoptions pipefail 2> /dev/null
 		cd "${$(pwd | nawk -v RS=/ '{sub("\n","");p=p $0 "/"; print p}' | fzf --tac):-.}"
 	  local ret=$?
+		zle reset-prompt
 		zle redisplay
 		typeset -f zle-line-init >/dev/null && zle zle-line-init
 		return $ret
 	}
 	zle     -N   fzf-bcd
 	bindkey "\e^L" fzf-bcd
+
+	fzf-cdhist() {
+		setopt localoptions pipefail 2> /dev/null
+		cd "${$(dirs -lp | fzf):-.}"
+	  local ret=$?
+		zle reset-prompt
+		zle redisplay
+		typeset -f zle-line-init >/dev/null && zle zle-line-init
+		return $ret
+	}
+	zle     -N   fzf-cdhist
+	bindkey "\er" fzf-cdhist
 fi
