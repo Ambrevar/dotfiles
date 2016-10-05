@@ -135,7 +135,7 @@ fi
 
 ## fzf
 if command -v fzf >/dev/null 2>&1; then
-	export FZF_DEFAULT_OPTS="--cycle --extended --multi"
+	export FZF_DEFAULT_OPTS="--cycle --extended --multi --bind=ctrl-v:page-down,alt-v:page-up"
 fi
 
 ## pacman abs
