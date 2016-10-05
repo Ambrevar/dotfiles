@@ -13,9 +13,9 @@
 (defun go-buffer-in-gopath-p ()
   (if (not buffer-file-name)
       nil
-    (let ((dir (expand-file-name (file-name-directory buffer-file-name))) (looping t) (gopath (getenv "GOPATH")))
+    (let ((dir (expand-file-name (file-name-directory buffer-file-name))) (looping t) (gopath (split-string (getenv "GOPATH") ":")))
       (while (progn
-               (if (string= dir gopath)
+               (if (member dir gopath)
                    (setq looping nil)
                  (setq dir (expand-file-name ".." dir)))
                (and looping (not (string= dir "/")))))
