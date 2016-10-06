@@ -71,5 +71,5 @@ fi
 
 if command -v emacs >/dev/null 2>&1; then
 	echo "==> Emacs extra packages"
-	emacs --batch -l ~/.emacs.d/init.el --eval '(init-extra-packages)' 2>/dev/null
+	yes | emacs --batch -l ~/.emacs.d/init.el --eval '(progn (package-refresh-contents)(package-install-selected-packages))'
 fi

@@ -46,13 +46,12 @@ TeX and LaTeX full-featured environment: no AucTeX, itemize function, skeletons,
 compilation with various engines and index support, external PDF view with
 SyncTeX support, temp files clean function, PDF compression.
 
-I make use of just a few unofficial packages. Use `init-extra-packages` to
-install/update them all at once.
+I make use of just a few unofficial packages. Use
+`package-install-selected-packages` to install them all at once.
 
 ### Mutt
 
-* Compile options: IMAP and SMTP support.
-* Patch: sidebar.
+* Compile options: IMAP and SMTP support, sidebar.
 * Extra deps: antiword, ccrypt, fortune, sxiv, w3m.
 
 Support for multiple accounts with encrypted passwords. (Mutt will prompt for

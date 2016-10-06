@@ -82,18 +82,6 @@ To view where the bindings are set in your config files, lookup
   ;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
   (setq package-user-dir (concat emacs-cache-folder "elpa"))
-  (setq favorite-packages nil)
-
-  (defun init-extra-packages ()
-    (interactive)
-    (unless (file-exists-p package-user-dir)
-      (package-refresh-contents))
-    (let ((pkglist favorite-packages))
-      (while pkglist
-        (when (not (package-installed-p (car pkglist)))
-          (package-install (car pkglist)))
-        (setq pkglist (cdr pkglist)))))
-
   (package-initialize))
 
 ;;------------------------------------------------------------------------------
@@ -117,23 +105,23 @@ To view where the bindings are set in your config files, lookup
 
 (load-external "\\.vert\\'\\|\\.frag\\'\\|\\.glsl\\'" 'glsl-mode nil 'c-mode)
 
-(add-to-list 'favorite-packages 'go-mode)
-(add-to-list 'favorite-packages 'go-eldoc)
-(add-to-list 'favorite-packages 'go-guru)
-(add-to-list 'favorite-packages 'go-rename)
-(add-to-list 'favorite-packages 'helm-go-package)
-(add-to-list 'favorite-packages 'company-go)
+(add-to-list 'package-selected-packages 'go-mode)
+(add-to-list 'package-selected-packages 'go-eldoc)
+(add-to-list 'package-selected-packages 'go-guru)
+(add-to-list 'package-selected-packages 'go-rename)
+(add-to-list 'package-selected-packages 'helm-go-package)
+(add-to-list 'package-selected-packages 'company-go)
 (load-external "\\.go\\'" 'go-mode)
 (add-hook 'go-mode-hook (lambda () (require 'mode-go)))
 
 (load-external "\\.dot\\'" 'graphviz-dot-mode)
 (add-hook 'graphviz-dot-mode-hook (lambda () (require 'mode-dot)))
 
-(add-to-list 'favorite-packages 'lua-mode)
+(add-to-list 'package-selected-packages 'lua-mode)
 (load-external "\\.lua\\'" 'lua-mode nil 'sh-mode)
 (add-hook 'lua-mode-hook (lambda () (require 'mode-lua)))
 
-(add-to-list 'favorite-packages 'markdown-mode)
+(add-to-list 'package-selected-packages 'markdown-mode)
 (load-external "\\.md\\'\\|\\.markdown\\'" 'markdown-mode)
 ;; If we need more option, add it to a dedicated file.
 (add-hook 'markdown-mode-hook (lambda () (set (make-local-variable 'paragraph-start) "
@@ -156,8 +144,8 @@ To view where the bindings are set in your config files, lookup
 ;; (setq guess-style-info-mode 1)
 ;; (add-hook 'prog-mode-hook (lambda () (ignore-errors (guess-style-guess-all))))
 
-(add-to-list 'favorite-packages 'multiple-cursors)
-(add-to-list 'favorite-packages 'phi-search)
+(add-to-list 'package-selected-packages 'multiple-cursors)
+(add-to-list 'package-selected-packages 'phi-search)
 (when (require 'multiple-cursors nil t)
   (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
   ;; Load the file at the new location.
@@ -170,12 +158,12 @@ To view where the bindings are set in your config files, lookup
   ;; Search compatible with mc.
   (require 'phi-search nil t))
 
-(add-to-list 'favorite-packages 'helm)
-(add-to-list 'favorite-packages 'helm-descbinds)
-(add-to-list 'favorite-packages 'helm-fuzzy-find)
-(add-to-list 'favorite-packages 'helm-ls-git)
-(add-to-list 'favorite-packages 'wgrep-helm)
-(add-to-list 'favorite-packages 'wgrep-pt)
+(add-to-list 'package-selected-packages 'helm)
+(add-to-list 'package-selected-packages 'helm-descbinds)
+(add-to-list 'package-selected-packages 'helm-fuzzy-find)
+(add-to-list 'package-selected-packages 'helm-ls-git)
+(add-to-list 'package-selected-packages 'wgrep-helm)
+(add-to-list 'package-selected-packages 'wgrep-pt)
 (when (require 'helm-config nil t)
   (require 'tool-helm))
 
@@ -190,12 +178,12 @@ To view where the bindings are set in your config files, lookup
 ;; initially.
 (require 'fzf nil t)
 
-(add-to-list 'favorite-packages 'company)
-(add-to-list 'favorite-packages 'helm-company)
+(add-to-list 'package-selected-packages 'company)
+(add-to-list 'package-selected-packages 'helm-company)
 (when (require 'company nil t)
   (setq company-idle-delay nil))
 
-(add-to-list 'favorite-packages 'magit)
+(add-to-list 'package-selected-packages 'magit)
 (when (require 'magit nil t)
   (set-face-foreground  'magit-branch-remote "orange red")
   (setq git-commit-summary-max-length git-commit-fill-column)
