@@ -347,6 +347,8 @@
 ;; Replace not-so-useful comment-dwim binding.
 (define-key mickey-minor-mode-map "\M-;" 'comment-line)
 
+; In case you find eldoc too distracting.
+;; (global-eldoc-mode 0)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'main)

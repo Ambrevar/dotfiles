@@ -1,7 +1,6 @@
 ;;==============================================================================
 ;; Go
 ;;==============================================================================
-;; Optional packages: go-autocomplete?, go-complete?, go-guru
 
 (defun go-eval-buffer ()
   "Eval buffer with `go run'."
@@ -21,6 +20,13 @@
                (and looping (not (string= dir "/")))))
       (if (string= dir "/") nil t))))
 
+(when (require 'go-guru nil t)
+  (unless (executable-find "guru")
+    ; Requires `call-process-to-string' from `functions'."
+    (require 'functions)
+    (setq go-guru-command
+          (concat (replace-regexp-in-string "\n$" "" (call-process-to-string "go" "env" "GOTOOLDIR")) "/guru"))))
+
 (add-hook
  'godoc-mode-hook
  (lambda ()
@@ -29,6 +35,8 @@
 (add-hook-and-eval
  'go-mode-hook
  (lambda ()
+   (when (require 'go-eldoc nil t)
+     (go-eldoc-setup))
    (setq gofmt-command "goimports")
    (setq godoc-command "godoc -ex")
    (setq godoc-and-godef-command "godoc -ex")

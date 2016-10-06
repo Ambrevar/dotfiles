@@ -118,6 +118,8 @@ To view where the bindings are set in your config files, lookup
 (load-external "\\.vert\\'\\|\\.frag\\'\\|\\.glsl\\'" 'glsl-mode nil 'c-mode)
 
 (add-to-list 'favorite-packages 'go-mode)
+(add-to-list 'favorite-packages 'go-eldoc)
+(add-to-list 'favorite-packages 'go-guru)
 (add-to-list 'favorite-packages 'go-rename)
 (add-to-list 'favorite-packages 'helm-go-package)
 (load-external "\\.go\\'" 'go-mode)
