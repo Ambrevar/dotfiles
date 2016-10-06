@@ -122,6 +122,7 @@ To view where the bindings are set in your config files, lookup
 (add-to-list 'favorite-packages 'go-guru)
 (add-to-list 'favorite-packages 'go-rename)
 (add-to-list 'favorite-packages 'helm-go-package)
+(add-to-list 'favorite-packages 'company-go)
 (load-external "\\.go\\'" 'go-mode)
 (add-hook 'go-mode-hook (lambda () (require 'mode-go)))
 
@@ -189,8 +190,10 @@ To view where the bindings are set in your config files, lookup
 ;; initially.
 (require 'fzf nil t)
 
-(when (require 'auto-complete-config nil t)
-  (ac-config-default))
+(add-to-list 'favorite-packages 'company)
+(add-to-list 'favorite-packages 'helm-company)
+(when (require 'company nil t)
+  (setq company-idle-delay nil))
 
 (add-to-list 'favorite-packages 'magit)
 (when (require 'magit nil t)

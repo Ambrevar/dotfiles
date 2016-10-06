@@ -132,6 +132,11 @@ restored."
       (local-set-key (kbd "M-.") 'semantic-ia-fast-jump)
       (local-set-key (kbd "C-c C-d") 'semantic-ia-show-summary)
       (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
+      (when (fboundp 'company-mode)
+        (company-mode)
+        (if (fboundp 'helm-company)
+            (local-set-key (kbd "M-TAB") 'helm-company)
+          (local-set-key (kbd "M-TAB") 'company-complete)))
       (local-set-key (kbd "C-c a") 'cc-include-local)
       (local-set-key (kbd "C-c C-a") 'cc-include)
       (local-set-key (kbd "C-c o") 'ff-find-other-file)
@@ -145,7 +150,6 @@ restored."
       ; (local-set-key (kbd "C-c C-f") 'cc-for)
       ; (local-set-key (kbd "C-c C-i") 'cc-if)
       ; (local-set-key (kbd "C-c C-p") 'cc-printf)
-      ;; Toggle between source file and header.
       (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1))))))
  '(c-mode-hook c++-mode-hook))
 
