@@ -162,6 +162,7 @@ To view where the bindings are set in your config files, lookup
 (add-to-list 'package-selected-packages 'helm-descbinds)
 (add-to-list 'package-selected-packages 'helm-fuzzy-find)
 (add-to-list 'package-selected-packages 'helm-ls-git)
+;; (add-to-list 'package-selected-packages 'helm-pt) ; No need?
 (add-to-list 'package-selected-packages 'wgrep-helm)
 (add-to-list 'package-selected-packages 'wgrep-pt)
 (when (require 'helm-config nil t)
