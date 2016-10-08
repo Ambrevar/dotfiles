@@ -50,7 +50,8 @@
 (define-key mickey-minor-mode-map (kbd "M-s o") 'helm-occur)
 (define-key mickey-minor-mode-map (kbd "C-h a") 'helm-apropos)
 (define-key mickey-minor-mode-map (kbd "C-M-%") 'helm-regexp)
-(define-key mickey-minor-mode-map (kbd "C-x C-g") 'helm-grep-git-or-ag)
+(define-key mickey-minor-mode-map (kbd "C-x M-g") 'helm-grep-git-or-ag)
+(define-key mickey-minor-mode-map (kbd "C-x M-G") 'helm-do-grep-ag)
 (define-key mickey-minor-mode-map (kbd "C-x r b") 'helm-filtered-bookmarks)
 
 (set-face-background 'helm-source-header "white")
