@@ -322,8 +322,8 @@
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
 
 ;; Easy code folding toggle.
-(add-hook 'prog-mode-hook 'hs-minor-mode)
-(add-hook 'prog-mode-hook (lambda () (local-set-key (kbd "C-c h") 'hs-toggle-hiding)))
+; (add-hook 'prog-mode-hook 'hs-minor-mode)
+; (add-hook 'prog-mode-hook (lambda () (local-set-key (kbd "C-c h") 'hs-toggle-hiding)))
 
 ;; Move mouse away.
 ; (mouse-avoidance-mode 'banish)

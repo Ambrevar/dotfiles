@@ -214,7 +214,7 @@ To view where the bindings are set in your config files, lookup
 ;
 ; (transient-mark-mode 1)
 ;
-; ; Fix slow startup when network is slow. Most visible with Helm and Magit with Emacs <25.
+; ;; Fix slow startup when network is slow. Most visible with Helm and Magit with Emacs <25.
 ; (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
 
 (load "local" t t)
