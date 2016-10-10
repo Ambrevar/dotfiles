@@ -111,7 +111,7 @@ if [ -f /usr/share/fzf/key-bindings.zsh ]; then
 
 	fzf-bcd() {
 		setopt localoptions pipefail 2> /dev/null
-		cd "${$(pwd | nawk -v RS=/ '{sub("\n","");p=p $0 "/"; print p}' | fzf --tac):-.}"
+		cd "${$(pwd | nawk -v RS=/ '/\n/ {exit} {p=p $0 "/"; print p}' | fzf --tac):-.}"
 	  local ret=$?
 		zle reset-prompt
 		zle redisplay
