@@ -155,11 +155,11 @@ typex () {
 	for i; do
 		cmd="$(command -v "$i" 2>/dev/null)"
 		if [ $? -ne 0 ]; then
-			echo "$i does not exist."
+			echo "$i: does not exist"
 		elif [ -z "$(echo "$cmd" | grep ^/)" ]; then
 			type "$i"
 		else
-			xpath="$(type $1 | cut -d' ' -f3)"
+			xpath="$(type "$i" | cut -d' ' -f3)"
 			ls -l "$xpath"
 			file "$xpath" | cut -d':' -f2 | cut -b 2-
 		fi
