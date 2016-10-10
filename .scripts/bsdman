@@ -28,7 +28,7 @@ if [ $# -eq 2 ]; then
 fi
 
 
-AGENT="curl -s"
+AGENT="curl -s -L"
 if ! command -v curl >/dev/null 2>&1; then
 	AGENT="wget -q -O - "
 fi
