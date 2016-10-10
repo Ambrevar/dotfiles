@@ -1,5 +1,4 @@
-#!/usr/bin/env zsh
-## zsh is needed for the password.
+#!/bin/sh
 
 _usage () {
 cat<<EOF
@@ -13,10 +12,9 @@ Extract password-protected 7z archives in one run. 7z archives are found in all
 subfolders.
 
 If password is provided, it will be used on all archives. Password will not show
-up on screen. This requires a shell with 'read -s' support. It will not work for
-the Bourne Shell.
+up on screen.
 
-WARNING: this script is rather weak, most notably regarding existing files.
+WARNING: This script is rather weak, most notably regarding existing files.
 
 Options.
 
@@ -27,6 +25,7 @@ EOF
 }
 
 OPT_DELAFTER=false
+OPT_PASS=false
 PASS=''
 
 while getopts ":hfp" opt; do
@@ -37,9 +36,7 @@ while getopts ":hfp" opt; do
 	f)
 		OPT_DELAFTER=true ;;
 	p)
-		echo -n "Password: "
-		read -s PASS
-		PASS="-p$PASS" ;;
+		OPT_PASS=true ;;
 	\?)
 		_usage "$0"
 		exit 1 ;;
@@ -54,6 +51,15 @@ if [ $# -eq 0 ]; then
 fi
 
 command -v atool >/dev/null 2>&1 && echo "You should use atool instead." && echo
+
+if $OPT_PASS; then
+	echo -n "Password: "
+	stty_orig="$(stty -g)"
+	stty -echo
+	read PASS
+	stty "$stty_orig"
+	PASS="-p$PASS"
+fi
 
 _extract () {
 	echo "[$1]"
