@@ -135,6 +135,8 @@ To view where the bindings are set in your config files, lookup
 (when (fboundp 'po-find-file-coding-system)
   (modify-coding-system-alist 'file "\\.po\\'\\|\\.po\\." 'po-find-file-coding-system))
 
+(add-to-list 'package-selected-packages 'fish-mode)
+
 ;;------------------------------------------------------------------------------
 ;; External tools
 
