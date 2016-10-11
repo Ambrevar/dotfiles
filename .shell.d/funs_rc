@@ -33,7 +33,7 @@ mkcd () {
 	cd "$1"
 }
 
-## Quick search.
+## Quick search. More flexible alternative: 'ff -di'.
 search () {
 	find . -iname "*$1*"
 }

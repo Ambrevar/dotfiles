@@ -1,7 +1,7 @@
 #!/bin/sh
 ## This file is sourced by some DM and should not contain any desktop execution.
 
-## Internet browsers. They need X to run.
+## Internet browsers that need X to run.
 for i in qutebrowser dwb luakit chromium google-chrome; do
 	command -v $i >/dev/null 2>&1 && export BROWSER=$i && break
 done
@@ -29,7 +29,9 @@ fi
 
 ## This env variable is used by some programs (e.g. ranger, awesome) to get the
 ## terminal executable name.
-export TERMCMD="urxvt"
+for i in urxvt xterm; do
+	command -v $i >/dev/null 2>&1 && export TERMCMD=$i && break
+done
 
 ## Hook. Should be sourced last.
 [ -f ~/.xprofile_hook ] && . ~/.xprofile_hook
