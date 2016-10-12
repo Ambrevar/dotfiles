@@ -14,7 +14,7 @@
 ; (eval-after-load "org"
 ;   '(progn
 ;      (add-to-list 'org-agenda-files "/path/to/agenda.org")))
-(add-to-list 'org-agenda-files "~/todo.org")
+(add-to-list 'org-agenda-files "~/personal/todo/todo.org")
 
 (setq org-enforce-todo-dependencies t)
 ;; Set PDF association in Org-mode (was Evince by default).

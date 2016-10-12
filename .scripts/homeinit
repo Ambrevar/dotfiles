@@ -17,9 +17,6 @@ echo "==> Mutt"
 mkdir -pv "$HOME/.cache/mutt/headers"
 mkdir -pv "$HOME/.cache/mutt/messages"
 
-echo "==> To-Do"
-ln -sfv "$SOURCEDIR/todo/todo.org" "$HOME/todo.org"
-
 echo "==> Bookmarks"
 if [ -z "$BROWSER" ]; then
 	echo "Cannot proceed when variable BROWSER is not set."
