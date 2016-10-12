@@ -29,6 +29,7 @@ set -- "$HOME/.cache/awesome" \
 	"$HOME/.fehbg" \
 	"$HOME/.gtk-bookmarks" \
 	"$HOME/.lesshst" \
+	"$HOME/.local/share/fish" \
 	"$HOME/.local/share/newsbeuter" \
 	"$HOME/.local/share/qutebrowser" \
 	"$HOME/.local/share/webkit" \
