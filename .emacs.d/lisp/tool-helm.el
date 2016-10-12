@@ -21,10 +21,13 @@
 (setq helm-grep-ag-command "pt -S --hidden --color --nogroup %s %s %s")
 
 (defun helm-grep-git-or-ag (arg)
-  "Run `helm-grep-do-git-grep' if possible; fallback to `helm-do-grep-ag' otherwise."
+  "Run `helm-grep-do-git-grep' if possible; fallback to `helm-do-grep-ag' otherwise.
+Requires `call-process-to-string' from `functions'."
   (interactive "P")
   (require 'vc)
-  (if (vc-find-root default-directory ".git")
+  (require 'functions)
+  (if (and (vc-find-root default-directory ".git")
+           (or arg (split-string (call-process-to-string "git" "ls-files" "-z") "\0" t)))
       (helm-grep-do-git-grep arg)
     (helm-do-grep-ag arg)))
 
