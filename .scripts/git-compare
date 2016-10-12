@@ -14,6 +14,3 @@ FOLDER="$(mktemp)"
 git ls-files | sort > "$REPO"
 find "$1" -type f ! -path "*.git/*" | sed 's/^[^\/]*\///g' | sort > "$FOLDER"
 rm -f "$REPO" "$FOLDER"
-
-## Zsh version.
-# comm -3 <(git ls-files | sort) <(find "$1" -type f ! -path "*.git/*" | sed 's/^[^\/]*\///g' | sort)

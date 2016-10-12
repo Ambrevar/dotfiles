@@ -18,16 +18,7 @@ shift
 FILE="$(mktemp)"
 echo "==> $CC \"$INPUT\" -o \"$FILE\" $*"
 
-## Zsh compatibility. We need it otherwise word splitting of parameter will not
-## work.
-STATUS="$(set -o | awk '/shwordsplit / {print $2}')"
-[ "$STATUS" = "off" ] && set -o shwordsplit
-
 $CC "$INPUT" -o "$FILE" "$@"
-
-## Restore Zsh previous options. This will not turn off shwordsplit if it
-## was on before calling the function.
-[ "$STATUS" = "off" ] && set +o shwordsplit
 
 echo "==> $FILE"
 "$FILE"

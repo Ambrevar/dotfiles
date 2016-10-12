@@ -53,6 +53,3 @@ pacman -Qq${OPTION_FOREIGN}${OPTION_EXPLICIT} | sort > "$PKGLIST"
 sort "$@" > "$FILE"
 comm -3 ${OPTION_LOCAL} "$PKGLIST" "$FILE"
 rm -f "$PKGLIST" "$FILE"
-
-## Zsh version.
-# comm -3 ${OPTION_LOCAL} <(pacman -Qq${OPTION_FOREIGN}${OPTION_EXPLICIT} | sort) <(sort "$*")
