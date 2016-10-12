@@ -307,7 +307,7 @@ globalkeys = awful.util.table.join(
 	awful.key({}, "Print",         function () awful.util.spawn("scrot '" .. home .. "/temp/screen-%F-%T.png'") end),
 
 	-- TODO manager
-	awful.key({ modkey }, "t", function () awful.util.spawn(os.getenv("EDITOR") .. " ~/dataperso/todo/todo.org") end),
+	awful.key({ modkey }, "t", function () awful.util.spawn(os.getenv("EDITOR") .. " ~/personal/todo/todo.org") end),
 
 	-- Mouse control
 	-- Touchpad

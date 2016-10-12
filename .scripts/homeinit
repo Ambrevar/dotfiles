@@ -1,7 +1,7 @@
 #!/bin/sh
 ## Home session initialization.
 
-SOURCEDIR="$HOME/dataperso"
+SOURCEDIR="$HOME/personal"
 [ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
 [ -z "$XDG_DATA_HOME" ] && XDG_DATA_HOME="$HOME/.local/share"
 [ -z "$XDG_DATA_DIRS" ] && XDG_DATA_DIRS="/usr/local/share"
