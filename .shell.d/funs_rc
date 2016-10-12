@@ -269,22 +269,6 @@ if [ "$(uname)" = FreeBSD ]; then
 fi
 
 ##==============================================================================
-## TeXlive functions
-
-## It is important to set umask properly, otherwise users might not have
-## authorization to use the packages.
-
-if [ -d "/usr/local/texlive" ]; then
-	tli () {
-		sudo sh -c 'umask 022 && tlmgr install $0 "$@"' "$@"
-	}
-
-	tlr () {
-		sudo sh -c 'umask 022 && tlmgr remove $0 "$@"' "$@"
-	}
-fi
-
-##==============================================================================
 ## Luarocks functions
 
 if command -v luarocks >/dev/null 2>&1; then

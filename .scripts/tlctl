@@ -1,0 +1,74 @@
+#!/bin/sh
+
+usage () {
+	cat <<EOF
+Usage: ${1##*/} COMMAND [PACKAGES]
+
+Wrapper around essential features of 'tlmgr' TeXlive manager.
+
+List of commands:
+
+  f:  Search files.
+  i:  Install packages.
+  l   List installed packages.
+  q   Query info about package.
+  r:  Remove packages.
+  s:  Search packages.
+  u:  Update tlmgr.
+EOF
+}
+
+[ $# -eq 0 ] && usage "$0" && exit 1
+
+
+if ! command -v tlmgr >/dev/null 2>&1; then
+	echo 'tlmgr not found'
+	exit 1
+fi
+
+command="$1"
+shift 1
+
+## It is important to set umask properly, otherwise users might not have
+## authorization to use the packages.
+case "$command" in
+f)
+	tlmgr search --global --file "$@"	;;
+h)
+	usage "$0" ;;
+i)
+	sudo sh -c 'umask 022 && tlmgr install $0 "$@"' "$@" ;;
+l)
+	## Note: We use <TAB> in the sed expressions.
+	TEXLIVE_BASIC="$(mktemp)"
+	tlmgr info collection-basic --list | sed -n '/^	/{s/	//g;p;}' | sort >"$TEXLIVE_BASIC"
+
+	TEXLIVE_ALL="$(mktemp)"
+	tlmgr info --only-installed | grep -v 'x86_64\|amd64' | cut -d' ' -f2 | cut -f1 -d':' | sort >"$TEXLIVE_ALL"
+
+	comm -3 "$TEXLIVE_BASIC" "$TEXLIVE_ALL" | sed 's/	//g' | \
+		grep -vi 'collection-basic\|scheme-minimal\|texlive-common\|texlive-docindex\|texlive-en'
+
+	rm "$TEXLIVE_ALL" "$TEXLIVE_BASIC"
+	;;
+q)
+	## First query locally, then online db if needed.
+	buf=$(tlmgr info --list --only-installed "$@")
+	installed=$(echo "$buf" | awk '$1 == "package:" {firstline=$0; getline; if($1!="category:") next; else print firstline } 1')
+	echo "$installed"
+	missing=$(echo "$buf" | awk '$1 == "package:" {pkg=$2; getline; if($1!="category:") print pkg}')
+	[ -n "$missing" ] && tlmgr info --list "$missing"
+	;;
+r)
+	sudo sh -c 'umask 022 && tlmgr remove $0 "$@"' "$@" ;;
+s)
+	tlmgr search --global "$@" ;;
+u)
+	sudo sh -c 'umask 022 && tlmgr update --self'	;;
+*)
+	echo "wrong command '$command'"
+	usage "$0"
+	exit 1 ;;
+esac
+
+exit $?
