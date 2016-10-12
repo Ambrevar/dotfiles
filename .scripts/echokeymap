@@ -1,0 +1,18 @@
+#!/bin/sh
+
+KEYMAP="$HOME/.xkb/symbols/usim"
+
+if [ "$1" = "-h" ]; then
+	cat <<EOF>&2
+Usage: ${0##*/} KEYMAP
+
+Display KEYMAP in terminal. (Default: $KEYMAP)
+
+EOF
+	exit
+fi
+[ "$1" = "--" ] && shift
+
+## Keymap view in terminal
+[ $# -ne 0 ] && KEYMAP=$1
+awk '/━|┃|│|─/ {line=substr($0,4); print line}' "$KEYMAP"
