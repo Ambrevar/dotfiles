@@ -1,9 +1,7 @@
 #!/usr/bin/env zsh
 
 ## This is a home-made network manager. Systems running systemd and dhcpcd are
-## better off running the dhcpcd daemon with
-## /etc/wpa_supplicant/wpa_supplicant.conf configured if needed. See
-## dhcpcd-run-hooks(8).
+## better off using netctl.
 ##
 ## Deps: wpa_supplicant, ccrypt (optional)
 ##
@@ -87,7 +85,7 @@ fi
 
 ## Note: systemd-197 introduced Predictable Network Interface Names, so we need
 ## to check for the proper device dynamically.
-## TODO: check if it works on BSD systems.
+## TODO: Check if BSD has better options that this script. If so, remove it.
 NET_INTERFACE=$(ls -1 /sys/class/net | grep -m1 "^wl")
 
 pkill wpa_supplicant
