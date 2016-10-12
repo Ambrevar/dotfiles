@@ -1,8 +1,8 @@
 #!/bin/sh
 
-_usage () {
-	cat <<EOF
-Usage: ${1##*/} [-m|-e] [-q] FILE
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} [-m|-e] [-q] FILE
 
 Display packages listed in FILE but not installed.
 
@@ -22,14 +22,14 @@ while getopts ":hmqe" opt; do
 	e)
 		OPTION_EXPLICIT="e" ;;
 	h)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	m)
 		OPTION_FOREIGN="m" ;;
 	q)
 		OPTION_LOCAL="-2" ;;
 	\?)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	esac
 done
@@ -38,12 +38,12 @@ shift $((OPTIND - 1))
 
 if [ $# -eq 0 ]; then
 	echo "Missing argument."
-	_usage "$0"
+	usage
 	exit 1
 fi
 
 if ! command -v pacman >/dev/null 2>&1; then
-	echo >&2 "'pacman' not found in PATH. Exiting."
+	echo >&2 "'pacman' not found"
 	exit 1
 fi
 

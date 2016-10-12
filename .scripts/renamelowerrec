@@ -1,18 +1,20 @@
 #!/bin/sh
 
-if [ $# -eq 0 ] || [ "$1" = "-h" ] ; then
-	cat<<EOF
-Usage: ${1##*/} FOLDERS
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} FOLDERS
 
 Rename to lowercase all files found in FOLDERS if destination does not exists.
 
 EOF
+}
 
-	exit
-fi
+[ $# -eq 0 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--" ] && shift
 
 if ! command -v renamelower >/dev/null 2>&1; then
-	echo "'renamelower' not found in PATH. Exiting." >&2
+	echo >&2 "'renamelower' not found"
 	exit 1
 fi
 

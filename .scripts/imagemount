@@ -3,7 +3,7 @@
 ## User options:
 FUSEROOT="$HOME/fuse"
 
-_mount () {
+mount () {
 	[ ! -f "$1" ] && return
 
 	DEVICE="$(cdemu status | awk 'NR>2 && $2==0 {print $1; found=1; exit}  END {if(! found)print NR-2}')"
@@ -62,7 +62,7 @@ _mount () {
 }
 
 
-_umount () {
+umount () {
 	[ ! -d "$1" ] && return
 
 	NODE="$(df | awk -v mount="$1" '$0 ~ mount {node=$1; gsub(/[^%]+% /, ""); if ($0 ~ mount){print node; exit}}')"
@@ -78,10 +78,10 @@ _umount () {
 	fi
 }
 
-_usage () {
-	cat<<EOF
-Usage: ${1##*/} FILES
-       ${1##*/} -u FOLDERS
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} FILES
+       ${0##*/} -u FOLDERS
 
 Mount image files using CDEmu or fall back to fuseriso if available.  It will
 not mount an image if already mounted.
@@ -98,12 +98,12 @@ OPT_UNMOUNT=false
 while getopts ":hu" opt; do
 	case $opt in
 	h)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	u)
 		OPT_UNMOUNT=true ;;
 	\?)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	esac
 done
@@ -111,27 +111,24 @@ done
 shift $((OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-	_usage "$0"
+	usage
 	exit 1
 fi
 
-check () {
-	for i ; do
-		if ! command -v $i >/dev/null 2>&1; then
-			echo >&2 "'$i' not found in PATH. Exiting."
-			exit 1
-		fi
-	done
-}
 ## realpath is needed to check if image was already mounted or not.
-check udiskie cdemu realpath
+for i in udiskie cdemu realpath; do
+	if ! command -v $i >/dev/null 2>&1; then
+		echo >&2 "'$i' not found"
+		exit 1
+	fi
+done
 
 if $OPT_UNMOUNT; then
 	for i ; do
-		_umount "$(realpath "$i")"
+		umount "$(realpath "$i")"
 	done
 else
 	for i ; do
-		_mount "$(realpath "$i")"
+		mount "$(realpath "$i")"
 	done
 fi

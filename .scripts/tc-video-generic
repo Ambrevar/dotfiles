@@ -2,9 +2,9 @@
 
 ## TODO: handle srt encoding?
 
-_usage () {
-	cat <<EOF
-Usage: ${1##*/} [OPTIONS] FILES|FOLDERS
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} [OPTIONS] FILES|FOLDERS
 
 Transcode FILES or files found in FOLDERS to x264 and ogg vorbis in a MKV container.
 Black stripes are *not* cropped by default since it may be sometimes inaccurate.
@@ -49,28 +49,28 @@ Examples:
 
 * Get a preview of changes.
 
-  ${1##*/} -p input.video
+  ${0##*/} -p input.video
 
 * Proceed with default options over folders and files.
 
-  ${1##*/} input-folder input.video
+  ${0##*/} input-folder input.video
 
 * Preview black stripes cropping.
 
-  ${1##*/} -P input.video
+  ${0##*/} -P input.video
 
 * Process with default options and remove black stripes.
 
-  ${1##*/} -C input.video
+  ${0##*/} -C input.video
 
 * Exchange streams 1 and 2 by first removing them, then adding them in the
   desired order.
 
-  ${1##*/} -o '-map -0:1 -map -0:2 -map 0:2 -map 0:1' input.video
+  ${0##*/} -o '-map -0:1 -map -0:2 -map 0:2 -map 0:1' input.video
 
 * Change audio stream 1 title and remove audio stream 2 title:
 
-  ${1##*/} -o '-metadata:s:a:0 title="FR: OGG Stereo" -metadata:s:a:1 title=' input.video
+  ${0##*/} -o '-metadata:s:a:0 title="FR: OGG Stereo" -metadata:s:a:1 title=' input.video
 
 See <https://trac.ffmpeg.org/wiki/Encode/H.264>, 'ffmpeg -h encoder=libx264' and 'x264 --fullhelp'.
 EOF
@@ -113,7 +113,7 @@ while getopts ":a:b:cCd:fho:pPq:sS:t" opt; do
 		OVERWRITE="-y"
 		OPT_OVERWRITE=true;;
 	h)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	o)
 		TC_VIDEO_OPT="$OPTARG" ;;
@@ -132,14 +132,14 @@ while getopts ":a:b:cCd:fho:pPq:sS:t" opt; do
 	t)
 		OPT_REMOVE_TITLE=true ;;
 	\?)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	esac
 done
 
 shift $((OPTIND - 1))
 if [ $# -eq 0 ]; then
-	_usage "$0"
+	usage
 	exit
 fi
 
@@ -148,17 +148,17 @@ if ! command -v ffmpeg >/dev/null; then
 	exit
 fi
 
-_highfreq() {
+highfreq () {
 	awk 'BEGIN{max=0} /crop=/ {t[$NF]++; if (t[$NF]>max) {max=t[$NF]; val=$NF}} END{print val}'
 }
 
-## Usage: _cropvalue FILE STEP
+## Usage: cropvalue FILE STEP
 ## Return the crop values as ffmpeg output them.
-_cropvalue() {
+cropvalue () {
 	local step=$2
 	for i in $(seq "$step" "$step" $((5*step))); do
 		ffmpeg -nostdin -ss "$i" -i "$1"  -t 10 -vf "cropdetect=24:2:0" -f null - 2>&1
-	done | _highfreq
+	done | highfreq
 }
 
 ## Return the audio encoding parameters. For instance
@@ -166,7 +166,7 @@ _cropvalue() {
 ## If input codec is $AUDIO_CODEC, we copy. If some stream bitrates are missing
 ## or 0, we encode it to a default value. If default value is 0, then we copy
 ## stream.
-_audiobitrate() {
+audiobitrate () {
 	local bitrate
 
 	for i in $(seq 0 $((format_nb_streams-1))); do
@@ -191,20 +191,20 @@ _audiobitrate() {
 	done
 }
 
-_transcode() {
+transcode () {
 	echo "==> [$1]"
 	OUTPUT="${1%.*}.$EXT"
 	[ -e "$OUTPUT" ] && OUTPUT="${1%.*}-$(date '+%F-%H%M%S').$EXT"
 
 	## Metadata (i.e. tags + technical data).
-	_buffer="$(ffprobe -v quiet -print_format flat=s=_ -show_streams -show_format "$1")"
+	buffer="$(ffprobe -v quiet -print_format flat=s=_ -show_streams -show_format "$1")"
 	if [ $? -ne 0 ]; then
-		_error "File [$1] is unsupported by FFmpeg."
+		echo "File [$1] is unsupported by FFmpeg."
 		return
 	fi
 	## The following 'eval' defines variables such as format_nb_streams
-	eval "$_buffer"
-	unset _buffer
+	eval "$buffer"
+	unset buffer
 
 	STREAM_TITLE=""
 	if $OPT_REMOVE_TITLE; then
@@ -222,7 +222,7 @@ _transcode() {
 		STEP=${format_duration:-$streams_stream_0_duration}
 		STEP="${STEP%%.*}"
 		STEP=$((STEP/6))
-		VIDEO_FILTER="-vf $(_cropvalue "$1" "$STEP")"
+		VIDEO_FILTER="-vf $(cropvalue "$1" "$STEP")"
 		if $OPT_CROPPREVIEW; then
 			echo "Generating preview... "
 			for i in $(seq  $STEP $STEP $((5*STEP))); do
@@ -237,9 +237,9 @@ _transcode() {
 	## file size and avoid any confusion for playback, which is often the case
 	## when converting DTS to any other format. (DTS has embedded channel
 	## description which is not always available in other formats.)
-	! $OPT_COPY && AUDIO_PARAM="$(_audiobitrate "$1") -ac 2"
+	! $OPT_COPY && AUDIO_PARAM="$(audiobitrate "$1") -ac 2"
 
-	cat<<EOF
+	cat <<EOF>&2
 User options:  ${TC_VIDEO_OPT:-none}
 Sample:        ${SAMPLE:-no}
 Clear tags:    $OPT_REMOVE_TITLE
@@ -293,7 +293,7 @@ for i in "$@"; do
 		## WARNING: ffmpeg continues to read stdin once it has started, so it should
 		## not be called from within a while<<EOF loop without disabling stdin.
 		while IFS= read -r j; do
-			_transcode "$j"
+			transcode "$j"
 		done<<EOF
 $(find "$i"  \( \
 		-iname '*.avi' -o \
@@ -310,7 +310,7 @@ EOF
 
 	else
 		## Argument is a regular file.
-		_transcode "$i"
+		transcode "$i"
 	fi
 
 done

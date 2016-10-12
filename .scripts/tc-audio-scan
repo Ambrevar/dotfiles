@@ -1,7 +1,7 @@
 #!/bin/sh
 
-_usage() {
-	cat<<EOF
+usage () {
+	cat <<EOF>&2
 Usage: ${0##*/} FOLDERS
 
 Print audio files found in FOLDERS with
@@ -11,10 +11,9 @@ Print audio files found in FOLDERS with
 EOF
 }
 
-if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-	_usage
-	exit
-fi
+[ $# -eq 0 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--" ] && shift
 
 if ! command -v mediainfo >/dev/null 2>&1; then
 	echo >&2 "mediainfo required."

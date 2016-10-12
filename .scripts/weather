@@ -1,12 +1,13 @@
 #!/bin/sh
 
 if [ "$1" = "-h" ]; then
-	cat<<EOF
+	cat <<EOF>&2
 Usage: ${0##*/} [OPTIONS]
 
 Display weather forecast.
 
 Use '${0##*/} :help' to list all options.
+
 EOF
 	exit
 fi

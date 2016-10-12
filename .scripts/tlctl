@@ -1,8 +1,8 @@
 #!/bin/sh
 
 usage () {
-	cat <<EOF
-Usage: ${1##*/} COMMAND [PACKAGES]
+	cat <<EOF>&2
+Usage: ${0##*/} COMMAND [PACKAGES]
 
 Wrapper around essential features of 'tlmgr' TeXlive manager.
 
@@ -18,7 +18,7 @@ List of commands:
 EOF
 }
 
-[ $# -eq 0 ] && usage "$0" && exit 1
+[ $# -eq 0 ] && usage && exit 1
 
 
 if ! command -v tlmgr >/dev/null 2>&1; then
@@ -35,7 +35,7 @@ case "$command" in
 f)
 	tlmgr search --global --file "$@"	;;
 h)
-	usage "$0" ;;
+	usage ;;
 i)
 	sudo sh -c 'umask 022 && tlmgr install $0 "$@"' "$@" ;;
 l)
@@ -67,7 +67,7 @@ u)
 	sudo sh -c 'umask 022 && tlmgr update --self'	;;
 *)
 	echo "wrong command '$command'"
-	usage "$0"
+	usage
 	exit 1 ;;
 esac
 

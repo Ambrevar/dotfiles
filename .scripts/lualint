@@ -1,6 +1,6 @@
 #!/usr/bin/env lua
 
-local function usage()
+local function usage ()
 	print ([[Lua static checker
 Usage: ]] .. arg[0]:match('/?([^/]+)$') .. [[ LUASOURCE
 
@@ -11,7 +11,7 @@ Warning: it does not report false negative, but is not exhaustive either.
 end
 
 if #arg < 1 then
-	usage()
+	usage ()
 	os.exit()
 end
 

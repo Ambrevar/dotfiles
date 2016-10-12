@@ -1,8 +1,8 @@
 #!/bin/sh
 
-_usage () {
-	cat<<EOF
-Usage: ${1##*/} [OPTIONS] SCRIPT [ARGS...]
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} [OPTIONS] SCRIPT [ARGS...]
 
 Run Emacs Lisp SCRIPT.
 
@@ -22,31 +22,30 @@ while getopts :bc OPT; do
 	c)
 		OPT_CLEAN=true ;;
 	\?)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	esac
 done
 
 shift $((OPTIND - 1))
 if [ $# -eq 0 ]; then
-	_usage "$0"
+	usage
 	exit 1
 fi
 
 if ! command -v emacs >/dev/null 2>&1; then
-	echo 'emacs not found in PATH. Exiting.' >&2
+	echo >&2 'emacs not found'
 	exit 1
 fi
 
 script="$1"
-if $OPT_BYTE && [ "${1##*.}" = "el" ]; then
+if $OPT_BYTE && [ "${0##*.}" = "el" ]; then
 	script="${1%.*}.elc"
 	emacs -Q --batch -f batch-byte-compile "$1" 2>/dev/null
 fi
 shift
 
 emacs -Q --script "$script" "$@" 2>&1
+status=$?
 $OPT_CLEAN && rm "$script"
-
-## WARNING: never leave a script on a condition, return code be unexpectedly != 0.
-exit 0
+exit $status

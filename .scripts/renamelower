@@ -1,15 +1,17 @@
 #!/bin/sh
 
-if [ $# -eq 0 ] || [ "$1" = "-h" ] ; then
-	cat<<EOF
-Usage: ${1##*/} FILES
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} FILES
 
 Rename FILES to lowercase if destination does not exist.
 
 EOF
+}
 
-	exit
-fi
+[ $# -eq 0 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--" ] && shift
 
 for f ; do
 	filename=${f##*/}

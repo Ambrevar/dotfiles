@@ -46,7 +46,7 @@ END {
 }
 
 error () {
-	echo "$@" >&2
+	echo >&2 "$@"
 }
 
 ## Print size and name. We round to the lowest integer, this makes output
@@ -67,9 +67,9 @@ remove_duplicates () {
 }
 
 usage () {
-	cat <<EOF
-Usage: ${1##*/} [OPTIONS] PACKAGES
-       ${1##*/} -a [OPTIONS]
+	cat <<EOF>&2
+Usage: ${0##*/} [OPTIONS] PACKAGES
+       ${0##*/} -a [OPTIONS]
 
 Display the size of PACKAGES. Duplicates are removed if any. The local database
 is queried first; if the package is not found, the sync database is then used
@@ -86,13 +86,13 @@ Options:
 
 Examples:
 
-  $ ${1##*/} -ast
+  $ ${0##*/} -ast
     Convenient way to keep track of big packages.
 
-  $ ${1##*/} \$(pactree -ld1 linux)
+  $ ${0##*/} \$(pactree -ld1 linux)
     Print the size of linux and all its direct dependencies.
 
-  $ ${1##*/} -st \$(pacman -Qdtq)
+  $ ${0##*/} -st \$(pacman -Qdtq)
     Print a grand total of orphan packages, and sort by size.
 EOF
 }
@@ -111,7 +111,7 @@ while getopts ":ahnstV" opt; do
 	a)
 		opt_all=true ;;
 	h)
-		usage "$0"
+		usage
 		exit ;;
 	n)
 		opt_sort="sort -k3" ;;
@@ -123,7 +123,7 @@ while getopts ":ahnstV" opt; do
 		version "$0"
 		exit ;;
 	\?)
-		usage "$0"
+		usage
 		exit 1 ;;
 	esac
 done
@@ -163,13 +163,13 @@ fi
 ## Per-package mode.
 if [ $# -eq 0 ]; then
 	error "Missing argument."
-	usage "$0"
+	usage
 	exit 1
 fi
 
 ## Remove this check if integrated to pacman.
 if ! command -v pacman >/dev/null 2>&1; then
-	error "'pacman' not found."
+	error "'pacman' not found"
 	exit 1
 fi
 

@@ -10,15 +10,18 @@ else
 	MANPATH="FreeBSD+10-current"
 fi
 
-if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-	cat<<EOF
+usage () {
+	cat <<EOF>&2
 Usage: ${0##*/} [SECTION] PAGE
 
 Fetch $OS man page PAGE from the official website and display it.
 
 EOF
-	exit
-fi
+}
+
+[ $# -eq 0 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--" ] && shift
 
 SECTION=0
 PAGE=$1

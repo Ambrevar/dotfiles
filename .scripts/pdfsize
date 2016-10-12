@@ -1,16 +1,19 @@
 #!/bin/sh
 
-if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-	cat<<EOF
+usage () {
+	cat <<EOF>&2
 Usage: ${0##*/} [options] <PDF-file>
 
 Same as pdfinfo, but append size in milimeters.
 EOF
-	exit
-fi
+}
+
+[ $# -eq 0 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--" ] && shift
 
 if ! command -v pdfinfo >/dev/null 2>&1; then
-	echo 'pdfinfo not found in PATH. Exiting.' >&2
+	echo >&2 'pdfinfo not found'
 	exit 1
 fi
 

@@ -1,8 +1,8 @@
 #!/bin/sh
 
-_usage () {
-	cat<<EOF
-Usage: ${1##*/} [OPTIONS] ISOFILE
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} [OPTIONS] ISOFILE
 
 Dump optical disc to ISOFILE (without extension).
 
@@ -18,12 +18,12 @@ DRIVE=/dev/sr0
 while getopts ":hd:" opt; do
 	case $opt in
 	h)
-		_usage "$0"
-		exit 1 ;;
+		usage
+		exit ;;
 	d)
 		DRIVE=/dev/$OPTARG ;;
 	\?)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	esac
 done
@@ -31,12 +31,12 @@ done
 shift $((OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-	_usage "$0"
+	usage
 	exit 1
 fi
 
 if ! command -v readcd >/dev/null 2>&1; then
-	echo >&2 "'readcd' not found in PATH. Exiting."
+	echo >&2 "'readcd' not found"
 	exit 1
 fi
 

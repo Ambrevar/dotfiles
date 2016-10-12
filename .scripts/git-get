@@ -3,9 +3,9 @@
 DOMAIN=bitbucket.org
 USER=ambrevar
 
-usage() {
-	cat<<EOF
-Usage: ${1##*/} [OPTIONS] REPOS
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} [OPTIONS] REPOS
 
 Clone git repo(s) from $DOMAIN:$USER.
 
@@ -21,14 +21,14 @@ EOF
 while getopts ":hd:u:" opt; do
 	case $opt in
 	h)
-		usage "$0"
+		usage
 		exit 1 ;;
 	d)
 		DOMAIN=$OPTARG ;;
 	u)
 		USER=$OPTARG ;;
 	\?)
-		usage "$0"
+		usage
 		exit 1 ;;
 	esac
 done
@@ -36,12 +36,12 @@ done
 shift $((OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-	usage "$0"
+	usage
 	exit 1
 fi
 
 if ! command -v git >/dev/null 2>&1; then
-	echo >&2 "'git' not found in PATH. Exiting."
+	echo >&2 "'git' not found"
 	exit 1
 fi
 

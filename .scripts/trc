@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "$1" = "-h" ]; then
-	cat<<EOF
+	cat <<EOF>&2
 Usage: ${0##*/} [OPTIONS]
 
 With no argument, start transmission-remote-cli. Otherwise, run
@@ -14,19 +14,14 @@ EOF
 	exit
 fi
 
+for i in check transmission-daemon transmission-remote-cli ; do
+	if ! command -v $i >/dev/null 2>&1; then
+		echo >&2 "'$i' not found"
+		exit 1
+	fi
+done
 
-check () {
-	for i ; do
-		if ! command -v $i >/dev/null 2>&1; then
-			echo >&2 "'$i' not found in PATH. Exiting."
-			exit 1
-		fi
-	done
-}
-
-check transmission-daemon transmission-remote-cli
-
-ps -U "$USER" | grep -q transmission-da || transmission-daemon
+ps -U "$USER" -o comm= | grep -q transmission-da || transmission-daemon
 if [ $# -eq 0 ]; then
 	exec transmission-remote-cli
 else

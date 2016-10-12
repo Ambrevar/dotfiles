@@ -9,9 +9,9 @@
 # -dGraphicsAlphaBits=4
 # -dMaxStripSize=8192
 
-_usage () {
-	cat <<EOF
-Usage: ${1##*/} [OPTIONS] PDFFILES
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} [OPTIONS] PDFFILES
 
 All PDF files will be compressed to a PDF file with "-compressed" appended in its name.
 
@@ -44,14 +44,14 @@ while getopts ":cfhin" opt; do
 	f)
 		OPT_OVERWRITE=true ;;
 	h)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	i)
 		OPT_INPLACE=true ;;
 	n)
 		OPT_COMPRESSION="-dColorConversionStrategy=/LeaveColorUnchanged -dEncodeColorImages=false -dEncodeGrayImages=false -dEncodeMonoImages=false" ;;
 	\?)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	esac
 done
@@ -59,7 +59,7 @@ done
 shift $((OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-	_usage "$0"
+	usage
 	exit 1
 fi
 

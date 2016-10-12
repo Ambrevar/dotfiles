@@ -1,8 +1,8 @@
 #!/bin/sh
 
-_usage () {
-	cat <<EOF
-Usage: ${1##*/} MODE
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} MODE
 
 This script was generated with tc-video-custom.
 
@@ -24,8 +24,8 @@ OPT_PROCESS=false
 while getopts ":hfsS:" opt; do
 	case $opt in
 	h)
-		_usage "$0"
-		exit 1 ;;
+		usage
+		exit ;;
 	f)
 		OPT_PROCESS=true ;;
 	s)
@@ -35,7 +35,7 @@ while getopts ":hfsS:" opt; do
 		SAMPLE="-ss 60 -t $((60*$OPTARG))"
 		OPT_PROCESS=true ;;
 	\?)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	esac
 done
@@ -43,16 +43,16 @@ done
 shift $(($OPTIND - 1))
 
 if ! $OPT_PROCESS; then
-	_usage "$0"
+	usage
 	exit
 fi
 
 if ! command -v ffmpeg >/dev/null 2>&1; then
-	echo >&2 "'ffmpeg' not found in PATH. Exiting."
+	echo >&2 "'ffmpeg' not found"
 	exit 1
 fi
 
-_transcode () {
+transcode () {
 	## You can choose here to process all files at the same time. Useful if you
 	## need to remux streams or to concatenate.
 	# ffmpeg -i ###FILELIST \
@@ -69,12 +69,12 @@ set -- ###FILENAMES
 
 ## Choose to process all files one after another.
 for i ; do
-	_transcode "$i"
+	transcode "$i"
 done
 
 ## Or all files at the same time. You have to change the ffmpeg input in the
 ## function.
-# _transcode
+# transcode
 
 ################################################################################
 ## USE CASES

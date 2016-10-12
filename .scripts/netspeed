@@ -1,14 +1,16 @@
 #!/bin/sh
 
-if [ "$1" = "-h" ] || [ $# -gt 1 ]; then
-	cat<<EOF
+usage () {
+	cat <<EOF>&2
 Usage: ${0##*/} [INTERFACE]
 
 Return up and down transmission speed on given interface. If not given, use the
 first online interface returned by ifconfig (lo is ignored).
 EOF
-	exit
-fi
+}
+ 
+[ $# -gt 1 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
 
 if [ -n "$1" ]; then
 	interface="$1"
@@ -19,7 +21,7 @@ else
 fi
 
 if [ ! -d "/sys/class/net/${interface}" ]; then
-	echo "Error: no such interface: ${interface}" >&2
+	echo >&2 "Error: no such interface: ${interface}"
 else
 	path="/dev/shm/netspeed"
 	time=$(date +%s)

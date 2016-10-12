@@ -2,8 +2,8 @@
 ## Note: we do not use the (-a "") parameters of emacsclient to auto start the
 ## daemon since we want to pass additional parameters to emacs.
 
-if [  "$1" = "--help" ] || [ "$1" = "-h" ]; then
-	cat <<EOF
+if [ "$1" = "-h" ]; then
+	cat <<EOF>&2
 Usage: ${0##*/} [OPTIONS] [FILES]
 
 Start emacsclient in terminal or in X window if possible. If server is not

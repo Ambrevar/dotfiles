@@ -1,7 +1,7 @@
 #!/bin/sh
 
-_usage () {
-	cat <<EOF
+usage () {
+	cat <<EOF>&2
 ${0##*/} FOLDERS DEST
 
 Merge FOLDERS content into DEST. Existing files and folders will remain. It does
@@ -23,21 +23,21 @@ OPT_DELEMPTY=false
 while getopts ":fhr" opt; do
 	case $opt in
 	h)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	f)
 		OPT_OVERWRITE=true ;;
 	r)
 		OPT_DELEMPTY=true ;;
 	\?)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	esac
 done
 
 shift $((OPTIND - 1))
 if [ $# -eq 0 ]; then
-	_usage "$0"
+	usage
 	exit 1
 fi
 

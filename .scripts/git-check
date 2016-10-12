@@ -1,17 +1,16 @@
 #!/bin/sh
 
-_usage() {
-	cat<<EOF
+usage () {
+	cat <<EOF>&2
 Usage: ${0##*/} FOLDERS
 
 Chack all git repos found in FOLDERS for non-commited file.
 EOF
 }
 
-if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-	_usage
-	exit
-fi
+[ $# -eq 0 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--" ] && shift
 
 for i; do
 	while IFS= read -r FOLDER; do

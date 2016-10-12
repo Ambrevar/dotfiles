@@ -1,14 +1,17 @@
 #!/bin/sh
 
-if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-	cat<<EOF
+usage () {
+	cat <<EOF>&2
 Usage: ${0##*/} PROCESS-EXP
 
 Extended pgrep -a.
 
 EOF
-	exit
-fi
+}
+
+[ $# -eq 0 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--" ] && shift
 
 for i ; do
 	## We need to store the result of 'ps' first to prevent the filtering from

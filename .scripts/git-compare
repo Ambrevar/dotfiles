@@ -1,12 +1,12 @@
 #!/bin/sh
 
 if [ $# -ne 1 ]; then
-	cat<<EOF
+	cat <<EOF>&2
 Usage: ${0##*/} FOLDER
 
 Compare current git repo with FOLDER.
 EOF
-	exit
+	exit 1
 fi
 
 REPO="$(mktemp)"

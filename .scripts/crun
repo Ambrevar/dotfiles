@@ -1,7 +1,7 @@
 #!/bin/sh
 
-if [ $# -lt 1 ]; then
-	cat<<EOF
+if [ $# -eq 0 ]; then
+	cat <<EOF>&2
 Usage: ${0##*/} FILE [CFLAGS]
 
 Simulate a C interpreter by compiling, executing and removing file in one run.

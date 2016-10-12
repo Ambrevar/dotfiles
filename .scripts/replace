@@ -1,8 +1,8 @@
 #!/bin/sh
 
-_usage () {
-	cat<<EOF
-Usage: ${1##*/} [OPTIONS] SEARCH REPLACE [FILES]
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} [OPTIONS] SEARCH REPLACE [FILES]
 
 Replace SEARCH by REPLACE in FILES. If no file is provided, use stdin.
 Backslashes are interpreted in SEARCH and REPLACE (e.g. \n, \t). If you want to
@@ -22,10 +22,10 @@ while getopts ":ih" opt; do
 	i)
 		OPT_INPLACE=-i ;;
 	h)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	\?)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	esac
 done
@@ -33,7 +33,7 @@ done
 shift $((OPTIND - 1))
 
 if [ $# -lt 2 ]; then
-	_usage "$0"
+	usage
 	exit 1
 fi
 
@@ -41,18 +41,18 @@ search="$1"
 replace="$2"
 shift 2
 
-_replace () {
+replace () {
 	## We cannot use gsub, otherwise regex substitutions could occur.
 	## Source: http://mywiki.wooledge.org/BashFAQ/021
 	awk -v s="$search" -v r="$replace" 'BEGIN {l=length(s)} {o="";while (i=index($0, s)) {o=o substr($0,1,i-1) r; $0=substr($0,i+l)} print o $0}' "$@"
 }
 
 if [ $# -eq 0 ] || [ -z "$OPT_INPLACE" ]; then
-	_replace "$@"
+	replace "$@"
 else
 	for i ; do
 		out="$(mktemp "$i.XXXXXX")"
-		_replace "$i" > "$out"
+		replace "$i" > "$out"
 		mv "$out" "$i"
 	done
 fi

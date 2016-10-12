@@ -1,13 +1,17 @@
 #!/bin/sh
 
-if [ "$1" = "" ]; then
-	cat<<EOF
+usage () {
+	cat <<EOF>&2
 Usage: ${0##*/} FOLDER
 
 Print movies in FOLDER which have strictly more than 1 audio channel.
+
 EOF
-	exit
-fi
+}
+
+[ $# -eq 0 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--" ] && shift
 
 while IFS= read -r i; do
 	## Some formats (e.g. m2ts) will also return an "audio" channel in the

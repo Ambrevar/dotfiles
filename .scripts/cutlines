@@ -1,8 +1,8 @@
 #!/bin/sh
 
-_usage () {
-	cat<<EOF
-Usage: ${1##*/} [OPTIONS] [FILES]
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} [OPTIONS] [FILES]
 
 Cut out last 10 lines from stdin. If FILES are provided, cut files instead of
 stdin and output to stdout.
@@ -29,14 +29,14 @@ while getopts ":fhin:" opt; do
 	f)
 		OPT_CUTFIRST=true ;;
 	h)
-		_usage "$0"
-		exit 1 ;;
+		usage
+		exit ;;
 	i)
 		OPT_INPLACE="-i" ;;
 	n)
 		OPT_LINES=$OPTARG ;;
 	\?)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	esac
 done

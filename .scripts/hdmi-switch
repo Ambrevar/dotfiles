@@ -1,7 +1,7 @@
 #!/bin/sh
 
-_usage() {
-	cat<<EOF
+usage () {
+	cat <<EOF>&2
 Usage: ${0##*/}
 
 This script will toggle HDMI Audio (and set video properly). To do this
@@ -20,12 +20,12 @@ EOF
 }
 
 if [ "$(uname)" != "Linux" ]; then
-	_usage
+	usage
 	exit 1
 fi
 
 if [ "$(id -u)" -ne 0 ]; then
-	_usage
+	usage
 	exit 1
 fi
 
@@ -34,12 +34,12 @@ HDMI_STATUS="$(cat /sys/class/drm/card0-HDMI-A-1/status)"
 [ -z "$HDMI_STATUS" ] && exit
 
 APLAY_BUF="$(aplay -l | grep HDMI)"
-_getprop() {
+getprop () {
 	echo "$APLAY_BUF" | awk -v prop="$1" '{for(i=1; i<NF; i++) if ($i == prop) { print substr($(i+1), 1,1); exit}}'
 }
 
-CARD="$(_getprop card)"
-DEVICE="$(_getprop device)"
+CARD="$(getprop card)"
+DEVICE="$(getprop device)"
 
 udevadm settle --timeout=2
 
@@ -60,7 +60,7 @@ fi
 
 ## Sound
 if [ "$HDMI_STATUS" = "connected" ]; then
-	cat<<EOF > "$ALSACONF"
+	cat <<EOF > "$ALSACONF"
 pcm.!default {
 	type hw
 	card $CARD

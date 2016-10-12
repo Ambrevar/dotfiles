@@ -1,8 +1,8 @@
 #!/bin/sh
 
-_usage () {
-	cat <<EOF
-Usage: ${1##*/} [-m METHOD] [-v] FILES|FOLDERS
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} [-m METHOD] [-v] FILES|FOLDERS
 
 Create an archive in current folder from a single or multiples
 files/folders. Each input entry will be at archive root (no absolute path is
@@ -28,8 +28,8 @@ OPT_SPLIT=false
 while getopts ":him:sv" opt; do
 	case $opt in
 	h)
-		_usage "$0"
-		exit 1 ;;
+		usage
+		exit ;;
 	i)
 		OPTIONS="$OPTIONS --owner=root --group=root --numeric-owner" ;;
 	m)
@@ -42,7 +42,7 @@ while getopts ":him:sv" opt; do
 	v)
 		OPTIONS="$OPTIONS --exclude-vcs" ;;
 	\?)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	esac
 done
@@ -51,7 +51,7 @@ done
 shift $((OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-	_usage "$0"
+	usage
 	exit 1
 fi
 
@@ -59,11 +59,11 @@ fi
 ## files/folders and the archive location. Otherwise we could have troubles with
 ## circular symlinks and so on.
 if ! command -v realpath >/dev/null 2>&1; then
-	echo >&2 "'realpath' not found in PATH. Exiting."
+	echo >&2 "'realpath' not found"
 	exit 1
 fi
 
-_archive () {
+archive () {
 	## Only one input entry: use it as base name for the archive.
 	if [ $# -eq 1 ]; then
 		REALPATH="$(realpath "$1")"
@@ -93,7 +93,7 @@ _archive () {
 	echo "==> [$OUTPATH/$OUTFILE]"
 	for i; do
 		REALPATH="$(realpath "$i")"
-		echo "${REALPATH}" >&2
+		echo >&2 "${REALPATH}"
 		echo "-C '${REALPATH%/*}'"
 		echo "${REALPATH##*/}"
 	done | tar $OPTIONS -${ARCOPT}cf "$OUTPATH/$OUTFILE" -T -
@@ -101,8 +101,8 @@ _archive () {
 
 if $OPT_SPLIT; then
 	for j ; do
-		_archive "$j"
+		archive "$j"
 	done
 else
-	_archive "$@"
+	archive "$@"
 fi

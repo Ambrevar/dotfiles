@@ -1,8 +1,8 @@
 #!/bin/sh
 
-_usage () {
-cat<<EOF
-Usage: ${1##*/} [OPTIONS] FILES|FOLDERS
+usage () {
+cat <<EOF>&2
+Usage: ${0##*/} [OPTIONS] FILES|FOLDERS
 
 Wrapper around various archive extraction tools. The archives are recognized
 according to their file extension. Folders will be searched recursively for
@@ -31,14 +31,14 @@ PASS=''
 while getopts ":hfp" opt; do
 	case $opt in
 	h)
-		_usage "$0"
-		exit 1 ;;
+		usage
+		exit ;;
 	f)
 		OPT_DELAFTER=true ;;
 	p)
 		OPT_PASS=true ;;
 	\?)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	esac
 done
@@ -46,22 +46,22 @@ done
 shift $((OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-	_usage "$0"
+	usage
 	exit 1
 fi
 
 command -v atool >/dev/null 2>&1 && echo "You should use atool instead." && echo
 
 if $OPT_PASS; then
-	echo -n "Password: "
+	printf "Password: "
 	stty_orig="$(stty -g)"
 	stty -echo
-	read PASS
+	read -r PASS
 	stty "$stty_orig"
 	PASS="-p$PASS"
 fi
 
-_extract () {
+extract () {
 	echo "[$1]"
 	case "$1" in
 	*/*) FOLDER="${1%/*}";;
@@ -94,11 +94,11 @@ for i ; do
 
 	if [ -d "$i" ]; then
 		while IFS= read -r FILE; do
-			_extract "$FILE"
+			extract "$FILE"
 		done <<EOF
 $(find "$i" -type f)
 EOF
 	else
-		_extract "$i"
+		extract "$i"
 	fi
 done

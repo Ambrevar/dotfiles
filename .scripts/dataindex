@@ -1,8 +1,8 @@
 #!/bin/sh
 
-_usage () {
-	cat<<EOF
-Usage: ${1##*/} [OPTIONS] FOLDERS
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} [OPTIONS] FOLDERS
 
 Output index of folder hierarchies to stdout. This is used as a small "backup"
 purpose. In case of data loss, it is still possible to get the full file list
@@ -23,12 +23,12 @@ while getopts ":fhw" opt; do
 	f)
 		opt_noclobber=false ;;
 	h)
-		_usage "$0"
-		exit 0 ;;
+		usage
+		exit ;;
 	w)
 		opt_file=true ;;
 	\?)
-		_usage "$0"
+		usage
 		exit 1 ;;
 	esac
 done
@@ -36,13 +36,13 @@ done
 shift $((OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-	_usage "$0"
+	usage
 	exit 1
 fi
 
 ## 'realpath' is required in case argument is ending with '.' or '..'.
 if ! command -v realpath >/dev/null 2>&1; then
-	echo "'realpath' not found in PATH. Exiting." >&2
+	echo >&2 "'realpath' not found"
 	exit 1
 fi
 

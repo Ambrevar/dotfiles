@@ -1,8 +1,8 @@
 #!/bin/sh
 
 usage () {
-	cat <<EOF
-Usage: ${1##*/} [TRANSFORM]
+	cat <<EOF>&2
+Usage: ${0##*/} [TRANSFORM]
 
 Apply TRANSFORM to the X screen renderer:
 - zoomin
@@ -15,8 +15,8 @@ EOF
 }
 
 if [ $# -eq 0 ]; then
-	xrandr --output $(xrandr | awk 'NR==2 {print $1; exit}') --auto --transform none && \
-		xrandr -s $(xrandr | awk '/^ / {print $1;exit}')
+	xrandr --output "$(xrandr | awk 'NR==2 {print $1; exit}')" --auto --transform none && \
+		xrandr -s "$(xrandr | awk '/^ / {print $1;exit}')"
 	exit
 fi
 
@@ -24,11 +24,11 @@ case "$1" in
 -h)
 	usage;;
 zoomin)
-	xrandr --output $(xrandr | grep -m1 "\<connected\>" | cut -f1 -d" ") --scale 0.8x0.8 ;;
+	xrandr --output "$(xrandr | grep -m1 "\<connected\>" | cut -f1 -d" ")" --scale 0.8x0.8 ;;
 zoomout)
-	xrandr --output $(xrandr | grep -m1 "\<connected\>" | cut -f1 -d" ") --scale 1.2x1.2 ;;
+	xrandr --output "$(xrandr | grep -m1 "\<connected\>" | cut -f1 -d" ")" --scale 1.2x1.2 ;;
 starwars)
-	xrandr --output $(xrandr | grep -m1 "\<connected\>" | cut -f1 -d" ") --transform 1.24,0.16,-124,0,1.24,0,0,0.000316,1 ;;
+	xrandr --output "$(xrandr | grep -m1 "\<connected\>" | cut -f1 -d" ")" --transform 1.24,0.16,-124,0,1.24,0,0,0.000316,1 ;;
 *)
 	usage;;
 esac

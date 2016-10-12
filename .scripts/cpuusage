@@ -1,19 +1,18 @@
 #!/bin/sh
 
 if [ "$1" = "-h" ]; then
-	cat<<EOF
+	cat <<EOF>&2
 Usage: ${0##*/}
 
 Return the CPU usage. Linux only.
 
 EOF
-
 	exit
 fi
 
 if [ ! "$(uname)" = "Linux" ]; then
-	echo "Linux only."
-	exit
+	echo >&2 "Linux only."
+	exit 1
 fi
 
 

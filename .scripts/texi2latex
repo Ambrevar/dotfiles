@@ -3,15 +3,18 @@
 ## Resources: http://docstore.mik.ua/orelly/unix/vi/ch07_04.htm
 ## Note: '%s/@/\\/g' needs to be last.
 
-if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-	cat<<EOF
+usage () {
+	cat <<EOF>&2
 Usage: ${0##*/} FILES
 
 Convert texinfo files to LaTeX.
 
 EOF
-	exit
-fi
+}
+
+[ $# -eq 0 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--" ] && shift
 
 for i; do
 	ex - "$i" <<'EOF' >/dev/null

@@ -1,13 +1,7 @@
 #!/bin/sh
 
-opt_dry="-n"
-if [ "$1" = "-p" ]; then
-	opt_dry=""
-	shift
-fi
-
-if [ "$1" = "-h" ] || [ $# -ne 2 ]; then
-	cat<<EOF
+usage () {
+	cat <<EOF>&2
 Usage: ${0##*/} SOURCE DEST
 
 Use rsync to mirror SOURCE to DEST while showing progress.
@@ -21,9 +15,17 @@ Options:
   -p: Process.
 
 EOF
+}
 
-	exit
+opt_dry="-n"
+if [ "$1" = "-p" ]; then
+	opt_dry=""
+	shift
 fi
+
+[ $# -ne 2 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--" ] && shift
 
 ## We use archive mode '-a' which preserves perms and dates. On non-POSIX
 ## filesystems, you might want to skip this and preserve symlinks only by

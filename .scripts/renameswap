@@ -1,15 +1,17 @@
 #!/bin/sh
 
-if [ $# -ne 2 ] || [ "$1" = "-h" ] ; then
-	cat<<EOF
-Usage: ${1##*/} FILE1 FILE2
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} FILE1 FILE2
 
 Swap 2 filenames around.
 
 EOF
+}
 
-	exit
-fi
+[ $# -ne 2 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--" ] && shift
 
 ## We need a temp file is case both files are in the same folder. We use the
 ## unsecure option since we do not want to create a empty file in
@@ -30,5 +32,5 @@ esac
 if ! mv -n "$1" "$TEMPFILE"; then
 	echo >&2 "Race condition, exiting. Try again."
 fi
-mv -n "$2" "$DIR2/${1##*/}"
+mv -n "$2" "$DIR2/${0##*/}"
 mv -n "$TEMPFILE" "$DIR1/${2##*/}"

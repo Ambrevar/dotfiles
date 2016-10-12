@@ -4,7 +4,7 @@ COLUMN="1"
 FORMAT="TOTAL: %s\n"
 
 if [ "$1" = "-h" ]; then
-	cat<<EOF
+	cat <<EOF>&2
 Usage: ${0##*/} [COLUMN] [FORMAT]
 
 Sum COLUMN (default to column $COLUMN) and output result with format FORMAT

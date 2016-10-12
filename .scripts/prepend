@@ -1,7 +1,7 @@
 #!/bin/sh
 
-if [ $# -eq 0 ] || [ "$1" = "-h" ]; then
-	cat <<EOF
+usage () {
+	cat <<EOF>&2
 Usage: ${0##*/} [OPTIONS] STRING [FILES]
 
 Prepend STRING to FILES or stdin if unspecified. STRING may not contain pipes
@@ -12,8 +12,11 @@ Options:
   -i: If files are provided, convert them in-place.
 
 EOF
-	exit
-fi
+}
+
+[ $# -eq 0 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--" ] && shift
 
 unset OPT
 if [ "$1" = "-i" ]; then
