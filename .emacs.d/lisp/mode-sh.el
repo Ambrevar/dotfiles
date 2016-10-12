@@ -73,30 +73,20 @@ The advantages of this function over the vanilla code are:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-skeleton sh-check
-  "Insert a function checking for presence in PATH."
-  nil
-  > "check() {" \n
-  > "for i ; do" \n
-  > "if ! command -v $i >/dev/null 2>&1; then" \n
-  > "echo \"'$i' not found in PATH. Exiting.\" >&2" \n
+(define-skeleton sh-command
+  "Insert a condition on command existence in path."
+  "Command name: "
+  > "command -v " @ str " >/dev/null 2>&1 " @ _)
+
+(define-skeleton sh-commands-or-die
+  "Insert a loop that exits if any of the commands is not found in path."
+  "Command names: "
+  > "for i " @ str "; do" \n
+  > "if ! command -v \"$i\" >/dev/null 2>&1; then" \n
+  > "echo >&2 \"'$i' not found\"" \n
   > "exit 1" \n
   "fi" > \n
-  "done" > \n
-  "}" > \n \n)
-
-(define-skeleton sh-command
-  "Insert a line that executes if command is found in path."
-  "Command name: "
-  > "command -v " @ str " >/dev/null 2>&1 && " @ _)
-
-(define-skeleton sh-command-or-die
-  "Insert a line that quits if command is not found in path."
-  "Command name: "
-  > "if ! command -v " @ str " >/dev/null 2>&1; then" \n
-  > "echo '" str " not found in PATH. Exiting.' >&2" \n
-  > "exit 1" \n
-  "fi" > \n \n)
+  "done" > \n \n)
 
 (define-skeleton sh-for
   "Insert a for loop.  See `sh-feature'. This overrides vanilla function."
