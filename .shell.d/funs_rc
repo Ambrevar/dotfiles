@@ -185,32 +185,6 @@ webcam () {
 	mpv --tv driver=v4l2:width=640:height=480:device=/dev/video0 tv://
 }
 
-xscreen () {
-	## Does not work?
-	cvt $1 $2
-	echo  "$(cvt $1 $2 | tail -1 | cut -d' ' -f2-)"
-	xrandr --newmode "$(cvt $1 $2 | tail -1 | cut -d' ' -f2-)"
-}
-
-## Xrandr
-xmulti () {
-	if [ $# -ne 1 ]; then
-		echo "Usage: $0 VIDEOPORT"
-		return
-	fi
-
-	xrandr --output "$1" --auto --right-of $(xrandr | sed -n "/current/{n;p;q}" | cut -f1 -d" ")
-}
-
-xmultioff () {
-	if [ $# -ne 1 ]; then
-		echo "Usage: $0 VIDEOPORT"
-		return
-	fi
-
-	xrandr --output "$1" --off
-}
-
 ##==============================================================================
 ## Pacman functions
 

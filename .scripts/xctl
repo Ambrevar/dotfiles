@@ -2,33 +2,49 @@
 
 usage () {
 	cat <<EOF>&2
-Usage: ${0##*/} [TRANSFORM]
+Usage: ${0##*/} [OPERATION]
 
-Apply TRANSFORM to the X screen renderer:
-- zoomin
-- zoomout
-- starwars
+When no OPERATION is specified, reset the screen to the defaults.
 
-When no transform is specified, reset the screen to the defaults.
+Apply OPERATION to the X screen renderer:
+
+  multi VIDEOPORT
+  starwars
+  zoomin
+  zoomout
 
 EOF
 }
 
+current=$(xrandr | sed -n "/current/{n;p;q}" | cut -f1 -d" ")
+## Other unreliable options:
+# xrandr | grep -m1 "\<connected\>" | cut -f1 -d" "
+# xrandr | awk 'NR==2 {print $1; exit}'
+
 if [ $# -eq 0 ]; then
-	xrandr --output "$(xrandr | awk 'NR==2 {print $1; exit}')" --auto --transform none && \
+	xrandr --output "$current" --auto --transform none && \
 		xrandr -s "$(xrandr | awk '/^ / {print $1;exit}')"
 	exit
 fi
 
 case "$1" in
--h)
-	usage;;
-zoomin)
-	xrandr --output "$(xrandr | grep -m1 "\<connected\>" | cut -f1 -d" ")" --scale 0.8x0.8 ;;
-zoomout)
-	xrandr --output "$(xrandr | grep -m1 "\<connected\>" | cut -f1 -d" ")" --scale 1.2x1.2 ;;
+multi)
+	[ $# -lt 2 ] && usage && exit 1
+	xrandr --output "$2" --auto --right-of "$current" ;;
 starwars)
-	xrandr --output "$(xrandr | grep -m1 "\<connected\>" | cut -f1 -d" ")" --transform 1.24,0.16,-124,0,1.24,0,0,0.000316,1 ;;
+	xrandr --output "$current" --transform 1.24,0.16,-124,0,1.24,0,0,0.000316,1 ;;
+zoomin)
+	xrandr --output "$current" --scale 0.8x0.8 ;;
+zoomout)
+	xrandr --output "$current" --scale 1.2x1.2 ;;
 *)
 	usage;;
 esac
+
+## Old code.
+# xscreen () {
+# 	## Does not work?
+# 	cvt $1 $2
+# 	echo  "$(cvt $1 $2 | tail -1 | cut -d' ' -f2-)"
+# 	xrandr --newmode "$(cvt $1 $2 | tail -1 | cut -d' ' -f2-)"
+# }
