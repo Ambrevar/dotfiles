@@ -273,10 +273,11 @@ globalkeys = awful.util.table.join(
 	awful.key({ }, "XF86MyComputer", function () awful.util.spawn("browser-autostart") end),
 
 	-- Screen lock. xlockmore is useful for LDAP login because slock does not work with it.
-	awful.key({ modkey,  }, "s",      function () awful.util.spawn_with_shell("xlock 2>/dev/null || slock") end),
-	awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn_with_shell("xlock 2>/dev/null || slock") end),
-	awful.key({ }, "XF86Sleep",       function () awful.util.spawn_with_shell("xlock 2>/dev/null || slock") end),
-	awful.key({ }, "XF86Standby",     function () awful.util.spawn_with_shell("xlock 2>/dev/null || slock") end),
+	-- Don't use 'spawn_with_shell' if you want to keep Awesome's config portable.
+	awful.key({ modkey,  }, "s",      function () awful.util.spawn("sh -c 'xlock 2>/dev/null || slock'") end),
+	awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn("sh -c 'xlock 2>/dev/null || slock'") end),
+	awful.key({ }, "XF86Sleep",       function () awful.util.spawn("sh -c 'xlock 2>/dev/null || slock'") end),
+	awful.key({ }, "XF86Standby",     function () awful.util.spawn("sh -c 'xlock 2>/dev/null || slock'") end),
 
 	-- PDF Reader
 	awful.key({ modkey,  }, "p", function () awful.util.spawn("zathura") end),
