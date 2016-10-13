@@ -1,0 +1,19 @@
+#!/bin/sh
+
+if [ $# -ne 0 ]; then
+	cat <<EOF>&2
+Test the webcam using an mplayer-compatible program.
+
+EOF
+	exit
+fi
+
+for i in mpv mplayer2 mplayer; do
+	if command -v $i >/dev/null 2>&1 
+		 $i --tv driver=v4l2:width=640:height=480:device=/dev/video0 tv://
+		 exit
+	fi
+done
+
+echo >&2 "mplayer-compatible program not found"
+exit 1

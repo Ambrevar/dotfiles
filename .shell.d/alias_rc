@@ -40,24 +40,6 @@ alias mkdir='mkdir -p'
 alias cls='printf "\ec"'
 
 ##==============================================================================
-## TODO: Move those to scripts?
-
-# List desktop applications.
-[ -d /usr/share/applications ] && XDG_APPS=($XDG_APPS /usr/share/applications)
-[ -d /usr/local/share/applications ] && XDG_APPS=($XDG_APPS /usr/local/share/applications)
-[ ${#XDG_APPS} -ne 0 ] && alias applist='grep -R "^Name=" $XDG_APPS | cut -d'=' -f2 | sort'
-
-## Get your external IP.
-command -v curl >/dev/null 2>&1 && alias myip='curl ifconfig.me'
-
-## Start X and lock current terminal (press ENTER when back in terminal to
-## prompt for password). Useless if X is running on the same TTY.
-command -v vlock >/dev/null 2>&1 && alias sx='startx & vlock'
-
-## Udiskie
-command -v udiskie-umount >/dev/null 2>&1 && alias uua='udiskie-umount -a'
-
-##==============================================================================
 ## Pacman aliases
 
 if command -v "pacman" >/dev/null 2>&1; then
