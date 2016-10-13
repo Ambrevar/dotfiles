@@ -92,48 +92,6 @@ termsupport () {
 	done | sort -nk2
 }
 
-if command -v highlight >/dev/null 2>&1; then
-	highlight-gallery () {
-		local SAMPLE DUMMY
-
-		if [ $# -gt 0 ]; then
-			cat<<EOF
-Usage: $1
-
-Highlight themes viewer for 256-colors terminals.
-
-highlight is a tool for listing printing. This script displays a preview for
-every highlight's theme.  Press ENTER to display next preview. Press anything
-else then ENTER to quit.
-EOF
-			return
-		fi
-
-		SAMPLE="$(cat <<EOF
-void function(char *pointer, int &ref) {
-	int integer=3;
-	char* string="Hello!";
-
-	// Line comment
-	for (i=0; i<10; i++)
-	{
-		printf("Sum: %d\n", i*( integer+14 ) );
-	}
-}
-EOF
-)"
-
-		for i in $(highlight -w | grep -v "\s\|^$"); do
-			echo "==> $i"
-			highlight -S c -O xterm256 <(echo "$SAMPLE") -s "$i"
-			read DUMMY
-			if [ -n "$DUMMY" ]; then
-				return
-			fi
-		done
-	}
-fi
-
 ## Keymap view in terminal
 echokeymap () {
 	if [ $# -ne 1 ]; then
