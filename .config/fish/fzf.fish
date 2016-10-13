@@ -4,14 +4,14 @@ bind \e\ct fzf-file-widget
 bind \ec capitalize-word
 bind \eC fzf-cd-widget
 
-function __fzf-selector -d 'fzf commandline and print selection back to commandline. Awesome!'
+function __fzf-select -d 'fzf commandline and print selection back to commandline. Awesome!'
 	set -l cmd (commandline)
 	[ $cmd ]; or return
 	eval $cmd | eval (__fzfcmd) -m --tiebreak=index --toggle-sort=ctrl-r | string join ' ' | read -l result
 	[ "$result" ]; and commandline -- $result
 	commandline -f repaint
 end
-bind \e\cm __fzf-selector
+bind \e\cm __fzf-select
 
 ## DONE: Report missing (commandline) upstream.
 ## TODO: Report use of 'read'.
