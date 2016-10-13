@@ -1,12 +1,4 @@
-## Shell Config -- Master File
-
-## Note that 'ps -o command= $$' gives the same result with parameters.
-[ -z "$SHELL_CURRENT" ] && readonly SHELL_CURRENT="$(ps -o comm= $$)"
-[ -z "$SHELL_DIR" ] && readonly SHELL_DIR="$HOME/.shell.d"
-
-## .profile is sourced automatically by most login managers, but we need to
-## source it manually if in TTY.
-[ -z "$DISPLAY" ] && [ -f "$HOME/.profile" ] && . "$HOME/.profile"
+## Zsh master file
 
 loadrc () {
 	for i; do
@@ -14,17 +6,19 @@ loadrc () {
 	done
 }
 
-## main and options should be sourced first.
-loadrc main_rc options_zsh
-
-## Source order should not matter.
+## Options should be sourced first, before the SHELL_FILEBROWSER hook.
+loadrc options_zsh
 loadrc keys_zsh
 loadrc alias_rc colors_rc completion_rc funs_rc
-
-## Shell hook: should be sourced last.
-loadrc hook
 
 ## Assign a binding
 ##   sh -c 'export SHELL_FILEBROWSER=true; exec $TERMCMD'
 ## and this will autostart the file browser.
 [ -n "$SHELL_FILEBROWSER" ] && unset SHELL_FILEBROWSER && browse
+
+## Start at a specific location. Useful when switching to a shell from a browser
+## for instance.
+[ -n "$SHELL_CD" ] && cd "$SHELL_CD" && unsert SHELL_CD
+
+## Shell hook: should be sourced last.
+loadrc hook

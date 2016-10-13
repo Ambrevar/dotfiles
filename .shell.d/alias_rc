@@ -4,8 +4,8 @@
 
 ## Warning: if this does not work if you change shell without relogging, use
 ## 'source .<shell>rc' instead.
-
-if [ "zsh" = "$SHELL_CURRENT" ]; then
+## Note that 'ps -o command= $$' gives the same result with parameters.
+if [ "zsh" = "$(ps -o comm= $$)" ]; then
 	alias ssrc='source ~/.zshrc'
 fi
 
@@ -33,6 +33,15 @@ alias lx='ls -lXh'   # Sort by extension
 ## Misc
 alias grep='grep --color=auto'
 
+## Prevents accidentally clobbering files.
+alias mkdir='mkdir -p'
+
+## Reset terminal -- Faster alternative of 'reset'.
+alias cls='printf "\ec"'
+
+##==============================================================================
+## TODO: Move those to scripts?
+
 # List desktop applications.
 [ -d /usr/share/applications ] && XDG_APPS=($XDG_APPS /usr/share/applications)
 [ -d /usr/local/share/applications ] && XDG_APPS=($XDG_APPS /usr/local/share/applications)
@@ -40,12 +49,6 @@ alias grep='grep --color=auto'
 
 ## Get your external IP.
 command -v curl >/dev/null 2>&1 && alias myip='curl ifconfig.me'
-
-## Prevents accidentally clobbering files.
-alias mkdir='mkdir -p'
-
-## Reset terminal -- Faster alternative of 'reset'.
-alias cls='printf "\ec"'
 
 ## Start X and lock current terminal (press ENTER when back in terminal to
 ## prompt for password). Useless if X is running on the same TTY.

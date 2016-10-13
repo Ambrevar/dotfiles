@@ -1,16 +1,15 @@
 ## -*- mode:sh -*- #
 
-if [ "zsh" = "$SHELL_CURRENT" ]; then
-	compdef _gcc crun
-	compdef _gcc formatc
-	compdef _gs pdfcompress
-	compdef _gs pdfextract
-	compdef _gs pdfresize
-	compdef _pcc pacfiles
-	compdef _pcc pacsize
-	compdef _pcc pel
-	compdef _pcc pql
-	compdef _tex ltx
-	compdef _path_commands typex
-	compdef _pspdf zat
-fi
+## Zsh
+compdef _gcc crun
+compdef _gcc formatc
+compdef _gs pdfcompress
+compdef _gs pdfextract
+compdef _gs pdfresize
+compdef _pcc pacfiles
+compdef _pcc pacsize
+compdef _pcc pel
+compdef _pcc pql
+compdef _tex ltx
+compdef _path_commands typex
+compdef _pspdf zat
