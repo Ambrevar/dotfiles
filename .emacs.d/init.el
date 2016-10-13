@@ -37,7 +37,6 @@ To view where the bindings are set in your config files, lookup
 (require 'functions nil t)
 (require 'main nil t)
 (require 'theme nil t)
-(require 'personal nil t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Vanilla
