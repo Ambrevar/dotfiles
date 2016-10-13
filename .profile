@@ -2,32 +2,34 @@
 ## This file should be automatically sourced by the login manager. We source it
 ## manually from shell rc files to make sure it works in TTY as well
 
-## Mask
-## Result for 027 is: rwxr-x---
-umask 027
+## Preliminary definitions.
 
 ## Note that it is important for MANPATH to have an empty entry to keep
 ## searching in the default db path. Same for INFOPATH, which should have an
 ## empty entry at the end, otherwise Emacs will not use standard locations. For
-## security (and bad programming assumptions) you should always append entries
-## to PATH, not prepend them.
-appendpath() {
+## security reasons (and bad programming assumptions) you should always append
+## entries to PATH, not prepend them.
+appendpath () {
 	[ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
-	if [ -d "$1" ] && [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
-		eval export $PATHVAR="\$$PATHVAR:$1"
-	fi
+	[ -d "$1" ] || return
+	eval echo \$$PATHVAR | grep -q "\(:\|^\)$1\(:\|$\)" && return
+	eval export $PATHVAR="\$$PATHVAR:$1"
 }
-prependpath() {
+prependpath () {
 	[ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
-	if [ -d "$1" ] && [ -z "$(eval echo \$$PATHVAR | grep "\(:\|^\)$1\(:\|$\)")" ]; then
-		eval export $PATHVAR="$1:\$$PATHVAR"
-	fi
+	[ -d "$1" ] || return
+	eval echo \$$PATHVAR | grep -q "\(:\|^\)$1\(:\|$\)" && return
+	eval export $PATHVAR="$1:\$$PATHVAR"
 }
 
-appendpath "${HOME}/.launchers"
-appendpath "${HOME}/.scripts"
-prependpath "${HOME}/.hackpool"
-[ -d /usr/lib/surfraw ] && appendpath "/usr/lib/surfraw"
+################################################################################
+
+## Common resources.
+[ -d "$HOME/.shell.d" ] && export SHELL_DIR="$HOME/.shell.d"
+
+## Mask
+## Result for 027 is: rwxr-x---
+umask 027
 
 ## TeXlive
 TEXDIR="${TEXDIR:-/usr/local/texlive}"
@@ -40,7 +42,7 @@ if [ -d "${TEXDIR}" ]; then
 		prependpath ${TEXDIR}/${TEXYEAR}/texmf/doc/info INFOPATH
 
 		## BSD uses 'manpath' utility, so MANPATH variable may be empty.
-		if [ "$OSTYPE" = "linux-gnu" ]; then
+		if [ "$(uname -o)" = "GNU/Linux" ]; then
 			prependpath ${TEXDIR}/${TEXYEAR}/texmf/doc/man MANPATH
 		fi
 	fi
@@ -51,12 +53,12 @@ fi
 unset TEXDIR
 export BIBINPUTS=~/dataperso/bibliography
 
-## Plan9
+## Plan9 (base)
 PLAN9DIR="/opt/plan9"
 if [ -d "$PLAN9DIR" ]; then
 	## No need to add to path if /etc/profile.d/plan9.sh does it already.
 	# appendpath "$PLAN9DIR/bin"
-	if [ "$OSTYPE" = "linux-gnu" ]; then
+	if [ "$(uname -o)" = "GNU/Linux" ]; then
 		appendpath "$PLAN9DIR/share/man" MANPATH
 	fi
 fi
@@ -81,26 +83,36 @@ export MANWIDTH=80
 ## TODO: BSD version?
 export TIME_STYLE=+"|%Y-%m-%d %H:%M:%S|"
 
-## Default text editor
-EDITOR="nano"
-command -v vim >/dev/null 2>&1 && EDITOR="vim"
-command -v emacs >/dev/null 2>&1 && EDITOR="emacs"
-GIT_EDITOR="$EDITOR"
-
-## 'em' is a script for emacsclient. See '.scripts/em'.
-if command -v em >/dev/null 2>&1; then
-	EDITOR='em'
-	GIT_EDITOR='emc'
-fi
-
-export EDITOR
-export GIT_EDITOR
-
 ## SSH-Agent
 if command -v ssh-agent >/dev/null 2>&1 && [ -z "$SSH_AGENT_PID" ]; then
 	 eval "$(ssh-agent)"
 	 ## Kill ssh-agent on session end. Console login only.
 	 command -v sessionclean >/dev/null 2>&1 && trap 'sessionclean' 0
+fi
+
+if [ "$(uname -o)" = "GNU/Linux" ] ; then
+	## Startup error log.
+	## dmesg
+	log_dmesg="$(dmesg | grep -i error)"
+	[ -n "$log_dmesg" ] && echo "$log_dmesg" > "$HOME/errors-dmesg.log" || rm -f "$HOME/errors-dmesg.log"
+	## systemd
+	if command -v systemctl >/dev/null 2>&1; then
+		count="$(systemctl show | awk -F= '$1=="NFailedUnits" {print $2; exit}')"
+		if [ $count -ne 0 ]; then
+			systemctl -l --failed > "$HOME/errors-systemd.log"
+		else
+			rm -f "$HOME/errors-systemd.log"
+		fi
+	fi
+
+	## Set sound volume.
+	amixer 2>/dev/null | grep -q PCM && amixer set PCM 100%
+
+	## External device auto-mounting.
+	## If already started, the new process will replace the old one.
+	if command -v udiskie >/dev/null 2>&1; then
+		udiskie &
+	fi
 fi
 
 ## Set TEMP dir if you want to override /tmp for some applications that check
@@ -119,20 +131,6 @@ if [ -d "$HOME/go" ]; then
 	command -v godoc >/dev/null 2>&1 && godoc -http :6060 -play 2>/dev/null &
 fi
 
-## Startup error log.
-## dmesg
-log_dmesg="$(dmesg | grep -i error)"
-[ -n "$log_dmesg" ] && echo "$log_dmesg" > "$HOME/errors-dmesg.log" || rm -f "$HOME/errors-dmesg.log"
-## systemd
-if command -v systemctl >/dev/null 2>&1; then
-	count="$(systemctl show | awk -F= '$1=="NFailedUnits" {print $2; exit}')"
-	if [ $count -ne 0 ]; then
-		systemctl -l --failed > "$HOME/errors-systemd.log"
-	else
-		rm -f "$HOME/errors-systemd.log"
-	fi
-fi
-
 ## fzf
 if command -v fzf >/dev/null 2>&1; then
 	export FZF_DEFAULT_OPTS="--cycle --extended --multi --bind=ctrl-v:page-down,alt-v:page-up"
@@ -143,9 +141,25 @@ if command -v asp >/dev/null 2>&1; then
 	export ASPROOT="$HOME/.cache/asp"
 fi
 
+################################################################################
+
+## Last PATH entries.
+appendpath "/usr/lib/surfraw"
+appendpath "${HOME}/.launchers"
+appendpath "${HOME}/.scripts"
+prependpath "${HOME}/.hackpool"
+
+## Default text editor
+## 'em' is a custom wrapper for emacsclient. See '.scripts/em'.
+for i in em emacs vim nano; do
+	command -v $i >/dev/null 2>&1 && export EDITOR=$i && break
+done
+export GIT_EDITOR="$EDITOR"
+
+################################################################################
+
 ## Hook. Should be sourced last
 [ -f ~/.profile_hook ] && . ~/.profile_hook
-################################################################################
 ## Hook example
 #
 # appendpath "${HOME}/local/usr/bin"
@@ -165,4 +179,7 @@ fi
 # export LUA_CPATH="$HOME/local/usr/lib/lib?.so;$(lua -e "print(package.cpath)")"
 #
 # umask 077
-################################################################################
+
+## End: Source .bashrc. The rc file should guard against non-interactive shells.
+[ "$(ps -o comm= $$)" != bash ] && return
+[ -f ~/.bashrc ] && . ~/.bashrc

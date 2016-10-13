@@ -19,16 +19,8 @@ xkbcomp -I"$HOME/.xkb" "$HOME/.xkb/usim.xkb" $DISPLAY
 numlockx on
 synclient TouchpadOff=1
 
-if [ "$OSTYPE" = "linux-gnu" ] ; then
-	## Set sound volume.
-	[ -n "$(amixer 2>/dev/null | grep PCM)" ] && amixer set PCM 100%
-
-	## External device auto-mounting.
-	command -v udiskie >/dev/null 2>&1 && udiskie &
-fi
-
-## This env variable is used by some programs (e.g. ranger, awesome) to get the
-## terminal executable name.
+## This env variable is used by some program configs (e.g. ranger, awesome) to
+## get the terminal executable name.
 for i in urxvt xterm; do
 	command -v $i >/dev/null 2>&1 && export TERMCMD=$i && break
 done
