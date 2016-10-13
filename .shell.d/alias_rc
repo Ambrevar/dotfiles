@@ -65,9 +65,6 @@ alias xres='xrandr --output $(xrandr | awk '"'"'NR==2 {print $1;exit}'"'"') --au
 ## Udiskie
 command -v udiskie-umount >/dev/null 2>&1 && alias uua='udiskie-umount -a'
 
-## Emacs
-command -v emacsclient >/dev/null 2>&1 && alias emacs-kill="emacsclient -e '(kill-emacs)' >/dev/null 2>&1"
-
 ##==============================================================================
 ## Pacman aliases
 

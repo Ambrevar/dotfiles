@@ -4,7 +4,7 @@
 
 if [  "$1" = "--help" ] || [ "$1" = "-h" ]; then
 	cat <<EOF
-Usage: ${0##*/} [FILES]
+Usage: ${0##*/} [OPTIONS] [FILES]
 
 Start emacsclient in terminal or in X window if possible. If server is not
 found, it is started with --no-site-file parameter.
@@ -16,13 +16,23 @@ Calling script can have different names.
 When starting the server, the EMACS_SERVER variable is set so that Emacs can
 know in its initialization file whether the server is going to be started.
 
-All emacsclient(1) options are supported.
+All emacsclient(1) options are supported:
 
 $(emacsclient --help)
+
+Extra options:
+
+  --kill: Shutdown Emacs daemon.
 
 EOF
 	exit
 fi
+
+if [  "$1" = "--kill" ]; then
+	emacsclient -e '(kill-emacs)'
+	exit
+fi
+
 
 if [ "${0##*/}" = "emc" ] || [ -z "$DISPLAY" ] || \
 		 [ "$(emacs --batch -Q --eval='(if (fboundp '"'"'tool-bar-mode) (message "X") (message "TTY"))' 2>&1)" = TTY ]; then
