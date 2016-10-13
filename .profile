@@ -116,7 +116,7 @@ if [ -d "$HOME/go" ]; then
 	export GOPATH=~/go:~/.go-tools
 	appendpath "$HOME/.go-tools/bin"
 	appendpath "$HOME/go/bin"
-	command -v godoc >/dev/null 2>&1 && godoc -http :6060 -play &
+	command -v godoc >/dev/null 2>&1 && godoc -http :6060 -play 2>/dev/null &
 fi
 
 ## Startup error log.
