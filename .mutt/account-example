@@ -19,7 +19,7 @@ unset ssl_starttls
 set signature="cat ~/.mutt/real_name && fortune -s |"
 
 ## Sidebar mailboxes separator workaround.
-mailboxes "+A-- Personal -------"
+mailboxes "+~~~~~~~~~~~~~~~~~~~~~~~~"
 
 ## Hooks
 account-hook $folder "set imap_user=user@gmail.com imap_pass=$my_pw_personal"
