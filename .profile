@@ -154,7 +154,9 @@ prependpath "${HOME}/.hackpool"
 for i in em emacs vim nano; do
 	command -v $i >/dev/null 2>&1 && export EDITOR=$i && break
 done
-export GIT_EDITOR="$EDITOR"
+GIT_EDITOR="$EDITOR"
+[ "$GIT_EDITOR" = em ] && GIT_EDITOR=emc
+export GIT_EDITOR
 
 ################################################################################
 
