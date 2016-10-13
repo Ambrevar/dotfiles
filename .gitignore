@@ -22,8 +22,9 @@
 .zcompdump
 .zdirs
 .zshistfile
-games
-music
+games*
+go
+music*
 personal
 projects
 temp
