@@ -24,5 +24,7 @@ loadrc alias_rc colors_rc completion_rc funs_rc
 ## Shell hook: should be sourced last.
 loadrc hook
 
-## Browser autostart. See .scripts/browser-autostart
-[ -n "$BROWSER_AUTOSTART" ] && unset BROWSER_AUTOSTART && browse
+## Assign a binding
+##   sh -c 'export SHELL_FILEBROWSER=true; exec $TERMCMD'
+## and this will autostart the file browser.
+[ -n "$SHELL_FILEBROWSER" ] && unset SHELL_FILEBROWSER && browse
