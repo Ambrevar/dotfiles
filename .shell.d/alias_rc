@@ -54,14 +54,6 @@ command -v curl >/dev/null 2>&1 && alias myip='curl ifconfig.me'
 ## prompt for password). Useless if X is running on the same TTY.
 command -v vlock >/dev/null 2>&1 && alias sx='startx & vlock'
 
-## Xrandr
-alias xmorphnone='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --transform none'
-alias xmorphsw='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --transform 1.24,0.16,-124,0,1.24,0,0,0.000316,1'
-alias xmorphzo='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --scale 1.2x1.2'
-alias xmorphzi='xrandr --output $(xrandr | grep "\<connected\>" | cut -f1 -d" ") --scale 0.8x0.8'
-
-alias xres='xrandr --output $(xrandr | awk '"'"'NR==2 {print $1;exit}'"'"') --auto && xrandr -s $(xrandr | awk '"'"'/^ / {print $1;exit}'"'"')'
-
 ## Udiskie
 command -v udiskie-umount >/dev/null 2>&1 && alias uua='udiskie-umount -a'
 
