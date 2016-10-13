@@ -267,10 +267,10 @@ globalkeys = awful.util.table.join(
 	-- Editor
 	awful.key({ modkey,  }, "e",     function () awful.util.spawn(os.getenv("EDITOR")) end),
 
-	-- Directory browser
-	awful.key({ modkey,  }, "d",     function () awful.util.spawn("browser-autostart") end),
-	awful.key({ }, "XF86Explorer",   function () awful.util.spawn("browser-autostart") end),
-	awful.key({ }, "XF86MyComputer", function () awful.util.spawn("browser-autostart") end),
+	-- File browser
+	awful.key({ modkey,  }, "d",     function () awful.util.spawn("sh -c 'export SHELL_FILEBROWSER=true; exec " .. termcmd .. "'") end),
+	awful.key({ }, "XF86Explorer",   function () awful.util.spawn("sh -c 'export SHELL_FILEBROWSER=true; exec " .. termcmd .. "'") end),
+	awful.key({ }, "XF86MyComputer", function () awful.util.spawn("sh -c 'export SHELL_FILEBROWSER=true; exec " .. termcmd .. "'") end),
 
 	-- Screen lock. xlockmore is useful for LDAP login because slock does not work with it.
 	-- Don't use 'spawn_with_shell' if you want to keep Awesome's config portable.
