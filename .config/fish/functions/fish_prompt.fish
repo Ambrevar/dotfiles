@@ -13,7 +13,7 @@ function fish_prompt
 	## Path
 	set -l cwd_color $fish_color_cwd
 	if test (id -u) -eq 0
-		set -l cwd_color $fish_color_cwd_root
+		set cwd_color $fish_color_cwd_root
 	end
 	set PROMPT_PWD (prompt_pwd)
 	printf "%s%s%s%s" \
