@@ -5,6 +5,6 @@ function fish_user_key_bindings
 	end
 
 	## Ranger
-	type -q ranger; and bind \e\cb ranger
+	type -q ranger; and bind \e\cd ranger
 end
 
