@@ -71,11 +71,6 @@ The advantages of this function over the vanilla code are:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-skeleton sh-command
-  "Insert a condition on command existence in path."
-  "Command name: "
-  > "command -v " @ str " >/dev/null 2>&1 " @ _)
-
 (define-skeleton sh-commands-or-die
   "Insert a loop that exits if any of the commands is not found in path."
   "Command names: "
@@ -86,28 +81,12 @@ The advantages of this function over the vanilla code are:
   "fi" > \n
   "done" > \n \n)
 
-(define-skeleton sh-for
-  "Insert a for loop.  See `sh-feature'. This overrides vanilla function."
-  "Index variable: "
-  > "for " str | "i"
-  '(setq v1 (skeleton-read "Index values: " ""))
-  (unless (string= v1 "")
-    (concat " in " v1))
-  "; do" \n
-  > _ \n
-  "done" > \n)
-
 (define-skeleton sh-ifcommand
   "Insert a test to check if command is found in path."
   "Command name: "
   > "if command -v " @ str " >/dev/null 2>&1; then" \n
   > @ _ \n
   "fi" > \n)
-
-(define-skeleton sh-redirect-to-null
-  "Insert a null redirection."
-  nil
-  ">/dev/null 2>&1")
 
 (define-skeleton sh-while-getopts
   "Insert a getops prototype."
