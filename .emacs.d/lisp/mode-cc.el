@@ -46,10 +46,9 @@ provided.\n Requires `get-closest-pathname'."
 found, no action is taken. The previous `compile' command is then
 restored."
   (interactive)
-  (when (get-closest-pathname)
-    (let ((compile-command-backup compile-command))
-      (compile (format "make -k -f '%s' clean" (get-closest-pathname)))
-      (setq compile-command compile-command-backup))))
+  (let (compile-command (makefile (get-closest-pathname)))
+    (when makefile
+      (compile (format "make -k -f '%s' clean" makefile)))))
 
 (defun cc-fmt ()
   "Run uncrustify(1) on current buffer or region."
@@ -68,7 +67,7 @@ restored."
       (insert-buffer formatbuf)
       (kill-buffer formatbuf))))
 
-;;==============================================================================
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Semantic options.
 
 ;; Semanticdb folders must be set before starting semantic.
@@ -78,22 +77,16 @@ restored."
 ;; Extra semantic support
 ;; Example:
 ; (when  (fboundp 'semantic-add-system-include)
-;   (setq qt4-base-dir "/usr/include/qt4")
-;   (setq qt4-gui-dir (concat qt4-base-dir "/QtGui"))
-;   (semantic-add-system-include qt4-base-dir 'c++-mode)
-;   (semantic-add-system-include qt4-gui-dir 'c++-mode)
+;   (semantic-add-system-include "new/header/dir" 'c++-mode)
 ;   (add-to-list 'auto-mode-alist (cons qt4-base-dir 'c++-mode))
 ;   (add-hook
 ;    'c++-mode-hook
 ;    (lambda ()
 ;      (when semantic-mode
-;        (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig.h"))
-;        (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig-large.h"))
-;        (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qglobal.h"))))))
+;        (add-to-list 'semantic-lex-c-preprocessor-symbol-file "new/header/dir/config.h")))))
 
-;;==============================================================================
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; C-mode
-;;==============================================================================
 
 ;; WARNING: this style is a work-in-progress.
 (c-add-style
@@ -136,42 +129,20 @@ restored."
         (if (fboundp 'helm-company)
             (local-set-key (kbd "M-TAB") 'helm-company)
           (local-set-key (kbd "M-TAB") 'company-complete)))
-      (local-set-key (kbd "C-c a") 'cc-include-local)
-      (local-set-key (kbd "C-c C-a") 'cc-include)
       (local-set-key (kbd "C-c o") 'ff-find-other-file)
       (local-set-key (kbd "C-c m") 'cc-main)
       ;; The cc-fmt hook is disable since there is no standard C formatting,
       ;; unlike for Go.
       ; (add-hook 'before-save-hook 'cc-fmt nil t)
-      ;; Annoying defaults?
-      ; (c-toggle-auto-newline)
-      ; (local-set-key (kbd "C-c (") 'cc-function)
-      ; (local-set-key (kbd "C-c C-f") 'cc-for)
-      ; (local-set-key (kbd "C-c C-i") 'cc-if)
-      ; (local-set-key (kbd "C-c C-p") 'cc-printf)
       (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1))))))
  '(c-mode-hook c++-mode-hook))
 
-;;==============================================================================
-;; Skel
-;;==============================================================================
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Skeletons
 
 ;; Note that it is possible to extend the skel syntax with
 ;; `skeleton-further-elements'. For instance:
 ; (setq skeleton-further-elements '((q "\"")))
-
-(define-skeleton cc-case
-  "Insert a case/switch statement."
-  "expression: "
-  > "switch (" str ") {" \n
-  ( "Value, %s: "
-    > "case " > str ":" \n
-    "break;" \n)
-  "default:" > \n
-  > _ \n
-  "break;" \n
-  resume:
-  "}" > \n)
 
 (define-skeleton cc-debug
   "Insert debug macros."
@@ -190,22 +161,6 @@ fprintf(stderr, \"\\n\\033[31;1mDEBUG:\\033[0m %s:%d:%s()\\t\", __FILE__, __LINE
 fprintf(stderr, __VA_ARGS__); \\
 fprintf(stderr, \"\\n\"); \\
 )"))
-
-(define-skeleton cc-for
-  "for loop."
-  nil
-  '(setq str (skeleton-read "Variable: " "i"))
-  > "for (" @ (skeleton-read "" (concat str " = 0")) "; "
-  @ (skeleton-read "" (concat str " < N")) "; "
-    @ (skeleton-read "" (concat str "++")) ") {" \n
-      @ _ \n
-        "}" > )
-
-(define-skeleton cc-function
-  "Insert punctuation for function."
-  "Arguments: " '(just-one-space) "(" @ str ") {" \n
-  > _ \n
-  "}" > \n)
 
 (define-skeleton cc-getopt
   "Insert a getopt template."
@@ -234,29 +189,6 @@ fprintf(stderr, \"\\n\"); \\
   "fprintf(stderr, \"Expected argument after options\\n\");" \n
   "exit(EXIT_FAILURE);" \n
   "}" > \n)
-
-(define-skeleton cc-if
-  "Insert an if statement."
-  "Condition: "
-  > "if (" @ str ") {" \n
-  > @ _ \n
-  ("Other condition, %s: "
-   "} else if (" > @ str ") {" \n
-   @ \n)
-  "} else {" > \n
-  @ \n
-  resume:
-  "}" > \n)
-
-(define-skeleton cc-include
-  "Insert system include."
-  "Header: "
-  \n "#include <" @ str ">" \n)
-
-(define-skeleton cc-include-local
-  "Insert local include."
-  "Header: "
-  \n "#include \"" @ str "\"" \n)
 
 (define-skeleton cc-loadfile
   "Insert loadfile function."
@@ -310,23 +242,6 @@ int main(int argc, char **argv) {" \n
 > @ _ \n
 > "return 0;
 }" \n)
-
-(define-skeleton cc-printf
-  "fprintf/printf snippet.
-If no file descriptor is provided, switch do printf.  The format
-string is properly parsed (%% are not taken into account).\n
-Requires `count-percents'."
-  nil
-  '(require 'functions)
-  '(setq v1 (skeleton-read "File desc: " "stderr"))
-  (if (string= v1 "") "printf(" (concat "fprintf(" v1 ", "))
-  "\"" (setq v1 (skeleton-read "Format string: " "%s\\n")) "\""
-  '(setq v2 (count-percents v1))
-  '(setq v1 0)
-  '(while (< v1 v2)
-     (setq v1 (1+ v1))
-     (skeleton-insert '(nil (concat ", " (skeleton-read "Value: ")))))
-  @ ");")
 
 (define-skeleton cc-usage-version
   "Insert usage() and version() functions."
