@@ -4,6 +4,7 @@ bind \e\ct fzf-file-widget
 bind \ec capitalize-word
 bind \eC fzf-cd-widget
 
+## TODO: Force --no-cycle or use global?
 function __fzf-select -d 'fzf commandline and print selection back to commandline. Awesome!'
 	set -l cmd (commandline)
 	[ $cmd ]; or return
@@ -60,11 +61,12 @@ end
 ## restrict search to this path. $cwd will be suppressed from commandline to
 ## ensure clean output from the search results.
 ## TODO: Report upstream. Makes '**' obsolete for bash and zsh.
+## TODO: Do not use temp file.
 function fzf-file-widget
 	set -l cwd_esc (commandline -t)
 	## The commandline token might be escaped, we need to unescape it.
 	set -l cwd (eval "echo $cwd_esc")
-	if [ ! -d $cwd ]
+	if [ ! -d "$cwd" ]
 		set cwd .
 	end
 
@@ -75,13 +77,13 @@ function fzf-file-widget
   -o -type l -print 2> /dev/null | sed 1d"
 
   if eval $FZF_CTRL_T_COMMAND | eval (__fzfcmd) -m $FZF_CTRL_T_OPTS > $TMPDIR/fzf.result
-		if [ $cwd != . ]
-			## Remove path from commandline: it will be
+		if [ "$cwd" != . ]
+			## Remove last token from commandline.
 			set -l cmd (commandline)
 			set -l len (math (string length $cmd) - (string length $cwd_esc))
 			commandline -- (string sub -l $len (commandline))
 		end
-		for i in (seq 20); commandline -i (cat $TMPDIR/fzf.result | __fzf_escape) 2> /dev/null; and break; sleep 0.1; end
+		for i in (seq 20); commandline -i (cat $TMPDIR/fzf.result | __fzf_escape) ^ /dev/null; and break; sleep 0.1; end
 	end
   commandline -f repaint
   rm -f $TMPDIR/fzf.result
@@ -89,14 +91,14 @@ end
 
 function fzf-bcd-widget -d 'cd backwards'
 	pwd | nawk -v RS=/ '/\n/ {exit} {p=p $0 "/"; print p}' | eval (__fzfcmd) +m --tac | read -l result
-	[ $result ]; and cd $result
+	[ "$result" ]; and cd $result
 	commandline -f repaint
 end
 bind \e\cL fzf-bcd-widget
 
 function fzf-cdhist-widget -d 'cd to one of the previously visited location'
 	string join \n $dirprev | eval (__fzfcmd) +m | read -l result
-	[ $result ]; and cd $result
+	[ "$result" ]; and cd $result
 	commandline -f repaint
 end
 bind \er fzf-cdhist-widget
