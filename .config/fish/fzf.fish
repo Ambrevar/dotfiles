@@ -37,7 +37,8 @@ function __fzf-complete -d 'fzf completion and print selection back to commandli
 	set -l len (math (string length -- $cmd) - (string length -- $token))
 	commandline -- (string sub -l $len -- (commandline))
 	## Insert results.
-	for r in $result
+	for i in (seq (count $result))
+		set -l r $result[$i]
 		## We need to escape the result. We unescape 'r' first in case 'r' to
 		## prevent double escaping.
 		switch (string sub -s 1 -l 1 -- $token)
@@ -46,7 +47,7 @@ function __fzf-complete -d 'fzf completion and print selection back to commandli
 			case '*'
 				commandline -i -- (string escape -n -- (eval "printf '%s' '$r'"))
 		end
-		commandline -i ' '
+		[ $i -lt (count $result) ]; and commandline -i ' '
 	end
 
 	commandline -f repaint
