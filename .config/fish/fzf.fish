@@ -5,7 +5,7 @@ bind \ec capitalize-word
 bind \eC fzf-cd-widget
 
 ## TODO: Force --no-cycle or use global?
-function __fzf-select -d 'fzf commandline and print selection back to commandline. Awesome!'
+function __fzf-select -d 'fzf commandline and print unescaped selection back to commandline'
 	set -l cmd (commandline)
 	[ $cmd ]; or return
 	eval $cmd | eval (__fzfcmd) -m --no-cycle --tac --tiebreak=index --toggle-sort=ctrl-r | string join ' ' | read -l result
@@ -14,19 +14,19 @@ function __fzf-select -d 'fzf commandline and print selection back to commandlin
 end
 bind \e\cm __fzf-select
 
-function __fzf-complete -d 'fzf completion and print selection back to commandline. Awesome!'
+function __fzf-complete -d 'fzf completion and print selection back to commandline'
 	set -l complist (complete -C)
 	set -l result
 	switch (count $complist)
 		case 0
 			return
 		case 1
-			set result (echo $complist[1] | cut -f1)
+			set result (printf '%s' "$complist[1]" | cut -f1)
 		case '*'
-			string join \n $complist | eval (__fzfcmd) -m --no-cycle --tac --tiebreak=index --toggle-sort=ctrl-r | cut -f1 | string join ' ' | read result
+			string join -- \n $complist | eval (__fzfcmd) -m --no-cycle --tac --tiebreak=index --toggle-sort=ctrl-r | cut -f1 | while read -l r; set result $result $r; end
 	end
 
-	if [ ! "$result" ]
+	if [ -z "$result" ]
 		commandline -f repaint
 		return
 	end
@@ -34,15 +34,20 @@ function __fzf-complete -d 'fzf completion and print selection back to commandli
 	## Remove last token from commandline.
 	set -l token (commandline -t)
 	set -l cmd (commandline)
-	set -l len (math (string length $cmd) - (string length $token))
-	commandline -- (string sub -l $len (commandline))
-	switch (string sub -s 1 -l 1 $token)
-		case "'" '"'
-		commandline -i -- (string escape (eval "echo $result"))
-		case '*'
-		commandline -i -- (string escape -n (eval "echo $result"))
+	set -l len (math (string length -- $cmd) - (string length -- $token))
+	commandline -- (string sub -l $len -- (commandline))
+	## Insert results.
+	for r in $result
+		## We need to escape the result. We unescape 'r' first in case 'r' to
+		## prevent double escaping.
+		switch (string sub -s 1 -l 1 -- $token)
+			case "'" '"'
+				commandline -i -- (string escape -- (eval "printf '%s' '$r'"))
+			case '*'
+				commandline -i -- (string escape -n -- (eval "printf '%s' '$r'"))
+		end
+		commandline -i ' '
 	end
-	commandline -i ' '
 
 	commandline -f repaint
 end
@@ -61,11 +66,10 @@ end
 ## restrict search to this path. $cwd will be suppressed from commandline to
 ## ensure clean output from the search results.
 ## TODO: Report upstream. Makes '**' obsolete for bash and zsh.
-## TODO: Do not use temp file.
 function fzf-file-widget
 	set -l cwd_esc (commandline -t)
 	## The commandline token might be escaped, we need to unescape it.
-	set -l cwd (eval "echo $cwd_esc")
+	set -l cwd (eval "printf '%s' '$cwd_esc'")
 	if [ ! -d "$cwd" ]
 		set cwd .
 	end
@@ -76,17 +80,21 @@ function fzf-file-widget
   -o -type d -print \
   -o -type l -print 2> /dev/null | sed 1d"
 
-  if eval $FZF_CTRL_T_COMMAND | eval (__fzfcmd) -m $FZF_CTRL_T_OPTS > $TMPDIR/fzf.result
+	set -l result
+  eval $FZF_CTRL_T_COMMAND | eval (__fzfcmd) -m $FZF_CTRL_T_OPTS | while read -l r; set result $result $r; end
+	if [ "$result" ]
 		if [ "$cwd" != . ]
 			## Remove last token from commandline.
 			set -l cmd (commandline)
 			set -l len (math (string length $cmd) - (string length $cwd_esc))
 			commandline -- (string sub -l $len (commandline))
 		end
-		for i in (seq 20); commandline -i (cat $TMPDIR/fzf.result | __fzf_escape) ^ /dev/null; and break; sleep 0.1; end
+		for i in $result
+			commandline -i -- (string escape (eval "printf '%s' '$i'"))
+			commandline -i -- ' '
+		end
 	end
-  commandline -f repaint
-  rm -f $TMPDIR/fzf.result
+	commandline -f repaint
 end
 
 function fzf-bcd-widget -d 'cd backwards'
