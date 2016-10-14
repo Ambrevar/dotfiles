@@ -45,7 +45,7 @@ To view where the bindings are set in your config files, lookup
 (add-hook 'c++-mode-hook      (lambda () (require 'mode-cc)))
 (add-hook 'c-mode-hook        (lambda () (require 'mode-cc)))
 (add-hook 'sgml-mode-hook     (lambda () (require 'mode-sgml)))
-(add-hook 'js-mode-hook       (lambda () (require 'mode-js)))
+(add-hook 'js-mode-hook       (lambda () (defvaralias 'js-indent-level 'tab-width)))
 (add-hook 'latex-mode-hook    (lambda () (require 'mode-latex)))
 (add-hook 'makefile-mode-hook (lambda () (require 'mode-makefile)))
 (add-hook 'nroff-mode-hook    (lambda () (require 'mode-nroff)))
