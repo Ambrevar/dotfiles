@@ -1,4 +1,6 @@
-;; Ediff in one frame.
+;; Ediff
+
+;; In one frame.
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 ;; Ediff split horizontally by default. ediff split does not seem to

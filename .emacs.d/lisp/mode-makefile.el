@@ -1,4 +1,4 @@
-;; makefile mode setup.
+;; Makefile
 
 (add-hook-and-eval
  'awk-mode-hook

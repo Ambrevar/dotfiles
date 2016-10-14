@@ -1,5 +1,5 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs config
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Global variables.
 
@@ -193,6 +193,8 @@ To view where the bindings are set in your config files, lookup
   (global-set-key (kbd "C-x g") 'magit-status))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; End of config
+
 ;; We need to put it at the end to make sure it doesn't get overriden by other
 ;; minor modes.
 (mickey-minor-mode 1)
@@ -219,6 +221,3 @@ To view where the bindings are set in your config files, lookup
 ; (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
 
 (load "local" t t)
-
-;; End of file
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

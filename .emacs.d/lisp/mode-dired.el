@@ -1,4 +1,4 @@
-;; Dired options
+;; Dired
 
 ;; On a GNU system, ls has the option to sort folders first.
 (if (string-match "^gnu.*" (prin1-to-string system-type))

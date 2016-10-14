@@ -1,6 +1,6 @@
-;;==============================================================================
-;; LaTeX, using the TeX setup
-;;==============================================================================
+;; LaTeX
+
+;; We use the TeX setup.
 (require 'mode-tex)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -363,7 +363,7 @@ The table type is any value found in `latex-table-names'."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The magnificent latex-math-preview mode!
-;; TODO: some symbols are not generated properly.
+;; TODO: Some symbols are not generated properly.
 (autoload 'latex-math-preview-expression "latex-math-preview" nil t)
 (autoload 'latex-math-preview-insert-symbol "latex-math-preview" nil t)
 (autoload 'latex-math-preview-save-image-file "latex-math-preview" nil t)
@@ -392,6 +392,4 @@ The table type is any value found in `latex-table-names'."
    ;;              latex-math-preview-pifont-symbol-fonts-symbol-data)))
    ))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'mode-latex)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

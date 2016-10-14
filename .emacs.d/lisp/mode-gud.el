@@ -1,3 +1,5 @@
+;; GUD
+
 ;; Set GUD to display many windows by default.
 ;; (setq gdb-show-main t)
 (setq gdb-many-windows t)

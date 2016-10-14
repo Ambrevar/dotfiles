@@ -1,6 +1,5 @@
-;;==============================================================================
 ;; TeX
-;;==============================================================================
+
 ;; The default tex-mode and AucTeX may seem quite disappointing. Let's use
 ;; custom KISS functions for everything.
 
@@ -20,13 +19,15 @@
 ;; argument.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; CUSTOM
+;; Custom
+
 (defcustom masterfile nil
   "The file that should be compiled. Useful for modular documents."
   :safe 'stringp)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; VARIABLES
+;; Variables
+
 (defvar tex-extension-list nil
   "List of known TeX exentsions. This list is used by `tex-clean'
   to purge all matching files.")
@@ -35,7 +36,8 @@
   "The TeX index file generator.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; FUNCTIONS
+;; Functions
+
 (defun tex-set-compiler ()
   "Set `compile-command' for TeX-based document."
   (interactive)

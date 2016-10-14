@@ -1,11 +1,8 @@
-;;==============================================================================
-;; Texinfo using TeX setup
-;;==============================================================================
+;; Texinfo
+
+;; We use the TeX setup.
 (require 'tex-mode)
 (require 'mode-tex)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; FUNCTIONS
 
 (defun texinfo-menu-update ()
   "Update texinfo node menu automatically."
@@ -14,11 +11,7 @@
   (let
       ;; Master file.
       ((local-master (if (not masterfile) buffer-file-name masterfile)))
-
     (texinfo-multiple-files-update local-master t 8)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; HOOKS
 
 (add-hook-and-eval
  'texinfo-mode-hook

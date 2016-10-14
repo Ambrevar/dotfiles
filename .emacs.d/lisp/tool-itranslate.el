@@ -1,4 +1,5 @@
-;;; tool-itranslate.el --- Internet Translation
+;;; Itranslate
+;; Translate text from Internet services
 
 (defvar itranslate-program "translate"
   "The translation program installed on the system.")
@@ -115,5 +116,3 @@ auto-detect. Empty output defaults to English."
        (read-string "Output language: " itranslate-lang-output)))
 
 (provide 'tool-itranslate)
-
-;;; tool-itranslate.el ends here

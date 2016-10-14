@@ -1,6 +1,4 @@
-;;==============================================================================
 ;; AWK
-;;==============================================================================
 
 (add-hook-and-eval
  'awk-mode-hook
@@ -11,8 +9,6 @@
    (local-set-key (kbd "C-c (") 'awk-function)
    (local-set-key (kbd "C-c C-p") 'awk-printf)
    (set (make-local-variable 'compile-command) (concat "awk " (shell-quote-argument buffer-file-name)))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-skeleton awk-fori
   "for i loop."

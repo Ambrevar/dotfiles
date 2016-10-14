@@ -1,4 +1,4 @@
-;;; tool-smiext.el --- Hack around SMIE
+;;; Hack around SMIE
 (require 'smie)
 (defcustom smie-align nil "Whether to align function arguments.")
 
@@ -61,5 +61,3 @@ in `smie-align'."
            (current-column)))))))
 
 (provide 'smiext)
-
-;;; tool-smiext.el ends here

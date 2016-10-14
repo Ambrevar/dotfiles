@@ -1,4 +1,4 @@
-;;; tool-pdf.el --- PDF utils
+;;; PDF utils
 
 (defvar pdf-compressor "pdfcompress" "PDF compressor.")
 
@@ -62,5 +62,3 @@ It FILE is not a PDF, the extension is automatically replaced by
       (apply 'start-process "dummy" nil pdf-viewer pdf pdf-viewer-args))))
 
 (provide 'tool-pdf)
-
-;;; tool-pdf.el ends here

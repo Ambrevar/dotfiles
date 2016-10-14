@@ -1,6 +1,4 @@
-;;==============================================================================
-;; Graphviz' dot mode
-;;==============================================================================
+;; Graphviz' dot
 
 (setq graphviz-dot-preview-extension "pdf")
 (defcustom graphviz-dot-view-extension "pdf"

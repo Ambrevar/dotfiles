@@ -1,4 +1,5 @@
 ;; Eshell
+
 ;; This mode has a lot of hooks.
 ;; `emacs-load-hook' is run at the very beginning; not all variables/functions will be set.
 ;; `emacs-mode-hook' is run once everything is loaded.

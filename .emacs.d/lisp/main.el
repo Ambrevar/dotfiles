@@ -1,6 +1,4 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; MAIN
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Main options
 
 ;; Minimal UI. Load early to hide as soon as possible.
 (setq inhibit-startup-screen t)
@@ -350,9 +348,10 @@
 ; In case you find eldoc too distracting.
 ;; (global-eldoc-mode 0)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'main)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Old code.
 
 ;; This may be needed for gud/pdb.
 ; (defadvice pop-to-buffer (before cancel-other-window first)
