@@ -13,6 +13,40 @@ function __fzf-select -d 'fzf commandline and print selection back to commandlin
 end
 bind \e\cm __fzf-select
 
+function __fzf-complete -d 'fzf completion and print selection back to commandline. Awesome!'
+	set -l complist (complete -C)
+	set -l result
+	switch (count $complist)
+		case 0
+			return
+		case 1
+			set result (echo $complist[1] | cut -f1)
+		case '*'
+			string join \n $complist | eval (__fzfcmd) -m --no-cycle --tac --tiebreak=index --toggle-sort=ctrl-r | cut -f1 | string join ' ' | read result
+	end
+
+	if [ ! "$result" ]
+		commandline -f repaint
+		return
+	end
+
+	## Remove last token from commandline.
+	set -l token (commandline -t)
+	set -l cmd (commandline)
+	set -l len (math (string length $cmd) - (string length $token))
+	commandline -- (string sub -l $len (commandline))
+	switch (string sub -s 1 -l 1 $token)
+		case "'" '"'
+		commandline -i -- (string escape (eval "echo $result"))
+		case '*'
+		commandline -i -- (string escape -n (eval "echo $result"))
+	end
+	commandline -i ' '
+
+	commandline -f repaint
+end
+bind \t __fzf-complete
+
 ## DONE: Report missing (commandline) upstream.
 ## TODO: Report use of 'read'.
 function fzf-history-widget
