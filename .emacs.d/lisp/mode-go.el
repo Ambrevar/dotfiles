@@ -32,8 +32,8 @@ If `compile-command' is \"go build\":
 
 (defun go-metalinter ()
   (interactive)
-  (let ((compile-command "gometalinter --cyclo-over=20 --deadline=20s -e 'declaration of err shadows' -e 'error return value not checked \\(.*\\.Close\\(\\)'"))
-  (compile compile-command)))
+  (let (compile-command)
+    (compile "gometalinter --cyclo-over=20 --deadline=20s -e 'declaration of err shadows' -e 'error return value not checked \\(.*\\.Close\\(\\)'")))
 
 (when (require 'go-guru nil t)
   (unless (executable-find "guru")
