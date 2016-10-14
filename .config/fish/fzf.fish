@@ -7,7 +7,7 @@ bind \eC fzf-cd-widget
 function __fzf-select -d 'fzf commandline and print selection back to commandline. Awesome!'
 	set -l cmd (commandline)
 	[ $cmd ]; or return
-	eval $cmd | eval (__fzfcmd) -m --tiebreak=index --toggle-sort=ctrl-r | string join ' ' | read -l result
+	eval $cmd | eval (__fzfcmd) -m --no-cycle --tac --tiebreak=index --toggle-sort=ctrl-r | string join ' ' | read -l result
 	[ "$result" ]; and commandline -- $result
 	commandline -f repaint
 end
