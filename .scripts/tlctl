@@ -41,12 +41,12 @@ i)
 l)
 	## Note: We use <TAB> in the sed expressions.
 	TEXLIVE_BASIC="$(mktemp)"
-	tlmgr info collection-basic --list | sed -n '/^	/{s/	//g;p;}' | sort >"$TEXLIVE_BASIC"
+	tlmgr info collection-basic --list | sed -n '/^	/{s/	//g;p;}' | LC_ALL=C sort >"$TEXLIVE_BASIC"
 
 	TEXLIVE_ALL="$(mktemp)"
-	tlmgr info --only-installed | grep -v 'x86_64\|amd64' | cut -d' ' -f2 | cut -f1 -d':' | sort >"$TEXLIVE_ALL"
+	tlmgr info --only-installed | grep -v 'x86_64\|amd64' | cut -d' ' -f2 | cut -f1 -d':' | LC_ALL=C sort >"$TEXLIVE_ALL"
 
-	comm -3 "$TEXLIVE_BASIC" "$TEXLIVE_ALL" | sed 's/	//g' | \
+	LC_ALL=C comm -3 "$TEXLIVE_BASIC" "$TEXLIVE_ALL" | sed 's/	//g' | \
 		grep -vi 'collection-basic\|scheme-minimal\|texlive-common\|texlive-docindex\|texlive-en'
 
 	rm "$TEXLIVE_ALL" "$TEXLIVE_BASIC"

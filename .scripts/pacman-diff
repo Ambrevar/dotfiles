@@ -2,9 +2,9 @@
 
 usage () {
 	cat <<EOF>&2
-Usage: ${0##*/} [-m|-e] [-q] FILE
+Usage: ${0##*/} [-m] [-e] [-q] FILES...
 
-Display packages listed in FILE but not installed.
+Display packages listed in FILES but not installed.
 
   -e:  Compare FILE to explicitly installed packages.
   -h:  Display this help.
@@ -49,7 +49,7 @@ fi
 
 PKGLIST="$(mktemp)"
 FILE="$(mktemp)"
-pacman -Qq${OPTION_FOREIGN}${OPTION_EXPLICIT} | sort > "$PKGLIST"
-sort "$@" > "$FILE"
-comm -3 ${OPTION_LOCAL} "$PKGLIST" "$FILE"
+pacman -Qq${OPTION_FOREIGN}${OPTION_EXPLICIT} | LC_ALL=C sort > "$PKGLIST"
+LC_ALL=C sort "$@" > "$FILE"
+LC_ALL=C comm -3 ${OPTION_LOCAL} "$PKGLIST" "$FILE"
 rm -f "$PKGLIST" "$FILE"

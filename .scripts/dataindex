@@ -59,7 +59,7 @@ for i ; do
 	## different systems.
 
 	## The two following lines do the same for the same time cost. The former is shorter.
-	# find "$i" -type f | awk -v str="$i" '{l=length(str)+2; print substr($0, l)}' | sort > "$OUTPUT"
+	# find "$i" -type f | awk -v str="$i" '{l=length(str)+2; print substr($0, l)}' | LC_ALL=C sort > "$OUTPUT"
 	(cd -- "$i" && find . -type f) | sed 's/^.\///' | LC_ALL=C sort | \
 		if $opt_file; then
 			i="$(realpath -- "$i")"
