@@ -42,8 +42,14 @@ function __fzf-complete -d 'fzf completion and print selection back to commandli
 		## We need to escape the result. We unescape 'r' first in case 'r' to
 		## prevent double escaping.
 		switch (string sub -s 1 -l 1 -- $token)
-			case "'" '"'
+			case "'"
 				commandline -i -- (string escape -- (eval "printf '%s' '$r'"))
+			case '"'
+				set -l quoted (string escape -- (eval "printf '%s' '$r'"))
+				set -l len (string length $quoted)
+				commandline -i -- '"'(string sub -s 2 -l (math $len - 2) (string escape -- (eval "printf '%s' '$r'")))'"'
+			case '~'
+				commandline -i -- (string sub -s 2 (string escape -n -- (eval "printf '%s' '$r'")))
 			case '*'
 				commandline -i -- (string escape -n -- (eval "printf '%s' '$r'"))
 		end
@@ -70,19 +76,25 @@ end
 function fzf-file-widget
 	set -l cwd_esc (commandline -t)
 	## The commandline token might be escaped, we need to unescape it.
-	set -l cwd (eval "printf '%s' '$cwd_esc'")
+	set -l cwd (eval "printf '%s' $cwd_esc")
 	if [ ! -d "$cwd" ]
 		set cwd .
 	end
 
-  set -q FZF_CTRL_T_COMMAND; or set -l FZF_CTRL_T_COMMAND "
-  command find -L \$cwd \\( -path '*/\\.*' -o -fstype 'dev' -o -fstype 'proc' \\) -prune \
-  -o -type f -print \
-  -o -type d -print \
-  -o -type l -print 2> /dev/null | sed 1d"
+	set -q FZF_CTRL_T_COMMAND; or set -l FZF_CTRL_T_COMMAND "
+	command find -L $cwd_esc \\( -path '*/\\.*' -o -fstype 'dev' -o -fstype 'proc' \\) -prune \
+	-o -type f -print \
+	-o -type d -print \
+	-o -type l -print 2> /dev/null | sed 1d"
 
 	set -l result
-  eval $FZF_CTRL_T_COMMAND | eval (__fzfcmd) -m $FZF_CTRL_T_OPTS | while read -l r; set result $result $r; end
+	set found (eval $FZF_CTRL_T_COMMAND)
+	if [ -z "$found" ]
+		commandline -f repaint
+		return
+	end
+
+	string join \n $found | eval (__fzfcmd) -m $FZF_CTRL_T_OPTS | while read -l r; set result $result $r; end
 	if [ "$result" ]
 		if [ "$cwd" != . ]
 			## Remove last token from commandline.
