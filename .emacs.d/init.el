@@ -42,7 +42,6 @@ To view where the bindings are set in your config files, lookup
 ;; Vanilla
 
 ;; Major modes
-(add-hook 'awk-mode-hook      (lambda () (require 'mode-awk)))
 (add-hook 'c++-mode-hook      (lambda () (require 'mode-cc)))
 (add-hook 'c-mode-hook        (lambda () (require 'mode-cc)))
 (add-hook 'sgml-mode-hook     (lambda () (require 'mode-sgml)))
