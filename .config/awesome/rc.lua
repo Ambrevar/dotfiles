@@ -1,6 +1,4 @@
---------------------------------------------------------------------------------
 -- Awesome configuration
---------------------------------------------------------------------------------
 
 -- TODO: Update system bar on audio volume update.
 
@@ -38,7 +36,7 @@ local home = os.getenv("HOME")
 
 --------------------------------------------------------------------------------
 -- Error handling
---------------------------------------------------------------------------------
+
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
@@ -78,7 +76,7 @@ end
 
 --------------------------------------------------------------------------------
 -- Themes define colours, icons, and wallpapers
---------------------------------------------------------------------------------
+
 -- beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 beautiful.init(awful.util.getdir("config") .. "/themes/occam/theme.lua")
 
@@ -91,7 +89,6 @@ end
 
 --------------------------------------------------------------------------------
 -- General
---------------------------------------------------------------------------------
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -107,7 +104,6 @@ end
 
 --------------------------------------------------------------------------------
 -- Wibox
---------------------------------------------------------------------------------
 
 -- Separator
 separator = " | "
@@ -226,7 +222,6 @@ end
 
 --------------------------------------------------------------------------------
 -- Mouse
---------------------------------------------------------------------------------
 
 -- Mouse control
 local f = io.popen([[ xrandr | awk '/connected/ {getline; while($0 !~ "\\*") getline; print $1; exit}' ]])
@@ -252,9 +247,7 @@ end
 
 --------------------------------------------------------------------------------
 -- Key bindings
--- Note that some laptop will not work when pressing Super+Fn.
--- Therefore we only use Fn and Mod1+Fn.
---------------------------------------------------------------------------------
+-- We reserve modkey+Mod1 for $EDITOR.
 
 globalkeys = awful.util.table.join(
 	-- Terminal
@@ -488,7 +481,6 @@ root.keys(globalkeys)
 
 --------------------------------------------------------------------------------
 -- Rules
---------------------------------------------------------------------------------
 
 awful.rules.rules = {
 	-- All clients will match this rule.
@@ -543,7 +535,6 @@ awful.rules.rules = {
 
 --------------------------------------------------------------------------------
 -- Signals
---------------------------------------------------------------------------------
 
 -- Signal function to execute when a new client appears.
 client.connect_signal("manage", function (c, startup)
@@ -571,6 +562,4 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 
---------------------------------------------------------------------------------
 -- End of Awesome config
---------------------------------------------------------------------------------
