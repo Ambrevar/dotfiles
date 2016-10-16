@@ -60,9 +60,8 @@ Xft.rgba: rgb
 !! http://xcolors.net/dl/derp
 !! https://bbs.archlinux.org/viewtopic.php?id=51818
 
-!! Color order is as listed in .shell.d/colors_rc. Bright values are all
-!! canonical colors except for blue and black which are not bright enough on a
-!! black background.
+!! Bright values are all canonical colors except for blue and black which are
+!! not bright enough on a black background.
 URxvt.background: black
 URxvt.foreground: white
 URxvt.color0  : black

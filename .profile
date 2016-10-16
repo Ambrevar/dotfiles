@@ -24,9 +24,6 @@ prependpath () {
 
 ################################################################################
 
-## Common resources.
-[ -d "$HOME/.shell.d" ] && export SHELL_DIR="$HOME/.shell.d"
-
 ## Mask
 ## Result for 027 is: rwxr-x---
 umask 027

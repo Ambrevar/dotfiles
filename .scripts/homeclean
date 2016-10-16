@@ -10,7 +10,6 @@ set -- "$HOME/.cache/awesome" \
 	"$HOME/.cache/emacs/saveplace" \
 	"$HOME/.cache/mutt" \
 	"$HOME/.cache/qutebrowser" \
-	"$HOME/.cache/zsh" \
 	"$HOME/.cmus/autosave" \
 	"$HOME/.cmus/cache" \
 	"$HOME/.cmus/command-history" \

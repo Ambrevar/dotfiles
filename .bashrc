@@ -28,7 +28,7 @@
 ## Enable color support of ls.
 if [ "$TERM" != "dumb" ]; then
 	if [ "$OSTYPE" = "linux-gnu" ]; then
-		eval "$(dircolors "$HOME/.shell.d/dircolorsdb")"
+		eval "$(dircolors "$HOME/.dircolorsdb")"
 	else
 		export LSCOLORS="Ex"
 		# export LSCOLORS="ExfxcxDxCxdxdxCxCxECEh"

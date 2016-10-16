@@ -19,9 +19,6 @@
 .ssh
 .texlive*
 .wine
-.zcompdump
-.zdirs
-.zshistfile
 games*
 go
 music*
