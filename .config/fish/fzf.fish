@@ -87,15 +87,8 @@ function fzf-file-widget
 	-o -type d -print \
 	-o -type l -print 2> /dev/null | sed 1d"
 
-	set -l result
-	set found (eval $FZF_CTRL_T_COMMAND)
-	if [ -z "$found" ]
-		commandline -f repaint
-		return
-	end
-
-	string join \n $found | eval (__fzfcmd) -m $FZF_CTRL_T_OPTS | while read -l r; set result $result $r; end
-	if [ "$result" ]
+	eval "$FZF_CTRL_T_COMMAND | "(__fzfcmd)" -m $FZF_CTRL_T_OPTS" | while read -l r; set result $result $r; end
+	if [ -n "$result" ]
 		if [ "$cwd" != . ]
 			## Remove last token from commandline.
 			set -l cmd (commandline)
