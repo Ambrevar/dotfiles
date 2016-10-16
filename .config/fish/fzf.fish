@@ -23,7 +23,7 @@ function __fzf-complete -d 'fzf completion and print selection back to commandli
 		case 1
 			set result (printf '%s' "$complist[1]" | cut -f1)
 		case '*'
-			string join -- \n $complist | eval (__fzfcmd) -m --no-cycle --tac --tiebreak=index --toggle-sort=ctrl-r | cut -f1 | while read -l r; set result $result $r; end
+			string join -- \n $complist | sort | eval (__fzfcmd) -m --no-cycle --tac --tiebreak=index --toggle-sort=ctrl-r | cut -f1 | while read -l r; set result $result $r; end
 	end
 
 	if [ -z "$result" ]
