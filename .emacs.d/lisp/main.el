@@ -169,7 +169,10 @@
 
 ;; Windmove mode: easy window switching with Shift+arrows.
 (when (fboundp 'windmove-default-keybindings)
-  (windmove-default-keybindings))
+  (define-key mickey-minor-mode-map (kbd "M-s-h") 'windmove-left)
+  (define-key mickey-minor-mode-map (kbd "M-s-j") 'windmove-down)
+  (define-key mickey-minor-mode-map (kbd "M-s-k") 'windmove-up)
+  (define-key mickey-minor-mode-map (kbd "M-s-l") 'windmove-right))
 
 ;; Make Emacs use environment browser, or w3m if BROWSER is not set.
 (setq browse-url-generic-program
