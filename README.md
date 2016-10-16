@@ -34,7 +34,8 @@ See my [Emacs pro-tips](http://ambrevar.bitbucket.org/emacs/).
 ### fish
 
 fish's default configuration satisfies most of my need. I make intense use of
-`fzf` with custom functions and bindings, such as __fzf-select and __fzf-complete.
+`fzf` with custom functions and bindings, such as `__fzf-select` and
+`__fzf-complete`.
 
 A few wrappers:
 
