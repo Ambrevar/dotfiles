@@ -145,9 +145,7 @@
 ;; end.
 ; (require 'functions) ; for `sanitize'
 ; (add-hook 'before-save-hook 'sanitize)
-
-;; Remove whitespaces on region, or whole file.
-(define-key mickey-minor-mode-map (kbd "C-\\") 'delete-trailing-whitespace)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Hippie expand.
 ;; (define-key mickey-minor-mode-map (kbd "M-/") 'hippie-expand)
