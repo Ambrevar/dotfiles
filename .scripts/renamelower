@@ -22,6 +22,7 @@ for f ; do
 	esac
 
 	nf="$(echo "$filename" | awk '{print tolower($0)}')"
+	[ "$nf" = "$filename" ] && continue
 	newname="${dirname}/${nf}"
-	mv -nv "$f" "$newname" 2>/dev/null
+	mv -nv "$f" "$newname"
 done
