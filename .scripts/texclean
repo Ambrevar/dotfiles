@@ -2,14 +2,12 @@
 
 usage () {
 	cat <<EOF>&2
-Usage: ${0##*/} FOLDERS
+Usage: ${0##*/} FILES.tex|FILES.texi
 
-Clean TeX/LaTeX/Texinfo project folders recursively.
+Clean TeX/LaTeX/Texinfo projects of temp files.
 
-First we look for .tex or .texi files, and then we can remove associated
-extensions in current folder. We proceed this way so that we do not incidentally
-remove files matching these extensions if they are not linked to a TeX file in
-any manner.
+Argument must have a '.tex' or '.texi' extension so that we do not acccidentally
+remove files matching these extensions if they are not related to a TeX file.
 
 EOF
 }
@@ -19,23 +17,23 @@ EOF
 [ "$1" = "--" ] && shift
 
 for i ; do
-	while read -r file; do
-		case "$file" in
-		*/*) ;;
-		*)
-			file="./$file" ;;
-		esac
-		dirname="${file%/*}"
-		basename="${file##*/}"
-		basename="${basename%.*}"
-		## Reset arg list (big performance boost).
-		set -- 
-		for j in aux bbl blg cp cps fn glg glo gls idx ilg ind ky lof log maf mt mtc nav out pg snm synctex.gz synctex tns toc tp vr vrs xdy
-		do
-			set -- "$@" "$dirname/$basename.$j"
-		done
-		rm -v "$@" 2>/dev/null
-	done <<EOF
-$(find "$i" -type f \( -name "*.tex" -o -name "*.texi" \) )
-EOF
+	case "$i" in
+	*/*) ;;
+	*)
+		i="./$i" ;;
+	esac
+	dirname="${i%/*}"
+	basename="${i##*/}"
+	ext=$(echo "${basename##*.}" | awk '{print tolower($0)}')
+	basename="${basename%.*}"
+	[ "$ext" != "tex" ] && [ "$ext" != "texi" ] && continue
+	## Reset arg list (big performance boost).
+	set --
+	for j in aux bbl blg cp cps fn glg glo gls idx ilg ind ky lof log maf mt mtc nav out pg snm synctex.gz synctex tns toc tp vr vrs xdy
+	do
+		set -- "$@" "$dirname/$basename.$j"
+	done
+	## Do the file check last to minimize race conditions.
+	[ -f "$i" ] || continue
+	rm -v "$@" 2>/dev/null
 done
