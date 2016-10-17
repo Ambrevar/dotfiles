@@ -14,6 +14,9 @@ not overwrite by default. Empty folders are ignored. The resulting hierarchy is:
 Options:
   -f: Overwrite destination.
   -r: Remove empty folders.
+
+WARNING: Do not use over filenames with newlines.
+
 EOF
 }
 
@@ -41,9 +44,8 @@ if [ $# -eq 0 ]; then
 	exit 1
 fi
 
-## We the counter we offer the interesting feature of processing all arguments
-## but the last one. We can get the last argument with an 'eval'. Note that the
-## 'eval' is safe here.
+## The counter is used to process all arguments but the last one. We can get the
+## last argument with an 'eval'. (Safe here.)
 DEST="$(eval "echo \$$#")"
 count=0
 
