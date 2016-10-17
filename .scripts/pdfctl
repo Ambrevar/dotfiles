@@ -1,0 +1,169 @@
+#!/bin/sh
+
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} COMMAND [-i] [-o OUTPUT] [OPTIONS] FILES...
+
+Wrapper around various PDF operations.
+OUTPUT is ignored when processing in-place (-i) or when more than one input
+files is given.
+Otherwise, or if OUTPUT is unspecified, a file with a random suffix is produced.
+
+List of commands and their options:
+
+  compress [OPTIONS]
+    Compress PDFs.
+    -c: Compress raster graphics at the expense of a quality loss.
+    -n:  Do not compress raster graphics at all. Output may be bigger.
+
+  extract [-f FIRST-PAGE] [-l LAST-PAGE]
+    Extract a range of pages to a single PDF.
+
+  resize
+    Resize to A4.
+
+  size
+    Same as pdfinfo, but append size in milimeters.
+
+  xerox
+    Convert a PDF to a blurred, black & white raster image.
+
+
+For more details on compression:
+
+  $ gs -sDEVICE=pdfwrite -o /dev/null \\
+    -c "currentpagedevice { exch ==only ( ) print == } forall"
+
+  http://partners.adobe.com/public/developer/en/acrobat/sdk/pdf/pdf_creation_apis_and_specs/DistillerParameters.pdf
+
+EOF
+}
+
+cmd="$1"
+shift 1
+
+NO_OUTPUT=false
+INPLACE=false
+
+COMPRESS_OPT="-dColorConversionStrategy=/LeaveColorUnchanged -dDownsampleMonoImages=false -dDownsampleGrayImages=false -dDownsampleColorImages=false -dAutoFilterColorImages=false -dAutoFilterGrayImages=false -dColorImageFilter=/FlateEncode -dGrayImageFilter=/FlateEncode"
+
+EXTRACT_FIRST=1
+EXTRACT_LAST=1
+
+case $cmd in
+compress)
+	while getopts ":cino:" opt; do
+		case $opt in
+		c)
+			COMPRESS_OPT="" ;;
+		i)
+			INPLACE=true ;;
+		n)
+			COMPRESS_OPT="-dColorConversionStrategy=/LeaveColorUnchanged -dEncodeColorImages=false -dEncodeGrayImages=false -dEncodeMonoImages=false" ;;
+		o)
+			output="$OPTARG" ;;
+		\?)
+			usage
+			exit 1 ;;
+		esac
+	done
+	;;
+
+extract)
+	while getopts ":f:il:o:" opt; do
+		case $opt in
+		f)
+			EXTRACT_FIRST="$OPTARG" ;;
+		i)
+			INPLACE=true ;;
+		l)
+			EXTRACT_LAST="$OPTARG" ;;
+		o)
+			output="$OPTARG" ;;
+		\?)
+			usage
+			exit 1 ;;
+		esac
+	done
+	;;
+
+resize|xerox)
+	while getopts ":io:" opt; do
+		case $opt in
+		i)
+			INPLACE=true ;;
+		o)
+			output="$OPTARG" ;;
+		\?)
+			usage
+			exit 1 ;;
+		esac
+	done
+	;;
+
+size)
+	NO_OUTPUT=true ;;
+
+*)
+	usage
+	exit 1 ;;
+esac
+
+shift $((OPTIND - 1))
+if [ $# -eq 0 ]; then
+	usage
+	exit 1
+fi
+[ $# -gt 1 ] &&	unset output
+
+mkoutput () {
+	if [ -z "$output" ] || [ -e "$output" ]; then
+		case "$input" in
+		*/*) ;;
+		*)   input="./$input" ;;
+		esac
+		dirname="${input%/*}"
+		basename="${input##*/}"
+		output=$(mktemp "$dirname/${basename%.*}-$cmd"-XXXXXX.pdf)
+	fi
+	echo "$output"
+}
+
+## Some JPEG options
+# -sDEVICE=jpeg
+# -dUseCIEColor
+# -dJPEGQ=100
+# -r300
+# -dTextAlphaBits=4
+# -dGraphicsAlphaBits=4
+# -dMaxStripSize=8192
+compress () {
+	gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite $COMPRESS_OPT -sOutputFile="$output" "$input"
+}
+
+extract () {
+	gs -sDEVICE=pdfwrite -dNOPAUSE -dSAFER -dSAFER -dFirstPage="$EXTRACT_FIRST" -dBATCH -dLastPage="$EXTRACT_LAST" -sOutputFile="$output" "$input"
+}
+
+resize () {
+	gs -q -o "$output" -sDEVICE=pdfwrite -sPAPERSIZE=a4 -dFIXEDMEDIA -dPDFFitPage -dCompatibilityLevel=1.4 "$input"
+}
+
+size () {
+	pdfinfo "$input" | awk '/^Page size:/ {printf $0; print ", " $3*0.35278 " x " $5*0.35278 " mm"; next } 1'
+}
+
+xerox () {
+	convert -threshold 90% -blur 1x1 -quality 100 -flatten -density 400 "$input" "$output"
+}
+
+for input; do
+	echo "==> '$input'"
+	$NO_OUTPUT ||	output=$(mkoutput)
+	$cmd
+	if $INPLACE; then
+		rm -f "$input"
+		mv "$output" "$input"
+	fi
+	echo
+done
