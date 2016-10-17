@@ -4,7 +4,7 @@ usage () {
 	cat <<EOF>&2
 Usage: ${0##*/} FOLDERS
 
-Chack all git repos found in FOLDERS for non-commited file.
+Chack all FOLDERS for a git repo with non-commited files.
 EOF
 }
 
@@ -13,11 +13,9 @@ EOF
 [ "$1" = "--" ] && shift
 
 for i; do
-	while IFS= read -r FOLDER; do
-		if [ -z "$(cd -- "${FOLDER%/*}" && LC_ALL=C git status -uno | grep "nothing to commit")" ]; then
-			echo "${FOLDER%/*}"
-		fi
-	done <<EOF
-$(find "$i" -type d -name ".git")
-EOF
+	cd "$i" || continue
+	if [ -d ".git" ]; then
+		LC_ALL=C git status -uno | grep -q "nothing to commit" || echo "$i"
+	fi
+	cd - >/dev/null
 done
