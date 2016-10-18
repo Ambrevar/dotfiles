@@ -1,0 +1,63 @@
+#!/bin/sh
+
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} FOLDER
+
+Print lints in mediafiles:
+
+- CBR audio
+- Less of more than 2 channels
+- Non-HD files
+- HD files without resolution in their names
+- Misspellings in subtitles (oe, `, ´)
+- Embedded covers
+- Leading zeros in tags
+
+EOF
+}
+
+[ $# -eq 0 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--" ] && shift
+
+if ! command -v mediainfo >/dev/null 2>&1; then
+	echo >&2 "mediainfo required."
+	exit 1
+fi
+
+subtitle () {
+	buffer=$(cat "$1")
+	echo "$buffer" | grep -q "\`" && echo "$i: Misspelling (\`)"
+	echo "$buffer" | grep -q "´" && echo "$i: Misspelling (´)"
+	echo "$buffer" | grep -q "oe" && echo "$i: Misspelling (oe)"
+}
+
+media () {
+	buffer=$(mediainfo "$1")
+	echo "$buffer" | grep -q "Bit rate mode *: Constant" && echo "$i: CBR audio"
+	echo "$buffer" | grep -q "Cover *: Yes" && echo "$i : Embedded cover(s)"
+	echo "$buffer" | grep -q "Track name/Position *: 0+" && echo "$i: Leading zeros in tags"
+	echo "$buffer" | grep -q "Channel(s) *: 1 channel" && echo "$i: Only 1 audio channel"
+	echo "$buffer" | grep -q "Channel(s) *: (2[0-9]+|[013-9]+) channels" && echo "$i: More than 2 audio channels"
+
+	width=$(echo "$buffer" | awk '/^Width *:/ {gsub(/[^0-9]/, ""); print; exit} ')
+	if [ -n "$width" ]; then
+		 if [ "$width" -lt 1200 ]; then
+			 echo "$i: Non-HD"
+		 else
+			 echo "$i" | grep -q "\[720\]|\[1080\]" || echo "$i: HD file without resolution in filename"
+		 fi
+	fi
+}
+
+for i ; do
+	l=$(echo "$i" | awk '{print tolower($0)}')
+	case "$l" in
+	*.srt|*.sub|*.ass)
+		subtitle "$i"
+		exit ;;
+	esac
+
+	media "$i"
+done
