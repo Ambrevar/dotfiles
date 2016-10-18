@@ -277,7 +277,7 @@ EOF
 		"$SAMPLE" "$TC_VIDEO_OPT" "$OUTPUT"
 
 	$OPT_2PASS && rm -v ffmpeg2pass-0.log ffmpeg2pass-0.log.mbtree
-	
+
 	if $OPT_OVERWRITE; then
 		rm "$1"
 		mv -f "$OUTPUT" "${1%.*}.$EXT"
@@ -285,32 +285,6 @@ EOF
 	echo
 }
 
-for i in "$@"; do
-
-	## Argument is a folder. We search for all video files in there.
-	if [ -d "$i" ]; then
-
-		## WARNING: ffmpeg continues to read stdin once it has started, so it should
-		## not be called from within a while<<EOF loop without disabling stdin.
-		while IFS= read -r j; do
-			transcode "$j"
-		done<<EOF
-$(find "$i"  \( \
-		-iname '*.avi' -o \
-		-iname '*.flv' -o \
-		-iname '*.mkv' -o \
-		-iname '*.mov' -o \
-		-iname '*.mp4' -o \
-		-iname '*.mpeg' -o \
-		-iname '*.mpg' -o \
-		-iname '*.ogm' -o \
-		-iname '*.webm' -o \
-		-iname '*.wmv' \) )
-EOF
-
-	else
-		## Argument is a regular file.
-		transcode "$i"
-	fi
-
+for i; do
+	transcode "$i"
 done
