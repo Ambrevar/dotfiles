@@ -15,7 +15,7 @@ end
 bind \e\cm __fzf-select
 
 function __fzf-complete -d 'fzf completion and print selection back to commandline'
-	set -l complist (complete -C)
+	set -l complist (complete -C(commandline -c))
 	set -l result
 	switch (count $complist)
 		case 0
@@ -31,27 +31,21 @@ function __fzf-complete -d 'fzf completion and print selection back to commandli
 		return
 	end
 
-	## Remove last token from commandline.
-	set -l token (commandline -t)
-	set -l cmd (commandline)
-	set -l len (math (string length -- $cmd) - (string length -- $token))
-	commandline -- (string sub -l $len -- (commandline))
-	## Insert results.
 	for i in (seq (count $result))
 		set -l r $result[$i]
 		## We need to escape the result. We unescape 'r' first in case 'r' to
 		## prevent double escaping.
-		switch (string sub -s 1 -l 1 -- $token)
+		switch (string sub -s 1 -l 1 -- (commandline -t))
 			case "'"
-				commandline -i -- (string escape -- (eval "printf '%s' '$r'"))
+				commandline -t -- (string escape -- (eval "printf '%s' '$r'"))
 			case '"'
 				set -l quoted (string escape -- (eval "printf '%s' '$r'"))
 				set -l len (string length $quoted)
-				commandline -i -- '"'(string sub -s 2 -l (math $len - 2) (string escape -- (eval "printf '%s' '$r'")))'"'
+				commandline -t -- '"'(string sub -s 2 -l (math $len - 2) (string escape -- (eval "printf '%s' '$r'")))'"'
 			case '~'
-				commandline -i -- (string sub -s 2 (string escape -n -- (eval "printf '%s' '$r'")))
+				commandline -t -- (string sub -s 2 (string escape -n -- (eval "printf '%s' '$r'")))
 			case '*'
-				commandline -i -- (string escape -n -- (eval "printf '%s' '$r'"))
+				commandline -t -- (string escape -n -- (eval "printf '%s' '$r'"))
 		end
 		[ $i -lt (count $result) ]; and commandline -i ' '
 	end
@@ -91,13 +85,11 @@ function fzf-file-widget
 	if [ -n "$result" ]
 		if [ "$cwd" != . ]
 			## Remove last token from commandline.
-			set -l cmd (commandline)
-			set -l len (math (string length $cmd) - (string length $cwd_esc))
-			commandline -- (string sub -l $len (commandline))
+			commandline -t ""
 		end
 		for i in $result
-			commandline -i -- (string escape (eval "printf '%s' '$i'"))
-			commandline -i -- ' '
+			commandline -it -- (string escape (eval "printf '%s' '$i'"))
+			commandline -it -- ' '
 		end
 	end
 	commandline -f repaint
