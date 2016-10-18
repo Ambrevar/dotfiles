@@ -1,0 +1,42 @@
+#!/bin/sh
+
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} FILES...
+
+Convert all "badly" encoded text files to UTF-8/LF without BOM.
+
+EOF
+}
+
+[ $# -eq 0 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--" ] && shift
+
+for i ; do
+	[ ! -f "$i" ] && continue
+	mimetype=$(file -bi "$i")
+	description=$(file -b "$i")
+	type=$(echo "$mimetype" | awk -F/ '{print $1}')
+	[ "$type" != text ] && continue
+
+	charset=$(echo "$mimetype" | awk -F "=" '{print $2}')
+	if [ "$charset" != utf-8 ]; then
+		echo "$i: Convert to UTF-8"
+		iconv -f "$charset" -t utf8 "$i" -o "$i"
+	fi
+
+	if echo "$description" | grep -q 'UTF-8 Unicode (with BOM)'; then
+		echo "$i: Remove BOM"
+		ex -sc '1s/^.//|xit' "$i"
+		## Interesting alternatives:
+		# dd iflag=skip_bytes skip=3 if=file.srt of=temp.srt
+		# dd bs=1 skip=3 if=file.srt of=temp.srt
+		# tail -c +32 file.srt > temp.srt
+	fi
+
+	if echo "$description" | grep -q 'CRLF'; then
+		echo "$i: Remove CR"
+		ex -sc '%s///g|xit' "$i"
+	fi
+done
