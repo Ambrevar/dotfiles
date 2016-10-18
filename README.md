@@ -110,7 +110,7 @@ automatically.
 
 * pac*: pacman helper functions.
 
-* pdf*: PDF manipulation, e.g. extract pages, compress, resize to A4.
+* pdfctl: PDF manipulation, e.g. extract pages, compress, resize to A4.
 
 * pkglister: generate lists of installed with pacman, FreeBSD's pkg and tlmgr
 (TeX Live manager).
@@ -133,13 +133,3 @@ all files directly.
 Some applications will need extra dependencies other than the default ones. You
 might have a look at the lists in the `.pkg/` folder to know what programs I am
 using.
-
---------------------------------------------------------------------------------
-## Known issues
-
-* All scripts take a strong point at being POSIX. However, there is no POSIX way
-(at least to my knowledge) to execute a shell function on the result of a
-'find'. Neither 'find' nor 'xargs' can execute shell functions. One solution to
-this would be to call an external script, but then we lose all global variables.
-For now I assume no input file has newline, which is quite a strong assumption
-and not safe at all.
