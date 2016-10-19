@@ -5,10 +5,10 @@ bind \ec capitalize-word
 bind \eC fzf-cd-widget
 
 function __fzf-select -d 'fzf commandline and print unescaped selection back to commandline'
-	set -l cmd (commandline)
-	[ $cmd ]; or return
+	set -l cmd (commandline -j)
+	[ "$cmd" ]; or return
 	eval $cmd | eval (__fzfcmd) -m --tac --tiebreak=index --toggle-sort=ctrl-r | string join ' ' | read -l result
-	[ "$result" ]; and commandline -- $result
+	[ "$result" ]; and commandline -j -- $result
 	commandline -f repaint
 end
 bind \e\cm __fzf-select
