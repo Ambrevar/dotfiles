@@ -4,11 +4,10 @@ bind \e\ct fzf-file-widget
 bind \ec capitalize-word
 bind \eC fzf-cd-widget
 
-## TODO: Force --no-cycle or use global?
 function __fzf-select -d 'fzf commandline and print unescaped selection back to commandline'
 	set -l cmd (commandline)
 	[ $cmd ]; or return
-	eval $cmd | eval (__fzfcmd) -m --no-cycle --tac --tiebreak=index --toggle-sort=ctrl-r | string join ' ' | read -l result
+	eval $cmd | eval (__fzfcmd) -m --tac --tiebreak=index --toggle-sort=ctrl-r | string join ' ' | read -l result
 	[ "$result" ]; and commandline -- $result
 	commandline -f repaint
 end
@@ -23,7 +22,7 @@ function __fzf-complete -d 'fzf completion and print selection back to commandli
 		case 1
 			set result (printf '%s' "$complist[1]" | cut -f1)
 		case '*'
-			string join -- \n $complist | sort | eval (__fzfcmd) -m --no-cycle --tac --tiebreak=index --toggle-sort=ctrl-r | cut -f1 | while read -l r; set result $result $r; end
+			string join -- \n $complist | sort | eval (__fzfcmd) -m --tac --tiebreak=index --toggle-sort=ctrl-r | cut -f1 | while read -l r; set result $result $r; end
 	end
 
 	if [ -z "$result" ]
