@@ -349,6 +349,9 @@
 ; In case you find eldoc too distracting.
 ;; (global-eldoc-mode 0)
 
+;; Replace `kill-buffer' binding by `kill-this-buffer'.
+(define-key mickey-minor-mode-map (kbd "C-x k") 'kill-this-buffer)
+
 (provide 'main)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
