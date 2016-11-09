@@ -4,6 +4,7 @@ aircrack-ng
 alsa-utils
 antiword
 apvlv
+asciinema
 aspell
 aspell-de
 aspell-en
@@ -116,7 +117,6 @@ glfw-x11
 glibc
 glm
 glu
-gmp
 gnupg
 go
 go-tools
@@ -158,6 +158,7 @@ jfsutils
 jhead
 jshon
 lame
+lbzip2
 less
 lesspipe
 libvpx
@@ -174,21 +175,12 @@ lshw
 lsof
 ltrace
 lua
-lua-expat
-lua-filesystem
 lua-lgi
-lua-lpeg
-lua-luajson
-lua-penlight
-lua-socket
 lua51
 luajit
-luarocks
-luarocks5.1
 lvm2
 lxdm
 lz4
-lzo2
 lzop
 make
 man-db
@@ -232,10 +224,8 @@ ogmtools
 openal
 openbsd-netcat
 opengl-man-pages
-openjpeg
 openscenegraph
 openssh
-openssl
 opus
 opus-tools
 opusfile
@@ -265,7 +255,6 @@ pstotext
 pulseaudio
 pulseaudio-alsa
 pwgen
-qemu
 qutebrowser
 ranger
 rawtherapee
@@ -364,7 +353,6 @@ xf86-input-joystick
 xf86-input-synaptics
 xf86-video-vesa
 xfsprogs
-xlockmore
 xloadimage
 xorg-bdftopcf
 xorg-server
@@ -384,8 +372,9 @@ xorg-xrdb
 xorg-xset
 xosd
 xsel
-xz
 xterm
+xz
+youtube-dl
 zathura
 zathura-djvu
 zathura-pdf-poppler
