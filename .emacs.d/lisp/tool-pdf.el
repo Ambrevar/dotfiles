@@ -1,9 +1,8 @@
 ;;; PDF utils
 
-(defvar pdf-compressor "pdfcompress" "PDF compressor.")
+(defvar pdf-compressor "pdfctl" "PDF compressor.")
 
 (defvar pdf-viewer "zathura" "PDF viewer.")
-
 
 (defvar pdf-viewer-args
   '("--fork"
@@ -37,7 +36,7 @@ It FILE is not a PDF, the extension is automatically replaced by
               ".pdf")))
     (when (and (file-exists-p pdf) (file-writable-p pdf)
                (executable-find pdf-compressor))
-      (start-process "dummy" nil pdf-compressor "-i" pdf)
+      (start-process "dummy" nil pdf-compressor "compress" "-i" pdf)
       (message "File %s compressed." pdf))))
 
 ;;;###autoload
