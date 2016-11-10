@@ -4,9 +4,13 @@ babel
 caption
 collectbox
 csquotes
+ec
+etoolbox
 eurosym
 geometry
 graphics
+graphics-cfg
+graphics-def
 hyperref
 l3experimental
 l3kernel
@@ -19,12 +23,9 @@ listings
 lm
 marvosym
 media9
-ms
 oberdiek
 ocgx2
-pgf
-svg
+tools
 ulem
 url
-xcolor
 xkeyval
