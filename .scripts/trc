@@ -14,7 +14,7 @@ EOF
 	exit
 fi
 
-for i in check transmission-daemon transmission-remote-cli ; do
+for i in transmission-daemon transmission-remote-cli ; do
 	if ! command -v $i >/dev/null 2>&1; then
 		echo >&2 "'$i' not found"
 		exit 1
