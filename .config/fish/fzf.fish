@@ -92,7 +92,7 @@ end
 bind \e\cL fzf-bcd-widget
 
 function fzf-cdhist-widget -d 'cd to one of the previously visited location'
-	string join \n $dirprev | eval (__fzfcmd) +m | read -l result
+	string join \n $dirprev | eval (__fzfcmd) +m --tac | read -l result
 	[ "$result" ]; and cd $result
 	commandline -f repaint
 end
