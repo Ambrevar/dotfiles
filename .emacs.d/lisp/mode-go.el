@@ -18,7 +18,7 @@ Note that the -cover test flag is left out since it shifts line numbers."
   (set (make-local-variable 'compile-command)
        (if (string= compile-command "go build")
            (concat "go run " (shell-quote-argument buffer-file-name))
-         (if (go-buffer-in-gopath-p) (if (string-match "_test.[gG][oO]$" buffer-file-name) "go test -v" "go install")  "go build")))
+         (if (go-buffer-in-gopath-p) (if (string-match "_test.[gG][oO]$" buffer-file-name) "go test -v -run ." "go install")  "go build")))
   (message "Set `compile-command' to `%s'" compile-command))
 
 (defun go-buffer-in-gopath-p ()
