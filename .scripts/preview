@@ -1,0 +1,59 @@
+#!/bin/sh
+
+usage () {
+	cat <<EOF>&2
+Usage: ${0##*/} FILE
+
+Preview FILE:
+
+- If folder, list it.
+
+- For text files, media files and other files supported by ranger's "scope.sh",
+  use the script to preview the file.
+
+- For other files, display some file information.
+
+EOF
+}
+
+[ $# -ne 1 ] && usage && exit 1
+[ "$1" = "-h" ] && usage && exit
+[ "$1" = "--" ] && shift
+
+ls="ls -1 --color=always"
+if test -t 0; then
+	ls="$ls --indicator-style=classify"
+fi
+if [ "$(uname -o)" = "GNU/Linux" ]; then
+	ls="$ls  --group-directories-first"
+fi
+
+## Folders.
+[ -d "$1" ] && $ls "$1" && exit
+
+## scope.sh.
+XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-~/.config}
+buf=$($XDG_CONFIG_HOME/ranger/scope.sh "$1" $(tput cols) $(tput lines) 2>/dev/null)
+status=$?
+
+case $status in
+1)
+	break ;;
+2)
+	## Text files
+	sed $(tput lines)q "$1"
+	exit ;;
+*)
+	echo "$buf" | sed $(tput lines)q
+	exit ;;
+esac
+
+## All files.
+path="$1"
+[ ! -e "$path" ] && path=$(command -v "$1")
+[ ! -e "$path" ] && exit 1
+$ls -l "$path"
+file "$path" | cut -d':' -f2 | cut -b 2-
+if command -v pacman >/dev/null 2>&1; then
+	pacman -Qo "$path" 2>/dev/null
+fi
