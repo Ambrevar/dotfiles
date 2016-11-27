@@ -217,6 +217,14 @@
       (when (and (executable-find "ranger") (executable-find term))
         (start-process "dummy" nil term "-e" "ranger")))))
 
+;; Run terminal asynchronously in current `default-directory'.
+;; This requires SHELL_CD to be used in the shell config.
+(define-key mickey-minor-mode-map (kbd "C-x M-RET")
+  (lambda () (interactive)
+    (let ((term (getenv "TERMCMD")))
+      (when (executable-find term)
+        (start-process "dummy" nil "env" (concat "SHELL_CD=" default-directory) term)))))
+
 ;; Calendar ISO display.
 (setq calendar-week-start-day 1)
 (setq calendar-date-style 'iso)
