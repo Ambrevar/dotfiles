@@ -130,7 +130,11 @@ fi
 
 ## fzf
 if command -v fzf >/dev/null 2>&1; then
-	export FZF_DEFAULT_OPTS="--cycle --extended --multi --bind=ctrl-v:page-down,alt-v:page-up,alt-a:toggle-all"
+	export FZF_DEFAULT_OPTS="--reverse --inline-info --cycle --extended --multi --bind=ctrl-k:kill-line,ctrl-j:accept,alt-s:toggle-sort,ctrl-v:page-down,alt-v:page-up,alt-a:toggle-all,alt-i:toggle-up,alt-z:toggle-preview"
+	export FZF_ALT_C_OPTS="--preview='preview {}'"
+	export FZF_BCD_OPTS=$FZF_ALT_C_OPTS
+	export FZF_CDHIST_OPTS=$FZF_ALT_C_OPTS
+	export FZF_CTRL_T_OPTS="--bind=ctrl-j:'execute-multi(rifle {})' --preview='preview {}'"
 fi
 
 ## pacman abs
