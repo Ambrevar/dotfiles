@@ -6,7 +6,7 @@ set -q fish_config_path; or set -g fish_config_path $XDG_CONFIG_HOME/fish
 
 ## cdhist options
 set -g fish_cdhist_path $fish_data_path/fish_cdhist
-set -g fish_cdhist_max 100
+set -g fish_cdhist_max 128
 
 ## Go back to last cdhist folder. Run this before the SHELL_FILEBROWSER hook.
 if grep -q . $fish_cdhist_path ^ /dev/null
