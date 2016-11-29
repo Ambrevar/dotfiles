@@ -57,15 +57,15 @@ bind \cr __fzf-history-widget
 ## restrict search to this path.
 ## TODO: Report upstream. Makes '**' obsolete for bash and zsh.
 function __fzf-file-widget
-	set -l cwd_esc (commandline -t)
+	set -l cwd (commandline -t)
 	## The commandline token might be escaped, we need to unescape it.
-	set -l cwd (eval "printf '%s' $cwd_esc")
+	set cwd (eval "printf '%s' $cwd")
 	if [ ! -d "$cwd" ]
 		set cwd .
 	end
 
 	set -q FZF_CTRL_T_COMMAND; or set -l FZF_CTRL_T_COMMAND "
-	command find -L $cwd_esc \\( -path $cwd_esc'*/\\.*' -o -fstype 'dev' -o -fstype 'proc' \\) -prune \
+	command find -L \$cwd \\( -path \$cwd'*/\\.*' -o -fstype 'dev' -o -fstype 'proc' \\) -prune \
 	-o -type f -print \
 	-o -type d -print \
 	-o -type l -print 2> /dev/null | sed 1d"
