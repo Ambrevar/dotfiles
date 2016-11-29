@@ -65,7 +65,7 @@ function __fzf-file-widget
 	end
 
 	set -q FZF_CTRL_T_COMMAND; or set -l FZF_CTRL_T_COMMAND "
-	command find -L $cwd_esc \\( -path '*/\\.*' -o -fstype 'dev' -o -fstype 'proc' \\) -prune \
+	command find -L $cwd_esc \\( -path $cwd_esc'*/\\.*' -o -fstype 'dev' -o -fstype 'proc' \\) -prune \
 	-o -type f -print \
 	-o -type d -print \
 	-o -type l -print 2> /dev/null | sed 1d"
