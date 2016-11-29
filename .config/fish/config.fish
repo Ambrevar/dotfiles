@@ -12,7 +12,7 @@ set -g fish_cdhist_max 128
 if grep -q . $fish_cdhist_path ^ /dev/null
 	set dirprev (cat $fish_cdhist_path)
 	set -q dirprev[$fish_cdhist_max]; and set dirprev $dirprev[-$fish_cdhist_max..-1]
-	cd $dirprev[(count $dirprev)]
+	cd $dirprev[(count $dirprev)] ^ /dev/null
 end
 
 ## Run the following
