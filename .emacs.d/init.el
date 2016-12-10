@@ -57,7 +57,6 @@ To view where the bindings are set in your config files, lookup
 
 ;; Minor modes
 (add-hook 'dired-mode-hook  (lambda () (require 'mode-dired)))
-(add-hook 'ediff-mode-hook  (lambda () (require 'mode-ediff)))
 (add-hook 'eshell-load-hook (lambda () (require 'mode-eshell)))
 (add-hook 'gud-mode-hook    (lambda () (require 'mode-gud)))
 (add-hook 'octave-mode-hook (lambda () (require 'mode-octave)))
