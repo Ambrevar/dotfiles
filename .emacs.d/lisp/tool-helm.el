@@ -71,4 +71,6 @@ Requires `call-process-to-string' from `functions'."
 (set-face-attribute 'helm-ff-file nil :background 'unspecified :foreground 'unspecified :weight 'unspecified :inherit 'helm-buffer-file)
 ;; Helm color for unsaved buffers? Dim special *buffers*?
 
+(setq helm-source-names-using-follow '("Occur" "Git-Grep" "PT"))
+
 (provide 'tool-helm)
