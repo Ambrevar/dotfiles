@@ -35,9 +35,9 @@
       `((".*" . ,(concat emacs-cache-folder "backups/"))))
 
 ;; Other backup options.
-; (setq backup-inhibited t) ;; Disable backup files.
-; (setq make-backup-files t) ;; Enable backup files.
-; (setq version-control t) ;; Enable numbered versioning.
+; (setq backup-inhibited t)
+; (setq make-backup-files t)
+; (setq version-control t)
 
 ;; Default mode
 (setq default-major-mode 'text-mode)
@@ -245,7 +245,8 @@
 (require 'functions) ; for `compile-custom'
 (setq compilation-ask-about-save nil)
 (autoload 'recompile "compile" nil t)
-(define-key mickey-minor-mode-map (kbd "<f10>") 'compile-custom)
+(define-key mickey-minor-mode-map (kbd "C-<f10>") 'compile)
+(define-key mickey-minor-mode-map (kbd "<f10>") 'compile-here)
 (define-key mickey-minor-mode-map (kbd "<f11>") 'previous-error)
 (define-key mickey-minor-mode-map (kbd "<f12>") 'next-error)
 

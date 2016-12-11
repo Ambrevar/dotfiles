@@ -6,20 +6,19 @@
 
 (defun go-set-compile-command ()
   "Set `compile-command' depending on the context.
-If `compile-command' is not \"go build\":
+
 - go install: file is in GOPATH and is not a test file.
 - go test: file is in GOPATH and is a test file.
-- go build: file is not in GOPATH.
-If `compile-command' is \"go build\":
-- go run <buffer-file-name>.
+- go run `buffer-file-name': file is not in GOPATH.
 
 Note that the -cover test flag is left out since it shifts line numbers."
   (interactive)
   (set (make-local-variable 'compile-command)
-       (if (string= compile-command "go build")
-           (concat "go run " (shell-quote-argument buffer-file-name))
-         (if (go-buffer-in-gopath-p) (if (string-match "_test.[gG][oO]$" buffer-file-name) "go test -v -run ." "go install")  "go build")))
-  (message "Set `compile-command' to `%s'" compile-command))
+       (if (go-buffer-in-gopath-p)
+           (if (string-match "_test.[gG][oO]$" buffer-file-name)
+               "go test -v -run ."
+             "go install")
+         (concat "go run " (shell-quote-argument buffer-file-name)))))
 
 (defun go-buffer-in-gopath-p ()
   (if (not buffer-file-name)
@@ -67,7 +66,6 @@ Note that the -cover test flag is left out since it shifts line numbers."
      (local-set-key (kbd "C-c D") 'helm-go-package))
    (local-set-key (kbd "C-c d") 'godoc-at-point)
    (local-set-key (kbd "M-.") #'godef-jump)
-   (local-set-key (kbd "C-<f10>") 'go-set-compile-command)
    (local-set-key (kbd "<f9>") 'go-metalinter)
    (go-set-compile-command)))
 
