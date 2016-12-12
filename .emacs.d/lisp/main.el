@@ -365,32 +365,3 @@
       ediff-split-window-function 'split-window-horizontally)
 
 (provide 'main)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Old code.
-
-;; This may be needed for gud/pdb.
-; (defadvice pop-to-buffer (before cancel-other-window first)
-;   (ad-set-arg 1 nil))
-; (ad-activate 'pop-to-buffer)
-
-;; Use color escape sequences. Only use if needed.
-; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-
-;; Flymake has a bug that prevents menu from spawning in a console. We redefine
-;; the function to spawn the error message in the mini-buffer.
-; (defun flymake-display-err-message-for-current-line ()
-;   "Display a message with errors/warnings for current line if it
-; has errors and/or warnings."
-;   (interactive)
-;   (let* ((line-no             (flymake-current-line-no))
-;          (line-err-info-list  (nth 0 (flymake-find-err-info flymake-err-info line-no)))
-;          (menu-data           (flymake-make-err-menu-data line-no line-err-info-list)))
-;     (if menu-data
-;         (let ((messages))
-;           (push (concat (car menu-data) ":") messages)
-;           (dolist (error-or-warning (cadr menu-data))
-;             (push (car error-or-warning) messages))
-;           (message "%s" (mapconcat #'identity (reverse messages) "\n"))))))
-; (define-key mickey-minor-mode-map (kbd "C-<f10>")
-;  'flymake-display-err-message-for-current-line)

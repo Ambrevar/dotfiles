@@ -16,6 +16,10 @@
   (delete-other-windows)
 
   ;; TODO: this does not behave the same on Emacs 23 and 24.
+  ;; This may be needed for gud/pdb.
+  ;; (defadvice pop-to-buffer (before cancel-other-window first)
+  ;;   (ad-set-arg 1 nil))
+  ;; (ad-activate 'pop-to-buffer)
   (switch-to-buffer
    (if gud-last-last-frame
        (gud-find-file (car gud-last-last-frame))
