@@ -261,6 +261,7 @@ rawtherapee
 rclone
 recode
 reiserfsprogs
+rfkill
 rmlint
 rsync
 rxvt-unicode
@@ -355,6 +356,7 @@ xf86-video-vesa
 xfsprogs
 xloadimage
 xorg-bdftopcf
+xorg-fonts-type1
 xorg-server
 xorg-server-xephyr
 xorg-setxkbmap
