@@ -1,5 +1,3 @@
-;; Theme
-
 ;; This file enforces consistency in the visual style:
 ;; - doc, here-doc, comments, strings are in the same taint.
 ;; - search highlight, search lazy follow the same color code.
@@ -180,4 +178,4 @@
    (set-face-attribute 'Man-underline nil :foreground (face-foreground 'font-lock-string-face) :underline nil)
    (set-face-attribute 'Man-overstrike nil :foreground (face-foreground 'font-lock-comment-face) :weight 'normal)))
 
-(provide 'theme)
+(provide 'visual)
