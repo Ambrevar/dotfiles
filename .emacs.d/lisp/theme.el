@@ -164,10 +164,13 @@
     (lambda () (interactive)
       (font-lock-add-keywords
        nil
-       ;; TODO: Add support for the 'TODO(doe):' syntax.
-       '(("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
-         ("\\<\\(TODO\\):" 1 font-lock-warning-face prepend)
-         ("\\<\\(WARNING\\):" 1 font-lock-warning-face prepend))))))
+       ;; See https://en.wikipedia.org/wiki/Comment_(computer_programming)#Tags.
+       '(("\\<\\(FIXME\\(([^)]+)\\)?\\):" 1 font-lock-warning-face prepend)
+         ("\\<\\(TODO\\(([^)]+)\\)?\\):" 1 font-lock-warning-face prepend)
+         ("\\<\\(UNDONE\\):" 1 font-lock-warning-face prepend)
+         ("\\<\\(UX\\):" 1 font-lock-warning-face prepend)
+         ("\\<\\(WARNING\\):" 1 font-lock-warning-face prepend)
+         ("\\<\\(XXX\\):" 1 font-lock-warning-face prepend))))))
  '(prog-mode-hook tex-mode-hook texinfo-mode-hook))
 
 ;; Man pages
