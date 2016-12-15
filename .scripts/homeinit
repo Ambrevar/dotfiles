@@ -56,14 +56,14 @@ if command -v go >/dev/null 2>&1; then
 	export PATH="$PATH:$GOPATH/bin"
 	## See https://dominik.honnef.co/posts/2014/12/an_incomplete_list_of_go_tools/.
 	## https://dominik.honnef.co/go/
-	go get -v \
+	go get -v -ldflags "-s -w" \
 		github.com/client9/misspell \
 		github.com/nsf/gocode \
 		github.com/rogpeppe/godef \
 		honnef.co/go/unused/cmd/unused
-	go get -v github.com/monochromegane/the_platinum_searcher/...
-	go get -v github.com/alecthomas/gometalinter && gometalinter -i
-	strip -s "$GOPATH/bin"/*
+	go get -v -ldflags "-s -w" github.com/monochromegane/the_platinum_searcher/...
+	## TODO: Pass ldflags "-s -w" to `gometalinter -i`.
+	go get -v -ldflags "-s -w" github.com/alecthomas/gometalinter && gometalinter -i
 fi
 
 if command -v emacs >/dev/null 2>&1; then
