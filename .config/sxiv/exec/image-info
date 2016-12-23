@@ -1,10 +1,8 @@
 #!/bin/sh
 
-s=" | " # field separator
-
 filename=$(basename "$1")
 filesize=$(du -Hh "$1" | cut -f 1)
 
-geometry=$(identify -format '%wx%h' "$1[0]")
+geometry=$(identify -format '%wx%h' "$1")
 
-echo "${filename}${s}${filesize}${s}${geometry}"
+printf "%s | %s | %s" "$filename" "$filesize" "$geometry"
