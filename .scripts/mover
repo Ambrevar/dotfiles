@@ -8,7 +8,7 @@ Merge FOLDERS content into DEST. Existing files and folders will remain. It does
 not overwrite by default. Empty folders are ignored. The resulting hierarchy is:
 
   DEST/FOLDER1/<folder1data>
-  DEST/FOLDER2/<folder1data>
+  DEST/FOLDER2/<folder2data>
   ...
 
 Options:

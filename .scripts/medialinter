@@ -10,7 +10,7 @@ Print lints in mediafiles:
 - Less of more than 2 channels
 - Non-HD files
 - HD files without resolution in their names
-- Misspellings in subtitles (oe, `, ´)
+- Misspellings in subtitles (oe, \`, ´)
 - Embedded covers
 - Leading zeros in tags
 
