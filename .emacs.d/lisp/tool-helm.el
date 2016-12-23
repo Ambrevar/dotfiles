@@ -10,6 +10,7 @@
 (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
 ;; (setq helm-split-window-default-side 'right)
 (setq helm-reuse-last-window-split-state t)
+(setq helm-findutils-search-full-path t)
 
 (setq helm-apropos-fuzzy-match t)
 (setq helm-buffers-fuzzy-matching t)
@@ -42,9 +43,6 @@ Requires `call-process-to-string' from `functions'."
 
 (define-key mickey-minor-mode-map (kbd "M-x") 'helm-M-x)
 (define-key mickey-minor-mode-map (kbd "C-x M-f") 'helm-semantic-or-imenu)
-(define-key mickey-minor-mode-map (kbd "C-x C-/") 'helm-find)
-(when (require 'helm-fuzzy-find nil t)
-  (define-key mickey-minor-mode-map (kbd "C-c C-/") 'helm-fuzzy-find))
 (define-key mickey-minor-mode-map (kbd "C-x C-f") 'helm-find-files)
 (define-key mickey-minor-mode-map (kbd "C-x C-d") 'helm-browse-project)
 (define-key mickey-minor-mode-map (kbd "C-x b") 'helm-buffers-list)
@@ -69,7 +67,6 @@ Requires `call-process-to-string' from `functions'."
 (set-face-attribute 'helm-buffer-directory nil :background 'unspecified :foreground "#1e90ff" :weight 'bold)
 (set-face-attribute 'helm-ff-directory nil :background 'unspecified :foreground 'unspecified :weight 'unspecified :inherit 'helm-buffer-directory)
 (set-face-attribute 'helm-ff-file nil :background 'unspecified :foreground 'unspecified :weight 'unspecified :inherit 'helm-buffer-file)
-;; Helm color for unsaved buffers? Dim special *buffers*?
 
 (setq helm-source-names-using-follow '("Occur" "Git-Grep" "PT"))
 

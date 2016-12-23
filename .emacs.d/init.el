@@ -159,7 +159,6 @@ To view where the bindings are set in your config files, lookup
 
 (add-to-list 'package-selected-packages 'helm)
 (add-to-list 'package-selected-packages 'helm-descbinds)
-(add-to-list 'package-selected-packages 'helm-fuzzy-find)
 (add-to-list 'package-selected-packages 'helm-ls-git)
 ;; (add-to-list 'package-selected-packages 'helm-pt) ; No need?
 (add-to-list 'package-selected-packages 'wgrep-helm)
@@ -172,11 +171,6 @@ To view where the bindings are set in your config files, lookup
 
 (when (require 'powerline nil t)
   (powerline-default-theme))
-
-;; fzf and helm-fuzzy-find are in direct competition.
-;; helm-fuzzy-find has better integration, but does not print anything
-;; initially.
-(require 'fzf nil t)
 
 (add-to-list 'package-selected-packages 'company)
 (add-to-list 'package-selected-packages 'helm-company)
