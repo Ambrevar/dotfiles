@@ -1,4 +1,5 @@
-## TODO: This fixes upstream bug, report!
+## TODO: Remove this fix when upstream has merged it.
+## https://github.com/fish-shell/fish-shell/pull/3642
 complete -c fusermount --description "Mount point" -x -a '(__fish_print_mounted)'
 complete -c fusermount -s h --description "Display help and exit"
 complete -c fusermount -s v --description "Display version and exit"
