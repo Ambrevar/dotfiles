@@ -210,13 +210,6 @@
 ;; (if (>= emacs-major-version 24)
 ;;     (electric-pair-mode 1))
 
-;; Run ranger asynchronously.
-(define-key mickey-minor-mode-map (kbd "C-x D")
-  (lambda () (interactive)
-    (let ((term (getenv "TERMCMD")))
-      (when (and (executable-find "ranger") (executable-find term))
-        (start-process "dummy" nil term "-e" "ranger")))))
-
 ;; Run terminal asynchronously in current `default-directory'.
 ;; This requires SHELL_CD to be used in the shell config.
 (define-key mickey-minor-mode-map (kbd "C-x M-RET")

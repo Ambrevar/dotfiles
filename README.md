@@ -31,11 +31,11 @@ build.
 
 See my [Emacs pro-tips](http://ambrevar.bitbucket.org/emacs/).
 
-### fish
+### fish & fzf
 
 fish's default configuration satisfies most of my need. I make intense use of
-`fzf` with custom functions and bindings, such as `__fzf-select` and
-`__fzf-complete`.
+`fzf` with custom functions and bindings, such as `fzf-select` and
+`fzf-complete`.
 
 A few wrappers:
 
@@ -47,6 +47,10 @@ A few wrappers:
 visited location.
 
 I also have a `fzf-cdhist-widget` to go back to any location in just blink.
+
+fzf can display a preview. I use a `preview` wrapper script over ranger's
+`scope.sh`. Extra deps: antiword, atool, highlight, img2txt, mediainfo, odt2txt,
+pdftotext, unrtf, w3m.
 
 ### Mutt
 
@@ -70,14 +74,6 @@ capabilities and load colors appropriately.
 
 URxvt has an URL support that works also from Mutt. For other terminals, you
 might consider using the `urlview` plugin for Mutt.
-
-### Ranger
-
-* Extra deps: antiword, atool, highlight, img2txt, mediainfo, odt2txt, pdftotext,
-unrtf, w3m.
-
-Custom bindings, file association, tweaked a few options, additional functions
-(mkcd, extracthere...).
 
 ### Scripts
 
