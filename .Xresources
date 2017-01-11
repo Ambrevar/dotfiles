@@ -84,13 +84,27 @@ URxvt.color15 : white
 !!==============================================================================
 !! Xterm
 
+xterm*termName: xterm-256color
+xterm*locale: true
+
 ! XTerm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
 ! xterm.font:              xft:Dina:pixelsize=18
 ! xterm*font       : -*-dejavu sans-medium-r-*-*-14-*-*-*-*-*-*-*
 xterm*faceName:DejaVu Sans Mono:pixelsize=14
 
 !! Make Meta-* bindings work.
-*VT100.eightBitInput: false
+xterm*eightBitInput: false
+
+!! Fix the backspace key
+xterm*backarrowKey: false
+xterm*ttyModes: erase ^?
+
+xterm*saveLines: 4096
+
+xterm*selectToClipboard: true
+
+xterm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+xterm*on3Clicks: regex ([[:alpha:]]+://)?([[:alnum:]!#+,./=?@_~-]|(%[[:xdigit:]][[:xdigit:]]))+
 
 xterm*background: black
 xterm*foreground: white
@@ -110,4 +124,3 @@ xterm*color12 : #1e90ff
 xterm*color13 : magenta
 xterm*color14 : cyan
 xterm*color15 : white
-

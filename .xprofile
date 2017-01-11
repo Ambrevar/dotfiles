@@ -6,13 +6,19 @@ for i in qutebrowser dwb luakit chromium google-chrome; do
 	command -v $i >/dev/null 2>&1 && export BROWSER=$i && break
 done
 
-## X resources for URxvt et al.
-[ -f "$HOME/.Xresources" ] && xrdb -merge "$HOME/.Xresources"
+## X resources for xterm, rxvt et al.
+# [ -f "$HOME/.Xresources" ] && xrdb -merge "$HOME/.Xresources"
 ## Dynamic values. We could have defined the value from a variable in
 ## .Xresources which we would have set with the preprocessor. But the login
 ## manager may merge after sourcing this file without setting the preprocessor
 ## variable, thus overwriting the value with the variable name.
-echo "URxvt.url-select.launcher: $BROWSER" | xrdb -merge
+cat <<EOF | xrdb -merge
+URxvt.url-select.launcher: $BROWSER
+
+*VT100*translations: #override Ctrl Meta <KeyPress> U: exec-formatted("$BROWSER '%t'", CLIPBOARD) \n\
+	Shift <KeyPress> Up:scroll-back(1,line,m) \n\
+	Shift <KeyPress> Down:scroll-forw(1,line,m)
+EOF
 
 ## Load custom keymap and configure input devices.
 xkbcomp -I"$HOME/.xkb" "$HOME/.xkb/usim.xkb" $DISPLAY
