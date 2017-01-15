@@ -22,7 +22,8 @@ function cd --description "Change directory"
 		if set -q dirprev
 			## Remove duplicates.
 			set -g dirprev (string match -v $PWD $dirprev) $PWD
-			set -q dirprev[$fish_cdhist_max]; and set dirprev $dirprev[-$fish_cdhist_max..-1]
+			## Keep last '$fish_cdhist_max' elements only.
+			set -q dirprev[$fish_cdhist_max]; and set dirprev $dirprev[(math - $fish_cdhist_max)..-1]
 			## Save history.
 			string join \n $dirprev > $fish_cdhist_path
 		else

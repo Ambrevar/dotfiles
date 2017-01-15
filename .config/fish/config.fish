@@ -11,7 +11,7 @@ set -g fish_cdhist_max 128
 ## Go back to last cdhist folder. Run this before the SHELL_FILEBROWSER hook.
 if grep -q . $fish_cdhist_path ^ /dev/null
 	set dirprev (cat $fish_cdhist_path)
-	set -q dirprev[$fish_cdhist_max]; and set dirprev $dirprev[-$fish_cdhist_max..-1]
+	set -q dirprev[$fish_cdhist_max]; and set dirprev $dirprev[(math - $fish_cdhist_max)..-1]
 	cd $dirprev[(count $dirprev)] ^ /dev/null
 end
 
