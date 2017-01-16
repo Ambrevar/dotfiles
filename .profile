@@ -130,11 +130,19 @@ fi
 
 ## fzf
 if command -v fzf >/dev/null 2>&1; then
-	export FZF_DEFAULT_OPTS="--reverse --inline-info --cycle --extended --multi --select-1 --exit-0 --bind=ctrl-k:kill-line,ctrl-j:accept,alt-s:toggle-sort,ctrl-v:page-down,alt-v:page-up,alt-a:toggle-all,alt-i:toggle-up,alt-z:toggle-preview"
+	export FZF_DEFAULT_OPTS="--reverse --inline-info --height 40% --cycle --extended --multi --select-1 --exit-0 --bind=ctrl-k:kill-line,ctrl-j:accept,alt-s:toggle-sort,ctrl-v:page-down,alt-v:page-up,alt-a:toggle-all,alt-i:toggle-up,alt-z:toggle-preview"
 	export FZF_ALT_C_OPTS="--preview='preview {}'"
 	export FZF_BCD_OPTS=$FZF_ALT_C_OPTS
 	export FZF_CDHIST_OPTS=$FZF_ALT_C_OPTS
+	export FZF_CTRL_R_OPTS="--reverse"
 	export FZF_CTRL_T_OPTS="--bind=ctrl-j:'execute-multi(rifle {})' --preview='preview {}'"
+	if [ "$(uname -o)" = "GNU/Linux" ]; then
+		## Append '/' to folder names. GNU find required.
+		export FZF_CTRL_T_COMMAND="command find -L \$dir -mindepth 1 \\( -path \$dir'*/\\.*' -o -fstype 'devfs' -o -fstype 'devtmpfs' \\) -prune \
+-o -type f -print \
+-o -type d -printf '%p/\n' \
+-o -type l -print 2> /dev/null | sed 's#^\./##'"
+	fi
 fi
 
 ## pacman abs

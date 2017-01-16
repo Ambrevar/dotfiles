@@ -21,7 +21,7 @@ function fish_prompt
 	(set_color -o $cwd_color)$PROMPT_PWD \
   (set_color normal) \
   (set_color -o)']'
-	
+
 	echo
 	echo '> '
 end
