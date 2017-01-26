@@ -469,7 +469,6 @@ awful.rules.rules = {
 				"Gpick",
 				"Kruler",
 				"MessageWin", -- kalarm.
-				"Sxiv",
 				"Wpa_gui",
 				"pinentry",
 				"veromix",
