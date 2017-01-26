@@ -1,5 +1,4 @@
-bookmark-cmd newsbeuter-bookmarks
-browser "`echo $BROWSER` %u >/dev/null 2>&1 &"
+browser "$BROWSER %u >/dev/null 2>&1 &"
 macro a edit-flags a
 define-filter Starred flags="a"
 
@@ -11,5 +10,3 @@ highlight article "^Date:" magenta default bold
 
 bind-key j down
 bind-key k up
-
-## End
