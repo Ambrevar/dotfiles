@@ -41,12 +41,6 @@ echo "==> Newsbeuter"
 mkdir -pv "$XDG_DATA_HOME/newsbeuter"
 ln -sfv "$SOURCEDIR/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
 
-echo "==> Launchers"
-ln -snfv "$SOURCEDIR/launchers" "$HOME/.launchers"
-
-echo "==> Hackpool"
-ln -snfv "$SOURCEDIR/hackpool" "$HOME/.hackpool"
-
 echo "==> Go path"
 mkdir -pv "$HOME/go" "$HOME/.go-tools"
 if command -v go >/dev/null 2>&1; then

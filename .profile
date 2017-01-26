@@ -154,9 +154,9 @@ fi
 
 ## Last PATH entries.
 appendpath "/usr/lib/surfraw"
-appendpath "${HOME}/.launchers"
+appendpath "${HOME}/personal/games/launchers"
 appendpath "${HOME}/.scripts"
-prependpath "${HOME}/.hackpool"
+prependpath "${HOME}/personal/hackpool"
 
 ## Default text editor
 ## 'em' is a custom wrapper for emacsclient. See '.scripts/em'.
