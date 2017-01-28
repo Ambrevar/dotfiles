@@ -121,7 +121,14 @@ To view where the bindings are set in your config files, lookup
 (add-to-list 'package-selected-packages 'markdown-mode)
 (load-external "\\.md\\'\\|\\.markdown\\'" 'markdown-mode)
 ;; If we need more option, add it to a dedicated file.
-(add-hook 'markdown-mode-hook (lambda () (set (make-local-variable 'paragraph-start) "
+(add-hook
+ 'markdown-mode-hook
+ (lambda ()
+   (set-face-attribute 'markdown-header-face-1 nil :inherit 'info-title-1)
+   (set-face-attribute 'markdown-header-face-2 nil :inherit 'info-title-2)
+   (set-face-attribute 'markdown-header-face-3 nil :inherit 'info-title-3)
+   (set-face-attribute 'markdown-header-face-4 nil :inherit 'info-title-4)
+   (set (make-local-variable 'paragraph-start) "
 ")))
 
 (load-external "\\.wiki\\'" 'mediawiki 'mediawiki-mode)
