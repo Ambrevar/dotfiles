@@ -281,7 +281,6 @@ steam-native-runtime
 strace
 subdl
 sudo
-surf
 sxiv
 syslinux
 sysstat
@@ -350,7 +349,6 @@ xclip
 xdg-user-dirs
 xdg-utils
 xdotool
-xf86-input-joystick
 xf86-input-synaptics
 xf86-video-vesa
 xfsprogs
