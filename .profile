@@ -134,7 +134,7 @@ if command -v fzf >/dev/null 2>&1; then
 	export FZF_ALT_C_OPTS="--preview='preview {}'"
 	export FZF_BCD_OPTS=$FZF_ALT_C_OPTS
 	export FZF_CDHIST_OPTS=$FZF_ALT_C_OPTS
-	export FZF_CTRL_R_OPTS="--reverse"
+	export FZF_CTRL_R_OPTS="--reverse --sort"
 	export FZF_CTRL_T_OPTS="--bind=ctrl-j:'execute-multi(rifle {})' --preview='preview {}'"
 	if [ "$(uname -o)" = "GNU/Linux" ]; then
 		## Append '/' to folder names. GNU find required.
