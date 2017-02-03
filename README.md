@@ -41,8 +41,6 @@ A few wrappers:
 
 - man: color and justify to window width.
 
-- ranger: synchronize ranger location with shell location on exit.
-
 - cd: keeps a bigger history and suppress duplicates. fish starts at last
 visited location.
 
