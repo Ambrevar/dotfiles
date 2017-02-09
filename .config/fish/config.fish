@@ -15,11 +15,6 @@ if grep -q . $fish_cdhist_path ^ /dev/null
 	cd $dirprev[(count $dirprev)] ^ /dev/null
 end
 
-## Run the following
-##   sh -c 'export SHELL_FILEBROWSER=true; exec $TERMCMD'
-## and this will autostart the file browser.
-[ -n "$SHELL_FILEBROWSER" ]; and set -u SHELL_FILEBROWSER; and ranger
-
 ## Start at a specific location. Useful when switching to a shell from a browser
 ## for instance.
 [ -n "$SHELL_CD" ]; and cd $SHELL_CD; and set -u SHELL_CD
