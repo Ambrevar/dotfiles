@@ -7,7 +7,8 @@ for i in qutebrowser dwb luakit chromium google-chrome; do
 done
 
 ## X resources for xterm, rxvt et al.
-# [ -f "$HOME/.Xresources" ] && xrdb -merge "$HOME/.Xresources"
+## Some DM merge this automatically; merge it for manual logins.
+[ -f "$HOME/.Xresources" ] && xrdb -merge "$HOME/.Xresources"
 ## Dynamic values. We could have defined the value from a variable in
 ## .Xresources which we would have set with the preprocessor. But the login
 ## manager may merge after sourcing this file without setting the preprocessor
