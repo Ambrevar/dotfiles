@@ -1,8 +1,11 @@
 #!/bin/sh
 
-file="${0%/*}/mail.html"
-## Assume utf-8, otherwise most browsers will display ascii.
+## Force UTF-8, otherwise most browsers will display ASCII.
+
+umask 0600
+root="/tmp/mutt-$(id -u)"
+mkdir -p "$root"
+file="$root"/mail.html
 echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>' > "$file"
 cat >> "$file"
 $BROWSER "$file"
-rm "$file"
