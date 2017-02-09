@@ -125,5 +125,5 @@ all files directly.
 	git checkout master
 
 Some applications will need extra dependencies other than the default ones. You
-might have a look at the lists in the `.pkg/` folder to know what programs I am
+might have a look at the lists in the `.pkglists/` folder to know what programs I am
 using.
