@@ -1,8 +1,11 @@
 # Write your default config options here!
 
-ao=alsa
+# ao=alsa
+# profile=opengl-hq
+
+## Starting fullscreen remove AwesomeWM borders when windowed.
 # fullscreen=yes
+
 sub-codepage=utf8
-# vo=opengl
-# vo=opengl-hq
-vo=xv
+
+save-position-on-quit
