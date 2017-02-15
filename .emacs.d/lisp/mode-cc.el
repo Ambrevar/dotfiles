@@ -60,9 +60,9 @@ restored."
   (let ((status)
         (formatbuf (get-buffer-create "*C format buffer*")))
     (setq status
-          (call-process-region (point) (mark) "uncrustify" nil formatbuf nil "-lc" "-q"))
+          (call-process-region (point) (mark) "uncrustify" nil formatbuf nil "-lc" "-q" "-c" (concat (getenv "HOME") "/.uncrustify.cfg")))
     (if (/= status 0)
-        (error "Bad formatted C file")
+        (error "error running uncrustify")
       (delete-region (point) (mark))
       (insert-buffer formatbuf)
       (kill-buffer formatbuf))))
