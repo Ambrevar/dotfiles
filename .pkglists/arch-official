@@ -198,6 +198,7 @@ mkvtoolnix-cli
 mp3info
 mpg123
 mps-youtube
+mpv
 mtools
 mupen64plus
 musl
@@ -239,6 +240,7 @@ patch
 pciutils
 pcmciautils
 pcsxr
+pdf2djvu
 pdf2svg
 perl-authen-sasl
 perl-crypt-passwdmd5
