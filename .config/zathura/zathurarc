@@ -1,4 +1,4 @@
 set adjust-open "width"
-
+set selection-clipboard clipboard
 set zoom-min 1
 set zoom-max 5000
