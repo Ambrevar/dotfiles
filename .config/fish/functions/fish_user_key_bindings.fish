@@ -5,4 +5,5 @@ function fish_user_key_bindings
 	end
 
 	bind \el downcase-word
+	bind \cw trim_trailing_slashes
 end
