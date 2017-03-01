@@ -16,7 +16,7 @@ set ssl_force_tls=yes
 unset ssl_starttls
 
 ## Signature with a random 'fortune'.
-set signature="cat ~/.mutt/real_name && fortune -s |"
+set signature="cat $my_localdir/real_name && fortune -s |"
 
 ## Sidebar mailboxes separator workaround.
 mailboxes "+~~~~~~~~~~~~~~~~~~~~~~~~"

@@ -3,9 +3,13 @@
 ## This configuration is made for Mutt with embedded IMAP support.
 
 ## These folders are assumed to exist:
-## ~/.mutt.d: personal stuff (contacts, account information).
-## ~/.mutt: public stuff (config, theme, mailcap).
-## ~/.cache/mutt: cache for headers and messages.
+## Cache for headers and messages:
+set header_cache=~/.cache/mutt/headers
+set message_cachedir=~/.cache/mutt/messages
+## Public data (config, theme, mailcap):
+set my_configdir=~/.config/mutt
+## personal data (contacts, account information):
+set my_localdir=~/.local/share/mutt
 
 ################################################################################
 ## General options.
@@ -24,7 +28,7 @@ set pgp_timeout=3600
 set edit_headers=yes
 
 ## Set EDITOR dynamically.
-source "~/.mutt/maileditor.sh|"
+source "$my_configdir/maileditor.sh|"
 
 ## Don't ask for recipient. We usually don't want to include mail unless we want
 ## to quote it.
@@ -35,9 +39,7 @@ set include_onlyfirst=yes
 ## Store message headers locally to speed things up. Gentoo wiki says that if a
 ## folder is specified, it is even faster. If no folder exists, the cache will
 ## be a single file.
-set header_cache=~/.cache/mutt/headers
-set message_cachedir=~/.cache/mutt/messages
-source "~/.mutt/purgecache.sh $message_cachedir|"
+source "$my_configdir/purgecache.sh $message_cachedir|"
 
 ## Tell Mutt to check all IMAP folders. This will add all of them to the sidebar
 ## (if used). Contrary to the 'mailboxes' menu, sorting order cannot be
@@ -54,7 +56,7 @@ set mail_check=60
 set mail_check_stats=yes
 
 ## Mailcap
-set mailcap_path=~/.mutt/mailcap
+set mailcap_path=$my_configdir/mailcap
 auto_view text/html
 alternative_order text/plain text/html
 
@@ -109,22 +111,22 @@ set strict_threads=yes
 # source "gpg2 -dq ~/.mutt.pwds.gpg |"
 ##
 ## Source accounts. Default account is last.
-# source "~/.mutt.d/personal"
-# folder-hook $folder 'source ~/.mutt.d/personal'
-# source "~/.mutt.d/work"
-# folder-hook $folder 'source ~/.mutt.d/work'
+# source "$my_localdir/personal"
+# folder-hook $folder 'source $my_localdir/personal'
+# source "$my_localdir/work"
+# folder-hook $folder 'source $my_localdir/work'
 ##
 ## You can add an optional binding to switch mailboxes:
-# macro index,pager <f2> '<enter-command>source ~/.mutt.d/personal<enter><change-folder>!<enter>'
-# macro index,pager <f3> '<enter-command>source ~/.mutt.d/work<enter><change-folder>!<enter>'
+# macro index,pager <f2> '<enter-command>source $my_localdir/personal<enter><change-folder>!<enter>'
+# macro index,pager <f3> '<enter-command>source $my_localdir/work<enter><change-folder>!<enter>'
 
-source "~/.mutt.d/accountrc"
+source "$my_localdir/accountrc"
 
 ################################################################################
 ## Aliases.
 
 ## Mutt native support.
-# set alias_file = "~/.mutt.d/aliases"
+# set alias_file = "$my_localdir/aliases"
 # set sort_alias = alias
 # set reverse_alias = yes
 # source $alias_file
@@ -146,7 +148,7 @@ bind editor <Tab> complete-query
 bind generic,alias,attach,browser,editor,index,compose,pager,pgp,postpone ':' noop
 
 ## HTML mail view with graphical Internet browser.
-macro attach 'V' "<pipe-entry>~/.mutt/view-html.sh<enter>"
+macro attach 'V' "<pipe-entry>$my_configdir/view-html.sh<enter>"
 
 ## Remap bounce-message function to "B"
 bind index B bounce-message
@@ -246,19 +248,19 @@ set status_format="-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del
 macro index,pager \CL "<enter-command>$my_index_format_pre"F"$my_index_format_post<enter><redraw-screen>"
 
 ## Set color variables from a theme.
-# source "~/.mutt/colors.classic"
-source "~/.mutt/colors.zenburn"
+# source "$my_configdir/colors.classic"
+source "$my_configdir/colors.zenburn"
 
 ## Fallback for terminals without 256 colors. This needs to be a shell script so
 ## that it can check for terminal capabilities.
-source "~/.mutt/colors.fallback.sh |"
+source "$my_configdir/colors.fallback.sh |"
 
 ## Apply theme.
-source "~/.mutt/theme"
+source "$my_configdir/theme"
 
 ################################################################################
 ## Sidebar.
 
 ## We use a script to test if sidebar is installed. Needs to be loaded _after_
 ## the theme.
-source "~/.mutt/sidebar.sh|"
+source "$my_configdir/sidebar.sh|"

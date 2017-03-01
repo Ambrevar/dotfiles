@@ -13,7 +13,7 @@ echo "==> Abook"
 ln -snfv "$SOURCEDIR/contacts" "$HOME/.abook"
 
 echo "==> Mutt"
-[ -d "$SOURCEDIR/mails" ] && ln -snf "$SOURCEDIR/mails" "$HOME/.mutt.d"
+[ -d "$SOURCEDIR/mails" ] && ln -snf "$SOURCEDIR/mails" "$XDG_DATA_HOME/mutt"
 mkdir -pv "$HOME/.cache/mutt/headers"
 mkdir -pv "$HOME/.cache/mutt/messages"
 
