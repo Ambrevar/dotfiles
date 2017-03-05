@@ -129,7 +129,7 @@
     ("cmt" "comment" nil 1)
     ("coeur" "cœur" nil 1)
     ("coeurs" "cœurs" nil 1)
-    ("config" "configuration" nil 2)
+    ("confs" "configurations" nil 1)
     ("configs" "configurations" nil 1)
     ("cpd" "cependant" nil 2)
     ("cvg" "converge" nil 1)
@@ -248,4 +248,3 @@
 (define-abbrev-table 'vc-git-log-view-mode-abbrev-table '())
 
 (define-abbrev-table 'vc-svn-log-view-mode-abbrev-table '())
-
