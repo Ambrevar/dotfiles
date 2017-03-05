@@ -142,7 +142,7 @@ compress () {
 }
 
 extract () {
-	gs -sDEVICE=pdfwrite -dNOPAUSE -dSAFER -dSAFER -dFirstPage="$EXTRACT_FIRST" -dBATCH -dLastPage="$EXTRACT_LAST" -sOutputFile="$output" "$input"
+	gs -sDEVICE=pdfwrite -dNOPAUSE -dSAFER -dBATCH -dFirstPage="$EXTRACT_FIRST" -dLastPage="$EXTRACT_LAST" -sOutputFile="$output" "$input"
 }
 
 resize () {
