@@ -1,6 +1,8 @@
 -- Occam theme for Awesome
 
-path = os.getenv ("HOME") .. "/.config/awesome/themes/occam/"
+local path = os.getenv ("HOME") .. "/.config/awesome/themes/occam/"
+local xresources = require("beautiful.xresources")
+local dpi = xresources.apply_dpi
 
 theme = {}
 
@@ -9,7 +11,7 @@ theme.font          = "sans 8"
 theme.bg_normal     = "#222222"
 theme.bg_focus      = "#444444"
 theme.bg_urgent     = "#0088CC"
-theme.bg_minimize   = theme.bg_normal
+theme.bg_minimize   = "#535d6c"
 theme.bg_systray    = theme.bg_normal
 
 theme.fg_normal     = "#dddddd"
@@ -17,7 +19,7 @@ theme.fg_focus      = theme.fg_normal
 theme.fg_urgent     = theme.fg_normal
 theme.fg_minimize   = theme.fg_normal
 
-theme.border_width  = 2
+theme.border_width  = dpi(2)
 theme.border_normal = theme.bg_focus
 theme.border_focus  = "#808080"
 theme.border_marked = theme.border_normal
