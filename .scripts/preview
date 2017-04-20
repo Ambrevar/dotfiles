@@ -33,7 +33,18 @@ fi
 
 ## scope.sh.
 XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-~/.config}
-buf=$($XDG_CONFIG_HOME/ranger/scope.sh "$1" $(tput cols) $(tput lines) 2>/dev/null)
+
+
+scope="$XDG_CONFIG_HOME/ranger/scope.sh"
+if [ ! -x "$scope" ]; then
+	XDG_DATA_DIRS=${XDG_DATA_DIRS:-"/usr/local/share"}
+	scope="$XDG_DATA_DIRS/doc/ranger/config/scope.sh"
+	if [ ! -x "$scope" ]; then
+		scope="/usr/share/doc/ranger/config/scope.sh"
+	fi
+fi
+
+buf=$("$scope" "$1" $(tput cols) $(tput lines) 2>/dev/null)
 status=$?
 
 case $status in
