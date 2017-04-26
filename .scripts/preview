@@ -34,7 +34,6 @@ fi
 ## scope.sh.
 XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-~/.config}
 
-
 scope="$XDG_CONFIG_HOME/ranger/scope.sh"
 if [ ! -x "$scope" ]; then
 	XDG_DATA_DIRS=${XDG_DATA_DIRS:-"/usr/local/share"}
