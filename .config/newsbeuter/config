@@ -1,10 +1,28 @@
-browser "$BROWSER %u >/dev/null 2>&1 &"
+## Open 'youtube' or 'youtu.be' with mpv, use $BROWSER for other pages.
+## To run in the background we append a single '&' that will be valid for both
+## commands unless the 'mpv' job ends with stream redication. Strange shell
+## syntax?
+browser "echo %u | grep -q 'youtu.\\?be' && mpv >/dev/null 2>&1 --ytdl-format='[height<=?480]' %u || $BROWSER %u >/dev/null 2>&1 &"
+
+## Use macro to change the video quality.
+macro l set browser "echo %u | grep -q 'youtube' && mpv --ytdl-format='[height<=?480]' %u || $BROWSER %u"
+macro h set browser "echo %u | grep -q 'youtube' && mpv %u || $BROWSER %u"
+
+bookmark-cmd "~/.config/newsbeuter/bookmark.sh"
+
+## w3m does a better job at rendering HTML (e.g. at displaying source code), but
+## the internal renderer is the only one that supports URIs.
+macro w set html-renderer "w3m -dump -T text/html"
+macro i set html-renderer internal
+
+reload-threads 4
 feed-sort-order firsttag
 datetime-format %F
 show-keymap-hint no
-# text-width 0
 
-highlight article "^(Feed|Title|Author|Links?|Date):" white default bold
+## TODO: It would be nice to be able to set 'text-width' dynamically. Sadly the configuration will be read only once.
+## Sourcing a config file does not seem to work either.
+# macro ^L set text-width "`[ $(tput cols) -gt $MANWIDTH ] && echo $MANWIDTH || echo 0`"
 
 bind-key j down
 bind-key k up
@@ -14,11 +32,13 @@ bind-key s sort
 bind-key S rev-sort
 bind-key ^D pagedown
 bind-key ^U pageup
-bind-key o open-in-browser-and-mark-read
+bind-key o open-in-browser-and-mark-read articlelist
 unbind-key C
 unbind-key O
 unbind-key D
 unbind-key A feedlist
+
+highlight article "^(Feed|Title|Author|Links?|Date):" white default bold
 
 ## Inspired from cmus' night theme
 color background white default
