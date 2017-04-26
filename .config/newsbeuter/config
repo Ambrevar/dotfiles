@@ -1,12 +1,30 @@
 browser "$BROWSER %u >/dev/null 2>&1 &"
-macro a edit-flags a
-define-filter Starred flags="a"
+feed-sort-order firsttag
+datetime-format %F
+show-keymap-hint no
+# text-width 0
 
-highlight article "^Feed:" red default bold
-highlight article "^Title:" green default bold
-highlight article "^Author:" blue default bold
-highlight article "^Links?:" yellow default bold
-highlight article "^Date:" magenta default bold
+highlight article "^(Feed|Title|Author|Links?|Date):" white default bold
 
 bind-key j down
 bind-key k up
+bind-key g home
+bind-key G end
+bind-key s sort
+bind-key S rev-sort
+bind-key ^D pagedown
+bind-key ^U pageup
+bind-key o open-in-browser-and-mark-read
+unbind-key C
+unbind-key O
+unbind-key D
+unbind-key A feedlist
+
+## Inspired from cmus' night theme
+color background white default
+color info color45 color234 bold
+# color article white default
+color listfocus color45 color235
+color listnormal white default
+color listnormal_unread color46 default
+color listfocus_unread color118 color235
