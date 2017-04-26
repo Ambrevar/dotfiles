@@ -249,7 +249,7 @@ macro index,pager \CL "<enter-command>$my_index_format_pre"F"$my_index_format_po
 
 ## Set color variables from a theme.
 # source "$my_configdir/colors.classic"
-source "$my_configdir/colors.zenburn"
+source "$my_configdir/colors.night"
 
 ## Fallback for terminals without 256 colors. This needs to be a shell script so
 ## that it can check for terminal capabilities.

@@ -6,13 +6,17 @@ if [ -n "$(man muttrc | grep sidebar)" ]; then
 set sidebar_visible = yes
 set sidebar_width = 24
 set sidebar_sort_method = alpha
-set sidebar_divider_char=' '
+set sidebar_divider_char='│'
 set sidebar_short_path = yes
 set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%S"
 set sidebar_folder_indent = yes
 
 ## Color of folders with new mail
 color sidebar_new $my_new $my_bg
+color sidebar_flagged white $my_bg
+# color sidebar_divider $my_status $my_status_bg
+color sidebar_divider $my_flag $my_bg
+color sidebar_highlight white $my_status_bg
 
 ## Ctrl-n, Ctrl-p to select next, previous folder.
 ## Ctrl-o to open selected folder
