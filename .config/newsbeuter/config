@@ -2,27 +2,29 @@
 ## To run in the background we append a single '&' that will be valid for both
 ## commands unless the 'mpv' job ends with stream redication. Strange shell
 ## syntax?
-browser "echo %u | grep -q 'youtu.\\?be' && mpv >/dev/null 2>&1 --ytdl-format='[height<=?480]' %u || $BROWSER %u >/dev/null 2>&1 &"
+browser "echo %u | grep -q 'youtu.\\?be' && mpv >/dev/null 2>&1 ' %u || $BROWSER %u >/dev/null 2>&1 &"
 
 ## Use macro to change the video quality.
 macro l set browser "echo %u | grep -q 'youtube' && mpv --ytdl-format='[height<=?480]' %u || $BROWSER %u"
 macro h set browser "echo %u | grep -q 'youtube' && mpv %u || $BROWSER %u"
-
-bookmark-cmd "~/.config/newsbeuter/bookmark.sh"
 
 ## w3m does a better job at rendering HTML (e.g. at displaying source code), but
 ## the internal renderer is the only one that supports URIs.
 macro w set html-renderer "w3m -dump -T text/html"
 macro i set html-renderer internal
 
+## TODO: It would be nice to be able to set 'text-width' dynamically. Sadly the configuration will be read only once.
+## Sourcing a config file does not seem to work either.
+# macro ^L set text-width "`[ $(tput cols) -gt $MANWIDTH ] && echo $MANWIDTH || echo 0`"
+macro m set text-width "`echo $MANWIDTH`"
+macro n set text-width 0
+
+bookmark-cmd "~/.config/newsbeuter/bookmark.sh"
+
 reload-threads 4
 feed-sort-order firsttag
 datetime-format %F
 show-keymap-hint no
-
-## TODO: It would be nice to be able to set 'text-width' dynamically. Sadly the configuration will be read only once.
-## Sourcing a config file does not seem to work either.
-# macro ^L set text-width "`[ $(tput cols) -gt $MANWIDTH ] && echo $MANWIDTH || echo 0`"
 
 bind-key j down
 bind-key k up
@@ -30,6 +32,7 @@ bind-key g home
 bind-key G end
 bind-key s sort
 bind-key S rev-sort
+bind-key ^S save
 bind-key ^D pagedown
 bind-key ^U pageup
 bind-key o open-in-browser-and-mark-read articlelist
