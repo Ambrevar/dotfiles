@@ -2,11 +2,12 @@
 ## To run in the background we append a single '&' that will be valid for both
 ## commands unless the 'mpv' job ends with stream redication. Strange shell
 ## syntax?
-browser "echo %u | grep -q 'youtu.\\?be' && mpv >/dev/null 2>&1 ' %u || $BROWSER %u >/dev/null 2>&1 &"
+browser "echo %u | grep -q 'youtu.\\?be' && mpv >/dev/null 2>&1 %u || $BROWSER %u >/dev/null 2>&1 &"
 
 ## Use macro to change the video quality.
-macro l set browser "echo %u | grep -q 'youtube' && mpv --ytdl-format='[height<=?480]' %u || $BROWSER %u"
-macro h set browser "echo %u | grep -q 'youtube' && mpv %u || $BROWSER %u"
+## Note that backslashes need to be quadrupled.
+macro l set browser "echo %u | grep -q 'youtu.\\\\?be' && mpv >/dev/null 2>&1 --ytdl-format='[height<=?480]' %u || $BROWSER %u >/dev/null 2>&1 &"
+macro h set browser "echo %u | grep -q 'youtu.\\\\?be' && mpv >/dev/null 2>&1 %u || $BROWSER %u >/dev/null 2>&1 &"
 
 ## w3m does a better job at rendering HTML (e.g. at displaying source code), but
 ## the internal renderer is the only one that supports URIs.
@@ -41,13 +42,16 @@ unbind-key O
 unbind-key D
 unbind-key A feedlist
 
-highlight article "^(Feed|Title|Author|Links?|Date):" white default bold
-
 ## Inspired from cmus' night theme
-color background white default
+## TODO: When following issue is fixed,
+## https://github.com/akrennmair/newsbeuter/issues/528
+## restore 'black' to default.
+color background white black
 color info color45 color234 bold
-# color article white default
 color listfocus color45 color235
-color listnormal white default
-color listnormal_unread color46 default
+color listnormal white black
+color listnormal_unread color46 black
 color listfocus_unread color118 color235
+color article white black
+
+highlight article "^(Feed|Title|Author|Links?|Date):" white black bold
