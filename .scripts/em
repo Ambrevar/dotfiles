@@ -1,20 +1,16 @@
 #!/bin/sh
-## Note: we do not use the (-a "") parameters of emacsclient to auto start the
-## daemon since we want to pass additional parameters to emacs.
 
 if [ "$1" = "-h" ]; then
 	cat <<EOF>&2
 Usage: ${0##*/} [OPTIONS] [FILES]
 
-Start emacsclient in terminal or in X window if possible. If server is not
-found, it is started with --no-site-file parameter.
+Start emacsclient in terminal or in X window if possible. If no server is
+running, it is started with the '--no-site-file' parameter.
 
-Calling script can have different names.
-* emc: emacs instance is opened in current terminal.
-* emw: if graphical, tell client to wait.
+The calling script can have different names:
 
-When starting the server, the EMACS_SERVER variable is set so that Emacs can
-know in its initialization file whether the server is going to be started.
+- emc: the Emacs instance is opened in the current terminal.
+- emw: if graphical, tell the client to wait.
 
 All emacsclient(1) options are supported:
 
@@ -28,22 +24,39 @@ EOF
 	exit
 fi
 
-if [  "$1" = "--kill" ]; then
+if [ "$1" = "--kill" ]; then
 	emacsclient -e '(kill-emacs)'
 	exit
 fi
 
-
-if [ "${0##*/}" = "emc" ] || [ -z "$DISPLAY" ] || \
-		 [ "$(emacs --batch -Q --eval='(if (fboundp '"'"'tool-bar-mode) (message "X") (message "TTY"))' 2>&1)" = TTY ]; then
+## Emacs will start in console mode if it cannot start in graphical mode or if
+## called from "emc".
+if [ "${0##*/}" = "emc" ]; then
 	param="-t"
 else
-	if [ "${0##*/}" = "emw" ]; then
-		param="-c"
-	else
-		param="-nc"
+	param="-c"
+	## Emacs should always wait unless running graphical and "emw" was not called.
+	if [ "${0##*/}" != "emw" ] && [ "$(emacs --batch -Q --eval='(if (fboundp '"'"'tool-bar-mode) (message "X") (message "TTY"))' 2>&1)" = X ] && [ -n "$DISPLAY" ]; then
+		param="$param -n"
 	fi
 fi
 
-[ ! -e "/tmp/emacs$(id -u)/server" ] && EMACS_SERVER=t emacs --daemon --no-site-file
+## Simple invokation:
+##
+## emacsclient $param -a "" "$@"
+##
+## The '-a ""' parameter starts "emacs --daemon", but we want to skip the "site
+## files", i.e. the extra init files some distros try to force into Emacs. To
+## achieve this we have to start the daemon manually.
+socket="/tmp/emacs$(id -u)/server"
+[ ! -e "$socket" ] && emacs --daemon --no-site-file
 emacsclient $param "$@"
+
+## If Emacs was forcefully closed or crashed, the dead socket will be left
+## behind and Emacs cannot reset it automatically without the '-a ""' parameter.
+if [ $? -ne 0 ]; then
+	echo >&2 "Removing existing socket and trying again."
+	rm "$socket"
+	[ ! -e "$socket" ] && emacs --daemon --no-site-file
+	emacsclient $param "$@"
+fi

@@ -254,8 +254,10 @@
   (when (not (emacs-process-p ad-return-value))
     (setq ad-return-value nil)))
 
-;; Let Emacs auto-load/save sessions.
-(when (getenv "EMACS_SERVER")
+;; Let Emacs auto-load/save sessions only when running the daemon.
+;; (server-running-p) is only useful once the daemon is started and cannot be
+;; used for initialization.
+(when (daemonp)
   (desktop-save-mode 1)
   (setq history-length 250)
   (setq desktop-dirname (concat emacs-cache-folder "desktop"))
