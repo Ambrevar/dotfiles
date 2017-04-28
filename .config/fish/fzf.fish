@@ -13,26 +13,35 @@ function fzf-select -d 'fzf commandline and print unescaped selection back to co
 end
 bind \e\cm fzf-select
 
+## TODO: 'complete' is not completely finished, keep original version for now.
+## We need a way to distinguish escape content from unescaped content:
+## - https://github.com/fish-shell/fish-shell/issues/1127
+## - https://github.com/fish-shell/fish-shell/issues/3469
+## Examples:
+## - $VAR
+## - ~/
+## - echo \$HOME-$H<tab>
 function fzf-complete -d 'fzf completion and print selection back to commandline'
 	set -l complist (complete -C(commandline -c))
 	set -l result
 	string join -- \n $complist | sort | fzf -m --tiebreak=index --select-1 --exit-0 --header '(commandline)' | cut -f1 | while read -l r; set result $result $r; end
 
+	set prefix (string sub -s 1 -l 1 -- (commandline -t))
 	for i in (seq (count $result))
 		set -l r $result[$i]
-		## We need to escape the result. We unescape 'r' first in case 'r' to
-		## prevent double escaping.
-		switch (string sub -s 1 -l 1 -- (commandline -t))
+		switch $prefix
 			case "'"
-				commandline -t -- (string escape -- (eval "printf '%s' '$r'"))
+				commandline -t -- (string escape -- $r)
 			case '"'
-				set -l quoted (string escape -- (eval "printf '%s' '$r'"))
-				set -l len (string length $quoted)
-				commandline -t -- '"'(string sub -s 2 -l (math $len - 2) (string escape -- (eval "printf '%s' '$r'")))'"'
+				if string match '*"*' -- $r >/dev/null
+					commandline -t --  (string escape -- $r)
+				else
+					commandline -t -- '"'$r'"'
+				end
 			case '~'
-				commandline -t -- (string sub -s 2 (string escape -n -- (eval "printf '%s' '$r'")))
+				commandline -t -- (string sub -s 2 (string escape -n -- $r))
 			case '*'
-				commandline -t -- (string escape -n -- (eval "printf '%s' '$r'"))
+				commandline -t -- (string escape -n -- $r)
 		end
 		[ $i -lt (count $result) ]; and commandline -i ' '
 	end
@@ -40,7 +49,6 @@ function fzf-complete -d 'fzf completion and print selection back to commandline
 	commandline -f repaint
 end
 bind \t fzf-complete
-## TODO: 'complete' is not completely finished, keep original version for now.
 bind \e\t complete
 
 
