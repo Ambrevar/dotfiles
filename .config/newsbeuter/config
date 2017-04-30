@@ -1,3 +1,11 @@
+datetime-format %F
+feed-sort-order firsttag
+reload-threads 4
+show-keymap-hint no
+text-width "`echo $MANWIDTH`"
+
+bookmark-cmd "~/.config/newsbeuter/bookmark.sh"
+
 ## Open 'youtube' or 'youtu.be' with mpv, use $BROWSER for other pages.
 ## To run in the background we append a single '&' that will be valid for both
 ## commands unless the 'mpv' job ends with stream redication. Strange shell
@@ -19,13 +27,6 @@ macro i set html-renderer internal
 # macro ^L set text-width "`[ $(tput cols) -gt $MANWIDTH ] && echo $MANWIDTH || echo 0`"
 macro m set text-width "`echo $MANWIDTH`"
 macro n set text-width 0
-
-bookmark-cmd "~/.config/newsbeuter/bookmark.sh"
-
-reload-threads 4
-feed-sort-order firsttag
-datetime-format %F
-show-keymap-hint no
 
 bind-key j down
 bind-key k up
