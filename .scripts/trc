@@ -4,7 +4,7 @@ if [ "$1" = "-h" ]; then
 	cat <<EOF>&2
 Usage: ${0##*/} [OPTIONS]
 
-With no argument, start transmission-remote-cli. Otherwise, run
+With no argument, open Transmission's interface. Otherwise, run
 transmission-remote with the provided options.
 
 In both cases if transmission-daemon is not running it will be started
@@ -14,16 +14,16 @@ EOF
 	exit
 fi
 
-for i in transmission-daemon transmission-remote-cli ; do
+for i in transmission-daemon transmission-remote ; do
 	if ! command -v $i >/dev/null 2>&1; then
 		echo >&2 "'$i' not found"
 		exit 1
 	fi
 done
 
-ps -U "$USER" -o comm= | grep -q transmission-da || transmission-daemon
+ps -U "$USER" -o comm= | grep -q transmission-daemon || transmission-daemon
 if [ $# -eq 0 ]; then
-	exec transmission-remote-cli
+	$BROWSER http://localhost:9091/
 else
 	## The 'sleep' is needed here to give the daemon some time to start. 1 sec
 	## should be enough on most system.
