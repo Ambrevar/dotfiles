@@ -5,6 +5,7 @@ alsa-utils
 antiword
 apvlv
 asciinema
+asp
 aspell
 aspell-de
 aspell-en
@@ -192,7 +193,6 @@ mdadm
 mediainfo
 mesa
 mesa-demos
-mesa-libgl
 metapixel
 mkvtoolnix-cli
 mp3info
@@ -254,9 +254,9 @@ poppler-glib
 procps-ng
 psmisc
 pstotext
-pulseaudio
-pulseaudio-alsa
 pwgen
+python-keyutils
+qt5-webkit-ng
 qutebrowser
 ranger
 rawtherapee
@@ -300,12 +300,12 @@ timidity-freepats
 tmux
 tor
 transmission-cli
-transmission-remote-cli
 trash-cli
 tre
 tree
 ttf-dejavu
 txt2man
+uchardet
 ucl
 udiskie
 unace
