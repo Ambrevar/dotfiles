@@ -23,10 +23,6 @@ mailboxes "+~~~~~~~~~~~~~~~~~~~~~~~~"
 
 ## Hooks
 account-hook $folder "set imap_user=user@gmail.com imap_pass=$my_pw_personal"
-## Reset PGP send-hooks.
-## TODO: unhook does not seem to be working.
-unhook send-hook
-send-hook . 'unset pgp_autosign; unset pgp_autoencrypt'
 
 ## Remove own e-mail address from group-reply.
 alternates $imap_user
