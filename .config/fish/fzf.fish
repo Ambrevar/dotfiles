@@ -4,10 +4,10 @@ bind \e\ct fzf-file-widget
 bind \ec capitalize-word
 bind \eC fzf-cd-widget
 
-function fzf-select -d 'fzf commandline and print unescaped selection back to commandline'
+function fzf-select -d 'Eval commandline, fzf result and print out selection'
 	set -l cmd (commandline -j)
 	[ "$cmd" ]; or return
-	eval $cmd | eval (__fzfcmd) -m --tiebreak=index --select-1 --exit-0 | string join ' ' | read -l result
+	eval $cmd | eval (__fzfcmd) -m --select-1 --exit-0 | string join ' ' | read -l result
 	[ "$result" ]; and commandline -j -- $result
 	commandline -f repaint
 end
@@ -24,7 +24,7 @@ bind \e\cm fzf-select
 function fzf-complete -d 'fzf completion and print selection back to commandline'
 	set -l complist (complete -C(commandline -c))
 	set -l result
-	string join -- \n $complist | sort | fzf -m --tiebreak=index --select-1 --exit-0 --header '(commandline)' | cut -f1 | while read -l r; set result $result $r; end
+	string join -- \n $complist | sort | fzf -m --select-1 --exit-0 --header '(commandline)' | cut -f1 | while read -l r; set result $result $r; end
 
 	set prefix (string sub -s 1 -l 1 -- (commandline -t))
 	for i in (seq (count $result))
