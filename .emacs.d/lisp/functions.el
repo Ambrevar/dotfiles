@@ -14,14 +14,6 @@ sure it gets executed."
   (add-hook hook function)
   (funcall function))
 
-(defun calc-eval-line ()
-  "Append calc expression to end of line after an ' = ' separtor.
-Regular math expression can be computed with calc."
-  (interactive)
-  (end-of-line)
-  (insert " = " (calc-eval (buffer-substring-no-properties
-                            (line-beginning-position) (line-end-position)))))
-
 (defun call-process-to-string (program &rest args)
   "Call PROGRAM with ARGS and return output."
   (with-output-to-string
@@ -65,24 +57,6 @@ If you want to operate on buffer, use `how-many' instead."
       (setq start (match-end 0))
       (setq matches (1+ matches)))
     matches))
-
-(defun count-percents (string)
-  "Return count of 'printf' conversion specifications.
-Those specifications are introduced by a percent
-sign (%). Escaped percent signs (%%) are skipped."
-  (let ((start 0) (matches 0))
-    (while (string-match "%." string start)
-      (unless (string= (match-string 0 string) "%%")
-        (setq matches (1+ matches)))
-      (setq start (match-end 0)))
-    matches))
-
-(defun dtwi ()
-  "Delete trailing whitespaces interactively."
-  (interactive)
-  (query-replace-regexp " +
-" "
-"))
 
 (defun duplicate (arg)
   "Duplicate the current line or region ARG times.
@@ -166,7 +140,7 @@ parameters."
 ;;
 ;; I do not know why the (bolp) condition was used since it does not match the
 ;; above comment.
-;; DONE: Fix reported to http://debbugs.gnu.org/cgi/bugreport.cgi?bug=20663.
+;; TODO: Fix reported to http://debbugs.gnu.org/cgi/bugreport.cgi?bug=20663.
 (defun forward-page (&optional count)
   "Move forward to page boundary.  With arg, repeat, or go back if negative.
 A page boundary is any line whose beginning matches the regexp
@@ -236,26 +210,6 @@ it appears in the minibuffer prompt."
          (insert (expand-file-name filename)))
         (t
          (insert filename))))
-; (define-key mickey-minor-mode-map "\C-x\M-f" 'insert-file-name)
-
-(defun insert-symbol-at-point-in-regexp-search-ring ()
-  "Insert symbol at point in regexp search ring."
-  (interactive)
-  (add-to-history 'regexp-search-ring (find-tag-default-as-symbol-regexp)))
-(define-key mickey-minor-mode-map "\M-#" 'insert-symbol-at-point-in-regexp-search-ring)
-
-(defun kill-all-buffers ()
-  "Kill all buffers, leaving *scratch* only."
-  (interactive)
-  (mapc
-   (lambda (x)
-     (kill-buffer x))
-   (buffer-list))
-  (delete-other-windows))
-
-(defun map-on-pair (function sequence)
-  "Map a function taking two arguments on a sequence of pairs."
-  (mapcar (lambda (p) (funcall function (car p) (cadr p))) sequence ))
 
 (defun load-external (ext feature &optional mode default)
   "Add the EXT regex to `auto-mode-alist' such that it loads the
@@ -307,13 +261,15 @@ Enlarge/Shrink by ARG columns, or 5 if arg is nil."
       (move-border-left-or-right arg t)))
 (define-key mickey-minor-mode-map (kbd "M-(") 'move-border-left)
 
-(defun move-border-left-or-right (arg dir)
+(defun move-border-left-or-right (arg dir-left)
   "Wrapper around move-border-left and move-border-right.
 If DIR is t, then move left, otherwise move right."
   (interactive)
   (if (null arg) (setq arg 5))
-  (let ((left-edge (nth 0 (window-edges))))
-    (if (xor (= left-edge 0) dir)
+  (let ((left-edge (= (car (window-edges)) 0)))
+    (if (or
+         (and left-edge dir-left)
+         (and (not left-edge) (not dir-left)))
         (shrink-window arg t)
       (enlarge-window arg t))))
 
@@ -372,13 +328,6 @@ WARNING: this may slow down editing on big files."
           mode-line-modes
           mode-line-misc-info
           mode-line-end-spaces)))
-
-(defun pos-at-line (arg)
-  "Return the position at beginning of line."
-  (save-excursion
-    (goto-line arg)
-    (beginning-of-line)
-    (point)))
 
 (defun rename-buffer-and-file ()
   "Renames current buffer and file it is visiting."
@@ -496,24 +445,6 @@ Works on whole buffer if region is unactive."
           (tabify start end))
       (setq tabify-regexp tabify-regexp-old))))
 
-(defun toggle-indent-tabs ()
-  "Indent with tabs or spaces."
-  (interactive)
-  (if indent-tabs-mode
-      (progn
-        (message "Indent using spaces")
-        (setq indent-tabs-mode nil))
-    (message "Indent using tabs")
-    (setq indent-tabs-mode t)))
-; (define-key mickey-minor-mode-map (kbd "C-x M-i") 'toggle-indent-tabs)
-
-(defun toggle-trailing-whitespace ()
-  "Show trailing whitespace or not."
-  (interactive)
-  (if show-trailing-whitespace
-      (setq show-trailing-whitespace nil)
-    (setq show-trailing-whitespace t)))
-
 (defun toggle-window-dedicated ()
   "Toggle whether the current active window is dedicated or not.
 Run it in each window you want to 'freeze', i.e. prevent Emacs
@@ -579,10 +510,5 @@ Each paragraph stand on its line."
   (interactive)
   (let ((fill-column (point-max)))
     (fill-region (region-beginning) (region-end) nil)))
-
-(defun xor (b1 b2)
-  "Exclusive or of its two arguments."
-  (or (and b1 b2)
-      (and (not b1) (not b2))))
 
 (provide 'functions)
