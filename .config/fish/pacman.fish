@@ -6,12 +6,13 @@ function pacfiles -d 'List of files in pacman package packages sorted by size'
 end
 complete -c pacfiles -a "$listinstalled"
 
-function paced -d 'Edit files from packages'
+function pacls -d 'List/open package files with fzf'
 	set -l result
-	pacman -Qlq $argv | grep -v '/$' | eval (__fzfcmd) -m --tiebreak=index --toggle-sort=ctrl-r | while read -l r; set result $result $r; end
-	[ "$result" ]; and eval $EDITOR $result
+	set -lx OPT "--bind=ctrl-j:'execute-multi(rifle {})' --preview='preview {}'"
+	pacman -Qlq $argv | grep -v '/$' | eval (__fzfcmd) -m --tiebreak=index --toggle-sort=ctrl-r $OPT | string join ' ' | read -l result
+	[ "$result" ]; and commandline -- $result
 end
-complete -c pel -a "$listinstalled"
+complete -c pacls -a "$listinstalled"
 
 function paclog -a size -d 'Pacman last installed packages'
 	[ $size ]; or set size 30
