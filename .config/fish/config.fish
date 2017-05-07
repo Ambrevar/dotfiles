@@ -48,6 +48,8 @@ function mkcd -a folder -d 'Make directory and change into it.'
 end
 
 alias cal 'cal -m'
+alias cp 'cp -i'
+alias mv 'mv -i'
 
 if type -pq pacman
 	source $fish_config_path/pacman.fish
