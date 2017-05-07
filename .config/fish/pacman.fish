@@ -13,7 +13,7 @@ function paced -d 'Edit files from packages'
 end
 complete -c pel -a "$listinstalled"
 
-function pacli -a size -d 'Pacman last installed packages'
+function paclog -a size -d 'Pacman last installed packages'
 	[ $size ]; or set size 30
 	expac -t '%F %T' '%-8l %n' | sort -rn | head -$size
 end
