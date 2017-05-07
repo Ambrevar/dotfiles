@@ -4,6 +4,24 @@
 (setq godoc-command "godoc -ex")
 (setq godoc-and-godef-command "godoc -ex")
 
+(defvar gometalinter-args
+  (mapconcat
+   'identity
+   '("--cyclo-over=20 --deadline=20s"
+     ;; Ignore some benign errors.
+     "-e 'declaration of err shadows'"
+     "-e 'error return value not checked \\(.*\\.Close\\(\\)'"
+     ;; Customize linters.
+     "-E misspell"
+     "-E unparam"
+     "-E unused"
+     ;; gofmt is only useful if not called on save with '-s'
+     ;; (goimports does not do this) and for its first rule not
+     ;; superseded by gosimple or solint:
+     ;; https://golang.org/cmd/gofmt/#hdr-The_simplify_command
+     "-E gofmt")
+   " ") "Additional arguments to pass to gometalinter.")
+
 (defun go-set-compile-command ()
   "Set `compile-command' depending on the context.
 
@@ -31,10 +49,12 @@ Note that the -cover test flag is left out since it shifts line numbers."
                (and looping (not (string= dir "/")))))
       (if (string= dir "/") nil t))))
 
-(defun go-metalinter ()
-  (interactive)
-  (let (compile-command)
-    (compile "gometalinter --cyclo-over=20 --deadline=20s -e 'declaration of err shadows' -e 'error return value not checked \\(.*\\.Close\\(\\)'")))
+(defun go-metalinter (arg)
+  (interactive "P")
+  (let ((compile-command  (format "gometalinter %s" gometalinter-args)))
+    (if arg
+        (recompile t)
+      (compile compile-command))))
 
 (when (require 'go-guru nil t)
   (unless (executable-find "guru")
@@ -67,6 +87,7 @@ Note that the -cover test flag is left out since it shifts line numbers."
    (local-set-key (kbd "C-c d") 'godoc-at-point)
    (local-set-key (kbd "M-.") #'godef-jump)
    (local-set-key (kbd "<f9>") 'go-metalinter)
+   (local-set-key (kbd "C-<f9>") (lambda () (interactive) (go-metalinter t)))
    (go-set-compile-command)))
 
 (define-skeleton go-main
