@@ -3,7 +3,7 @@
 //------------------------------------------------------------------------------
 //
 // Description: This keyboard layout is based on Xorg's "us" and inspired by
-// "us(intl)". We switch Caps Lock and Left Control.
+// "us(intl)". We switch Caps Lock and Escape.
 //
 // User setup: run
 //
@@ -93,8 +93,8 @@ partial alphanumeric_keys xkb_symbols "usim" {
 	key <SPCE> { [ space, space,  nobreakspace,  nobreakspace     ] };
 	key <LSGT> { [ less, greater, lessthanequal, greaterthanequal ] };
 
-	key <CAPS> { [ Control_L ] };
-	key <LCTL> { [ Caps_Lock ] };
+	key <CAPS> { [ Escape ] };
+	key <ESC> { [ Caps_Lock ] };
 
 	include "level3(ralt_switch)"
 };
