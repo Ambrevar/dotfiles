@@ -36,8 +36,8 @@ provided.\n Requires `get-closest-pathname'."
                      (shell-quote-argument file)
                      (shell-quote-argument (file-name-sans-extension file))
                      (if c++-p
-                         (or (getenv "CPPFLAGS") "-Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0")
-                       (or (getenv "CFLAGS") "-ansi -pedantic -std=c99 -Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0"))
+                         (or (getenv "CXXFLAGS") "-Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0")
+                       (or (getenv "CFLAGS") "-ansi -pedantic -std=c11 -Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0"))
                      (or (getenv "LDFLAGS") cc-ldflags)
                      (or (getenv "LDLIBS") cc-ldlibs)))))))
 
@@ -155,9 +155,8 @@ restored."
 
 "
   '(insert-and-indent
-    "#define DEBUG_STR(STR) DEBUG_CMD(fprintf(stderr, \":: %s\\n\", STR))
-#define DEBUG_PRINT(...) DEBUG_CMD( \\
-fprintf(stderr, \"\\n\\033[31;1mDEBUG:\\033[0m %s:%d:%s()\\t\", __FILE__, __LINE__, __func__); \\
+    "#define DEBUG_PRINT(...) DEBUG_CMD( \\
+fprintf(stderr, \"%s:%d:\\t(%s)\\t\", __FILE__, __LINE__, __func__); \\
 fprintf(stderr, __VA_ARGS__); \\
 fprintf(stderr, \"\\n\"); \\
 )"))
