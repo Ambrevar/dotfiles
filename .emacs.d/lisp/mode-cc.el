@@ -119,7 +119,7 @@ restored."
     mode-hook
     (lambda ()
       (c-set-style "ambrevar") ;; We override existing values.
-      (add-hook 'compilation-before-hook 'cc-set-compiler nil t)
+      (cc-set-compiler)
       (local-set-key (kbd "<f9>") 'cc-clean)
       (local-set-key (kbd "M-.") 'semantic-ia-fast-jump)
       (local-set-key (kbd "C-c C-d") 'semantic-ia-show-summary)

@@ -51,8 +51,10 @@
  'latex-mode-hook
  (lambda ()
    (set (make-local-variable 'tex-extension-list)
-         '("aux" "bbl" "blg" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "maf" "mt" "mtc" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy"))
+        '("aux" "bbl" "blg" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "maf" "mt" "mtc" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy"))
    (set (make-local-variable 'tex-command) "pdflatex")
+   ;; Need to reset the compiler because we changed tex-command.
+   (tex-set-compiler)
    ;; For some unknown reasons, `skeleton-end-hook' is set to nil in tex-mode.
    (add-hook 'skeleton-end-hook 'skeleton-make-markers)
    (local-set-key (kbd "C-c m") 'latex-article)

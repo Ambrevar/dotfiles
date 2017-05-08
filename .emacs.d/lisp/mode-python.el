@@ -1,29 +1,21 @@
 ;; Python
 
-(defun python-version ()
-  "Returns \"python2\" or \"python3\" according to the shabang.
-`python-shell-interpreter' is assumed by default."
-  (let ((firstline
-         (car
-          (split-string (buffer-substring-no-properties 1 (point-max)) "\n"))))
-    (if (not (string-match "^#!" firstline))
-        "python"
-      (cond
-       ((string-match "python2" firstline) "python2")
-       ((string-match "python3" firstline) "python3")
-       (t python-shell-interpreter)))))
-
-(defun python-set-interpreter ()
-  "Use compile to run python programs."
-  (interactive)
-  (set (make-local-variable 'compile-command)
-       (concat (python-version) " " (shell-quote-argument buffer-file-name))))
+(defun python-set-compiler ()
+  "Returns the value of the shebang if any, `python-shell-interpreter' otherwise."
+  (let* ((firstline
+          (save-excursion (beginning-of-buffer) (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
+         (interpreter
+          (if (not (string-match "^#!" firstline))
+              python-shell-interpreter
+            (substring firstline 2))))
+    (set (make-local-variable 'compile-command)
+         (concat interpreter " " (shell-quote-argument buffer-file-name)))))
 
 (add-hook-and-eval
  'python-mode-hook
  (lambda ()
    (set (make-local-variable 'compilation-scroll-output) t)
-   (add-hook 'compilation-before-hook 'python-set-interpreter nil t)))
+   (python-set-compiler)))
 
 ;; Doc lookup. Requires the python.info file to be installed. See
 ;; https://bitbucket.org/jonwaltman/pydoc-info/.

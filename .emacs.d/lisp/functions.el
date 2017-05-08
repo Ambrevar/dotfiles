@@ -21,34 +21,6 @@ sure it gets executed."
         standard-output
       (apply 'call-process program nil t nil args))))
 
-;; (defcustom compilation-after-hook nil
-;;   "List of hook functions run by `compile-custom'."
-;;   :type 'hook
-;;   :group 'compilation)
-
-(defcustom compilation-before-hook nil
-  "List of hook functions run by `compile-custom'.
-You may want to set the `compile-command' with this hook. If you
-do so, do not forget to set the LOCAL flag to t."
-  :type 'hook
-  :group 'compilation)
-
-(defvar compilation-time-before-hide-window nil
-  "Hide compilation window after the specified seconds.
-If nil, do not hide.")
-
-(defun compile-here (&optional runhooks)
-  "Call `recompile' in the default directory.
-If RUNHOOKS is non-nil (or with \\[universal-argument]), run hooks in
-`compilation-before-hook', then `recompile'."
-  (interactive "P")
-  (when (or runhooks (string= compile-command "make -k ")) (run-hooks 'compilation-before-hook))
-  (setq-default compilation-directory default-directory)
-  (recompile)
-  (when compilation-time-before-hide-window
-    (sit-for compilation-time-before-hide-window)
-    (delete-windows-on "*compilation*")))
-
 (defun count-occurences (regex string)
   "Return number of times regex occurs in string.
 If you want to operate on buffer, use `how-many' instead."

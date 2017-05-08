@@ -21,18 +21,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom
 
-(defcustom masterfile nil
-  "The file that should be compiled. Useful for modular documents."
-  :safe 'stringp)
+(defvar-local tex-masterfile nil
+  "The file that should be compiled. Useful for modular documents.")
+(defvar-local tex-compilation-delay 2
+  "Delay before hiding the compilation window.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Variables
 
-(defvar tex-extension-list nil
+(defcustom tex-extension-list nil
   "List of known TeX exentsions. This list is used by `tex-clean'
   to purge all matching files.")
 
-(defvar tex-index-command "makeindex"
+(defcustom tex-index-command "makeindex"
   "The TeX index file generator.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -44,8 +45,7 @@
   (hack-local-variables)
   (let* (;; Master file.
          (local-master
-
-          (if masterfile masterfile (if buffer-file-name buffer-file-name (error "Buffer has no file name"))))
+          (if tex-masterfile tex-masterfile (if buffer-file-name buffer-file-name (error "Buffer has no file name"))))
          (dirname (file-name-directory local-master))
          (basename (file-name-sans-extension (file-name-nondirectory local-master)))
          ;; Note: makeindex fails with absolute file names, we need relative names.
@@ -54,9 +54,9 @@
          (concat
           "cd " (if dirname (shell-quote-argument dirname) ".") " && "
           (when (executable-find tex-index-command)
-            (concat tex-index-command " " (shell-quote-argument (concat basename ".idx")) " ; "))
+            (concat tex-index-command " " (shell-quote-argument (concat basename ".idx")) "; "))
           (when (executable-find tex-bibtex-command)
-            (concat tex-bibtex-command " " (shell-quote-argument basename) " ; "))
+            (concat tex-bibtex-command " " (shell-quote-argument basename) "; "))
           tex-command
           " " tex-start-options
           " " tex-start-commands
@@ -68,8 +68,8 @@ but there is no warranty."
   (interactive)
   (hack-local-variables)
   (let ((master (concat
-                 (if masterfile
-                     (file-name-sans-extension masterfile)
+                 (if tex-masterfile
+                     (file-name-sans-extension tex-masterfile)
                    (file-name-sans-extension buffer-file-name))
                  ".")))
     (mapcar
@@ -84,19 +84,19 @@ but there is no warranty."
       tex-extension-list))))
 
 (defun tex-pdf-compress ()
-  "Use `masterfile' variable as default value for `pdf-compress'."
+  "Use `tex-masterfile' variable as default value for `pdf-compress'."
   (interactive)
   (require 'tool-pdf)
   (hack-local-variables)
-  (let ((local-master (if masterfile masterfile buffer-file-name)))
+  (let ((local-master (if tex-masterfile tex-masterfile buffer-file-name)))
     (pdf-compress local-master)))
 
 (defun tex-pdf-view ()
-  "Use `masterfile' variable as default value for `pdf-view'."
+  "Use `tex-masterfile' variable as default value for `pdf-view'."
   (interactive)
   (require 'tool-pdf)
   (hack-local-variables)
-  (let ((local-master (if masterfile masterfile buffer-file-name)))
+  (let ((local-master (if tex-masterfile tex-masterfile buffer-file-name)))
     (pdf-view local-master)))
 
 (defun tex-toggle-escape-char ()
@@ -113,10 +113,12 @@ This does not interfere with `subword-mode'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TeX setup
 
-(setq tex-start-options "-file-line-error-style -interaction=nonstopmode -synctex=1 ")
+(setq-default tex-command "pdftex")
+(setq tex-command "pdftex")
+(setq-default tex-start-options "-file-line-error-style -interaction=nonstopmode -synctex=1")
 ;; Use the following variable to append file local commands without erasing
 ;; default options.
-(setq tex-start-commands nil)
+(setq-default tex-start-commands nil)
 
 (add-hook-and-eval
  'tex-mode-hook
@@ -129,13 +131,12 @@ This does not interfere with `subword-mode'."
      (local-unset-key key))
    (set-face-attribute 'tex-verbatim nil :family "freemono")
    (set (make-local-variable 'compilation-scroll-output) t)
-   (set (make-local-variable 'compilation-time-before-hide-window) 2)
    (set (make-local-variable 'paragraph-start) "
 ")
    ;; (set (make-local-variable 'use-hard-newlines) t)
    (local-set-key (kbd "<f9>") 'tex-pdf-view)
-   (setq tex-command "pdftex")
-   (add-hook 'compilation-before-hook 'tex-set-compiler nil t)))
+   (local-set-key (kbd "<f10>") (lambda () (interactive) (progn (recompile) (sit-for tex-compilation-delay) (delete-windows-on "*compilation*"))))
+   (tex-set-compiler)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Skeletons

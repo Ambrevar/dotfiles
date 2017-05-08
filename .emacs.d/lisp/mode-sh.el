@@ -8,7 +8,7 @@
 (setq-default sh-shell-file sh-shell-file)
 ;; (setq-default sh-shell 'sh)
 
-(defun sh-set-interpreter ()
+(defun sh-set-compiler ()
   "Set shell interpreter.
 Set `sh-shell', `sh-shell-file' and `compile-command' according to the following rules:
 - Look at shabang.
@@ -67,7 +67,7 @@ The advantages of this function over the vanilla code are:
    (setq sh-indent-for-case-alt '+)
    (set (make-local-variable 'defun-prompt-regexp)
         (concat "^\\(function[ \t]\\|[[:alnum:]_]+[ \t]+()[ \t]+\\)"))
-   (sh-set-interpreter)))
+   (sh-set-compiler)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

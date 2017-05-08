@@ -216,13 +216,13 @@
        (auto-fill-mode -1))))
 
 ;; Compilation bindings and conveniences.
-(require 'functions) ; for `compile-custom'
 (setq compilation-ask-about-save nil)
-(autoload 'recompile "compile" nil t)
-(define-key mickey-minor-mode-map (kbd "C-<f10>") 'compile)
-(define-key mickey-minor-mode-map (kbd "<f10>") 'compile-here)
-(define-key mickey-minor-mode-map (kbd "<f11>") 'previous-error)
-(define-key mickey-minor-mode-map (kbd "<f12>") 'next-error)
+;; Don't set these bindings in mickey as we might have to override them from
+;; mode hooks.
+(global-set-key (kbd "C-<f10>") 'compile)
+(global-set-key (kbd "<f10>") 'recompile)
+(global-set-key (kbd "<f11>") 'previous-error)
+(global-set-key (kbd "<f12>") 'next-error)
 
 ;; Code browsing: make C-M-e jump to next function instead of the end of the current function.
 (define-key mickey-minor-mode-map (kbd "C-M-e") (lambda () (interactive) (beginning-of-defun -1)))
