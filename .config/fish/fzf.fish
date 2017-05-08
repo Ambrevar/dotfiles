@@ -1,8 +1,15 @@
 fzf_key_bindings
-bind \cT transpose-chars
-bind \e\ct fzf-file-widget
-bind \ec capitalize-word
-bind \eC fzf-cd-widget
+
+## Emacs bindings
+# bind \cT transpose-chars
+# bind \e\ct fzf-file-widget
+# bind \ec capitalize-word
+# bind \eC fzf-cd-widget
+
+bind -M insert \et fzf-file-widget
+bind t fzf-file-widget
+bind r fzf-history-widget
+bind -m insert C fzf-cd-widget
 
 function fzf-select -d 'Eval commandline, fzf result and print out selection'
 	set -l cmd (commandline -j)
@@ -12,6 +19,7 @@ function fzf-select -d 'Eval commandline, fzf result and print out selection'
 	commandline -f repaint
 end
 bind \e\cm fzf-select
+bind m fzf-select
 
 ## TODO: 'complete' is not completely finished, keep original version for now.
 ## We need a way to distinguish escape content from unescaped content:
@@ -50,7 +58,8 @@ function fzf-complete -d 'fzf completion and print selection back to commandline
 end
 bind \t fzf-complete
 bind \e\t complete
-
+bind -M insert \t fzf-complete
+bind -M insert \e\t complete
 
 function fzf-bcd-widget -d 'cd backwards'
 	## TODO: (fish upsteam bug) Cannot use eval here.
@@ -59,7 +68,8 @@ function fzf-bcd-widget -d 'cd backwards'
 	[ "$result" ]; and cd $result
 	commandline -f repaint
 end
-bind \e\cL fzf-bcd-widget
+# bind \e\cL fzf-bcd-widget
+bind -m insert / fzf-bcd-widget
 
 function fzf-cdhist-widget -d 'cd to one of the previously visited locations'
 	## Clear non-existent folders from cdhist.
@@ -77,4 +87,5 @@ function fzf-cdhist-widget -d 'cd to one of the previously visited locations'
 	[ "$result" ]; and cd $result
 	commandline -f repaint
 end
-bind \er fzf-cdhist-widget
+# bind \er fzf-cdhist-widget
+bind -m insert z fzf-cdhist-widget
