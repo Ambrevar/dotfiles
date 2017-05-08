@@ -48,8 +48,8 @@ Requires `call-process-to-string' from `functions'."
 (define-key mickey-minor-mode-map (kbd "C-x b") 'helm-buffers-list)
 (define-key mickey-minor-mode-map (kbd "C-x C-b") 'helm-mini)
 (define-key mickey-minor-mode-map (kbd "M-y") 'helm-show-kill-ring)
-(define-key mickey-minor-mode-map (kbd "C-x C-x") 'helm-mark-or-exchange-rect)
-(define-key mickey-minor-mode-map (kbd "C-x x") 'helm-mark-ring)
+;; (define-key mickey-minor-mode-map (kbd "C-x C-x") 'helm-mark-or-exchange-rect) ; Overriding this make it inconvenient to rectify selection.
+(define-key mickey-minor-mode-map (kbd "C-x x") 'helm-all-mark-rings)
 (define-key mickey-minor-mode-map (kbd "M-s o") 'helm-occur)
 (define-key mickey-minor-mode-map (kbd "C-h a") 'helm-apropos)
 (define-key mickey-minor-mode-map (kbd "C-M-%") 'helm-regexp)
