@@ -164,8 +164,11 @@ for i in em emacs vim nano; do
 	command -v $i >/dev/null 2>&1 && export EDITOR=$i && break
 done
 GIT_EDITOR="$EDITOR"
+VISUAL="$EDITOR"
 [ "$GIT_EDITOR" = em ] && GIT_EDITOR=emc
+[ "$VISUAL" = em ] && VISUAL=emw
 export GIT_EDITOR
+export VISUAL
 
 ################################################################################
 
