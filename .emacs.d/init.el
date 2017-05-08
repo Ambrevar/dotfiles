@@ -62,6 +62,10 @@ To view where the bindings are set in your config files, lookup
 (add-hook 'octave-mode-hook (lambda () (require 'mode-octave)))
 (add-hook 'org-mode-hook    (lambda () (require 'mode-org)))
 
+;; Bind extensions.
+(add-to-list 'auto-mode-alist '("rc\\'" . sh-mode)) ; rc shell
+(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode)) ; matlab
+
 ;; Tools
 (autoload 'pdf-view "tool-pdf" nil t)
 (autoload 'pdf-compress "tool-pdf" nil t)

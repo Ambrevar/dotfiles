@@ -1,6 +1,6 @@
 ;; Main options
 
-;; Minimal UI. Load early to hide as soon as possible.
+;; Minimal UI. Run early to hide it as soon as possible.
 (setq inhibit-startup-screen t)
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (menu-bar-mode -1)
@@ -33,7 +33,6 @@
 ;; Place backup files in specific directory.
 (setq backup-directory-alist
       `((".*" . ,(concat emacs-cache-folder "backups/"))))
-
 ;; Other backup options.
 ; (setq backup-inhibited t)
 ; (setq make-backup-files t)
@@ -64,20 +63,9 @@
 (setq kill-whole-line t)
 
 ;; Alternative scrolling
-(define-key mickey-minor-mode-map [next]
-  (lambda () (interactive)
-    (if (string= major-mode "doc-view-mode")
-        (doc-view-next-page)
-      (condition-case nil (scroll-up)
-        (end-of-buffer (goto-char (point-max)))))))
+(setq scroll-error-top-bottom t)
 
-(define-key mickey-minor-mode-map [prior]
-  (lambda () (interactive)
-    (if (string= major-mode "doc-view-mode")
-        (doc-view-previous-page)
-      (condition-case nil (scroll-down)
-        (beginning-of-buffer (goto-char (point-min)))))))
-
+;; Narrow page navigation.
 (define-key mickey-minor-mode-map (kbd "C-x M-n") (lambda () (interactive) (narrow-to-page 1)))
 (define-key mickey-minor-mode-map (kbd "C-x M-p") (lambda () (interactive) (narrow-to-page -1)))
 
@@ -142,7 +130,7 @@
 ; (setq whitespace-action '(report-on-bogus))
 
 ;; WARNING: this can break some configuration files needing whitespaces at the
-;; end.
+;; end. This can also slow down saving on big files.
 ; (require 'functions) ; for `sanitize'
 ; (add-hook 'before-save-hook 'sanitize)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -203,9 +191,6 @@
 (setq show-paren-delay 0)
 (setq show-paren-when-point-inside-paren t)
 
-;; query-replace-regex fix on terminals.
-(if (not (fboundp 'tool-bar-mode)) (define-key mickey-minor-mode-map (kbd "C-M-y") 'query-replace-regexp))
-
 ;; Electric Pairs to auto-complete () [] {} "" etc. You can use it on regions.
 ;; (if (>= emacs-major-version 24)
 ;;     (electric-pair-mode 1))
@@ -221,10 +206,6 @@
 ;; Calendar ISO display.
 (setq calendar-week-start-day 1)
 (setq calendar-date-style 'iso)
-
-;; Quick buffer switching.
-(define-key mickey-minor-mode-map (kbd "C-<prior>") 'previous-buffer)
-(define-key mickey-minor-mode-map (kbd "C-<next>") 'next-buffer)
 
 ;; Remove auto-fill in web edits because wikis and forums do not like it.
 ;; This works for qutebrowser, but may need changes for other browsers.
@@ -254,9 +235,10 @@
   (when (not (emacs-process-p ad-return-value))
     (setq ad-return-value nil)))
 
+;; Desktop-mode
 ;; Let Emacs auto-load/save sessions only when running the daemon.
-;; (server-running-p) is only useful once the daemon is started and cannot be
-;; used for initialization.
+;; `server-running-p' is only useful once the daemon is started and cannot be
+;; used for initialization. We use `daemonp' instead.
 (when (daemonp)
   (desktop-save-mode 1)
   (setq history-length 250)
@@ -273,6 +255,7 @@
              (cons '("(gmp)Function Index" nil "^ -.* " "\\>")
                    (nth 3 mode-value)))))
 
+;; Buffer names.
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
@@ -284,17 +267,12 @@
 (define-key mickey-minor-mode-map (kbd "C->") 'skeleton-next-position)
 (define-key mickey-minor-mode-map (kbd "C-<") (lambda () (interactive) (skeleton-next-position t)))
 
-;; Alternate focus.
-(add-hook 'occur-hook (lambda () (pop-to-buffer occur-buf)))
-;; (add-hook 'help-mode-hook (lambda () (pop-to-buffer (get-buffer "*Help*"))))
-(add-hook 'grep-mode-hook (lambda () (pop-to-buffer (get-buffer "*grep*"))))
-
 ;; Disable prompt (but leave warning) on git symlink.
 (setq vc-follow-symlinks t)
 
 ;; Clipboard and primary selection.
-(setq x-select-enable-clipboard t)
-(setq x-select-enable-primary t)
+; (setq select-enable-clipboard t)
+(setq select-enable-primary t)
 
 ;; Bibtex
 (setq bibtex-entry-format '(opts-or-alts required-fields numerical-fields whitespace realign last-comma delimiters braces sort-fields))
@@ -304,25 +282,14 @@
  (lambda ()
    (setq indent-tabs-mode nil)))
 
-;; Git commit meessages.
-(add-to-list 'auto-mode-alist '("COMMIT_EDITMSG\\'" . conf-mode))
-
 ;; Mutt support.
 (add-to-list 'auto-mode-alist '("/tmp/mutt.*" . mail-mode))
 
 ;; Arch Linux PKGBUILD.
 (add-to-list 'auto-mode-alist '("PKGBUILD" . sh-mode))
 
-;; Shell extensions. We do not put 'sh' only because it could get messy. Emacs
-;; knows it anyway.
-(add-to-list 'auto-mode-alist '("\\(bash\\'\\|zsh\\'\\|csh\\'\\|tcsh\\'\\|ksh\\'\\)" . sh-mode))
-(add-to-list 'auto-mode-alist '("rc\\'" . sh-mode))
-
 ;; Subtitles support.
 (add-to-list 'auto-mode-alist '("\\.srt\\'" . text-mode))
-
-;; Read Matlab files in Octave mode.
-(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
 
 ;; Easy code folding toggle.
 ; (add-hook 'prog-mode-hook 'hs-minor-mode)
@@ -335,7 +302,7 @@
 (which-function-mode)
 
 ;; Replace maximized binding for fullscreen.
-(define-key mickey-minor-mode-map (kbd "M-<f10>") 'toggle-frame-fullscreen)
+; (define-key mickey-minor-mode-map (kbd "M-<f10>") 'toggle-frame-fullscreen)
 
 ;; Scroll zooming.
 (define-key mickey-minor-mode-map (kbd "C-<wheel-down>") 'text-scale-decrease)
