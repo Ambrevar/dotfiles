@@ -68,8 +68,9 @@ Also returns nil if pid is nil."
 
 (defun escape-region (&optional regex to-string)
   "Escape double-quotes and backslashes.
-You can control the regex replacement with the two optional
-parameters."
+This is useful for writing Elisp strings containing those
+characters. You can control the regex replacement with the two
+optional parameters."
   (interactive)
   (unless regex (setq regex "\\([\"\\\\]\\)"))
   (unless to-string (setq to-string "\\\\\\1"))
