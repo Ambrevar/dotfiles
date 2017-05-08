@@ -5,6 +5,6 @@
 (add-hook-and-eval
  'lua-mode-hook
  (lambda ()
-   (set (make-local-variable 'compile-command) (concat "lua " (shell-quote-argument buffer-file-name)))))
+   (set (make-local-variable 'compile-command) (concat lua-default-application " " (shell-quote-argument buffer-file-name)))))
 
 (provide 'mode-lua)
