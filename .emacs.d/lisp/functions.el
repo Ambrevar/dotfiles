@@ -302,6 +302,8 @@ WARNING: this may slow down editing on big files."
           mode-line-misc-info
           mode-line-end-spaces)))
 
+;; Almost useless compared to Helm-file M-R. However helm does not change
+;; current directory.
 (defun rename-buffer-and-file ()
   "Renames current buffer and file it is visiting."
   (interactive)
