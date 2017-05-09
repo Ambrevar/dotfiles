@@ -172,9 +172,6 @@ bind index "^" imap-fetch-mail
 ## Changed kbs=^H to kbs=\177, then:
 ##   $ tic -x termbs.src
 
-## Remove N/O flag in one key stroke.
-macro index <Esc>n '<clear-flag>N'
-
 ## Do not quit accidentally
 bind index "Q" quit
 bind index "q" query
@@ -200,6 +197,10 @@ bind attach,index g first-entry
 bind attach,index G last-entry
 bind attach,index <Esc>< first-entry
 bind attach,index <Esc>> last-entry
+bind index,pager <Esc>w set-flag
+
+## Remove N/O flag in one key stroke.
+macro index w '<clear-flag>N'
 
 ################################################################################
 ## Custom header for outgoing mail.
