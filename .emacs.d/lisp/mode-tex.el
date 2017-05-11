@@ -133,7 +133,7 @@ This does not interfere with `subword-mode'."
 ")
    ;; (set (make-local-variable 'use-hard-newlines) t)
    (local-set-key (kbd "<f9>") 'tex-pdf-view)
-   (local-set-key (kbd "<f10>") (lambda () (interactive) (progn (recompile) (sit-for tex-compilation-delay) (delete-windows-on "*compilation*"))))
+   (local-set-key (kbd "<f10>") (lambda () (interactive) (progn (compile compile-command) (sit-for tex-compilation-delay) (delete-windows-on "*compilation*"))))
    (tex-set-compiler)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

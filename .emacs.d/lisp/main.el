@@ -220,7 +220,7 @@
 ;; Don't set these bindings in mickey as we might have to override them from
 ;; mode hooks.
 (global-set-key (kbd "C-<f10>") 'compile)
-(global-set-key (kbd "<f10>") 'recompile)
+(global-set-key (kbd "<f10>") (lambda () (interactive) (compile compile-command))) ; Do not use recompile since we want to change de compilation folder to the current buffer.
 (global-set-key (kbd "<f11>") 'previous-error)
 (global-set-key (kbd "<f12>") 'next-error)
 

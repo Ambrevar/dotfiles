@@ -22,6 +22,13 @@
      "-E gofmt")
    " ") "Additional arguments to pass to gometalinter.")
 
+(defun go-metalinter (arg)
+  (interactive "P")
+  (let ((compile-command  (format "gometalinter %s" gometalinter-args)))
+    (if arg
+        (call-interactively 'compile)
+      (compile compile-command))))
+
 (defun go-set-compile-command ()
   "Set `compile-command' depending on the context.
 
@@ -48,13 +55,6 @@ Note that the -cover test flag is left out since it shifts line numbers."
                  (setq dir (expand-file-name ".." dir)))
                (and looping (not (string= dir "/")))))
       (if (string= dir "/") nil t))))
-
-(defun go-metalinter (arg)
-  (interactive "P")
-  (let ((compile-command  (format "gometalinter %s" gometalinter-args)))
-    (if arg
-        (recompile t)
-      (compile compile-command))))
 
 (when (require 'go-guru nil t)
   (unless (executable-find "guru")
