@@ -145,16 +145,14 @@ A page boundary is any line whose beginning matches the regexp
 (defun get-closest-pathname (&optional file)
   "Get pathname of the first instance of FILE towards root.
 If FILE is unspecified, look for 'Makefile'. If it does not find
-FILE, then it shall return the name of FILE in the current
-directory, suitable for creation. This may not do the correct
-thing in presence of links."
-  (let ((current-dir default-directory) (looping t) (makefile (or file "Makefile")))
-    (while (progn
-             (if (file-exists-p (expand-file-name makefile current-dir))
-                 (setq looping nil)
-               (setq current-dir (expand-file-name ".." current-dir)))
-             (and looping (not (equal current-dir "/")))))
-    (if (equal current-dir "/") nil (expand-file-name makefile current-dir))))
+FILE, return nil. This may not do the correct thing in presence
+of links."
+  (let* ((pwd default-directory) (file (or file "Makefile")) (target (expand-file-name file pwd)))
+    (while
+        (unless (or (file-exists-p target) (equal pwd "/"))
+          (setq pwd (expand-file-name ".." pwd))
+          (setq target (expand-file-name file pwd))))
+    (if (file-exists-p target) target nil)))
 
 (defun insert-and-indent (text)
   "Insert indented TEXT at point."
