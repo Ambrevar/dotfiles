@@ -56,6 +56,7 @@ Requires `call-process-to-string' from `functions'."
 (define-key mickey-minor-mode-map (kbd "C-x M-g") 'helm-grep-git-or-ag)
 (define-key mickey-minor-mode-map (kbd "C-x M-G") 'helm-do-grep-ag)
 (define-key mickey-minor-mode-map (kbd "C-x r b") 'helm-filtered-bookmarks)
+(define-key mickey-minor-mode-map (kbd "C-x M-b") 'helm-resume) ; Convenient for god-mode.
 
 (set-face-background 'helm-source-header "white")
 (set-face-foreground 'helm-source-header "black")
