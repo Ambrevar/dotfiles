@@ -3,7 +3,7 @@
 (setq graphviz-dot-preview-extension "pdf")
 (defcustom graphviz-dot-view-extension "pdf"
   "Graphviz format for external view."
-  :safe 'stringp)
+  :type 'string)
 (setq graphviz-dot-view-command "zathura --fork %s")
 
 ;; Override original stupid function.

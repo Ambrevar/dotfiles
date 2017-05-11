@@ -18,23 +18,21 @@
 ;; Note that -shell-escape can also be toggled with universal
 ;; argument.
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Custom
-
 (defvar-local tex-masterfile nil
   "The file that should be compiled. Useful for modular documents.")
-(defvar-local tex-compilation-delay 2
-  "Delay before hiding the compilation window.")
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Variables
+(defcustom tex-compilation-delay 2
+  "Seconds before hiding the compilation window."
+  :type 'number)
 
 (defcustom tex-extension-list nil
   "List of known TeX exentsions. This list is used by `tex-clean'
-  to purge all matching files.")
+  to purge all matching files."
+  :type '(repeat list))
 
 (defcustom tex-index-command "makeindex"
-  "The TeX index file generator.")
+  "The TeX index file generator."
+  :type 'string)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions

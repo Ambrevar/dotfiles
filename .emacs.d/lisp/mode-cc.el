@@ -2,15 +2,11 @@
 
 ;; Should we split this in mode-c and mode-c++?
 
-(defcustom cc-ldlibs "-lm -pthread"
-  "Custom linker flags for C/C++ linkage."
-  :safe 'stringp)
-(make-variable-buffer-local 'cc-ldlibs)
+(defvar-local cc-ldlibs "-lm -pthread"
+  "Custom linker flags for C/C++ linkage.")
 
-(defcustom cc-ldflags ""
-  "Custom linker libs for C/C++ linkage."
-  :safe 'stringp)
-(make-variable-buffer-local 'cc-ldflags)
+(defvar-local cc-ldflags ""
+  "Custom linker libs for C/C++ linkage.")
 
 (defun cc-set-compiler (&optional nomakefile)
   "Set compile command to be nearest Makefile or a generic command.
@@ -22,8 +18,7 @@ provided.\n Requires `get-closest-pathname'."
   (require 'functions)
   (hack-local-variables)
   (let ((makefile (get-closest-pathname)))
-    (if (and makefile
-            (not nomakefile))
+    (if (and makefile (not nomakefile))
         (set (make-local-variable 'compile-command) (concat "make -k -C " (shell-quote-argument (file-name-directory makefile))))
       (set (make-local-variable 'compile-command)
            (let

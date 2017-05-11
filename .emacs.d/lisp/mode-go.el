@@ -4,7 +4,7 @@
 (setq godoc-command "godoc -ex")
 (setq godoc-and-godef-command "godoc -ex")
 
-(defvar gometalinter-args
+(defvar-local gometalinter-args
   (mapconcat
    'identity
    '("--cyclo-over=20 --deadline=20s"
