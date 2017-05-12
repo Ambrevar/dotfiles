@@ -217,6 +217,15 @@
 
 ;; Compilation bindings and conveniences.
 (setq compilation-ask-about-save nil)
+(eval-after-load 'compile
+  '(progn (make-variable-buffer-local 'compile-command)
+          ;; Making `compilation-directory' local only works with `recompile'
+          ;; and if `compile' is never used. In such a scenario,
+          ;; `compile-command' is not saved by `recompile' itself which adds a
+          ;; lot of bookkeeping.
+          ; (make-variable-buffer-local 'compilation-directory)
+          ; (make-variable-buffer-local 'compile-history)
+          ))
 ;; Don't set these bindings in mickey as we might have to override them from
 ;; mode hooks.
 (global-set-key (kbd "C-<f10>") 'compile)
@@ -246,6 +255,10 @@
   (unless (file-directory-p desktop-dirname)
     (make-directory desktop-dirname t))
   (setq desktop-path `(,desktop-dirname))
+  ;; TODO: `compile-history' should be buffer local but that does not work.
+  ;; http://user42.tuxfamily.org/compile-history-local/index.html
+  ;; http://stackoverflow.com/questions/22995203/one-compile-command-per-buffer-not-directory
+  ; (add-to-list 'desktop-locals-to-save 'compile-history)
   (add-to-list 'desktop-locals-to-save 'compile-command))
 
 ;; GMP documentation

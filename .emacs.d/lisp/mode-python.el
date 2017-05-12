@@ -8,7 +8,7 @@
           (if (not (string-match "^#!" firstline))
               python-shell-interpreter
             (substring firstline 2))))
-    (set (make-local-variable 'compile-command)
+    (setq compile-command
          (concat interpreter " " (shell-quote-argument buffer-file-name)))))
 
 (add-hook-and-eval

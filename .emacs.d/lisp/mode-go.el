@@ -38,7 +38,7 @@
 
 Note that the -cover test flag is left out since it shifts line numbers."
   (interactive)
-  (set (make-local-variable 'compile-command)
+  (setq compile-command
        (if (go-buffer-in-gopath-p)
            (if (string-match "_test.[gG][oO]$" buffer-file-name)
                "go test -v -run ."

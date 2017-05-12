@@ -47,7 +47,7 @@ The advantages of this function over the vanilla code are:
   ;; `buffer-file-name` seems to have a non-string type sometimes With `git
   ;; merge` and cause ediff to fail. Let's protect it.
   (when (stringp buffer-file-name)
-    (set (make-local-variable 'compile-command) (concat sh-shell-file " " (shell-quote-argument buffer-file-name)))))
+    (setq compile-command (concat sh-shell-file " " (shell-quote-argument buffer-file-name)))))
 
 (add-hook-and-eval
  'sh-mode-hook

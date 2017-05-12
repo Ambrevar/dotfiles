@@ -48,17 +48,17 @@
          (basename (file-name-sans-extension (file-name-nondirectory local-master)))
          ;; Note: makeindex fails with absolute file names, we need relative names.
          (idxfile ))
-    (set (make-local-variable 'compile-command)
-         (concat
-          "cd " (if dirname (shell-quote-argument dirname) ".") " && "
-          (when (executable-find tex-index-command)
-            (concat tex-index-command " " (shell-quote-argument (concat basename ".idx")) "; "))
-          (when (executable-find tex-bibtex-command)
-            (concat tex-bibtex-command " " (shell-quote-argument basename) "; "))
-          tex-command
-          " " tex-start-options
-          " " tex-start-commands
-          " " (shell-quote-argument basename)))))
+    (setq compile-command
+          (concat
+           "cd " (if dirname (shell-quote-argument dirname) ".") " && "
+           (when (executable-find tex-index-command)
+             (concat tex-index-command " " (shell-quote-argument (concat basename ".idx")) "; "))
+           (when (executable-find tex-bibtex-command)
+             (concat tex-bibtex-command " " (shell-quote-argument basename) "; "))
+           tex-command
+           " " tex-start-options
+           " " tex-start-commands
+           " " (shell-quote-argument basename)))))
 
 (defun tex-clean ()
   "Remove all TeX temporary files. This command should be safe,

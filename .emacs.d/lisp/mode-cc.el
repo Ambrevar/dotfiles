@@ -19,8 +19,8 @@ provided.\n Requires `get-closest-pathname'."
   (hack-local-variables)
   (let ((makefile (get-closest-pathname)))
     (if (and makefile (not nomakefile))
-        (set (make-local-variable 'compile-command) (concat "make -k -C " (shell-quote-argument (file-name-directory makefile))))
-      (set (make-local-variable 'compile-command)
+        (setq compile-command (concat "make -k -C " (shell-quote-argument (file-name-directory makefile))))
+      (setq compile-command
            (let
                ((c++-p (eq major-mode 'c++-mode))
                 (file (file-name-nondirectory buffer-file-name)))
