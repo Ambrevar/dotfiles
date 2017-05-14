@@ -48,17 +48,17 @@ restored."
 (defun cc-fmt ()
   "Run uncrustify(1) on current buffer or region."
   (interactive)
-  (unless mark-active
-    (mark-whole-buffer))
-  (when (> (point) (mark))
-    (exchange-point-and-mark))
-  (let ((status)
-        (formatbuf (get-buffer-create "*C format buffer*")))
+  (let  (status
+         start end
+         (formatbuf (get-buffer-create "*C format buffer*")))
+    (if mark-active
+        (setq start (region-beginning) end (region-end))
+      (setq start (point-min) end (point-max)))
     (setq status
-          (call-process-region (point) (mark) "uncrustify" nil formatbuf nil "-lc" "-q" "-c" (concat (getenv "HOME") "/.uncrustify.cfg")))
+          (call-process-region start end "uncrustify" nil formatbuf nil "-lc" "-q" "-c" (concat (getenv "HOME") "/.uncrustify.cfg")))
     (if (/= status 0)
         (error "error running uncrustify")
-      (delete-region (point) (mark))
+      (delete-region start end)
       (insert-buffer formatbuf)
       (kill-buffer formatbuf))))
 

@@ -1,11 +1,27 @@
 ;; Functions
 
-;; Note on mark and region: to get a consistent behaviour whether transient mode
-;; is on or off, check `mark-active' to know if the region is active. It will
-;; work as expected if transient. If not, it will always be true as soon as the
-;; mark has been set once; so you need to make sure the mark is set as you want
-;; beforehand (e.g. whole buffer, single line...). This is the behaviour of
-;; `sort-lines'.
+;; Notes on mark and region: to get a consistent behaviour whether Transient
+;; mode is on or off, check `mark-active'. It will work as expected if
+;; transient. If not, it will always be true as soon as the mark has been set
+;; once; so you need to make sure the mark is set as you want beforehand (e.g.
+;; whole buffer, single line...). This is the behaviour of `sort-lines'.
+;;
+;; The clean way to get region boundaries and fallback on buffer:
+; (let (start end)
+;   (if mark-active
+;       (setq start (region-beginning) end (region-end))
+;     (setq start (point-min) end (point-max)))
+;
+;; If several commands act on region and the region size/pos is susceptible to change:
+; (save-excursion
+;   (unless mark-active
+;     (mark-whole-buffer))
+;; Then call (region-beginning) and (region-end)
+;;
+;; For commands that only work on regions:
+; (defun count-lines-region (start end)
+;   "Print number of lines and characters in the region."
+;   (interactive "r")
 
 (defun add-hook-and-eval (hook function)
   "Add FUNCTION to HOOK and evaluate it.
@@ -77,10 +93,7 @@ optional parameters."
   (save-excursion
     (while (re-search-forward
             regex
-            (if (not mark-active)
-                (point-max)
-              (when (> (point) (mark)) (exchange-point-and-mark))
-              (mark))
+            (if (not mark-active) (point-max) (region-end))
             t)
       (replace-match to-string))))
 
@@ -324,15 +337,16 @@ WARNING: this may slow down editing on big files."
   "(Un)tabifies according to `indent-tabs-mode', indents and deletes trailing whitespace.
 Works on buffer or region. Requires `tabify-leading'."
   (interactive)
-  (save-excursion
-    (unless mark-active
-      (mark-whole-buffer))
+  (let (start end)
+    (if mark-active
+     (setq start (region-beginning) end (region-end))
+   (setq start (point-min) end (point-max)))
     (if indent-tabs-mode
         (tabify-leading)
-      (untabify (region-beginning) (region-end)))
-    (indent-region (region-beginning) (region-end))
+      (untabify start end))
+    (indent-region start end)
     (save-restriction
-      (narrow-to-region (region-beginning) (region-end))
+      (narrow-to-region start end)
       (delete-trailing-whitespace))))
 
 (defun shell-last-command ()
@@ -376,14 +390,15 @@ Hook function for skeletons."
   "Remove trailing white space, then duplicate lines, then sort the result.
 Do not fold case with \\[universal-argument] or non-nil ARG."
   (interactive "P")
-  (unless mark-active
-    (mark-whole-buffer))
-  (when (> (point) (mark))
-    (exchange-point-and-mark))
-  (delete-trailing-whitespace (point) (mark))
-  (delete-duplicate-lines (point) (mark))
-  (let ((sort-fold-case (if arg nil t)))
-    (sort-lines nil (point) (mark))))
+  ;; We use save-excursion here because the region boundaries change during
+  ;; execution, so it's more convenient to track them with region functions.
+  (save-excursion
+    (unless mark-active
+      (mark-whole-buffer))
+    (let ((sort-fold-case (if arg nil t)))
+      (delete-trailing-whitespace (region-beginning) (region-end))
+      (delete-duplicate-lines (region-beginning) (region-end))
+      (sort-lines nil (region-beginning) (region-end)))))
 
 (defun swap-windows ()
   "If 2 windows are up, swap them."
