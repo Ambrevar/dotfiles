@@ -39,7 +39,7 @@ Requires `call-process-to-string' from `functions'."
     (helm-do-grep-ag arg)))
 
 (defun helm-mark-or-exchange-rect ()
-  "Run `helm-all-mark-rings' or `rectangle-exchange-point-and-mark' if in rectangle-mark-mode."
+  "Run `helm-all-mark-rings-before-mark-point' or `rectangle-exchange-point-and-mark' if in rectangle-mark-mode."
   (interactive)
   (if rectangle-mark-mode
       (rectangle-exchange-point-and-mark)
@@ -53,8 +53,7 @@ Requires `call-process-to-string' from `functions'."
 (define-key mickey-minor-mode-map (kbd "C-x b") 'helm-buffers-list)
 (define-key mickey-minor-mode-map (kbd "C-x C-b") 'helm-mini)
 (define-key mickey-minor-mode-map (kbd "M-y") 'helm-show-kill-ring)
-;; (define-key mickey-minor-mode-map (kbd "C-x C-x") 'helm-mark-or-exchange-rect) ; Overriding this make it inconvenient to rectify selection.
-(define-key mickey-minor-mode-map (kbd "C-x x") 'helm-all-mark-rings)
+(define-key mickey-minor-mode-map (kbd "C-x C-x") 'helm-mark-or-exchange-rect)
 (define-key mickey-minor-mode-map (kbd "M-s o") 'helm-occur)
 (define-key mickey-minor-mode-map (kbd "C-h a") 'helm-apropos)
 (define-key mickey-minor-mode-map (kbd "C-M-%") 'helm-regexp)
