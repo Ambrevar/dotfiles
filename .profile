@@ -61,8 +61,8 @@ if [ -d "$PLAN9DIR" ]; then
 fi
 unset PLAN9DIR
 
-## Less config. -R is needed for lesspipe.
-export LESS=' -R '
+## Less config. -R is needed for lesspipe colorization.
+# export LESS=' -R '
 ## Make 'less' more friendly for non-text input files, see lesspipe(1).
 command -v lesspipe >/dev/null 2>&1 && eval "$(lesspipe)"
 ## Remove less history.
