@@ -3,6 +3,7 @@
 ;; We cannot use mickey if we want to use it from Helm.
 (global-set-key (kbd "<escape>") 'god-local-mode)
 (define-key god-local-mode-map (kbd ".") 'repeat)
+(define-key god-local-mode-map (kbd "i") 'god-local-mode)
 
 (require 'god-mode-isearch)
 (define-key isearch-mode-map (kbd "<escape>") 'god-mode-isearch-activate)
