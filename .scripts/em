@@ -29,14 +29,14 @@ if [ "$1" = "--kill" ]; then
 	exit
 fi
 
-## Emacs will start in console mode if it cannot start in graphical mode or if
-## called from "emc".
 if [ "${0##*/}" = "emc" ]; then
+	## Emacs will start in console mode if it cannot start in graphical mode or if
+	## called from "emc".
 	param="-t"
 else
 	param="-c"
 	## Emacs should always wait unless running graphical and "emw" was not called.
-	if [ "${0##*/}" != "emw" ] && [ "$(emacs --batch -Q --eval='(if (fboundp '"'"'tool-bar-mode) (message "X") (message "TTY"))' 2>&1)" = X ] && [ -n "$DISPLAY" ]; then
+	if [ "${0##*/}" != "emw" ] && [ "$(emacs --batch -Q --eval='(message (if (fboundp '"'"'tool-bar-mode) "X" "TTY"))' 2>&1)" = X ] && [ -n "$DISPLAY" ]; then
 		param="$param -n"
 	fi
 fi
@@ -53,7 +53,8 @@ socket="/tmp/emacs$(id -u)/server"
 emacsclient $param "$@"
 
 ## If Emacs was forcefully closed or crashed, the dead socket will be left
-## behind and Emacs cannot reset it automatically without the '-a ""' parameter.
+## behind and emacsclient cannot reset it automatically without the '-a ""'
+## parameter.
 if [ $? -ne 0 ]; then
 	echo >&2 "Removing existing socket and trying again."
 	rm "$socket"
