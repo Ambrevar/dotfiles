@@ -148,11 +148,8 @@ To view where the bindings are set in your config files, lookup
 ;;------------------------------------------------------------------------------
 ;; External tools
 
-;; (autoload 'guess-style-set-variable "guess-style" nil t)
-;; (autoload 'guess-style-guess-variable "guess-style")
-;; (autoload 'guess-style-guess-all "guess-style" nil t)
-;; (setq guess-style-info-mode 1)
-;; (add-hook 'prog-mode-hook (lambda () (ignore-errors (guess-style-guess-all))))
+;; Guess indentation rules.
+(require 'dtrt-indent nil t)
 
 (add-to-list 'package-selected-packages 'multiple-cursors)
 (add-to-list 'package-selected-packages 'phi-search)
