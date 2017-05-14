@@ -174,7 +174,8 @@ bind index "^" imap-fetch-mail
 
 ## Do not quit accidentally
 bind index "Q" quit
-bind index "q" query
+bind index <Esc>q query
+bind index "q" noop
 
 ## Vi/Emacs bindings.
 bind pager j next-line
