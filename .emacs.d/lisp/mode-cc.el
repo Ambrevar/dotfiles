@@ -1,6 +1,17 @@
 ;; C/C++
 
-;; Should we split this in mode-c and mode-c++?
+;; Should we split this into mode-c and mode-c++?
+
+(local-set-key (kbd "C-c m") 'cc-main)
+(local-set-key (kbd "<f9>") 'cc-clean)
+(local-set-key (kbd "M-.") 'semantic-ia-fast-jump)
+(local-set-key (kbd "C-c C-d") 'semantic-ia-show-summary)
+(local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
+(local-set-key (kbd "C-c o") 'ff-find-other-file)
+(local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1)))
+
+(when (fboundp 'company-mode)
+  (local-set-key (kbd "M-TAB") (if (require 'company nil t) 'helm-company 'company-complete)))
 
 (defvar-local cc-ldlibs "-lm -pthread"
   "Custom linker flags for C/C++ linkage.")
@@ -114,22 +125,9 @@ restored."
     mode-hook
     (lambda ()
       (c-set-style "ambrevar") ;; We override existing values.
-      (cc-set-compiler)
-      (local-set-key (kbd "<f9>") 'cc-clean)
-      (local-set-key (kbd "M-.") 'semantic-ia-fast-jump)
-      (local-set-key (kbd "C-c C-d") 'semantic-ia-show-summary)
-      (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
-      (when (fboundp 'company-mode)
-        (company-mode)
-        (if (fboundp 'helm-company)
-            (local-set-key (kbd "M-TAB") 'helm-company)
-          (local-set-key (kbd "M-TAB") 'company-complete)))
-      (local-set-key (kbd "C-c o") 'ff-find-other-file)
-      (local-set-key (kbd "C-c m") 'cc-main)
-      ;; The cc-fmt hook is disable since there is no standard C formatting,
-      ;; unlike for Go.
-      ; (add-hook 'before-save-hook 'cc-fmt nil t)
-      (local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1))))))
+      (when (require 'company nil t)
+        (company-mode))
+      (cc-set-compiler))))
  '(c-mode-hook c++-mode-hook))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

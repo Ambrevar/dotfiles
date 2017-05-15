@@ -1,5 +1,12 @@
 ;; Dired
 
+(local-set-key (kbd "C-c h") 'dired-toggle-humansize)
+(local-set-key (kbd "<left>") 'dired-up-directory)
+(local-set-key (kbd "<right>") 'dired-find-file)
+(local-set-key (kbd "SPC") 'dired-mark)
+(local-set-key (kbd "<backspace>") 'dired-up-directory)
+(local-set-key (kbd "b") 'dired-up-directory)
+
 ;; On a GNU system, ls has the option to sort folders first.
 (if (string-match "^gnu.*" (prin1-to-string system-type))
     (setq dired-listing-switches "--group-directories-first -lha")
@@ -52,12 +59,5 @@
                           "h" " -h")))
         (setq dired-showing-humansize t))))
   (revert-buffer))
-
-(local-set-key (kbd "C-c h") 'dired-toggle-humansize)
-(local-set-key (kbd "<left>") 'dired-up-directory)
-(local-set-key (kbd "<right>") 'dired-find-file)
-(local-set-key (kbd "SPC") 'dired-mark)
-(local-set-key (kbd "<backspace>") 'dired-up-directory)
-(local-set-key (kbd "b") 'dired-up-directory)
 
 (provide 'mode-dired)

@@ -1,5 +1,23 @@
 ;; Go
 
+;; TODO: Report missing `use-local-map` upstream.
+;; https://github.com/dominikh/go-mode.el/issues/191
+(use-local-map go-mode-map)
+
+(local-set-key (kbd "C-c m") 'go-main)
+(local-set-key (kbd "C-c D") 'godoc)
+(when (require 'helm-go-package nil t)
+  (local-set-key (kbd "C-c D") 'helm-go-package))
+(local-set-key (kbd "C-c d") 'godoc-at-point)
+(local-set-key (kbd "M-.") #'godef-jump)
+(local-set-key (kbd "<f9>") 'go-metalinter)
+(local-set-key (kbd "C-<f9>") (lambda () (interactive) (go-metalinter t)))
+
+(when (require 'company-go nil t)
+  (add-hook-and-eval 'go-mode-hook 'company-mode)
+  (add-to-list 'company-backends 'company-go)
+  (local-set-key (kbd "M-TAB") (if (require 'company nil t) 'helm-company 'company-complete)))
+
 (setq gofmt-command "goimports")
 (setq godoc-command "godoc -ex")
 (setq godoc-and-godef-command "godoc -ex")
@@ -74,20 +92,6 @@ Note that the -cover test flag is left out since it shifts line numbers."
    (add-hook 'before-save-hook #'gofmt-before-save nil t)
    (when (require 'go-eldoc nil t)
      (go-eldoc-setup))
-   (when (require 'company-go nil t)
-     (add-to-list 'company-backends 'company-go)
-     (company-mode)
-     (if (fboundp 'helm-company)
-         (local-set-key (kbd "M-TAB") 'helm-company)
-       (local-set-key (kbd "M-TAB") 'company-complete)))
-   (local-set-key (kbd "C-c m") 'go-main)
-   (local-set-key (kbd "C-c D") 'godoc)
-   (when (require 'helm-go-package nil t)
-     (local-set-key (kbd "C-c D") 'helm-go-package))
-   (local-set-key (kbd "C-c d") 'godoc-at-point)
-   (local-set-key (kbd "M-.") #'godef-jump)
-   (local-set-key (kbd "<f9>") 'go-metalinter)
-   (local-set-key (kbd "C-<f9>") (lambda () (interactive) (go-metalinter t)))
    (go-set-compile-command)))
 
 (define-skeleton go-main

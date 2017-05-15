@@ -1,13 +1,16 @@
 ;; MediaWiki
 
+(local-set-key (kbd "C-c o") 'mediawiki-browse)
+(local-unset-key (kbd "M-g")) ; This shadows M-g M-g.
+(local-set-key (kbd "C-x C-s") 'save-buffer)
+(local-set-key (kbd "C-c M-s") 'mediawiki-save)
+
 (setq
  mediawiki-site-alist
- '(
-   ("Wikipedia" "http://en.wikipedia.org/w/" "Ambrevar" "" "Main Page")
+ '(("Wikipedia" "http://en.wikipedia.org/w/" "Ambrevar" "" "Main Page")
    ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX")
    ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt")
-   ("WikEmacs" "https://wikemacs.org/wiki/" "Ambrevar" "" "Main Page")
-   ))
+   ("WikEmacs" "https://wikemacs.org/wiki/" "Ambrevar" "" "Main Page")))
 
 ;; The url-cookie timer is set to a high value because it seems that once the
 ;; cookie has been saved, MediaWiki fails to upload files correctly.  Is
@@ -20,14 +23,7 @@
  'mediawiki-mode-hook
  (lambda ()
    (visual-line-mode 1)
-   (turn-off-auto-fill)
-   (define-key mediawiki-mode-map (kbd "C-c RET") 'mediawiki-open-page-at-point)
-   (define-key mediawiki-mode-map (kbd "C-c o") 'mediawiki-browse)
-   (local-unset-key (kbd "M-g"))
-   (local-set-key (kbd "C-c C-d") 'duplicate-line)
-   (local-set-key (kbd "C-c C-s") 'mediawiki-save)
-   (local-set-key (kbd "C-x C-s") 'save-buffer)
-   ))
+   (turn-off-auto-fill)))
 
 ;; Skeletons
 

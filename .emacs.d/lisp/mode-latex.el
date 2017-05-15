@@ -3,6 +3,18 @@
 ;; We use the TeX setup.
 (require 'mode-tex)
 
+(local-set-key (kbd "C-c m") 'latex-article)
+(local-set-key (kbd "C-c C-a") 'latex-insert-table)
+(local-set-key (kbd "C-c C-c") 'latex-smallcaps)
+(local-set-key (kbd "C-c C-e") 'latex-emph)
+(local-set-key (kbd "C-c C-l") 'latex-slanted)
+(local-set-key (kbd "C-c C-s") 'latex-insert-section)
+(local-set-key (kbd "C-c C-u") 'latex-superscript)
+(local-set-key (kbd "C-c l") 'latex-lstinline)
+(local-set-key (kbd "C-c o") 'latex-orgtbl)
+(local-set-key (kbd "C-c u") 'latex-package)
+(local-set-key (kbd "M-RET") 'latex-itemize)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 
@@ -57,17 +69,6 @@
    (tex-set-compiler)
    ;; For some unknown reasons, `skeleton-end-hook' is set to nil in tex-mode.
    (add-hook 'skeleton-end-hook 'skeleton-make-markers)
-   (local-set-key (kbd "C-c m") 'latex-article)
-   (local-set-key (kbd "C-c C-a") 'latex-insert-table)
-   (local-set-key (kbd "C-c C-c") 'latex-smallcaps)
-   (local-set-key (kbd "C-c C-e") 'latex-emph)
-   (local-set-key (kbd "C-c C-l") 'latex-slanted)
-   (local-set-key (kbd "C-c C-s") 'latex-insert-section)
-   (local-set-key (kbd "C-c C-u") 'latex-superscript)
-   (local-set-key (kbd "C-c l") 'latex-lstinline)
-   (local-set-key (kbd "C-c o") 'latex-orgtbl)
-   (local-set-key (kbd "C-c u") 'latex-package)
-   (local-set-key (kbd "M-RET") 'latex-itemize)
    (turn-on-orgtbl)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -377,15 +378,16 @@ The table type is any value found in `latex-table-names'."
 
 ;; Extra for latex-math-preview-mode.
 ;; TODO: latex-math-preview-mode extra does not work.
-(require 'latex-math-preview-extra-data nil t)
-(add-hook
+(when (require 'latex-math-preview-extra-data nil t)
+;; (local-set-key (kbd "C-c p") 'latex-math-preview-expression)
+;; (local-set-key (kbd "C-c C-p") 'latex-math-preview-save-image-file)
+(local-set-key (kbd "C-c j") 'latex-math-preview-insert-symbol)
+(local-set-key (kbd "C-c C-j") 'latex-math-preview-last-symbol-again)
+;; (local-set-key (kbd "C-c C-b") 'latex-math-preview-beamer-frame)
+)
+(add-hook-and-eval
  'latex-mode-hook
  (lambda ()
-   ;; (local-set-key (kbd "C-c p") 'latex-math-preview-expression)
-   ;; (local-set-key (kbd "C-c C-p") 'latex-math-preview-save-image-file)
-   (local-set-key (kbd "C-c j") 'latex-math-preview-insert-symbol)
-   (local-set-key (kbd "C-c C-j") 'latex-math-preview-last-symbol-again)
-   ;; (local-set-key (kbd "C-c C-b") 'latex-math-preview-beamer-frame)
    ;; (add-to-list 'latex-math-preview-text-symbol-datasets
    ;;              latex-math-preview-textcomp-symbol-data)
    ;; (add-to-list 'latex-math-preview-text-symbol-datasets

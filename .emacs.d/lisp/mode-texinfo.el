@@ -4,6 +4,8 @@
 (require 'tex-mode)
 (require 'mode-tex)
 
+(local-set-key (kbd "C-c C-b") 'texinfo-menu-update)
+
 (defun texinfo-menu-update ()
   "Update texinfo node menu automatically."
   (interactive)
@@ -16,8 +18,7 @@
 (add-hook-and-eval
  'texinfo-mode-hook
  (lambda ()
-   (setq fill-column 80) ;; Really needed?
-   (local-set-key (kbd "C-c C-b") 'texinfo-menu-update)
+   (setq fill-column 80) ;; Is it needed?
    (set (make-local-variable 'tex-extension-list)
          '("aux" "cp" "cps" "fn" "ky" "log" "pg" "toc" "tp" "vr" "vrs"))
    (set (make-local-variable 'tex-start-options) nil)

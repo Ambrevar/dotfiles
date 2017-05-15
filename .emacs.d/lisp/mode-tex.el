@@ -18,6 +18,11 @@
 ;; Note that -shell-escape can also be toggled with universal
 ;; argument.
 
+(dolist (key '("\C-c\C-f" "\C-c\C-b"))
+  (local-unset-key key))
+(local-set-key (kbd "<f9>") 'tex-pdf-view)
+(local-set-key (kbd "<f10>") (lambda () (interactive) (progn (compile compile-command) (sit-for tex-compilation-delay) (delete-windows-on "*compilation*"))))
+
 (defvar-local tex-masterfile nil
   "The file that should be compiled. Useful for modular documents.")
 
@@ -125,15 +130,11 @@ This does not interfere with `subword-mode'."
    ;; argument: "TABs in verbatim environments don't do what you think." Not
    ;; sure how relevant this bad comment is. We revert it.
    (setq indent-tabs-mode t)
-   (dolist (key '("\C-c\C-f" "\C-c\C-b"))
-     (local-unset-key key))
    (set-face-attribute 'tex-verbatim nil :family "freemono")
    (set (make-local-variable 'compilation-scroll-output) t)
    (set (make-local-variable 'paragraph-start) "
 ")
    ;; (set (make-local-variable 'use-hard-newlines) t)
-   (local-set-key (kbd "<f9>") 'tex-pdf-view)
-   (local-set-key (kbd "<f10>") (lambda () (interactive) (progn (compile compile-command) (sit-for tex-compilation-delay) (delete-windows-on "*compilation*"))))
    (tex-set-compiler)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

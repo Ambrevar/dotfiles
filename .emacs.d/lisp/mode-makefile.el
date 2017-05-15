@@ -1,12 +1,9 @@
 ;; Makefile
 
-(add-hook-and-eval
- 'makefile-mode-hook
- (lambda ()
-   (local-set-key (kbd "C-c c") 'makefile-config)
-   (local-set-key (kbd "C-c d") 'makefile-doc)
-   (local-set-key (kbd "C-c m") 'makefile-main)
-   (local-set-key (kbd "C-c s") 'makefile-c)))
+(local-set-key (kbd "C-c c") 'makefile-config)
+(local-set-key (kbd "C-c d") 'makefile-doc)
+(local-set-key (kbd "C-c m") 'makefile-main)
+(local-set-key (kbd "C-c s") 'makefile-c)
 
 (define-skeleton makefile-main
   "Insert root Makefile." nil

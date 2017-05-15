@@ -1,12 +1,10 @@
 ;; SGML
 
-;; Just because XML is ugly.
 (add-hook-and-eval
  'sgml-mode-hook
  (lambda ()
    (setq sgml-xml-mode t)
-   ;; This seems to slow down Emacs.
-   ; (toggle-truncate-lines)
+   ; (toggle-truncate-lines) ; This seems to slow down Emacs.
    (turn-off-auto-fill)))
 
 (provide 'mode-sgml)

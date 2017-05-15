@@ -1,5 +1,7 @@
 ;; Org mode config.
 
+(local-set-key (kbd "C-c C-a") 'org-agenda)
+
 ;; Move annoying babel folder. This move does not seem to work properly.
 (setq org-babel-temporary-directory (concat emacs-cache-folder "babel"))
 ;; Disable line splitting on M-RET
@@ -30,7 +32,6 @@
  'org-mode-hook
  (lambda ()
    (setq indent-tabs-mode nil)
-   (local-set-key (kbd "C-c C-a") 'org-agenda)
    (auto-fill-mode -1)))
 
 (provide 'mode-org)
