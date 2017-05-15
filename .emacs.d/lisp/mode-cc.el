@@ -56,6 +56,11 @@ restored."
     (when makefile
       (compile (format "make -k -f '%s' clean" makefile)))))
 
+;; It is tempting to add `cc-fmt' to the hook:
+; (add-hook 'before-save-hook 'cc-fmt nil t)
+;; Unlike Go however, there is no formatting standard and thus this would break
+;; the formatting rules of every third-party C file that does not follow the
+;; same style.
 (defun cc-fmt ()
   "Run uncrustify(1) on current buffer or region."
   (interactive)
@@ -94,7 +99,6 @@ restored."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; C-mode
 
-;; WARNING: this style is a work-in-progress.
 (c-add-style
  "ambrevar"
  `((c-comment-only-line-offset . 0)
@@ -119,7 +123,7 @@ restored."
 ;; function. Since cc modes belong to prog-mode, each hook is called another
 ;; time at the end of the initialization. No big deal since we only set some
 ;; variables.
-(mapcar
+(mapc
  (lambda (mode-hook)
    (add-hook-and-eval
     mode-hook

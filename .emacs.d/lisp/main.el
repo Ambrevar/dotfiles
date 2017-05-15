@@ -82,7 +82,7 @@
 (setq-default indent-tabs-mode t)
 
 ;; Lisp should not use tabs.
-(mapcar
+(mapc
  (lambda (hook)
    (add-hook
     hook

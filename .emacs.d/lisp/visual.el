@@ -83,7 +83,7 @@
    (set-face-foreground 'compilation-line-number "cyan")))
 
 ;; C additional keywords.
-(mapcar
+(mapc
  (lambda (mode)
    (font-lock-add-keywords
     mode
@@ -155,7 +155,7 @@
 ;; Key notes highlighting. We need to apply it to the mode hook since
 ;; font-lock-add-keywords has no inheritance support.
 (set-face-foreground 'font-lock-warning-face "DarkOrange")
-(mapcar
+(mapc
  (lambda (mode-hook)
    (add-hook
     mode-hook

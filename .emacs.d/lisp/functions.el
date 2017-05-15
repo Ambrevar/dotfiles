@@ -26,7 +26,8 @@
 (defun add-hook-and-eval (hook function)
   "Add FUNCTION to HOOK and evaluate it.
 This can be useful when called from a hooked function to make
-sure it gets executed."
+sure it gets executed, since additions to hooks will be ignored
+while `run-mode-hooks' is running."
   (add-hook hook function)
   (funcall function))
 

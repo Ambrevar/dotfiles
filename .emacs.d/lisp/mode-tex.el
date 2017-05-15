@@ -75,13 +75,13 @@ but there is no warranty."
                      (file-name-sans-extension tex-masterfile)
                    (file-name-sans-extension buffer-file-name))
                  ".")))
-    (mapcar
+    (mapc
      ;; Delete file if it exists.
      (lambda (argfile)
        (when (and (file-exists-p argfile) (file-writable-p argfile))
          (delete-file argfile)
          (message "[%s] deleted." argfile)))
-     (mapcar
+     (mapc
       ;; Concat file name with extensions.
       (lambda (arg) (concat master arg))
       tex-extension-list))))

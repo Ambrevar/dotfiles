@@ -54,7 +54,7 @@
 (setq latex-block-default "itemize")
 (setq latex-block-names '("listing" "align" "align*" "Bmatrix" "Vmatrix" "bmatrix" "matrix" "pmatrix" "smallmatrix" "vmatrix"))
 
-(mapcar
+(mapc
  (lambda (latex-block)
    (add-to-list 'latex-block-body-alist `(,latex-block nil '(delete-horizontal-space t) _)))
  '("listing" "verbatim" "verbatim*"))

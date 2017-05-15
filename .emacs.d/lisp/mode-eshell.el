@@ -33,7 +33,7 @@
 (eval-after-load 'em-alias
   '(progn
      (eshell-read-aliases-list)
-     (mapcar
+     (mapc
       (lambda (alias)
         (add-to-list 'eshell-command-aliases-list alias))
       '(("ls" "ls -F $*")
