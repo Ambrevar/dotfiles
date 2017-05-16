@@ -4,6 +4,7 @@ babel
 caption
 collectbox
 csquotes
+dvipng
 ec
 etoolbox
 eurosym
@@ -25,7 +26,10 @@ marvosym
 media9
 oberdiek
 ocgx2
+psnfss
+symbol
 tools
 ulem
 url
 xkeyval
+zapfding
