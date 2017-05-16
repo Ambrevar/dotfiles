@@ -145,6 +145,10 @@ To view where the bindings are set in your config files, lookup
 
 (add-to-list 'package-selected-packages 'fish-mode)
 
+(add-to-list 'package-selected-packages 'latex-math-preview)
+(add-to-list 'package-selected-packages 'latex-pretty-symbols)
+(require 'latex-pretty-symbols nil t)
+
 ;;------------------------------------------------------------------------------
 ;; External tools
 

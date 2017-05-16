@@ -130,7 +130,6 @@ This does not interfere with `subword-mode'."
    ;; argument: "TABs in verbatim environments don't do what you think." Not
    ;; sure how relevant this bad comment is. We revert it.
    (setq indent-tabs-mode t)
-   (set-face-attribute 'tex-verbatim nil :family "freemono")
    (set (make-local-variable 'compilation-scroll-output) t)
    (set (make-local-variable 'paragraph-start) "
 ")

@@ -15,6 +15,17 @@
 (local-set-key (kbd "C-c u") 'latex-package)
 (local-set-key (kbd "M-RET") 'latex-itemize)
 
+;; Needs dvipng.
+;; With TeXlive, the following packages are needed: psnfss, symbol, zapfding
+(when (and (executable-find "dvipng") (require 'latex-math-preview nil t))
+  (setq latex-math-preview-cache-directory-for-insertion
+      (concat emacs-cache-folder "latex-math-preview-cache"))
+  (local-set-key (kbd "C-c p") 'latex-math-preview-expression)
+  (local-set-key (kbd "C-c j") 'latex-math-preview-insert-symbol)
+  (local-set-key (kbd "C-c C-j") 'latex-math-preview-last-symbol-again)
+  ;; Any color package should be filtered out as they will have unexpected impact on coloring.
+  (add-to-list 'latex-math-preview-usepackage-filter-alist '("color")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 
@@ -363,37 +374,5 @@ The table type is any value found in `latex-table-names'."
 "\\lstinputlisting[caption=#2, escapechar=, style=#1]{#2}}" \n
 "\\let\\verbatim\\relax%" \n
 "\\lstnewenvironment{verbatim}[1][]{\\lstset{style=custom}}{}%" > \n -)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; The magnificent latex-math-preview mode!
-;; TODO: Some symbols are not generated properly.
-(autoload 'latex-math-preview-expression "latex-math-preview" nil t)
-(autoload 'latex-math-preview-insert-symbol "latex-math-preview" nil t)
-(autoload 'latex-math-preview-save-image-file "latex-math-preview" nil t)
-(autoload 'latex-math-preview-beamer-frame "latex-math-preview" nil t)
-(autoload 'latex-math-preview-text-symbol-datasets "latex-math-preview" nil t)
-
-(setq latex-math-preview-cache-directory-for-insertion
-      (concat emacs-cache-folder "latex-math-preview-cache"))
-
-;; Extra for latex-math-preview-mode.
-;; TODO: latex-math-preview-mode extra does not work.
-(when (require 'latex-math-preview-extra-data nil t)
-;; (local-set-key (kbd "C-c p") 'latex-math-preview-expression)
-;; (local-set-key (kbd "C-c C-p") 'latex-math-preview-save-image-file)
-(local-set-key (kbd "C-c j") 'latex-math-preview-insert-symbol)
-(local-set-key (kbd "C-c C-j") 'latex-math-preview-last-symbol-again)
-;; (local-set-key (kbd "C-c C-b") 'latex-math-preview-beamer-frame)
-)
-(add-hook-and-eval
- 'latex-mode-hook
- (lambda ()
-   ;; (add-to-list 'latex-math-preview-text-symbol-datasets
-   ;;              latex-math-preview-textcomp-symbol-data)
-   ;; (add-to-list 'latex-math-preview-text-symbol-datasets
-   ;;              latex-math-preview-pifont-zapf-dingbats-symbol-data)
-   ;; (add-to-list 'latex-math-preview-text-symbol-datasets
-   ;;              latex-math-preview-pifont-symbol-fonts-symbol-data)))
-   ))
 
 (provide 'mode-latex)
