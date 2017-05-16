@@ -231,16 +231,16 @@ The table type is any value found in `latex-table-names'."
 \n
 "%%=============================================================================
 %% Babel (load near the end before 'hyperref')
-\\usepackage[french,ngerman,english]{babel}
-\\iflanguage{french}{
-}{"
+\\usepackage[english]{babel}
+%\\iflanguage{french}{
+%}{"
 "%% Narrow items" \n
-"\\newlength{\\wideitemsep}" \n
-"\\setlength{\\wideitemsep}{.5\\itemsep}" \n
-"\\addtolength{\\wideitemsep}{-7pt}" \n
-"\\let\\olditem\\item" \n
-"\\renewcommand{\\item}{\\setlength{\\itemsep}{\\wideitemsep}\\olditem}"\n
-"}" > \n
+"%\\newlength{\\wideitemsep}" \n
+"%\\setlength{\\wideitemsep}{.5\\itemsep}" \n
+"%\\addtolength{\\wideitemsep}{-7pt}" \n
+"%\\let\\olditem\\item" \n
+"%\\renewcommand{\\item}{\\setlength{\\itemsep}{\\wideitemsep}\\olditem}"\n
+"%}" > \n
 "
 %%=============================================================================
 %% Formatting
