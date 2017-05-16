@@ -1,5 +1,10 @@
 ;; MediaWiki
 
+;; This mode has numerous issue with network queries:
+;; https://github.com/hexmode/mediawiki-el/issues/
+;; Besides you can try extending `url-cookie-save-interval'.
+;; Nonetheless is mode is helpfull for syntax awareness.
+
 (local-set-key (kbd "C-c o") 'mediawiki-browse)
 (local-unset-key (kbd "M-g")) ; This shadows M-g M-g.
 (local-set-key (kbd "C-x C-s") 'save-buffer)
@@ -11,13 +16,6 @@
    ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX")
    ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt")
    ("WikEmacs" "https://wikemacs.org/wiki/" "Ambrevar" "" "Main Page")))
-
-;; The url-cookie timer is set to a high value because it seems that once the
-;; cookie has been saved, MediaWiki fails to upload files correctly.  Is
-;; 'url-do-setup' needed to make sure the url-cookie-save-interval variable is
-;; taken into account?
-;; TODO: url-cookie timer does not work.
-(setq url-cookie-save-interval 86400)
 
 (add-hook-and-eval
  'mediawiki-mode-hook
