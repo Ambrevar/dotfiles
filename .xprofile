@@ -24,7 +24,7 @@ EOF
 ## Load custom keymap and configure input devices.
 xkbcomp -I"$HOME/.xkb" "$HOME/.xkb/usim.xkb" $DISPLAY
 numlockx on
-synclient TouchpadOff=1
+# xinput disable "SynPS/2 Synaptics TouchPad"
 
 ## This env variable is used by some program configs (e.g. ranger, awesome) to
 ## get the terminal executable name.

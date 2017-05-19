@@ -333,11 +333,11 @@ globalkeys = awful.util.table.join(
 		{description="lock screen", group="awesome"}),
 
 	-- Touchpad control
-	awful.key({ }, "XF86TouchpadToggle", function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end,
+	awful.key({ }, "XF86TouchpadToggle", function () os.execute('xinput list-props "SynPS/2 Synaptics TouchPad" | grep -q "Device Enabled [^:]*:[[:space:]]*1" && xinput disable "SynPS/2 Synaptics TouchPad" || xinput enable "SynPS/2 Synaptics TouchPad"') end,
 		{description="toggle touchpad", group="mouse"}),
-	awful.key({ }, "XF86Tools",          function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end,
+	awful.key({ }, "XF86Tools",          function () os.execute('xinput list-props "SynPS/2 Synaptics TouchPad" | grep -q "Device Enabled [^:]*:[[:space:]]*1" && xinput disable "SynPS/2 Synaptics TouchPad" || xinput enable "SynPS/2 Synaptics TouchPad"') end,
 		{description="toggle touchpad", group="mouse"}),
-	awful.key({ modkey, "Control" }, "m",  function () os.execute("synclient TouchpadOff=`synclient -l | grep -c 'TouchpadOff.*=.*0'`") end,
+	awful.key({ modkey, "Control" }, "m",  function () os.execute('xinput list-props "SynPS/2 Synaptics TouchPad" | grep -q "Device Enabled [^:]*:[[:space:]]*1" && xinput disable "SynPS/2 Synaptics TouchPad" || xinput enable "SynPS/2 Synaptics TouchPad"') end,
 		{description="toggle touchpad", group="mouse"}),
 	awful.key({ modkey, "Shift" }, "m", move_mouse_away,
 		{description="move mouse away", group="mouse"}),
