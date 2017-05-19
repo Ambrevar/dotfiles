@@ -98,6 +98,7 @@ To view where the bindings are set in your config files, lookup
 (autoload 'maxima "maxima" "Maxima interaction" t)
 (setq auto-mode-alist (cons '("\\.mac" . maxima-mode) auto-mode-alist))
 
+(add-to-list 'package-selected-packages 'bbcode-mode)
 (load-external "\\.bbcode\\'" 'bbcode-mode)
 (add-hook 'bbcode-mode-hook (lambda () (require 'mode-bbcode)))
 
@@ -135,6 +136,7 @@ To view where the bindings are set in your config files, lookup
    (set (make-local-variable 'paragraph-start) "
 ")))
 
+(add-to-list 'package-selected-packages 'mediawiki-mode)
 (load-external "\\.wiki\\'" 'mediawiki 'mediawiki-mode)
 (add-hook 'mediawiki-mode-hook (lambda () (require 'mode-mediawiki)))
 
