@@ -8,7 +8,7 @@ complete -c pacfiles -a "$listinstalled"
 
 function pacls -d 'List/open package files with fzf'
 	set -l result
-	set -lx OPT "--bind=ctrl-j:'execute-multi(rifle {})' --preview='preview {}'"
+	set -lx OPT $FZF_CTRL_T_OPTS
 	pacman -Qlq $argv | grep -v '/$' | eval (__fzfcmd) -m --tiebreak=index --toggle-sort=ctrl-r $OPT | string join ' ' | read -l result
 	[ "$result" ]; and commandline -- $result
 end
