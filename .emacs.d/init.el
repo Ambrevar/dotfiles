@@ -136,7 +136,7 @@ To view where the bindings are set in your config files, lookup
    (set (make-local-variable 'paragraph-start) "
 ")))
 
-(add-to-list 'package-selected-packages 'mediawiki-mode)
+(add-to-list 'package-selected-packages 'mediawiki)
 (load-external "\\.wiki\\'" 'mediawiki 'mediawiki-mode)
 (add-hook 'mediawiki-mode-hook (lambda () (require 'mode-mediawiki)))
 
