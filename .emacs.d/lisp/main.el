@@ -72,9 +72,12 @@
 ;; Line numbers
 (add-hook 'find-file-hook (lambda () (linum-mode 1)))
 (define-key mickey-minor-mode-map (kbd "C-<f5>") 'linum-mode)
-(add-hook
- 'linum-before-numbering-hook
- (lambda () (if (display-graphic-p) (setq linum-format "%d") (setq linum-format "%d "))))
+;; Emacs-nox does not display a fringe after the linum: Setting linum-format in
+;; linum-before-numbering-hook is not the right approach as it will change the
+;; type of linum-format in the middle. See linum-update-window.
+;; See http://stackoverflow.com/questions/3626632/right-align-line-numbers-with-linum-mode
+;; and http://stackoverflow.com/questions/3626632/right-align-line-numbers-with-linum-mode.
+;; The complexity is not worth the benefit.
 
 ;; Indentation
 (setq-default tab-width 2)
