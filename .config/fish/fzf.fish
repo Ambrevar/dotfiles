@@ -8,7 +8,7 @@ fzf_key_bindings
 
 bind -M insert \et fzf-file-widget
 bind t fzf-file-widget
-bind r fzf-history-widget
+bind R fzf-history-widget
 bind -m insert C fzf-cd-widget
 
 function fzf-select -d 'Eval commandline, fzf result and print out selection'
