@@ -215,8 +215,11 @@
 (add-hook
  'find-file-hook
  (lambda ()
-   (if (string-match (concat (getenv "BROWSER") "-editor-*") (buffer-name))
-       (auto-fill-mode -1))))
+   (when (string-match (concat (getenv "BROWSER") "-editor-*") (buffer-name))
+     (when (require 'with-editor nil t)
+       ;; Just like git commits.
+       (with-editor-mode))
+     (auto-fill-mode -1))))
 
 ;; Compilation bindings and conveniences.
 (setq compilation-ask-about-save nil)
