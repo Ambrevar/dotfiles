@@ -13,7 +13,7 @@ To view where the bindings are set in your config files, lookup
 `mickey-minor-mode-map' over it. Example:
 
   (define-key mickey-minor-mode-map (kbd \"C-i\") 'some-function)"
-  t " my-keys" 'mickey-minor-mode-map)
+  t " myckey" 'mickey-minor-mode-map)
 (add-hook 'minibuffer-setup-hook (lambda () (mickey-minor-mode 0)))
 
 (defvar emacs-cache-folder "~/.cache/emacs/"
@@ -204,6 +204,9 @@ To view where the bindings are set in your config files, lookup
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; End of config
+
+;; Don't let `customize' clutter my config.
+(setq custom-file "/dev/null")
 
 ;; We need to put it at the end to make sure it doesn't get overriden by other
 ;; minor modes.
