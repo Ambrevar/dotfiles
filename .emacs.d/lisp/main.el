@@ -210,17 +210,6 @@
 (setq calendar-week-start-day 1)
 (setq calendar-date-style 'iso)
 
-;; Remove auto-fill in web edits because wikis and forums do not like it.
-;; This works for qutebrowser, but may need changes for other browsers.
-(add-hook
- 'find-file-hook
- (lambda ()
-   (when (string-match (concat (getenv "BROWSER") "-editor-*") (buffer-name))
-     (when (require 'with-editor nil t)
-       ;; Just like git commits.
-       (with-editor-mode))
-     (auto-fill-mode -1))))
-
 ;; Compilation bindings and conveniences.
 (setq compilation-ask-about-save nil)
 (eval-after-load 'compile
@@ -301,14 +290,36 @@
  (lambda ()
    (setq indent-tabs-mode nil)))
 
+;; Remove auto-fill in web edits because wikis and forums do not like it.
+;; This works for qutebrowser, but may need changes for other browsers.
+(add-hook
+ 'find-file-hook
+ (lambda ()
+   (when (string-match (concat (getenv "BROWSER") "-editor-*") (buffer-name))
+     (when (require 'with-editor nil t)
+       ;; Just like git commits.
+       (with-editor-mode))
+     (auto-fill-mode -1))))
+
 ;; Mutt support.
-(add-to-list 'auto-mode-alist '("/tmp/mutt.*" . mail-mode))
+(add-to-list 'auto-mode-alist '("/tmp/mutt-.*" . mail-mode))
+(add-hook
+ 'find-file-hook
+ (lambda ()
+   (when (and (string-match "/tmp/mutt-.*" (buffer-file-name))
+              (require 'with-editor nil t))
+     ;; Just like git commits.
+     (with-editor-mode))))
 
 ;; Arch Linux PKGBUILD.
 (add-to-list 'auto-mode-alist '("PKGBUILD" . sh-mode))
 
 ;; Subtitles support.
 (add-to-list 'auto-mode-alist '("\\.srt\\'" . text-mode))
+
+(add-hook
+ 'mail-mode-hook
+ 'mail-text)
 
 ;; Easy code folding toggle.
 ; (add-hook 'prog-mode-hook 'hs-minor-mode)
