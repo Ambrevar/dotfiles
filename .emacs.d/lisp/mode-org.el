@@ -13,20 +13,18 @@
 
 ;; Agendas.
 ;; If you want to add other agendas in a local file, use the following code:
-; (eval-after-load "org"
-;   '(progn
-;      (add-to-list 'org-agenda-files "/path/to/agenda.org")))
+; (with-eval-after-load "org"
+;   (add-to-list 'org-agenda-files "/path/to/agenda.org"))
 (add-to-list 'org-agenda-files "~/personal/todo/todo.org")
 
 (setq org-enforce-todo-dependencies t)
 ;; Set PDF association in Org-mode (was Evince by default).
-(eval-after-load "org"
-  '(progn
-     (setq indent-tab-mode nil) ; Org-mode aligns text.
-     (require 'tool-pdf)
-     ;; Change .pdf association directly within the alist
-     (setcdr (assoc "\\.pdf\\'" org-file-apps)
-             (concat pdf-viewer " " (mapconcat 'identity pdf-viewer-args " ")))))
+(with-eval-after-load "org"
+  (setq indent-tab-mode nil) ; Org-mode aligns text.
+  (require 'tool-pdf)
+  ;; Change .pdf association directly within the alist
+  (setcdr (assoc "\\.pdf\\'" org-file-apps)
+          (concat pdf-viewer " " (mapconcat 'identity pdf-viewer-args " "))))
 
 (add-hook-and-eval
  'org-mode-hook

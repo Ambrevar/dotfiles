@@ -212,15 +212,14 @@
 
 ;; Compilation bindings and conveniences.
 (setq compilation-ask-about-save nil)
-(eval-after-load 'compile
-  '(progn (make-variable-buffer-local 'compile-command)
-          ;; Making `compilation-directory' local only works with `recompile'
-          ;; and if `compile' is never used. In such a scenario,
-          ;; `compile-command' is not saved by `recompile' itself which adds a
-          ;; lot of bookkeeping.
-          ; (make-variable-buffer-local 'compilation-directory)
-          ; (make-variable-buffer-local 'compile-history)
-          ))
+(with-eval-after-load 'compile
+  ;; Making `compilation-directory' local only works with `recompile'
+  ;; and if `compile' is never used. In such a scenario,
+  ;; `compile-command' is not saved by `recompile' itself which adds a
+  ;; lot of bookkeeping.
+  ;; (make-variable-buffer-local 'compilation-directory)
+  ;; (make-variable-buffer-local 'compile-history)
+  (make-variable-buffer-local 'compile-command))
 ;; Don't set these bindings in mickey as we might have to override them from
 ;; mode hooks.
 (global-set-key (kbd "C-<f10>") 'compile)
@@ -257,11 +256,11 @@
   (add-to-list 'desktop-locals-to-save 'compile-command))
 
 ;; GMP documentation
-(eval-after-load "info-look"
-  '(let ((mode-value (assoc 'c-mode (assoc 'symbol info-lookup-alist))))
-     (setcar (nthcdr 3 mode-value)
-             (cons '("(gmp)Function Index" nil "^ -.* " "\\>")
-                   (nth 3 mode-value)))))
+(with-eval-after-load "info-look"
+  (let ((mode-value (assoc 'c-mode (assoc 'symbol info-lookup-alist))))
+    (setcar (nthcdr 3 mode-value)
+            (cons '("(gmp)Function Index" nil "^ -.* " "\\>")
+                  (nth 3 mode-value)))))
 
 ;; Buffer names.
 (require 'uniquify)

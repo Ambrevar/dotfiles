@@ -23,28 +23,27 @@
 ;; If the prompt spans over multiple lines, the regexp should match last line only.
 (setq eshell-prompt-regexp "^[#>] ")
 
-(eval-after-load 'em-term
-  '(nconc eshell-visual-commands
-          '("abook" "cmus" "fzf" "htop" "mpv" "mutt" "ncdu" "newsbeuter" "ranger")))
-; (eval-after-load 'em-term
-;   '(add-to-list 'eshell-visual-subcommands '("git" "log" "diff" "show")))
+(with-eval-after-load 'em-term
+  (nconc eshell-visual-commands
+         '("abook" "cmus" "fzf" "htop" "mpv" "mutt" "ncdu" "newsbeuter" "ranger")))
+;; (with-eval-after-load 'em-term
+;;   (add-to-list 'eshell-visual-subcommands '("git" "log" "diff" "show")))
 
 ;; eshell/alias is too slow as it reads and write the file on each definition.
-(eval-after-load 'em-alias
-  '(progn
-     (eshell-read-aliases-list)
-     (mapc
-      (lambda (alias)
-        (add-to-list 'eshell-command-aliases-list alias))
-      '(("ls" "ls -F $*")
-        ("l" "ls -1 $*")
-        ("la" "ls -lAh $*")
-        ("ll" "ls -lh $*")
-        ("grep" "grep --color=auto")
-        ("mkdir" "mkdir -p $*")
-        ("mkcd" "mkdir -p $* && cd $1")
-        ("emacs" "find-file $1")
-        ("em" "find-file $1")))
-     (eshell-write-aliases-list)))
+(with-eval-after-load 'em-alias
+  (eshell-read-aliases-list)
+  (mapc
+   (lambda (alias)
+     (add-to-list 'eshell-command-aliases-list alias))
+   '(("ls" "ls -F $*")
+     ("l" "ls -1 $*")
+     ("la" "ls -lAh $*")
+     ("ll" "ls -lh $*")
+     ("grep" "grep --color=auto")
+     ("mkdir" "mkdir -p $*")
+     ("mkcd" "mkdir -p $* && cd $1")
+     ("emacs" "find-file $1")
+     ("em" "find-file $1")))
+  (eshell-write-aliases-list))
 
 (provide 'mode-eshell)
