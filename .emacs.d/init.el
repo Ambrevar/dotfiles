@@ -183,9 +183,6 @@ To view where the bindings are set in your config files, lookup
 (when (require 'dired+ nil t)
   (toggle-diredp-find-file-reuse-dir 1))
 
-(when (require 'powerline nil t)
-  (powerline-default-theme))
-
 (add-to-list 'package-selected-packages 'company)
 (add-to-list 'package-selected-packages 'helm-company)
 (when (require 'company nil t)
