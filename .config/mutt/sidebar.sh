@@ -18,13 +18,13 @@ color sidebar_flagged white $my_bg
 color sidebar_divider $my_flag $my_bg
 color sidebar_highlight white $my_status_bg
 
-## Folder selection
+## Folder selection, Emacs and vi bindings.
 bind index,pager \CP sidebar-prev
 bind index,pager \CN sidebar-next
 bind index,pager \CO sidebar-open
-bind index,pager <Esc>p sidebar-prev
-bind index,pager <Esc>n sidebar-next
-bind index,pager <Esc>o sidebar-open
+bind index,pager <Esc>k sidebar-prev
+bind index,pager <Esc>j sidebar-next
+bind index,pager <Esc>l sidebar-open
 
 ## Toggle sidebar visibility. Screen might get messed up, hence the refresh.
 macro index b '<enter-command>toggle sidebar_visible<enter><refresh>'
