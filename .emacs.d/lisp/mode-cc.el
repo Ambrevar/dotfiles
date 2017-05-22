@@ -123,16 +123,14 @@ restored."
 ;; function. Since cc modes belong to prog-mode, each hook is called another
 ;; time at the end of the initialization. No big deal since we only set some
 ;; variables.
-(mapc
- (lambda (mode-hook)
+(dolist (hook '(c-mode-hook c++-mode-hook))
    (add-hook-and-eval
-    mode-hook
+    hook
     (lambda ()
       (c-set-style "ambrevar") ;; We override existing values.
       (when (require 'company nil t)
         (company-mode))
       (cc-set-compiler))))
- '(c-mode-hook c++-mode-hook))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Skeletons

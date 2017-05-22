@@ -32,18 +32,16 @@
 ;; eshell/alias is too slow as it reads and write the file on each definition.
 (with-eval-after-load 'em-alias
   (eshell-read-aliases-list)
-  (mapc
-   (lambda (alias)
-     (add-to-list 'eshell-command-aliases-list alias))
-   '(("ls" "ls -F $*")
-     ("l" "ls -1 $*")
-     ("la" "ls -lAh $*")
-     ("ll" "ls -lh $*")
-     ("grep" "grep --color=auto")
-     ("mkdir" "mkdir -p $*")
-     ("mkcd" "mkdir -p $* && cd $1")
-     ("emacs" "find-file $1")
-     ("em" "find-file $1")))
+  (dolist (alias '(("ls" "ls -F $*")
+                   ("l" "ls -1 $*")
+                   ("la" "ls -lAh $*")
+                   ("ll" "ls -lh $*")
+                   ("grep" "grep --color=auto")
+                   ("mkdir" "mkdir -p $*")
+                   ("mkcd" "mkdir -p $* && cd $1")
+                   ("emacs" "find-file $1")
+                   ("em" "find-file $1")))
+    (add-to-list 'eshell-command-aliases-list alias))
   (eshell-write-aliases-list))
 
 (provide 'mode-eshell)

@@ -85,24 +85,16 @@
 (setq-default indent-tabs-mode t)
 
 ;; Lisp should not use tabs.
-(mapc
- (lambda (hook)
-   (add-hook
-    hook
-    (lambda ()
-      (setq indent-tabs-mode nil))))
- '(lisp-mode-hook emacs-lisp-mode-hook))
+(dolist (hook '(lisp-mode-hook emacs-lisp-mode-hook))
+   (add-hook hook (lambda () (setq indent-tabs-mode nil))))
 
 (add-hook
  'emacs-lisp-mode-hook
- (lambda ()
-   (local-set-key (kbd "M-.") 'find-symbol-at-point)))
+ (lambda () (local-set-key (kbd "M-.") 'find-symbol-at-point)))
 
 (add-hook
  'change-log-mode-hook
- (lambda ()
-   (setq tab-width 2)
-   (setq left-margin 2)))
+ (lambda () (setq tab-width 2 left-margin 2)))
 
 ;; This needs to be set globally since they are defined as local variable and
 ;; Emacs does not know how to set an alias on a local variable.

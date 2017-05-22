@@ -47,8 +47,7 @@
   (interactive)
   (hack-local-variables)
   (let* (;; Master file.
-         (local-master
-          (if tex-masterfile tex-masterfile (if buffer-file-name buffer-file-name (error "Buffer has no file name"))))
+         (local-master (or tex-masterfile buffer-file-name (error "Buffer has no file name")))
          (dirname (file-name-directory local-master))
          (basename (file-name-sans-extension (file-name-nondirectory local-master)))
          ;; Note: makeindex fails with absolute file names, we need relative names.
@@ -66,32 +65,26 @@
            " " (shell-quote-argument basename)))))
 
 (defun tex-clean ()
-  "Remove all TeX temporary files. This command should be safe,
-but there is no warranty."
+  "Remove all TeX temporary files.
+This command should be safe, but there is no warranty."
   (interactive)
   (hack-local-variables)
-  (let ((master (concat
-                 (if tex-masterfile
-                     (file-name-sans-extension tex-masterfile)
-                   (file-name-sans-extension buffer-file-name))
-                 ".")))
-    (mapc
-     ;; Delete file if it exists.
-     (lambda (argfile)
-       (when (and (file-exists-p argfile) (file-writable-p argfile))
-         (delete-file argfile)
-         (message "[%s] deleted." argfile)))
-     (mapc
-      ;; Concat file name with extensions.
-      (lambda (arg) (concat master arg))
-      tex-extension-list))))
+  (let ((master (file-name-sans-extension (or tex-masterfile buffer-file-name))))
+    (dolist (file (mapcar
+                   ;; Concat file name with extensions.
+                   (lambda (arg) (concat master "." arg))
+                   tex-extension-list))
+      ;; Delete file if it exists.
+      (when (and (file-exists-p file) (file-writable-p file))
+        (delete-file file)
+        (message "Deleted %S." file)))))
 
 (defun tex-pdf-compress ()
   "Use `tex-masterfile' variable as default value for `pdf-compress'."
   (interactive)
   (require 'tool-pdf)
   (hack-local-variables)
-  (let ((local-master (if tex-masterfile tex-masterfile buffer-file-name)))
+  (let ((local-master (or tex-masterfile buffer-file-name)))
     (pdf-compress local-master)))
 
 (defun tex-pdf-view ()
@@ -99,7 +92,7 @@ but there is no warranty."
   (interactive)
   (require 'tool-pdf)
   (hack-local-variables)
-  (let ((local-master (if tex-masterfile tex-masterfile buffer-file-name)))
+  (let ((local-master (or tex-masterfile buffer-file-name)))
     (pdf-view local-master)))
 
 (defun tex-toggle-escape-char ()

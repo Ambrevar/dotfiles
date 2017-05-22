@@ -83,15 +83,13 @@
    (set-face-foreground 'compilation-line-number "cyan")))
 
 ;; C additional keywords.
-(mapc
- (lambda (mode)
+(dolist (mode '(c-mode c++-mode))
    (font-lock-add-keywords
     mode
     '(("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)
       ;; Functions.
       ("\\<\\(\\sw+\\)(" 1 'font-lock-function-name-face)
       ("\\<\\(\\sw+\\)<\\sw+>(" 1 'font-lock-function-name-face))))
- '(c-mode c++-mode))
 
 ;; Ediff
 (add-hook
@@ -155,21 +153,19 @@
 ;; Key notes highlighting. We need to apply it to the mode hook since
 ;; font-lock-add-keywords has no inheritance support.
 (set-face-foreground 'font-lock-warning-face "DarkOrange")
-(mapc
- (lambda (mode-hook)
-   (add-hook
-    mode-hook
-    (lambda () (interactive)
-      (font-lock-add-keywords
-       nil
-       ;; See https://en.wikipedia.org/wiki/Comment_(computer_programming)#Tags.
-       '(("\\<\\(FIXME\\(([^)]+)\\)?\\):" 1 font-lock-warning-face prepend)
-         ("\\<\\(TODO\\(([^)]+)\\)?\\):" 1 font-lock-warning-face prepend)
-         ("\\<\\(UNDONE\\):" 1 font-lock-warning-face prepend)
-         ("\\<\\(UX\\):" 1 font-lock-warning-face prepend)
-         ("\\<\\(WARNING\\):" 1 font-lock-warning-face prepend)
-         ("\\<\\(XXX\\):" 1 font-lock-warning-face prepend))))))
- '(prog-mode-hook tex-mode-hook texinfo-mode-hook))
+(dolist (hook '(prog-mode-hook tex-mode-hook texinfo-mode-hook))
+  (add-hook
+   hook
+   (lambda () (interactive)
+     (font-lock-add-keywords
+      nil
+      ;; See https://en.wikipedia.org/wiki/Comment_(computer_programming)#Tags.
+      '(("\\<\\(FIXME\\(([^)]+)\\)?\\):" 1 font-lock-warning-face prepend)
+        ("\\<\\(TODO\\(([^)]+)\\)?\\):" 1 font-lock-warning-face prepend)
+        ("\\<\\(UNDONE\\):" 1 font-lock-warning-face prepend)
+        ("\\<\\(UX\\):" 1 font-lock-warning-face prepend)
+        ("\\<\\(WARNING\\):" 1 font-lock-warning-face prepend)
+        ("\\<\\(XXX\\):" 1 font-lock-warning-face prepend))))))
 
 ;; Man pages
 (add-hook

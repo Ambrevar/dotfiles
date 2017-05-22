@@ -215,13 +215,11 @@ To view where the bindings are set in your config files, lookup
 ; (setq pdf-viewer "evince")
 ; (setq pdf-viewer-args nil)
 ;
-; (mapcar
-;  (lambda (mode-hook)
-;    (add-hook mode-hook (lambda () (run-hooks 'prog-mode-hook))))
-;  '(asm-mode-hook awk-mode-hook c++-mode-hook c-mode-hook
-;                  emacs-lisp-mode-hook lisp-mode-hook lua-mode-hook
-;                  makefile-mode-hook octave-mode-hook perl-mode-hook
-;                  python-mode-hook scheme-mode-hook sh-mode-hook))
+; (dolist (hook '(asm-mode-hook awk-mode-hook c++-mode-hook c-mode-hook
+;                 emacs-lisp-mode-hook lisp-mode-hook lua-mode-hook
+;                 makefile-mode-hook octave-mode-hook perl-mode-hook
+;                 python-mode-hook scheme-mode-hook sh-mode-hook))
+;   (add-hook hook (lambda () (run-hooks 'prog-mode-hook))))
 ;
 ; (defun comment-line... ;; From emacs 25
 ;
