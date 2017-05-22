@@ -195,14 +195,22 @@ To view where the bindings are set in your config files, lookup
   (setq magit-diff-refine-hunk 'all)
   (global-set-key (kbd "C-x g") 'magit-status))
 
-(add-to-list 'package-selected-packages 'god-mode)
-(when (require 'god-mode nil t)
-  (require 'tool-god))
+;; (add-to-list 'package-selected-packages 'god-mode)
+;; (when (require 'god-mode nil t)
+;;   (require 'tool-god))
+
+(add-to-list 'package-selected-packages 'evil-mode)
+(add-to-list 'package-selected-packages 'evil-leader)
+(add-to-list 'package-selected-packages 'evil-magit)
+(add-to-list 'package-selected-packages 'linum-relative)
+(when (require 'evil nil t)
+  (require 'tool-evil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; End of config
 
 ;; Don't let `customize' clutter my config.
+;; This will prompt "File exists, but cannot be read".
 (setq custom-file "/dev/null")
 
 ;; We need to put it at the end to make sure it doesn't get overriden by other
