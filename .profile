@@ -130,7 +130,29 @@ fi
 
 ## fzf
 if command -v fzf >/dev/null 2>&1; then
-	export FZF_DEFAULT_OPTS="--reverse --inline-info --height 40% --cycle --extended --multi --select-1 --exit-0 --bind=ctrl-k:kill-line,alt-l:accept,alt-f:page-down,alt-b:page-up,alt-a:toggle-all,ctrl-a:select-all,alt-space:toggle-down,alt-i:toggle-up,alt-z:toggle-preview,alt-j:down,alt-k:up,alt-h:unix-line-discard"
+	export FZF_DEFAULT_OPTS="\
+--reverse \
+--inline-info \
+--height=40% \
+--cycle \
+--extended \
+--multi \
+--select-1 \
+--exit-0 \
+--bind=alt-a:toggle-all \
+--bind=alt-b:page-up \
+--bind=alt-f:page-down \
+--bind=alt-h:unix-line-discard \
+--bind=alt-i:toggle-up \
+--bind=alt-j:down \
+--bind=alt-k:up \
+--bind=alt-l:accept \
+--bind=alt-space:toggle-down \
+--bind=alt-z:toggle-preview \
+--bind=ctrl-a:select-all \
+--bind=ctrl-k:kill-line \
+"
+
 	export FZF_ALT_C_OPTS="--preview='preview {}'"
 	export FZF_BCD_OPTS=$FZF_ALT_C_OPTS
 	export FZF_CDHIST_OPTS=$FZF_ALT_C_OPTS
