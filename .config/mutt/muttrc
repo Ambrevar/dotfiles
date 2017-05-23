@@ -182,6 +182,7 @@ bind pager j next-line
 bind pager k previous-line
 bind attach,index,pager \CD next-page
 bind attach,index,pager \CU previous-page
+bind attach,index,pager <Esc>f next-page
 bind attach,index,pager ? search-reverse
 bind attach,index,pager h help
 bind attach,index,pager \Ch display-toggle-weed
@@ -190,6 +191,7 @@ bind index <Esc>x collapse-thread
 bind index <Esc>X collapse-all
 bind attach,index,pager \CV next-page
 bind attach,index,pager <Esc>v previous-page
+bind attach,index,pager <Esc>b previous-page
 bind pager g top
 bind pager G bottom
 bind pager <Esc>< top
