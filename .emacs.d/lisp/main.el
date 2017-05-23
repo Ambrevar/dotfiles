@@ -190,13 +190,8 @@
 ;; (if (>= emacs-major-version 24)
 ;;     (electric-pair-mode 1))
 
-;; Run terminal asynchronously in current `default-directory'.
-;; This requires SHELL_CD to be used in the shell config.
-(define-key mickey-minor-mode-map (kbd "C-x M-RET")
-  (lambda () (interactive)
-    (let ((term (getenv "TERMCMD")))
-      (when (executable-find term)
-        (start-process "dummy" nil "env" (concat "SHELL_CD=" default-directory) term)))))
+;; Spawn terminal shortcut: WM's binding is s+RET.
+(define-key mickey-minor-mode-map (kbd "C-x M-RET") 'spawn-terminal)
 
 ;; Calendar ISO display.
 (setq calendar-week-start-day 1)
@@ -298,6 +293,15 @@
  'find-file-hook
  (lambda ()
    (when (and (string-match "/tmp/mutt-.*" (buffer-file-name))
+              (require 'with-editor nil t))
+     ;; Just like git commits.
+     (with-editor-mode))))
+
+;; Fish commandline editing.
+(add-hook
+ 'find-file-hook
+ (lambda ()
+   (when (and (string-match "/tmp/tmp\..*\.fish" (buffer-file-name))
               (require 'with-editor nil t))
      ;; Just like git commits.
      (with-editor-mode))))

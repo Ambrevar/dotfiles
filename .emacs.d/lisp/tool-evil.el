@@ -25,6 +25,7 @@
   ;; TODO: dired/info can not super <SPC> as leader. Use ',' as leader key?
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
+    "RET" 'spawn-terminal
     "\\" 'toggle-window-split
     "b" 'buffer-menu
     "e" 'find-file

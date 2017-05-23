@@ -401,6 +401,15 @@ Do not fold case with \\[universal-argument] or non-nil ARG."
       (delete-duplicate-lines (region-beginning) (region-end))
       (sort-lines nil (region-beginning) (region-end)))))
 
+(defun spawn-terminal ()
+  "Spawn terminal asynchronously.
+The SHELL_CD environement variable is set to `default-directory'.
+The shell can use it to automatically change directory to it."
+  (interactive)
+  (let ((term (or (getenv "TERMCMD") "xterm")))
+    (when (executable-find term)
+      (start-process "dummy" nil "env" (concat "SHELL_CD=" default-directory) term))))
+
 (defun swap-windows ()
   "If 2 windows are up, swap them."
   (interactive)
