@@ -130,11 +130,14 @@ fi
 
 ## fzf
 if command -v fzf >/dev/null 2>&1; then
-	export FZF_DEFAULT_OPTS="--reverse --inline-info --height 40% --cycle --extended --multi --select-1 --exit-0 --bind=ctrl-k:kill-line,alt-l:accept,alt-f:page-down,alt-b:page-up,alt-a:toggle-all,ctrl-a:select-all,alt-i:toggle-down,alt-o:toggle-up,alt-z:toggle-preview,alt-j:down,alt-k:up,alt-h:kill-line"
+	export FZF_DEFAULT_OPTS="--reverse --inline-info --height 40% --cycle --extended --multi --select-1 --exit-0 --bind=ctrl-k:kill-line,alt-l:accept,alt-f:page-down,alt-b:page-up,alt-a:toggle-all,ctrl-a:select-all,alt-space:toggle-down,alt-i:toggle-up,alt-z:toggle-preview,alt-j:down,alt-k:up,alt-h:unix-line-discard"
 	export FZF_ALT_C_OPTS="--preview='preview {}'"
 	export FZF_BCD_OPTS=$FZF_ALT_C_OPTS
 	export FZF_CDHIST_OPTS=$FZF_ALT_C_OPTS
 	export FZF_CTRL_R_OPTS="--reverse --sort"
+	## Multiple previews might not show up when the --height is less then 100%
+	## since the 'preview' script only considers the total number of lines in the
+	## terminal window (not in the preview window).
 	export FZF_CTRL_T_OPTS="--bind=alt-l:'execute(rifle {+})' --preview='preview {+}'"
 	if [ "$(uname -o)" = "GNU/Linux" ]; then
 		## Append '/' to folder names. GNU find required.
