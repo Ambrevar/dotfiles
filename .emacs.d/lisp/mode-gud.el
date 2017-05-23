@@ -31,8 +31,7 @@ Do not set `gdb-show-main' to true as we handle it manually here."
 
   (split-window-horizontally)
   (other-window 1)
-  (gdb-set-window-buffer
-   (gdb-get-buffer-create 'gdb-inferior-io)))
+  (gdb-set-window-buffer (gdb-get-buffer-create 'gdb-inferior-io))
 
   (other-window 1)
   (gdb-set-window-buffer gud-comint-buffer)

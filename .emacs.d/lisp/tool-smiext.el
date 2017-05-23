@@ -1,5 +1,6 @@
 ;;; Hack around SMIE
 (require 'smie)
+
 (defcustom smie-align nil "Whether to align function arguments.")
 
 (defun smie-indent-exps ()

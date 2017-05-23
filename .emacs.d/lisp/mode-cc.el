@@ -75,7 +75,7 @@ restored."
     (if (/= status 0)
         (error "error running uncrustify")
       (delete-region start end)
-      (insert-buffer formatbuf)
+      (insert-buffer-substring formatbuf)
       (kill-buffer formatbuf))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

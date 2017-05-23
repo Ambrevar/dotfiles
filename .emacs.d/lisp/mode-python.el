@@ -3,7 +3,7 @@
 (defun python-set-compiler ()
   "Returns the value of the shebang if any, `python-shell-interpreter' otherwise."
   (let* ((firstline
-          (save-excursion (beginning-of-buffer) (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
+          (save-excursion (goto-char (point-min)) (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
          (interpreter
           (if (not (string-match "^#!" firstline))
               python-shell-interpreter

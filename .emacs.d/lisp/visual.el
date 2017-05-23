@@ -22,7 +22,7 @@
   (set-face-background 'mode-line "white"))
 
 ;; (set-face-foreground 'link "#00ffff")
-(set-face-underline-p 'link t)
+(set-face-underline 'link t)
 (set-face-foreground 'minibuffer-prompt "#00ffff")
 (set-face-background 'region "#191970")
 (set-face-attribute 'isearch nil :foreground "#8b0000" :background "white")
@@ -67,7 +67,7 @@
  'sh-mode-hook
  (lambda ()
    (set-face-foreground 'sh-heredoc "#00bfff")
-   (set-face-bold-p 'sh-heredoc nil)))
+   (set-face-bold 'sh-heredoc nil)))
 
 ;; Eshell
 (add-hook

@@ -13,7 +13,7 @@
 ;     (setq start (point-min) end (point-max)))
 ;
 ;; If several commands act on region and the region size/pos is susceptible to change:
-; (save-excursion
+; (save-mark-and-excursion
 ;   (unless mark-active
 ;     (mark-whole-buffer))
 ;; Then call (region-beginning) and (region-end)
@@ -39,7 +39,7 @@ while `run-mode-hooks' is running."
       (apply 'call-process program nil t nil args))))
 
 (defun count-occurences (regex string)
-  "Return number of times regex occurs in string.
+  "Return number of times REGEX occurs in STRING.
 If you want to operate on buffer, use `how-many' instead."
   (let ((start 0) (matches 0))
     (while (string-match regex string start)
@@ -74,7 +74,7 @@ there's a region, all lines that region covers will be duplicated."
 (define-key mickey-minor-mode-map (kbd "C-x M-d") 'duplicate)
 
 (defun emacs-process-p (pid)
-  "If pid is the process ID of an emacs process, return t, else nil.
+  "If PID is the process ID of an Emacs process, return t, else nil.
 Also returns nil if pid is nil."
   (when pid
     (let ((attributes (process-attributes pid)) (cmd))
@@ -86,15 +86,15 @@ Also returns nil if pid is nil."
 (defun escape-region (&optional regex to-string)
   "Escape double-quotes and backslashes.
 This is useful for writing Elisp strings containing those
-characters. You can control the regex replacement with the two
-optional parameters."
+characters. The optional parameters let you control the replacement of REGEX for
+TO-STRING."
   (interactive)
   (unless regex (setq regex "\\([\"\\\\]\\)"))
   (unless to-string (setq to-string "\\\\\\1"))
   (save-excursion
     (while (re-search-forward
             regex
-            (if (not mark-active) (point-max) (region-end))
+            (if mark-active (region-end) (point-max))
             t)
       (replace-match to-string))))
 
@@ -129,7 +129,8 @@ optional parameters."
 ;; above comment.
 ;; TODO: Fix reported to http://debbugs.gnu.org/cgi/bugreport.cgi?bug=20663.
 (defun forward-page (&optional count)
-  "Move forward to page boundary.  With arg, repeat, or go back if negative.
+  "Move forward to page boundary.
+With prefix or COUNT, repeat, or go back if negative.
 A page boundary is any line whose beginning matches the regexp
 `page-delimiter'."
   (interactive "p")
@@ -197,7 +198,8 @@ it appears in the minibuffer prompt."
          (insert filename))))
 
 (defun load-external (ext feature &optional mode default)
-  "Add the EXT regex to `auto-mode-alist' such that it loads the
+  "Load FEATURE with EXT.
+Add the EXT regex to `auto-mode-alist' such that it loads the
 associated symbol FEATURE. If FEATURE has not the same name as
 the mode, you should provide the real mode name in symbol MODE.
 If MODE is nil or unspecified, FEATURE is used as the mode name.
@@ -213,14 +215,15 @@ fallback to the mode provided in symbol DEFAULT."
                       (,local-mode)
                     ,(if (null default)
                          `(warn "Could not load %s, fallback to %s"
-                                (symbol-name ',feature) (symbol-name ',default-major-mode))
+                                (symbol-name ',feature) (symbol-name ',major-mode))
                        `(progn
                           (,default)
                           (warn "Could not load %s, fallback to %s"
                                 (symbol-name ',feature) (symbol-name ',default))))))))))
 
 (defun mark-word-from-beginning (&optional arg allow-extend)
-  "Set the point at the beginning of the word and call `mark-word'."
+  "Set the point at the beginning of the word and call `mark-word'.
+ARG and ALLOW-EXTEND are the same."
   (interactive "P\np")
   (cond ((and allow-extend
               (or (and (eq last-command this-command) (mark t))
@@ -240,17 +243,18 @@ If this is a window with its right edge being the edge of the
 screen, enlarge the window horizontally. If this is a window with
 its left edge being the edge of the screen, shrink the window
 horizontally. Otherwise, default to enlarging horizontally.\n
-Enlarge/Shrink by ARG columns, or 5 if arg is nil."
+Enlarge/Shrink by ARG columns, or 5 if ARG is nil."
   (interactive "P")
   (if (= (count-windows) 2)
       (move-border-left-or-right arg t)))
 (define-key mickey-minor-mode-map (kbd "M-(") 'move-border-left)
 
 (defun move-border-left-or-right (arg dir-left)
-  "Wrapper around move-border-left and move-border-right.
-If DIR is t, then move left, otherwise move right."
+  "Wrapper around ‘move-border-left’ and ‘move-border-right’.
+ARG is the number of columns to move.
+If DIR-LEFT is t, then move left, otherwise move right."
   (interactive)
-  (if (null arg) (setq arg 5))
+  (unless arg (setq arg 5))
   (let ((left-edge (= (car (window-edges)) 0)))
     (if (or
          (and left-edge dir-left)
@@ -293,7 +297,7 @@ If ACTIVATE is non-nil, enable, disable otherwise. Interactively,
 activate unless called with \\[universal-argument].\n\nThis adds
 page-number/page-count to mode line. It will only display if
 there is more than one page. A page is delimited by
-page-delimiter.\n
+‘page-delimiter’.\n
 WARNING: this may slow down editing on big files."
   (interactive (list (not (equal current-prefix-arg '(4)))))
   (setq mode-line-format
@@ -334,8 +338,9 @@ WARNING: this may slow down editing on big files."
                (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
 
 (defun sanitize ()
-  "(Un)tabifies according to `indent-tabs-mode', indents and deletes trailing whitespace.
-Works on buffer or region. Requires `tabify-leading'."
+  "(Un)tabify, indent and delete trailing whitespace.
+Tabify if `indent-tabs-mode' is true, otherwise use spaces.
+Work on buffer or region. Require `tabify-leading'."
   (interactive)
   (let (start end)
     (if mark-active
@@ -367,10 +372,11 @@ Hook function for skeletons."
         (mapcar 'copy-marker (reverse skeleton-positions))))
 
 (defvar skeleton-markers nil
-  "Markers for locations saved in skeleton-positions.")
+  "Markers for locations saved in `skeleton-positions'.")
 
 (defun skeleton-next-position (&optional reverse)
-  "Skeleton movements through placeholders."
+  "Move to next skeleton placeholder.
+If REVERSE it t, move to previes placeholder."
   (interactive "P")
   (let ((positions (mapcar 'marker-position skeleton-markers))
         (comp (if reverse '< '<=))
@@ -392,7 +398,7 @@ Do not fold case with \\[universal-argument] or non-nil ARG."
   (interactive "P")
   ;; We use save-excursion here because the region boundaries change during
   ;; execution, so it's more convenient to track them with region functions.
-  (save-excursion
+  (save-mark-and-excursion
     (unless mark-active
       (mark-whole-buffer))
     (let ((sort-fold-case (if arg nil t)))
@@ -448,7 +454,7 @@ Run it in each window you want to 'freeze', i.e. prevent Emacs
 from acting on it."
   (interactive)
   (message
-   (if (let (window (get-buffer-window (current-buffer)))
+   (if (let ((window (get-buffer-window (current-buffer))))
          (set-window-dedicated-p window
                                  (not (window-dedicated-p window))))
        "Window '%s' is dedicated"

@@ -37,7 +37,7 @@
 ; (setq version-control t)
 
 ;; Default mode
-(setq default-major-mode 'text-mode)
+(setq-default major-mode 'text-mode)
 
 ;; Disable suspend key since it is useless on Emacs server.
 (global-unset-key (kbd "C-z"))

@@ -28,16 +28,19 @@
 
 (defcustom tex-compilation-delay 2
   "Seconds before hiding the compilation window."
-  :type 'number)
+  :type 'number
+  :group 'tex)
 
 (defcustom tex-extension-list nil
   "List of known TeX exentsions. This list is used by `tex-clean'
   to purge all matching files."
-  :type '(repeat list))
+  :type '(repeat list)
+  :group 'tex)
 
 (defcustom tex-index-command "makeindex"
   "The TeX index file generator."
-  :type 'string)
+  :type 'string
+  :group 'tex)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions

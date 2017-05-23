@@ -10,10 +10,7 @@
   "Update texinfo node menu automatically."
   (interactive)
   (hack-local-variables)
-  (let
-      ;; Master file.
-      ((local-master (if (not masterfile) buffer-file-name masterfile)))
-    (texinfo-multiple-files-update local-master t 8)))
+  (texinfo-multiple-files-update (or tex-master-file buffer-file-name) t 8))
 
 (add-hook-and-eval
  'texinfo-mode-hook

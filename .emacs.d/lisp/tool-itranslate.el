@@ -86,10 +86,11 @@ the end after an ' = ' separtor."
   (save-excursion
     ;; forward-line will remain on the same line if EOF has been reached. Need
     ;; to check for it.
-    (let ((lang-in (or in itranslate-lang-input))
+    (let (line
+          (lang-in (or in itranslate-lang-input))
           (lang-out (or out itranslate-lang-output)))
       (while (<= beg end)
-        (goto-line beg)
+        (forward-line beg)
         (setq line (buffer-substring-no-properties
                     (line-beginning-position) (line-end-position)))
         (unless (string-match "^ *$" line)
