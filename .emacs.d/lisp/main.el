@@ -5,9 +5,7 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (menu-bar-mode -1)
 (when (fboundp 'set-scroll-bar-mode)
-  (set-scroll-bar-mode 'left)
-  (scroll-bar-mode -1)
-  (define-key mickey-minor-mode-map (kbd "C-<f6>") 'toggle-scroll-bar))
+  (scroll-bar-mode -1))
 
 ;; Remember last cursor position.
 (require 'saveplace)
@@ -71,7 +69,6 @@
 
 ;; Line numbers
 (add-hook 'find-file-hook (lambda () (linum-mode 1)))
-(define-key mickey-minor-mode-map (kbd "C-<f5>") 'linum-mode)
 ;; Emacs-nox does not display a fringe after the linum: Setting linum-format in
 ;; linum-before-numbering-hook is not the right approach as it will change the
 ;; type of linum-format in the middle. See linum-update-window.
@@ -114,7 +111,7 @@
  (lambda ()
    (page-number-mode t)))
 
-(define-key mickey-minor-mode-map (kbd "C-<f7>") 'whitespace-mode)
+(define-key mickey-minor-mode-map (kbd "<f5>") 'whitespace-mode)
 (setq
  whitespace-style
  '(face empty indentation space-after-tab space-before-tab tab-mark trailing))
@@ -162,17 +159,8 @@
          (if b b "w3m" )))
       browse-url-browser-function 'browse-url-generic)
 
-;; Default ispell dictionnay. If not set, Emacs uses the current locale.
+;; Default ispell dictionary. If not set, Emacs uses the current locale.
 (setq ispell-dictionary "english")
-(define-key mickey-minor-mode-map
-  (kbd "<f5>")
-  (lambda () (interactive) (ispell-change-dictionary "english")))
-(define-key mickey-minor-mode-map
-  (kbd "<f6>")
-  (lambda () (interactive) (ispell-change-dictionary "francais")))
-(define-key mickey-minor-mode-map
-  (kbd "<f7>")
-  (lambda () (interactive) (ispell-change-dictionary "svenska")))
 
 ;; Long paragraphs. Useful for quick navigation with backward-paragraph and
 ;; forward-paragraph.
@@ -240,6 +228,7 @@
   ;; http://stackoverflow.com/questions/22995203/one-compile-command-per-buffer-not-directory
   ; (add-to-list 'desktop-locals-to-save 'compile-history)
   (add-to-list 'desktop-locals-to-save 'compile-command)
+  (add-to-list 'desktop-locals-to-save 'ispell-local-dictionary)
   (desktop-save-mode 1))
 
 ;; GMP documentation

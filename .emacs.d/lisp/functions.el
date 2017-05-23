@@ -332,7 +332,6 @@ WARNING: this may slow down editing on big files."
                (set-visited-file-name new-name)
                (set-buffer-modified-p nil)
                (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
-(define-key mickey-minor-mode-map (kbd "C-x w") 'rename-buffer-and-file)
 
 (defun sanitize ()
   "(Un)tabifies according to `indent-tabs-mode', indents and deletes trailing whitespace.
