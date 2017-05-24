@@ -161,6 +161,9 @@
       nil
       ;; See https://en.wikipedia.org/wiki/Comment_(computer_programming)#Tags.
       '(("\\<\\(FIXME\\(([^)]+)\\)?\\):" 1 font-lock-warning-face prepend)
+        ("\\<\\(HACK\\):" 1 font-lock-warning-face prepend)
+        ("\\<\\(OPTIMIZE\\(([^)]+)\\)?\\):" 1 font-lock-warning-face prepend)
+        ("\\<\\(REVIEW\\(([^)]+)\\)?\\):" 1 font-lock-warning-face prepend)
         ("\\<\\(TODO\\(([^)]+)\\)?\\):" 1 font-lock-warning-face prepend)
         ("\\<\\(UNDONE\\):" 1 font-lock-warning-face prepend)
         ("\\<\\(UX\\):" 1 font-lock-warning-face prepend)
