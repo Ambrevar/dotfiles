@@ -55,7 +55,7 @@ called with universal argument, insert result at point. If IN or
 OUT are nil, use `itranslate-lang-input' and
 `itranslate-lang-output' respectively."
   (interactive
-   (list (if mark-active (mark) (error "Mark not set"))
+   (list (if (use-region-p) (mark) (error "Mark not set"))
          (point)
          (equal current-prefix-arg '(4))))
   (when (called-interactively-p 'any) (itranslate-init))
@@ -78,7 +78,7 @@ region. This calls the `itranslate' function. Output result at
 the end after an ' = ' separtor."
   (interactive
    (list (line-number-at-pos (point))
-         (line-number-at-pos (if mark-active (mark) (point))) nil nil))
+         (line-number-at-pos (if (use-region-p) (mark) (point))) nil nil))
   (when (called-interactively-p 'any) (itranslate-init))
   (when (> beg end)
     (setq beg end)

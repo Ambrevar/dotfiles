@@ -67,7 +67,7 @@ restored."
   (let  (status
          start end
          (formatbuf (get-buffer-create "*C format buffer*")))
-    (if mark-active
+    (if (use-region-p)
         (setq start (region-beginning) end (region-end))
       (setq start (point-min) end (point-max)))
     (setq status

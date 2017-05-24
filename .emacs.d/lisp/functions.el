@@ -1,23 +1,21 @@
 ;; Functions
 
-;; Notes on mark and region: to get a consistent behaviour whether Transient
-;; mode is on or off, check `mark-active'. It will work as expected if
+;; Notes on mark and region: to get a consistent behaviour regardless of Transient
+;; mode, check `(use-region-p)'. It will work as expected if
 ;; transient. If not, it will always be true as soon as the mark has been set
 ;; once; so you need to make sure the mark is set as you want beforehand (e.g.
 ;; whole buffer, single line...). This is the behaviour of `sort-lines'.
 ;;
-;; The clean way to get region boundaries and fallback on buffer:
+;; The clean way to get static region boundaries and fallback on buffer boundaries:
 ; (let (start end)
-;   (if mark-active
+;   (if (use-region-p)
 ;       (setq start (region-beginning) end (region-end))
 ;     (setq start (point-min) end (point-max)))
 ;
 ;; If several commands act on region and the region size/pos is susceptible to change:
-; (save-mark-and-excursion
-;   (unless mark-active
-;     (mark-whole-buffer))
-;; Then call (region-beginning) and (region-end)
-;;
+; (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
+;       (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-end)))))
+;
 ;; For commands that only work on regions:
 ; (defun count-lines-region (start end)
 ;   "Print number of lines and characters in the region."
@@ -56,11 +54,11 @@ there's a region, all lines that region covers will be duplicated."
         end
         (origin (point))
         (auto-fill-p (symbol-value 'auto-fill-function)))
-    (if (and mark-active (> (point) (mark)))
-        (exchange-point-and-mark))
+    (when (and (use-region-p) (> (point) (mark)))
+      (exchange-point-and-mark))
     (setq beg (line-beginning-position))
-    (if mark-active
-        (exchange-point-and-mark))
+    (when (use-region-p)
+      (exchange-point-and-mark))
     (setq end (line-end-position))
     (let ((region (buffer-substring-no-properties beg end)))
       (auto-fill-mode -1)
@@ -91,12 +89,8 @@ TO-STRING."
   (interactive)
   (unless regex (setq regex "\\([\"\\\\]\\)"))
   (unless to-string (setq to-string "\\\\\\1"))
-  (save-excursion
-    (while (re-search-forward
-            regex
-            (if mark-active (region-end) (point-max))
-            t)
-      (replace-match to-string))))
+  (while (re-search-forward regex (if (use-region-p) (region-end) (point-max)) t)
+    (replace-match to-string)))
 
 (defun eval-and-replace ()
   "Replace the last sexp with its value."
@@ -342,10 +336,8 @@ WARNING: this may slow down editing on big files."
 Tabify if `indent-tabs-mode' is true, otherwise use spaces.
 Work on buffer or region. Require `tabify-leading'."
   (interactive)
-  (let (start end)
-    (if mark-active
-     (setq start (region-beginning) end (region-end))
-   (setq start (point-min) end (point-max)))
+  (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
+        (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-end)))))
     (if indent-tabs-mode
         (tabify-leading)
       (untabify start end))
@@ -396,15 +388,12 @@ If REVERSE it t, move to previes placeholder."
   "Remove trailing white space, then duplicate lines, then sort the result.
 Do not fold case with \\[universal-argument] or non-nil ARG."
   (interactive "P")
-  ;; We use save-excursion here because the region boundaries change during
-  ;; execution, so it's more convenient to track them with region functions.
-  (save-mark-and-excursion
-    (unless mark-active
-      (mark-whole-buffer))
+ (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
+       (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-end)))))
     (let ((sort-fold-case (if arg nil t)))
-      (delete-trailing-whitespace (region-beginning) (region-end))
-      (delete-duplicate-lines (region-beginning) (region-end))
-      (sort-lines nil (region-beginning) (region-end)))))
+      (delete-trailing-whitespace start end)
+      (delete-duplicate-lines start end)
+      (sort-lines nil start end))))
 
 (defun spawn-terminal ()
   "Spawn terminal asynchronously.
@@ -439,7 +428,7 @@ Works on whole buffer if region is unactive."
   (interactive)
   (require 'tabify) ; Need this to initialize `tabify-regexp'.
   (let ((tabify-regexp-old tabify-regexp) start end)
-    (if mark-active
+    (if (use-region-p)
         (setq start (region-beginning) end (region-end))
       (setq start (point-min) end (point-max)))
     (unwind-protect

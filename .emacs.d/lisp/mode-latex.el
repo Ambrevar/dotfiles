@@ -30,16 +30,14 @@
 ;; Functions
 
 (defun latex-itemize ()
-  "Prepend \\item to the beginning of the line if not already
-  there, otherwise insert it on next line. On region, append
-  \item to every line and surround the region by an `itemize'
-  environment. If bound to M-RET, you can then easily apply this
-  command on the paragraph at point with M-h M-RET."
+  "Itemize current line or lines in region.
+Prepend \\item to the beginning of the lines if not already
+there, otherwise insert it on next line. If region, surround it
+by an {itemize} environment."
   (interactive)
-  (let (min max case-fold-search)
-    (if (not (region-active-p))
-
-        (if (string-match "\\item" (buffer-substring (line-beginning-position) (line-end-position)))
+  (let (min max)
+    (if (not (use-region-p))
+        (if (string-match "\\item" (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
             (progn
               (goto-char (line-end-position))
               (newline)
@@ -47,17 +45,19 @@
           (goto-char (line-beginning-position))
           (insert "\\item")
           (just-one-space))
-
-      (replace-regexp "^ *\\([^
- ]\\)" "\\\\item \\1" nil (region-beginning) (region-end))
-      (goto-char (region-end))
-      (goto-char (line-end-position))
-      (newline)
-      (insert "\\end{itemize}")
-      (goto-char (region-beginning))
-      (goto-char (line-beginning-position))
-      (insert "\\begin{itemize}")
-      (newline))))
+      ;; On region:
+      (let ((end-marker (set-marker (make-marker) (region-end))))
+        (goto-char (region-beginning))
+        (goto-char (line-beginning-position))
+        (insert "\\begin{itemize}")
+        (newline-and-indent)
+        (while (and (< (line-beginning-position) end-marker) (not (eobp)))
+          (insert "\\item")
+          (just-one-space)
+          (indent-according-to-mode)
+          (forward-line))
+        (insert "\\end{itemize}")
+        (newline-and-indent)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LaTeX setup

@@ -1,6 +1,6 @@
 ;; Go
 
-;; TODO: Report missing `use-local-map` upstream.
+;; TODO: Report missing `use-local-map' upstream.
 ;; https://github.com/dominikh/go-mode.el/issues/191
 (use-local-map go-mode-map)
 
