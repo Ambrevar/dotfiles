@@ -79,6 +79,6 @@ Requires `call-process-to-string' from `functions'."
 (set-face-attribute 'helm-ff-directory nil :background 'unspecified :foreground 'unspecified :weight 'unspecified :inherit 'helm-buffer-directory)
 (set-face-attribute 'helm-ff-file nil :background 'unspecified :foreground 'unspecified :weight 'unspecified :inherit 'helm-buffer-file)
 
-(setq helm-source-names-using-follow '("Occur" "Git-Grep" "PT"))
+(setq helm-source-names-using-follow '("Occur" "Git-Grep" "PT" "mark-ring"))
 
 (provide 'tool-helm)
