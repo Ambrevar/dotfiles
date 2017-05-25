@@ -52,7 +52,6 @@ Requires `call-process-to-string' from `functions'."
     (helm-all-mark-rings)))
 
 (define-key mickey-minor-mode-map (kbd "M-x") 'helm-M-x)
-(define-key mickey-minor-mode-map (kbd "C-x M-f") 'helm-semantic-or-imenu)
 (define-key mickey-minor-mode-map (kbd "C-x C-f") 'helm-find-files)
 (define-key mickey-minor-mode-map (kbd "C-x c C-/") 'helm-find)
 (define-key mickey-minor-mode-map (kbd "C-x C-d") 'helm-browse-project)
@@ -68,6 +67,13 @@ Requires `call-process-to-string' from `functions'."
 (define-key mickey-minor-mode-map (kbd "C-x C-r") 'helm-filtered-bookmarks)
 (define-key mickey-minor-mode-map (kbd "C-x M-b") 'helm-resume) ; Convenient for god-mode.
 (define-key helm-find-files-map (kbd "C-c C-/") 'helm-ff-run-find-sh-command) ; Convenient for god-mode.
+
+;; We use the M-s prefix just like `occur'.
+(define-key prog-mode-map "\M-sf" 'helm-semantic-or-imenu)
+;; The text-mode-map binding targets structured text modes like Markdown.
+(define-key text-mode-map "\M-sf" 'helm-semantic-or-imenu)
+(with-eval-after-load "org"
+  (define-key org-mode-map "\M-sf" 'helm-org-in-buffer-headings))
 
 (set-face-background 'helm-source-header "white")
 (set-face-foreground 'helm-source-header "black")

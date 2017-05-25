@@ -45,7 +45,6 @@
       "d" 'helm-browse-project
       "e" 'helm-find-files
       "E" 'helm-find
-      "f" 'helm-semantic-or-imenu
       "g" 'helm-grep-git-or-ag
       "G" 'helm-grep-git-all-or-ag
       "ha" 'helm-apropos))
