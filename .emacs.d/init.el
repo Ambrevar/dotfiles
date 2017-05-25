@@ -39,6 +39,19 @@ To view where the bindings are set in your config files, lookup
 (require 'visual nil t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load first.
+
+;; Helm
+(add-to-list 'package-selected-packages 'helm)
+(add-to-list 'package-selected-packages 'helm-descbinds)
+(add-to-list 'package-selected-packages 'helm-ls-git)
+;; (add-to-list 'package-selected-packages 'helm-pt) ; No need?
+(add-to-list 'package-selected-packages 'wgrep-helm)
+(add-to-list 'package-selected-packages 'wgrep-pt)
+(when (require 'helm-config nil t)
+  (require 'tool-helm))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Major modes
 
 ;; Assembly
@@ -250,16 +263,6 @@ To view where the bindings are set in your config files, lookup
 
 ;; GUD (GDB, etc.)
 (add-hook 'gud-mode-hook    (lambda () (require 'mode-gud)))
-
-;; Helm
-(add-to-list 'package-selected-packages 'helm)
-(add-to-list 'package-selected-packages 'helm-descbinds)
-(add-to-list 'package-selected-packages 'helm-ls-git)
-;; (add-to-list 'package-selected-packages 'helm-pt) ; No need?
-(add-to-list 'package-selected-packages 'wgrep-helm)
-(add-to-list 'package-selected-packages 'wgrep-pt)
-(when (require 'helm-config nil t)
-  (require 'tool-helm))
 
 ;; Indentation engine fix.
 (require 'smiext "tool-smiext")
