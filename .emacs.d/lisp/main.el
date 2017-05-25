@@ -81,18 +81,6 @@
 (defvaralias 'standard-indent 'tab-width)
 (setq-default indent-tabs-mode t)
 
-;; Lisp should not use tabs.
-(dolist (hook '(lisp-mode-hook emacs-lisp-mode-hook))
-   (add-hook hook (lambda () (setq indent-tabs-mode nil))))
-
-(add-hook
- 'emacs-lisp-mode-hook
- (lambda () (local-set-key (kbd "M-.") 'find-symbol-at-point)))
-
-(add-hook
- 'change-log-mode-hook
- (lambda () (setq tab-width 2 left-margin 2)))
-
 ;; This needs to be set globally since they are defined as local variable and
 ;; Emacs does not know how to set an alias on a local variable.
 (defvaralias 'c-basic-offset 'tab-width)
@@ -134,11 +122,8 @@
 (setq-default abbrev-mode t)
 
 ;; Set Fill Column
-(setq-default fill-column 80)
+(setq-default fill-column (string-to-number (getenv "MANWIDTH")))
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
-
-;; Set man pages to display on a 80 character wide window.
-(setenv "MANWIDTH" "80")
 
 ;; Enforce horizontal splitting. 140 means that the window is large enough to
 ;; hold 2 other windows of 70 columns.
@@ -205,9 +190,6 @@
 ;; Code browsing: make C-M-e jump to next function instead of the end of the current function.
 (define-key mickey-minor-mode-map (kbd "C-M-e") (lambda () (interactive) (beginning-of-defun -1)))
 
-;; Common LISP
-(setq inferior-lisp-program "clisp")
-
 (defadvice desktop-owner (after pry-from-cold-dead-hands activate)
   "Don't allow dead emacsen to own the desktop file."
   (when (not (emacs-process-p ad-return-value))
@@ -256,54 +238,6 @@
 ;; Clipboard and primary selection.
 ; (setq select-enable-clipboard t)
 (setq select-enable-primary t)
-
-;; Bibtex
-(setq bibtex-entry-format '(opts-or-alts required-fields numerical-fields whitespace realign last-comma delimiters braces sort-fields))
-(setq bibtex-field-delimiters 'double-quotes)
-(add-hook
- 'bibtex-mode-hook
- (lambda ()
-   (setq indent-tabs-mode nil)))
-
-;; Remove auto-fill in web edits because wikis and forums do not like it.
-;; This works for qutebrowser, but may need changes for other browsers.
-(add-hook
- 'find-file-hook
- (lambda ()
-   (when (string-match (concat (getenv "BROWSER") "-editor-*") (buffer-name))
-     (when (require 'with-editor nil t)
-       ;; Just like git commits.
-       (with-editor-mode))
-     (auto-fill-mode -1))))
-
-;; Mutt support.
-(add-to-list 'auto-mode-alist '("/tmp/mutt-.*" . mail-mode))
-(add-hook
- 'find-file-hook
- (lambda ()
-   (when (and (string-match "/tmp/mutt-.*" (buffer-file-name))
-              (require 'with-editor nil t))
-     ;; Just like git commits.
-     (with-editor-mode))))
-
-;; Fish commandline editing.
-(add-hook
- 'find-file-hook
- (lambda ()
-   (when (and (string-match "/tmp/tmp\..*\.fish" (buffer-file-name))
-              (require 'with-editor nil t))
-     ;; Just like git commits.
-     (with-editor-mode))))
-
-;; Arch Linux PKGBUILD.
-(add-to-list 'auto-mode-alist '("PKGBUILD" . sh-mode))
-
-;; Subtitles support.
-(add-to-list 'auto-mode-alist '("\\.srt\\'" . text-mode))
-
-(add-hook
- 'mail-mode-hook
- 'mail-text)
 
 ;; Easy code folding toggle.
 ; (add-hook 'prog-mode-hook 'hs-minor-mode)

@@ -1,17 +1,13 @@
 ;; Emacs config
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Global variables.
+;; Prerequisites
 
-(defvar mickey-minor-mode-map (make-keymap)
-  "Keymap for mickey-minor-mode. See its docstring for more
-details.")
-
+(defvar mickey-minor-mode-map (make-keymap) "Keymap for `mickey-minor-mode'.")
 (define-minor-mode mickey-minor-mode
   "The mode's keymap allows for overriding all global and major mode keys.
 To view where the bindings are set in your config files, lookup
-`mickey-minor-mode-map' over it. Example:
-
+`mickey-minor-mode-map' over it. Example:\n
   (define-key mickey-minor-mode-map (kbd \"C-i\") 'some-function)"
   t " myckey" 'mickey-minor-mode-map)
 (add-hook 'minibuffer-setup-hook (lambda () (mickey-minor-mode 0)))
@@ -22,7 +18,8 @@ To view where the bindings are set in your config files, lookup
 (if (not (file-directory-p emacs-cache-folder))
     (make-directory emacs-cache-folder t))
 
-;; Load config easily.
+;; Store additional config in a 'lisp' subfolder and add it to the load path so
+;; that `require' can find the files.
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
 ;; Local plugin folder for quick install. All files in this folder will be
@@ -31,82 +28,54 @@ To view where the bindings are set in your config files, lookup
 ;; there for Emacs <24.
 (add-to-list 'load-path "~/.emacs.d/local")
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load main config
-
-(require 'functions nil t)
-(require 'main nil t)
-(require 'visual nil t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Vanilla
-
-;; Major modes
-(add-hook 'c++-mode-hook      (lambda () (require 'mode-cc)))
-(add-hook 'c-mode-hook        (lambda () (require 'mode-cc)))
-(add-hook 'sgml-mode-hook     (lambda () (require 'mode-sgml)))
-(add-hook 'js-mode-hook       (lambda () (defvaralias 'js-indent-level 'tab-width)))
-(add-hook 'latex-mode-hook    (lambda () (require 'mode-latex)))
-(add-hook 'makefile-mode-hook (lambda () (require 'mode-makefile)))
-(add-hook 'nroff-mode-hook    (lambda () (require 'mode-nroff)))
-(add-hook 'perl-mode-hook     (lambda () (require 'mode-perl)))
-(add-hook 'python-mode-hook   (lambda () (require 'mode-python)))
-(add-hook 'sh-mode-hook       (lambda () (require 'mode-sh)))
-(add-hook 'tex-mode-hook      (lambda () (require 'mode-tex)))
-(add-hook 'texinfo-mode-hook  (lambda () (require 'mode-texinfo)))
-
-;; Minor modes
-(add-hook 'dired-mode-hook  (lambda () (require 'mode-dired)))
-(add-hook 'eshell-load-hook (lambda () (require 'mode-eshell)))
-(add-hook 'gud-mode-hook    (lambda () (require 'mode-gud)))
-(add-hook 'octave-mode-hook (lambda () (require 'mode-octave)))
-(add-hook 'org-mode-hook    (lambda () (require 'mode-org)))
-
-;; Bind extensions.
-(add-to-list 'auto-mode-alist '("rc\\'" . sh-mode)) ; rc shell
-(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode)) ; matlab
-
-;; Tools
-(autoload 'pdf-view "tool-pdf" nil t)
-(autoload 'pdf-compress "tool-pdf" nil t)
-
-(autoload 'itranslate "tool-itranslate" nil t)
-(autoload 'itranslate-lines "tool-itranslate" nil t)
-(autoload 'itranslate-region "tool-itranslate" nil t)
-
-(require 'smiext "tool-smiext")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; External
-
 (when (require 'package nil t)
   ;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
   (setq package-user-dir (concat emacs-cache-folder "elpa"))
   (package-initialize))
 
-;;------------------------------------------------------------------------------
-;; External modes
+(require 'functions nil t)
+(require 'main nil t)
+(require 'visual nil t)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Major modes
+
+;; Assembly
+(add-to-list 'package-selected-packages 'nasm-mode)
+
+;; Asymptote
 (add-to-list 'load-path "/usr/share/asymptote")
 (autoload 'asy-mode "asy-mode.el" "Asymptote major mode." t)
 (autoload 'lasy-mode "asy-mode.el" "Hybrid Asymptote/Latex major mode." t)
 (autoload 'asy-insinuate-latex "asy-mode.el" "Asymptote insinuate LaTeX." t)
 (add-to-list 'auto-mode-alist '("\\.asy$" . asy-mode))
 
-(autoload 'maxima-mode "maxima" "Maxima mode" t)
-(autoload 'maxima "maxima" "Maxima interaction" t)
-(setq auto-mode-alist (cons '("\\.mac" . maxima-mode) auto-mode-alist))
-
+;; BBCode
 (add-to-list 'package-selected-packages 'bbcode-mode)
 (load-external "\\.bbcode\\'" 'bbcode-mode)
 (add-hook 'bbcode-mode-hook (lambda () (require 'mode-bbcode)))
 
+;; Bibtex
+(setq bibtex-entry-format '(opts-or-alts required-fields numerical-fields whitespace realign last-comma delimiters braces sort-fields))
+(setq bibtex-field-delimiters 'double-quotes)
+(add-hook 'bibtex-mode-hook (lambda () (setq indent-tabs-mode nil)))
+
+;; Bison/Flex
 (load-external "\\.l\\'" 'flex-mode nil 'c-mode)
 (load-external "\\.yy?\\'" 'bison-mode nil 'c-mode)
 
+;; C/C++
+(add-hook 'c-mode-hook   (lambda () (require 'mode-cc)))
+(add-hook 'c++-mode-hook (lambda () (require 'mode-cc)))
+
+;; ChangeLog
+(add-hook 'change-log-mode-hook (lambda () (setq tab-width 2 left-margin 2)))
+
+;; GLSL
 (load-external "\\.vert\\'\\|\\.frag\\'\\|\\.glsl\\'" 'glsl-mode nil 'c-mode)
 
+;; Go
 (add-to-list 'package-selected-packages 'go-mode)
 (add-to-list 'package-selected-packages 'go-eldoc)
 (add-to-list 'package-selected-packages 'go-guru)
@@ -116,13 +85,43 @@ To view where the bindings are set in your config files, lookup
 (load-external "\\.go\\'" 'go-mode)
 (add-hook 'go-mode-hook (lambda () (require 'mode-go)))
 
+;; Graphviz dot
 (load-external "\\.dot\\'" 'graphviz-dot-mode)
 (add-hook 'graphviz-dot-mode-hook (lambda () (require 'mode-dot)))
 
+;; JavaScript
+(add-hook 'js-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
+
+;; Lisp
+;; Should not use tabs.
+(dolist (hook '(lisp-mode-hook emacs-lisp-mode-hook))
+   (add-hook hook (lambda () (setq indent-tabs-mode nil))))
+(add-hook
+ 'emacs-lisp-mode-hook
+ (lambda () (local-set-key (kbd "M-.") 'find-symbol-at-point)))
+;; Common LISP
+(setq inferior-lisp-program "clisp")
+
+;; Lua
 (add-to-list 'package-selected-packages 'lua-mode)
 (load-external "\\.lua\\'" 'lua-mode nil 'sh-mode)
 (add-hook 'lua-mode-hook (lambda () (require 'mode-lua)))
 
+;; Mail with Mutt support.
+(add-hook 'mail-mode-hook 'mail-text)
+(add-to-list 'auto-mode-alist '("/tmp/mutt-.*" . mail-mode))
+(add-hook
+ 'find-file-hook
+ (lambda ()
+   (when (and (string-match "/tmp/mutt-.*" (buffer-file-name))
+              (require 'with-editor nil t))
+     ;; Just like git commits.
+     (with-editor-mode))))
+
+;; Makefile
+(add-hook 'makefile-mode-hook (lambda () (require 'mode-makefile)))
+
+;; Markdown
 (add-to-list 'package-selected-packages 'markdown-mode)
 (load-external "\\.md\\'\\|\\.markdown\\'" 'markdown-mode)
 ;; If we need more option, add it to a dedicated file.
@@ -137,27 +136,146 @@ To view where the bindings are set in your config files, lookup
    (set (make-local-variable 'paragraph-start) "
 ")))
 
+;; Matlab / Octave
+(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode)) ; matlab
+;; Set comments to be '%' to be matlab-compatible.
+(add-hook 'octave-mode-hook (lambda () (set (make-local-variable 'comment-start) "% ")))
+
+;; Maxima
+(autoload 'maxima-mode "maxima" "Maxima mode" t)
+(autoload 'maxima "maxima" "Maxima interaction" t)
+(setq auto-mode-alist (cons '("\\.mac" . maxima-mode) auto-mode-alist))
+
+;; Mediawiki
 (add-to-list 'package-selected-packages 'mediawiki)
 (load-external "\\.wiki\\'" 'mediawiki 'mediawiki-mode)
 (add-hook 'mediawiki-mode-hook (lambda () (require 'mode-mediawiki)))
 
-;; .po support. This mode has no hooks.
+;; Org-mode
+(add-hook 'org-mode-hook (lambda () (require 'mode-org)))
+
+;; Perl
+(add-hook
+ 'perl-mode-hook
+ (lambda ()
+   (defvaralias 'perl-indent-level 'tab-width)
+   (setq compile-command (concat "perl " (shell-quote-argument buffer-file-name)))))
+
+;; po
+;; No hook for this mode?
 (load-external "\\.po\\'\\|\\.po\\." 'po-mode)
 (when (fboundp 'po-find-file-coding-system)
   (modify-coding-system-alist 'file "\\.po\\'\\|\\.po\\." 'po-find-file-coding-system))
 
-(add-to-list 'package-selected-packages 'fish-mode)
+;; Python
+(add-hook 'python-mode-hook (lambda () (require 'mode-python)))
 
+;; Roff / Nroff
+(add-hook 'nroff-mode-hook (lambda () (require 'mode-nroff)))
+
+;; Shell
+(add-hook 'sh-mode-hook (lambda () (require 'mode-sh)))
+;; Arch Linux PKGBUILD
+(add-to-list 'auto-mode-alist '("PKGBUILD" . sh-mode))
+;; rc
+(add-to-list 'auto-mode-alist '("rc\\'" . sh-mode))
+;; Fish
+(add-to-list 'package-selected-packages 'fish-mode)
+(add-hook
+ 'find-file-hook
+ (lambda ()
+   (when (and (string-match "/tmp/tmp\..*\.fish" (buffer-file-name))
+              (require 'with-editor nil t))
+     ;; Just like git commits.
+     (with-editor-mode))))
+
+;; Srt (subtitles)
+(add-to-list 'auto-mode-alist '("\\.srt\\'" . text-mode))
+
+;; TeX / LaTeX / Texinfo
+(add-hook 'tex-mode-hook      (lambda () (require 'mode-tex)))
+(add-hook 'texinfo-mode-hook  (lambda () (require 'mode-texinfo)))
+(add-hook 'latex-mode-hook    (lambda () (require 'mode-latex)))
 (add-to-list 'package-selected-packages 'latex-math-preview)
 (add-to-list 'package-selected-packages 'latex-pretty-symbols)
 (require 'latex-pretty-symbols nil t)
 
-;;------------------------------------------------------------------------------
-;; External tools
+;; Web forms.
+;; Remove auto-fill in web edits because wikis and forums do not like it.
+;; This works for qutebrowser, but may need changes for other browsers.
+(add-hook
+ 'find-file-hook
+ (lambda ()
+   (when (string-match (concat (getenv "BROWSER") "-editor-*") (buffer-name))
+     (when (require 'with-editor nil t)
+       ;; Just like git commits.
+       (with-editor-mode))
+     (auto-fill-mode -1))))
 
-;; Guess indentation rules.
+;; XML / SGML
+(add-hook
+ 'sgml-mode-hook
+ (lambda ()
+   (setq sgml-xml-mode t)
+   ;; (toggle-truncate-lines) ; This seems to slow down Emacs.
+   (turn-off-auto-fill)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Minor modes and features.
+
+;; Company
+(add-to-list 'package-selected-packages 'company)
+(add-to-list 'package-selected-packages 'helm-company)
+(when (require 'company nil t)
+  (setq company-idle-delay nil))
+
+;; Dired
+(add-hook 'dired-mode-hook  (lambda () (require 'mode-dired)))
+
+;; Eshell
+(add-hook 'eshell-load-hook (lambda () (require 'mode-eshell)))
+
+;; Evil
+(add-to-list 'package-selected-packages 'evil)
+(add-to-list 'package-selected-packages 'evil-leader)
+(add-to-list 'package-selected-packages 'evil-magit)
+(add-to-list 'package-selected-packages 'linum-relative)
+(when (require 'evil nil t)
+  (require 'tool-evil))
+
+;; God mode
+;; (add-to-list 'package-selected-packages 'god-mode)
+;; (when (require 'god-mode nil t)
+;;   (require 'tool-god))
+
+;; GUD (GDB, etc.)
+(add-hook 'gud-mode-hook    (lambda () (require 'mode-gud)))
+
+;; Helm
+(add-to-list 'package-selected-packages 'helm)
+(add-to-list 'package-selected-packages 'helm-descbinds)
+(add-to-list 'package-selected-packages 'helm-ls-git)
+;; (add-to-list 'package-selected-packages 'helm-pt) ; No need?
+(add-to-list 'package-selected-packages 'wgrep-helm)
+(add-to-list 'package-selected-packages 'wgrep-pt)
+(when (require 'helm-config nil t)
+  (require 'tool-helm))
+
+;; Indentation engine fix.
+(require 'smiext "tool-smiext")
+
+;; Indent style guessing.
 (require 'dtrt-indent nil t)
 
+;; Magit
+(add-to-list 'package-selected-packages 'magit)
+(when (require 'magit nil t)
+  (set-face-foreground 'magit-branch-remote "orange red")
+  (setq git-commit-summary-max-length fill-column)
+  (setq magit-diff-refine-hunk 'all)
+  (global-set-key (kbd "C-x g") 'magit-status))
+
+;; Multiple cursors
 (add-to-list 'package-selected-packages 'multiple-cursors)
 (add-to-list 'package-selected-packages 'phi-search)
 (when (require 'multiple-cursors nil t)
@@ -172,43 +290,17 @@ To view where the bindings are set in your config files, lookup
   ;; Search compatible with mc.
   (require 'phi-search nil t))
 
-(add-to-list 'package-selected-packages 'helm)
-(add-to-list 'package-selected-packages 'helm-descbinds)
-(add-to-list 'package-selected-packages 'helm-ls-git)
-;; (add-to-list 'package-selected-packages 'helm-pt) ; No need?
-(add-to-list 'package-selected-packages 'wgrep-helm)
-(add-to-list 'package-selected-packages 'wgrep-pt)
-(when (require 'helm-config nil t)
-  (require 'tool-helm))
+;; PDF
+(autoload 'pdf-view "tool-pdf" nil t)
+(autoload 'pdf-compress "tool-pdf" nil t)
 
-(when (require 'dired+ nil t)
-  (toggle-diredp-find-file-reuse-dir 1))
-
-(add-to-list 'package-selected-packages 'company)
-(add-to-list 'package-selected-packages 'helm-company)
-(when (require 'company nil t)
-  (setq company-idle-delay nil))
-
-(add-to-list 'package-selected-packages 'magit)
-(when (require 'magit nil t)
-  (set-face-foreground 'magit-branch-remote "orange red")
-  (setq git-commit-summary-max-length fill-column)
-  (setq magit-diff-refine-hunk 'all)
-  (global-set-key (kbd "C-x g") 'magit-status))
-
-;; (add-to-list 'package-selected-packages 'god-mode)
-;; (when (require 'god-mode nil t)
-;;   (require 'tool-god))
-
-(add-to-list 'package-selected-packages 'evil-mode)
-(add-to-list 'package-selected-packages 'evil-leader)
-(add-to-list 'package-selected-packages 'evil-magit)
-(add-to-list 'package-selected-packages 'linum-relative)
-(when (require 'evil nil t)
-  (require 'tool-evil))
+;; Translator
+(autoload 'itranslate "tool-itranslate" nil t)
+(autoload 'itranslate-lines "tool-itranslate" nil t)
+(autoload 'itranslate-region "tool-itranslate" nil t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; End of config
+;; Finalization
 
 ;; Don't let `customize' clutter my config.
 ;; This will prompt "File exists, but cannot be read".

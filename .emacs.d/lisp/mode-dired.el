@@ -7,6 +7,9 @@
 (local-set-key (kbd "<backspace>") 'dired-up-directory)
 (local-set-key (kbd "b") 'dired-up-directory)
 
+(when (require 'dired+ nil t)
+  (toggle-diredp-find-file-reuse-dir 1))
+
 ;; On a GNU system, ls has the option to sort folders first.
 (if (string-match "^gnu.*" (prin1-to-string system-type))
     (setq dired-listing-switches "--group-directories-first -lha")
