@@ -185,7 +185,9 @@ prependpath "${HOME}/personal/hackpool"
 
 ## Default text editor
 ## 'em' is a custom wrapper for emacsclient. See '.scripts/em'.
-for i in em emacs vim nano; do
+## VISUAL is given priority by some programs like Mutt. This way we can separate
+## editors that wait from those that don't.
+for i in em emacs vim vi nano; do
 	command -v $i >/dev/null 2>&1 && export EDITOR=$i && break
 done
 GIT_EDITOR="$EDITOR"

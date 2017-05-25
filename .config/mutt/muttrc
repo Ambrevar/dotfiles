@@ -27,9 +27,6 @@ set pgp_timeout=3600
 ## Headers are editable in editor.
 set edit_headers=yes
 
-## Set EDITOR dynamically.
-source "$my_configdir/maileditor.sh|"
-
 ## Don't ask for recipient. We usually don't want to include mail unless we want
 ## to quote it.
 set fast_reply=yes
