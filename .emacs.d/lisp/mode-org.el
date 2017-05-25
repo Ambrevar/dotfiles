@@ -29,6 +29,7 @@
 (add-hook-and-eval
  'org-mode-hook
  (lambda ()
+   (linum-mode 0)
    (setq indent-tabs-mode nil)
    (auto-fill-mode -1)))
 
