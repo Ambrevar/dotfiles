@@ -62,9 +62,8 @@ bind -M insert \t fzf-complete
 bind -M insert \e\t complete
 
 function fzf-bcd-widget -d 'cd backwards'
-	## TODO: (fish upsteam bug) Cannot use eval here.
-	# pwd | awk -v RS=/ '/\n/ {exit} {p=p $0 "/"; print p}' | tac | eval (__fzfcmd) +m --select-1 --exit-0 $FZF_BCD_OPTS | read -l result
-	pwd | awk -v RS=/ '/\n/ {exit} {p=p $0 "/"; print p}' | tac | fzf +m --select-1 --exit-0 --preview='preview {}' | read -l result
+	set -lx FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS $FZF_BCD_OPTS"
+	pwd | awk -v RS=/ '/\n/ {exit} {p=p $0 "/"; print p}' | tac | eval (__fzfcmd) +m --select-1 --exit-0 | read -l result
 	[ "$result" ]; and cd $result
 	commandline -f repaint
 end
@@ -81,9 +80,8 @@ function fzf-cdhist-widget -d 'cd to one of the previously visited locations'
 		end
 	end
 	set dirprev $buf
-	## TODO: (fish upsteam bug) Cannot use eval here.
-	# string join \n $dirprev | tac | sed 1d | eval (__fzfcmd) +m $FZF_CDHIST_OPTS | read -l result
-	string join \n $dirprev | tac | sed 1d | fzf +m --preview='preview {}' | read -l result
+	set -lx FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS $FZF_CDHIST_OPTS"
+	string join \n $dirprev | tac | sed 1d | eval (__fzfcmd) +m --tiebreak=index --toggle-sort=ctrl-r | read -l result
 	[ "$result" ]; and cd $result
 	commandline -f repaint
 end
