@@ -15,6 +15,7 @@
 ;; (setq helm-split-window-default-side 'right)
 (setq helm-reuse-last-window-split-state t)
 (setq helm-findutils-search-full-path t)
+(setq helm-display-header-line nil)
 
 (setq helm-apropos-fuzzy-match t)
 (setq helm-buffers-fuzzy-matching t)
