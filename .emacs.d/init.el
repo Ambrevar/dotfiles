@@ -109,9 +109,7 @@ To view where the bindings are set in your config files, lookup
 ;; Should not use tabs.
 (dolist (hook '(lisp-mode-hook emacs-lisp-mode-hook))
    (add-hook hook (lambda () (setq indent-tabs-mode nil))))
-(add-hook
- 'emacs-lisp-mode-hook
- (lambda () (local-set-key (kbd "M-.") 'find-symbol-at-point)))
+(define-key lisp-mode-shared-map "\M-." 'find-symbol-at-point)
 ;; Common LISP
 (setq inferior-lisp-program "clisp")
 
@@ -138,16 +136,14 @@ To view where the bindings are set in your config files, lookup
 (add-to-list 'package-selected-packages 'markdown-mode)
 (load-external "\\.md\\'\\|\\.markdown\\'" 'markdown-mode)
 ;; If we need more option, add it to a dedicated file.
-(add-hook
- 'markdown-mode-hook
- (lambda ()
-   (set-face-attribute 'markdown-header-face-1 nil :inherit 'info-title-1)
-   (set-face-attribute 'markdown-header-face-2 nil :inherit 'info-title-2)
-   (set-face-attribute 'markdown-header-face-3 nil :inherit 'info-title-3)
-   (set-face-attribute 'markdown-header-face-4 nil :inherit 'info-title-4)
-   (local-set-key "\M-'" 'markdown-blockquote-region)
-   (set (make-local-variable 'paragraph-start) "
-")))
+(when (require 'markdown-mode nil t)
+	(set-face-attribute 'markdown-header-face-1 nil :inherit 'info-title-1)
+	(set-face-attribute 'markdown-header-face-2 nil :inherit 'info-title-2)
+	(set-face-attribute 'markdown-header-face-3 nil :inherit 'info-title-3)
+	(set-face-attribute 'markdown-header-face-4 nil :inherit 'info-title-4)
+	(define-key markdown-mode-map "\M-'" 'markdown-blockquote-region)
+	(add-hook 'markdown-mode-hook (lambda () (set (make-local-variable 'paragraph-start) "
+"))))
 
 ;; Matlab / Octave
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode)) ; matlab
