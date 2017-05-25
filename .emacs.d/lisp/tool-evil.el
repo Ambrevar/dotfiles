@@ -74,7 +74,7 @@
   ;; Alternative: show-marks with helm?
   ;; Back to where search started with C-o. Alternative without Ctrl? Seems that '' does it.
   (evil-global-set-key 'normal "'" 'helm-mark-or-exchange-rect)
-  ;; TODO: Yank ring pasting behaves like emacs, not Vim.
+  ;; TODO: Yank ring pasting behaves like Emacs, not Vim.
   (evil-global-set-key 'normal "\M-p" 'helm-show-kill-ring)
 
   (define-key helm-map (kbd "M-\\") 'helm-toggle-resplit-and-swap-windows) ; Or use M-t (helm standard binding is C-t).
@@ -86,7 +86,10 @@
   (define-key helm-map (kbd "M-H") 'describe-key)
   (define-key helm-map (kbd "M-l") (kbd "RET"))
   (define-key helm-map [escape] 'helm-keyboard-quit)
+  (dolist (keymap (list helm-buffer-map))
+    (define-key keymap (kbd "M-o") 'helm-buffer-switch-other-window))
   (dolist (keymap (list helm-find-files-map helm-read-file-map))
+    (define-key keymap (kbd "M-o") 'helm-ff-run-switch-other-window)
     (define-key keymap (kbd "M-.") 'helm-ff-run-find-sh-command)
     (define-key keymap (kbd "M-l") 'helm-execute-persistent-action)
     (define-key keymap (kbd "M-h") 'helm-find-files-up-one-level)
