@@ -252,6 +252,8 @@ To view where the bindings are set in your config files, lookup
 (add-to-list 'package-selected-packages 'evil)
 (add-to-list 'package-selected-packages 'evil-leader)
 (add-to-list 'package-selected-packages 'evil-magit)
+(add-to-list 'package-selected-packages 'evil-mc)
+(add-to-list 'package-selected-packages 'evil-mc-extras)
 (add-to-list 'package-selected-packages 'linum-relative)
 (when (require 'evil nil t)
   (require 'tool-evil))
