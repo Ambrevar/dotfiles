@@ -147,9 +147,9 @@
  (lambda ()
    (when (require 'evil-leader nil t)
      (evil-leader/set-key-for-mode 'org-mode "a" 'org-agenda))
+   (evil-define-key 'normal org-mode-map "<" 'org-up-element)
    (dolist (state '(normal insert))
      (evil-define-key state org-mode-map
-       (kbd "<") 'org-up-element
        (kbd "M-l") 'org-shiftright
        (kbd "M-h") 'org-shiftleft
        (kbd "M-k") 'org-shiftup
