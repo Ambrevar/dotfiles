@@ -37,7 +37,7 @@ Requires `call-process-to-string' from `functions'."
   (if (and (vc-find-root default-directory ".git")
            (or arg (split-string (call-process-to-string "git" "ls-files" "-z") "\0" t)))
       (helm-grep-do-git-grep arg)
-    (helm-do-grep-ag)))
+    (helm-do-grep-ag nil)))
 
 (defun helm-grep-git-all-or-ag ()
   "Run `helm-grep-do-git-grep' over all git files."
