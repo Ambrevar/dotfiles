@@ -42,7 +42,6 @@ fi
 ## Several files must share the screen space.
 lines=$(expr $(tput lines) / $#)
 [ $lines -lt 1 ] && lines=1
-echo HHH $lines
 
 _preview() {
 	## Folders.
@@ -74,7 +73,7 @@ _preview() {
 	fi
 }
 
-[ $# -eq 1 ] && _preview $1 && exit
+[ $# -eq 1 ] && _preview "$1" && exit
 
 for i; do
 	## GNU head uses this echo when outputting multiple files.
