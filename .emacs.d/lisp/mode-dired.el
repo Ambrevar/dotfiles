@@ -22,7 +22,6 @@
 (dired-internal-noselect dired-directory dired-listing-switches)
 
 (setq wdired-allow-to-change-permissions t)
-(put 'dired-find-alternate-file 'disabled nil)
 
 ;; omit-mode needs to be started _after_ omit-files redefinition.
 (require 'dired-x)
