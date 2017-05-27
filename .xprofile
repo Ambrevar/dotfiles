@@ -23,6 +23,7 @@ EOF
 
 ## Load custom keymap and configure input devices.
 xkbcomp -I"$HOME/.xkb" "$HOME/.xkb/usim.xkb" $DISPLAY
+xcape -e 'Control_L=Escape'
 numlockx on
 # xinput disable "SynPS/2 Synaptics TouchPad"
 

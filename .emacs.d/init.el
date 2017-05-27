@@ -242,6 +242,7 @@ To view where the bindings are set in your config files, lookup
   (require 'tool-evil))
 
 ;; God mode
+;; TODO: Evil largely replaces god-mode. Remove?
 ;; (add-to-list 'package-selected-packages 'god-mode)
 ;; (when (require 'god-mode nil t)
 ;;   (require 'tool-god))

@@ -3,13 +3,16 @@ fzf_key_bindings
 ## Emacs bindings
 # bind \cT transpose-chars
 # bind \e\ct fzf-file-widget
-# bind \ec capitalize-word
-# bind \eC fzf-cd-widget
 
-bind -M insert \et fzf-file-widget
-bind t fzf-file-widget
-bind R fzf-history-widget
-bind -m insert C fzf-cd-widget
+## Emacs binding that is also useful in vi.
+bind -M insert \ec capitalize-word
+bind -m insert \ec fzf-cd-widget
+
+# bind -M insert \et fzf-file-widget
+# Add to normal mode too.
+bind \cT fzf-file-widget
+# bind R fzf-history-widget
+# bind -m insert C fzf-cd-widget
 
 function fzf-select -d 'Eval commandline, fzf result and print out selection'
 	set -l cmd (commandline -j)

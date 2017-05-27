@@ -3,7 +3,8 @@
 //------------------------------------------------------------------------------
 //
 // Description: This keyboard layout is based on Xorg's "us" and inspired by
-// "us(intl)". We switch Caps Lock and Escape.
+// "us(intl)". Caps Lock is Ctrl and LShift+RShift is Caps Lock. For best
+// vi-style experience, set the new Ctrl to be Esc when not used as a modifier.
 //
 // User setup: run
 //
@@ -17,10 +18,10 @@
 //
 //   $ setxkbmap usim
 //
-// ┏━━━━━━━┓
-// ┃Caps   ┃
-// ┃Lock ⇬ ┃
-// ┡━━━━━┯━┹───┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┲━━━━━━━━━┓
+// ┏━━━━━━┓
+// ┃      ┃
+// ┃Esc   ┃
+// ┡━━━━━┯┹────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┲━━━━━━━━━┓
 // │ ~ ~ │ ! ¡ │ @ ˝ │ # ¯ │ $ ¤ │ % ¢ │ ^ ^ │ & ¼ │ * ¾ │ ( ˘ │ ) ÷ │ _ × │ + ± ┃ ⌫ Back  ┃
 // │ ` ` │ 1 ¹ │ 2 ² │ 3 ³ │ 4 £ │ 5 € │ 6 ¥ │ 7 ½ │ 8 „ │ 9 “ │ 0 ” │ - ⋅ │ = ≠ ┃  space  ┃
 // ┢━━━━━┷━┱───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┺━┳━━━━━━━┫
@@ -28,7 +29,7 @@
 // ┃Tab ↹  ┃ q à │ w è │ e é │ r ® │ t © │ y ù │ u ú │ i í │ o ó │ p å │ [ « │ ] » ┃   ⏎   ┃
 // ┣━━━━━━━┻┱────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┺┓      ┃
 // ┃        ┃ A Á │ S § │ D Â │ F Ê │ G Î │ H Ô │ J Û │ K Œ │ L Æ │ : ° │ " ¨ │ | ¦ ┃      ┃
-// ┃Esc     ┃ a á │ s ß │ d â │ f ê │ g î │ h ô │ j û │ k œ │ l æ │ ; ° │ ' ´ │ \ ¬ ┃      ┃
+// ┃Ctrl    ┃ a á │ s ß │ d â │ f ê │ g î │ h ô │ j û │ k œ │ l æ │ ; ° │ ' ´ │ \ ¬ ┃      ┃
 // ┣━━━━━━━┳┹────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┲┷━━━━━┻━━━━━━┫
 // ┃       ┃ > ≥ │ Z Ä │ X Ë │ C Ï │ V Ö │ B Ü │ N Ñ │ M Ø │ < Ç │ > µ │ ? ¿ ┃             ┃
 // ┃Shift ⇧┃ < ≤ │ z ä │ x ë │ c ï │ v ö │ b ü │ n ñ │ m ø │ , ç │ . … │ / ¶ ┃Shift ⇧      ┃
@@ -96,8 +97,7 @@ partial alphanumeric_keys xkb_symbols "usim" {
 	key <SPCE> { [ space, space,  nobreakspace,  nobreakspace     ] };
 	key <LSGT> { [ less, greater, lessthanequal, greaterthanequal ] };
 
-	key <CAPS> { [ Escape ] };
-	key <ESC> { [ Caps_Lock ] };
-
 	include "level3(ralt_switch)"
+	include "ctrl(nocaps)"
+	include "shift(both_capslock)"
 };
