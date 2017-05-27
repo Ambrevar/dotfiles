@@ -337,7 +337,7 @@ Tabify if `indent-tabs-mode' is true, otherwise use spaces.
 Work on buffer or region. Require `tabify-leading'."
   (interactive)
   (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
-        (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-end)))))
+        (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-max)))))
     (if indent-tabs-mode
         (tabify-leading)
       (untabify start end))
