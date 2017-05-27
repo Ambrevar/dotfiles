@@ -402,7 +402,7 @@ The shell can use it to automatically change directory to it."
   (interactive)
   (let ((term (or (getenv "TERMCMD") "xterm")))
     (when (executable-find term)
-      (start-process "dummy" nil "env" (concat "SHELL_CD=" default-directory) term))))
+      (start-process "dummy" nil "env" (concat "SHELL_CD=" (expand-file-name default-directory)) term))))
 
 (defun swap-windows ()
   "If 2 windows are up, swap them."
