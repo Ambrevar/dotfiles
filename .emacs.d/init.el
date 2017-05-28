@@ -279,9 +279,8 @@ To view where the bindings are set in your config files, lookup
   (global-set-key (kbd "C-x g") 'magit-status))
 
 ;;; Multiple cursors
-;;; TODO: Remove from selected-packages once evil-mc has proven itself.
-(add-to-list 'package-selected-packages 'multiple-cursors)
-(add-to-list 'package-selected-packages 'phi-search)
+;; (add-to-list 'package-selected-packages 'multiple-cursors)
+;; (add-to-list 'package-selected-packages 'phi-search)
 (when (require 'multiple-cursors nil t)
   (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
   ;; Load the file at the new location.
