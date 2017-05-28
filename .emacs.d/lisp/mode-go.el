@@ -81,18 +81,20 @@ Note that the -cover test flag is left out since it shifts line numbers."
     (setq go-guru-command
           (concat (replace-regexp-in-string "\n$" "" (call-process-to-string "go" "env" "GOTOOLDIR")) "/guru"))))
 
-(add-hook
- 'godoc-mode-hook
- (lambda ()
-   (setq tab-width 8)))
+(defun go-turn-on-gofmt-before-save ()
+  (add-hook 'before-save-hook #'gofmt-before-save nil t))
 
-(add-hook-and-eval
- 'go-mode-hook
- (lambda ()
-   (add-hook 'before-save-hook #'gofmt-before-save nil t)
-   (when (require 'go-eldoc nil t)
-     (go-eldoc-setup))
-   (go-set-compile-command)))
+(add-hook-and-eval 'go-mode-hook 'go-turn-on-gofmt-before-save)
+
+(when (require 'go-eldoc nil t)
+  (add-hook-and-eval 'go-mode-hook 'go-eldoc-setup))
+
+(add-hook-and-eval 'go-mode-hook 'go-set-compile-command)
+
+(defun godoc-setup ()
+ (setq tab-width 8))
+
+(add-hook 'godoc-mode-hook 'godoc-setup)
 
 (define-skeleton go-main
   "Insert main function with basic includes."

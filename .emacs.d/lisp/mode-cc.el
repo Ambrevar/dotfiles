@@ -8,7 +8,6 @@
 (local-set-key (kbd "C-c C-d") 'semantic-ia-show-summary)
 (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
 (local-set-key (kbd "C-c o") 'ff-find-other-file)
-(local-set-key (kbd "C-M-e") (lambda () (interactive) (c-beginning-of-defun -1)))
 
 (when (fboundp 'company-mode)
   (local-set-key (kbd "M-TAB") (if (require 'company nil t) 'helm-company 'company-complete)))
@@ -124,13 +123,13 @@ restored."
 ;; time at the end of the initialization. No big deal since we only set some
 ;; variables.
 (dolist (hook '(c-mode-hook c++-mode-hook))
-   (add-hook-and-eval
-    hook
-    (lambda ()
-      (c-set-style "ambrevar") ;; We override existing values.
-      (when (require 'company nil t)
-        (company-mode))
-      (cc-set-compiler))))
+  (add-hook-and-eval
+   hook
+   (lambda ()
+     (c-set-style "ambrevar"))) ;; We override existing values.
+  (when (require 'company nil t)
+    (add-hook-and-eval hook 'company-mode))
+  (add-hook-and-eval hook 'cc-set-compiler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Skeletons

@@ -11,11 +11,7 @@
     (setq compile-command
          (concat interpreter " " (shell-quote-argument buffer-file-name)))))
 
-(add-hook-and-eval
- 'python-mode-hook
- (lambda ()
-   (set (make-local-variable 'compilation-scroll-output) t)
-   (python-set-compiler)))
+(add-hook-and-eval 'python-mode-hook 'python-set-compiler)
 
 ;; Doc lookup. Requires the python.info file to be installed. See
 ;; https://bitbucket.org/jonwaltman/pydoc-info/.

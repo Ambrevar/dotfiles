@@ -97,10 +97,7 @@
 
 ;; There is no prog-mode-hook on Emacs<24.
 (require 'functions) ; for `page-number-mode'
-(add-hook
- 'prog-mode-hook
- (lambda ()
-   (page-number-mode t)))
+(add-hook 'prog-mode-hook 'page-number-mode)
 
 (define-key mickey-minor-mode-map (kbd "<f5>") 'whitespace-mode)
 (setq
@@ -175,6 +172,7 @@
 
 ;; Compilation bindings and conveniences.
 (setq compilation-ask-about-save nil)
+(setq compilation-scroll-output 'first-error)
 (with-eval-after-load 'compile
   ;; Making `compilation-directory' local only works with `recompile'
   ;; and if `compile' is never used. In such a scenario,
@@ -231,7 +229,7 @@
 (require 'functions)
 ;; Do not expand abbrevs in skeletons.
 (setq-default skeleton-further-elements '((abbrev-mode nil)))
-(add-hook 'skeleton-end-hook 'skeleton-make-markers)
+(turn-on-skeleton-markers)
 (define-key mickey-minor-mode-map (kbd "C->") 'skeleton-next-position)
 (define-key mickey-minor-mode-map (kbd "C-<") (lambda () (interactive) (skeleton-next-position t)))
 

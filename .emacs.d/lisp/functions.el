@@ -29,6 +29,12 @@ while `run-mode-hooks' is running."
   (add-hook hook function)
   (funcall function))
 
+(defun beginning-of-next-defun ()
+  "Move forward to the beginning of a defun.
+Useful when bound to a key opposed to `beginning-of-defun'."
+  (beginning-of-defun -1))
+(define-key mickey-minor-mode-map (kbd "C-M-e") 'beginning-of-next-defun)
+
 (defun call-process-to-string (program &rest args)
   "Call PROGRAM with ARGS and return output."
   (with-output-to-string
@@ -285,15 +291,21 @@ If DIR-LEFT is t, then move left, otherwise move right."
           (setq count (1+ count)))
         count))))
 
-(defun page-number-mode (activate)
-  "Display of page number in mode line.
-If ACTIVATE is non-nil, enable, disable otherwise. Interactively,
-activate unless called with \\[universal-argument].\n\nThis adds
-page-number/page-count to mode line. It will only display if
-there is more than one page. A page is delimited by
-‘page-delimiter’.\n
+(define-minor-mode page-number-mode
+  "Toggle page number display in the mode line (Page Number mode).
+With a prefix argument ARG, enable Page Number mode if ARG is
+positive, and disable it otherwise.
+
+If called from Lisp, enable the mode if ARG is omitted or nil.
+
+It will only display if there is more than one page. A page is
+delimited by ‘page-delimiter’.
+
 WARNING: this may slow down editing on big files."
-  (interactive (list (not (equal current-prefix-arg '(4)))))
+  :global t :group 'mode-line
+  ;; TODO: Don't setq the mode-line, insert instead. See column-number-mode.
+  ;; TODO: Move page-related functions to a separate file.
+  ;; TODO: Should we use a lighter if it's running in the background? Maybe not, just make sure we always print like column-number-mode.
   (setq mode-line-format
         `("%e"
           mode-line-front-space
@@ -305,7 +317,7 @@ WARNING: this may slow down editing on big files."
           mode-line-buffer-identification
           "   "
           mode-line-position
-          ,(when activate '(:eval (when (> (page-count) 1) (format "%d/%d" (page-number) (page-count)))))
+          ,(when page-number-mode '(:eval (when (> (page-count) 1) (format "%d/%d" (page-number) (page-count)))))
           (vc-mode vc-mode)
           "  "
           mode-line-modes
@@ -331,6 +343,9 @@ WARNING: this may slow down editing on big files."
                (set-buffer-modified-p nil)
                (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
 
+(defun reset-fill-column ()
+  "Reset `fill-column' to its default value."
+  (setq fill-column (default-value 'fill-column)))
 (defun sanitize ()
   "(Un)tabify, indent and delete trailing whitespace.
 Tabify if `indent-tabs-mode' is true, otherwise use spaces.
@@ -368,11 +383,12 @@ Hook function for skeletons."
 
 (defun skeleton-next-position (&optional reverse)
   "Move to next skeleton placeholder.
-If REVERSE it t, move to previes placeholder."
+If REVERSE it t, move to previous placeholder."
   (interactive "P")
   (let ((positions (mapcar 'marker-position skeleton-markers))
         (comp (if reverse '< '<=))
-        pos prev)
+        pos
+        prev)
     (when positions
       (setq pos (pop positions))
       (while (and pos (funcall comp pos (point)))
@@ -489,6 +505,22 @@ This does not interfere with `subword-mode'."
         (message "_ is a not word delimiter"))
     (modify-syntax-entry ?_ "_")
     (message "_ is a word delimiter")))
+
+(defun turn-off-indent-tabs ()
+  "Unconditionally turn off tab indentation."
+  (setq indent-tabs-mode nil))
+
+(defun turn-on-indent-tabs ()
+  "Unconditionally turn on tab indentation."
+  (setq indent-tabs-mode t))
+
+(defun turn-on-skeleton-markers ()
+  "Allow skeletons to make markers to ease field navigation."
+  (add-hook 'skeleton-end-hook 'skeleton-make-markers))
+
+(defun turn-off-linum ()
+  "Unconditionally turn off Linum mode."
+  (linum-mode 0))
 
 (defun unfill-paragraph ()
   "Paragraph at point is unwrapped on one single line."

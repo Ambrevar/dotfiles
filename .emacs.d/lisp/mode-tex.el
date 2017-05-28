@@ -21,7 +21,7 @@
 (dolist (key '("\C-c\C-f" "\C-c\C-b"))
   (local-unset-key key))
 (local-set-key (kbd "<f9>") 'tex-pdf-view)
-(local-set-key (kbd "<f10>") (lambda () (interactive) (progn (compile compile-command) (sit-for tex-compilation-delay) (delete-windows-on "*compilation*"))))
+(local-set-key (kbd "<f10>") 'tex-compile)
 
 (defvar-local tex-masterfile nil
   "The file that should be compiled. Useful for modular documents.")
@@ -109,6 +109,13 @@ This does not interfere with `subword-mode'."
     (modify-syntax-entry ?\\ "\\")
     (message "\\ is a an escape character")))
 
+(defun tex-compile ()
+  "Compile the TeX document."
+  (interactive)
+  (compile compile-command)
+  (sit-for tex-compilation-delay)
+  (delete-windows-on "*compilation*"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TeX setup
 
@@ -119,18 +126,17 @@ This does not interfere with `subword-mode'."
 ;; default options.
 (setq-default tex-start-commands nil)
 
-(add-hook-and-eval
- 'tex-mode-hook
- (lambda ()
-   ;; `tex-mode' sets `indent-tabs-mode' to nil, invoking the following
-   ;; argument: "TABs in verbatim environments don't do what you think." Not
-   ;; sure how relevant this bad comment is. We revert it.
-   (setq indent-tabs-mode t)
-   (set (make-local-variable 'compilation-scroll-output) t)
-   (set (make-local-variable 'paragraph-start) "
-")
-   ;; (set (make-local-variable 'use-hard-newlines) t)
-   (tex-set-compiler)))
+(defun tex-make-newline-paragraph ()
+  ;; (set (make-local-variable 'use-hard-newlines) t)
+  (set (make-local-variable 'paragraph-start) "
+"))
+
+;; `tex-mode' sets `indent-tabs-mode' to nil, invoking the following
+;; argument: "TABs in verbatim environments don't do what you think." Not
+;; sure how relevant this bad comment is. We revert it.
+(add-hook-and-eval 'tex-mode-hook 'turn-on-indent-tabs)
+(add-hook-and-eval 'tex-mode-hook 'tex-make-newline-paragraph)
+(add-hook-and-eval 'tex-mode-hook 'tex-set-compiler)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Skeletons

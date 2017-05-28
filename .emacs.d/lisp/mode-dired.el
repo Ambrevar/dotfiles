@@ -27,7 +27,7 @@
 (require 'dired-x)
 (setq dired-omit-files "^\\.")
 (dired-omit-mode)
-(add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
+(add-hook 'dired-mode-hook 'dired-omit-mode)
 
 (require 'tool-pdf) ; for `pdf-viewer'
 (setq dired-guess-shell-alist-user

@@ -2,9 +2,9 @@
 
 (defvaralias 'lua-indent-level 'tab-width)
 
-(add-hook-and-eval
- 'lua-mode-hook
- (lambda ()
-   (setq compile-command (concat lua-default-application " " (shell-quote-argument buffer-file-name)))))
+(defun lua-set-compiler ()
+  (setq compile-command (concat lua-default-application " " (shell-quote-argument buffer-file-name))))
+
+(add-hook-and-eval 'lua-mode-hook 'lua-set-compiler)
 
 (provide 'mode-lua)

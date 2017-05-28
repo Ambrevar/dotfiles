@@ -44,19 +44,22 @@ The advantages of this function over the vanilla code are:
   ; (setq sh-shell-file (executable-find (symbol-name sh-shell)))
   ;; Convenient version.
   (setq sh-shell-file (concat "/bin/" (symbol-name sh-shell)))
-  ;; `buffer-file-name` seems to have a non-string type sometimes With `git
-  ;; merge` and cause ediff to fail. Let's protect it.
+  ;; Sometimes with `git merge` it seems that the `buffer-file-name' is not a
+  ;; string. We safe-guard that case.
   (when (stringp buffer-file-name)
     (setq compile-command (concat sh-shell-file " " (shell-quote-argument buffer-file-name)))))
 
-(add-hook-and-eval
- 'sh-mode-hook
- (lambda ()
-   (setq sh-indent-for-case-label 0)
-   (setq sh-indent-for-case-alt '+)
-   (set (make-local-variable 'defun-prompt-regexp)
-        (concat "^\\(function[ \t]\\|[[:alnum:]_]+[ \t]+()[ \t]+\\)"))
-   (sh-set-compiler)))
+(defun sh-set-indent-rules ()
+  (setq sh-indent-for-case-label 0)
+  (setq sh-indent-for-case-alt '+))
+
+(defun sh-set-prompt ()
+  (set (make-local-variable 'defun-prompt-regexp)
+       (concat "^\\(function[ \t]\\|[[:alnum:]_]+[ \t]+()[ \t]+\\)")))
+
+(add-hook-and-eval 'sh-mode-hook 'sh-set-indent-rules)
+(add-hook-and-eval 'sh-mode-hook 'sh-set-prompt)
+(add-hook-and-eval 'sh-mode-hook 'sh-set-compiler)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

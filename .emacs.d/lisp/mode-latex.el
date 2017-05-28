@@ -68,17 +68,17 @@ by an {itemize} environment."
 (dolist (block '("listing" "verbatim" "verbatim*"))
   (add-to-list 'latex-block-body-alist `(,block nil '(delete-horizontal-space t) _)))
 
-(add-hook-and-eval
- 'latex-mode-hook
- (lambda ()
-   (set (make-local-variable 'tex-extension-list)
-        '("aux" "bbl" "blg" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "maf" "mt" "mtc" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy"))
-   (set (make-local-variable 'tex-command) "pdflatex")
-   ;; Need to reset the compiler because we changed tex-command.
-   (tex-set-compiler)
-   ;; For some unknown reasons, `skeleton-end-hook' is set to nil in tex-mode.
-   (add-hook 'skeleton-end-hook 'skeleton-make-markers)
-   (turn-on-orgtbl)))
+(defun latex-set-compiler ()
+  (set (make-local-variable 'tex-extension-list)
+       '("aux" "bbl" "blg" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "maf" "mt" "mtc" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy"))
+  (set (make-local-variable 'tex-command) "pdflatex")
+  ;; Need to reset the compiler because we changed tex-command, order matters.
+  (tex-set-compiler))
+
+(add-hook-and-eval 'latex-mode-hook 'latex-set-compiler)
+(add-hook-and-eval 'latex-mode-hook 'turn-on-orgtbl)
+;; For some unknown reasons, `skeleton-end-hook' is set to nil in tex-mode.
+(add-hook-and-eval 'latex-mode-hook 'turn-on-skeleton-markers)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Skeletons

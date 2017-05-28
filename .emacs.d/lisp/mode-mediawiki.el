@@ -17,11 +17,8 @@
    ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt")
    ("WikEmacs" "https://wikemacs.org/wiki/" "Ambrevar" "" "Main Page")))
 
-(add-hook-and-eval
- 'mediawiki-mode-hook
- (lambda ()
-   (visual-line-mode 1)
-   (turn-off-auto-fill)))
+(add-hook-and-eval 'mediawiki-mode-hook 'visual-line-mode)
+(add-hook-and-eval 'mediawiki-mode-hook 'turn-off-auto-fill)
 
 ;; Skeletons
 

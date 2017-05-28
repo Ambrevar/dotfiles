@@ -26,11 +26,8 @@
   (setcdr (assoc "\\.pdf\\'" org-file-apps)
           (concat pdf-viewer " " (mapconcat 'identity pdf-viewer-args " "))))
 
-(add-hook-and-eval
- 'org-mode-hook
- (lambda ()
-   (linum-mode 0)
-   (setq indent-tabs-mode nil)
-   (auto-fill-mode -1)))
+(add-hook-and-eval 'org-mode-hook 'turn-off-linum)
+(add-hook-and-eval 'org-mode-hook 'turn-off-indent-tabs)
+(add-hook-and-eval 'org-mode-hook 'turn-off-auto-fill)
 
 (provide 'mode-org)
