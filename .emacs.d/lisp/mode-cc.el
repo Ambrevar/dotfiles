@@ -9,8 +9,8 @@
 (local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
 (local-set-key (kbd "C-c o") 'ff-find-other-file)
 
-(when (fboundp 'company-mode)
-  (local-set-key (kbd "M-TAB") (if (require 'company nil t) 'helm-company 'company-complete)))
+(when (require 'company nil t)
+  (local-set-key (kbd "M-TAB") (if (require 'helm-company nil t) 'helm-company 'company-complete)))
 
 (defvar-local cc-ldlibs "-lm -pthread"
   "Custom linker flags for C/C++ linkage.")
@@ -31,20 +31,20 @@ provided.\n Requires `get-closest-pathname'."
     (if (and makefile (not nomakefile))
         (setq compile-command (concat "make -k -C " (shell-quote-argument (file-name-directory makefile))))
       (setq compile-command
-           (let
-               ((c++-p (eq major-mode 'c++-mode))
-                (file (file-name-nondirectory buffer-file-name)))
-             (format "%s %s -o '%s' %s %s %s"
-                     (if c++-p
-                         (or (getenv "CXX") "g++")
-                       (or (getenv "CC") "gcc"))
-                     (shell-quote-argument file)
-                     (shell-quote-argument (file-name-sans-extension file))
-                     (if c++-p
-                         (or (getenv "CXXFLAGS") "-Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0")
-                       (or (getenv "CFLAGS") "-ansi -pedantic -std=c11 -Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0"))
-                     (or (getenv "LDFLAGS") cc-ldflags)
-                     (or (getenv "LDLIBS") cc-ldlibs)))))))
+            (let
+                ((c++-p (eq major-mode 'c++-mode))
+                 (file (file-name-nondirectory buffer-file-name)))
+              (format "%s %s -o '%s' %s %s %s"
+                      (if c++-p
+                          (or (getenv "CXX") "g++")
+                        (or (getenv "CC") "gcc"))
+                      (shell-quote-argument file)
+                      (shell-quote-argument (file-name-sans-extension file))
+                      (if c++-p
+                          (or (getenv "CXXFLAGS") "-Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0")
+                        (or (getenv "CFLAGS") "-ansi -pedantic -std=c11 -Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0"))
+                      (or (getenv "LDFLAGS") cc-ldflags)
+                      (or (getenv "LDLIBS") cc-ldlibs)))))))
 
 (defun cc-clean ()
   "Find Makefile and call the `clean' rule. If no Makefile is
@@ -55,11 +55,11 @@ restored."
     (when makefile
       (compile (format "make -k -f '%s' clean" makefile)))))
 
-;; It is tempting to add `cc-fmt' to the hook:
-; (add-hook 'before-save-hook 'cc-fmt nil t)
-;; Unlike Go however, there is no formatting standard and thus this would break
-;; the formatting rules of every third-party C file that does not follow the
-;; same style.
+;;; It is tempting to add `cc-fmt' to the hook:
+;; (add-hook 'before-save-hook 'cc-fmt nil t)
+;;; Unlike Go however, there is no formatting standard and thus this would break
+;;; the formatting rules of every third-party C file that does not follow the
+;;; same style.
 (defun cc-fmt ()
   "Run uncrustify(1) on current buffer or region."
   (interactive)
@@ -78,25 +78,22 @@ restored."
       (kill-buffer formatbuf))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Semantic options.
+;;; Options
 
-;; Semanticdb folders must be set before starting semantic.
+;;; Semanticdb folders must be set before starting semantic.
 (setq semanticdb-default-save-directory (concat emacs-cache-folder "semanticdb"))
 (semantic-mode 1)
 
-;; Extra semantic support
-;; Example:
-; (when  (fboundp 'semantic-add-system-include)
-;   (semantic-add-system-include "new/header/dir" 'c++-mode)
-;   (add-to-list 'auto-mode-alist (cons qt4-base-dir 'c++-mode))
-;   (add-hook
-;    'c++-mode-hook
-;    (lambda ()
-;      (when semantic-mode
-;        (add-to-list 'semantic-lex-c-preprocessor-symbol-file "new/header/dir/config.h")))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; C-mode
+;;; Extra semantic support
+;;; Example:
+;; (when  (fboundp 'semantic-add-system-include)
+;;   (semantic-add-system-include "new/header/dir" 'c++-mode)
+;;   (add-to-list 'auto-mode-alist (cons qt4-base-dir 'c++-mode))
+;;   (add-hook
+;;    'c++-mode-hook
+;;    (lambda ()
+;;      (when semantic-mode
+;;        (add-to-list 'semantic-lex-c-preprocessor-symbol-file "new/header/dir/config.h")))))
 
 (c-add-style
  "ambrevar"
@@ -118,10 +115,10 @@ restored."
     (substatement-open . 0)
     )))
 
-;; Note that in Emacs 24, cc-mode calls its hooks manually in each mode init
-;; function. Since cc modes belong to prog-mode, each hook is called another
-;; time at the end of the initialization. No big deal since we only set some
-;; variables.
+;;; Note that in Emacs 24, cc-mode calls its hooks manually in each mode init
+;;; function. Since cc modes belong to prog-mode, each hook is called another
+;;; time at the end of the initialization. No big deal since we only set some
+;;; variables.
 (dolist (hook '(c-mode-hook c++-mode-hook))
   (add-hook-and-eval
    hook
@@ -132,11 +129,11 @@ restored."
   (add-hook-and-eval hook 'cc-set-compiler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Skeletons
+;;; Skeletons
 
-;; Note that it is possible to extend the skel syntax with
-;; `skeleton-further-elements'. For instance:
-; (setq skeleton-further-elements '((q "\"")))
+;;; Note that it is possible to extend the skel syntax with
+;;; `skeleton-further-elements'. For instance:
+                                        ; (setq skeleton-further-elements '((q "\"")))
 
 (define-skeleton cc-debug
   "Insert debug macros."

@@ -1,4 +1,4 @@
-;; Sh
+;;; Sh
 
 (defvaralias 'sh-indentation 'sh-basic-offset)
 
@@ -40,9 +40,9 @@ The advantages of this function over the vanilla code are:
          ((equal (file-name-nondirectory buffer-file-name) ".profile") "sh")
          (t sh-shell-file))
    nil nil)
-  ;; Universal version.
-  ; (setq sh-shell-file (executable-find (symbol-name sh-shell)))
-  ;; Convenient version.
+  ;; Universal version:
+  ;; (setq sh-shell-file (executable-find (symbol-name sh-shell)))
+  ;; Convenient version:
   (setq sh-shell-file (concat "/bin/" (symbol-name sh-shell)))
   ;; Sometimes with `git merge` it seems that the `buffer-file-name' is not a
   ;; string. We safe-guard that case.
@@ -50,8 +50,8 @@ The advantages of this function over the vanilla code are:
     (setq compile-command (concat sh-shell-file " " (shell-quote-argument buffer-file-name)))))
 
 (defun sh-set-indent-rules ()
-  (setq sh-indent-for-case-label 0)
-  (setq sh-indent-for-case-alt '+))
+  (setq sh-indent-for-case-label 0
+        sh-indent-for-case-alt '+))
 
 (defun sh-set-prompt ()
   (set (make-local-variable 'defun-prompt-regexp)

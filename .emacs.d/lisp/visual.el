@@ -1,21 +1,21 @@
-;; This file enforces consistency in the visual style:
-;; - doc, here-doc, comments, strings are in the same taint.
-;; - search highlight, search lazy follow the same color code.
-;; - diffs (ediff, smerge, etc.) follow the same color code.
+;;; This file enforces consistency in the visual style:
+;;; - doc, here-doc, comments, strings are in the same taint.
+;;; - search highlight, search lazy follow the same color code.
+;;; - diffs (ediff, smerge, etc.) follow the same color code.
 
-;; To find the variable associated to a currently used color, place the cursor
-;; on it and call `describe-face'. Or browse the `list-faces-display'.
+;;; To find the variable associated to a currently used color, place the cursor
+;;; on it and call `describe-face'. Or browse the `list-faces-display'.
 
-;; General
+;;; General
 (set-face-attribute 'default nil :foreground "white" :background "black")
 
-;; Font size
+;;; Font size
 (when (fboundp 'tool-bar-mode)
   ;; (set-face-attribute 'default nil :height 100)
   (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-10")))
 
-;; More readable but more space consuming; try on big screens.
-; (setq-default line-spacing 1)
+;;; More readable but more space consuming; try on big screens.
+;; (setq-default line-spacing 1)
 
 (if (= emacs-major-version 23)
     (set-face-background 'modeline "white")
@@ -31,26 +31,26 @@
 (when (>= emacs-major-version 24)
   (set-face-attribute 'error nil :foreground "red" :weight 'bold))
 
-;; Cursor type: default (box) is visible and practical.
-; (setq-default cursor-type 'hollow)
+;;; Cursor type: default (box) is visible and practical.
+;; (setq-default cursor-type 'hollow)
 (setq-default x-stretch-cursor t)
-;; Blinking cursor is on only when Emacs is not daemonized.
+;;; Blinking cursor is on only when Emacs is not daemonized.
 (blink-cursor-mode 0)
 
-;; Line numbers. Graphic version has a gray bar separating text from line
-;; numbers, so we can leave the background black.
+;;; Line numbers. Graphic version has a gray bar separating text from line
+;;; numbers, so we can leave the background black.
 (if (display-graphic-p)
     (set-face-background 'shadow "black")
   (set-face-background 'shadow   "#1c1c1c"))
 
-;; Whitespace mode
+;;; Whitespace mode
 (add-hook
  'whitespace-load-hook
  (lambda ()
    (set-face-background 'whitespace-space-after-tab "#a9a9a9")
    (set-face-background 'whitespace-indentation "#696969")))
 
-;; Programming
+;;; Programming
 (set-face-foreground 'font-lock-comment-face "#00ced1")
 (set-face-foreground 'font-lock-comment-delimiter-face (face-foreground 'font-lock-comment-face))
 (set-face-foreground 'font-lock-doc-face "#00dfff")
@@ -62,36 +62,36 @@
 (set-face-foreground 'font-lock-type-face (face-foreground 'default))
 (set-face-foreground 'font-lock-variable-name-face (face-foreground 'default))
 
-;; Sh-mode
+;;; Sh-mode
 (add-hook
  'sh-mode-hook
  (lambda ()
    (set-face-foreground 'sh-heredoc "#00bfff")
    (set-face-bold 'sh-heredoc nil)))
 
-;; Eshell
+;;; Eshell
 (add-hook
  'eshell-mode-hook
  (lambda ()
    (set-face-foreground 'eshell-prompt "#008b8b")))
 
-;; Compilation mode
+;;; Compilation mode
 (add-hook
  'compilation-mode-hook
  (lambda ()
    (set-face-foreground 'compilation-column-number "cyan")
    (set-face-foreground 'compilation-line-number "cyan")))
 
-;; C additional keywords.
+;;; C additional keywords.
 (dolist (mode '(c-mode c++-mode))
-   (font-lock-add-keywords
-    mode
-    '(("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)
-      ;; Functions.
-      ("\\<\\(\\sw+\\)(" 1 'font-lock-function-name-face)
-      ("\\<\\(\\sw+\\)<\\sw+>(" 1 'font-lock-function-name-face))))
+  (font-lock-add-keywords
+   mode
+   '(("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)
+     ;; Functions.
+     ("\\<\\(\\sw+\\)(" 1 'font-lock-function-name-face)
+     ("\\<\\(\\sw+\\)<\\sw+>(" 1 'font-lock-function-name-face))))
 
-;; Ediff
+;;; Ediff
 (add-hook
  'ediff-mode-hook
  (lambda ()
@@ -105,7 +105,7 @@
    (set-face-attribute 'ediff-current-diff-B nil :box "white")
    (set-face-attribute 'ediff-current-diff-C nil :box "white")))
 
-;; Outline mode
+;;; Outline mode
 (add-hook
  'outline-mode-hook
  (lambda ()
@@ -118,14 +118,15 @@
    (set-face-foreground 'outline-7 "DarkSlateGray4")
    (set-face-foreground 'outline-8 "DarkSlateBlue")))
 
-;; show-paren
-(when (boundp 'show-paren-delay)
-  ;; (set-face-background 'show-paren-match-face (face-background 'default)) ; Disable background color.
-  (set-face-background 'show-paren-match-face "#555555")
-  (set-face-foreground 'show-paren-match-face "#def")
-  (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))
+;;; show-paren
+(add-hook
+ 'show-paren-mode-hook
+ ;; (set-face-background 'show-paren-match-face (face-background 'default)) ; Disable background color.
+ (set-face-background 'show-paren-match-face "#555555")
+ (set-face-foreground 'show-paren-match-face "#def")
+ (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))
 
-;; Mail mode
+;;; Mail mode
 (font-lock-add-keywords
  'mail-mode
  '(
@@ -150,8 +151,8 @@
    ;; Signature (multi-line regexes are a bit flaky).
    ("^--.*\\(\n.*\\)*" . font-lock-comment-face)))
 
-;; Key notes highlighting. We need to apply it to the mode hook since
-;; font-lock-add-keywords has no inheritance support.
+;;; Key notes highlighting. We need to apply it to the mode hook since
+;;; font-lock-add-keywords has no inheritance support.
 (set-face-foreground 'font-lock-warning-face "DarkOrange")
 (dolist (hook '(prog-mode-hook tex-mode-hook texinfo-mode-hook))
   (add-hook
@@ -164,7 +165,7 @@
        (lambda (keyword) `(,(concat "\\<\\(" keyword "\\):") 1 font-lock-warning-face prepend))
        '("FIXME\\(([^)]+)\\)?" "HACK" "OPTIMIZE\\(([^)]+)\\)?" "REVIEW\\(([^)]+)\\)?" "TODO\\(([^)]+)\\)?" "UNDONE" "UX" "WARNING" "XXX"))))))
 
-;; Man pages
+;;; Man pages
 (add-hook
  'Man-mode-hook
  (lambda ()

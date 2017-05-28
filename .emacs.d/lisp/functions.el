@@ -1,25 +1,29 @@
-;; Functions
+;;; Functions
 
-;; Notes on mark and region: to get a consistent behaviour regardless of Transient
-;; mode, check `(use-region-p)'. It will work as expected if
-;; transient. If not, it will always be true as soon as the mark has been set
-;; once; so you need to make sure the mark is set as you want beforehand (e.g.
-;; whole buffer, single line...). This is the behaviour of `sort-lines'.
+;;; Notes on mark and region: to get a consistent behaviour regardless of Transient
+;;; mode, check `(use-region-p)'. It will work as expected if
+;;; transient. If not, it will always be true as soon as the mark has been set
+;;; once; so you need to make sure the mark is set as you want beforehand (e.g.
+;;; whole buffer, single line...). This is the behaviour of `sort-lines'.
+;;;
+;;; The clean way to get static region boundaries and fallback on buffer boundaries:
 ;;
-;; The clean way to get static region boundaries and fallback on buffer boundaries:
-; (let (start end)
-;   (if (use-region-p)
-;       (setq start (region-beginning) end (region-end))
-;     (setq start (point-min) end (point-max)))
-;
-;; If several commands act on region and the region size/pos is susceptible to change:
-; (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
-;       (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-end)))))
-;
-;; For commands that only work on regions:
-; (defun count-lines-region (start end)
-;   "Print number of lines and characters in the region."
-;   (interactive "r")
+;; (let (start end)
+;;   (if (use-region-p)
+;;       (setq start (region-beginning) end (region-end))
+;;     (setq start (point-min) end (point-max)))
+;;
+:;; If several commands act on region and the region size/pos is susceptible to change:
+;;
+;; (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
+;;       (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-end)))))
+;;
+;;
+;;; For commands that only work on regions:
+;;
+;; (defun count-lines-region (start end)
+;;   "Print number of lines and characters in the region."
+;;   (interactive "r")
 
 (defun add-hook-and-eval (hook function)
   "Add FUNCTION to HOOK and evaluate it.
@@ -131,18 +135,18 @@ Work on buffer or region. Require `tabify-leading'."
       (narrow-to-region start end)
       (delete-trailing-whitespace))))
 
-;; Fix forward-page. Previously, when the point was at the end of the page,
-;; going forward would skip 1 page.  Changed:
+;;; Fix forward-page. Previously, when the point was at the end of the page,
+;;; going forward would skip 1 page.  Changed:
 ;;
 ;;    (if (bolp) (forward-char 1))
 ;;
-;; to
+;;; to
 ;;
 ;;    (if (string= page-delimiter "")
 ;;
-;; I do not know why the (bolp) condition was used since it does not match the
-;; above comment.
-;; TODO: Fix reported to http://debbugs.gnu.org/cgi/bugreport.cgi?bug=20663.
+;;; I do not know why the (bolp) condition was used since it does not match the
+;;; above comment.
+;;; TODO: Fix reported to http://debbugs.gnu.org/cgi/bugreport.cgi?bug=20663.
 (defun forward-page (&optional count)
   "Move forward to page boundary.
 With prefix or COUNT, repeat, or go back if negative.
@@ -339,8 +343,8 @@ WARNING: this may slow down editing on big files."
           mode-line-misc-info
           mode-line-end-spaces)))
 
-;; Almost useless compared to Helm-file M-R. However helm does not change
-;; current directory.
+;;; Almost useless compared to Helm-file M-R. However helm does not change
+;;; current directory.
 (defun rename-buffer-and-file ()
   "Renames current buffer and file it is visiting."
   (interactive)
@@ -405,8 +409,8 @@ If REVERSE it t, move to previous placeholder."
   "Remove trailing white space, then duplicate lines, then sort the result.
 Do not fold case with \\[universal-argument] or non-nil ARG."
   (interactive "P")
- (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
-       (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-end)))))
+  (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
+        (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-end)))))
     (let ((sort-fold-case (if arg nil t)))
       (delete-trailing-whitespace start end)
       (delete-duplicate-lines start end)
