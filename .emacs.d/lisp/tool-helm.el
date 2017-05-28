@@ -7,7 +7,9 @@
   (setq wgrep-auto-save-buffer t)
   (setq wgrep-enable-key (kbd "C-x C-q")))
 
-(require 'helm-ls-git nil t)
+;;; Require helm-ls-git unconditionally, this makes following config easier.
+(require 'helm-ls-git)
+
 (helm-mode 1)
 ;; (helm-autoresize-mode 1)
 (setq helm-follow-mode-persistent t)
@@ -21,6 +23,21 @@
 (setq helm-buffers-fuzzy-matching t)
 (setq helm-imenu-fuzzy-match t)
 (setq helm-M-x-fuzzy-match t)
+
+;;; Make `helm-mini' almighty.
+(setq helm-mini-default-sources '(helm-source-buffers-list
+                                  helm-source-recentf
+                                  helm-source-ls-git
+                                  helm-source-bookmarks
+                                  helm-source-bookmark-set
+                                  helm-source-buffer-not-found))
+
+;;; `helm-source-ls-git' must be defined manually.
+;;; See https://github.com/emacs-helm/helm-ls-git/issues/34.
+(setq helm-source-ls-git
+      (and (memq 'helm-source-ls-git helm-ls-git-default-sources)
+           (helm-make-source "Git files" 'helm-ls-git-source
+             :fuzzy-match helm-ls-git-fuzzy-match)))
 
 ;;; Do not exclude any files from 'git grep'.
 (setq helm-grep-git-grep-command "git --no-pager grep -n%cH --color=always --full-name -e %p -- %f")
@@ -54,8 +71,6 @@ Requires `call-process-to-string' from `functions'."
 (define-key mickey-minor-mode-map (kbd "M-x") 'helm-M-x)
 (define-key mickey-minor-mode-map (kbd "C-x C-f") 'helm-find-files)
 (define-key mickey-minor-mode-map (kbd "C-x c C-/") 'helm-find)
-(define-key mickey-minor-mode-map (kbd "C-x C-d") 'helm-browse-project)
-(define-key mickey-minor-mode-map (kbd "C-x b") 'helm-buffers-list)
 (define-key mickey-minor-mode-map (kbd "C-x C-b") 'helm-mini)
 (define-key mickey-minor-mode-map (kbd "M-y") 'helm-show-kill-ring)
 (define-key mickey-minor-mode-map (kbd "C-x C-x") 'helm-mark-or-exchange-rect)
@@ -64,7 +79,6 @@ Requires `call-process-to-string' from `functions'."
 (define-key mickey-minor-mode-map (kbd "C-M-%") 'helm-regexp)
 (define-key mickey-minor-mode-map (kbd "C-x M-g") 'helm-grep-git-or-ag)
 (define-key mickey-minor-mode-map (kbd "C-x M-G") 'helm-do-grep-ag)
-(define-key mickey-minor-mode-map (kbd "C-x C-r") 'helm-filtered-bookmarks)
 (define-key mickey-minor-mode-map (kbd "C-x M-b") 'helm-resume) ; Convenient for god-mode.
 (define-key helm-find-files-map (kbd "C-c C-/") 'helm-ff-run-find-sh-command) ; Convenient for god-mode.
 
