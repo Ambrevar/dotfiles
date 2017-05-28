@@ -76,9 +76,9 @@
 
   ;; TODO: show-marks with helm? Evil mixes up the mark ring.
   ;; Back to where search started with C-o or ''(?).
-  (evil-global-set-key 'normal "'" 'helm-mark-or-exchange-rect)
+  ;; (evil-global-set-key 'normal "'" 'helm-mark-or-exchange-rect)
   ;; TODO: Yank ring pasting behaves like Emacs, not Vim.
-  (evil-global-set-key 'normal "\M-p" 'helm-show-kill-ring)
+  ;; (evil-global-set-key 'normal "\M-p" 'helm-show-kill-ring)
 
   ;; TODO: Should we stick to M-based bindings or use C-based?
   ;; Magit uses C-jk, helm uses C-space.
@@ -183,12 +183,17 @@
    (call-interactively (key-binding (kbd "M-.")))))
 
 ;; Multiple cursors.
-;; TODO: Figure out better bindings, current ones shadow 'paste', history browsing, Magit update "gr" (Use ?g instead), etc.
+;; This shadows evil-magit's "gr", but we can use "?g" for that instead.
+;; It shadows C-n/p (`evil-paste-pop'), but we use `helm-show-kill-ring' on
+;; another binding.
 (when (require 'evil-mc nil t)
   (global-evil-mc-mode 1)
-  ;; (when (require 'evil-mc-extras nil t)
-  ;; (global-evil-mc-extras-mode 1))
-  )
+  (define-key evil-mc-key-map (kbd "C-<mouse-1>") 'evil-mc-toggle-cursor-on-click)
+  ;; Don't shadow evil's standard keys. TODO: Is \C-t ever needed? Evil's normal binding is `pop-tag-mark'.
+  ;; (evil-define-key '(normal visual) evil-mc-key-map "\C-t" nil)
 
+  (set-face-attribute 'evil-mc-cursor-default-face nil :inherit nil :inverse-video nil :box "white")
+  (when (require 'evil-mc-extras nil t)
+    (global-evil-mc-extras-mode 1)))
 
 (provide 'tool-evil)

@@ -286,7 +286,6 @@ To view where the bindings are set in your config files, lookup
   (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
   ;; Load the file at the new location.
   (load mc/list-file t)
-  (global-unset-key (kbd "C-<down-mouse-1>"))
   (define-key mickey-minor-mode-map (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
   (define-key mickey-minor-mode-map (kbd "C-x M-r") 'mc/edit-lines)
   (define-key mickey-minor-mode-map (kbd "C-x M-m") 'mc/mark-more-like-this-extended)

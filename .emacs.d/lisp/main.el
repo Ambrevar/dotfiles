@@ -246,6 +246,8 @@
 
 ;;; Move mouse away.
 ;; (mouse-avoidance-mode 'banish)
+;;; That binding is not very useful and gets in the way of C-<mouse-1>.
+(global-unset-key (kbd "C-<down-mouse-1>"))
 
 ;;; Display defun in mode line.
 (which-function-mode)
