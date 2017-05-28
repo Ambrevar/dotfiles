@@ -245,14 +245,8 @@ To view where the bindings are set in your config files, lookup
 (when (require 'evil nil t)
   (require 'tool-evil))
 
-;;; God mode
-;;; TODO: Evil largely replaces god-mode. Remove?
-;; (add-to-list 'package-selected-packages 'god-mode)
-;; (when (require 'god-mode nil t)
-;;   (require 'tool-god))
-
 ;;; GUD (GDB, etc.)
-(add-hook 'gud-mode-hook    (lambda () (require 'mode-gud)))
+(add-hook 'gud-mode-hook (lambda () (require 'mode-gud)))
 
 ;;; Helm
 (add-to-list 'package-selected-packages 'helm)
