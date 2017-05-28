@@ -8,7 +8,8 @@ function fish_user_key_bindings
 	## As of fish 2.5, Alt-f binding is missing in vi-mode.
 	bind -M insert \ef forward-word
 
-	bind -M insert \ee edit_command_buffer
+	bind -M insert \ce edit_command_buffer
+	bind -m insert \ce edit_command_buffer
 
 	## fzf
 	if type -pq fzf
