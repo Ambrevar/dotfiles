@@ -116,6 +116,21 @@ TO-STRING."
         (find-variable sym)
       (find-function sym))))
 
+(defun fmt ()
+  "(Un)tabify, indent and delete trailing whitespace.
+Tabify if `indent-tabs-mode' is true, otherwise use spaces.
+Work on buffer or region. Require `tabify-leading'."
+  (interactive)
+  (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
+        (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-max)))))
+    (if indent-tabs-mode
+        (tabify-leading)
+      (untabify start end))
+    (indent-region start end)
+    (save-restriction
+      (narrow-to-region start end)
+      (delete-trailing-whitespace))))
+
 ;; Fix forward-page. Previously, when the point was at the end of the page,
 ;; going forward would skip 1 page.  Changed:
 ;;
@@ -346,20 +361,6 @@ WARNING: this may slow down editing on big files."
 (defun reset-fill-column ()
   "Reset `fill-column' to its default value."
   (setq fill-column (default-value 'fill-column)))
-(defun sanitize ()
-  "(Un)tabify, indent and delete trailing whitespace.
-Tabify if `indent-tabs-mode' is true, otherwise use spaces.
-Work on buffer or region. Require `tabify-leading'."
-  (interactive)
-  (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
-        (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-max)))))
-    (if indent-tabs-mode
-        (tabify-leading)
-      (untabify start end))
-    (indent-region start end)
-    (save-restriction
-      (narrow-to-region start end)
-      (delete-trailing-whitespace))))
 
 (defun shell-last-command ()
   "Run last shell command."
@@ -505,6 +506,10 @@ This does not interfere with `subword-mode'."
         (message "_ is a not word delimiter"))
     (modify-syntax-entry ?_ "_")
     (message "_ is a word delimiter")))
+
+(defun turn-on-fmt-before-save ()
+  "Unconditionally add the `fmt' function to `before-save-hook'."
+  (add-hook 'before-save-hook 'fmt nil t))
 
 (defun turn-off-indent-tabs ()
   "Unconditionally turn off tab indentation."

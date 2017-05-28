@@ -111,8 +111,8 @@
 
 ;; WARNING: this can break some configuration files needing whitespaces at the
 ;; end. This can also slow down saving on big files.
-; (require 'functions) ; for `sanitize'
-; (add-hook 'before-save-hook 'sanitize)
+; (require 'functions) ; for `fmt'
+; (add-hook 'before-save-hook 'fmt)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Hippie expand.
