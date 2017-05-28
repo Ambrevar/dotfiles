@@ -174,31 +174,27 @@ bind index "Q" quit
 bind index <Esc>q query
 bind index "q" noop
 
-## Vi/Emacs bindings.
+## Vi bindings.
 bind pager j next-line
 bind pager k previous-line
+bind attach,index,pager \CB previous-page
 bind attach,index,pager \CD next-page
+bind attach,index,pager \CF next-page
 bind attach,index,pager \CU previous-page
-bind attach,index,pager <Esc>f next-page
 bind attach,index,pager ? search-reverse
 bind attach,index,pager h help
 bind attach,index,pager \Ch display-toggle-weed
 bind attach,index,pager N search-opposite
-bind index <Esc>x collapse-thread
-bind index <Esc>X collapse-all
-bind attach,index,pager \CV next-page
-bind attach,index,pager <Esc>v previous-page
-bind attach,index,pager <Esc>b previous-page
 bind pager g top
 bind pager G bottom
-bind pager <Esc>< top
-bind pager <Esc>> bottom
 bind attach,index g first-entry
 bind attach,index G last-entry
-bind attach,index <Esc>< first-entry
-bind attach,index <Esc>> last-entry
-bind index,pager <Esc>w set-flag
 
+bind index <Esc>x collapse-thread
+bind index <Esc>X collapse-all
+
+## Flags
+bind index,pager <Esc>w set-flag
 ## Remove N/O flag in one key stroke.
 macro index w '<clear-flag>N'
 
