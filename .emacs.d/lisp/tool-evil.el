@@ -24,13 +24,13 @@
 ;; TODO: We do not map <leader><leader> to most used command since it could be
 ;; misleading. Maybe the helm buffer menu would be interesting to have though?
 (when (require 'evil-leader nil t)
-  ;; Leader mode must be set before evil-mode.
+  ;; Leader mode and its key must be set before evil-mode.
+  (evil-leader/set-leader "<SPC>")
   (global-evil-leader-mode))
 
 (evil-mode 1)
 
 ;; TODO: dired/info can not super <SPC> as leader. Use ',' as leader key?
-(evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
   "RET" 'spawn-terminal
   "\\" 'toggle-window-split
@@ -110,7 +110,7 @@
 
 ;; Add support for magit.
 (require 'evil-magit nil t)
-;; TODO: C-jk is the default, M-jk is more intuitive if we use it for helm. Set it?
+;; C-j/k is the default, M-j/k is more intuitive if we use it for helm.
 (when (and (require 'magit-mode nil t) (require 'evil-magit nil t))
   (evil-magit-define-key evil-magit-state 'magit-mode-map "M-j" 'magit-section-forward)
   (evil-magit-define-key evil-magit-state 'magit-mode-map "M-k" 'magit-section-backward))
