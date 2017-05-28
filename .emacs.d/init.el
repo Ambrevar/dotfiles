@@ -182,10 +182,11 @@ To view where the bindings are set in your config files, lookup
 ;;; Fish
 (add-to-list 'package-selected-packages 'fish-mode)
 (defun fish-check-buffer ()
-  (when (and (string-match "/tmp/tmp\..*\.fish" (buffer-file-name))
-             (require 'with-editor nil t))
-    ;; Just like git commits.
-    (with-editor-mode)))
+  (when (string-match "/tmp/tmp\..*\.fish" (buffer-file-name))
+    (when (require 'with-editor nil t)
+      ;; Just like git commits.
+      (with-editor-mode))
+    (end-of-line)))
 (add-hook 'find-file-hook 'fish-check-buffer)
 
 ;;; Srt (subtitles)
