@@ -88,8 +88,10 @@ To view where the bindings are set in your config files, lookup
 (add-hook 'go-mode-hook (lambda () (require 'mode-go)))
 
 ;;; Graphviz dot
+;; The view command is broken but the preview command works (it displays the PNG
+;; in a new window), which is enough and probably not worth a fix.
+(add-to-list 'package-selected-packages 'graphviz-dot-mode)
 (load-external "\\.dot\\'" 'graphviz-dot-mode)
-(add-hook 'graphviz-dot-mode-hook (lambda () (require 'mode-dot)))
 
 ;;; JavaScript
 (add-hook 'js-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
