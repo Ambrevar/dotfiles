@@ -58,13 +58,11 @@
 (with-eval-after-load 'tool-helm
   (evil-leader/set-key
     "b" 'helm-mini
-    "d" 'helm-browse-project
     "e" 'helm-find-files
     "E" 'helm-find
     "g" 'helm-grep-git-or-ag
     "G" 'helm-grep-git-all-or-ag
     ;; "ha" 'helm-apropos
-    "m" 'helm-filtered-bookmarks ; This must be a leader binding: normal mode "m" could get shadowed (e.g. dired).
     ;; "q" 'read-only-mode ; Bad cause in wdired, it's a different mapping.
     "r" 'helm-resume)
 
