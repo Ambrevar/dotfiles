@@ -191,9 +191,6 @@
 (global-set-key (kbd "<f11>") 'previous-error)
 (global-set-key (kbd "<f12>") 'next-error)
 
-;;; Code browsing: make C-M-e jump to next function instead of the end of the current function.
-(define-key mickey-minor-mode-map (kbd "C-M-e") (lambda () (interactive) (beginning-of-defun -1)))
-
 (defadvice desktop-owner (after pry-from-cold-dead-hands activate)
   "Don't allow dead emacsen to own the desktop file."
   (when (not (emacs-process-p ad-return-value))

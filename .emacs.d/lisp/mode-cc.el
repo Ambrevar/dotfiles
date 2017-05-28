@@ -120,10 +120,7 @@ restored."
 ;;; time at the end of the initialization. No big deal since we only set some
 ;;; variables.
 (dolist (hook '(c-mode-hook c++-mode-hook))
-  (add-hook-and-eval
-   hook
-   (lambda ()
-     (c-set-style "ambrevar"))) ;; We override existing values.
+  (add-hook-and-eval hook (lambda () (c-set-style "ambrevar"))) ;; We override existing values.
   (when (require 'company nil t)
     (add-hook-and-eval hook 'company-mode))
   (add-hook-and-eval hook 'cc-set-compiler))
