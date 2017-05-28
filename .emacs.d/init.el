@@ -59,7 +59,7 @@ To view where the bindings are set in your config files, lookup
 ;;; Bibtex
 (setq bibtex-entry-format '(opts-or-alts required-fields numerical-fields whitespace realign last-comma delimiters braces sort-fields))
 (setq bibtex-field-delimiters 'double-quotes)
-(add-hook 'bibtex-mode-hook (lambda () (setq indent-tabs-mode nil)))
+(add-hook 'bibtex-mode-hook 'turn-off-indent-tabs)
 
 ;;; Bison/Flex
 (load-external "\\.l\\'" 'flex-mode nil 'c-mode)
@@ -70,7 +70,9 @@ To view where the bindings are set in your config files, lookup
 (add-hook 'c++-mode-hook (lambda () (require 'mode-cc)))
 
 ;;; ChangeLog
-(add-hook 'change-log-mode-hook (lambda () (setq tab-width 2 left-margin 2)))
+(defun change-log-set-indent-rules ()
+  (setq tab-width 2 left-margin 2))
+(add-hook 'change-log-mode-hook 'change-log-set-indent-rules)
 
 ;;; GLSL
 (load-external "\\.vert\\'\\|\\.frag\\'\\|\\.glsl\\'" 'glsl-mode nil 'c-mode)
@@ -109,13 +111,12 @@ To view where the bindings are set in your config files, lookup
 ;;; Mail with Mutt support.
 (add-hook 'mail-mode-hook 'mail-text)
 (add-to-list 'auto-mode-alist '("/tmp/mutt-.*" . mail-mode))
-(add-hook
- 'find-file-hook
- (lambda ()
-   (when (and (string-match "/tmp/mutt-.*" (buffer-file-name))
-              (require 'with-editor nil t))
-     ;; Just like git commits.
-     (with-editor-mode))))
+(defun mutt-check-buffer ()
+  (when (and (string-match "/tmp/mutt-.*" (buffer-file-name))
+             (require 'with-editor nil t))
+    ;; Just like git commits.
+    (with-editor-mode)))
+(add-hook 'find-file-hook 'mutt-check-buffer)
 
 ;;; Makefile
 (add-hook 'makefile-mode-hook (lambda () (require 'mode-makefile)))
@@ -130,13 +131,14 @@ To view where the bindings are set in your config files, lookup
   (set-face-attribute 'markdown-header-face-3 nil :inherit 'info-title-3)
   (set-face-attribute 'markdown-header-face-4 nil :inherit 'info-title-4)
   (define-key markdown-mode-map "\M-'" 'markdown-blockquote-region)
-  (add-hook 'markdown-mode-hook (lambda () (set (make-local-variable 'paragraph-start) "
-"))))
+  (add-hook 'markdown-mode-hook 'turn-on-newline-paragraph))
 
 ;;; Matlab / Octave
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode)) ; matlab
-;;; Set comments to be '%' to be matlab-compatible.
-(add-hook 'octave-mode-hook (lambda () (set (make-local-variable 'comment-start) "% ")))
+(defun octave-set-comment-start ()
+  "Set comment character to '%' to be Matlab-compatible."
+  (set (make-local-variable 'comment-start) "% "))
+(add-hook 'octave-mode-hook 'octave-set-comment-start)
 
 ;;; Maxima
 (autoload 'maxima-mode "maxima" "Maxima mode" t)
@@ -152,11 +154,12 @@ To view where the bindings are set in your config files, lookup
 (add-hook 'org-mode-hook (lambda () (require 'mode-org)))
 
 ;;; Perl
-(add-hook
- 'perl-mode-hook
- (lambda ()
-   (defvaralias 'perl-indent-level 'tab-width)
-   (setq compile-command (concat "perl " (shell-quote-argument buffer-file-name)))))
+(defun perl-set-indent-rules ()
+  (defvaralias 'perl-indent-level 'tab-width))
+(defun perl-set-compiler ()
+  (setq compile-command (concat "perl " (shell-quote-argument buffer-file-name))))
+(add-hook 'perl-mode-hook 'perl-set-indent-rules)
+(add-hook 'perl-mode-hook 'perl-set-compiler)
 
 ;;; po
 ;;; No hook for this mode?
@@ -178,13 +181,12 @@ To view where the bindings are set in your config files, lookup
 (add-to-list 'auto-mode-alist '("rc\\'" . sh-mode))
 ;;; Fish
 (add-to-list 'package-selected-packages 'fish-mode)
-(add-hook
- 'find-file-hook
- (lambda ()
-   (when (and (string-match "/tmp/tmp\..*\.fish" (buffer-file-name))
-              (require 'with-editor nil t))
-     ;; Just like git commits.
-     (with-editor-mode))))
+(defun fish-check-buffer ()
+  (when (and (string-match "/tmp/tmp\..*\.fish" (buffer-file-name))
+             (require 'with-editor nil t))
+    ;; Just like git commits.
+    (with-editor-mode)))
+(add-hook 'find-file-hook 'fish-check-buffer)
 
 ;;; Srt (subtitles)
 (add-to-list 'auto-mode-alist '("\\.srt\\'" . text-mode))
@@ -200,22 +202,20 @@ To view where the bindings are set in your config files, lookup
 ;;; Web forms.
 ;;; Remove auto-fill in web edits because wikis and forums do not like it.
 ;;; This works for qutebrowser, but may need changes for other browsers.
-(add-hook
- 'find-file-hook
- (lambda ()
-   (when (string-match (concat (getenv "BROWSER") "-editor-*") (buffer-name))
-     (when (require 'with-editor nil t)
-       ;; Just like git commits.
-       (with-editor-mode))
-     (auto-fill-mode -1))))
+(defun browser-check-buffer ()
+  (when (string-match (concat (getenv "BROWSER") "-editor-*") (buffer-name))
+    (when (require 'with-editor nil t)
+      ;; Just like git commits.
+      (with-editor-mode))
+    (auto-fill-mode -1)))
+(add-hook 'find-file-hook 'browser-check-buffer)
 
 ;;; XML / SGML
-(add-hook
- 'sgml-mode-hook
- (lambda ()
-   (setq sgml-xml-mode t)
-   ;; (toggle-truncate-lines) ; This seems to slow down Emacs.
-   (turn-off-auto-fill)))
+(defun sgml-setup ()
+  (setq sgml-xml-mode t)
+  ;; (toggle-truncate-lines) ; This seems to slow down Emacs.
+  (turn-off-auto-fill))
+(add-hook 'sgml-mode-hook 'sgml-setup)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Minor modes and features.

@@ -126,17 +126,16 @@ This does not interfere with `subword-mode'."
 ;; default options.
 (setq-default tex-start-commands nil)
 
-(defun tex-make-newline-paragraph ()
-  ;; (set (make-local-variable 'use-hard-newlines) t)
-  (set (make-local-variable 'paragraph-start) "
-"))
-
 ;; `tex-mode' sets `indent-tabs-mode' to nil, invoking the following
 ;; argument: "TABs in verbatim environments don't do what you think." Not
 ;; sure how relevant this bad comment is. We revert it.
 (add-hook-and-eval 'tex-mode-hook 'turn-on-indent-tabs)
+(add-hook-and-eval 'tex-mode-hook 'turn-on-newline-paragraph)
 (add-hook-and-eval 'tex-mode-hook 'tex-make-newline-paragraph)
 (add-hook-and-eval 'tex-mode-hook 'tex-set-compiler)
+
+;; Not sure how useful that is:
+;; (set (make-local-variable 'use-hard-newlines) t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Skeletons

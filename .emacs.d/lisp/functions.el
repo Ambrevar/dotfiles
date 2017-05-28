@@ -523,6 +523,10 @@ This does not interfere with `subword-mode'."
   "Unconditionally turn on tab indentation."
   (setq indent-tabs-mode t))
 
+(defun turn-on-newline-paragraph ()
+  (set (make-local-variable 'paragraph-start) "
+"))
+
 (defun turn-on-skeleton-markers ()
   "Allow skeletons to make markers to ease field navigation."
   (add-hook 'skeleton-end-hook 'skeleton-make-markers))
