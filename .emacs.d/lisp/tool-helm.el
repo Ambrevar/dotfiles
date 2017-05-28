@@ -1,4 +1,4 @@
-;; Helm
+;;; Helm
 
 (when (require 'helm-descbinds nil t)
   (helm-descbinds-mode))
@@ -9,7 +9,7 @@
 
 (require 'helm-ls-git nil t)
 (helm-mode 1)
-; (helm-autoresize-mode 1)
+;; (helm-autoresize-mode 1)
 (setq helm-follow-mode-persistent t)
 (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
 ;; (setq helm-split-window-default-side 'right)
@@ -22,10 +22,10 @@
 (setq helm-imenu-fuzzy-match t)
 (setq helm-M-x-fuzzy-match t)
 
-;; Do not exclude any files from 'git grep'.
+;;; Do not exclude any files from 'git grep'.
 (setq helm-grep-git-grep-command "git --no-pager grep -n%cH --color=always --full-name -e %p -- %f")
 
-;; Use `pt' instead of `ag'.
+;;; Use `pt' instead of `ag'.
 (setq helm-grep-ag-command "pt -e -S --hidden --color --nogroup %s %s %s")
 
 (defun helm-grep-git-or-ag (arg)
@@ -68,9 +68,9 @@ Requires `call-process-to-string' from `functions'."
 (define-key mickey-minor-mode-map (kbd "C-x M-b") 'helm-resume) ; Convenient for god-mode.
 (define-key helm-find-files-map (kbd "C-c C-/") 'helm-ff-run-find-sh-command) ; Convenient for god-mode.
 
-;; We use the M-s prefix just like `occur'.
+;;; We use the M-s prefix just like `occur'.
 (define-key prog-mode-map "\M-sf" 'helm-semantic-or-imenu)
-;; The text-mode-map binding targets structured text modes like Markdown.
+;;; The text-mode-map binding targets structured text modes like Markdown.
 (define-key text-mode-map "\M-sf" 'helm-semantic-or-imenu)
 (with-eval-after-load "org"
   (define-key org-mode-map "\M-sf" 'helm-org-in-buffer-headings))
