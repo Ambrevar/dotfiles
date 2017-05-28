@@ -3,6 +3,8 @@
 ;; TODO: Turn off bindings from tool-helm.el when evil is loaded?
 ;; TODO: Add hjkl to debugger output mode.
 ;; TODO: Navigate visual lines with j/k?
+;; TODO: Yank ring pasting behaves like Emacs, not Vim.
+;; TODO: show-marks with helm? Evil mixes up the mark ring. Back to where search started with C-o or ''(?).
 
 ;; TODO: M-; comments next line in VISUAL. This is because of a different
 ;; newline definition between Emacs and Vim.
@@ -36,7 +38,6 @@
   "\\" 'toggle-window-split
   "b" 'buffer-menu
   "e" 'find-file
-  ;; "h" 'help-command ; Does not work in insert mode. M-h creates conflicts, so let's keep C-h for insert mode.
   "k" 'kill-this-buffer ; TODO: In Vim its :bd, so should we map to " d"? Then git project should be something else.
   "o" 'delete-other-windows
   "w" 'evil-window-next
@@ -45,13 +46,6 @@
 (when (require 'magit nil t)
   ;; Use S-SPC instead of SPC to browse commit details.
   (evil-leader/set-key "v" 'magit-status))
-
-;; TODO: Remove M-bindings that are useless when Ctrl is properly mapped.
-;; (evil-global-set-key 'normal "\M-6" 'evil-switch-to-windows-last-buffer)
-;; (evil-global-set-key 'normal (kbd "M-v") 'evil-visual-block)
-;; (evil-global-set-key 'motion (kbd "M-b") 'evil-scroll-page-up)
-;; (evil-global-set-key 'motion (kbd "M-f") 'evil-scroll-page-down)
-;; (evil-global-set-key 'motion (kbd "M-r") 'undo-tree-redo)
 
 ;; Tweak motion map: useful for info-mode, help-mode, etc.
 ;; See `evil-motion-state-modes'.
@@ -74,17 +68,9 @@
     ;; "q" 'read-only-mode ; Bad cause in wdired, it's a different mapping.
     "r" 'helm-resume)
 
-  ;; TODO: show-marks with helm? Evil mixes up the mark ring.
-  ;; Back to where search started with C-o or ''(?).
-  ;; (evil-global-set-key 'normal "'" 'helm-mark-or-exchange-rect)
-  ;; TODO: Yank ring pasting behaves like Emacs, not Vim.
-  ;; (evil-global-set-key 'normal "\M-p" 'helm-show-kill-ring)
-
   ;; TODO: Should we stick to M-based bindings or use C-based?
-  ;; Magit uses C-jk, helm uses C-space.
-  ;; Evil has C-w, C-o, C-p, C-r.
-  ;; Emacs has C-xC-q, C-xC-o.
-  ;; In environments where Caps is not Ctrl, C-bindings are painful.
+  ;; Magit uses C-jk, helm uses C-space. Evil has C-w, C-o, C-p, C-r. Emacs has C-xC-q, C-xC-o.
+  ;; However, in environments where Caps is not Ctrl, C-bindings are painful.
   (define-key helm-map (kbd "M-\\") 'helm-toggle-resplit-and-swap-windows) ; Or use M-t (helm standard binding is C-t).
   (define-key helm-map (kbd "C-f") 'helm-next-page)
   (define-key helm-map (kbd "C-b") 'helm-previous-page)
@@ -102,11 +88,6 @@
     (define-key keymap (kbd "M-l") 'helm-execute-persistent-action)
     (define-key keymap (kbd "M-h") 'helm-find-files-up-one-level)
     (define-key keymap (kbd "M-H") 'describe-key)))
-
-;; TODO: Define ex commands? Useful for short calls with arguments.
-;; (evil-ex-define-cmd "buffers" 'helm-buffers-list)
-;; (evil-ex-define-cmd "ls" 'helm-buffers-list)
-;; (evil-ex-define-cmd "edit" 'helm-find-files)
 
 ;; Add support for magit.
 (require 'evil-magit nil t)
