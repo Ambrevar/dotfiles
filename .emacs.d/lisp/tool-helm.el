@@ -24,6 +24,21 @@
 (setq helm-imenu-fuzzy-match t)
 (setq helm-M-x-fuzzy-match t)
 
+;;; Add bindings to `helm-apropos`.
+;;; https://github.com/emacs-helm/helm/issues/1140
+(defun helm-def-source--emacs-commands (&optional default)
+  (helm-build-in-buffer-source "Commands"
+    :init `(lambda ()
+             (helm-apropos-init 'commandp ,default))
+    :fuzzy-match helm-apropos-fuzzy-match
+    :filtered-candidate-transformer (and (null helm-apropos-fuzzy-match)
+                                         'helm-apropos-default-sort-fn)
+    :candidate-transformer 'helm-M-x-transformer-1
+    :nomark t
+    :action '(("Describe Function" . helm-describe-function)
+              ("Find Function" . helm-find-function)
+              ("Info lookup" . helm-info-lookup-symbol))))
+
 ;;; Make `helm-mini' almighty.
 (setq helm-mini-default-sources '(helm-source-buffers-list
                                   helm-source-recentf
