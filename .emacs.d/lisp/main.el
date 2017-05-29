@@ -50,6 +50,7 @@
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
+(put 'dired-find-alternate-file 'disabled nil)
 
 ;;; Print column number in mode line.
 (column-number-mode 1)
