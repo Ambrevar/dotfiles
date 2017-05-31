@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -- \
+	UTC '' \
+	Europe/Paris "France Germany Sweden" \
+	Asia/Calcutta India \
+	Indian/Mauritius Mauritius \
+	Africa/Tunis Tunisia \
+	Asia/Ho_Chi_Minh Vietnam \
+	Australia/Melbourne Melbourne \
+	Africa/Nairobi Uganda \
+
+while [ $# -gt 0 ]; do
+	TZ="$1" date "+%a %b %e %H:%M:%S %Z %Y%t$2"
+	shift 2
+done
