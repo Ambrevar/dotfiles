@@ -97,7 +97,7 @@
 (setq sentence-end-double-space nil)
 
 ;;; There is no prog-mode-hook on Emacs<24.
-(require 'functions) ; for `page-number-mode'
+(require 'tool-page) ; for `page-number-mode'
 (add-hook 'prog-mode-hook 'page-number-mode)
 
 (define-key mickey-minor-mode-map (kbd "<f5>") 'whitespace-mode)

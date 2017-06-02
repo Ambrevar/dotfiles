@@ -135,47 +135,6 @@ Work on buffer or region. Require `tabify-leading'."
       (narrow-to-region start end)
       (delete-trailing-whitespace))))
 
-;;; Fix forward-page. Previously, when the point was at the end of the page,
-;;; going forward would skip 1 page.  Changed:
-;;
-;;    (if (bolp) (forward-char 1))
-;;
-;;; to
-;;
-;;    (if (string= page-delimiter "")
-;;
-;;; I do not know why the (bolp) condition was used since it does not match the
-;;; above comment.
-;;; TODO: Fix reported to http://debbugs.gnu.org/cgi/bugreport.cgi?bug=20663.
-(defun forward-page (&optional count)
-  "Move forward to page boundary.
-With prefix or COUNT, repeat, or go back if negative.
-A page boundary is any line whose beginning matches the regexp
-`page-delimiter'."
-  (interactive "p")
-  (or count (setq count 1))
-  (while (and (> count 0) (not (eobp)))
-    ;; In case the page-delimiter matches the null string,
-    ;; don't find a match without moving.
-    (if (string= page-delimiter "") (forward-char 1))
-    (if (re-search-forward page-delimiter nil t)
-        nil
-      (goto-char (point-max)))
-    (setq count (1- count)))
-  (while (and (< count 0) (not (bobp)))
-    ;; In case the page-delimiter matches the null string,
-    ;; don't find a match without moving.
-    (and (save-excursion (re-search-backward page-delimiter nil t))
-         (= (match-end 0) (point))
-         (goto-char (match-beginning 0)))
-    (forward-char -1)
-    (if (re-search-backward page-delimiter nil t)
-        ;; We found one--move to the end of it.
-        (goto-char (match-end 0))
-      ;; We found nothing--go to beg of buffer.
-      (goto-char (point-min)))
-    (setq count (1+ count))))
-
 (defun get-closest-pathname (&optional file)
   "Get pathname of the first instance of FILE towards root.
 If FILE is unspecified, look for 'Makefile'. If it does not find
@@ -287,61 +246,6 @@ If DIR-LEFT is t, then move left, otherwise move right."
   (if (= (count-windows) 2)
       (move-border-left-or-right arg nil)))
 (define-key mickey-minor-mode-map (kbd "M-)") 'move-border-right)
-
-(defun page-count ()
-  "Return page count."
-  (save-restriction
-    (widen)
-    (save-excursion
-      (+ 1 (how-many
-            page-delimiter 1 (point-max))))))
-
-(defun page-number ()
-  "Return page number."
-  (save-restriction
-    (widen)
-    (save-excursion
-      (let ((count 1)
-            (opoint (point)))
-        (goto-char (point-min))
-        (while (re-search-forward page-delimiter opoint t)
-          (if (= (match-beginning 0) (match-end 0))
-              (forward-char 1))
-          (setq count (1+ count)))
-        count))))
-
-(define-minor-mode page-number-mode
-  "Toggle page number display in the mode line (Page Number mode).
-With a prefix argument ARG, enable Page Number mode if ARG is
-positive, and disable it otherwise.
-
-If called from Lisp, enable the mode if ARG is omitted or nil.
-
-It will only display if there is more than one page. A page is
-delimited by ‘page-delimiter’.
-
-WARNING: this may slow down editing on big files."
-  :global t :group 'mode-line
-  ;; TODO: Don't setq the mode-line, insert instead. See column-number-mode.
-  ;; TODO: Move page-related functions to a separate file.
-  ;; TODO: Should we use a lighter if it's running in the background? Maybe not, just make sure we always print like column-number-mode.
-  (setq mode-line-format
-        `("%e"
-          mode-line-front-space
-          mode-line-mule-info
-          mode-line-client
-          mode-line-modified
-          mode-line-remote
-          mode-line-frame-identification
-          mode-line-buffer-identification
-          "   "
-          mode-line-position
-          ,(when page-number-mode '(:eval (when (> (page-count) 1) (format "%d/%d" (page-number) (page-count)))))
-          (vc-mode vc-mode)
-          "  "
-          mode-line-modes
-          mode-line-misc-info
-          mode-line-end-spaces)))
 
 ;;; Almost useless compared to Helm-file M-R. However helm does not change
 ;;; current directory.
