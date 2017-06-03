@@ -119,12 +119,11 @@
    (set-face-foreground 'outline-8 "DarkSlateBlue")))
 
 ;;; show-paren
-(add-hook
- 'show-paren-mode-hook
- ;; (set-face-background 'show-paren-match-face (face-background 'default)) ; Disable background color.
- (set-face-background 'show-paren-match-face "#555555")
- (set-face-foreground 'show-paren-match-face "#def")
- (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))
+(with-eval-after-load 'paren
+  ;; (set-face-background 'show-paren-match-face (face-background 'default)) ; Disable background color.
+  (set-face-background 'show-paren-match-face "#555555")
+  (set-face-foreground 'show-paren-match-face "#def")
+  (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))
 
 ;;; Mail mode
 (font-lock-add-keywords
