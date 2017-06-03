@@ -93,9 +93,6 @@
 ;;; Line by line scrolling
 (setq scroll-step 1)
 
-;;; Autofill tweak.
-(setq sentence-end-double-space nil)
-
 ;;; There is no prog-mode-hook on Emacs<24.
 (require 'tool-page) ; for `page-number-mode'
 (add-hook 'prog-mode-hook 'page-number-mode)
@@ -111,12 +108,13 @@
 ;; (setq whitespace-action '(report-on-bogus))
 
 ;;; WARNING: this can break some configuration files needing whitespaces at the
-;;; end. This can also slow down saving on big files.
+;;; end. This can also slow down saving on big files.  Some modes (e.g. lisp) run
+;;; `fmt' in their local hook, which is redundant with this.
 ;; (require 'functions) ; for `fmt'
 ;; (add-hook 'before-save-hook 'fmt)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-;;; Hippie expand.
+;;; Hippie expand
 ;; (define-key mickey-minor-mode-map (kbd "M-/") 'hippie-expand)
 
 ;;; Abbreviation support
@@ -126,6 +124,7 @@
 (when (getenv "MANWIDTH")
   (setq-default fill-column (string-to-number (getenv "MANWIDTH"))))
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
+;; (setq sentence-end-double-space nil)
 
 ;;; Enforce horizontal splitting. 140 means that the window is large enough to
 ;;; hold 2 other windows of 70 columns.
