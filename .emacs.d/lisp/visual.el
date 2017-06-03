@@ -25,8 +25,8 @@
 (set-face-underline 'link t)
 (set-face-foreground 'minibuffer-prompt "#00ffff")
 (set-face-background 'region "#191970")
-(set-face-attribute 'isearch nil :foreground "#8b0000" :background "white")
-(set-face-attribute 'isearch-lazy-highlight-face nil :foreground "#8b4500" :background "white")
+(set-face-attribute 'isearch nil :foreground 'unspecified :background "#2f4f4f" :box "white")
+(set-face-attribute 'lazy-highlight nil :inherit 'isearch :foreground 'unspecified :background 'unspecified :box nil)
 (set-face-attribute 'highlight nil :background 'unspecified :box "white")
 (when (>= emacs-major-version 24)
   (set-face-attribute 'error nil :foreground "red" :weight 'bold))
@@ -121,9 +121,9 @@
 ;;; show-paren
 (with-eval-after-load 'paren
   ;; (set-face-background 'show-paren-match-face (face-background 'default)) ; Disable background color.
-  (set-face-background 'show-paren-match-face "#555555")
-  (set-face-foreground 'show-paren-match-face "#def")
-  (set-face-attribute 'show-paren-match-face nil :weight 'extra-bold))
+  (set-face-background 'show-paren-match "#555555")
+  (set-face-foreground 'show-paren-match "#def")
+  (set-face-attribute 'show-paren-match nil :weight 'extra-bold))
 
 ;;; Mail mode
 (font-lock-add-keywords
