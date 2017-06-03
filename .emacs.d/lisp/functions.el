@@ -36,6 +36,7 @@ while `run-mode-hooks' is running."
 (defun beginning-of-next-defun ()
   "Move forward to the beginning of a defun.
 Useful when bound to a key opposed to `beginning-of-defun'."
+  (interactive)
   (beginning-of-defun -1))
 (define-key mickey-minor-mode-map (kbd "C-M-e") 'beginning-of-next-defun)
 
