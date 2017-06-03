@@ -141,6 +141,7 @@
 (when (require 'evil-leader nil t)
   (evil-leader/set-key-for-mode 'org-mode "a" 'org-agenda))
 (evil-define-key 'normal org-mode-map
+  (kbd "M-<return>") (lambda () (interactive) (evil-insert 1) (org-meta-return))
   "\M-l" 'org-shiftright
   "\M-h" 'org-shiftleft
   "\M-k" 'org-shiftup
