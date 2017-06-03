@@ -122,8 +122,9 @@
 ;;; Abbreviation support
 (setq-default abbrev-mode t)
 
-;;; Set Fill Column
-(setq-default fill-column (string-to-number (getenv "MANWIDTH")))
+;;; Auto-fill
+(when (getenv "MANWIDTH")
+  (setq-default fill-column (string-to-number (getenv "MANWIDTH"))))
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 ;;; Enforce horizontal splitting. 140 means that the window is large enough to
