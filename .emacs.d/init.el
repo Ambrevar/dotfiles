@@ -113,11 +113,19 @@ To view where the bindings are set in your config files, lookup
 ;;; Mail with Mutt support.
 (add-hook 'mail-mode-hook 'mail-text)
 (add-to-list 'auto-mode-alist '("/tmp/mutt-.*" . mail-mode))
+(defun mutt-backup-buffer ()
+  "Create a copy of the current buffer.
+This is useful for recovery in case Mutt hangs before sending the
+e-mail."
+  (when (not (boundp 'mutt-backup))
+    (set (make-local-variable 'mutt-backup) (make-temp-file (concat (buffer-name) "-"))))
+  (copy-file buffer-file-name mutt-backup t))
 (defun mutt-check-buffer ()
-  (when (and (string-match "/tmp/mutt-.*" (buffer-file-name))
-             (require 'with-editor nil t))
-    ;; Just like git commits.
-    (with-editor-mode)))
+  (when (string-match "/tmp/mutt-.*" (buffer-file-name))
+    (when (require 'with-editor nil t)
+      ;; Just like git commits.
+      (with-editor-mode))
+    (add-hook 'after-save-hook 'mutt-backup-buffer nil t)))
 (add-hook 'find-file-hook 'mutt-check-buffer)
 
 ;;; Makefile
