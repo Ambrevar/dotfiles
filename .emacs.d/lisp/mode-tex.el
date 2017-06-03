@@ -131,7 +131,7 @@ This does not interfere with `subword-mode'."
 ;; sure how relevant this bad comment is. We revert it.
 (add-hook-and-eval 'tex-mode-hook 'turn-on-indent-tabs)
 (add-hook-and-eval 'tex-mode-hook 'turn-on-newline-paragraph)
-(add-hook-and-eval 'tex-mode-hook 'tex-make-newline-paragraph)
+(add-hook-and-eval 'tex-mode-hook 'turn-on-newline-paragraph)
 (add-hook-and-eval 'tex-mode-hook 'tex-set-compiler)
 
 ;; Not sure how useful that is:
