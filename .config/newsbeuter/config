@@ -36,8 +36,8 @@ bind-key G end
 bind-key s sort
 bind-key S rev-sort
 bind-key ^S save
-bind-key ^D pagedown
-bind-key ^U pageup
+bind-key ^F pagedown
+bind-key ^B pageup
 bind-key o open-in-browser-and-mark-read articlelist
 bind-key w toggle-article-read articlelist
 unbind-key C
