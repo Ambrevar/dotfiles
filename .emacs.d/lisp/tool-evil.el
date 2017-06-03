@@ -103,8 +103,6 @@
   (add-hook 'with-editor-mode-hook 'evil-insert-state))
 
 ;; Allow for evil states in minibuffer. Double <ESC> exits.
-;; TODO: Double <ESC> does not exit EX prompt.
-;; (evil-define-key 'normal 'evil-ex-map [escape] 'abort-recursive-edit)
 (dolist
     (keymap
      ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/
@@ -114,9 +112,6 @@
        minibuffer-local-completion-map
        minibuffer-local-must-match-map
        minibuffer-local-isearch-map))
-  ;; (evil-define-key 'insert (eval keymap) [escape] 'abort-recursive-edit)
-  ;; (evil-define-key 'insert (eval keymap) [return] 'exit-minibuffer)
-  ;; (evil-define-key 'insert (eval keymap) "\M-z" 'evil-normal-state))
   (evil-define-key 'normal (eval keymap) [escape] 'abort-recursive-edit)
   (evil-define-key 'normal (eval keymap) [return] 'exit-minibuffer))
 
@@ -129,6 +124,15 @@
     ;; The alternative is to create a minibuffer mode (here), but
     ;; then it may conflict with other packages' if they do the same.
     (evil-insert 1)))
+;; Because of the above minibuffer-setup-hook, some bindings need be reset.
+(evil-define-key 'normal evil-ex-completion-map [escape] 'abort-recursive-edit)
+(evil-define-key 'insert evil-ex-completion-map "\M-p" 'previous-complete-history-element)
+(evil-define-key 'insert evil-ex-completion-map "\M-n" 'next-complete-history-element)
+;; TODO: evil-ex history binding in normal mode do not work.
+(evil-define-key 'normal evil-ex-completion-map "\M-p" 'previous-history-element)
+(evil-define-key 'normal evil-ex-completion-map "\M-n" 'next-history-element)
+(define-key evil-ex-completion-map "\M-p" 'previous-history-element)
+(define-key evil-ex-completion-map "\M-n" 'next-history-element)
 
 ;; Remap org-mode meta keys for convenience
 ;; - org-evil: Not as polished as of May 2017.
