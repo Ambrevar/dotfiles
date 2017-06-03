@@ -30,11 +30,7 @@
 
 ;;; Place backup files in specific directory.
 (setq backup-directory-alist
-      `((".*" . ,(concat emacs-cache-folder "backups/"))))
-;;; Other backup options.
-;; (setq backup-inhibited t)
-;; (setq make-backup-files t)
-;; (setq version-control t)
+      `(("." . ,(concat emacs-cache-folder "backups/"))))
 
 ;;; Default mode
 (setq-default major-mode 'text-mode)
