@@ -49,9 +49,11 @@
 
 ;; Tweak motion map: useful for info-mode, help-mode, etc.
 ;; See `evil-motion-state-modes'.
-;; TODO: Map n/p, l/r for help-mode and Info-mode?
 (evil-global-set-key 'motion (kbd "TAB") 'forward-button)
 (evil-global-set-key 'motion (kbd "<backtab>") 'backward-button)
+(evil-define-key 'motion Info-mode-map (kbd "S-SPC") 'Info-scroll-up)
+(evil-define-key 'motion help-mode-map (kbd "S-SPC") 'scroll-up-command)
+(evil-define-key 'motion help-mode-map (kbd "C-o") 'help-go-back)
 
 ;; This depends on the local configuration of Helm which might not be loaded
 ;; yet.
