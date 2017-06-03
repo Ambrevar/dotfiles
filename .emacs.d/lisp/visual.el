@@ -17,10 +17,7 @@
 ;;; More readable but more space consuming; try on big screens.
 ;; (setq-default line-spacing 1)
 
-(if (= emacs-major-version 23)
-    (set-face-background 'modeline "white")
-  (set-face-background 'mode-line "white"))
-
+(set-face-background 'mode-line "white")
 ;; (set-face-foreground 'link "#00ffff")
 (set-face-underline 'link t)
 (set-face-foreground 'minibuffer-prompt "#00ffff")
@@ -28,8 +25,7 @@
 (set-face-attribute 'isearch nil :foreground 'unspecified :background "#2f4f4f" :box "white")
 (set-face-attribute 'lazy-highlight nil :inherit 'isearch :foreground 'unspecified :background 'unspecified :box nil)
 (set-face-attribute 'highlight nil :background 'unspecified :box "white")
-(when (>= emacs-major-version 24)
-  (set-face-attribute 'error nil :foreground "red" :weight 'bold))
+(set-face-attribute 'error nil :foreground "red" :weight 'bold)
 
 ;;; Cursor type: default (box) is visible and practical.
 ;; (setq-default cursor-type 'hollow)

@@ -160,8 +160,7 @@
 (setq show-paren-when-point-inside-paren t)
 
 ;;; Electric Pairs to auto-complete () [] {} "" etc. You can use it on regions.
-;; (if (>= emacs-major-version 24)
-;;     (electric-pair-mode 1))
+;; (electric-pair-mode)
 
 ;;; Spawn terminal shortcut: WM's binding is s+RET.
 (define-key mickey-minor-mode-map (kbd "C-x M-RET") 'spawn-terminal)
