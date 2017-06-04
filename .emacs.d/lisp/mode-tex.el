@@ -141,28 +141,28 @@ This does not interfere with `subword-mode'."
 ;; Skeletons
 
 (define-skeleton tex-array
-  "Insert skel."
+  "Insert array."
   "Format: "
   "$$\\begin{array}{" @ str "}" \n
   _ \n
   "\\end{array}$$" > \n)
 
-(define-skeleton tex-bf "Insert skel." nil "{\\bf{" @ _ "}" @)
-(define-skeleton tex-binom "Insert skel." nil "\\binom{" @ _ "}{" @ _ "}" @)
-(define-skeleton tex-coprod "Insert skel." nil "\\coprod_{" @ _ "}^{" @ _ "}" @)
-(define-skeleton tex-em "Insert skel." nil "{\\em{" @ _ "}" @)
-(define-skeleton tex-footnote "Insert skel." nil "\\footnote{" @ _ "}" @)
-(define-skeleton tex-href "Insert skel." "Desc: " "\\href{" @ _ "}{" @ str "}" @)
-(define-skeleton tex-it "Insert skel." nil "{\\it{" @ _ "}" @)
+(define-skeleton tex-bf "Insert bold text." nil "{\\bf " @ _ "}" @)
+(define-skeleton tex-binom "Insert binomial." nil "\\binom{" @ _ "}{" @ _ "}" @)
+(define-skeleton tex-coprod "Insert coproduct." nil "\\coprod_{" @ _ "}^{" @ _ "}" @)
+(define-skeleton tex-em "Insert emphasized text." nil "{\\em " @ _ "}" @)
+(define-skeleton tex-footnote "Insert footnote." nil "\\footnote{" @ _ "}" @)
+(define-skeleton tex-href "Insert href." "Desc: " "\\href{" @ _ "}{" @ str "}" @)
+(define-skeleton tex-it "Insert italic text." nil "{\\it " @ _ "}" @)
 
-(define-skeleton tex-main "Insert skel." nil
+(define-skeleton tex-main "Insert document template." nil
   "\\input eplain" \n
   @ > _ \n
     "\\bye" > @)
 
-(define-skeleton tex-prod "Insert skel." nil "\\prod_{" @ _ "}^{" @ _ "}" @)
-(define-skeleton tex-sum "Insert skel." nil "\\sum_{" @ _ "}^{" @ _ "}" @)
-(define-skeleton tex-tt "Insert skel." nil "{\\tt{" @ _ "}" @)
-(define-skeleton tex-url "Insert skel." nil "\\url{" @ _ "}" @)
+(define-skeleton tex-prod "Insert product." nil "\\prod_{" @ _ "}^{" @ _ "}" @)
+(define-skeleton tex-sum "Insert sum." nil "\\sum_{" @ _ "}^{" @ _ "}" @)
+(define-skeleton tex-tt "Insert truetype text." nil "{\\tt " @ _ "}" @)
+(define-skeleton tex-url "Insert URL." nil "\\url{" @ _ "}" @)
 
 (provide 'mode-tex)
