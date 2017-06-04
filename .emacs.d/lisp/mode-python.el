@@ -2,14 +2,15 @@
 
 (defun python-set-compiler ()
   "Returns the value of the shebang if any, `python-shell-interpreter' otherwise."
-  (let* ((firstline
-          (save-excursion (goto-char (point-min)) (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
-         (interpreter
-          (if (not (string-match "^#!" firstline))
-              python-shell-interpreter
-            (substring firstline 2))))
-    (setq compile-command
-         (concat interpreter " " (shell-quote-argument buffer-file-name)))))
+  (when buffer-file-name
+    (let* ((firstline
+            (save-excursion (goto-char (point-min)) (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
+           (interpreter
+            (if (not (string-match "^#!" firstline))
+                python-shell-interpreter
+              (substring firstline 2))))
+      (setq compile-command
+            (concat interpreter " " (shell-quote-argument buffer-file-name))))))
 
 (add-hook-and-eval 'python-mode-hook 'python-set-compiler)
 
