@@ -19,7 +19,7 @@
 ;; With TeXlive, the following packages are needed: psnfss, symbol, zapfding
 (when (and (executable-find "dvipng") (require 'latex-math-preview nil t))
   (setq latex-math-preview-cache-directory-for-insertion
-      (concat emacs-cache-folder "latex-math-preview-cache"))
+        (concat emacs-cache-folder "latex-math-preview-cache"))
   (local-set-key (kbd "C-c p") 'latex-math-preview-expression)
   (local-set-key (kbd "C-c j") 'latex-math-preview-insert-symbol)
   (local-set-key (kbd "C-c C-j") 'latex-math-preview-last-symbol-again)
@@ -151,20 +151,6 @@ The table type is any value found in `latex-table-names'."
   "| " @ _ " |" \n
   "%$" \n
   "\\end{comment}" > \n @)
-
-(define-skeleton latex-minipage
-  "Insert skel."
-  "Width: "
-  > "\\begin{minipage}{" str "}" \n
-  @ _ \n
-  "\\end{minipage}" > \n @)
-
-(define-skeleton latex-parbox
-  "Insert skel."
-  "Width: "
-  > "\\parbox{" str "}{" \n
-  @ _ \n
-  "}" > \n @)
 
 (define-skeleton latex-lstinline
   "Insert inline listing." nil
