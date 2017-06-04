@@ -241,6 +241,7 @@ e-mail."
 ;;; Evil
 (add-to-list 'package-selected-packages 'evil)
 (add-to-list 'package-selected-packages 'evil-leader)
+(add-to-list 'package-selected-packages 'evil-ediff)
 (add-to-list 'package-selected-packages 'evil-magit)
 (add-to-list 'package-selected-packages 'evil-mc)
 (add-to-list 'package-selected-packages 'evil-mc-extras)

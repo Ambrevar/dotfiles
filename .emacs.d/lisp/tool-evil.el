@@ -2,6 +2,7 @@
 
 ;; TODO: Yank ring pasting behaves like Emacs, not Vim.
 ;; TODO: show-marks with helm? Evil mixes up the mark ring. Back to where search started with C-o or ''(?).
+;; TODO: Evil seems marks in the wrong ring sometimes.
 
 ;; TODO: M-; comments next line in VISUAL. This is because of a different
 ;; newline definition between Emacs and Vim.
@@ -90,6 +91,9 @@
 (when (and (require 'magit-mode nil t) (require 'evil-magit nil t))
   (evil-magit-define-key evil-magit-state 'magit-mode-map "M-j" 'magit-section-forward)
   (evil-magit-define-key evil-magit-state 'magit-mode-map "M-k" 'magit-section-backward))
+
+;; Add support for ediff.
+(require 'evil-ediff nil t)
 
 ;; For git commit, web edits and others.
 ;; Since `with-editor-mode' is not a major mode, `evil-set-initial-state' cannot
