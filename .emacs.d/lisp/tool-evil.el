@@ -1,8 +1,5 @@
 ;; Evil
 
-;; TODO: Turn off bindings from tool-helm.el when evil is loaded?
-;; TODO: Add hjkl to debugger output mode.
-;; TODO: Navigate visual lines with j/k?
 ;; TODO: Yank ring pasting behaves like Emacs, not Vim.
 ;; TODO: show-marks with helm? Evil mixes up the mark ring. Back to where search started with C-o or ''(?).
 
@@ -23,7 +20,7 @@
 
 ;; The evil-leader package might seem worthless but it centralizes the leader
 ;; key configuration and automatically makes it available in relevant states.
-;; TODO: We do not map <leader><leader> to most used command since it could be
+;; We do not map <leader><leader> to most used command since it could be
 ;; misleading. Maybe the helm buffer menu would be interesting to have though?
 (when (require 'evil-leader nil t)
   ;; Leader mode and its key must be set before evil-mode.
@@ -32,16 +29,15 @@
 
 (evil-mode 1)
 
-;; TODO: dired/info can not super <SPC> as leader. Use ',' as leader key?
 (evil-leader/set-key
   "RET" 'spawn-terminal
   "\\" 'toggle-window-split
   "b" 'buffer-menu
   "e" 'find-file
-  "k" 'kill-this-buffer ; TODO: In Vim its :bd, so should we map to " d"? Then git project should be something else.
+  "k" 'kill-this-buffer
   "o" 'delete-other-windows
   "w" 'evil-window-next
-  "|" 'swap-windows ; TODO: Map to " x" (Vim has ^W x)? helm-marks would then need to be mapped to '' for instance.
+  "|" 'swap-windows
   )
 (when (require 'magit nil t)
   ;; Use S-SPC instead of SPC to browse commit details.
@@ -68,9 +64,8 @@
     ;; "q" 'read-only-mode ; Bad cause in wdired, it's a different mapping.
     "r" 'helm-resume)
 
-  ;; TODO: Should we stick to M-based bindings or use C-based?
+  ;; Should we stick to M-based bindings or use C-based?
   ;; Magit uses C-jk, helm uses C-space. Evil has C-w, C-o, C-p, C-r. Emacs has C-xC-q, C-xC-o.
-  ;; However, in environments where Caps is not Ctrl, C-bindings are painful.
   (define-key helm-map (kbd "M-\\") 'helm-toggle-resplit-and-swap-windows) ; Or use M-t (helm standard binding is C-t).
   (define-key helm-map (kbd "C-f") 'helm-next-page)
   (define-key helm-map (kbd "C-b") 'helm-previous-page)

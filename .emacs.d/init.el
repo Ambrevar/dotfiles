@@ -310,8 +310,8 @@ e-mail."
 (mickey-minor-mode 1)
 
 ;;; Local hook. You can use it to set system specific variables, such as the
-;;; external web browser or pdf viewer. You can also backport feature for old
-;;; Emacs. For instance:
+;;; external web browser or pdf viewer. You can also backport features for an
+;;; old Emacs. For instance:
 ;;
 ;; (setq pdf-viewer "evince")
 ;; (setq pdf-viewer-args nil)
