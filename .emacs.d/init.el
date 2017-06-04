@@ -53,8 +53,8 @@ To view where the bindings are set in your config files, lookup
 
 ;;; BBCode
 (add-to-list 'package-selected-packages 'bbcode-mode)
-(load-external "\\.bbcode\\'" 'bbcode-mode)
-(add-hook 'bbcode-mode-hook (lambda () (require 'mode-bbcode)))
+(when (require 'bbcode-mode nil t)
+  (add-hook 'bbcode-mode-hook (lambda () (require 'mode-bbcode))))
 
 ;;; Bibtex
 (setq bibtex-entry-format '(opts-or-alts required-fields numerical-fields whitespace realign last-comma delimiters braces sort-fields))
@@ -62,8 +62,7 @@ To view where the bindings are set in your config files, lookup
 (add-hook 'bibtex-mode-hook 'turn-off-indent-tabs)
 
 ;;; Bison/Flex
-(load-external "\\.l\\'" 'flex-mode nil 'c-mode)
-(load-external "\\.yy?\\'" 'bison-mode nil 'c-mode)
+(add-to-list 'package-selected-packages 'bison-mode)
 
 ;;; C/C++
 (add-hook 'c-mode-hook   (lambda () (require 'mode-cc)))
@@ -75,7 +74,7 @@ To view where the bindings are set in your config files, lookup
 (add-hook 'change-log-mode-hook 'change-log-set-indent-rules)
 
 ;;; GLSL
-(load-external "\\.vert\\'\\|\\.frag\\'\\|\\.glsl\\'" 'glsl-mode nil 'c-mode)
+(add-to-list 'package-selected-packages 'glsl-mode)
 
 ;;; Go
 (add-to-list 'package-selected-packages 'go-mode)
@@ -84,14 +83,13 @@ To view where the bindings are set in your config files, lookup
 (add-to-list 'package-selected-packages 'go-rename)
 (add-to-list 'package-selected-packages 'helm-go-package)
 (add-to-list 'package-selected-packages 'company-go)
-(load-external "\\.go\\'" 'go-mode)
-(add-hook 'go-mode-hook (lambda () (require 'mode-go)))
+(when (require 'go-mode nil t)
+  (add-hook 'go-mode-hook (lambda () (require 'mode-go))))
 
 ;;; Graphviz dot
 ;; The view command is broken but the preview command works (it displays the PNG
 ;; in a new window), which is enough and probably not worth a fix.
 (add-to-list 'package-selected-packages 'graphviz-dot-mode)
-(load-external "\\.dot\\'" 'graphviz-dot-mode)
 
 ;;; JavaScript
 (add-hook 'js-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
@@ -107,8 +105,8 @@ To view where the bindings are set in your config files, lookup
 
 ;;; Lua
 (add-to-list 'package-selected-packages 'lua-mode)
-(load-external "\\.lua\\'" 'lua-mode nil 'sh-mode)
-(add-hook 'lua-mode-hook (lambda () (require 'mode-lua)))
+(when (require 'lua-mode nil t)
+  (add-hook 'lua-mode-hook (lambda () (require 'mode-lua))))
 
 ;;; Mail with Mutt support.
 (add-hook 'mail-mode-hook 'mail-text)
@@ -133,9 +131,8 @@ e-mail."
 
 ;;; Markdown
 (add-to-list 'package-selected-packages 'markdown-mode)
-(load-external "\\.md\\'\\|\\.markdown\\'" 'markdown-mode)
-;;; If we need more option, add it to a dedicated file.
 (when (require 'markdown-mode nil t)
+  ;; If we need more option, add it to a dedicated file.
   (set-face-attribute 'markdown-header-face-1 nil :inherit 'info-title-1)
   (set-face-attribute 'markdown-header-face-2 nil :inherit 'info-title-2)
   (set-face-attribute 'markdown-header-face-3 nil :inherit 'info-title-3)
@@ -153,12 +150,13 @@ e-mail."
 ;;; Maxima
 (autoload 'maxima-mode "maxima" "Maxima mode" t)
 (autoload 'maxima "maxima" "Maxima interaction" t)
-(setq auto-mode-alist (cons '("\\.mac" . maxima-mode) auto-mode-alist))
+(add-to-list 'auto-mode-alist '("\\.mac" . maxima-mode))
 
 ;;; Mediawiki
 (add-to-list 'package-selected-packages 'mediawiki)
-(load-external "\\.wiki\\'" 'mediawiki 'mediawiki-mode)
-(add-hook 'mediawiki-mode-hook (lambda () (require 'mode-mediawiki)))
+(add-to-list 'auto-mode-alist '("\\.wiki\\'" . mediawiki-mode))
+(when (require 'mediawiki nil t)
+  (add-hook 'mediawiki-mode-hook (lambda () (require 'mode-mediawiki))))
 
 ;;; Org-mode
 (add-hook 'org-mode-hook (lambda () (require 'mode-org)))
@@ -172,10 +170,7 @@ e-mail."
 (add-hook 'perl-mode-hook 'perl-set-compiler)
 
 ;;; po
-;;; No hook for this mode?
-(load-external "\\.po\\'\\|\\.po\\." 'po-mode)
-(when (fboundp 'po-find-file-coding-system)
-  (modify-coding-system-alist 'file "\\.po\\'\\|\\.po\\." 'po-find-file-coding-system))
+(add-to-list 'package-selected-packages 'po-mode)
 
 ;;; Python
 (add-hook 'python-mode-hook (lambda () (require 'mode-python)))
