@@ -42,23 +42,4 @@ else
 	fi
 fi
 
-## Simple invokation:
-##
-## emacsclient $param -a "" "$@"
-##
-## The '-a ""' parameter starts "emacs --daemon", but we want to skip the "site
-## files", i.e. the extra init files some distros try to force into Emacs. To
-## achieve this we have to start the daemon manually.
-socket="/tmp/emacs$(id -u)/server"
-[ ! -e "$socket" ] && emacs --daemon --no-site-file
-emacsclient $param "$@"
-
-## If Emacs was forcefully closed or crashed, the dead socket will be left
-## behind and emacsclient cannot reset it automatically without the '-a ""'
-## parameter.
-if [ $? -ne 0 ]; then
-	echo >&2 "Removing existing socket and trying again."
-	rm "$socket"
-	[ ! -e "$socket" ] && emacs --daemon --no-site-file
-	emacsclient $param "$@"
-fi
+emacsclient $param -a "" "$@"
