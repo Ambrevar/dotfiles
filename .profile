@@ -155,6 +155,7 @@ if command -v fzf >/dev/null 2>&1; then
 --bind=alt-z:toggle-preview \
 --bind=ctrl-a:select-all \
 --bind=ctrl-k:kill-line \
+--bind=change:top \
 "
 
 	export FZF_ALT_C_OPTS="--preview='preview {}'"
