@@ -2,13 +2,14 @@
 ## This file should be automatically sourced by the login manager. We source it
 ## manually from shell rc files to make sure it works in TTY as well
 
-## Preliminary definitions.
+## Mask
+## Result for 027 is: rwxr-x---
+umask 027
 
-## Note that it is important for MANPATH to have an empty entry to keep
-## searching in the default db path. Same for INFOPATH, which should have an
-## empty entry at the end, otherwise Emacs will not use standard locations. For
-## security reasons (and bad programming assumptions) you should always append
-## entries to PATH, not prepend them.
+
+
+## Preliminary path definitions.  For security reasons (and bad programming
+## assumptions) you should always append entries to PATH, not prepend them.
 appendpath () {
 	[ $# -eq 2 ] && PATHVAR=$2 || PATHVAR=PATH
 	[ -d "$1" ] || return
@@ -22,11 +23,8 @@ prependpath () {
 	eval export $PATHVAR="$1:\$$PATHVAR"
 }
 
-################################################################################
-
-## Mask
-## Result for 027 is: rwxr-x---
-umask 027
+## Use this to override system executables.
+prependpath "${HOME}/personal/hackpool"
 
 ## TeXlive
 TEXDIR="${TEXDIR:-/usr/local/texlive}"
@@ -36,10 +34,14 @@ if [ -d "${TEXDIR}" ]; then
 	TEXFOLDER="${TEXDIR}/${TEXYEAR}/bin/${TEXDISTRO}"
 	if [ -d "${TEXFOLDER}" ]; then
 		appendpath $TEXFOLDER
+		## Same for INFOPATH, which should have an empty entry
+		## at the end, otherwise Emacs will not use standard locations.
 		prependpath ${TEXDIR}/${TEXYEAR}/texmf/doc/info INFOPATH
 
-		## BSD uses 'manpath' utility, so MANPATH variable may be empty.
 		if [ "$(uname -o)" = "GNU/Linux" ]; then
+			## Under GNU/Linux, MANPATH must contain one empty entry for 'man' to
+			## lookup the default database.  Since BSD uses 'manpath' utility, the
+			## MANPATH variable is not needed.
 			prependpath ${TEXDIR}/${TEXYEAR}/texmf/doc/man MANPATH
 		fi
 	fi
@@ -61,6 +63,21 @@ if [ -d "$PLAN9DIR" ]; then
 fi
 unset PLAN9DIR
 
+## Go
+if [ -d "$HOME/go" ]; then
+	export GOPATH=~/go:~/.go-tools
+	appendpath "$HOME/.go-tools/bin"
+	appendpath "$HOME/go/bin"
+	command -v godoc >/dev/null 2>&1 && godoc -http :6060 -play 2>/dev/null &
+fi
+
+## Last PATH entries.
+appendpath "/usr/lib/surfraw"
+appendpath "${HOME}/personal/games/launchers"
+appendpath "${HOME}/.scripts"
+
+
+
 ## Less config. -R is needed for lesspipe colorization.
 # export LESS=' -R '
 ## Make 'less' more friendly for non-text input files, see lesspipe(1).
@@ -75,7 +92,6 @@ export MANWIDTH=80
 ## an empty prompt. Sadly this gets messy with 'apropos'.
 # export MANPAGER="less -sP '?f%f .?m(file %i of %m) .?ltlines %lt-%lb?L/%L. .byte %bB?s/%s. ?e(END) :?pB%pB\%..%t'"
 
-
 ## Time display (with ls command for example)
 ## TODO: BSD version?
 export TIME_STYLE=+"|%Y-%m-%d %H:%M:%S|"
@@ -87,6 +103,7 @@ if command -v ssh-agent >/dev/null 2>&1 && [ -z "$SSH_AGENT_PID" ]; then
 	 command -v sessionclean >/dev/null 2>&1 && trap 'sessionclean' 0
 fi
 
+## Linux specific
 if [ "$(uname -o)" = "GNU/Linux" ] ; then
 	## Startup error log.
 	## dmesg
@@ -112,21 +129,8 @@ if [ "$(uname -o)" = "GNU/Linux" ] ; then
 	fi
 fi
 
-## Set TEMP dir if you want to override /tmp for some applications that check
-## for this variable. Usually not a good idea since some applications will write
-## junk files in it.
-# [ -d "$HOME/temp" ] && export TEMP="$HOME/temp"
-
 ## Wine DLL override. This removes the annoying messages for Mono and Gecko.
 export WINEDLLOVERRIDES="mscoree,mshtml="
-
-## Go
-if [ -d "$HOME/go" ]; then
-	export GOPATH=~/go:~/.go-tools
-	appendpath "$HOME/.go-tools/bin"
-	appendpath "$HOME/go/bin"
-	command -v godoc >/dev/null 2>&1 && godoc -http :6060 -play 2>/dev/null &
-fi
 
 ## fzf
 if command -v fzf >/dev/null 2>&1; then
@@ -170,18 +174,10 @@ if command -v fzf >/dev/null 2>&1; then
 	fi
 fi
 
-## pacman abs
+## Pacman asp root.
 if command -v asp >/dev/null 2>&1; then
 	export ASPROOT="$HOME/.cache/asp"
 fi
-
-################################################################################
-
-## Last PATH entries.
-appendpath "/usr/lib/surfraw"
-appendpath "${HOME}/personal/games/launchers"
-appendpath "${HOME}/.scripts"
-prependpath "${HOME}/personal/hackpool"
 
 ## Default text editor
 ## 'em' is a custom wrapper for emacsclient. See '.scripts/em'.
@@ -197,7 +193,7 @@ VISUAL="$EDITOR"
 export GIT_EDITOR
 export VISUAL
 
-################################################################################
+
 
 ## Hook. Should be sourced last
 [ -f ~/.profile_hook ] && . ~/.profile_hook
