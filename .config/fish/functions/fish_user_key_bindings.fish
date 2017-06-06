@@ -5,8 +5,8 @@ function fish_user_key_bindings
 	## Useful for rsync when folders are completed with fzf.
 	bind \cw trim_trailing_slashes
 
-	## As of fish 2.5, Alt-f binding is missing in vi-mode.
-	bind -M insert \ef forward-word
+	bind \e\x7f backward-kill-word
+	bind -M insert \e\x7f backward-kill-word
 
 	bind -M insert \ce edit_command_buffer
 	bind -m insert \ce edit_command_buffer
@@ -15,6 +15,4 @@ function fish_user_key_bindings
 	if type -pq fzf
 		source $fish_config_path/fzf.fish
 	end
-
-	# bind \el downcase-word # For Emacs bindings only, load after fzf.
 end
