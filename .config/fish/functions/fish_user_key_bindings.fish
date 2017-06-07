@@ -11,6 +11,9 @@ function fish_user_key_bindings
 	bind -M insert \ce edit_command_buffer
 	bind -m insert \ce edit_command_buffer
 
+	bind \cv fish_primary_paste
+	bind \cx fish_primary_copy
+
 	## fzf
 	if type -pq fzf
 		source $fish_config_path/fzf.fish
