@@ -177,7 +177,6 @@ lsof
 ltrace
 lua
 lua-lgi
-lua51
 luajit
 lvm2
 lxdm
@@ -346,8 +345,8 @@ wpa_supplicant
 wv
 x264
 x265
+xcape
 xchm
-xclip
 xdg-user-dirs
 xdg-utils
 xdotool
