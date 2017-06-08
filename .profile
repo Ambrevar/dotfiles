@@ -6,7 +6,7 @@
 ## Result for 027 is: rwxr-x---
 umask 027
 
-
+
 
 ## Preliminary path definitions.  For security reasons (and bad programming
 ## assumptions) you should always append entries to PATH, not prepend them.
@@ -76,7 +76,7 @@ appendpath "/usr/lib/surfraw"
 appendpath "${HOME}/personal/games/launchers"
 appendpath "${HOME}/.scripts"
 
-
+
 
 ## Less config. -R is needed for lesspipe colorization.
 # export LESS=' -R '
@@ -194,7 +194,7 @@ VISUAL="$EDITOR"
 export GIT_EDITOR
 export VISUAL
 
-
+
 
 ## Hook. Should be sourced last
 [ -f ~/.profile_hook ] && . ~/.profile_hook
