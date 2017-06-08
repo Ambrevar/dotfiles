@@ -22,7 +22,8 @@ URxvt.url-select.launcher: $BROWSER
 EOF
 
 ## Load custom keymap and configure input devices.
-xkbcomp -I"$HOME/.xkb" "$HOME/.xkb/usim.xkb" $DISPLAY
+## Some login managers don't like output hence the redirection.
+xkbcomp -I"$HOME/.xkb" "$HOME/.xkb/usim.xkb" $DISPLAY 2>/dev/null
 xcape -e 'Control_L=Escape'
 numlockx on
 # xinput disable "SynPS/2 Synaptics TouchPad"
