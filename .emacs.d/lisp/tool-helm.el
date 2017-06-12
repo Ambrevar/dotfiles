@@ -54,6 +54,14 @@
            (helm-make-source "Git files" 'helm-ls-git-source
              :fuzzy-match helm-ls-git-fuzzy-match)))
 
+;;; Eshell
+(add-hook
+ 'eshell-mode-hook
+ (lambda ()
+   (eshell-cmpl-initialize)
+   (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
+   (define-key eshell-mode-map (kbd "C-r") 'helm-eshell-history)))
+
 ;;; Do not exclude any files from 'git grep'.
 (setq helm-grep-git-grep-command "git --no-pager grep -n%cH --color=always --full-name -e %p -- %f")
 

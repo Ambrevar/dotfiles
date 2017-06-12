@@ -236,6 +236,7 @@ e-mail."
 (add-hook 'dired-mode-hook  (lambda () (require 'mode-dired)))
 
 ;;; Eshell
+(add-to-list 'package-selected-packages 'pcomplete-extension)
 (add-hook 'eshell-load-hook (lambda () (require 'mode-eshell)))
 
 ;;; Evil

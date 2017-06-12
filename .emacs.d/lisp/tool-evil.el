@@ -31,15 +31,14 @@
 (evil-mode 1)
 
 (evil-leader/set-key
-  "RET" 'spawn-terminal
+  "RET" 'eshell
   "\\" 'toggle-window-split
   "b" 'buffer-menu
   "e" 'find-file
   "k" 'kill-this-buffer
   "o" 'delete-other-windows
   "w" 'evil-window-next
-  "|" 'swap-windows
-  )
+  "|" 'swap-windows)
 (when (require 'magit nil t)
   ;; Use S-SPC instead of SPC to browse commit details.
   (evil-leader/set-key "v" 'magit-status))
@@ -158,6 +157,54 @@
 (evil-define-key 'normal package-menu-mode-map "u" 'package-menu-mark-unmark)
 (evil-define-key 'normal package-menu-mode-map "d" 'package-menu-mark-delete)
 (evil-define-key 'normal package-menu-mode-map "x" 'package-menu-execute)
+
+;; Eshell
+(defun evil/eshell-insert ()
+  (interactive)
+  (when (get-text-property (point) 'read-only)
+    (eshell-next-prompt 1))
+  (evil-insert 1))
+(defun evil/eshell-interrupt-process ()
+  (interactive)
+  (eshell-interrupt-process)
+  (evil-insert 1))
+(defun evil/eshell-define-keys ()
+  (with-eval-after-load 'tool-helm
+    (evil-define-key '(normal insert) eshell-mode-map "\C-r" 'helm-eshell-history)
+    (evil-define-key 'insert eshell-mode-map "\C-e" 'helm-find-files))
+  (evil-define-key 'normal eshell-mode-map "i" 'evil/eshell-insert)
+  (evil-define-key 'normal eshell-mode-map "\M-k" 'eshell-previous-prompt)
+  (evil-define-key 'normal eshell-mode-map "\M-j" 'eshell-next-prompt)
+  (evil-define-key 'normal eshell-mode-map "0" 'eshell-bol)
+  (evil-define-key 'normal eshell-mode-map (kbd "RET") 'eshell-send-input)
+  (evil-define-key 'normal eshell-mode-map (kbd "C-c C-c") 'evil/eshell-interrupt-process)
+  (evil-define-key '(normal insert) eshell-mode-map "\M-h" 'eshell-backward-argument)
+  (evil-define-key '(normal insert) eshell-mode-map "\M-l" 'eshell-forward-argument))
+(add-hook 'eshell-mode-hook 'evil/eshell-define-keys)
+
+;; TODO: When point is on "> ", helm-find-files looks up parent folder. Prevent that.
+
+;; DONE: eshell-mode-map gets reset on new shells. Make it permanent. Hook? Hook looks good:
+;; https://stackoverflow.com/questions/11946113/emacs-eshell-how-to-read-content-of-command-line-on-pressing-ret
+
+;; TODO: Cannot kill emacs when eshell has started: "text is read only"
+
+;; TODO: Make Evil commands react more dynamically with read-only text.
+;; Add support for I, C, D, S, s, c*, d*, R, r.
+(defun evil/eshell-delete-whole-line ()
+  (interactive)
+  (if (not (get-text-property (line-beginning-position) 'read-only))
+      (evil-delete-whole-line (line-beginning-position) (line-end-position))
+    (eshell-return-to-prompt) ; Difference with eshell-bol?
+    (evil-delete-line (point) (line-end-position))))
+;; (evil-define-key 'normal eshell-mode-map "dd" 'evil/eshell-delete-whole-line)
+(defun evil/eshell-change-whole-line ()
+  (interactive)
+  (if (not (get-text-property (line-beginning-position) 'read-only))
+      (evil-change-whole-line (line-beginning-position) (line-end-position))
+    (eshell-return-to-prompt) ; Difference with eshell-bol?
+    (evil-change-line (point) (line-end-position))))
+;; (evil-define-key 'normal eshell-mode-map "cc" 'evil/eshell-change-whole-line)
 
 ;; Go-to-definition.
 ;; From https://emacs.stackexchange.com/questions/608/evil-map-keybindings-the-vim-way
