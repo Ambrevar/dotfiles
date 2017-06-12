@@ -8,7 +8,7 @@ function fish_prompt
 	(set_color normal) \
 	(set_color $fish_color_hostname)$HOST \
 	(set_color normal) \
-	(set_color -o)'}'
+	(set_color -o)')'
 
 	## Path
 	set -l cwd_color $fish_color_cwd
