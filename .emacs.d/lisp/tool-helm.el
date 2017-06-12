@@ -125,4 +125,18 @@ Requires `call-process-to-string' from `functions'."
 
 (setq helm-source-names-using-follow '("Occur" "Git-Grep" "PT" "mark-ring" "Org Headings"))
 
+(defun helm-skip-dots (old-func &rest args)
+  "Skip . and .. initially in helm-find-files.  First call OLD-FUNC with ARGS."
+  (apply old-func args)
+  (let ((sel (helm-get-selection)))
+    (if (and (stringp sel) (string-match "/\\.$" sel))
+        (helm-next-line 2)))
+  (let ((sel (helm-get-selection))) ; if we reached .. move back
+    (if (and (stringp sel) (string-match "/\\.\\.$" sel))
+        (helm-previous-line 1))))
+(advice-add #'helm-preselect :around #'helm-skip-dots)
+(advice-add #'helm-ff-move-to-first-real-candidate :around #'helm-skip-dots)
+
+(add-to-list 'desktop-globals-to-save 'helm-ff-history)
+
 (provide 'tool-helm)
