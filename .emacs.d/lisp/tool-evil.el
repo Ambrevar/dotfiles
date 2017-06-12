@@ -152,6 +152,7 @@
 
 ;; Package-menu mode
 (delete 'package-menu-mode evil-emacs-state-modes)
+(evil-define-key 'normal package-menu-mode-map "q" 'quit-window)
 (evil-define-key 'normal package-menu-mode-map "i" 'package-menu-mark-install)
 (evil-define-key 'normal package-menu-mode-map "U" 'package-menu-mark-upgrades)
 (evil-define-key 'normal package-menu-mode-map "u" 'package-menu-mark-unmark)
