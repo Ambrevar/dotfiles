@@ -180,6 +180,13 @@
   ;; (make-variable-buffer-local 'compilation-directory)
   ;; (make-variable-buffer-local 'compile-history)
   (make-variable-buffer-local 'compile-command))
+;;; Some commands ignore that compilation-mode is a "dumb" terminal and still display colors.
+;;; Thus we render those colors.
+(require 'ansi-color)
+(defun compilation-colorize-buffer ()
+  (when (eq major-mode 'compilation-mode)
+    (ansi-color-apply-on-region compilation-filter-start (point-max))))
+(add-hook 'compilation-filter-hook 'compilation-colorize-buffer)
 ;;; Don't set these bindings in mickey as we might have to override them from
 ;;; mode hooks.
 (global-set-key (kbd "C-<f10>") 'compile)
