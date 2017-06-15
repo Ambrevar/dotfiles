@@ -4,8 +4,8 @@ if [ "$1" = "-h" ]; then
 	cat <<EOF>&2
 Usage: ${0##*/} [OPTIONS] [FILES]
 
-Start emacsclient in terminal or in X window if possible. If no server is
-running, it is started with the '--no-site-file' parameter.
+Start emacsclient in terminal or in X window if possible. Server is started on
+demand.
 
 The calling script can have different names:
 
@@ -16,16 +16,7 @@ All emacsclient(1) options are supported:
 
 $(emacsclient --help)
 
-Extra options:
-
-  --kill: Shutdown Emacs daemon.
-
 EOF
-	exit
-fi
-
-if [ "$1" = "--kill" ]; then
-	emacsclient -e '(kill-emacs)'
 	exit
 fi
 
