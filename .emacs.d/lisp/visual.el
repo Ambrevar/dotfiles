@@ -167,4 +167,9 @@
    (set-face-attribute 'Man-underline nil :foreground (face-foreground 'font-lock-string-face) :underline nil)
    (set-face-attribute 'Man-overstrike nil :foreground (face-foreground 'font-lock-comment-face) :weight 'normal)))
 
+;;; Term
+;;; Use lighter blue.
+(with-eval-after-load 'ansi-color
+  (setf (aref ansi-color-map 34) '(foreground-color . "#1e90ff")))
+
 (provide 'visual)
