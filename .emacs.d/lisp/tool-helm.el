@@ -60,7 +60,7 @@
  (lambda ()
    (eshell-cmpl-initialize)
    (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
-   (define-key eshell-mode-map (kbd "C-r") 'helm-eshell-history)))
+   (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)))
 
 ;;; Do not exclude any files from 'git grep'.
 (setq helm-grep-git-grep-command "git --no-pager grep -n%cH --color=always --full-name -e %p -- %f")
