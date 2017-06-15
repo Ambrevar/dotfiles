@@ -169,11 +169,12 @@
   (interactive)
   (eshell-interrupt-process)
   (evil-insert 1))
-(defun evil/eshell-define-keys ()
+
+;;; `eshell-mode-map' is reset when Eshell is initialized in `eshell-mode'. We
+;;; need to add bindings to `eshell-first-time-mode-hook'.
+(defun evil/eshell-set-keys ()
   (with-eval-after-load 'tool-helm
-    (evil-define-key '(normal insert) eshell-mode-map "\C-r" 'helm-eshell-history)
     (evil-define-key 'insert eshell-mode-map "\C-e" 'helm-find-files))
-  (evil-define-key 'normal eshell-mode-map "i" 'evil/eshell-insert)
   (evil-define-key 'normal eshell-mode-map "\M-k" 'eshell-previous-prompt)
   (evil-define-key 'normal eshell-mode-map "\M-j" 'eshell-next-prompt)
   (evil-define-key 'normal eshell-mode-map "0" 'eshell-bol)
@@ -181,17 +182,18 @@
   (evil-define-key 'normal eshell-mode-map (kbd "C-c C-c") 'evil/eshell-interrupt-process)
   (evil-define-key '(normal insert) eshell-mode-map "\M-h" 'eshell-backward-argument)
   (evil-define-key '(normal insert) eshell-mode-map "\M-l" 'eshell-forward-argument))
-(add-hook 'eshell-mode-hook 'evil/eshell-define-keys)
+(add-hook 'eshell-first-time-mode-hook 'evil/eshell-set-keys)
 
 ;; TODO: When point is on "> ", helm-find-files looks up parent folder. Prevent that.
 
 ;; DONE: eshell-mode-map gets reset on new shells. Make it permanent. Hook? Hook looks good:
 ;; https://stackoverflow.com/questions/11946113/emacs-eshell-how-to-read-content-of-command-line-on-pressing-ret
 
-;; TODO: Cannot kill emacs when eshell has started: "text is read only"
+;; DONE: Cannot kill emacs when eshell has started: "text is read only"
 
 ;; TODO: Make Evil commands react more dynamically with read-only text.
 ;; Add support for I, C, D, S, s, c*, d*, R, r.
+;; See https://github.com/emacs-evil/evil/issues/852
 (defun evil/eshell-delete-whole-line ()
   (interactive)
   (if (not (get-text-property (line-beginning-position) 'read-only))

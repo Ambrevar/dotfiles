@@ -237,7 +237,10 @@ e-mail."
 
 ;;; Eshell
 (add-to-list 'package-selected-packages 'pcomplete-extension)
-(add-hook 'eshell-load-hook (lambda () (require 'mode-eshell)))
+;;; `eshell-first-time-mode-hook' is run too late to remove modules globally, so we do it here.
+(with-eval-after-load 'em-banner
+  (setq-default eshell-modules-list (delq 'eshell-banner eshell-modules-list)))
+(add-hook 'eshell-first-time-mode-hook (lambda () (require 'mode-eshell)))
 
 ;;; Evil
 (add-to-list 'package-selected-packages 'evil)
