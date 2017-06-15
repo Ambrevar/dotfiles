@@ -30,8 +30,18 @@
 
 (evil-mode 1)
 
+(defun eshell-or-new-session (&optional arg)
+  "Create an interactive Eshell buffer.
+If there is already an Eshell session active, switch to it.
+If current buffer is already an Eshell buffer, create a new one and switch to it.
+See `eshell' for the numeric prefix arg."
+  (interactive "P")
+  (if (eq major-mode 'eshell-mode)
+      (eshell (or arg t))
+    (eshell arg)))
+
 (evil-leader/set-key
-  "RET" 'eshell
+  "RET" 'eshell-or-new-session
   "\\" 'toggle-window-split
   "b" 'buffer-menu
   "e" 'find-file
