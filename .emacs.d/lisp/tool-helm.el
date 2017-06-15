@@ -137,6 +137,7 @@ Requires `call-process-to-string' from `functions'."
 (advice-add #'helm-preselect :around #'helm-skip-dots)
 (advice-add #'helm-ff-move-to-first-real-candidate :around #'helm-skip-dots)
 
-(add-to-list 'desktop-globals-to-save 'helm-ff-history)
+(with-eval-after-load 'desktop
+  (add-to-list 'desktop-globals-to-save 'helm-ff-history))
 
 (provide 'tool-helm)
