@@ -170,11 +170,16 @@ See `eshell' for the numeric prefix arg."
 (evil-define-key 'normal package-menu-mode-map "x" 'package-menu-execute)
 
 ;; Eshell
-(defun evil/eshell-insert ()
-  (interactive)
+(defun evil/eshell-next-prompt ()
   (when (get-text-property (point) 'read-only)
-    (eshell-next-prompt 1))
-  (evil-insert 1))
+    ;; If at end of prompt, `eshell-next-prompt' will not move, so go backward.
+    (beginning-of-line)
+    (eshell-next-prompt 1)))
+(defun evil/eshell-setup ()
+  (dolist (hook '(evil-replace-state-entry-hook evil-insert-state-entry-hook))
+    (add-hook hook 'evil/eshell-next-prompt nil t)))
+(add-hook 'eshell-mode-hook 'evil/eshell-setup)
+
 (defun evil/eshell-interrupt-process ()
   (interactive)
   (eshell-interrupt-process)
