@@ -277,7 +277,11 @@
 ;;; Replace `kill-buffer' binding by `kill-this-buffer'.
 (define-key mickey-minor-mode-map (kbd "C-x k") 'kill-this-buffer)
 
+;;; Ediff
 (setq ediff-window-setup-function 'ediff-setup-windows-plain
       ediff-split-window-function 'split-window-horizontally)
+
+;;; Trash
+(setq delete-by-moving-to-trash t)
 
 (provide 'main)
