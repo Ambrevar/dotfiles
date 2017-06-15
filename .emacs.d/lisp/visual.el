@@ -40,11 +40,9 @@
   (set-face-background 'shadow   "#1c1c1c"))
 
 ;;; Whitespace mode
-(add-hook
- 'whitespace-load-hook
- (lambda ()
-   (set-face-background 'whitespace-space-after-tab "#a9a9a9")
-   (set-face-background 'whitespace-indentation "#696969")))
+(with-eval-after-load 'whitespace
+  (set-face-background 'whitespace-space-after-tab "#a9a9a9")
+  (set-face-background 'whitespace-indentation "#696969"))
 
 ;;; Programming
 (set-face-foreground 'font-lock-comment-face "#00ced1")
@@ -59,60 +57,47 @@
 (set-face-foreground 'font-lock-variable-name-face (face-foreground 'default))
 
 ;;; Sh-mode
-(add-hook
- 'sh-mode-hook
- (lambda ()
-   (set-face-foreground 'sh-heredoc "#00bfff")
-   (set-face-bold 'sh-heredoc nil)))
-
-;;; Eshell
-(add-hook
- 'eshell-mode-hook
- (lambda ()
-   (set-face-foreground 'eshell-prompt "#008b8b")))
+(with-eval-after-load 'sh-script
+  (set-face-foreground 'sh-heredoc "#00bfff")
+  (set-face-bold 'sh-heredoc nil))
 
 ;;; Compilation mode
-(add-hook
- 'compilation-mode-hook
- (lambda ()
-   (set-face-foreground 'compilation-column-number "cyan")
-   (set-face-foreground 'compilation-line-number "cyan")))
+(with-eval-after-load 'compile
+  (set-face-foreground 'compilation-column-number "cyan")
+  (set-face-foreground 'compilation-line-number "cyan"))
 
 ;;; C additional keywords.
-(dolist (mode '(c-mode c++-mode))
-  (font-lock-add-keywords
-   mode
-   '(("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)
-     ;; Functions.
-     ("\\<\\(\\sw+\\)(" 1 'font-lock-function-name-face)
-     ("\\<\\(\\sw+\\)<\\sw+>(" 1 'font-lock-function-name-face))))
+;;; Useless in quasi-monochrome.
+;; (dolist (mode '(c-mode c++-mode))
+;;   (font-lock-add-keywords
+;;    mode
+;;    '(("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)
+;;      ;; Functions.
+;;      ("\\<\\(\\sw+\\)(" 1 'font-lock-function-name-face)
+;;      ("\\<\\(\\sw+\\)<\\sw+>(" 1 'font-lock-function-name-face))))
 
 ;;; Ediff
-(add-hook
- 'ediff-mode-hook
- (lambda ()
-   (set-face-attribute 'ediff-even-diff-A nil :inherit 'ediff-current-diff-A :foreground 'unspecified :background 'unspecified :box nil)
-   (set-face-attribute 'ediff-odd-diff-A nil :inherit 'ediff-current-diff-A :foreground 'unspecified :background 'unspecified :box nil)
-   (set-face-attribute 'ediff-even-diff-B nil :inherit 'ediff-current-diff-B :foreground 'unspecified :background 'unspecified :box nil)
-   (set-face-attribute 'ediff-odd-diff-B nil :inherit 'ediff-current-diff-B :foreground 'unspecified :background 'unspecified :box nil)
-   (set-face-attribute 'ediff-even-diff-C nil :inherit 'ediff-current-diff-C :foreground 'unspecified :background 'unspecified :box nil)
-   (set-face-attribute 'ediff-odd-diff-C nil :inherit 'ediff-current-diff-C :foreground 'unspecified :background 'unspecified :box nil)
-   (set-face-attribute 'ediff-current-diff-A nil :box "white")
-   (set-face-attribute 'ediff-current-diff-B nil :box "white")
-   (set-face-attribute 'ediff-current-diff-C nil :box "white")))
+(with-eval-after-load 'ediff-init
+  (set-face-attribute 'ediff-even-diff-A nil :inherit 'ediff-current-diff-A :foreground 'unspecified :background 'unspecified :box nil)
+  (set-face-attribute 'ediff-odd-diff-A nil :inherit 'ediff-current-diff-A :foreground 'unspecified :background 'unspecified :box nil)
+  (set-face-attribute 'ediff-even-diff-B nil :inherit 'ediff-current-diff-B :foreground 'unspecified :background 'unspecified :box nil)
+  (set-face-attribute 'ediff-odd-diff-B nil :inherit 'ediff-current-diff-B :foreground 'unspecified :background 'unspecified :box nil)
+  (set-face-attribute 'ediff-even-diff-C nil :inherit 'ediff-current-diff-C :foreground 'unspecified :background 'unspecified :box nil)
+  (set-face-attribute 'ediff-odd-diff-C nil :inherit 'ediff-current-diff-C :foreground 'unspecified :background 'unspecified :box nil)
+  (set-face-attribute 'ediff-current-diff-A nil :box "white")
+  (set-face-attribute 'ediff-current-diff-B nil :box "white")
+  (set-face-attribute 'ediff-current-diff-C nil :box "white"))
 
 ;;; Outline mode
-(add-hook
- 'outline-mode-hook
- (lambda ()
-   (set-face-attribute 'outline-1 nil :inherit 'font-lock-warning-face)
-   (set-face-foreground 'outline-2 "Gold")
-   (set-face-foreground 'outline-3 "SpringGreen")
-   (set-face-foreground 'outline-4 "LightSlateBlue")
-   (set-face-foreground 'outline-5 "SlateGrey")
-   (set-face-foreground 'outline-6 "SeaGreen")
-   (set-face-foreground 'outline-7 "DarkSlateGray4")
-   (set-face-foreground 'outline-8 "DarkSlateBlue")))
+(with-eval-after-load 'outline
+  (set-face-attribute 'outline-1 nil :inherit 'font-lock-warning-face)
+  (set-face-foreground 'outline-2 "Gold")
+  (set-face-foreground 'outline-3 "SpringGreen")
+  (set-face-foreground 'outline-4 "LightSlateBlue")
+  (set-face-foreground 'outline-5 "SlateGrey")
+  (set-face-foreground 'outline-6 "SeaGreen")
+  (set-face-foreground 'outline-7 "DarkSlateGray4")
+  (set-face-foreground 'outline-8 "DarkSlateBlue"))
 
 ;;; show-paren
 (with-eval-after-load 'paren
@@ -149,23 +134,20 @@
 ;;; Key notes highlighting. We need to apply it to the mode hook since
 ;;; font-lock-add-keywords has no inheritance support.
 (set-face-foreground 'font-lock-warning-face "DarkOrange")
+(defun fontify-comment-tag ()
+  (font-lock-add-keywords
+   nil
+   ;; See https://en.wikipedia.org/wiki/Comment_(computer_programming)#Tags.
+   (mapcar
+    (lambda (keyword) `(,(concat "\\<\\(" keyword "\\):") 1 font-lock-warning-face prepend))
+    '("FIXME\\(([^)]+)\\)?" "HACK" "OPTIMIZE\\(([^)]+)\\)?" "REVIEW\\(([^)]+)\\)?" "TODO\\(([^)]+)\\)?" "UNDONE" "UX" "WARNING" "XXX"))))
 (dolist (hook '(prog-mode-hook tex-mode-hook texinfo-mode-hook))
-  (add-hook
-   hook
-   (lambda () (interactive)
-     (font-lock-add-keywords
-      nil
-      ;; See https://en.wikipedia.org/wiki/Comment_(computer_programming)#Tags.
-      (mapcar
-       (lambda (keyword) `(,(concat "\\<\\(" keyword "\\):") 1 font-lock-warning-face prepend))
-       '("FIXME\\(([^)]+)\\)?" "HACK" "OPTIMIZE\\(([^)]+)\\)?" "REVIEW\\(([^)]+)\\)?" "TODO\\(([^)]+)\\)?" "UNDONE" "UX" "WARNING" "XXX"))))))
+  (add-hook hook 'fontify-comment-tag))
 
 ;;; Man pages
-(add-hook
- 'Man-mode-hook
- (lambda ()
-   (set-face-attribute 'Man-underline nil :foreground (face-foreground 'font-lock-string-face) :underline nil)
-   (set-face-attribute 'Man-overstrike nil :foreground (face-foreground 'font-lock-comment-face) :weight 'normal)))
+(with-eval-after-load 'man
+  (set-face-attribute 'Man-underline nil :foreground (face-foreground 'font-lock-string-face) :underline nil)
+  (set-face-attribute 'Man-overstrike nil :foreground (face-foreground 'font-lock-comment-face) :weight 'normal))
 
 ;;; Term
 ;;; Use lighter blue.
