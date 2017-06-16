@@ -1,7 +1,7 @@
 ;;; Functions
 
-;;; Notes on mark and region: to get a consistent behaviour regardless of Transient
-;;; mode, check `(use-region-p)'. It will work as expected if
+;;; Notes on mark and region: to get a consistent behaviour regardless of
+;;; Transient mode, check `(use-region-p)'. It will work as expected if
 ;;; transient. If not, it will always be true as soon as the mark has been set
 ;;; once; so you need to make sure the mark is set as you want beforehand (e.g.
 ;;; whole buffer, single line...). This is the behaviour of `sort-lines'.
@@ -13,25 +13,17 @@
 ;;       (setq start (region-beginning) end (region-end))
 ;;     (setq start (point-min) end (point-max)))
 ;;
-:;; If several commands act on region and the region size/pos is susceptible to change:
+;;; If several commands act on region and the region size/pos is susceptible to change:
 ;;
 ;; (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
 ;;       (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-end)))))
-;;
 ;;
 ;;; For commands that only work on regions:
 ;;
 ;; (defun count-lines-region (start end)
 ;;   "Print number of lines and characters in the region."
 ;;   (interactive "r")
-
-(defun add-hook-and-eval (hook function)
-  "Add FUNCTION to HOOK and evaluate it.
-This can be useful when called from a hooked function to make
-sure it gets executed, since additions to hooks will be ignored
-while `run-mode-hooks' is running."
-  (add-hook hook function)
-  (funcall function))
+;;   ...
 
 (defun beginning-of-next-defun ()
   "Move forward to the beginning of a defun.

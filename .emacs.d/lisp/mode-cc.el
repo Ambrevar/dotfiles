@@ -2,12 +2,13 @@
 
 ;; Should we split this into mode-c and mode-c++?
 
-(local-set-key (kbd "C-c m") 'cc-main)
-(local-set-key (kbd "<f9>") 'cc-clean)
-(local-set-key (kbd "M-.") 'semantic-ia-fast-jump)
-(local-set-key (kbd "C-c C-d") 'semantic-ia-show-summary)
-(local-set-key (kbd "M-TAB") 'semantic-complete-analyze-inline)
-(local-set-key (kbd "C-c o") 'ff-find-other-file)
+(dolist (map (list c-mode-map c++-mode-map))
+  (define-key map (kbd "C-c m") 'cc-main)
+  (define-key map (kbd "<f9>") 'cc-clean)
+  (define-key map (kbd "M-.") 'semantic-ia-fast-jump)
+  (define-key map (kbd "C-c C-d") 'semantic-ia-show-summary)
+  ;; (define-key map (kbd "C-c o") 'ff-find-other-file)
+  (define-key map (kbd "M-TAB") 'semantic-complete-analyze-inline))
 
 (when (require 'company nil t)
   (local-set-key (kbd "M-TAB") (if (require 'helm-company nil t) 'helm-company 'company-complete)))
@@ -121,8 +122,8 @@ restored."
 ;;; variables.
 (dolist (hook '(c-mode-hook c++-mode-hook))
   (when (require 'company nil t)
-    (add-hook-and-eval hook 'company-mode))
-  (add-hook-and-eval hook 'cc-set-compiler))
+    (add-hook hook 'company-mode))
+  (add-hook hook 'cc-set-compiler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Skeletons

@@ -18,10 +18,11 @@
 ;; Note that -shell-escape can also be toggled with universal
 ;; argument.
 
-(dolist (key '("\C-c\C-f" "\C-c\C-b"))
-  (local-unset-key key))
-(local-set-key (kbd "<f9>") 'tex-pdf-view)
-(local-set-key (kbd "<f10>") 'tex-compile)
+(let ((map tex-mode-map))
+  (dolist (key '("\C-c\C-f" "\C-c\C-b"))
+    (define-key map key nil))
+  (define-key map (kbd "<f9>") 'tex-pdf-view)
+  (define-key map (kbd "<f10>") 'tex-compile))
 
 (defvar-local tex-masterfile nil
   "The file that should be compiled. Useful for modular documents.")
@@ -119,20 +120,18 @@ This does not interfere with `subword-mode'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TeX setup
 
-(setq-default tex-command "pdftex")
-(setq tex-command "pdftex")
-(setq-default tex-start-options "-file-line-error-style -interaction=nonstopmode -synctex=1")
-;; Use the following variable to append file local commands without erasing
-;; default options.
-(setq-default tex-start-commands nil)
+(setq-default
+ tex-run-command "pdftex"
+ tex-start-options "-file-line-error-style -interaction=nonstopmode -synctex=1"
+ ;; Use the following variable to append file local commands without erasing
+ ;; default options.
+ tex-start-commands nil)
 
 ;; `tex-mode' sets `indent-tabs-mode' to nil, invoking the following
 ;; argument: "TABs in verbatim environments don't do what you think." Not
 ;; sure how relevant this bad comment is. We revert it.
-(add-hook-and-eval 'tex-mode-hook 'turn-on-indent-tabs)
-(add-hook-and-eval 'tex-mode-hook 'turn-on-newline-paragraph)
-(add-hook-and-eval 'tex-mode-hook 'turn-on-newline-paragraph)
-(add-hook-and-eval 'tex-mode-hook 'tex-set-compiler)
+(dolist (fun '(turn-on-indent-tabs turn-on-newline-paragraph turn-on-newline-paragraph tex-set-compiler))
+  (add-hook 'tex-mode-hook fun))
 
 ;; Not sure how useful that is:
 ;; (set (make-local-variable 'use-hard-newlines) t)

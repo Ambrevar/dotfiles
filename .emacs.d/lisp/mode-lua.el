@@ -5,6 +5,6 @@
 (defun lua-set-compiler ()
   (setq compile-command (concat lua-default-application " " (shell-quote-argument buffer-file-name))))
 
-(add-hook-and-eval 'lua-mode-hook 'lua-set-compiler)
+(add-hook 'lua-mode-hook 'lua-set-compiler)
 
 (provide 'mode-lua)

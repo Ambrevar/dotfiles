@@ -1,33 +1,35 @@
-;; Dired
+;;; Dired
+;;; Warning: This file is loaded unconditionally on startup.
+;;; We cannot assume that current buffer is in dired-mode.
 
-(local-set-key (kbd "C-c h") 'dired-toggle-humansize)
-(local-set-key (kbd "<left>") 'dired-up-directory)
-(local-set-key (kbd "<right>") 'dired-find-file)
-(local-set-key (kbd "SPC") 'dired-mark)
-(local-set-key (kbd "<backspace>") 'dired-up-directory)
-(local-set-key (kbd "b") 'dired-up-directory)
+(let ((map dired-mode-map))
+  (define-key map (kbd "C-c h") 'dired-toggle-humansize)
+  (define-key map (kbd "<left>") 'dired-up-directory)
+  (define-key map (kbd "<right>") 'dired-find-file)
+  (define-key map (kbd "SPC") 'dired-mark)
+  (define-key map (kbd "<backspace>") 'dired-up-directory)
+  (define-key map (kbd "b") 'dired-up-directory))
 
 (when (require 'dired+ nil t)
   (toggle-diredp-find-file-reuse-dir 1))
 
-;; On a GNU system, ls has the option to sort folders first.
+;;; On a GNU system, ls has the option to sort folders first.
 (if (string-match "^gnu.*" (prin1-to-string system-type))
     (setq dired-listing-switches "--group-directories-first -lha")
   (setq dired-listing-switches "-lha"))
 
-;; Switches are set before the hook is called, so we need to reload dired. The
-;; dired-internal-noselect is a lower level function, so it is faster. WARNING:
-;; Not sure if it is equivalent though.
-; (dired dired-directory dired-listing-switches)
-(dired-internal-noselect dired-directory dired-listing-switches)
+;;; Switches are set before the hook is called, so we need to reload dired. The
+;;; dired-internal-noselect is a lower level function, so it is faster. WARNING:
+;;; Not sure if it is equivalent though.
+;; (dired dired-directory dired-listing-switches)
+(defun dired-set-listing-switches ()
+  (dired-internal-noselect dired-directory dired-listing-switches))
 
 (setq wdired-allow-to-change-permissions t)
 
-;; omit-mode needs to be started _after_ omit-files redefinition.
+;;; omit-mode needs to be started _after_ omit-files redefinition.
 (require 'dired-x)
 (setq dired-omit-files "^\\.")
-(dired-omit-mode)
-(add-hook 'dired-mode-hook 'dired-omit-mode)
 
 (require 'tool-pdf) ; for `pdf-viewer'
 (setq dired-guess-shell-alist-user
@@ -61,5 +63,8 @@
                           "h" " -h")))
         (setq dired-showing-humansize t))))
   (revert-buffer))
+
+(dolist (fun '(dired-omit-mode dired-set-listing-switches))
+  (add-hook 'dired-mode-hook fun))
 
 (provide 'mode-dired)

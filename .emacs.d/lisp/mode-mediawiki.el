@@ -5,10 +5,11 @@
 ;; Besides you can try extending `url-cookie-save-interval'.
 ;; Nonetheless is mode is helpfull for syntax awareness.
 
-(local-set-key (kbd "C-c o") 'mediawiki-browse)
-(local-unset-key (kbd "M-g")) ; This shadows M-g M-g.
-(local-set-key (kbd "C-x C-s") 'save-buffer)
-(local-set-key (kbd "C-c M-s") 'mediawiki-save)
+(let ((map mediawiki-mode-map))
+  (define-key map (kbd "C-c o") 'mediawiki-browse)
+  (define-key map (kbd "M-g") nil) ; This shadows M-g M-g.
+  (define-key map (kbd "C-x C-s") 'save-buffer)
+  (define-key map (kbd "C-c M-s") 'mediawiki-save))
 
 (setq
  mediawiki-site-alist
@@ -17,8 +18,8 @@
    ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt")
    ("WikEmacs" "https://wikemacs.org/wiki/" "Ambrevar" "" "Main Page")))
 
-(add-hook-and-eval 'mediawiki-mode-hook 'visual-line-mode)
-(add-hook-and-eval 'mediawiki-mode-hook 'turn-off-auto-fill)
+(add-hook 'mediawiki-mode-hook 'visual-line-mode)
+(add-hook 'mediawiki-mode-hook 'turn-off-auto-fill)
 
 (define-skeleton mediawiki-tt
   "Insert truetype text."

@@ -9,7 +9,7 @@
 To view where the bindings are set in your config files, lookup
 `mickey-minor-mode-map' over it. Example:\n
   (define-key mickey-minor-mode-map (kbd \"C-i\") 'some-function)"
-  t " myckey" 'mickey-minor-mode-map)
+  t " mickey" 'mickey-minor-mode-map)
 (add-hook 'minibuffer-setup-hook (lambda () (mickey-minor-mode 0)))
 
 (defvar emacs-cache-folder "~/.cache/emacs/"
@@ -53,8 +53,7 @@ To view where the bindings are set in your config files, lookup
 
 ;;; BBCode
 (add-to-list 'package-selected-packages 'bbcode-mode)
-(when (require 'bbcode-mode nil t)
-  (add-hook 'bbcode-mode-hook (lambda () (require 'mode-bbcode))))
+(with-eval-after-load 'bbcode-mode (require 'mode-bbcode))
 
 ;;; Bibtex
 (setq bibtex-entry-format '(opts-or-alts required-fields numerical-fields whitespace realign last-comma delimiters braces sort-fields))
@@ -65,8 +64,7 @@ To view where the bindings are set in your config files, lookup
 (add-to-list 'package-selected-packages 'bison-mode)
 
 ;;; C/C++
-(add-hook 'c-mode-hook   (lambda () (require 'mode-cc)))
-(add-hook 'c++-mode-hook (lambda () (require 'mode-cc)))
+(with-eval-after-load 'cc-mode (require 'mode-cc))
 
 ;;; ChangeLog
 (defun change-log-set-indent-rules ()
@@ -83,8 +81,7 @@ To view where the bindings are set in your config files, lookup
 (add-to-list 'package-selected-packages 'go-rename)
 (add-to-list 'package-selected-packages 'helm-go-package)
 (add-to-list 'package-selected-packages 'company-go)
-(when (require 'go-mode nil t)
-  (add-hook 'go-mode-hook (lambda () (require 'mode-go))))
+(with-eval-after-load 'go-mode (require 'mode-go))
 
 ;;; Graphviz dot
 ;; The view command is broken but the preview command works (it displays the PNG
@@ -105,8 +102,7 @@ To view where the bindings are set in your config files, lookup
 
 ;;; Lua
 (add-to-list 'package-selected-packages 'lua-mode)
-(when (require 'lua-mode nil t)
-  (add-hook 'lua-mode-hook (lambda () (require 'mode-lua))))
+(with-eval-after-load 'lua-mode (require 'mode-lua))
 
 ;;; Mail with Mutt support.
 (add-hook 'mail-mode-hook 'mail-text)
@@ -120,19 +116,18 @@ e-mail."
   (copy-file buffer-file-name mutt-backup t))
 (defun mutt-check-buffer ()
   (when (string-match "/tmp/mutt-.*" (buffer-file-name))
-    (when (require 'with-editor nil t)
-      ;; Just like git commits.
-      (with-editor-mode))
+    ;; Just like magit commits.
+    (when (require 'with-editor nil t) (with-editor-mode))
     (add-hook 'after-save-hook 'mutt-backup-buffer nil t)))
 (add-hook 'find-file-hook 'mutt-check-buffer)
 
 ;;; Makefile
-(add-hook 'makefile-mode-hook (lambda () (require 'mode-makefile)))
+(with-eval-after-load 'make-mode (require 'mode-makefile))
 
 ;;; Markdown
 (add-to-list 'package-selected-packages 'markdown-mode)
-(when (require 'markdown-mode nil t)
-  ;; If we need more option, add it to a dedicated file.
+(with-eval-after-load 'markdown-mode
+  ;; TODO: Move config to a dedicated file.
   (set-face-attribute 'markdown-header-face-1 nil :inherit 'info-title-1)
   (set-face-attribute 'markdown-header-face-2 nil :inherit 'info-title-2)
   (set-face-attribute 'markdown-header-face-3 nil :inherit 'info-title-3)
@@ -155,11 +150,10 @@ e-mail."
 ;;; Mediawiki
 (add-to-list 'package-selected-packages 'mediawiki)
 (add-to-list 'auto-mode-alist '("\\.wiki\\'" . mediawiki-mode))
-(when (require 'mediawiki nil t)
-  (add-hook 'mediawiki-mode-hook (lambda () (require 'mode-mediawiki))))
+(with-eval-after-load 'mediawiki (require 'mode-mediawiki))
 
 ;;; Org-mode
-(add-hook 'org-mode-hook (lambda () (require 'mode-org)))
+(with-eval-after-load 'org (require 'mode-org))
 
 ;;; Perl
 (defun perl-set-indent-rules ()
@@ -173,13 +167,13 @@ e-mail."
 (add-to-list 'package-selected-packages 'po-mode)
 
 ;;; Python
-(add-hook 'python-mode-hook (lambda () (require 'mode-python)))
+(with-eval-after-load 'python (require 'mode-python))
 
 ;;; Roff / Nroff
-(add-hook 'nroff-mode-hook (lambda () (require 'mode-nroff)))
+(with-eval-after-load 'nroff-mode (require 'mode-nroff))
 
 ;;; Shell
-(add-hook 'sh-mode-hook (lambda () (require 'mode-sh)))
+(with-eval-after-load 'sh-script (require 'mode-sh))
 ;;; Arch Linux PKGBUILD
 (add-to-list 'auto-mode-alist '("PKGBUILD" . sh-mode))
 ;;; rc
@@ -188,9 +182,7 @@ e-mail."
 (add-to-list 'package-selected-packages 'fish-mode)
 (defun fish-check-buffer ()
   (when (string-match "/tmp/tmp\..*\.fish" (buffer-file-name))
-    (when (require 'with-editor nil t)
-      ;; Just like git commits.
-      (with-editor-mode))
+    (when (require 'with-editor nil t) (with-editor-mode))
     (end-of-line)))
 (add-hook 'find-file-hook 'fish-check-buffer)
 
@@ -198,9 +190,11 @@ e-mail."
 (add-to-list 'auto-mode-alist '("\\.srt\\'" . text-mode))
 
 ;;; TeX / LaTeX / Texinfo
-(add-hook 'tex-mode-hook      (lambda () (require 'mode-tex)))
-(add-hook 'texinfo-mode-hook  (lambda () (require 'mode-texinfo)))
-(add-hook 'latex-mode-hook    (lambda () (require 'mode-latex)))
+(with-eval-after-load 'tex-mode (require 'mode-tex))
+(with-eval-after-load 'texinfo (require 'mode-texinfo))
+;;; LaTeX is defined in the same file as TeX. To separate the loading, we add it
+;;; to the hook.
+(add-hook 'latex-mode-hook (lambda () (require 'mode-latex)))
 (add-to-list 'package-selected-packages 'latex-math-preview)
 (add-to-list 'package-selected-packages 'latex-pretty-symbols)
 (require 'latex-pretty-symbols nil t)
@@ -210,9 +204,7 @@ e-mail."
 ;;; This works for qutebrowser, but may need changes for other browsers.
 (defun browser-check-buffer ()
   (when (string-match (concat (getenv "BROWSER") "-editor-*") (buffer-name))
-    (when (require 'with-editor nil t)
-      ;; Just like git commits.
-      (with-editor-mode))
+    (when (require 'with-editor nil t) (with-editor-mode))
     (auto-fill-mode -1)))
 (add-hook 'find-file-hook 'browser-check-buffer)
 
@@ -233,15 +225,25 @@ e-mail."
   (setq company-idle-delay nil))
 
 ;;; Dired
-(add-hook 'dired-mode-hook  (lambda () (require 'mode-dired)))
+;;; Dired is loaded after init.el, so configure it later.
+(with-eval-after-load 'dired (require 'mode-dired))
 
 ;;; Eshell
+;;; Extend completion.
 (add-to-list 'package-selected-packages 'pcomplete-extension)
-;;; `eshell-first-time-mode-hook' is run too late to remove modules globally, so we do it here.
-(with-eval-after-load 'em-banner
-  (setq-default eshell-modules-list (delq 'eshell-banner eshell-modules-list)))
+;;; Eshell gets initialized differently.  When eshell.el first gets loaded, only
+;;; the core is defined and `eshell-load-hook' is called. For every Eshell
+;;; session, `eshell-mode' is run: it resets `eshell-mode-map', it loads
+;;; modules, runs their hooks and concludes with `eshell-first-time-mode-hook'
+;;; (for the first session only) and `eshell-mode-hook'.
+;;;
+;;; TODO: Move most features inside (with-eval-after-load 'eshell ...)
+;;; `eshell-directory-name' is part of the core.
 (with-eval-after-load 'eshell
   (setq eshell-directory-name (concat emacs-cache-folder "eshell")))
+;;; The banner is a module.
+(with-eval-after-load 'em-banner
+  (setq-default eshell-modules-list (delq 'eshell-banner eshell-modules-list)))
 (add-hook 'eshell-first-time-mode-hook (lambda () (require 'mode-eshell)))
 
 ;;; Evil
@@ -252,11 +254,10 @@ e-mail."
 (add-to-list 'package-selected-packages 'evil-mc)
 (add-to-list 'package-selected-packages 'evil-mc-extras)
 (add-to-list 'package-selected-packages 'linum-relative)
-(when (require 'evil nil t)
-  (require 'tool-evil))
+(when (require 'evil nil t) (require 'tool-evil))
 
 ;;; GUD (GDB, etc.)
-(add-hook 'gud-mode-hook (lambda () (require 'mode-gud)))
+(with-eval-after-load 'gud (require 'mode-gud))
 
 ;;; Helm
 (add-to-list 'package-selected-packages 'helm)
@@ -265,14 +266,13 @@ e-mail."
 ;; (add-to-list 'package-selected-packages 'helm-pt) ; No need?
 (add-to-list 'package-selected-packages 'wgrep-helm)
 (add-to-list 'package-selected-packages 'wgrep-pt)
-(when (require 'helm-config nil t)
-  (require 'tool-helm))
+(when (require 'helm-config nil t) (require 'tool-helm))
 
 ;;; Indentation engine fix.
 (require 'smiext "tool-smiext")
 
 ;;; Indent style guessing.
-(require 'dtrt-indent nil t)
+;; (add-to-list 'package-selected-packages 'dtrt-indent)
 
 ;;; Magit
 (add-to-list 'package-selected-packages 'magit)
@@ -283,6 +283,7 @@ e-mail."
   (global-set-key (kbd "C-x g") 'magit-status))
 
 ;;; Multiple cursors
+;;; TODO: Delete?
 ;; (add-to-list 'package-selected-packages 'multiple-cursors)
 ;; (add-to-list 'package-selected-packages 'phi-search)
 (when (require 'multiple-cursors nil t)
@@ -301,6 +302,7 @@ e-mail."
 (autoload 'pdf-compress "tool-pdf" nil t)
 
 ;;; Translator
+;; TODO: Find alternative package.
 (autoload 'itranslate "tool-itranslate" nil t)
 (autoload 'itranslate-lines "tool-itranslate" nil t)
 (autoload 'itranslate-region "tool-itranslate" nil t)

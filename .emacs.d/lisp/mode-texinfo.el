@@ -19,8 +19,8 @@
   (set (make-local-variable 'tex-command) "texi2pdf -b")
   (tex-set-compiler))
 
-(add-hook-and-eval 'texinfo-mode-hook 'texinfo-set-compiler)
 ;; For some reason, Texinfo-mode forces the fill-column to 70...
-(add-hook-and-eval 'texinfo-mode-hook 'reset-fill-column)
+(dolist (fun '(texinfo-set-compiler reset-fill-column))
+  (add-hook 'texinfo-mode-hook fun))
 
 (provide 'mode-texinfo)

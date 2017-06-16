@@ -1,7 +1,8 @@
 ;; Nroff
 
-(local-set-key (kbd "C-c C-b") 'nroff-bold)
-(local-set-key (kbd "C-c C-i") 'nroff-italic)
+(let ((map nroff-mode-map))
+  (define-key map (kbd "C-c C-b") 'nroff-bold)
+  (define-key map (kbd "C-c C-i") 'nroff-italic))
 
 ;; Skeletons
 (define-skeleton nroff-bold "Bold text." nil "\\fB" @ _ "\\fR" @)

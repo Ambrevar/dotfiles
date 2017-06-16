@@ -14,7 +14,7 @@
 (local-set-key (kbd "C-<f9>") (lambda () (interactive) (go-metalinter t)))
 
 (when (require 'company-go nil t)
-  (add-hook-and-eval 'go-mode-hook 'company-mode)
+  (add-hook 'go-mode-hook 'company-mode)
   (add-to-list 'company-backends 'company-go)
   (local-set-key (kbd "M-TAB") (if (require 'helm-company nil t) 'helm-company 'company-complete)))
 
@@ -57,11 +57,11 @@
 Note that the -cover test flag is left out since it shifts line numbers."
   (interactive)
   (setq compile-command
-       (if (go-buffer-in-gopath-p)
-           (if (string-match "_test.[gG][oO]$" buffer-file-name)
-               "go test -v -run ."
-             "go install")
-         (concat "go run " (shell-quote-argument buffer-file-name)))))
+        (if (go-buffer-in-gopath-p)
+            (if (string-match "_test.[gG][oO]$" buffer-file-name)
+                "go test -v -run ."
+              "go install")
+          (concat "go run " (shell-quote-argument buffer-file-name)))))
 
 (defun go-buffer-in-gopath-p ()
   (if (not buffer-file-name)
@@ -76,7 +76,7 @@ Note that the -cover test flag is left out since it shifts line numbers."
 
 (when (require 'go-guru nil t)
   (unless (executable-find "guru")
-    ; Requires `call-process-to-string' from `functions'."
+    ;; Requires `call-process-to-string' from `functions'."
     (require 'functions)
     (setq go-guru-command
           (concat (replace-regexp-in-string "\n$" "" (call-process-to-string "go" "env" "GOTOOLDIR")) "/guru"))))
@@ -84,15 +84,15 @@ Note that the -cover test flag is left out since it shifts line numbers."
 (defun go-turn-on-gofmt-before-save ()
   (add-hook 'before-save-hook #'gofmt-before-save nil t))
 
-(add-hook-and-eval 'go-mode-hook 'go-turn-on-gofmt-before-save)
+(add-hook 'go-mode-hook 'go-turn-on-gofmt-before-save)
 
 (when (require 'go-eldoc nil t)
-  (add-hook-and-eval 'go-mode-hook 'go-eldoc-setup))
+  (add-hook 'go-mode-hook 'go-eldoc-setup))
 
-(add-hook-and-eval 'go-mode-hook 'go-set-compile-command)
+(add-hook 'go-mode-hook 'go-set-compile-command)
 
 (defun godoc-setup ()
- (setq tab-width 8))
+  (setq tab-width 8))
 
 (add-hook 'godoc-mode-hook 'godoc-setup)
 

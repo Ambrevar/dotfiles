@@ -1,8 +1,10 @@
-;; LaTeX
+;;; LaTeX
+;;; Warning: This file is loaded from a hook.
 
-;; We use the TeX setup.
+;;; We use the TeX setup.
 (require 'mode-tex)
 
+;;; Since current buffer is a LaTeX one, we can use `local-set-key'.
 (local-set-key (kbd "C-c m") 'latex-article)
 (local-set-key (kbd "C-c C-a") 'latex-insert-table)
 (local-set-key (kbd "C-c C-c") 'latex-smallcaps)
@@ -75,10 +77,12 @@ by an {itemize} environment."
   ;; Need to reset the compiler because we changed tex-command, order matters.
   (tex-set-compiler))
 
-(add-hook-and-eval 'latex-mode-hook 'latex-set-compiler)
-(add-hook-and-eval 'latex-mode-hook 'turn-on-orgtbl)
 ;; For some unknown reasons, `skeleton-end-hook' is set to nil in tex-mode.
-(add-hook-and-eval 'latex-mode-hook 'turn-on-skeleton-markers)
+(dolist (fun '(latex-set-compiler turn-on-orgtbl turn-on-skeleton-markers))
+  ;; Since this file is loaded from `latex-mode-hook', these functions will not
+  ;; be applied to the current buffer. We do it manually.
+  (funcall fun)
+  (add-hook 'latex-mode-hook fun))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Skeletons

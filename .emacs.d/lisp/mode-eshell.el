@@ -1,10 +1,5 @@
 ;;; Eshell
 
-;;; This mode has a lot of hooks.
-;;; `eshell-load-hook' is run at the very beginning; not all variables/functions will be set.
-;;; Use `eshell-first-time-mode-hook' to customize once everything is loaded.
-;;; `eshell-mode-hook' is run once per session.
-
 ;;; TODO: Bind "ls"? No need if we have Ctrl-e?
 ;; (local-set-key "\C-l" 'eshell/ls)
 

@@ -1,17 +1,19 @@
 ;;; Org mode
 
-(local-set-key (kbd "C-c C-a") 'org-agenda)
+(define-key org-mode-map (kbd "C-c C-a") 'org-agenda)
 
-;;; Move annoying babel folder.
-(setq org-babel-temporary-directory (concat emacs-cache-folder "babel"))
-;;; Disable line splitting on M-RET
-(setq org-M-RET-may-split-line '((default)))
-(setq org-insert-heading-respect-content t)
-(setq org-enforce-todo-dependencies t)
-
-(setq org-deadline-warning-days 7)
-(setq org-agenda-default-appointment-duration 60)
-(setq org-agenda-columns-add-appointments-to-effort-sum t)
+(setq
+ ;; Move annoying babel folder.
+ org-babel-temporary-directory (concat emacs-cache-folder "babel")
+ ;; Disable line splitting on M-RET.
+ org-M-RET-may-split-line '((default))
+ org-insert-heading-respect-content t
+ org-enforce-todo-dependencies t
+ org-deadline-warning-days 7
+ org-agenda-default-appointment-duration 60
+ org-agenda-columns-add-appointments-to-effort-sum t
+ ;; Org-mode aligns text.
+ indent-tab-mode nil)
 
 ;;; Agendas.
 ;;; If you want to add other agendas in a local file, use the following code:
@@ -20,15 +22,12 @@
 (add-to-list 'org-agenda-files "~/personal/todo/todo.org")
 
 ;;; Set PDF association in Org-mode (was Evince by default).
-(with-eval-after-load "org"
-  (setq indent-tab-mode nil) ; Org-mode aligns text.
-  (require 'tool-pdf)
-  ;; Change .pdf association directly within the alist
-  (setcdr (assoc "\\.pdf\\'" org-file-apps)
-          (concat pdf-viewer " " (mapconcat 'identity pdf-viewer-args " "))))
+(require 'tool-pdf)
+(setcdr (assoc "\\.pdf\\'" org-file-apps)
+        (concat pdf-viewer " " (mapconcat 'identity pdf-viewer-args " ")))
 
-(add-hook-and-eval 'org-mode-hook 'turn-off-linum)
-(add-hook-and-eval 'org-mode-hook 'turn-off-indent-tabs)
-(add-hook-and-eval 'org-mode-hook 'turn-off-auto-fill)
+;;; Hooks.
+(dolist (fun '(turn-off-linum turn-off-indent-tabs turn-off-auto-fill))
+  (add-hook 'org-mode-hook fun))
 
 (provide 'mode-org)

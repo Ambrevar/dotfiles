@@ -57,9 +57,9 @@ The advantages of this function over the vanilla code are:
   (set (make-local-variable 'defun-prompt-regexp)
        (concat "^\\(function[ \t]\\|[[:alnum:]_]+[ \t]+()[ \t]+\\)")))
 
-(add-hook-and-eval 'sh-mode-hook 'sh-set-indent-rules)
-(add-hook-and-eval 'sh-mode-hook 'sh-set-prompt)
-(add-hook-and-eval 'sh-mode-hook 'sh-set-compiler)
+;;; Hooks
+(dolist (fun '(sh-set-indent-rules sh-set-prompt sh-set-compiler))
+  (add-hook 'sh-mode-hook fun))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

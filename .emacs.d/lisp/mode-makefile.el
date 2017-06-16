@@ -1,9 +1,10 @@
 ;; Makefile
 
-(local-set-key (kbd "C-c c") 'makefile-config)
-(local-set-key (kbd "C-c d") 'makefile-doc)
-(local-set-key (kbd "C-c m") 'makefile-main)
-(local-set-key (kbd "C-c s") 'makefile-c)
+(let ((map makefile-mode-map))
+  (define-key map (kbd "C-c c") 'makefile-config)
+  (define-key map (kbd "C-c d") 'makefile-doc)
+  (define-key map (kbd "C-c m") 'makefile-main)
+  (define-key map (kbd "C-c s") 'makefile-c))
 
 (define-skeleton makefile-main
   "Insert root Makefile." nil
