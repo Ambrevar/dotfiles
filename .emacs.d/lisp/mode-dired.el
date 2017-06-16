@@ -2,13 +2,13 @@
 ;;; Warning: This file is loaded unconditionally on startup.
 ;;; We cannot assume that current buffer is in dired-mode.
 
-(let ((map dired-mode-map))
-  (define-key map (kbd "C-c h") 'dired-toggle-humansize)
-  (define-key map (kbd "<left>") 'dired-up-directory)
-  (define-key map (kbd "<right>") 'dired-find-file)
-  (define-key map (kbd "SPC") 'dired-mark)
-  (define-key map (kbd "<backspace>") 'dired-up-directory)
-  (define-key map (kbd "b") 'dired-up-directory))
+(define-keys dired-mode-map
+  "C-c h" 'dired-toggle-humansize
+  "<left>" 'dired-up-directory
+  "<right>" 'dired-find-file
+  "SPC" 'dired-mark
+  "<backspace>" 'dired-up-directory
+  "b" 'dired-up-directory)
 
 (when (require 'dired+ nil t)
   (toggle-diredp-find-file-reuse-dir 1))

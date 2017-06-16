@@ -18,11 +18,11 @@
 ;; Note that -shell-escape can also be toggled with universal
 ;; argument.
 
-(let ((map tex-mode-map))
-  (dolist (key '("\C-c\C-f" "\C-c\C-b"))
-    (define-key map key nil))
-  (define-key map (kbd "<f9>") 'tex-pdf-view)
-  (define-key map (kbd "<f10>") 'tex-compile))
+(define-keys tex-mode-map
+  "C-c C-f" nil
+  "C-c C-b" nil
+  "<f9>" 'tex-pdf-view
+  "<f10>" 'tex-compile)
 
 (defvar-local tex-masterfile nil
   "The file that should be compiled. Useful for modular documents.")

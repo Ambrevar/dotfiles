@@ -81,23 +81,25 @@ See `eshell' for the numeric prefix arg."
 
   ;; Should we stick to M-based bindings or use C-based?
   ;; Magit uses C-jk, helm uses C-space. Evil has C-w, C-o, C-p, C-r. Emacs has C-xC-q, C-xC-o.
-  (define-key helm-map (kbd "M-\\") 'helm-toggle-resplit-and-swap-windows) ; Or use M-t (helm standard binding is C-t).
-  (define-key helm-map (kbd "C-f") 'helm-next-page)
-  (define-key helm-map (kbd "C-b") 'helm-previous-page)
-  (define-key helm-map (kbd "M-j") 'helm-next-line)
-  (define-key helm-map (kbd "M-k") 'helm-previous-line)
-  (define-key helm-map (kbd "M-h") 'helm-next-source)
-  (define-key helm-map (kbd "M-H") 'describe-key)
-  (define-key helm-map (kbd "M-l") (kbd "RET"))
-  (define-key helm-map [escape] 'helm-keyboard-quit)
+  (define-keys helm-map
+    "M-\\" 'helm-toggle-resplit-and-swap-windows ; Or use M-t (helm standard binding is C-t).
+    "C-f" 'helm-next-page
+    "C-b" 'helm-previous-page
+    "M-j" 'helm-next-line
+    "M-k" 'helm-previous-line
+    "M-h" 'helm-next-source
+    "M-H" 'describe-key
+    "M-l" (kbd "RET")
+    "<escape>" 'helm-keyboard-quit)
   (dolist (keymap (list helm-buffer-map))
     (define-key keymap (kbd "M-o") 'helm-buffer-switch-other-window))
   (dolist (keymap (list helm-find-files-map helm-read-file-map))
-    (define-key keymap (kbd "M-o") 'helm-ff-run-switch-other-window)
-    (define-key keymap (kbd "M-.") 'helm-ff-run-find-sh-command)
-    (define-key keymap (kbd "M-l") 'helm-execute-persistent-action)
-    (define-key keymap (kbd "M-h") 'helm-find-files-up-one-level)
-    (define-key keymap (kbd "M-H") 'describe-key)))
+    (define-keys keymap
+      "M-o" 'helm-ff-run-switch-other-window
+      "M-." 'helm-ff-run-find-sh-command
+      "M-l" 'helm-execute-persistent-action
+      "M-h" 'helm-find-files-up-one-level
+      "M-H" 'describe-key)))
 
 ;; Add support for magit.
 (require 'evil-magit nil t)
@@ -145,8 +147,9 @@ See `eshell' for the numeric prefix arg."
 ;; TODO: evil-ex history binding in normal mode do not work.
 (evil-define-key 'normal evil-ex-completion-map "\M-p" 'previous-history-element)
 (evil-define-key 'normal evil-ex-completion-map "\M-n" 'next-history-element)
-(define-key evil-ex-completion-map "\M-p" 'previous-history-element)
-(define-key evil-ex-completion-map "\M-n" 'next-history-element)
+(define-keys evil-ex-completion-map
+  "M-p" 'previous-history-element
+  "M-n" 'next-history-element)
 
 ;; Remap org-mode meta keys for convenience
 ;; - org-evil: Not as polished as of May 2017.

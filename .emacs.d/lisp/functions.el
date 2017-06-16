@@ -48,6 +48,14 @@ If you want to operate on buffer, use `how-many' instead."
       (setq matches (1+ matches)))
     matches))
 
+(defun define-keys (map key def &rest bindings)
+  "Like `define-key' but allow for defining several bindings at once.
+`KEY' must be acceptable for `kbd'."
+  (while key
+    (define-key map (kbd key) def)
+    (setq key (pop bindings)
+          def (pop bindings))))
+
 (defun duplicate (arg)
   "Duplicate the current line or region ARG times.
 If there's no region, the current line will be duplicated. However, if
@@ -167,6 +175,14 @@ it appears in the minibuffer prompt."
          (insert (expand-file-name filename)))
         (t
          (insert filename))))
+
+(defun local-set-keys (key def &rest bindings)
+  "Like `local-set-key' but allow for defining several bindings at once.
+`KEY' must be acceptable for `kbd'."
+  (while key
+    (local-set-key (kbd key) def)
+    (setq key (pop bindings)
+          def (pop bindings))))
 
 (defun mark-word-from-beginning (&optional arg allow-extend)
   "Set the point at the beginning of the word and call `mark-word'.

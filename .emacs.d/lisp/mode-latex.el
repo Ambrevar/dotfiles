@@ -5,17 +5,18 @@
 (require 'mode-tex)
 
 ;;; Since current buffer is a LaTeX one, we can use `local-set-key'.
-(local-set-key (kbd "C-c m") 'latex-article)
-(local-set-key (kbd "C-c C-a") 'latex-insert-table)
-(local-set-key (kbd "C-c C-c") 'latex-smallcaps)
-(local-set-key (kbd "C-c C-e") 'latex-emph)
-(local-set-key (kbd "C-c C-l") 'latex-slanted)
-(local-set-key (kbd "C-c C-s") 'latex-insert-section)
-(local-set-key (kbd "C-c C-u") 'latex-superscript)
-(local-set-key (kbd "C-c l") 'latex-lstinline)
-(local-set-key (kbd "C-c o") 'latex-orgtbl)
-(local-set-key (kbd "C-c u") 'latex-package)
-(local-set-key (kbd "M-RET") 'latex-itemize)
+(local-set-keys
+ "C-c m" 'latex-article
+ "C-c C-a" 'latex-insert-table
+ "C-c C-c" 'latex-smallcaps
+ "C-c C-e" 'latex-emph
+ "C-c C-l" 'latex-slanted
+ "C-c C-s" 'latex-insert-section
+ "C-c C-u" 'latex-superscript
+ "C-c l" 'latex-lstinline
+ "C-c o" 'latex-orgtbl
+ "C-c u" 'latex-package
+ "M-RET" 'latex-itemize)
 
 ;; Needs dvipng.
 ;; With TeXlive, the following packages are needed: psnfss, symbol, zapfding

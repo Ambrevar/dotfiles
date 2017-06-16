@@ -91,18 +91,19 @@ Requires `call-process-to-string' from `functions'."
       (rectangle-exchange-point-and-mark)
     (helm-all-mark-rings)))
 
-(define-key mickey-minor-mode-map (kbd "M-x") 'helm-M-x)
-(define-key mickey-minor-mode-map (kbd "C-x C-f") 'helm-find-files)
-(define-key mickey-minor-mode-map (kbd "C-x c C-/") 'helm-find)
-(define-key mickey-minor-mode-map (kbd "C-x C-b") 'helm-mini)
-(define-key mickey-minor-mode-map (kbd "M-y") 'helm-show-kill-ring)
-(define-key mickey-minor-mode-map (kbd "C-x C-x") 'helm-mark-or-exchange-rect)
-(define-key mickey-minor-mode-map (kbd "M-s o") 'helm-occur)
-(define-key mickey-minor-mode-map (kbd "C-h a") 'helm-apropos)
-(define-key mickey-minor-mode-map (kbd "C-M-%") 'helm-regexp)
-(define-key mickey-minor-mode-map (kbd "C-x M-g") 'helm-grep-git-or-ag)
-(define-key mickey-minor-mode-map (kbd "C-x M-G") 'helm-do-grep-ag)
-(define-key mickey-minor-mode-map (kbd "C-x M-b") 'helm-resume) ; Convenient for god-mode.
+(define-keys mickey-minor-mode-map
+  "M-x" 'helm-M-x
+  "C-x C-f" 'helm-find-files
+  "C-x c C-/" 'helm-find
+  "C-x C-b" 'helm-mini
+  "M-y" 'helm-show-kill-ring
+  "C-x C-x" 'helm-mark-or-exchange-rect
+  "M-s o" 'helm-occur
+  "C-h a" 'helm-apropos
+  "C-M-%" 'helm-regexp
+  "C-x M-g" 'helm-grep-git-or-ag
+  "C-x M-G" 'helm-do-grep-ag
+  "C-x M-b" 'helm-resume) ; Convenient for god-mode.
 (define-key helm-find-files-map (kbd "C-c C-/") 'helm-ff-run-find-sh-command) ; Convenient for god-mode.
 
 ;;; We use the M-s prefix just like `occur'.

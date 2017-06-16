@@ -1,5 +1,7 @@
 ;;; Main options
 
+(require 'functions)
+
 ;;; Minimal UI. Run early to hide it as soon as possible.
 (setq inhibit-startup-screen t)
 (menu-bar-mode -1)
@@ -61,8 +63,9 @@
 (setq scroll-error-top-bottom t)
 
 ;;; Narrow page navigation.
-(define-key mickey-minor-mode-map (kbd "C-x M-n") (lambda () (interactive) (narrow-to-page 1)))
-(define-key mickey-minor-mode-map (kbd "C-x M-p") (lambda () (interactive) (narrow-to-page -1)))
+(define-keys mickey-minor-mode-map
+  "C-x M-n" (lambda () (interactive) (narrow-to-page 1))
+  "C-x M-p" (lambda () (interactive) (narrow-to-page -1)))
 
 ;;; Line numbers
 ;;; Adding to `find-file-hook' ensures it will work for every file, regardless of
@@ -132,10 +135,11 @@
 ;; stick to the home-row, but to avoid shadowing other binding I exceptionaly use
 ;; 'super' (normally reserved to the WM).
 (when (fboundp 'windmove-default-keybindings)
-  (define-key mickey-minor-mode-map (kbd "M-s-h") 'windmove-left)
-  (define-key mickey-minor-mode-map (kbd "M-s-j") 'windmove-down)
-  (define-key mickey-minor-mode-map (kbd "M-s-k") 'windmove-up)
-  (define-key mickey-minor-mode-map (kbd "M-s-l") 'windmove-right))
+  (define-keys mickey-minor-mode-map
+    "M-s-h" 'windmove-left
+    "M-s-j" 'windmove-down
+    "M-s-k" 'windmove-up
+    "M-s-l" 'windmove-right))
 
 ;;; Make Emacs use environment browser, or w3m if BROWSER is not set.
 (setq browse-url-generic-program
@@ -229,12 +233,12 @@
 (setq uniquify-buffer-name-style 'forward)
 
 ;;; Skeleton settings
-(require 'functions)
 ;;; Do not expand abbrevs in skeletons.
 (setq-default skeleton-further-elements '((abbrev-mode nil)))
 (turn-on-skeleton-markers)
-(define-key mickey-minor-mode-map (kbd "C->") 'skeleton-next-position)
-(define-key mickey-minor-mode-map (kbd "C-<") (lambda () (interactive) (skeleton-next-position t)))
+(define-keys mickey-minor-mode-map
+  "C->" 'skeleton-next-position
+  "C-<" (lambda () (interactive) (skeleton-next-position t)))
 
 ;;; Disable prompt (but leave warning) on git symlink.
 (setq vc-follow-symlinks t)
@@ -259,10 +263,11 @@
 ;; (define-key mickey-minor-mode-map (kbd "M-<f10>") 'toggle-frame-fullscreen)
 
 ;;; Scroll zooming.
-(define-key mickey-minor-mode-map (kbd "C-<wheel-down>") 'text-scale-decrease)
-(define-key mickey-minor-mode-map (kbd "C-<mouse-5>") 'text-scale-decrease)
-(define-key mickey-minor-mode-map (kbd "C-<wheel-up>") 'text-scale-increase)
-(define-key mickey-minor-mode-map (kbd "C-<mouse-4>") 'text-scale-increase)
+(define-keys mickey-minor-mode-map
+  "C-<wheel-down>" 'text-scale-decrease
+  "C-<mouse-5>" 'text-scale-decrease
+  "C-<wheel-up>" 'text-scale-increase
+  "C-<mouse-4>" 'text-scale-increase)
 (setq text-scale-mode-step 1.1)
 
 ;;; Sort

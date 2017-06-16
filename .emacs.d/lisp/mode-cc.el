@@ -3,14 +3,14 @@
 ;; Should we split this into mode-c and mode-c++?
 
 (dolist (map (list c-mode-map c++-mode-map))
-  (define-key map (kbd "C-c m") 'cc-main)
-  (define-key map (kbd "<f9>") 'cc-clean)
-  (define-key map (kbd "M-.") 'semantic-ia-fast-jump)
-  (define-key map (kbd "C-c C-d") 'semantic-ia-show-summary)
-  ;; (define-key map (kbd "C-c o") 'ff-find-other-file)
-  (define-key map (kbd "M-TAB") 'semantic-complete-analyze-inline))
+  (define-keys map "C-c m" 'cc-main
+    "<f9>" 'cc-clean
+    "M-." 'semantic-ia-fast-jump
+    "C-c C-d" 'semantic-ia-show-summary
+    "M-TAB" 'semantic-complete-analyze-inline))
+;; (define-key map (kbd "C-c o") 'ff-find-other-file)
 
-;;; C additional keywords.
+;;; C additional faces.
 ;;; Useless in quasi-monochrome.
 ;; (dolist (mode '(c-mode c++-mode))
 ;;   (font-lock-add-keywords

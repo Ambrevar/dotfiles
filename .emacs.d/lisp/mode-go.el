@@ -4,14 +4,15 @@
 ;; https://github.com/dominikh/go-mode.el/issues/191
 (use-local-map go-mode-map)
 
-(local-set-key (kbd "C-c m") 'go-main)
-(local-set-key (kbd "C-c D") 'godoc)
+(local-set-keys
+ "C-c m" 'go-main
+ "C-c D" 'godoc
+ "C-c d" 'godoc-at-point
+ "M-." #'godef-jump
+ "<f9>" 'go-metalinter
+ "C-<f9>" (lambda () (interactive) (go-metalinter t)))
 (when (require 'helm-go-package nil t)
   (local-set-key (kbd "C-c D") 'helm-go-package))
-(local-set-key (kbd "C-c d") 'godoc-at-point)
-(local-set-key (kbd "M-.") #'godef-jump)
-(local-set-key (kbd "<f9>") 'go-metalinter)
-(local-set-key (kbd "C-<f9>") (lambda () (interactive) (go-metalinter t)))
 
 (when (require 'company-go nil t)
   (add-hook 'go-mode-hook 'company-mode)
