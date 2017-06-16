@@ -52,7 +52,7 @@ To view where the bindings are set in your config files, lookup
 (add-to-list 'auto-mode-alist '("\\.asy$" . asy-mode))
 
 ;;; BBCode
-(add-to-list 'package-selected-packages 'bbcode-mode)
+(nconc package-selected-packages '(bbcode-mode))
 (with-eval-after-load 'bbcode-mode (require 'mode-bbcode))
 
 ;;; Bibtex
@@ -61,7 +61,7 @@ To view where the bindings are set in your config files, lookup
 (add-hook 'bibtex-mode-hook 'turn-off-indent-tabs)
 
 ;;; Bison/Flex
-(add-to-list 'package-selected-packages 'bison-mode)
+(nconc package-selected-packages '(bison-mode))
 
 ;;; C/C++
 (with-eval-after-load 'cc-mode (require 'mode-cc))
@@ -72,21 +72,16 @@ To view where the bindings are set in your config files, lookup
 (add-hook 'change-log-mode-hook 'change-log-set-indent-rules)
 
 ;;; GLSL
-(add-to-list 'package-selected-packages 'glsl-mode)
+(nconc package-selected-packages '(glsl-mode))
 
 ;;; Go
-(add-to-list 'package-selected-packages 'go-mode)
-(add-to-list 'package-selected-packages 'go-eldoc)
-(add-to-list 'package-selected-packages 'go-guru)
-(add-to-list 'package-selected-packages 'go-rename)
-(add-to-list 'package-selected-packages 'helm-go-package)
-(add-to-list 'package-selected-packages 'company-go)
+(nconc package-selected-packages '(go-mode go-eldoc go-guru go-rename helm-go-package company-go))
 (with-eval-after-load 'go-mode (require 'mode-go))
 
 ;;; Graphviz dot
 ;; The view command is broken but the preview command works (it displays the PNG
 ;; in a new window), which is enough and probably not worth a fix.
-(add-to-list 'package-selected-packages 'graphviz-dot-mode)
+(nconc package-selected-packages '(graphviz-dot-mode))
 
 ;;; JavaScript
 (add-hook 'js-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
@@ -101,7 +96,7 @@ To view where the bindings are set in your config files, lookup
 (setq inferior-lisp-program "clisp")
 
 ;;; Lua
-(add-to-list 'package-selected-packages 'lua-mode)
+(nconc package-selected-packages '(lua-mode))
 (with-eval-after-load 'lua-mode (require 'mode-lua))
 
 ;;; Mail with Mutt support.
@@ -125,7 +120,7 @@ e-mail."
 (with-eval-after-load 'make-mode (require 'mode-makefile))
 
 ;;; Markdown
-(add-to-list 'package-selected-packages 'markdown-mode)
+(nconc package-selected-packages '(markdown-mode))
 (with-eval-after-load 'markdown-mode (require 'mode-markdown))
 
 ;;; Matlab / Octave
@@ -141,7 +136,7 @@ e-mail."
 (add-to-list 'auto-mode-alist '("\\.mac" . maxima-mode))
 
 ;;; Mediawiki
-(add-to-list 'package-selected-packages 'mediawiki)
+(nconc package-selected-packages '(mediawiki))
 (add-to-list 'auto-mode-alist '("\\.wiki\\'" . mediawiki-mode))
 (with-eval-after-load 'mediawiki (require 'mode-mediawiki))
 
@@ -157,7 +152,7 @@ e-mail."
 (add-hook 'perl-mode-hook 'perl-set-compiler)
 
 ;;; po
-(add-to-list 'package-selected-packages 'po-mode)
+(nconc package-selected-packages '(po-mode))
 
 ;;; Python
 (with-eval-after-load 'python (require 'mode-python))
@@ -172,7 +167,7 @@ e-mail."
 ;;; rc
 (add-to-list 'auto-mode-alist '("rc\\'" . sh-mode))
 ;;; Fish
-(add-to-list 'package-selected-packages 'fish-mode)
+(nconc package-selected-packages '(fish-mode))
 (defun fish-check-buffer ()
   (when (string-match "/tmp/tmp\..*\.fish" (buffer-file-name))
     (when (require 'with-editor nil t) (with-editor-mode))
@@ -188,8 +183,7 @@ e-mail."
 ;;; LaTeX is defined in the same file as TeX. To separate the loading, we add it
 ;;; to the hook.
 (add-hook 'latex-mode-hook (lambda () (require 'mode-latex)))
-(add-to-list 'package-selected-packages 'latex-math-preview)
-(add-to-list 'package-selected-packages 'latex-pretty-symbols)
+(nconc package-selected-packages '(latex-math-preview latex-pretty-symbols))
 (require 'latex-pretty-symbols nil t)
 
 ;;; Web forms.
@@ -212,8 +206,7 @@ e-mail."
 ;;; Minor modes and features.
 
 ;;; Company
-(add-to-list 'package-selected-packages 'company)
-(add-to-list 'package-selected-packages 'helm-company)
+(nconc package-selected-packages '(company helm-company))
 (when (require 'company nil t)
   (setq company-idle-delay nil))
 
@@ -223,7 +216,7 @@ e-mail."
 
 ;;; Eshell
 ;;; Extend completion.
-(add-to-list 'package-selected-packages 'pcomplete-extension)
+(nconc package-selected-packages '(pcomplete-extension))
 ;;; Eshell gets initialized differently.  When eshell.el first gets loaded, only
 ;;; the core is defined and `eshell-load-hook' is called. For every Eshell
 ;;; session, `eshell-mode' is run: it resets `eshell-mode-map', it loads
@@ -240,25 +233,14 @@ e-mail."
 (add-hook 'eshell-first-time-mode-hook (lambda () (require 'mode-eshell)))
 
 ;;; Evil
-(add-to-list 'package-selected-packages 'evil)
-(add-to-list 'package-selected-packages 'evil-leader)
-(add-to-list 'package-selected-packages 'evil-ediff)
-(add-to-list 'package-selected-packages 'evil-magit)
-(add-to-list 'package-selected-packages 'evil-mc)
-(add-to-list 'package-selected-packages 'evil-mc-extras)
-(add-to-list 'package-selected-packages 'linum-relative)
+(nconc package-selected-packages '(evil evil-leader evil-ediff evil-magit evil-mc evil-mc-extras linum-relative))
 (when (require 'evil nil t) (require 'tool-evil))
 
 ;;; GUD (GDB, etc.)
 (with-eval-after-load 'gud (require 'mode-gud))
 
 ;;; Helm
-(add-to-list 'package-selected-packages 'helm)
-(add-to-list 'package-selected-packages 'helm-descbinds)
-(add-to-list 'package-selected-packages 'helm-ls-git)
-;; (add-to-list 'package-selected-packages 'helm-pt) ; No need?
-(add-to-list 'package-selected-packages 'wgrep-helm)
-(add-to-list 'package-selected-packages 'wgrep-pt)
+(nconc package-selected-packages '(helm helm-descbinds helm-ls-git wgrep-helm wgrep-pt))
 (when (require 'helm-config nil t) (require 'tool-helm))
 
 ;;; Indentation engine fix.
@@ -268,7 +250,7 @@ e-mail."
 ;; (add-to-list 'package-selected-packages 'dtrt-indent)
 
 ;;; Magit
-(add-to-list 'package-selected-packages 'magit)
+(nconc package-selected-packages '(magit))
 (when (require 'magit nil t)
   (set-face-foreground 'magit-branch-remote "orange red")
   (setq git-commit-summary-max-length fill-column)
