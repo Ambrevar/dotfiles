@@ -9,7 +9,6 @@
 ;; (local-set-key "\C-l" 'eshell/ls)
 
 (setq
- eshell-directory-name (concat emacs-cache-folder "eshell")
  eshell-ls-use-colors t
  eshell-destroy-buffer-when-process-dies t)
 

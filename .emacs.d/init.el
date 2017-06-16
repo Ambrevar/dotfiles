@@ -240,6 +240,8 @@ e-mail."
 ;;; `eshell-first-time-mode-hook' is run too late to remove modules globally, so we do it here.
 (with-eval-after-load 'em-banner
   (setq-default eshell-modules-list (delq 'eshell-banner eshell-modules-list)))
+(with-eval-after-load 'eshell
+  (setq eshell-directory-name (concat emacs-cache-folder "eshell")))
 (add-hook 'eshell-first-time-mode-hook (lambda () (require 'mode-eshell)))
 
 ;;; Evil
