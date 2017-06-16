@@ -217,20 +217,7 @@ e-mail."
 ;;; Eshell
 ;;; Extend completion.
 (nconc package-selected-packages '(pcomplete-extension))
-;;; Eshell gets initialized differently.  When eshell.el first gets loaded, only
-;;; the core is defined and `eshell-load-hook' is called. For every Eshell
-;;; session, `eshell-mode' is run: it resets `eshell-mode-map', it loads
-;;; modules, runs their hooks and concludes with `eshell-first-time-mode-hook'
-;;; (for the first session only) and `eshell-mode-hook'.
-;;;
-;;; TODO: Move most features inside (with-eval-after-load 'eshell ...)
-;;; `eshell-directory-name' is part of the core.
-(with-eval-after-load 'eshell
-  (setq eshell-directory-name (concat emacs-cache-folder "eshell")))
-;;; The banner is a module.
-(with-eval-after-load 'em-banner
-  (setq-default eshell-modules-list (delq 'eshell-banner eshell-modules-list)))
-(add-hook 'eshell-first-time-mode-hook (lambda () (require 'mode-eshell)))
+(with-eval-after-load 'eshell (require 'mode-eshell))
 
 ;;; Evil
 (nconc package-selected-packages '(evil evil-leader evil-ediff evil-magit evil-mc evil-mc-extras linum-relative))
