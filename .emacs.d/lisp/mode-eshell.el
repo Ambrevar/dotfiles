@@ -28,7 +28,9 @@
 
 (nconc eshell-visual-commands
        '("abook" "cmus" "fzf" "htop" "mpv" "mutt" "ncdu" "newsbeuter" "ranger"))
-(add-to-list 'eshell-visual-subcommands '("git" "log" "diff" "show"))
+(setq eshell-visual-subcommands
+      '(("git" "log" "diff" "show")
+        ("sudo" "vi")))
 
 ;;; Alias management possibilities:
 ;;; - Version eshell-alias and store it in user-emacs-directory. Simplest and
