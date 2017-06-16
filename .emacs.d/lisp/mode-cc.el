@@ -112,15 +112,14 @@ restored."
     (statement-block-intro . +)
     (statement-cont . +)
     (substatement-label . 0)
-    (substatement-open . 0)
-    )))
+    (substatement-open . 0))))
+(nconc c-default-style '((c-mode . "ambrevar") (c++-mode . "ambrevar")))
 
 ;;; Note that in Emacs 24, cc-mode calls its hooks manually in each mode init
 ;;; function. Since cc modes belong to prog-mode, each hook is called another
 ;;; time at the end of the initialization. No big deal since we only set some
 ;;; variables.
 (dolist (hook '(c-mode-hook c++-mode-hook))
-  (add-hook-and-eval hook (lambda () (c-set-style "ambrevar"))) ;; We override existing values.
   (when (require 'company nil t)
     (add-hook-and-eval hook 'company-mode))
   (add-hook-and-eval hook 'cc-set-compiler))
