@@ -103,6 +103,7 @@ See `eshell' for the numeric prefix arg."
 (require 'evil-magit nil t)
 ;; C-j/k is the default, M-j/k is more intuitive if we use it for helm.
 (when (and (require 'magit-mode nil t) (require 'evil-magit nil t))
+  (evil-magit-define-key evil-magit-state 'magit-mode-map "<" 'magit-section-up)
   (evil-magit-define-key evil-magit-state 'magit-mode-map "M-j" 'magit-section-forward)
   (evil-magit-define-key evil-magit-state 'magit-mode-map "M-k" 'magit-section-backward))
 
