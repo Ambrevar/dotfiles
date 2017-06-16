@@ -10,6 +10,16 @@
   ;; (define-key map (kbd "C-c o") 'ff-find-other-file)
   (define-key map (kbd "M-TAB") 'semantic-complete-analyze-inline))
 
+;;; C additional keywords.
+;;; Useless in quasi-monochrome.
+;; (dolist (mode '(c-mode c++-mode))
+;;   (font-lock-add-keywords
+;;    mode
+;;    '(("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)
+;;      ;; Functions.
+;;      ("\\<\\(\\sw+\\)(" 1 'font-lock-function-name-face)
+;;      ("\\<\\(\\sw+\\)<\\sw+>(" 1 'font-lock-function-name-face))))
+
 (when (require 'company nil t)
   (local-set-key (kbd "M-TAB") (if (require 'helm-company nil t) 'helm-company 'company-complete)))
 

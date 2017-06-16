@@ -8,6 +8,10 @@
 (setq-default sh-shell-file sh-shell-file)
 ;; (setq-default sh-shell 'sh)
 
+;;; Faces
+(set-face-foreground 'sh-heredoc "#00bfff")
+(set-face-bold 'sh-heredoc nil)
+
 (defun sh-set-compiler ()
   "Set shell interpreter.
 Set `sh-shell', `sh-shell-file' and `compile-command' according to the following rules:

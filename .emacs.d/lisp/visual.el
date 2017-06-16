@@ -56,25 +56,10 @@
 (set-face-foreground 'font-lock-type-face (face-foreground 'default))
 (set-face-foreground 'font-lock-variable-name-face (face-foreground 'default))
 
-;;; Sh-mode
-(with-eval-after-load 'sh-script
-  (set-face-foreground 'sh-heredoc "#00bfff")
-  (set-face-bold 'sh-heredoc nil))
-
 ;;; Compilation mode
 (with-eval-after-load 'compile
   (set-face-foreground 'compilation-column-number "cyan")
   (set-face-foreground 'compilation-line-number "cyan"))
-
-;;; C additional keywords.
-;;; Useless in quasi-monochrome.
-;; (dolist (mode '(c-mode c++-mode))
-;;   (font-lock-add-keywords
-;;    mode
-;;    '(("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)
-;;      ;; Functions.
-;;      ("\\<\\(\\sw+\\)(" 1 'font-lock-function-name-face)
-;;      ("\\<\\(\\sw+\\)<\\sw+>(" 1 'font-lock-function-name-face))))
 
 ;;; Ediff
 (with-eval-after-load 'ediff-init
