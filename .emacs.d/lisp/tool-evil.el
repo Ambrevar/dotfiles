@@ -61,6 +61,11 @@ See `eshell' for the numeric prefix arg."
 (evil-define-key 'motion help-mode-map (kbd "S-SPC") 'scroll-up-command)
 (evil-define-key 'motion help-mode-map (kbd "C-o") 'help-go-back)
 
+;;; Term mode should be in emacs state. It confuses 'vi' otherwise.
+;;; Upstream will not change this:
+;;; https://github.com/emacs-evil/evil/issues/854#issuecomment-309085267
+(evil-set-initial-state 'term-mode 'emacs)
+
 ;; This depends on the local configuration of Helm which might not be loaded
 ;; yet.
 (with-eval-after-load 'tool-helm
