@@ -297,7 +297,7 @@ globalkeys = awful.util.table.join(
 		{description = "toggle maximize", group = "screen"}),
 
 	-- Standard program
-	awful.key({ modkey, }, "Return", function () awful.spawn(terminal) end,
+	awful.key({ modkey, }, "Return", function () awful.spawn("emacsclient -a '' -n -c -e '(eshell t)'") end,
 		{description = "open a terminal", group = "launcher"}),
 	awful.key({ modkey, "Control" }, "r", awesome.restart,
 		{description = "reload awesome", group = "awesome"}),
