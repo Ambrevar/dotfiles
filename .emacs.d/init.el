@@ -282,21 +282,6 @@ e-mail."
   (setq magit-diff-refine-hunk 'all)
   (global-set-key (kbd "C-x g") 'magit-status))
 
-;;; Multiple cursors
-;;; TODO: Delete?
-;; (add-to-list 'package-selected-packages 'multiple-cursors)
-;; (add-to-list 'package-selected-packages 'phi-search)
-(when (require 'multiple-cursors nil t)
-  (setq mc/list-file (concat emacs-cache-folder "mc-lists.el"))
-  ;; Load the file at the new location.
-  (load mc/list-file t)
-  (define-key mickey-minor-mode-map (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
-  (define-key mickey-minor-mode-map (kbd "C-x M-r") 'mc/edit-lines)
-  (define-key mickey-minor-mode-map (kbd "C-x M-m") 'mc/mark-more-like-this-extended)
-  (define-key mickey-minor-mode-map (kbd "C-x M-l") 'mc/mark-all-like-this-dwim)
-  ;; Search compatible with mc.
-  (require 'phi-search nil t))
-
 ;;; PDF
 (autoload 'pdf-view "tool-pdf" nil t)
 (autoload 'pdf-compress "tool-pdf" nil t)
