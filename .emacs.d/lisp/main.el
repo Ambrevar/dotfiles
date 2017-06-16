@@ -269,7 +269,7 @@
 (setq sort-fold-case t)
 
 ;;; Replace not-so-useful comment-dwim binding.
-(define-key mickey-minor-mode-map "\M-;" 'comment-line)
+(global-set-key "\M-;" 'comment-line)
 
 ;;; In case you find eldoc too distracting.
 ;; (global-eldoc-mode 0)
