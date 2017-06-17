@@ -21,8 +21,8 @@
 
 ;; The evil-leader package might seem worthless but it centralizes the leader
 ;; key configuration and automatically makes it available in relevant states.
-;; We do not map <leader><leader> to most used command since it could be
-;; misleading. Maybe the helm buffer menu would be interesting to have though?
+;; Should we map <leader<leader> to the most used command, e.g. `helm-mini'?
+;; Could be misleading.
 (when (require 'evil-leader nil t)
   ;; Leader mode and its key must be set before evil-mode.
   (evil-leader/set-leader "<SPC>")
@@ -159,10 +159,14 @@ See `eshell' for the numeric prefix arg."
   (evil-leader/set-key-for-mode 'org-mode "a" 'org-agenda))
 (evil-define-key 'normal org-mode-map
   (kbd "M-<return>") (lambda () (interactive) (evil-insert 1) (org-meta-return))
-  "\M-l" 'org-shiftright
-  "\M-h" 'org-shiftleft
-  "\M-k" 'org-shiftup
-  "\M-j" 'org-shiftdown
+  "L" 'org-shiftright
+  "H" 'org-shiftleft
+  "K" 'org-shiftup
+  "J" 'org-shiftdown
+  "\M-l" 'org-metaright
+  "\M-h" 'org-metaleft
+  "\M-k" 'org-metaup
+  "\M-j" 'org-metadown
   "\M-L" 'org-shiftmetaright
   "\M-H" 'org-shiftmetaleft
   "\M-K" 'org-shiftmetaup
@@ -209,11 +213,6 @@ See `eshell' for the numeric prefix arg."
 (add-hook 'eshell-first-time-mode-hook 'evil/eshell-set-keys)
 
 ;; TODO: When point is on "> ", helm-find-files looks up parent folder. Prevent that.
-
-;; DONE: eshell-mode-map gets reset on new shells. Make it permanent. Hook? Hook looks good:
-;; https://stackoverflow.com/questions/11946113/emacs-eshell-how-to-read-content-of-command-line-on-pressing-ret
-
-;; DONE: Cannot kill emacs when eshell has started: "text is read only"
 
 ;; TODO: Make Evil commands react more dynamically with read-only text.
 ;; Add support for I, C, D, S, s, c*, d*, R, r.
