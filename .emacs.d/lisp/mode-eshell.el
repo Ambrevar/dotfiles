@@ -8,9 +8,13 @@
 
 (setq eshell-directory-name (concat emacs-cache-folder "eshell"))
 
-;;; Remove the banner module.
-(with-eval-after-load 'em-banner
-  (setq-default eshell-modules-list (delq 'eshell-banner eshell-modules-list)))
+;;; Use native 'sudo', system sudo asks for password every time.
+(require 'em-tramp)
+
+(with-eval-after-load "esh-module" ; Need a file name because `provide' is before the definition of `eshell-modules-list.
+  ;; Don't print the banner.
+  (delq 'eshell-banner eshell-modules-list)
+  (nconc eshell-modules-list '(eshell-tramp)))
 
 (setq
  eshell-ls-use-colors t
