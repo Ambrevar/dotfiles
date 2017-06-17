@@ -416,6 +416,9 @@ This does not interfere with `subword-mode'."
   (set (make-local-variable 'paragraph-start) "
 "))
 
+(defun turn-off-nobreak-char-display ()
+  (set (make-local-variable 'nobreak-char-display) nil))
+
 (defun turn-on-skeleton-markers ()
   "Allow skeletons to make markers to ease field navigation."
   (add-hook 'skeleton-end-hook 'skeleton-make-markers))
