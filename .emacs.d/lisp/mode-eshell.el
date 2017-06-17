@@ -12,9 +12,6 @@
 (with-eval-after-load 'em-banner
   (setq-default eshell-modules-list (delq 'eshell-banner eshell-modules-list)))
 
-;;; TODO: Bind "ls"? No need if we have Ctrl-e?
-;; (local-set-key "\C-l" 'eshell/ls)
-
 (setq
  eshell-ls-use-colors t
  eshell-destroy-buffer-when-process-dies t)
@@ -55,7 +52,6 @@
 ;;; `eshell/alias' is too slow as it reads and write the file on each definition.
 ;;; Let's write manually instead.
 ;;; TODO: Add pacman functions from fish config.
-;;; TODO: Compare system tools and lisp equivalents of ls and grep.
 (with-eval-after-load 'em-alias
   (eshell-read-aliases-list)
   (dolist
@@ -64,8 +60,6 @@
          ("la" "ls -lAh $*")
          ("ll" "ls -lh $*")
          ;; ("ls" "ls -F $*")
-         ;; ("grep" "grep --color=auto")
-         ;; ("cal" "*cal -m $*")
          ;; ("emacs" "find-file $1")
          ;; ("em" "find-file $*")
          ("cp" "*cp -i $*")
@@ -77,16 +71,17 @@
 
 ;;; Emacs' standard functions fail when output has empty lines.
 ;;; This implementation is more reliable.
-;;; TODO: Test when eshell-highlight-prompt is nil.
-;;; TODO: Report upstream.
+;;; DONE: Reported upstream:
+;;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27405
 (with-eval-after-load 'em-prompt
   (defun eshell-next-prompt (n)
     "Move to end of Nth next prompt in the buffer.
 See `eshell-prompt-regexp'."
     (interactive "p")
     (re-search-forward eshell-prompt-regexp nil t n)
-    (while (not (get-text-property (line-beginning-position) 'read-only) )
-      (re-search-forward eshell-prompt-regexp nil t n))
+    (when eshell-highlight-prompt
+      (while (not (get-text-property (line-beginning-position) 'read-only) )
+        (re-search-forward eshell-prompt-regexp nil t n)))
     (eshell-skip-prompt))
 
   (defun eshell-previous-prompt (n)
