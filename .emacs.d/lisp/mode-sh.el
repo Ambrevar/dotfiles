@@ -4,8 +4,7 @@
 
 (setq sh-indent-comment t)
 
-(set (make-local-variable 'sh-shell-file) "/bin/sh") ; Useful for the first time this hook is loaded.
-(setq-default sh-shell-file sh-shell-file)
+(setq-default sh-shell-file "/bin/sh")
 ;; (setq-default sh-shell 'sh)
 
 ;;; Faces
