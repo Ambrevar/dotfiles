@@ -17,7 +17,7 @@ bind \cT fzf-file-widget
 function fzf-select -d 'Eval commandline, fzf result and print out selection'
 	set -l cmd (commandline -j)
 	[ "$cmd" ]; or return
-	eval $cmd | eval (__fzfcmd) -m --select-1 --exit-0 | string join ' ' | read -l result
+	eval $cmd | fzf -m --select-1 --exit-0 | string join ' ' | read -l result
 	[ "$result" ]; and commandline -j -- $result
 	commandline -f repaint
 end
@@ -53,7 +53,7 @@ function fzf-complete -d 'fzf completion and print selection back to commandline
 
 	set -l complist (complete -C$cmd)
 	set -l result
-	string join -- \n $complist | sort | eval (__fzfcmd) -m --select-1 --exit-0 --header '(commandline)' | cut -f1 | while read -l r; set result $result $r; end
+	string join -- \n $complist | sort | fzf -m --select-1 --exit-0 --header '(commandline)' | cut -f1 | while read -l r; set result $result $r; end
 
 	set prefix (string sub -s 1 -l 1 -- (commandline -t))
 	for i in (seq (count $result))
@@ -84,7 +84,7 @@ bind -M insert \e\t complete
 
 function fzf-bcd-widget -d 'cd backwards'
 	set -lx FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS $FZF_BCD_OPTS"
-	pwd | awk -v RS=/ '/\n/ {exit} {p=p $0 "/"; print p}' | tac | eval (__fzfcmd) +m --select-1 --exit-0 | read -l result
+	pwd | awk -v RS=/ '/\n/ {exit} {p=p $0 "/"; print p}' | tac | fzf +m --select-1 --exit-0 | read -l result
 	[ "$result" ]; and cd $result
 	commandline -f repaint
 end
