@@ -37,7 +37,7 @@
 
 (with-eval-after-load 'em-term
   (nconc eshell-visual-commands
-         '("abook" "cmus" "fzf" "htop" "mpv" "mutt" "ncdu" "newsbeuter" "ranger"))
+         '("abook" "cmus" "fzf" "htop" "mpsyt" "mpv" "mutt" "ncdu" "newsbeuter" "ranger"))
   (setq eshell-visual-subcommands
         '(("git" "log" "diff" "show")
           ("sudo" "vi"))))
