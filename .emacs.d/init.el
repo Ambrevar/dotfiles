@@ -210,6 +210,9 @@ e-mail."
 (when (require 'company nil t)
   (setq company-idle-delay nil))
 
+;;; Debbugs
+(nconc package-selected-packages '(debbugs))
+
 ;;; Dired
 ;;; Dired is loaded after init.el, so configure it later.
 (with-eval-after-load 'dired (require 'mode-dired))
