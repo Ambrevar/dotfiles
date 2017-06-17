@@ -42,7 +42,7 @@ To view where the bindings are set in your config files, lookup
 ;;; Major modes
 
 ;;; Assembly
-(add-to-list 'package-selected-packages 'nasm-mode)
+(push 'nasm-mode package-selected-packages)
 
 ;;; Asymptote
 (add-to-list 'load-path "/usr/share/asymptote")

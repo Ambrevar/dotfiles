@@ -14,7 +14,7 @@
 (with-eval-after-load "esh-module" ; Need a file name because `provide' is before the definition of `eshell-modules-list.
   ;; Don't print the banner.
   (delq 'eshell-banner eshell-modules-list)
-  (nconc eshell-modules-list '(eshell-tramp)))
+  (push 'eshell-tramp eshell-modules-list))
 
 (setq
  eshell-ls-use-colors t
