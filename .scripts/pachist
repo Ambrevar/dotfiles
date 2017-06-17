@@ -1,0 +1,14 @@
+#!/bin/sh
+
+if [ "$1" = "-h" ]; then
+	cat <<EOF>&2
+Usage: ${0##*/} [COUNT]
+
+List pacman's COUNT last installed packages
+
+EOF
+	exit
+fi
+
+[ -z "$1" ] && set -- 30
+expac -t '%F %T' '%-8l %n' | sort -rn | head -$1

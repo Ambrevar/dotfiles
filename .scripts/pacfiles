@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ "$1" = "-h" ]; then
+	cat <<EOF>&2
+Usage: ${0##*/} [PACKAGES]
+
+List of files in pacman packages sorted by size
+
+EOF
+	exit
+fi
+
+pacman -Qlq "$@" | grep -v '/$' | xargs du -cbh | sort -h

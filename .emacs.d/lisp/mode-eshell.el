@@ -51,7 +51,6 @@
 ;;;
 ;;; `eshell/alias' is too slow as it reads and write the file on each definition.
 ;;; Let's write manually instead.
-;;; TODO: Add pacman functions from fish config.
 (with-eval-after-load 'em-alias
   (eshell-read-aliases-list)
   (dolist
