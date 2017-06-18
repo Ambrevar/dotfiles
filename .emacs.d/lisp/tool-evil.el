@@ -40,6 +40,10 @@ See `eshell' for the numeric prefix arg."
       (eshell (or arg t))
     (eshell arg)))
 
+(defun org-find-first-agenda ()
+  (interactive)
+  (find-file (car org-agenda-files)))
+
 (evil-leader/set-key
   "RET" 'eshell-or-new-session
   "\\" 'toggle-window-split
@@ -47,6 +51,7 @@ See `eshell' for the numeric prefix arg."
   "e" 'find-file
   "k" 'kill-this-buffer
   "o" 'delete-other-windows
+  "t" 'org-find-first-agenda
   "w" 'evil-window-next
   "|" 'swap-windows)
 (when (require 'magit nil t)
