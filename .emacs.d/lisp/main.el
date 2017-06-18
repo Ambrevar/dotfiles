@@ -276,7 +276,7 @@
 ;;; Replace not-so-useful comment-dwim binding.
 (global-set-key "\M-;" 'comment-line)
 
-;;; In case you find eldoc too distracting.
+;;; Eldoc: In case you find it too distracting.
 ;; (global-eldoc-mode 0)
 
 ;;; Replace `kill-buffer' binding by `kill-this-buffer'.
@@ -300,5 +300,8 @@
    ("Asia/Ho_Chi_Minh" "Vietnam")
    ("Australia/Melbourne" "Melbourne")
    ("Africa/Nairobi" "Uganda")))
+
+;;; Tramp
+(setq tramp-persistency-file-name (concat emacs-cache-folder "tramp"))
 
 (provide 'main)
