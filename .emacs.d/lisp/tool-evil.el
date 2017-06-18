@@ -85,11 +85,11 @@ See `eshell' for the numeric prefix arg."
     "M-\\" 'helm-toggle-resplit-and-swap-windows ; Or use M-t (helm standard binding is C-t).
     "C-f" 'helm-next-page
     "C-b" 'helm-previous-page
+    "M-h" 'helm-next-source
     "M-j" 'helm-next-line
     "M-k" 'helm-previous-line
-    "M-h" 'helm-next-source
+    "M-l" 'helm-execute-persistent-action ;(kbd "RET")
     "M-H" 'describe-key
-    "M-l" (kbd "RET")
     "<escape>" 'helm-keyboard-quit)
   (dolist (keymap (list helm-buffer-map))
     (define-key keymap (kbd "M-o") 'helm-buffer-switch-other-window))
@@ -97,8 +97,8 @@ See `eshell' for the numeric prefix arg."
     (define-keys keymap
       "M-o" 'helm-ff-run-switch-other-window
       "M-." 'helm-ff-run-find-sh-command
-      "M-l" 'helm-execute-persistent-action
       "M-h" 'helm-find-files-up-one-level
+      "M-l" 'helm-execute-persistent-action
       "M-H" 'describe-key)))
 
 ;; Add support for magit.
@@ -131,15 +131,14 @@ See `eshell' for the numeric prefix arg."
   (evil-define-key 'normal (eval keymap) [escape] 'abort-recursive-edit)
   (evil-define-key 'normal (eval keymap) [return] 'exit-minibuffer))
 
-(add-hook
- 'minibuffer-setup-hook
- '(lambda ()
-    (set (make-local-variable 'evil-echo-state) nil)
-    ;; (evil-set-initial-state 'mode 'insert) is the evil-proper
-    ;; way to do this, but the minibuffer doesn't have a mode.
-    ;; The alternative is to create a minibuffer mode (here), but
-    ;; then it may conflict with other packages' if they do the same.
-    (evil-insert 1)))
+(defun evil-minibuffer-setup ()
+  (set (make-local-variable 'evil-echo-state) nil)
+  ;; (evil-set-initial-state 'mode 'insert) is the evil-proper
+  ;; way to do this, but the minibuffer doesn't have a mode.
+  ;; The alternative is to create a minibuffer mode (here), but
+  ;; then it may conflict with other packages' if they do the same.
+  (evil-insert 1))
+(add-hook 'minibuffer-setup-hook 'evil-minibuffer-setup)
 ;; Because of the above minibuffer-setup-hook, some bindings need be reset.
 (evil-define-key 'normal evil-ex-completion-map [escape] 'abort-recursive-edit)
 (evil-define-key 'insert evil-ex-completion-map "\M-p" 'previous-complete-history-element)
