@@ -3,6 +3,7 @@
 
 ;;; We use the TeX setup.
 (require 'mode-tex)
+(require 'latex-pretty-symbols nil t)
 
 ;;; Since current buffer is a LaTeX one, we can use `local-set-key'.
 (local-set-keys

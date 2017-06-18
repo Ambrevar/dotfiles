@@ -184,7 +184,6 @@ e-mail."
 ;;; to the hook.
 (add-hook 'latex-mode-hook (lambda () (require 'mode-latex)))
 (nconc package-selected-packages '(latex-math-preview latex-pretty-symbols))
-(require 'latex-pretty-symbols nil t)
 
 ;;; Torrent
 (nconc package-selected-packages '(tranmission))
