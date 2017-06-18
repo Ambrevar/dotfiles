@@ -22,9 +22,10 @@
 
  helm-apropos-fuzzy-match t
  helm-buffers-fuzzy-matching t
- ;; helm-eshell-fuzzy-match t
+ helm-eshell-fuzzy-match t
  helm-imenu-fuzzy-match t
- helm-M-x-fuzzy-match t)
+ helm-M-x-fuzzy-match t
+ helm-recentf-fuzzy-match t)
 
 ;;; From https://github.com/emacs-helm/helm/issues/362.
 ;;; This is not perfect with evil mode as the cursor type is not right in the header line and the evil cursor remains in the minibufferl
