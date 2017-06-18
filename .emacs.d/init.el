@@ -7,6 +7,12 @@
   (when (version< emacs-version minver)
     (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
 
+;; Temporarily reduce garbage collection during startup. Inspect `gcs-done'.
+(defun reset-gc-cons-threshold ()
+  (setq gc-cons-threshold (car (get 'gc-cons-threshold 'standard-value))))
+(setq gc-cons-threshold (* 64 1024 1024))
+(add-hook 'after-init-hook 'reset-gc-cons-threshold)
+
 (defvar mickey-minor-mode-map (make-keymap) "Keymap for `mickey-minor-mode'.")
 (define-minor-mode mickey-minor-mode
   "The mode's keymap allows for overriding all global and major mode keys.
