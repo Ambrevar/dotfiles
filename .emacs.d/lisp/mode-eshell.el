@@ -43,7 +43,7 @@
   (nconc eshell-visual-commands
          '("abook" "cmus" "fzf" "htop" "mpsyt" "mpv" "mutt" "ncdu" "newsbeuter" "ranger"))
   (setq eshell-visual-subcommands
-        '(("git" "log" "diff" "show")
+        '(("git" "log" "l" "lol" "diff" "d" "dc" "show")
           ("sudo" "vi"))))
 
 ;;; Alias management possibilities:
