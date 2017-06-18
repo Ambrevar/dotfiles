@@ -126,7 +126,7 @@
    (mapcar
     (lambda (keyword) `(,(concat "\\<\\(" keyword "\\):") 1 font-lock-warning-face prepend))
     '("FIXME\\(([^)]+)\\)?" "HACK" "OPTIMIZE\\(([^)]+)\\)?" "REVIEW\\(([^)]+)\\)?" "TODO\\(([^)]+)\\)?" "UNDONE" "UX" "WARNING" "XXX"))))
-(dolist (hook '(prog-mode-hook tex-mode-hook texinfo-mode-hook))
+(dolist (hook '(prog-mode-hook text-mode-hook))
   (add-hook hook 'fontify-comment-tag))
 
 ;;; Man pages
