@@ -186,6 +186,9 @@ e-mail."
 (nconc package-selected-packages '(latex-math-preview latex-pretty-symbols))
 (require 'latex-pretty-symbols nil t)
 
+;;; Torrent
+(nconc package-selected-packages '(tranmission))
+
 ;;; Web forms.
 ;;; Remove auto-fill in web edits because wikis and forums do not like it.
 ;;; This works for qutebrowser, but may need changes for other browsers.
