@@ -289,4 +289,16 @@
 ;;; Trash
 (setq delete-by-moving-to-trash t)
 
+;;; Display Time
+(setq
+ zoneinfo-style-world-list
+ '(("UTC" "-")
+   ("Europe/Paris" "France Germany Sweden")
+   ("Asia/Calcutta" "India")
+   ("Indian/Mauritius" "Mauritius")
+   ("Africa/Tunis" "Tunisia")
+   ("Asia/Ho_Chi_Minh" "Vietnam")
+   ("Australia/Melbourne" "Melbourne")
+   ("Africa/Nairobi" "Uganda")))
+
 (provide 'main)
