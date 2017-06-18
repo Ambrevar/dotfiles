@@ -143,4 +143,8 @@ Requires `call-process-to-string' from `functions'."
 (with-eval-after-load 'desktop
   (add-to-list 'desktop-globals-to-save 'helm-ff-history))
 
+(helm-top-poll-mode)
+;;; Column indices might need some customizing. See `helm-top-command' and
+;;; https://github.com/emacs-helm/helm/issues/1586.
+
 (provide 'tool-helm)
