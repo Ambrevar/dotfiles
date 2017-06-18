@@ -239,7 +239,7 @@ e-mail."
 (require 'smiext "tool-smiext")
 
 ;;; Indent style guessing.
-;; (add-to-list 'package-selected-packages 'dtrt-indent)
+;; (nconc 'package-selected-packages '(dtrt-indent))
 
 ;;; Magit
 (nconc package-selected-packages '(magit))
@@ -250,11 +250,12 @@ e-mail."
   (global-set-key (kbd "C-x g") 'magit-status))
 
 ;;; PDF
+;;; TODO: Replace with pdf-tools package?
 (autoload 'pdf-view "tool-pdf" nil t)
 (autoload 'pdf-compress "tool-pdf" nil t)
 
 ;;; Translator
-;; TODO: Find alternative package.
+;;; TODO: Find alternative package.
 (autoload 'itranslate "tool-itranslate" nil t)
 (autoload 'itranslate-lines "tool-itranslate" nil t)
 (autoload 'itranslate-region "tool-itranslate" nil t)

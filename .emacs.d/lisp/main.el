@@ -70,8 +70,8 @@
 ;;; Line numbers
 ;;; Adding to `find-file-hook' ensures it will work for every file, regardless of
 ;;; the mode, but it won't work for buffers without files nor on mode change.
-(add-hook 'prog-mode-hook 'linum-mode)
-(add-hook 'text-mode-hook 'linum-mode)
+(dolist (hook '(prog-mode-hook text-mode-hook))
+  (add-hook hook 'linum-mode))
 ;;; Emacs-nox does not display a fringe after the linum: Setting linum-format in
 ;;; linum-before-numbering-hook is not the right approach as it will change the
 ;;; type of linum-format in the middle. See linum-update-window.
