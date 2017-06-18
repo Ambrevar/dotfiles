@@ -413,6 +413,7 @@ This does not interfere with `subword-mode'."
   (setq indent-tabs-mode t))
 
 (defun turn-on-newline-paragraph ()
+  "Unconditionally make of newlines the start of a paragraph."
   (set (make-local-variable 'paragraph-start) "
 "))
 
@@ -426,6 +427,10 @@ This does not interfere with `subword-mode'."
 (defun turn-off-linum ()
   "Unconditionally turn off Linum mode."
   (linum-mode 0))
+
+(defun turn-on-tab-width-to-8 ()
+  "Unconditionally set tab width to 8."
+  (setq tab-width 8))
 
 (defun unfill-paragraph ()
   "Paragraph at point is unwrapped on one single line."

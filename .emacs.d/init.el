@@ -139,10 +139,10 @@ To view where the bindings are set in your config files, lookup
 ;; (nconc 'package-selected-packages '(dtrt-indent))
 
 ;;; Lisp
-;;; Should not use tabs.
 (dolist (hook '(lisp-mode-hook emacs-lisp-mode-hook))
   (add-hook hook 'turn-on-fmt-before-save)
-  (add-hook hook 'turn-off-indent-tabs))
+  (add-hook hook 'turn-on-tab-width-to-8) ; Because some existing code uses tabs.
+  (add-hook hook 'turn-off-indent-tabs)) ; Should not use tabs.
 (define-key lisp-mode-shared-map "\M-." 'find-symbol-at-point)
 ;;; Common LISP
 (setq inferior-lisp-program "clisp")
