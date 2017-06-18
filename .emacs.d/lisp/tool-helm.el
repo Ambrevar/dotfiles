@@ -4,25 +4,26 @@
   (helm-descbinds-mode))
 
 (when (require 'wgrep-helm nil t)
-  (setq wgrep-auto-save-buffer t)
-  (setq wgrep-enable-key (kbd "C-x C-q")))
+  (setq wgrep-auto-save-buffer t
+        wgrep-enable-key (kbd "C-x C-q")))
 
 ;;; Require helm-ls-git unconditionally, this makes following config easier.
 (require 'helm-ls-git)
 
 (helm-mode 1)
 ;; (helm-autoresize-mode 1)
-(setq helm-follow-mode-persistent t)
 (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
-;; (setq helm-split-window-default-side 'right)
-(setq helm-reuse-last-window-split-state t)
-(setq helm-findutils-search-full-path t)
-(setq helm-display-header-line nil)
 
-(setq helm-apropos-fuzzy-match t)
-(setq helm-buffers-fuzzy-matching t)
-(setq helm-imenu-fuzzy-match t)
-(setq helm-M-x-fuzzy-match t)
+(setq
+ helm-follow-mode-persistent t
+ helm-reuse-last-window-split-state t
+ helm-display-header-line nil
+ helm-findutils-search-full-path t
+
+ helm-apropos-fuzzy-match t
+ helm-buffers-fuzzy-matching t
+ helm-imenu-fuzzy-match t
+ helm-M-x-fuzzy-match t)
 
 ;;; Add bindings to `helm-apropos`.
 ;;; https://github.com/emacs-helm/helm/issues/1140
@@ -126,6 +127,7 @@ Requires `call-process-to-string' from `functions'."
 
 (setq helm-source-names-using-follow '("Occur" "Git-Grep" "PT" "mark-ring" "Org Headings"))
 
+;;; From https://www.reddit.com/r/emacs/comments/5q922h/removing_dot_files_in_helmfindfiles_menu/.
 (defun helm-skip-dots (old-func &rest args)
   "Skip . and .. initially in helm-find-files.  First call OLD-FUNC with ARGS."
   (apply old-func args)
