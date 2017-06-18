@@ -25,6 +25,19 @@
  helm-imenu-fuzzy-match t
  helm-M-x-fuzzy-match t)
 
+;;; From https://github.com/emacs-helm/helm/issues/362.
+;;; This is not perfect with evil mode as the cursor type is not right in the header line and the evil cursor remains in the minibufferl
+;;; https://emacs.stackexchange.com/questions/17058/change-cursor-type-in-helm-header-line#17097
+(setq helm-echo-input-in-header-line t)
+(defun helm-hide-minibuffer-maybe ()
+  (when (with-helm-buffer helm-echo-input-in-header-line)
+    (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
+      (overlay-put ov 'window (selected-window))
+      (overlay-put ov 'face (let ((bg-color (face-background 'default nil)))
+                              `(:background ,bg-color :foreground ,bg-color)))
+      (setq-local cursor-type nil))))
+(add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
+
 ;;; Add bindings to `helm-apropos`.
 ;;; https://github.com/emacs-helm/helm/issues/1140
 (defun helm-def-source--emacs-commands (&optional default)
