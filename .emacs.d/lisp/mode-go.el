@@ -9,8 +9,8 @@
  "C-c D" 'godoc
  "C-c d" 'godoc-at-point
  "M-." #'godef-jump
- "<f9>" 'go-metalinter
- "C-<f9>" (lambda () (interactive) (go-metalinter t)))
+ "<f5>" 'go-metalinter
+ "C-<f5>" (lambda () (interactive) (go-metalinter t)))
 (when (require 'helm-go-package nil t)
   (local-set-key (kbd "C-c D") 'helm-go-package))
 

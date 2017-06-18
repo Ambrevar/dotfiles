@@ -21,8 +21,9 @@
 (define-keys tex-mode-map
   "C-c C-f" nil
   "C-c C-b" nil
-  "<f9>" 'tex-pdf-view
-  "<f10>" 'tex-compile)
+  "<f5>" 'tex-pdf-view
+  "C-<f6>" 'compile
+  "<f6>" 'tex-compile)
 
 (defvar-local tex-masterfile nil
   "The file that should be compiled. Useful for modular documents.")

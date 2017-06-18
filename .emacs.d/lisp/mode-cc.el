@@ -4,7 +4,7 @@
 
 (dolist (map (list c-mode-map c++-mode-map))
   (define-keys map "C-c m" 'cc-main
-    "<f9>" 'cc-clean
+    "<f5>" 'cc-clean
     "M-." 'semantic-ia-fast-jump
     "C-c C-d" 'semantic-ia-show-summary
     "M-TAB" 'semantic-complete-analyze-inline))

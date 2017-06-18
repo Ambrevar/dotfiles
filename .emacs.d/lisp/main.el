@@ -96,7 +96,7 @@
 (require 'tool-page) ; for `page-number-mode'
 (add-hook 'prog-mode-hook 'page-number-mode)
 
-(define-key mickey-minor-mode-map (kbd "<f5>") 'whitespace-mode)
+(define-key mickey-minor-mode-map (kbd "<f9>") 'whitespace-mode)
 (setq
  whitespace-style
  '(face empty indentation space-after-tab space-before-tab tab-mark trailing))
@@ -191,12 +191,12 @@
   (when (eq major-mode 'compilation-mode)
     (ansi-color-apply-on-region compilation-filter-start (point-max))))
 (add-hook 'compilation-filter-hook 'compilation-colorize-buffer)
-;;; Don't set these bindings in mickey as we might have to override them from
-;;; mode hooks.
-(global-set-key (kbd "C-<f10>") 'compile)
-(global-set-key (kbd "<f10>") (lambda () (interactive) (compile compile-command))) ; Do not use recompile since we want to change de compilation folder to the current buffer.
-(global-set-key (kbd "<f11>") 'previous-error)
-(global-set-key (kbd "<f12>") 'next-error)
+(global-set-key (kbd "<f7>") 'previous-error)
+(global-set-key (kbd "<f8>") 'next-error)
+(define-keys prog-mode-map
+  "C-<f6>" 'compile
+  ;; Do not use `recompile' since we want to change de compilation folder to the current buffer.
+  "<f6>" (lambda () (interactive) (compile compile-command)))
 
 (defadvice desktop-owner (after pry-from-cold-dead-hands activate)
   "Don't allow dead emacsen to own the desktop file."
@@ -258,9 +258,6 @@
 
 ;;; Display defun in mode line.
 (which-function-mode)
-
-;;; Replace maximized binding for fullscreen.
-;; (define-key mickey-minor-mode-map (kbd "M-<f10>") 'toggle-frame-fullscreen)
 
 ;;; Scroll zooming.
 (define-keys mickey-minor-mode-map
