@@ -1,5 +1,5 @@
 ;;; LaTeX
-;;; Warning: This file is loaded from a hook.
+;;; WARNING: This file is loaded from a hook.
 
 ;;; We use the TeX setup.
 (require 'mode-tex)

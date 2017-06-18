@@ -73,8 +73,8 @@ WARNING: this may slow down editing on big files."
 
 
 
-;;; Fix forward-page. Previously, when the point was at the end of the page,
-;;; going forward would skip 1 page.  Changed:
+;;; REVIEW: Fix forward-page. Previously, when the point was at the end of the
+;;; page, going forward would skip 1 page.  Changed:
 ;;
 ;;    (if (bolp) (forward-char 1))
 ;;
@@ -84,7 +84,7 @@ WARNING: this may slow down editing on big files."
 ;;
 ;;; I do not know why the (bolp) condition was used since it does not match the
 ;;; above comment.
-;;; TODO: Fix reported to http://debbugs.gnu.org/cgi/bugreport.cgi?bug=20663.
+;;; Reported at http://debbugs.gnu.org/cgi/bugreport.cgi?bug=20663.
 (defun forward-page (&optional count)
   "Move forward to page boundary.
 With prefix or COUNT, repeat, or go back if negative.

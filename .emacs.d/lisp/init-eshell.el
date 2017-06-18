@@ -76,10 +76,9 @@
 ;;; `nobreak-char-display' makes some output look weird, e.g. with 'tree'.
 (add-hook 'eshell-mode-hook 'turn-off-nobreak-char-display)
 
-;;; Emacs' standard functions fail when output has empty lines.
+;;; REVIEW: Emacs' standard functions fail when output has empty lines.
 ;;; This implementation is more reliable.
-;;; DONE: Reported upstream:
-;;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27405
+;;; Reported at https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27405.
 (with-eval-after-load 'em-prompt
   (defun eshell-next-prompt (n)
     "Move to end of Nth next prompt in the buffer.

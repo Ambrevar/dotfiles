@@ -100,10 +100,10 @@
 (setq
  whitespace-style
  '(face empty indentation space-after-tab space-before-tab tab-mark trailing))
-;;; `whitespace-report' will mistakenly always report empty lines at
+;;; REVIEW: `whitespace-report' will mistakenly always report empty lines at
 ;;; beginning and end of buffer as long as there is at least one empty line.
 ;;; `whitespace-cleanup' works properly however.
-;;; DONE: Reported at http://debbugs.gnu.org/cgi/bugreport.cgi?bug=23740.
+;;; Reported at http://debbugs.gnu.org/cgi/bugreport.cgi?bug=23740.
 ;; (setq whitespace-action '(report-on-bogus))
 
 ;;; WARNING: this can break some configuration files needing whitespaces at the

@@ -14,8 +14,8 @@
 ;; - linum-relative: integrates well but not with fringe string, must be a function.
 ;; - relative-line-number: linum must be disabled before running this.
 (when (require 'linum-relative nil t)
-  ;; TODO: Current symbol is displayed on all lines when we run `occur', `set-variables',
-  ;; `helm-occur', etc: https://github.com/coldnew/linum-relative/issues/40
+  ;; REVIEW: Current symbol is displayed on all lines when we run `occur', `set-variables',
+  ;; `helm-occur', etc: https://github.com/coldnew/linum-relative/issues/40.
   (setq linum-relative-current-symbol "")
   (linum-relative-toggle))
 

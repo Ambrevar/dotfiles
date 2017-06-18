@@ -1,5 +1,5 @@
 ;;; Dired
-;;; Warning: This file is loaded unconditionally on startup.
+;;; WARNING: This file is loaded unconditionally on startup.
 ;;; We cannot assume that current buffer is in dired-mode.
 
 (define-keys dired-mode-map
