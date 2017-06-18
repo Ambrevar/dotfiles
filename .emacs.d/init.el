@@ -177,6 +177,11 @@ e-mail."
 ;;; Srt (subtitles)
 (add-to-list 'auto-mode-alist '("\\.srt\\'" . text-mode))
 
+;;; StackExchange
+(nconc package-selected-packages '(sx))
+(with-eval-after-load 'sx
+  (setq sx-cache-directory (concat emacs-cache-folder "sx")))
+
 ;;; TeX / LaTeX / Texinfo
 (with-eval-after-load 'tex-mode (require 'mode-tex))
 (with-eval-after-load 'texinfo (require 'mode-texinfo))
