@@ -252,7 +252,7 @@
 ;; (add-hook 'prog-mode-hook (lambda () (local-set-key (kbd "C-c h") 'hs-toggle-hiding)))
 
 ;;; Move mouse away.
-;; (mouse-avoidance-mode 'banish)
+(mouse-avoidance-mode 'banish)
 ;;; That binding is not very useful and gets in the way of C-<mouse-1>.
 (global-unset-key (kbd "C-<down-mouse-1>"))
 
