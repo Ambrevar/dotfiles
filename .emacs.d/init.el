@@ -108,6 +108,9 @@ To view where the bindings are set in your config files, lookup
 (nconc package-selected-packages '(pcomplete-extension))
 (with-eval-after-load 'eshell (require 'init-eshell))
 
+;;; Esup
+(nconc package-selected-packages '(esup))
+
 ;;; GLSL
 (nconc package-selected-packages '(glsl-mode))
 
