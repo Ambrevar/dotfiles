@@ -216,8 +216,6 @@ See `eshell' for the numeric prefix arg."
   (evil-define-key '(normal insert) eshell-mode-map "\M-l" 'eshell-forward-argument))
 (add-hook 'eshell-first-time-mode-hook 'evil/eshell-set-keys)
 
-;; TODO: When point is on "> ", helm-find-files looks up parent folder. Prevent that.
-
 ;; TODO: Make Evil commands react more dynamically with read-only text.
 ;; Add support for I, C, D, S, s, c*, d*, R, r.
 ;; See https://github.com/emacs-evil/evil/issues/852

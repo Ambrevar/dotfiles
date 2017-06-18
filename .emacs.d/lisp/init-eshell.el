@@ -18,6 +18,9 @@
 
 (setq
  eshell-ls-use-colors t
+ ;; ffap-shell-prompt-regexp changes the behaviour of `helm-find-files' when
+ ;; point is on prompt. I find this disturbing.
+ ffap-shell-prompt-regexp nil
  eshell-destroy-buffer-when-process-dies t)
 
 ;; TODO: Hour is printed twice. We don't need to set this?
