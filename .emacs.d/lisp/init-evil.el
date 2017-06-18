@@ -218,24 +218,10 @@ See `eshell' for the numeric prefix arg."
 
 ;; TODO: Make Evil commands react more dynamically with read-only text.
 ;; Add support for I, C, D, S, s, c*, d*, R, r.
-;; See https://github.com/emacs-evil/evil/issues/852
-(defun evil/eshell-delete-whole-line ()
-  (interactive)
-  (if (not (get-text-property (line-beginning-position) 'read-only))
-      (evil-delete-whole-line (line-beginning-position) (line-end-position))
-    (eshell-return-to-prompt) ; Difference with eshell-bol?
-    (evil-delete-line (point) (line-end-position))))
-;; (evil-define-key 'normal eshell-mode-map "dd" 'evil/eshell-delete-whole-line)
-(defun evil/eshell-change-whole-line ()
-  (interactive)
-  (if (not (get-text-property (line-beginning-position) 'read-only))
-      (evil-change-whole-line (line-beginning-position) (line-end-position))
-    (eshell-return-to-prompt) ; Difference with eshell-bol?
-    (evil-change-line (point) (line-end-position))))
-;; (evil-define-key 'normal eshell-mode-map "cc" 'evil/eshell-change-whole-line)
+;; See https://github.com/emacs-evil/evil/issues/852.
 
 ;; Go-to-definition.
-;; From https://emacs.stackexchange.com/questions/608/evil-map-keybindings-the-vim-way
+;; From https://emacs.stackexchange.com/questions/608/evil-map-keybindings-the-vim-way.
 (evil-global-set-key
  'normal "gd"
  (lambda () (interactive)
@@ -249,9 +235,6 @@ See `eshell' for the numeric prefix arg."
 (when (require 'evil-mc nil t)
   (global-evil-mc-mode 1)
   (define-key evil-mc-key-map (kbd "C-<mouse-1>") 'evil-mc-toggle-cursor-on-click)
-  ;; Don't shadow evil's standard keys. TODO: Is \C-t ever needed? Evil's normal binding is `pop-tag-mark'.
-  ;; (evil-define-key '(normal visual) evil-mc-key-map "\C-t" nil)
-
   (set-face-attribute 'evil-mc-cursor-default-face nil :inherit nil :inverse-video nil :box "white")
   (when (require 'evil-mc-extras nil t)
     (global-evil-mc-extras-mode 1)))

@@ -58,6 +58,9 @@
 ;;; `eshell/alias' is too slow as it reads and write the file on each definition.
 ;;; Let's write manually instead.
 (with-eval-after-load 'em-alias
+  ;;; TODO: This conflicts with `evil-define-key' during the initialization of
+  ;;; the first eshell session: the map in insert-mode will not take the changes
+  ;;; into account. Going to normal mode and back to insert mode works.
   (eshell-read-aliases-list)
   (dolist
       (alias
