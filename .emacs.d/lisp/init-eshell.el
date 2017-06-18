@@ -74,6 +74,7 @@
 ;;; Hooks
 ;;; `nobreak-char-display' makes some output look weird, e.g. with 'tree'.
 (add-hook 'eshell-mode-hook 'turn-off-nobreak-char-display)
+(add-hook 'eshell-mode-hook 'eshell-cmpl-initialize)
 
 ;;; REVIEW: Emacs' standard functions fail when output has empty lines.
 ;;; This implementation is more reliable.

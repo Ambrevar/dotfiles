@@ -22,6 +22,7 @@
 
  helm-apropos-fuzzy-match t
  helm-buffers-fuzzy-matching t
+ ;; helm-eshell-fuzzy-match t
  helm-imenu-fuzzy-match t
  helm-M-x-fuzzy-match t)
 
@@ -69,12 +70,10 @@
              :fuzzy-match helm-ls-git-fuzzy-match)))
 
 ;;; Eshell
-(add-hook
- 'eshell-mode-hook
- (lambda ()
-   (eshell-cmpl-initialize)
-   (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
-   (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)))
+(defun helm/eshell-set-keys ()
+  (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
+  (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history))
+(add-hook 'eshell-mode-hook 'helm/eshell-set-keys)
 
 ;;; Do not exclude any files from 'git grep'.
 (setq helm-grep-git-grep-command "git --no-pager grep -n%cH --color=always --full-name -e %p -- %f")
