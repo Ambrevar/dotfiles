@@ -108,7 +108,6 @@ Requires `call-process-to-string' from `functions'."
 (define-keys mickey-minor-mode-map
   "M-x" 'helm-M-x
   "C-x C-f" 'helm-find-files
-  "C-x c C-/" 'helm-find
   "C-x C-b" 'helm-mini
   "M-y" 'helm-show-kill-ring
   "C-x C-x" 'helm-mark-or-exchange-rect
@@ -116,15 +115,13 @@ Requires `call-process-to-string' from `functions'."
   "C-h a" 'helm-apropos
   "C-M-%" 'helm-regexp
   "C-x M-g" 'helm-grep-git-or-ag
-  "C-x M-G" 'helm-do-grep-ag
-  "C-x M-b" 'helm-resume) ; Convenient for god-mode.
-(define-key helm-find-files-map (kbd "C-c C-/") 'helm-ff-run-find-sh-command) ; Convenient for god-mode.
+  "C-x M-G" 'helm-do-grep-ag)
 
 ;;; We use the M-s prefix just like `occur'.
 (define-key prog-mode-map "\M-sf" 'helm-semantic-or-imenu)
 ;;; The text-mode-map binding targets structured text modes like Markdown.
 (define-key text-mode-map "\M-sf" 'helm-semantic-or-imenu)
-(with-eval-after-load "org"
+(with-eval-after-load 'org
   (define-key org-mode-map "\M-sf" 'helm-org-in-buffer-headings))
 
 (set-face-background 'helm-source-header "white")

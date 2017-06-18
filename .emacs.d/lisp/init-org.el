@@ -16,9 +16,6 @@
  indent-tab-mode nil)
 
 ;;; Agendas.
-;;; If you want to add other agendas in a local file, use the following code:
-;; (with-eval-after-load "org"
-;;   (add-to-list 'org-agenda-files "/path/to/agenda.org"))
 (add-to-list 'org-agenda-files "~/personal/todo/todo.org")
 
 ;;; Set PDF association in Org-mode (was Evince by default).
