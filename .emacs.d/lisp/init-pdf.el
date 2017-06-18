@@ -60,4 +60,4 @@ It FILE is not a PDF, the extension is automatically replaced by
            (executable-find pdf-viewer))
       (apply 'start-process "dummy" nil pdf-viewer pdf pdf-viewer-args))))
 
-(provide 'tool-pdf)
+(provide 'init-pdf)

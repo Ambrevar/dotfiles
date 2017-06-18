@@ -7,4 +7,4 @@
 
 (add-hook 'lua-mode-hook 'lua-set-compiler)
 
-(provide 'mode-lua)
+(provide 'init-lua)

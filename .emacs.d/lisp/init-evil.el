@@ -73,7 +73,7 @@ See `eshell' for the numeric prefix arg."
 
 ;; This depends on the local configuration of Helm which might not be loaded
 ;; yet.
-(with-eval-after-load 'tool-helm
+(with-eval-after-load 'init-helm
   (evil-leader/set-key
     "b" 'helm-mini
     "e" 'helm-find-files
@@ -205,7 +205,7 @@ See `eshell' for the numeric prefix arg."
 ;;; `eshell-mode-map' is reset when Eshell is initialized in `eshell-mode'. We
 ;;; need to add bindings to `eshell-first-time-mode-hook'.
 (defun evil/eshell-set-keys ()
-  (with-eval-after-load 'tool-helm
+  (with-eval-after-load 'init-helm
     (evil-define-key 'insert eshell-mode-map "\C-e" 'helm-find-files))
   (evil-define-key 'normal eshell-mode-map "\M-k" 'eshell-previous-prompt)
   (evil-define-key 'normal eshell-mode-map "\M-j" 'eshell-next-prompt)
@@ -258,4 +258,4 @@ See `eshell' for the numeric prefix arg."
   (when (require 'evil-mc-extras nil t)
     (global-evil-mc-extras-mode 1)))
 
-(provide 'tool-evil)
+(provide 'init-evil)

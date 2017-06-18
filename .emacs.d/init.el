@@ -39,7 +39,6 @@ To view where the bindings are set in your config files, lookup
 (require 'visual nil t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Major modes
 
 ;;; Assembly
 (push 'nasm-mode package-selected-packages)
@@ -53,7 +52,7 @@ To view where the bindings are set in your config files, lookup
 
 ;;; BBCode
 (nconc package-selected-packages '(bbcode-mode))
-(with-eval-after-load 'bbcode-mode (require 'mode-bbcode))
+(with-eval-after-load 'bbcode-mode (require 'init-bbcode))
 
 ;;; Bibtex
 (setq bibtex-entry-format '(opts-or-alts required-fields numerical-fields whitespace realign last-comma delimiters braces sort-fields))
@@ -64,27 +63,60 @@ To view where the bindings are set in your config files, lookup
 (nconc package-selected-packages '(bison-mode))
 
 ;;; C/C++
-(with-eval-after-load 'cc-mode (require 'mode-cc))
+(with-eval-after-load 'cc-mode (require 'init-cc))
 
 ;;; ChangeLog
 (defun change-log-set-indent-rules ()
   (setq tab-width 2 left-margin 2))
 (add-hook 'change-log-mode-hook 'change-log-set-indent-rules)
 
+;;; Company
+(nconc package-selected-packages '(company helm-company))
+(when (require 'company nil t)
+  (setq company-idle-delay nil))
+
+;;; Debbugs
+(nconc package-selected-packages '(debbugs))
+
+;;; Dired
+;;; Dired is loaded after init.el, so configure it later.
+(with-eval-after-load 'dired (require 'init-dired))
+
+;;; Evil
+(nconc package-selected-packages '(evil evil-leader evil-ediff evil-magit evil-mc evil-mc-extras linum-relative))
+(when (require 'evil nil t) (require 'init-evil))
+
+;;; Eshell
+;;; Extend completion.
+(nconc package-selected-packages '(pcomplete-extension))
+(with-eval-after-load 'eshell (require 'init-eshell))
+
 ;;; GLSL
 (nconc package-selected-packages '(glsl-mode))
 
 ;;; Go
 (nconc package-selected-packages '(go-mode go-eldoc go-guru go-rename helm-go-package company-go))
-(with-eval-after-load 'go-mode (require 'mode-go))
+(with-eval-after-load 'go-mode (require 'init-go))
 
 ;;; Graphviz dot
 ;; The view command is broken but the preview command works (it displays the PNG
 ;; in a new window), which is enough and probably not worth a fix.
 (nconc package-selected-packages '(graphviz-dot-mode))
 
+;;; GUD (GDB, etc.)
+(with-eval-after-load 'gud (require 'init-gud))
 ;;; JavaScript
 (add-hook 'js-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
+
+;;; Helm
+(nconc package-selected-packages '(helm helm-descbinds helm-ls-git))
+(when (require 'helm-config nil t) (require 'init-helm))
+
+;;; Indentation engine fix.
+(require 'smiext "init-smiext")
+
+;;; Indentation style guessing.
+;; (nconc 'package-selected-packages '(dtrt-indent))
 
 ;;; Lisp
 ;;; Should not use tabs.
@@ -97,7 +129,15 @@ To view where the bindings are set in your config files, lookup
 
 ;;; Lua
 (nconc package-selected-packages '(lua-mode))
-(with-eval-after-load 'lua-mode (require 'mode-lua))
+(with-eval-after-load 'lua-mode (require 'init-lua))
+
+;;; Magit
+(nconc package-selected-packages '(magit))
+(when (require 'magit nil t)
+  (set-face-foreground 'magit-branch-remote "orange red")
+  (setq git-commit-summary-max-length fill-column)
+  (setq magit-diff-refine-hunk 'all)
+  (global-set-key (kbd "C-x g") 'magit-status))
 
 ;;; Mail with Mutt support.
 (add-hook 'mail-mode-hook 'mail-text)
@@ -117,11 +157,11 @@ e-mail."
 (add-hook 'find-file-hook 'mutt-check-buffer)
 
 ;;; Makefile
-(with-eval-after-load 'make-mode (require 'mode-makefile))
+(with-eval-after-load 'make-mode (require 'init-makefile))
 
 ;;; Markdown
 (nconc package-selected-packages '(markdown-mode))
-(with-eval-after-load 'markdown-mode (require 'mode-markdown))
+(with-eval-after-load 'markdown-mode (require 'init-markdown))
 
 ;;; Matlab / Octave
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode)) ; matlab
@@ -138,10 +178,15 @@ e-mail."
 ;;; Mediawiki
 (nconc package-selected-packages '(mediawiki))
 (add-to-list 'auto-mode-alist '("\\.wiki\\'" . mediawiki-mode))
-(with-eval-after-load 'mediawiki (require 'mode-mediawiki))
+(with-eval-after-load 'mediawiki (require 'init-mediawiki))
 
 ;;; Org-mode
-(with-eval-after-load 'org (require 'mode-org))
+(with-eval-after-load 'org (require 'init-org))
+
+;;; PDF
+;;; TODO: Replace with pdf-tools package?
+(autoload 'pdf-view "init-pdf" nil t)
+(autoload 'pdf-compress "init-pdf" nil t)
 
 ;;; Perl
 (defun perl-set-indent-rules ()
@@ -155,13 +200,13 @@ e-mail."
 (nconc package-selected-packages '(po-mode))
 
 ;;; Python
-(with-eval-after-load 'python (require 'mode-python))
+(with-eval-after-load 'python (require 'init-python))
 
 ;;; Roff / Nroff
-(with-eval-after-load 'nroff-mode (require 'mode-nroff))
+(with-eval-after-load 'nroff-mode (require 'init-nroff))
 
 ;;; Shell
-(with-eval-after-load 'sh-script (require 'mode-sh))
+(with-eval-after-load 'sh-script (require 'init-sh))
 ;;; Arch Linux PKGBUILD
 (add-to-list 'auto-mode-alist '("PKGBUILD" . sh-mode))
 ;;; rc
@@ -183,15 +228,21 @@ e-mail."
   (setq sx-cache-directory (concat emacs-cache-folder "sx")))
 
 ;;; TeX / LaTeX / Texinfo
-(with-eval-after-load 'tex-mode (require 'mode-tex))
-(with-eval-after-load 'texinfo (require 'mode-texinfo))
+(with-eval-after-load 'tex-mode (require 'init-tex))
+(with-eval-after-load 'texinfo (require 'init-texinfo))
 ;;; LaTeX is defined in the same file as TeX. To separate the loading, we add it
 ;;; to the hook.
-(add-hook 'latex-mode-hook (lambda () (require 'mode-latex)))
+(add-hook 'latex-mode-hook (lambda () (require 'init-latex)))
 (nconc package-selected-packages '(latex-math-preview latex-pretty-symbols))
 
 ;;; Torrent
 (nconc package-selected-packages '(tranmission))
+
+;;; Translator
+;;; TODO: Find alternative package.
+(autoload 'itranslate "init-itranslate" nil t)
+(autoload 'itranslate-lines "init-itranslate" nil t)
+(autoload 'itranslate-region "init-itranslate" nil t)
 
 ;;; Web forms.
 ;;; Remove auto-fill in web edits because wikis and forums do not like it.
@@ -202,6 +253,11 @@ e-mail."
     (auto-fill-mode -1)))
 (add-hook 'find-file-hook 'browser-check-buffer)
 
+;;; Wgrep
+(nconc package-selected-packages '(wgrep-helm wgrep-pt))
+(when (require 'wgrep nil t)
+  (set-face-attribute 'wgrep-face nil :inherit 'ediff-current-diff-C :foreground 'unspecified :background 'unspecified :box nil))
+
 ;;; XML / SGML
 (defun sgml-setup ()
   (setq sgml-xml-mode t)
@@ -210,84 +266,19 @@ e-mail."
 (add-hook 'sgml-mode-hook 'sgml-setup)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Minor modes and features.
-
-;;; Company
-(nconc package-selected-packages '(company helm-company))
-(when (require 'company nil t)
-  (setq company-idle-delay nil))
-
-;;; Debbugs
-(nconc package-selected-packages '(debbugs))
-
-;;; Dired
-;;; Dired is loaded after init.el, so configure it later.
-(with-eval-after-load 'dired (require 'mode-dired))
-
-;;; Eshell
-;;; Extend completion.
-(nconc package-selected-packages '(pcomplete-extension))
-(with-eval-after-load 'eshell (require 'mode-eshell))
-
-;;; Evil
-(nconc package-selected-packages '(evil evil-leader evil-ediff evil-magit evil-mc evil-mc-extras linum-relative))
-(when (require 'evil nil t) (require 'tool-evil))
-
-;;; GUD (GDB, etc.)
-(with-eval-after-load 'gud (require 'mode-gud))
-
-;;; Helm
-(nconc package-selected-packages '(helm helm-descbinds helm-ls-git wgrep-helm wgrep-pt))
-(when (require 'helm-config nil t) (require 'tool-helm))
-
-;;; Indentation engine fix.
-(require 'smiext "tool-smiext")
-
-;;; Indent style guessing.
-;; (nconc 'package-selected-packages '(dtrt-indent))
-
-;;; Magit
-(nconc package-selected-packages '(magit))
-(when (require 'magit nil t)
-  (set-face-foreground 'magit-branch-remote "orange red")
-  (setq git-commit-summary-max-length fill-column)
-  (setq magit-diff-refine-hunk 'all)
-  (global-set-key (kbd "C-x g") 'magit-status))
-
-;;; PDF
-;;; TODO: Replace with pdf-tools package?
-(autoload 'pdf-view "tool-pdf" nil t)
-(autoload 'pdf-compress "tool-pdf" nil t)
-
-;;; Translator
-;;; TODO: Find alternative package.
-(autoload 'itranslate "tool-itranslate" nil t)
-(autoload 'itranslate-lines "tool-itranslate" nil t)
-(autoload 'itranslate-region "tool-itranslate" nil t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Finalization
 
 ;;; Don't let `customize' clutter my config.
 (setq custom-file (expand-file-name "custom.el" server-socket-dir))
 (load custom-file t)
 
-;;; We need to put it at the end to make sure it doesn't get overriden by other
+;;; We need this at the very end to make sure it doesn't get overriden by other
 ;;; minor modes.
 (mickey-minor-mode 1)
 
-;;; Local hook. You can use it to set system specific variables, such as the
+;;; Local config. You can use it to set system specific variables, such as the
 ;;; external web browser or pdf viewer. You can also backport features for an
 ;;; old Emacs. For instance:
-;;
-;; (setq pdf-viewer "evince")
-;; (setq pdf-viewer-args nil)
-;;
-;; (dolist (hook '(asm-mode-hook awk-mode-hook c++-mode-hook c-mode-hook
-;;                 emacs-lisp-mode-hook lisp-mode-hook lua-mode-hook
-;;                 makefile-mode-hook octave-mode-hook perl-mode-hook
-;;                 python-mode-hook scheme-mode-hook sh-mode-hook))
-;;   (add-hook hook (lambda () (run-hooks 'prog-mode-hook))))
 ;;
 ;; (defun comment-line... ;; From emacs 25
 ;;
@@ -296,4 +287,4 @@ e-mail."
 ;; ;; Fix slow startup when network is slow. Most visible with Helm and Magit with Emacs <25.
 ;; (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
 
-(load "local" t t)
+(load "init-local" t t)

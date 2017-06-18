@@ -25,4 +25,4 @@
   "Insert truetype text."
   nil "<tt>" @ _ "</tt>" @)
 
-(provide 'mode-mediawiki)
+(provide 'init-mediawiki)

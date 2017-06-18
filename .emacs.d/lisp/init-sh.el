@@ -128,4 +128,4 @@ EOF
   "done <<EOF" > \n
   "EOF" > \n)
 
-(provide 'mode-sh)
+(provide 'init-sh)

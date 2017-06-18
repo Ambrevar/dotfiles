@@ -93,7 +93,7 @@
 (setq scroll-step 1)
 
 ;;; There is no prog-mode-hook on Emacs<24.
-(require 'tool-page) ; for `page-number-mode'
+(require 'init-page) ; for `page-number-mode'
 (add-hook 'prog-mode-hook 'page-number-mode)
 
 (define-key mickey-minor-mode-map (kbd "<f9>") 'whitespace-mode)

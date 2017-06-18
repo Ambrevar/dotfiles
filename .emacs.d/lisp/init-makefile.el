@@ -162,4 +162,4 @@ CFLAGS ?= -pedantic -std=c99 -Wall -Wextra -Wshadow
 ## END OF USER SETTINGS
 " > \n)
 
-(provide 'mode-makefile)
+(provide 'init-makefile)

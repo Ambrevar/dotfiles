@@ -23,4 +23,4 @@
 (dolist (fun '(texinfo-set-compiler reset-fill-column))
   (add-hook 'texinfo-mode-hook fun))
 
-(provide 'mode-texinfo)
+(provide 'init-texinfo)

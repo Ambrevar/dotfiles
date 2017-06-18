@@ -114,4 +114,4 @@ A page boundary is any line whose beginning matches the regexp
       (goto-char (point-min)))
     (setq count (1+ count))))
 
-(provide 'tool-page)
+(provide 'init-page)

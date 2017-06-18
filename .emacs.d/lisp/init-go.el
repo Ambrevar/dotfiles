@@ -108,4 +108,4 @@ Note that the -cover test flag is left out since it shifts line numbers."
   > @ _ \n
   "}" > \n)
 
-(provide 'mode-go)
+(provide 'init-go)

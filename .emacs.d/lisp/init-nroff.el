@@ -8,4 +8,4 @@
 (define-skeleton nroff-bold "Bold text." nil "\\fB" @ _ "\\fR" @)
 (define-skeleton nroff-italic "Italic text." nil "\\fI" @ _ "\\fR" @)
 
-(provide 'mode-nroff)
+(provide 'init-nroff)

@@ -9,4 +9,4 @@
 
 (add-hook 'markdown-mode-hook 'turn-on-newline-paragraph)
 
-(provide 'mode-markdown)
+(provide 'init-markdown)

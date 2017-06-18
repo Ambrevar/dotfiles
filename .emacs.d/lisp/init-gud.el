@@ -42,4 +42,4 @@ Do not set `gdb-show-main' to true as we handle it manually here."
   (gdb-set-window-buffer (gdb-breakpoints-buffer-name))
   (other-window 1))
 
-(provide 'mode-gud)
+(provide 'init-gud)

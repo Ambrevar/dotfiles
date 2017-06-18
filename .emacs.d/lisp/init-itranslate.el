@@ -116,4 +116,4 @@ auto-detect. Empty output defaults to English."
   (set (make-local-variable 'itranslate-lang-output)
        (read-string "Output language: " itranslate-lang-output)))
 
-(provide 'tool-itranslate)
+(provide 'init-itranslate)

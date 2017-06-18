@@ -31,7 +31,7 @@
 (require 'dired-x)
 (setq dired-omit-files "^\\.")
 
-(require 'tool-pdf) ; for `pdf-viewer'
+(require 'init-pdf) ; for `pdf-viewer'
 (setq dired-guess-shell-alist-user
       (list
        '("\\.ogg$" "mpv")
@@ -67,4 +67,4 @@
 (dolist (fun '(dired-omit-mode dired-set-listing-switches))
   (add-hook 'dired-mode-hook fun))
 
-(provide 'mode-dired)
+(provide 'init-dired)

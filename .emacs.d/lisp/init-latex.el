@@ -365,4 +365,4 @@ The table type is any value found in `latex-table-names'."
 "\\let\\verbatim\\relax%" \n
 "\\lstnewenvironment{verbatim}[1][]{\\lstset{style=custom}}{}%" > \n -)
 
-(provide 'mode-latex)
+(provide 'init-latex)

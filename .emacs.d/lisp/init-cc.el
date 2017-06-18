@@ -260,4 +260,4 @@ int main(int argc, char **argv) {" \n
   "printf(\"Copyright © %s %s\\n\", YEAR, AUTHOR);" \n
   "}" > \n)
 
-(provide 'mode-cc)
+(provide 'init-cc)

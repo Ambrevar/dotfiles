@@ -19,4 +19,4 @@
 ;; (add-to-list 'load-path "~/path/to/pydoc-info")
 ;; (require 'pydoc-info nil t)
 
-(provide 'mode-python)
+(provide 'init-python)

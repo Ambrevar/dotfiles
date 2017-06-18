@@ -98,4 +98,4 @@ See `eshell-prompt-regexp'."
     (backward-char)
     (eshell-next-prompt (- n))))
 
-(provide 'mode-eshell)
+(provide 'init-eshell)

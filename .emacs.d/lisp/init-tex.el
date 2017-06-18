@@ -87,7 +87,7 @@ This command should be safe, but there is no warranty."
 (defun tex-pdf-compress ()
   "Use `tex-masterfile' variable as default value for `pdf-compress'."
   (interactive)
-  (require 'tool-pdf)
+  (require 'init-pdf)
   (hack-local-variables)
   (let ((local-master (or tex-masterfile buffer-file-name)))
     (pdf-compress local-master)))
@@ -95,7 +95,7 @@ This command should be safe, but there is no warranty."
 (defun tex-pdf-view ()
   "Use `tex-masterfile' variable as default value for `pdf-view'."
   (interactive)
-  (require 'tool-pdf)
+  (require 'init-pdf)
   (hack-local-variables)
   (let ((local-master (or tex-masterfile buffer-file-name)))
     (pdf-view local-master)))
@@ -165,4 +165,4 @@ This does not interfere with `subword-mode'."
 (define-skeleton tex-tt "Insert truetype text." nil "{\\tt " @ _ "}" @)
 (define-skeleton tex-url "Insert URL." nil "\\url{" @ _ "}" @)
 
-(provide 'mode-tex)
+(provide 'init-tex)
