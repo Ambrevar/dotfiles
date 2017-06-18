@@ -36,8 +36,7 @@
            " "))))
 ;;; If the prompt spans over multiple lines, the regexp should match
 ;;; last line only.
-;;; Warning: This is a local variable.
-(setq eshell-prompt-regexp (setq-default eshell-prompt-regexp "^> "))
+(setq-default eshell-prompt-regexp "^> ")
 
 (with-eval-after-load 'em-term
   (nconc eshell-visual-commands
