@@ -3,6 +3,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Prerequisites
 
+(let ((minver "24.1"))
+  (when (version< emacs-version minver)
+    (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
+
 (defvar mickey-minor-mode-map (make-keymap) "Keymap for `mickey-minor-mode'.")
 (define-minor-mode mickey-minor-mode
   "The mode's keymap allows for overriding all global and major mode keys.
