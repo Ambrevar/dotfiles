@@ -261,8 +261,8 @@ e-mail."
 ;;; Finalization
 
 ;;; Don't let `customize' clutter my config.
-;;; This will prompt "File exists, but cannot be read".
-(setq custom-file "/dev/null")
+(setq custom-file (expand-file-name "custom.el" server-socket-dir))
+(load custom-file t)
 
 ;;; We need to put it at the end to make sure it doesn't get overriden by other
 ;;; minor modes.
