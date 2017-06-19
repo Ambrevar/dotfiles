@@ -56,6 +56,14 @@
 ;;; Print buffer size in mode line.
 (size-indication-mode 1)
 
+;;; Display defun in mode line.
+(which-function-mode)
+
+;;; Display battery status in mode line
+(display-battery-mode)
+;;; TODO: Battery status (%b) does not work properly.
+(setq battery-mode-line-format "[%p%%%b %t]")
+
 ;;; Kill whole line including \n.
 (setq kill-whole-line t)
 
@@ -255,9 +263,6 @@
 (mouse-avoidance-mode 'banish)
 ;;; That binding is not very useful and gets in the way of C-<mouse-1>.
 (global-unset-key (kbd "C-<down-mouse-1>"))
-
-;;; Display defun in mode line.
-(which-function-mode)
 
 ;;; Scroll zooming.
 (define-keys mickey-minor-mode-map
