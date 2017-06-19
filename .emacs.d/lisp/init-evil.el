@@ -83,37 +83,32 @@ See `eshell' for the numeric prefix arg."
     "E" 'helm-find
     "g" 'helm-grep-git-or-ag
     "G" 'helm-grep-git-all-or-ag
-    ;; "ha" 'helm-apropos
-    ;; "q" 'read-only-mode ; Bad cause in wdired, it's a different mapping.
     "r" 'helm-resume)
 
-  ;; Should we stick to M-based bindings or use C-based?
-  ;; Magit uses C-jk, helm uses C-space. Evil has C-w, C-o, C-p, C-r. Emacs has C-xC-q, C-xC-o.
+  ;; To navigate helm entries with hjkl, using the C- modifier would conflict
+  ;; with C-h (help prefix) and C-k (`evil-insert-digraph').  We use M- instead.
   (define-keys helm-map
-    "M-\\" 'helm-toggle-resplit-and-swap-windows ; Or use M-t (helm standard binding is C-t).
+    "C-\\" 'helm-toggle-resplit-and-swap-windows
     "C-f" 'helm-next-page
     "C-b" 'helm-previous-page
     "M-h" 'helm-next-source
     "M-j" 'helm-next-line
     "M-k" 'helm-previous-line
-    "M-l" 'helm-execute-persistent-action ;(kbd "RET")
-    "M-H" 'describe-key
+    "M-l" 'helm-execute-persistent-action
     "<escape>" 'helm-keyboard-quit)
-  (dolist (keymap (list helm-buffer-map))
-    (define-key keymap (kbd "M-o") 'helm-buffer-switch-other-window))
+  (define-key helm-buffer-map (kbd "C-o") 'helm-buffer-switch-other-window)
   (dolist (keymap (list helm-find-files-map helm-read-file-map))
     (define-keys keymap
       "M-o" 'helm-ff-run-switch-other-window
-      "M-." 'helm-ff-run-find-sh-command
+      "C-/" 'helm-ff-run-find-sh-command
       "M-h" 'helm-find-files-up-one-level
-      "M-l" 'helm-execute-persistent-action
-      "M-H" 'describe-key)))
+      "M-l" 'helm-execute-persistent-action)))
 
 ;; Add support for magit.
 (require 'evil-magit nil t)
-;; C-j/k is the default, M-j/k is more intuitive if we use it for helm.
 (when (and (require 'magit-mode nil t) (require 'evil-magit nil t))
   (evil-magit-define-key evil-magit-state 'magit-mode-map "<" 'magit-section-up)
+  ;; C-j/k is the default, M-j/k is more intuitive if we use it for helm.
   (evil-magit-define-key evil-magit-state 'magit-mode-map "M-j" 'magit-section-forward)
   (evil-magit-define-key evil-magit-state 'magit-mode-map "M-k" 'magit-section-backward))
 
