@@ -306,4 +306,7 @@
 ;;; Tramp
 (setq tramp-persistency-file-name (concat emacs-cache-folder "tramp"))
 
+;;; Frame title
+(setq frame-title-format (concat "%b" (unless (daemonp) " [serverless]")))
+
 (provide 'main)
