@@ -1,8 +1,11 @@
 ;; Evil
 
-;; TODO: Yank ring pasting behaves like Emacs, not Vim.
-;; TODO: show-marks with helm? Evil mixes up the mark ring. Back to where search started with C-o or ''(?).
-;; TODO: Evil seems marks in the wrong ring sometimes.
+;; TODO: helm-show-yank-ring behaves like Emacs when pasting whole lines, not like Vim.
+
+;; TODO: helm-mark-ring seems to have issues with Evil:
+;; - The first entry is not the last position but the current one.
+;; - Navigating through the marks randomly produces a "Marker points into wrong buffer" error.
+;; https://github.com/emacs-evil/evil/issues/845#issuecomment-306050231
 
 ;; TODO: M-; comments next line in VISUAL. This is because of a different
 ;; newline definition between Emacs and Vim.

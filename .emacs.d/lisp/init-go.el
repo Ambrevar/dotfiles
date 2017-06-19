@@ -1,7 +1,7 @@
 ;; Go
 
-;; TODO: Report missing `use-local-map' upstream.
-;; https://github.com/dominikh/go-mode.el/issues/191
+;; REVIEW: We should not need to use `use-local-map' here.
+;; Reported at https://github.com/dominikh/go-mode.el/issues/191.
 (use-local-map go-mode-map)
 
 (local-set-keys
