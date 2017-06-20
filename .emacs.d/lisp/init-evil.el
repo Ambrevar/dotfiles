@@ -61,13 +61,21 @@ See `eshell' for the numeric prefix arg."
   ;; Use S-SPC instead of SPC to browse commit details.
   (evil-leader/set-key "v" 'magit-status))
 
-;; Tweak motion map: useful for info-mode, help-mode, etc.
+;; Motion map: useful for `Info-mode', `help-mode', etc.
 ;; See `evil-motion-state-modes'.
 (evil-global-set-key 'motion (kbd "TAB") 'forward-button)
 (evil-global-set-key 'motion (kbd "<backtab>") 'backward-button)
-(evil-define-key 'motion Info-mode-map (kbd "S-SPC") 'Info-scroll-up)
-(evil-define-key 'motion help-mode-map (kbd "S-SPC") 'scroll-up-command)
-(evil-define-key 'motion help-mode-map (kbd "C-o") 'help-go-back)
+(evil-define-key 'motion Info-mode-map
+  (kbd "S-SPC") 'Info-scroll-up
+  "\C-f" 'Info-scroll-up
+  "\C-b" 'Info-scroll-down
+  "\M-sf" 'Info-goto-node
+  "gg" 'evil-goto-first-line)
+(evil-define-key 'motion help-mode-map
+  (kbd "S-SPC") 'scroll-up-command
+  "\C-f" 'scroll-up-command
+  "\C-b" 'scroll-down-command
+  "\C-o" 'help-go-back)
 
 ;;; Term mode should be in emacs state. It confuses 'vi' otherwise.
 ;;; Upstream will not change this:
@@ -95,14 +103,20 @@ See `eshell' for the numeric prefix arg."
     "M-j" 'helm-next-line
     "M-k" 'helm-previous-line
     "M-l" 'helm-execute-persistent-action
+    "M-." 'helm-end-of-buffer
+    "M-," 'helm-beginning-of-buffer
     "<escape>" 'helm-keyboard-quit)
-  (define-key helm-buffer-map (kbd "C-o") 'helm-buffer-switch-other-window)
+  (evil-define-key 'normal helm-map
+    "\C-f" 'helm-next-page
+    "\C-b" 'helm-previous-page)
+  (define-key helm-buffer-map (kbd "M-o") 'helm-buffer-switch-other-window)
   (dolist (keymap (list helm-find-files-map helm-read-file-map))
     (define-keys keymap
       "M-o" 'helm-ff-run-switch-other-window
       "C-/" 'helm-ff-run-find-sh-command
       "M-h" 'helm-find-files-up-one-level
-      "M-l" 'helm-execute-persistent-action)))
+      "M-l" 'helm-execute-persistent-action
+      "C-l" nil))) ; So that the header displays the above binding.
 
 ;; Add support for magit.
 (require 'evil-magit nil t)
