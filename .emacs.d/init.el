@@ -20,15 +20,6 @@
   (setq file-name-handler-alist default-file-name-handler-alist))
 (add-hook 'after-init-hook 'reset-file-name-handler-alist)
 
-(defvar mickey-minor-mode-map (make-keymap) "Keymap for `mickey-minor-mode'.")
-(define-minor-mode mickey-minor-mode
-  "The mode's keymap allows for overriding all global and major mode keys.
-To view where the bindings are set in your config files, lookup
-`mickey-minor-mode-map' over it. Example:\n
-  (define-key mickey-minor-mode-map (kbd \"C-i\") 'some-function)"
-  t " mickey" 'mickey-minor-mode-map)
-(add-hook 'minibuffer-setup-hook (lambda () (mickey-minor-mode 0)))
-
 (defvar emacs-cache-folder "~/.cache/emacs/"
   "Cache folder is everything we do not want to track along with
   the configuration files.")
@@ -98,6 +89,9 @@ To view where the bindings are set in your config files, lookup
 ;;; Dired
 ;;; Dired is loaded after init.el, so configure it later.
 (with-eval-after-load 'dired (require 'init-dired))
+
+;;; Emms
+(setq emms-directory (concat emacs-cache-folder "emms"))
 
 ;;; Evil
 (nconc package-selected-packages '(evil evil-leader evil-ediff evil-magit evil-mc evil-mc-extras linum-relative))
@@ -291,10 +285,6 @@ e-mail."
 ;;; Don't let `customize' clutter my config.
 (setq custom-file (expand-file-name "custom.el" server-socket-dir))
 (load custom-file t)
-
-;;; We need this at the very end to make sure it doesn't get overriden by other
-;;; minor modes.
-(mickey-minor-mode 1)
 
 ;;; Local config. You can use it to set system specific variables, such as the
 ;;; external web browser or pdf viewer. You can also backport features for an

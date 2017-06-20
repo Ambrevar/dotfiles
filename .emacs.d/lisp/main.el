@@ -103,7 +103,7 @@
 ;;; Line by line scrolling
 (setq scroll-step 1)
 
-(define-key mickey-minor-mode-map (kbd "<f9>") 'whitespace-mode)
+(global-set-key (kbd "<f9>") 'whitespace-mode)
 (setq
  whitespace-style
  '(face empty indentation space-after-tab space-before-tab tab-mark trailing))
@@ -121,7 +121,7 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;;; Hippie expand
-;; (define-key mickey-minor-mode-map (kbd "M-/") 'hippie-expand)
+;; (global-set-key (kbd "M-/") 'hippie-expand)
 
 ;;; Abbreviation support
 (setq-default abbrev-mode t)
@@ -142,11 +142,11 @@
 ;; stick to the home-row, but to avoid shadowing other binding I exceptionaly use
 ;; 'super' (normally reserved to the WM).
 (when (fboundp 'windmove-default-keybindings)
-  (define-keys mickey-minor-mode-map
-    "M-s-h" 'windmove-left
-    "M-s-j" 'windmove-down
-    "M-s-k" 'windmove-up
-    "M-s-l" 'windmove-right))
+  (global-set-keys
+   "M-s-h" 'windmove-left
+   "M-s-j" 'windmove-down
+   "M-s-k" 'windmove-up
+   "M-s-l" 'windmove-right))
 
 ;;; Make Emacs use environment browser, or w3m if BROWSER is not set.
 (setq browse-url-generic-program
@@ -174,7 +174,7 @@
 ;; (electric-pair-mode)
 
 ;;; Spawn terminal shortcut: WM's binding is s+RET.
-(define-key mickey-minor-mode-map (kbd "C-x M-RET") 'spawn-terminal)
+(global-set-key (kbd "C-x M-RET") 'spawn-terminal)
 
 ;;; Calendar ISO display.
 (setq calendar-week-start-day 1)
@@ -243,9 +243,9 @@
 ;;; Do not expand abbrevs in skeletons.
 (setq-default skeleton-further-elements '((abbrev-mode nil)))
 (turn-on-skeleton-markers)
-(define-keys mickey-minor-mode-map
-  "C->" 'skeleton-next-position
-  "C-<" (lambda () (interactive) (skeleton-next-position t)))
+(global-set-keys
+ "C->" 'skeleton-next-position
+ "C-<" (lambda () (interactive) (skeleton-next-position t)))
 
 ;;; Disable prompt (but leave warning) on git symlink.
 (setq vc-follow-symlinks t)
@@ -260,11 +260,11 @@
 (global-unset-key (kbd "C-<down-mouse-1>"))
 
 ;;; Scroll zooming.
-(define-keys mickey-minor-mode-map
-  "C-<wheel-down>" 'text-scale-decrease
-  "C-<mouse-5>" 'text-scale-decrease
-  "C-<wheel-up>" 'text-scale-increase
-  "C-<mouse-4>" 'text-scale-increase)
+(global-set-keys
+ "C-<wheel-down>" 'text-scale-decrease
+ "C-<mouse-5>" 'text-scale-decrease
+ "C-<wheel-up>" 'text-scale-increase
+ "C-<mouse-4>" 'text-scale-increase)
 (setq text-scale-mode-step 1.1)
 
 ;;; Sort
@@ -277,7 +277,7 @@
 ;; (global-eldoc-mode 0)
 
 ;;; Replace `kill-buffer' binding by `kill-this-buffer'.
-(define-key mickey-minor-mode-map (kbd "C-x k") 'kill-this-buffer)
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
 
 ;;; Ediff
 (setq ediff-window-setup-function 'ediff-setup-windows-plain

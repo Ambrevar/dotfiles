@@ -30,7 +30,7 @@
 Useful when bound to a key opposed to `beginning-of-defun'."
   (interactive)
   (beginning-of-defun -1))
-(define-key mickey-minor-mode-map (kbd "C-M-e") 'beginning-of-next-defun)
+(global-set-key (kbd "C-M-e") 'beginning-of-next-defun)
 
 (defun call-process-to-string (program &rest args)
   "Call PROGRAM with ARGS and return output."
@@ -80,7 +80,7 @@ there's a region, all lines that region covers will be duplicated."
         (setq end (point)))
       (if auto-fill-p (auto-fill-mode))
       (goto-char (+ origin (* (length region) arg) arg)))))
-(define-key mickey-minor-mode-map (kbd "C-x M-d") 'duplicate)
+(global-set-key (kbd "C-x M-d") 'duplicate)
 
 (defun emacs-process-p (pid)
   "If PID is the process ID of an Emacs process, return t, else nil.
@@ -148,6 +148,14 @@ of links."
           (setq target (expand-file-name file pwd))))
     (if (file-exists-p target) target nil)))
 
+(defun global-set-keys (key def &rest bindings)
+  "Like `global-set-key' but allow for defining several bindings at once.
+`KEY' must be acceptable for `kbd'."
+  (while key
+    (global-set-key (kbd key) def)
+    (setq key (pop bindings)
+          def (pop bindings))))
+
 (defun insert-and-indent (text)
   "Insert indented TEXT at point."
   (interactive "s Text: ")
@@ -198,7 +206,7 @@ ARG and ALLOW-EXTEND are the same."
          (ignore-errors (forward-char))
          (backward-word)
          (mark-word arg allow-extend))))
-(define-key mickey-minor-mode-map (kbd "M-@") 'mark-word-from-beginning)
+(global-set-key (kbd "M-@") 'mark-word-from-beginning)
 
 (defun move-border-left (arg)
   "Move window border in a natural manner.
@@ -210,7 +218,7 @@ Enlarge/Shrink by ARG columns, or 5 if ARG is nil."
   (interactive "P")
   (if (= (count-windows) 2)
       (move-border-left-or-right arg t)))
-(define-key mickey-minor-mode-map (kbd "M-(") 'move-border-left)
+(global-set-key (kbd "M-(") 'move-border-left)
 
 (defun move-border-left-or-right (arg dir-left)
   "Wrapper around ‘move-border-left’ and ‘move-border-right’.
@@ -230,7 +238,7 @@ If DIR-LEFT is t, then move left, otherwise move right."
   (interactive "P")
   (if (= (count-windows) 2)
       (move-border-left-or-right arg nil)))
-(define-key mickey-minor-mode-map (kbd "M-)") 'move-border-right)
+(global-set-key (kbd "M-)") 'move-border-right)
 
 ;;; Almost useless compared to Helm-file M-R. However helm does not change
 ;;; current directory.
@@ -262,7 +270,7 @@ If DIR-LEFT is t, then move left, otherwise move right."
     (if last
         (shell-command last)
       (error "Shell command history is empty"))))
-(define-key mickey-minor-mode-map (kbd "C-M-!") 'shell-last-command)
+(global-set-key (kbd "C-M-!") 'shell-last-command)
 
 (defun skeleton-make-markers ()
   "Save last skeleton markers in a list.
@@ -330,7 +338,7 @@ The shell can use it to automatically change directory to it."
     (set-window-start w1 s2)
     (set-window-start w2 s1))
   (other-window 1))
-(define-key mickey-minor-mode-map (kbd "C-x \\") 'swap-windows)
+(global-set-key (kbd "C-x \\") 'swap-windows)
 
 (defun tabify-leading ()
   "Call `tabify' on leading spaces only.
@@ -359,7 +367,7 @@ from acting on it."
        "Window '%s' is dedicated"
      "Window '%s' is normal")
    (current-buffer)))
-(define-key mickey-minor-mode-map [pause] 'toggle-window-dedicated)
+(global-set-key [pause] 'toggle-window-dedicated)
 
 (defun toggle-window-split ()
   "Switch between vertical and horizontal split.
@@ -387,7 +395,7 @@ It only works for frames with exactly two windows."
           (set-window-buffer (next-window) next-win-buffer)
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
-(define-key mickey-minor-mode-map (kbd "C-x C-\\") 'toggle-window-split)
+(global-set-key (kbd "C-x C-\\") 'toggle-window-split)
 
 (defun toggle-word-delim ()
   "Make underscore part of the word syntax or not.

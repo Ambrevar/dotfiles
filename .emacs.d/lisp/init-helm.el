@@ -105,17 +105,17 @@ Requires `call-process-to-string' from `functions'."
       (rectangle-exchange-point-and-mark)
     (helm-all-mark-rings)))
 
-(define-keys mickey-minor-mode-map
-  "M-x" 'helm-M-x
-  "C-x C-f" 'helm-find-files
-  "C-x C-b" 'helm-mini
-  "M-y" 'helm-show-kill-ring
-  "C-x C-x" 'helm-mark-or-exchange-rect
-  "M-s o" 'helm-occur
-  "C-h a" 'helm-apropos
-  "C-M-%" 'helm-regexp
-  "C-x M-g" 'helm-grep-git-or-ag
-  "C-x M-G" 'helm-do-grep-ag)
+(global-set-keys
+ "M-x" 'helm-M-x
+ "C-x C-f" 'helm-find-files
+ "C-x C-b" 'helm-mini
+ "M-y" 'helm-show-kill-ring
+ "C-x C-x" 'helm-mark-or-exchange-rect
+ "M-s o" 'helm-occur
+ "C-h a" 'helm-apropos
+ "C-M-%" 'helm-regexp
+ "C-x M-g" 'helm-grep-git-or-ag
+ "C-x M-G" 'helm-do-grep-ag)
 
 ;;; We use the M-s prefix just like `occur'.
 (define-key prog-mode-map "\M-sf" 'helm-semantic-or-imenu)
