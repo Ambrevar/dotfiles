@@ -59,26 +59,23 @@
 ;;; Display defun in mode line.
 (which-function-mode)
 
+(display-time)
+(setq display-time-day-and-date t
+      display-time-24hr-format t
+      display-time-default-load-average nil)
+
 ;;; Display battery status in mode line
 (display-battery-mode)
 ;;; TODO: Battery status (%b) does not work properly.
 (setq battery-mode-line-format "[%p%%%b %t]")
 
-;;; Kill whole line including \n.
-(setq kill-whole-line t)
-
-;;; Alternative scrolling
-(setq scroll-error-top-bottom t)
-
-;;; Narrow page navigation.
-(define-keys mickey-minor-mode-map
-  "C-x M-n" (lambda () (interactive) (narrow-to-page 1))
-  "C-x M-p" (lambda () (interactive) (narrow-to-page -1)))
-
 ;;; Line numbers
 ;;; Adding to `find-file-hook' ensures it will work for every file, regardless of
 ;;; the mode, but it won't work for buffers without files nor on mode change.
+(defun turn-off-line-number-mode ()
+  (line-number-mode -1))
 (dolist (hook '(prog-mode-hook text-mode-hook))
+  (add-hook hook 'turn-off-line-number-mode)
   (add-hook hook 'linum-mode))
 ;;; Emacs-nox does not display a fringe after the linum: Setting linum-format in
 ;;; linum-before-numbering-hook is not the right approach as it will change the
@@ -86,6 +83,12 @@
 ;;; See http://stackoverflow.com/questions/3626632/right-align-line-numbers-with-linum-mode
 ;;; and http://stackoverflow.com/questions/3626632/right-align-line-numbers-with-linum-mode.
 ;;; The complexity is not worth the benefit.
+
+;;; Alternative scrolling
+(setq scroll-error-top-bottom t)
+
+;;; Kill whole line including \n.
+(setq kill-whole-line t)
 
 ;;; Indentation
 (setq-default tab-width 2)
@@ -99,10 +102,6 @@
 
 ;;; Line by line scrolling
 (setq scroll-step 1)
-
-;;; There is no prog-mode-hook on Emacs<24.
-(require 'init-page) ; for `page-number-mode'
-(add-hook 'prog-mode-hook 'page-number-mode)
 
 (define-key mickey-minor-mode-map (kbd "<f9>") 'whitespace-mode)
 (setq
@@ -291,7 +290,7 @@
 ;;; Trash
 (setq delete-by-moving-to-trash t)
 
-;;; Display Time
+;;; Display Time World
 (setq
  zoneinfo-style-world-list
  '(("UTC" "-")
