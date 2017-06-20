@@ -307,4 +307,4 @@ e-mail."
 ;; ;; Fix slow startup when network is slow. Most visible with Helm and Magit with Emacs <25.
 ;; (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
 
-(load "init-local" t t)
+(load "local" t t)
