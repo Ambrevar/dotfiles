@@ -254,10 +254,6 @@
 ;; (setq select-enable-clipboard t)
 (setq select-enable-primary t)
 
-;;; Easy code folding toggle.
-;; (add-hook 'prog-mode-hook 'hs-minor-mode)
-;; (add-hook 'prog-mode-hook (lambda () (local-set-key (kbd "C-c h") 'hs-toggle-hiding)))
-
 ;;; Move mouse away.
 (mouse-avoidance-mode 'banish)
 ;;; That binding is not very useful and gets in the way of C-<mouse-1>.
