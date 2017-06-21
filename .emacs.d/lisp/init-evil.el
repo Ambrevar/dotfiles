@@ -110,6 +110,8 @@ See `eshell' for the numeric prefix arg."
     "\C-f" 'helm-next-page
     "\C-b" 'helm-previous-page)
   (define-key helm-buffer-map (kbd "M-o") 'helm-buffer-switch-other-window)
+  (define-key helm-moccur-map (kbd "M-o") 'helm-moccur-run-goto-line-ow)
+  (define-key helm-grep-map (kbd "M-o") 'helm-grep-run-other-window-action)
   (dolist (keymap (list helm-find-files-map helm-read-file-map))
     (define-keys keymap
       "M-o" 'helm-ff-run-switch-other-window
