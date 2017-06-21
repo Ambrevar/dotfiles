@@ -251,4 +251,7 @@ See `eshell' for the numeric prefix arg."
   (when (require 'evil-mc-extras nil t)
     (global-evil-mc-extras-mode 1)))
 
+;; nXML
+(evil-define-key 'normal nxml-mode-map "<" 'nxml-backward-up-element)
+
 (provide 'init-evil)
