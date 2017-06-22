@@ -13,7 +13,7 @@
  org-agenda-default-appointment-duration 60
  org-agenda-columns-add-appointments-to-effort-sum t
  ;; Org-mode aligns text.
- indent-tab-mode nil)
+ indent-tabs-mode nil)
 
 ;;; Agendas.
 (add-to-list 'org-agenda-files "~/personal/todo/todo.org")
