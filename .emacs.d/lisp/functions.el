@@ -412,6 +412,11 @@ This does not interfere with `subword-mode'."
   "Unconditionally add the `fmt' function to `before-save-hook'."
   (add-hook 'before-save-hook 'fmt nil t))
 
+(defun turn-on-delete-trailing-whitespace ()
+  "Unconditionally add the `delete-trailing-whitespace' function to `before-save-hook'."
+  (unless (string= (file-name-extension buffer-file-name) "csv")
+    (add-hook 'before-save-hook 'delete-trailing-whitespace nil t)))
+
 (defun turn-off-indent-tabs ()
   "Unconditionally turn off tab indentation."
   (setq indent-tabs-mode nil))

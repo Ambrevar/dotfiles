@@ -110,12 +110,12 @@
 ;;; Reported at http://debbugs.gnu.org/cgi/bugreport.cgi?bug=23740.
 ;; (setq whitespace-action '(report-on-bogus))
 
+;;; Add formatting functions to the buffer-local `before-save-hook'.
 ;;; WARNING: this can break some configuration files needing whitespaces at the
 ;;; end. This can also slow down saving on big files.  Some modes (e.g. lisp) run
 ;;; `fmt' in their local hook, which is redundant with this.
-;; (require 'functions) ; for `fmt'
-;; (add-hook 'before-save-hook 'fmt)
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+;; (add-hook 'find-file-hook 'turn-on-fmt-before-save)
+(add-hook 'find-file-hook 'turn-on-delete-trailing-whitespace)
 
 ;;; Hippie expand
 ;; (global-set-key (kbd "M-/") 'hippie-expand)
