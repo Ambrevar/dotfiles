@@ -44,11 +44,8 @@
 ;;; Make questions less annoying.
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;;; Allow some protected functions.
-(put 'upcase-region 'disabled nil)
-(put 'downcase-region 'disabled nil)
-(put 'narrow-to-page 'disabled nil)
-(put 'dired-find-alternate-file 'disabled nil)
+;;; Enable all disabled commands.
+(setq disabled-command-function nil)
 
 ;;; Print column number in mode line.
 (column-number-mode 1)
