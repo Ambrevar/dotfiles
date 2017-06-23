@@ -1,5 +1,6 @@
 ;;; Sh
 
+(defvaralias 'sh-basic-offset 'tab-width)
 (defvaralias 'sh-indentation 'sh-basic-offset)
 
 (setq sh-indent-comment t)

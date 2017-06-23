@@ -10,6 +10,8 @@
     "M-TAB" 'semantic-complete-analyze-inline))
 ;; (define-key map (kbd "C-c o") 'ff-find-other-file)
 
+(defvaralias 'c-basic-offset 'tab-width)
+
 ;;; C additional faces.
 ;;; Useless in quasi-monochrome.
 ;; (dolist (mode '(c-mode c++-mode))
