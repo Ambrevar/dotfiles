@@ -278,6 +278,10 @@ e-mail."
   ;; (toggle-truncate-lines) ; This seems to slow down Emacs.
   (turn-off-auto-fill))
 (add-hook 'sgml-mode-hook 'sgml-setup)
+(with-eval-after-load 'nxml-mode
+  (defvaralias 'nxml-child-indent 'tab-width))
+;;; Because XML is hard to read.
+(add-hook 'nxml-mode-hook 'turn-on-tab-width-to-4)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Finalization

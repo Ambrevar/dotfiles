@@ -441,6 +441,10 @@ This does not interfere with `subword-mode'."
   "Unconditionally turn off Linum mode."
   (linum-mode 0))
 
+(defun turn-on-tab-width-to-4 ()
+  "Unconditionally set tab width to 4."
+  (setq tab-width 4))
+
 (defun turn-on-tab-width-to-8 ()
   "Unconditionally set tab width to 8."
   (setq tab-width 8))
