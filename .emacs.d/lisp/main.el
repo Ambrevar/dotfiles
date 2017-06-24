@@ -47,9 +47,6 @@
 ;;; Enable all disabled commands.
 (setq disabled-command-function nil)
 
-;;; Print column number in mode line.
-(column-number-mode 1)
-
 ;;; Print buffer size in mode line.
 (size-indication-mode 1)
 
@@ -69,9 +66,8 @@
 ;;; Line numbers
 ;;; Adding to `find-file-hook' ensures it will work for every file, regardless of
 ;;; the mode, but it won't work for buffers without files nor on mode change.
-(defun turn-off-line-number-mode ()
-  (line-number-mode -1))
 (dolist (hook '(prog-mode-hook text-mode-hook))
+  (add-hook hook 'turn-on-column-number-mode)
   (add-hook hook 'turn-off-line-number-mode)
   (add-hook hook 'linum-mode))
 ;;; Emacs-nox does not display a fringe after the linum: Setting linum-format in

@@ -408,14 +408,19 @@ This does not interfere with `subword-mode'."
     (modify-syntax-entry ?_ "_")
     (message "_ is a word delimiter")))
 
+(defun turn-on-column-number-mode ()
+  "Unconditionally turn on `column-number-mode' for the current buffer."
+  (set (make-variable-buffer-local 'column-number-mode) t))
+
+(defun turn-on-delete-trailing-whitespace ()
+  "Add the `delete-trailing-whitespace' function to `before-save-hook'.
+This does not affect .csv files."
+  (unless (string= (file-name-extension buffer-file-name) "csv")
+    (add-hook 'before-save-hook 'delete-trailing-whitespace nil t)))
+
 (defun turn-on-fmt-before-save ()
   "Unconditionally add the `fmt' function to `before-save-hook'."
   (add-hook 'before-save-hook 'fmt nil t))
-
-(defun turn-on-delete-trailing-whitespace ()
-  "Unconditionally add the `delete-trailing-whitespace' function to `before-save-hook'."
-  (unless (string= (file-name-extension buffer-file-name) "csv")
-    (add-hook 'before-save-hook 'delete-trailing-whitespace nil t)))
 
 (defun turn-off-indent-tabs ()
   "Unconditionally turn off tab indentation."
@@ -424,6 +429,14 @@ This does not interfere with `subword-mode'."
 (defun turn-on-indent-tabs ()
   "Unconditionally turn on tab indentation."
   (setq indent-tabs-mode t))
+
+(defun turn-off-line-number-mode ()
+  "Unconditionally turn off `line-number-mode' fur the current buffer.."
+  (set (make-variable-buffer-local 'line-number-mode) nil))
+
+(defun turn-off-linum ()
+  "Unconditionally turn off Linum mode."
+  (linum-mode 0))
 
 (defun turn-on-newline-paragraph ()
   "Unconditionally make of newlines the start of a paragraph."
@@ -436,10 +449,6 @@ This does not interfere with `subword-mode'."
 (defun turn-on-skeleton-markers ()
   "Allow skeletons to make markers to ease field navigation."
   (add-hook 'skeleton-end-hook 'skeleton-make-markers))
-
-(defun turn-off-linum ()
-  "Unconditionally turn off Linum mode."
-  (linum-mode 0))
 
 (defun turn-on-tab-width-to-4 ()
   "Unconditionally set tab width to 4."
