@@ -7,11 +7,6 @@
 ;; - Navigating through the marks randomly produces a "Marker points into wrong buffer" error.
 ;; https://github.com/emacs-evil/evil/issues/845#issuecomment-306050231
 
-;; TODO: M-; comments next line in VISUAL. This is because of a different
-;; newline definition between Emacs and Vim.
-;; https://github.com/redguardtoo/evil-nerd-commenter: Not so different, cannot
-;; comment up without M--.
-
 ;; Several packages handle relative line numbering:
 ;; - nlinum-relative: Seems slow as of May 2017.
 ;; - linum-relative: integrates well but not with fringe string, must be a function.
@@ -32,6 +27,14 @@
   (global-evil-leader-mode))
 
 (evil-mode 1)
+
+;; Comments
+;; M-; comments next line in VISUAL. This is because of a different newline
+;; definition between Emacs and Vim.
+;; https://github.com/redguardtoo/evil-nerd-commenter: does not work well with
+;; motions and text objects, e.g. it cannot comment up without M--.
+;; `evil-commentary' is the way to go.
+(evil-commentary-mode)
 
 (defun eshell-or-new-session (&optional arg)
   "Create an interactive Eshell buffer.

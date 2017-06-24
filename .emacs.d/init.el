@@ -94,7 +94,7 @@
 (setq emms-directory (concat emacs-cache-folder "emms"))
 
 ;;; Evil
-(nconc package-selected-packages '(evil evil-leader evil-ediff evil-magit evil-mc evil-mc-extras linum-relative))
+(nconc package-selected-packages '(evil evil-commentary evil-leader evil-ediff evil-magit evil-mc evil-mc-extras linum-relative))
 (when (require 'evil nil t) (require 'init-evil))
 
 ;;; Eshell
