@@ -91,7 +91,11 @@
 (with-eval-after-load 'dired (require 'init-dired))
 
 ;;; Emms
-(setq emms-directory (concat emacs-cache-folder "emms"))
+(nconc package-selected-packages '(emms emms helm-emms emms-player-mpv))
+(when (fboundp 'emms-all)
+  ;; Emms has not autoload to switch to the browser, let's add one.
+  (autoload 'emms-smart-browse "emms-browser" nil t))
+(with-eval-after-load 'emms (require 'init-emms))
 
 ;;; Evil
 (nconc package-selected-packages '(evil evil-commentary evil-leader evil-ediff evil-magit evil-mc evil-mc-extras linum-relative))
