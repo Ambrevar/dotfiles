@@ -293,7 +293,9 @@ e-mail."
 ;;; Finalization
 
 ;;; Don't let `customize' clutter my config.
-(setq custom-file (expand-file-name "custom.el" server-socket-dir))
+(if (boundp 'server-socket-dir)
+    (setq custom-file (expand-file-name "custom.el" server-socket-dir))
+  (setq custom-file (expand-file-name (format "custom-%s.el" (user-uid)) temporary-file-directory)))
 (load custom-file t)
 
 ;;; Local config. You can use it to set system specific variables, such as the
