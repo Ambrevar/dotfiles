@@ -62,11 +62,11 @@ See `eshell' for the numeric prefix arg."
   "t" 'org-find-first-agenda
   "w" 'evil-window-next
   "|" 'swap-windows)
-(when (require 'magit nil t)
+(when (fboundp 'magit-status)
+  ;; Since it is an autoload, we cannot use `with-eval-after-load'.
   ;; Use S-SPC instead of SPC to browse commit details.
   (evil-leader/set-key "v" 'magit-status))
 (when (fboundp 'emms-smart-browse)
-  ;; Since it is an autoload, we cannot use `with-eval-after-load'.
   (evil-leader/set-key "M" 'helm-emms)
   (evil-leader/set-key "m" 'emms-smart-browse))
 (with-eval-after-load 'emms
@@ -132,12 +132,12 @@ See `eshell' for the numeric prefix arg."
 (evil-set-initial-state 'term-mode 'emacs)
 
 ;; Add support for magit.
-(require 'evil-magit nil t)
-(when (and (require 'magit-mode nil t) (require 'evil-magit nil t))
-  (evil-magit-define-key evil-magit-state 'magit-mode-map "<" 'magit-section-up)
-  ;; C-j/k is the default, M-j/k is more intuitive if we use it for helm.
-  (evil-magit-define-key evil-magit-state 'magit-mode-map "M-j" 'magit-section-forward)
-  (evil-magit-define-key evil-magit-state 'magit-mode-map "M-k" 'magit-section-backward))
+(with-eval-after-load 'magit
+  (when (require 'evil-magit nil t)
+    (evil-magit-define-key evil-magit-state 'magit-mode-map "<" 'magit-section-up)
+    ;; C-j/k is the default, M-j/k is more intuitive if we use it for helm.
+    (evil-magit-define-key evil-magit-state 'magit-mode-map "M-j" 'magit-section-forward)
+    (evil-magit-define-key evil-magit-state 'magit-mode-map "M-k" 'magit-section-backward)))
 
 ;; Add support for ediff.
 (require 'evil-ediff nil t)

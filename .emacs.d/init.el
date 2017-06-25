@@ -150,11 +150,13 @@
 (with-eval-after-load 'lua-mode (require 'init-lua))
 
 ;;; Magit
+;;; Magit can be loaded just-in-time.
 (nconc package-selected-packages '(magit))
-(when (require 'magit nil t)
+(with-eval-after-load 'magit
   (set-face-foreground 'magit-branch-remote "orange red")
   (setq git-commit-summary-max-length fill-column)
-  (setq magit-diff-refine-hunk 'all)
+  (setq magit-diff-refine-hunk 'all))
+(when (fboundp 'magit-status)
   (global-set-key (kbd "C-x g") 'magit-status))
 
 ;;; Mail with Mutt support.
