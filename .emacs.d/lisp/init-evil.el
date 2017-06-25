@@ -17,23 +17,24 @@
   (setq linum-relative-current-symbol "")
   (linum-relative-toggle))
 
-;; The evil-leader package might seem worthless but it centralizes the leader
-;; key configuration and automatically makes it available in relevant states.
-;; Should we map <leader<leader> to the most used command, e.g. `helm-mini'?
-;; Could be misleading.
-(when (require 'evil-leader nil t)
-  ;; Leader mode and its key must be set before evil-mode.
-  (evil-leader/set-leader "<SPC>")
-  (global-evil-leader-mode))
+;; The evil-leader package has that over regular bindings that it centralizes
+;; the leader key configuration and automatically makes it available in relevant
+;; states.  Should we map <leader<leader> to the most used command,
+;; e.g. `helm-mini'?  Could be misleading.
+(require 'evil-leader)
+;; Leader mode and its key must be set before evil-mode.
+(evil-leader/set-leader "<SPC>")
+(global-evil-leader-mode)
 
 (evil-mode 1)
 
-;; Comments
+;; Commenting.
 ;; M-; comments next line in VISUAL. This is because of a different newline
 ;; definition between Emacs and Vim.
 ;; https://github.com/redguardtoo/evil-nerd-commenter: does not work well with
 ;; motions and text objects, e.g. it cannot comment up without M--.
 ;; `evil-commentary' is the way to go.
+;; TODO: evil-commentary has a mode-line entry which is quite useless. Remove? Plus it shadows any other bindings like "gy" in Emms.
 (evil-commentary-mode)
 
 (defun eshell-or-new-session (&optional arg)
@@ -53,6 +54,7 @@ See `eshell' for the numeric prefix arg."
 (evil-leader/set-key
   "RET" 'eshell-or-new-session
   "\\" 'toggle-window-split
+  "a" 'org-agenda
   "b" 'buffer-menu
   "e" 'find-file
   "k" 'kill-this-buffer
@@ -63,30 +65,14 @@ See `eshell' for the numeric prefix arg."
 (when (require 'magit nil t)
   ;; Use S-SPC instead of SPC to browse commit details.
   (evil-leader/set-key "v" 'magit-status))
-
-;; Motion map: useful for `Info-mode', `help-mode', etc.
-;; See `evil-motion-state-modes'.
-(evil-global-set-key 'motion (kbd "TAB") 'forward-button)
-(evil-global-set-key 'motion (kbd "<backtab>") 'backward-button)
-(evil-define-key 'motion Info-mode-map
-  (kbd "S-SPC") 'Info-scroll-up
-  "\C-f" 'Info-scroll-up
-  "\C-b" 'Info-scroll-down
-  "\M-sf" 'Info-goto-node
-  "gg" 'evil-goto-first-line)
-(evil-define-key 'motion help-mode-map
-  (kbd "S-SPC") 'scroll-up-command
-  "\C-f" 'scroll-up-command
-  "\C-b" 'scroll-down-command
-  "\C-o" 'help-go-back)
-
-;;; Term mode should be in emacs state. It confuses 'vi' otherwise.
-;;; Upstream will not change this:
-;;; https://github.com/emacs-evil/evil/issues/854#issuecomment-309085267
-(evil-set-initial-state 'term-mode 'emacs)
-
-;; This depends on the local configuration of Helm which might not be loaded
-;; yet.
+(when (fboundp 'emms-smart-browse)
+  ;; Since it is an autoload, we cannot use `with-eval-after-load'.
+  (evil-leader/set-key "M" 'helm-emms)
+  (evil-leader/set-key "m" 'emms-smart-browse))
+(with-eval-after-load 'emms
+  (evil-leader/set-key
+    "p" 'emms-pause
+    "n" 'emms-next))
 (with-eval-after-load 'init-helm
   (evil-leader/set-key
     "b" 'helm-mini
@@ -94,8 +80,9 @@ See `eshell' for the numeric prefix arg."
     "E" 'helm-find
     "g" 'helm-grep-git-or-ag
     "G" 'helm-grep-git-all-or-ag
-    "r" 'helm-resume)
+    "r" 'helm-resume))
 
+(with-eval-after-load 'init-helm
   ;; To navigate helm entries with hjkl, using the C- modifier would conflict
   ;; with C-h (help prefix) and C-k (`evil-insert-digraph').  We use M- instead.
   (define-keys helm-map
@@ -122,6 +109,27 @@ See `eshell' for the numeric prefix arg."
       "M-h" 'helm-find-files-up-one-level
       "M-l" 'helm-execute-persistent-action
       "C-l" nil))) ; So that the header displays the above binding.
+
+;; Motion map: useful for `Info-mode', `help-mode', etc.
+;; See `evil-motion-state-modes'.
+(evil-global-set-key 'motion (kbd "TAB") 'forward-button)
+(evil-global-set-key 'motion (kbd "<backtab>") 'backward-button)
+(evil-define-key 'motion Info-mode-map
+  (kbd "S-SPC") 'Info-scroll-up
+  "\C-f" 'Info-scroll-up
+  "\C-b" 'Info-scroll-down
+  "\M-sf" 'Info-goto-node
+  "gg" 'evil-goto-first-line)
+(evil-define-key 'motion help-mode-map
+  (kbd "S-SPC") 'scroll-up-command
+  "\C-f" 'scroll-up-command
+  "\C-b" 'scroll-down-command
+  "\C-o" 'help-go-back)
+
+;;; Term mode should be in emacs state. It confuses 'vi' otherwise.
+;;; Upstream will not change this:
+;;; https://github.com/emacs-evil/evil/issues/854#issuecomment-309085267
+(evil-set-initial-state 'term-mode 'emacs)
 
 ;; Add support for magit.
 (require 'evil-magit nil t)
@@ -176,8 +184,6 @@ See `eshell' for the numeric prefix arg."
 ;; - org-evil: Not as polished as of May 2017.
 ;; - evil-org: Depends on MELPA's org-mode, too big a dependency for me.
 ;; See https://github.com/Somelauw/evil-org-mode/blob/master/doc/keythemes.org for inspiration.
-(when (require 'evil-leader nil t)
-  (evil-leader/set-key-for-mode 'org-mode "a" 'org-agenda))
 (evil-define-key 'normal org-mode-map
   (kbd "M-<return>") (lambda () (interactive) (evil-insert 1) (org-meta-return))
   "L" 'org-shiftright
@@ -194,8 +200,12 @@ See `eshell' for the numeric prefix arg."
   "\M-J" 'org-shiftmetadown
   "<" 'org-up-element)
 
-;; Package-menu mode
-(delete 'package-menu-mode evil-emacs-state-modes)
+;;; Use evil-leader in Debugger until I take time to define keys properly.
+(setq evil-leader/in-all-states t)
+(setq evil-leader/no-prefix-mode-rx '("Debugger.*"))
+
+;;; Package-menu mode
+(evil-set-initial-state 'package-menu-mode 'normal)
 (evil-define-key 'normal package-menu-mode-map "q" 'quit-window)
 (evil-define-key 'normal package-menu-mode-map "i" 'package-menu-mark-install)
 (evil-define-key 'normal package-menu-mode-map "U" 'package-menu-mark-upgrades)
