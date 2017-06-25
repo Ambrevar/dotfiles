@@ -79,9 +79,6 @@
 ;;; Do not exclude any files from 'git grep'.
 (setq helm-grep-git-grep-command "git --no-pager grep -n%cH --color=always --full-name -e %p -- %f")
 
-;;; Use `pt' instead of `ag'.
-(setq helm-grep-ag-command "pt -e -S --hidden --color --nogroup %s %s %s")
-
 (defun helm-grep-git-or-ag (arg)
   "Run `helm-grep-do-git-grep' if possible; fallback to `helm-do-grep-ag' otherwise.
 Requires `call-process-to-string' from `functions'."
@@ -135,7 +132,7 @@ Requires `call-process-to-string' from `functions'."
 (set-face-attribute 'helm-ff-directory nil :background 'unspecified :foreground 'unspecified :weight 'unspecified :inherit 'helm-buffer-directory)
 (set-face-attribute 'helm-ff-file nil :background 'unspecified :foreground 'unspecified :weight 'unspecified :inherit 'helm-buffer-file)
 
-(setq helm-source-names-using-follow '("Occur" "Git-Grep" "PT" "mark-ring" "Org Headings"))
+(setq helm-source-names-using-follow '("Occur" "Git-Grep" "AG" "mark-ring" "Org Headings"))
 
 ;;; From https://www.reddit.com/r/emacs/comments/5q922h/removing_dot_files_in_helmfindfiles_menu/.
 (defun helm-skip-dots (old-func &rest args)

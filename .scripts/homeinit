@@ -75,7 +75,6 @@ if command -v go >/dev/null 2>&1; then
 	go get -v $OPT_GO -ldflags "-s -w" \
 		github.com/nsf/gocode \
 		github.com/rogpeppe/godef
-	go get -v $OPT_GO -ldflags "-s -w" github.com/monochromegane/the_platinum_searcher/...
 fi
 
 if command -v emacs >/dev/null 2>&1; then
