@@ -35,8 +35,7 @@ Useful when bound to a key opposed to `beginning-of-defun'."
 (defun call-process-to-string (program &rest args)
   "Call PROGRAM with ARGS and return output."
   (with-output-to-string
-    (with-current-buffer
-        standard-output
+    (with-current-buffer standard-output
       (apply 'call-process program nil t nil args))))
 
 (defun count-occurences (regex string)

@@ -161,7 +161,6 @@
 
 ;;; Mail with Mutt support.
 (add-hook 'mail-mode-hook 'mail-text)
-(add-to-list 'auto-mode-alist '("/tmp/mutt-.*" . mail-mode))
 (defun mutt-backup-buffer ()
   "Create a copy of the current buffer.
 This is useful for recovery in case Mutt hangs before sending the
@@ -169,12 +168,12 @@ e-mail."
   (when (not (boundp 'mutt-backup))
     (set (make-local-variable 'mutt-backup) (make-temp-file (concat (buffer-name) "-"))))
   (copy-file buffer-file-name mutt-backup t))
-(defun mutt-check-buffer ()
-  (when (string-match "/tmp/mutt-.*" (buffer-file-name))
-    ;; Just like magit commits.
-    (when (require 'with-editor nil t) (with-editor-mode))
-    (add-hook 'after-save-hook 'mutt-backup-buffer nil t)))
-(add-hook 'find-file-hook 'mutt-check-buffer)
+(defun mutt-edit ()
+  (mail-mode)
+  ;; Just like magit commits.
+  (when (require 'with-editor nil t) (with-editor-mode))
+  (add-hook 'after-save-hook 'mutt-backup-buffer nil t))
+(add-to-list 'auto-mode-alist '("/tmp/mutt-.*" . mutt-edit))
 
 ;;; Makefile
 (with-eval-after-load 'make-mode (require 'init-makefile))
@@ -267,11 +266,10 @@ e-mail."
 ;;; Web forms.
 ;;; Remove auto-fill in web edits because wikis and forums do not like it.
 ;;; This works for qutebrowser, but may need changes for other browsers.
-(defun browser-check-buffer ()
-  (when (string-match (concat (getenv "BROWSER") "-editor-*") (buffer-name))
-    (when (require 'with-editor nil t) (with-editor-mode))
-    (auto-fill-mode -1)))
-(add-hook 'find-file-hook 'browser-check-buffer)
+(defun browser-edit ()
+  (when (require 'with-editor nil t) (with-editor-mode))
+  (auto-fill-mode -1))
+(add-to-list 'auto-mode-alist `(,(concat (getenv "BROWSER") "-editor-*") . browser-edit))
 
 ;;; Wgrep
 (nconc package-selected-packages '(wgrep-helm wgrep-pt))
