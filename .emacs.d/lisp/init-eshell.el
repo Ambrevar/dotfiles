@@ -21,6 +21,8 @@
  ;; ffap-shell-prompt-regexp changes the behaviour of `helm-find-files' when
  ;; point is on prompt. I find this disturbing.
  ffap-shell-prompt-regexp nil
+ eshell-history-size 1024
+ eshell-hist-ignoredups t
  eshell-destroy-buffer-when-process-dies t)
 
 ;; TODO: Hour is printed twice. We don't need to set this?
@@ -85,6 +87,12 @@
 ;;; `nobreak-char-display' makes some output look weird, e.g. with 'tree'.
 (add-hook 'eshell-mode-hook 'turn-off-nobreak-char-display)
 (add-hook 'eshell-mode-hook 'eshell-cmpl-initialize)
+
+;;; Filter out space-beginning commands from history.
+(setq eshell-input-filter
+      (lambda (str)
+        (not (or (string= "" str)
+                 (string-prefix-p " " str)))))
 
 ;;; REVIEW: Emacs' standard functions fail when output has empty lines.
 ;;; This implementation is more reliable.
