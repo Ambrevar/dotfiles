@@ -124,8 +124,16 @@ will always use the same cover per folder."
 
 (fset 'emms-browser-covers 'emms-cache-covers)
 
-;;; TODO: Resume on restart.
-;;; See `emms-bookmark-add' and `emms-bookmark-previous'.
+;;; Resume on restart.
+;;; We don't use bookmarks as that could interfere with user's ones.
+(with-eval-after-load 'desktop
+  (add-to-list 'desktop-globals-to-save 'emms-playing-time)
+  (let ((time emms-playing-time))
+    (setq emms-playing-time 0) ; Don't disturb the time display.
+    (emms-start)
+    (sleep-for 0 100) ; This is required for the player might not be ready yet.
+    (emms-player-seek-to time)
+    (emms-pause)))
 
 ;;; TODO: See if mpd is faster at building the db. Not so important.
 ;;; TODO: Delete entry from cache? See `emms-cache-del'. Not so important.
