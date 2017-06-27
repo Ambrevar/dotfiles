@@ -51,9 +51,9 @@
 (size-indication-mode 1)
 
 ;;; Display defun in mode line.
-(which-function-mode)
+;; (which-function-mode)
 
-(display-time)
+;; (display-time)
 (setq display-time-day-and-date t
       display-time-24hr-format t
       display-time-default-load-average nil)
