@@ -107,4 +107,23 @@ See `eshell-prompt-regexp'."
     (backward-char)
     (eshell-next-prompt (- n))))
 
+(when (require 'bash-completion nil t)
+  ;; REVIEW: `bash-completion-dynamic-complete-0' is almost what we want for eshell, it only needs a tiny modification.
+  ;; Ask upstream to change the function arguments.
+  ;; See https://github.com/szermatt/emacs-bash-completion/issues/13.
+  (defun bash-completion-eshell-complete ()
+    (cl-letf (((symbol-function 'comint-line-beginning-position)
+               #'(lambda () (save-excursion (eshell-bol) (point)))))
+      (bash-completion-dynamic-complete)))
+
+  (defun eshell-set-default-completion ()
+    (setq pcomplete-default-completion-function
+          (lambda ()
+            ;; TODO: Sometimes `eshell-default-completion-function' does better, e.g. "gcc <TAB>" shows .c files.
+            ;; Does it matter since we have Helm at hand?
+            ;; TODO: Lot's of things don't complete well, like "go". Use fish if available.
+            (while (pcomplete-here (nth 2 (bash-completion-eshell-complete)))))))
+  ;; `eshell-set-default-completion' must be run after `eshell-cmpl-initialize'.
+  (add-hook 'eshell-mode-hook 'eshell-set-default-completion t))
+
 (provide 'init-eshell)
