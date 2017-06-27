@@ -8,6 +8,7 @@
   ;; Don't use default players as they have poor playback support, e.g. seeking is missing for OGG.
   ;; REVIEW: mpv should not display covers.
   ;; Reported at https://github.com/dochang/emms-player-mpv/issues/8.
+  (setq emms-player-mpv-input-file (expand-file-name "emms-mpv-input-file" emms-directory))
   (setq emms-player-list '(emms-player-mpv emms-player-mplayer-playlist emms-player-mplayer)))
 
 (setq emms-source-file-default-directory "~/music/"
