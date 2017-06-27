@@ -43,10 +43,14 @@
 
 (with-eval-after-load 'em-term
   (nconc eshell-visual-commands
-         '("abook" "alsamixer" "cmus" "fzf" "htop" "mpsyt" "mpv" "mutt" "ncdu" "newsbeuter" "ranger" "watch"))
+         '("abook" "alsamixer" "cmus" "fzf" "htop" "mpsyt" "mpv" "mutt" "ncdu" "newsbeuter" "pinentry-curses" "ranger" "watch"))
   (setq eshell-visual-subcommands
         '(("git" "log" "l" "lol" "diff" "d" "dc" "show")
           ("sudo" "vi"))))
+
+;;; Support for Emacs' pinentry
+(setq epa-pinentry-mode 'loopback)
+(pinentry-start)
 
 ;;; Alias management possibilities:
 ;;; - Version eshell-alias and store it in user-emacs-directory. Simplest and
