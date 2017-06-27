@@ -29,7 +29,7 @@ build.
 
 ### Emacs
 
-See my [Emacs pro-tips](http://ambrevar.bitbucket.org/emacs/).
+See my [Emacs pro-tips](http://ambrevar.bitbucket.io/emacs/).
 
 ### fish & fzf
 
