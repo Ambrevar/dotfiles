@@ -344,6 +344,7 @@ The return value is the yanked text."
     "gy" 'emms-browse-by-year
     "gc" 'emms-browse-by-composer
     "gp" 'emms-browse-by-performer
+    "x" 'emms-pause
     "s" (lookup-key emms-browser-mode-map (kbd "s"))
     "z" (lookup-key emms-browser-mode-map (kbd "W")))
 
