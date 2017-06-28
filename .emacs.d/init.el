@@ -103,7 +103,7 @@
 
 ;;; Eshell
 ;;; Extend completion.
-(nconc package-selected-packages '(bash-completion pcomplete-extension))
+(nconc package-selected-packages '(pcomplete-extension))
 (with-eval-after-load 'eshell (require 'init-eshell))
 
 ;;; Esup

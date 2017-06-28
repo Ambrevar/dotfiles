@@ -11,7 +11,7 @@
 ;;; Use native 'sudo', system sudo asks for password every time.
 (require 'em-tramp)
 
-(with-eval-after-load "esh-module" ; Need a file name because `provide' is before the definition of `eshell-modules-list.
+(with-eval-after-load "esh-module" ; Need a file name because `provide' is before the definition of `eshell-modules-list. TODO: Report.
   ;; Don't print the banner.
   (delq 'eshell-banner eshell-modules-list)
   (push 'eshell-tramp eshell-modules-list))
@@ -116,22 +116,29 @@ See `eshell-prompt-regexp'."
     (eshell-next-prompt (- n))))
 
 (when (require 'bash-completion nil t)
-  ;; REVIEW: `bash-completion-dynamic-complete-0' is almost what we want for eshell, it only needs a tiny modification.
+  ;; REVIEW: `bash-completion-dynamic-complete' is almost what we want for eshell, it only needs a tiny modification.
   ;; Ask upstream to change the function arguments.
   ;; See https://github.com/szermatt/emacs-bash-completion/issues/13.
-  (defun bash-completion-eshell-complete ()
-    (cl-letf (((symbol-function 'comint-line-beginning-position)
-               #'(lambda () (save-excursion (eshell-bol) (point)))))
-      (bash-completion-dynamic-complete)))
+  ;;
+  ;; Sometimes `eshell-default-completion-function' does better, e.g. "gcc
+  ;; <TAB>" shows .c files.
+  (setq eshell-default-completion-function
+        (lambda ()
+          (while (pcomplete-here
+                  (cl-letf (((symbol-function 'comint-line-beginning-position)
+                             #'(lambda () (save-excursion (eshell-bol) (point)))))
+                    (nth 2 (bash-completion-dynamic-complete))))))))
 
-  (defun eshell-set-default-completion ()
-    (setq pcomplete-default-completion-function
-          (lambda ()
-            ;; TODO: Sometimes `eshell-default-completion-function' does better, e.g. "gcc <TAB>" shows .c files.
-            ;; Does it matter since we have Helm at hand?
-            ;; TODO: Lot's of things don't complete well, like "go". Use fish if available.
-            (while (pcomplete-here (nth 2 (bash-completion-eshell-complete)))))))
-  ;; `eshell-set-default-completion' must be run after `eshell-cmpl-initialize'.
-  (add-hook 'eshell-mode-hook 'eshell-set-default-completion t))
+(when (executable-find "fish")
+  (setq eshell-default-completion-function
+        (lambda ()
+          (while (pcomplete-here
+                  (let ((prompt (buffer-substring-no-properties (save-excursion (eshell-bol) (point)) (point))))
+                    (mapcar (lambda (e) (car (split-string e "\t")))
+                            (split-string
+                             (with-output-to-string
+                               (with-current-buffer standard-output
+                                 (call-process "fish" nil t nil "-c" (format "cd %s; complete -C'%s'" default-directory prompt))))
+                             "\n" t))))))))
 
 (provide 'init-eshell)
