@@ -283,6 +283,7 @@ e-mail."
   (turn-off-auto-fill))
 (add-hook 'sgml-mode-hook 'sgml-setup)
 (with-eval-after-load 'nxml-mode
+  (set-face-foreground 'nxml-element-local-name "gold1")
   (defvaralias 'nxml-child-indent 'tab-width))
 ;;; Because XML is hard to read.
 (add-hook 'nxml-mode-hook 'turn-on-tab-width-to-4)
