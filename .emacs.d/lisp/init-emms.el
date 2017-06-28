@@ -8,6 +8,7 @@
   ;; Don't use default players as they have poor playback support, e.g. seeking is missing for OGG.
   ;; REVIEW: mpv should not display covers.
   ;; Reported at https://github.com/dochang/emms-player-mpv/issues/8.
+  (add-to-list 'emms-player-mpv-parameters "--no-audio-display")
   (setq emms-player-mpv-input-file (expand-file-name "emms-mpv-input-file" emms-directory))
   (setq emms-player-list '(emms-player-mpv emms-player-mplayer-playlist emms-player-mplayer)))
 
@@ -28,7 +29,7 @@
 (defvar emms-cache-cover-small-size 128)
 (defvar emms-cache-cover-medium-size 256)
 (defvar emms-cache-cover-large-size 1024) ; Emms does not use it as of this writing
-;;; TODO: Sync cover cache? What if covers are update? Implement function to scan db and remove unlinked files.
+;;; TODO: Sync cover cache? What if covers are updated? Implement function to scan db and remove unlinked files.
 ;;; TODO: `emms-browser-expand-all' is slow because of all the covers. Turn off cover cache momentarily?
 ;;; TODO: Async version? Maybe not needed. Test with big music folder.
 
