@@ -123,8 +123,7 @@ Requires `call-process-to-string' from `functions'."
 (with-eval-after-load 'org
   (define-key org-mode-map "\M-sf" 'helm-org-in-buffer-headings))
 
-(set-face-background 'helm-source-header "white")
-(set-face-foreground 'helm-source-header "black")
+(set-face-attribute 'helm-source-header nil :inherit 'header-line :height 'unspecified :background 'unspecified :foreground 'unspecified)
 (set-face-background 'helm-selection "#4f4f4f")
 (set-face-background 'helm-visible-mark "#2f2f2f")
 (set-face-foreground 'helm-visible-mark nil)
