@@ -100,7 +100,7 @@ export TIME_STYLE=+"|%Y-%m-%d %H:%M:%S|"
 if command -v ssh-agent >/dev/null 2>&1 && [ -z "$SSH_AGENT_PID" ]; then
 	 eval "$(ssh-agent)"
 	 ## Kill ssh-agent on session end. Console login only.
-	 command -v sessionclean >/dev/null 2>&1 && trap 'sessionclean' 0
+	 trap 'test -n "$SSH_AGENT_PID" && eval $(ssh-agent -k)' 0
 fi
 
 ## Linux specific

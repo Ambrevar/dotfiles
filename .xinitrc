@@ -27,4 +27,5 @@ fi
 ## could be the place where to clean everything, but it will not be parsed by
 ## some login managers. Beside, systemd sessions may sigkill all user apps on
 ## logoff, preventing a clean termination.
-# command -v sessionclean >/dev/null 2>&1 && sessionclean
+# ssh-agent -k
+## See if exec'ing "ssh-agent <WM>" is a better idea.
