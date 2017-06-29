@@ -147,9 +147,9 @@
 (setq ispell-dictionary "english")
 
 ;;; Long paragraphs. Useful for quick navigation with backward-paragraph and
-;;; forward-paragraph.
-(setq paragraph-start "
-")
+;;; forward-paragraph. TODO: Useless?
+;; (setq paragraph-start "
+;; ")
 
 ;;; Show matching parenthesis
 (show-paren-mode 1)
@@ -158,7 +158,7 @@
 (setq show-paren-delay 0)
 (setq show-paren-when-point-inside-paren t)
 
-;;; Electric Pairs to auto-complete () [] {} "" etc. You can use it on regions.
+;;; Electric Pairs to auto-complete () [] {} "" etc. It works on regions.
 ;; (electric-pair-mode)
 
 ;;; Spawn terminal shortcut: WM's binding is s+RET.
