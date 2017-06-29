@@ -104,6 +104,7 @@ See `eshell' for the numeric prefix arg."
   (define-key helm-buffer-map (kbd "M-o") 'helm-buffer-switch-other-window)
   (define-key helm-moccur-map (kbd "M-o") 'helm-moccur-run-goto-line-ow)
   (define-key helm-grep-map (kbd "M-o") 'helm-grep-run-other-window-action)
+  (define-key helm-map (kbd "C-/") 'helm-quit-and-find-file)
   (dolist (keymap (list helm-find-files-map helm-read-file-map))
     (define-keys keymap
       "M-o" 'helm-ff-run-switch-other-window
