@@ -29,6 +29,7 @@
 (evil-mode 1)
 (remove-hook 'evil-insert-state-exit-hook 'expand-abbrev)
 ;; (setq evil-want-abbrev-expand-on-insert-exit nil)
+(setq undo-tree-mode-lighter "")
 
 ;; Commenting.
 ;; M-; comments next line in VISUAL. This is because of a different newline

@@ -20,6 +20,7 @@
  helm-display-header-line nil
  helm-findutils-search-full-path t
  helm-show-completion-use-special-display nil
+ helm-completion-mode-string ""
 
  helm-apropos-fuzzy-match t
  helm-buffers-fuzzy-matching t
