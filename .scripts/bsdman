@@ -36,4 +36,4 @@ if ! command -v curl >/dev/null 2>&1; then
 	AGENT="wget -q -O - "
 fi
 
-$AGENT "$DOMAIN/man.cgi?query=$PAGE&apropos=0&sektion=$SECTION&manpath=$MANPATH&arch=default&format=ascii" | less
+$AGENT "$DOMAIN/man.cgi?query=$PAGE&apropos=0&sektion=$SECTION&manpath=$MANPATH&arch=default&format=ascii" | if [ "$TERM" = dumb ]; then cat; else less; fi
