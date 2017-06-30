@@ -111,8 +111,10 @@
 ;;; Hippie expand
 ;; (global-set-key (kbd "M-/") 'hippie-expand)
 
-;;; Abbreviation support
-(setq-default abbrev-mode t)
+;;; Abbreviation is like snippets: annoying at times, especially in
+;;; prog-mode.  They are useful in text mode to avoid the sprawling of
+;;; abbreviations.
+(add-hook 'text-mode-hook 'abbrev-mode)
 
 ;;; Auto-fill
 (when (getenv "MANWIDTH")
