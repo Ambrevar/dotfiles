@@ -153,6 +153,7 @@
 ;;; Magit can be loaded just-in-time.
 (nconc package-selected-packages '(magit))
 (with-eval-after-load 'magit
+  (setq auto-revert-mode-text "")
   (set-face-foreground 'magit-branch-remote "orange red")
   (setq git-commit-summary-max-length fill-column)
   (setq magit-diff-refine-hunk 'all))
