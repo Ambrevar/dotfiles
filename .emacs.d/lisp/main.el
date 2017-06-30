@@ -147,6 +147,9 @@
 
 ;;; Default ispell dictionary. If not set, Emacs uses the current locale.
 (setq ispell-dictionary "english")
+(define-keys text-mode-map
+  "C-<f6>" 'ispell-change-dictionary
+  "<f6>" 'ispell-buffer)
 
 ;;; Long paragraphs. Useful for quick navigation with backward-paragraph and
 ;;; forward-paragraph. TODO: Useless?
@@ -263,7 +266,7 @@
 ;;; Replace not-so-useful comment-dwim binding.
 (global-set-key "\M-;" 'comment-line)
 
-;;; Eldoc: In case you find it too distracting.
+;;; Eldoc: Disable if too distracting.
 ;; (global-eldoc-mode 0)
 
 ;;; Replace `kill-buffer' binding by `kill-this-buffer'.
