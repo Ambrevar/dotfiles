@@ -138,7 +138,8 @@ will always use the same cover per folder."
     (emms-pause)))
 
 ;;; TODO: See if mpd is faster at building the db. Not so important.
-;;; TODO: Delete entry from cache? See `emms-cache-del'. Not so important.
+
+;;; TODO: Delete entry from cache? See `emms-cache-del'.
 
 ;;; TODO: Browse by album-artist? libtag has the field.
 ;; https://emacs.stackexchange.com/questions/10412/sort-by-artist-in-emms-with-compilation-albums/10435

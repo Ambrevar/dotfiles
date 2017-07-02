@@ -140,9 +140,7 @@
 
 ;;; Make Emacs use environment browser, or w3m if BROWSER is not set.
 (setq browse-url-generic-program
-      (executable-find
-       (let ((b (getenv "BROWSER")))
-         (if b b "w3m" )))
+      (or (executable-find (or (getenv "BROWSER") "")) (executable-find "w3m"))
       browse-url-browser-function 'browse-url-generic)
 
 ;;; Default ispell dictionary. If not set, Emacs uses the current locale.
