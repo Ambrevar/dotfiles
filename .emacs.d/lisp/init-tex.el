@@ -89,16 +89,16 @@ This command should be safe, but there is no warranty."
   (interactive)
   (require 'init-pdf)
   (hack-local-variables)
-  (let ((local-master (or tex-masterfile buffer-file-name)))
-    (pdf-compress local-master)))
+  (let ((master (or tex-masterfile buffer-file-name)))
+    (pdf-compress master)))
 
 (defun tex-pdf-view ()
   "Use `tex-masterfile' variable as default value for `pdf-view'."
   (interactive)
   (require 'init-pdf)
   (hack-local-variables)
-  (let ((local-master (or tex-masterfile buffer-file-name)))
-    (pdf-view local-master)))
+  (let ((master (or tex-masterfile buffer-file-name)))
+    (pdf-view master)))
 
 (defun tex-toggle-escape-char ()
   "Make backslash part of the word syntax or not.

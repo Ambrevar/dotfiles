@@ -2,7 +2,7 @@
 ;;; WARNING: This file is loaded from a hook.
 
 ;;; We use the TeX setup.
-(require 'mode-tex)
+(require 'init-tex)
 (require 'latex-pretty-symbols nil t)
 
 ;;; Since current buffer is a LaTeX one, we can use `local-set-key'.
