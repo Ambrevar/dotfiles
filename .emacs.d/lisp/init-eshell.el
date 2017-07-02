@@ -45,9 +45,10 @@
 
 (with-eval-after-load 'em-term
   (nconc eshell-visual-commands
-         '("abook" "alsamixer" "cmus" "fzf" "htop" "mpsyt" "mpv" "mutt" "ncdu" "newsbeuter" "pinentry-curses" "ranger" "watch"))
+         '("abook" "alsamixer" "cmus" "fzf" "htop" "mpsyt" "mpv" "mutt" "ncdu" "newsbeuter" "pinentry-curses" "ranger" "watch" "wifi-menu"))
   (setq eshell-visual-subcommands
         '(("git" "log" "l" "lol" "diff" "d" "dc" "show")
+          ("sudo" "wifi-menu")
           ("sudo" "vi"))))
 
 ;;; Support for Emacs' pinentry
