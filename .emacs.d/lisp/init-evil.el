@@ -36,9 +36,10 @@
 ;; definition between Emacs and Vim.
 ;; https://github.com/redguardtoo/evil-nerd-commenter: does not work well with
 ;; motions and text objects, e.g. it cannot comment up without M--.
-;; `evil-commentary' is the way to go.
-;; TODO: evil-commentary has a mode-line entry which is quite useless. Remove? Plus it shadows any other bindings like "gy" in Emms.
-(evil-commentary-mode)
+;; `evil-commentary' is the way to go. We don't need an additional minor-mode though.
+(when (require 'evil-commentary nil t)
+  (evil-global-set-key 'normal "gc" 'evil-commentary)
+  (evil-global-set-key 'normal "gy" 'evil-commentary-yank))
 
 (defun eshell-or-new-session (&optional arg)
   "Create an interactive Eshell buffer.
