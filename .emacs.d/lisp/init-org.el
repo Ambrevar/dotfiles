@@ -18,10 +18,8 @@
 ;;; Agendas.
 (add-to-list 'org-agenda-files "~/personal/todo/todo.org")
 
-;;; Set PDF association in Org-mode (was Evince by default).
-(require 'init-pdf)
-(setcdr (assoc "\\.pdf\\'" org-file-apps)
-        (concat pdf-viewer " " (mapconcat 'identity pdf-viewer-args " ")))
+;;; Set PDF association in Org-mode (original is 'default).
+(setcdr (assoc "\\.pdf\\'" org-file-apps) 'emacs)
 
 ;;; Hooks.
 (dolist (fun '(turn-off-linum turn-off-indent-tabs turn-off-auto-fill))

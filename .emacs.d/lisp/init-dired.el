@@ -31,13 +31,11 @@
 (require 'dired-x)
 (setq dired-omit-files "^\\.")
 
-(require 'init-pdf) ; for `pdf-viewer'
 (setq dired-guess-shell-alist-user
       (list
        '("\\.ogg$" "mpv")
        '("\\.\\(jpe?g\\|png\\|git\\)$" "sxiv")
-       '("\\.\\(mkv\\|mpe?g\\|avi\\|mp4\\|ogm\\)$" "mpv")
-       '("\\.pdf$" (concat pdf-viewer " " (mapconcat 'identity pdf-viewer-args " ")))))
+       '("\\.\\(mkv\\|mpe?g\\|avi\\|mp4\\|ogm\\)$" "mpv")))
 
 (defvar dired-showing-humansize t "If dired is displaying humansize or not.")
 

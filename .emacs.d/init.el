@@ -204,9 +204,9 @@ e-mail."
 (with-eval-after-load 'org (require 'init-org))
 
 ;;; PDF
-;;; TODO: Replace with pdf-tools package?
-(autoload 'pdf-view "init-pdf" nil t)
-(autoload 'pdf-compress "init-pdf" nil t)
+(nconc package-selected-packages '(pdf-tools))
+(when (require 'pdf-tools nil t)
+  (pdf-tools-install))
 
 ;;; Perl
 (defun perl-set-indent-rules ()

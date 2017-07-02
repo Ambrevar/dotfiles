@@ -84,21 +84,13 @@ This command should be safe, but there is no warranty."
         (delete-file file)
         (message "Deleted %S." file)))))
 
-(defun tex-pdf-compress ()
-  "Use `tex-masterfile' variable as default value for `pdf-compress'."
-  (interactive)
-  (require 'init-pdf)
-  (hack-local-variables)
-  (let ((master (or tex-masterfile buffer-file-name)))
-    (pdf-compress master)))
-
 (defun tex-pdf-view ()
-  "Use `tex-masterfile' variable as default value for `pdf-view'."
+  "Find PDF file associated to `tex-masterfile' if set or buffer-filename otherwise."
   (interactive)
-  (require 'init-pdf)
   (hack-local-variables)
-  (let ((master (or tex-masterfile buffer-file-name)))
-    (pdf-view master)))
+  (find-file (concat
+              (file-name-sans-extension (or tex-masterfile buffer-file-name))
+              ".pdf")))
 
 (defun tex-toggle-escape-char ()
   "Make backslash part of the word syntax or not.
