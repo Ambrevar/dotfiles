@@ -130,6 +130,11 @@ See `eshell-prompt-regexp'."
                              #'(lambda () (save-excursion (eshell-bol) (point)))))
                     (nth 2 (bash-completion-dynamic-complete))))))))
 
+;;; If the user fish config change directory on startup, file completion will
+;;; not be right.  One work-around is to add a "cd default-directory" before the
+;;; "complete", but that's brittle because of unreliable shell escaping.
+;;; Upstream does not allow for skipping the user config:
+;;; https://github.com/fish-shell/fish-shell/issues/4165.
 (when (executable-find "fish")
   (setq eshell-default-completion-function
         (lambda ()
@@ -139,7 +144,7 @@ See `eshell-prompt-regexp'."
                             (split-string
                              (with-output-to-string
                                (with-current-buffer standard-output
-                                 (call-process "fish" nil t nil "-c" (format "cd %s; complete -C'%s'" default-directory prompt))))
+                                 (call-process "fish" nil t nil "-c" (format "complete -C'%s'" prompt))))
                              "\n" t))))))))
 
 (provide 'init-eshell)
