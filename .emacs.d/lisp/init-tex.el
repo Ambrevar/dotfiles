@@ -123,7 +123,11 @@ This does not interfere with `subword-mode'."
 ;; `tex-mode' sets `indent-tabs-mode' to nil, invoking the following
 ;; argument: "TABs in verbatim environments don't do what you think." Not
 ;; sure how relevant this bad comment is. We revert it.
-(dolist (fun '(turn-on-indent-tabs turn-on-newline-paragraph turn-on-newline-paragraph tex-set-compiler))
+(dolist (fun '(turn-on-indent-tabs
+               turn-on-newline-paragraph
+               turn-on-newline-paragraph
+               prettify-symbols-mode
+               tex-set-compiler))
   (add-hook 'tex-mode-hook fun))
 
 ;; Not sure how useful that is:

@@ -253,7 +253,7 @@ e-mail."
 ;;; LaTeX is defined in the same file as TeX. To separate the loading, we add it
 ;;; to the hook.
 (add-hook 'latex-mode-hook (lambda () (require 'init-latex)))
-(nconc package-selected-packages '(latex-math-preview latex-pretty-symbols))
+(nconc package-selected-packages '(latex-math-preview))
 
 ;;; Torrent
 (nconc package-selected-packages '(tranmission))
