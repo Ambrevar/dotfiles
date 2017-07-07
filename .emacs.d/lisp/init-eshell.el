@@ -139,14 +139,14 @@ See `eshell-prompt-regexp'."
   (setq eshell-default-completion-function
         (lambda ()
           (while (pcomplete-here
-                  (let* ((raw-rompt (buffer-substring-no-properties (save-excursion (eshell-bol) (point)) (point)))
+                  (let* ((raw-prompt (buffer-substring-no-properties (save-excursion (eshell-bol) (point)) (point)))
                          ;; Keep spaces at the end with OMIT-NULLS=nil in `split-string'.
                          (toks (split-string raw-prompt split-string-default-separators nil))
                          ;; We want the command (i.e. the first 'car') to be the
                          ;; command.  Discard potential empty strings.
-                         (tokens (or (while (string= (car toks) "")
-                                       (setq toks (cdr toks)))
-                                     toks))
+                         (tokens (progn (while (string= (car toks) "")
+                                          (setq toks (cdr toks)))
+                                        toks))
                          ;; Fish does not support subcommand completion. We make
                          ;; a special case of 'sudo' and 'env' since they are
                          ;; the most common cases involving subcommands.  See
@@ -159,12 +159,12 @@ See `eshell-prompt-regexp'."
                                                    (string-match "=" (car tokens))))
                                      ;; Skip env/sudo parameters, like LC_ALL=C.
                                      (setq tokens (cdr tokens)))
-                                   (mapconcat 'identity tokens " ")))
-                         (mapcar (lambda (e) (car (split-string e "\t")))
-                                 (split-string
-                                  (with-output-to-string
-                                    (with-current-buffer standard-output
-                                      (call-process "fish" nil t nil "-c" (format "complete -C'%s'" prompt))))
-                                  "\n" t))))))))
+                                   (mapconcat 'identity tokens " "))))
+                    (mapcar (lambda (e) (car (split-string e "\t")))
+                            (split-string
+                             (with-output-to-string
+                               (with-current-buffer standard-output
+                                 (call-process "fish" nil t nil "-c" (format "complete -C'%s'" prompt))))
+                             "\n" t))))))))
 
-  (provide 'init-eshell)
+(provide 'init-eshell)
