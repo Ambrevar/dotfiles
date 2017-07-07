@@ -53,6 +53,8 @@ See `eshell' for the numeric prefix arg."
 
 (defun org-find-first-agenda ()
   (interactive)
+  (when (not (boundp 'org-agenda-files))
+    (require 'org))
   (find-file (car org-agenda-files)))
 
 (evil-leader/set-key
