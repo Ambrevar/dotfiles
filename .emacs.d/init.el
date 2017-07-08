@@ -230,14 +230,7 @@ e-mail."
 ;;; Arch Linux PKGBUILD
 (add-to-list 'auto-mode-alist '("PKGBUILD" . sh-mode))
 ;;; rc
-(add-to-list 'auto-mode-alist '("rc\\'" . sh-mode))
-;;; Fish
-(nconc package-selected-packages '(fish-mode))
-(defun fish-check-buffer ()
-  (when (string-match "/tmp/tmp\..*\.fish" (buffer-file-name))
-    (when (require 'with-editor nil t) (with-editor-mode))
-    (end-of-line)))
-(add-hook 'find-file-hook 'fish-check-buffer)
+(nconc package-selected-packages '(rc-mode))
 
 ;;; Srt (subtitles)
 (add-to-list 'auto-mode-alist '("\\.srt\\'" . text-mode))
