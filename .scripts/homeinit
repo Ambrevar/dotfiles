@@ -37,24 +37,9 @@ mkdir -pv "$HOME/.cache/mutt/headers"
 mkdir -pv "$HOME/.cache/mutt/messages"
 
 echo "==> Bookmarks"
-if [ -z "$BROWSER" ]; then
-	echo "Cannot proceed when variable BROWSER is not set."
-else
-	case "$BROWSER" in
-	dwb)
-		BOOKMARKS="$XDG_CONFIG_HOME/$BROWSER/default/"
-		QUICKMARKS="$XDG_CONFIG_HOME/$BROWSER/default/" ;;
-	qutebrowser)
-		mkdir -pv "$XDG_CONFIG_HOME/$BROWSER/bookmarks"
-		BOOKMARKS="$XDG_CONFIG_HOME/$BROWSER/bookmarks/urls"
-		QUICKMARKS="$XDG_CONFIG_HOME/$BROWSER/" ;;
-	*)
-		BOOKMARKS="$XDG_CONFIG_HOME/$BROWSER/"
-		QUICKMARKS="$XDG_CONFIG_HOME/$BROWSER/" ;;
-	esac
-	ln -sfv "$SOURCEDIR/bookmarks/bookmarks" "$BOOKMARKS"
-	ln -sfv "$SOURCEDIR/bookmarks/quickmarks" "$QUICKMARKS"
-fi
+mkdir -pv "$XDG_CONFIG_HOME/qutebrowser/bookmarks"
+ln -sfv "$SOURCEDIR/bookmarks/bookmarks" "$XDG_CONFIG_HOME/qutebrowser/bookmarks/urls"
+ln -sfv "$SOURCEDIR/bookmarks/quickmarks" "$XDG_CONFIG_HOME/qutebrowser/"
 
 echo "==> Newsbeuter"
 mkdir -pv "$XDG_DATA_HOME/newsbeuter"
