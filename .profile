@@ -74,7 +74,8 @@ fi
 ## Last PATH entries.
 appendpath "/usr/lib/surfraw"
 appendpath "${HOME}/personal/games/launchers"
-appendpath "${HOME}/.scripts"
+appendpath "${HOME}/.bin"
+command -v pacman >/dev/null 2>&1 && appendpath "${HOME}/.bin_pacman"
 
 
 
@@ -181,7 +182,7 @@ if command -v asp >/dev/null 2>&1; then
 fi
 
 ## Default text editor
-## 'em' is a custom wrapper for emacsclient. See '.scripts/em'.
+## 'em' is a custom wrapper for emacsclient. See '.bin/em'.
 ## VISUAL is given priority by some programs like Mutt. This way we can separate
 ## editors that wait from those that don't.
 for i in em emacs vim vi nano; do
