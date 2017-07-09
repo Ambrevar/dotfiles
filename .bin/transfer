@@ -17,7 +17,12 @@ fi
 # check arguments
 if [ $# -eq 0 ];
 then
-	echo "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"
+	cat<<EOF
+No arguments specified.
+
+Usage: transfer /tmp/test.md
+       cat /tmp/test.md | transfer test.md
+EOF
 	exit 1
 fi
 
