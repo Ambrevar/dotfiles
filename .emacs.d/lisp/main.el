@@ -133,10 +133,14 @@
 ;; 'super' (normally reserved to the WM).
 (when (fboundp 'windmove-default-keybindings)
   (global-set-keys
-   "M-s-h" 'windmove-left
-   "M-s-j" 'windmove-down
-   "M-s-k" 'windmove-up
-   "M-s-l" 'windmove-right))
+   "s-h" 'windmove-left
+   "s-j" 'windmove-down
+   "s-k" 'windmove-up
+   "s-l" 'windmove-right))
+(global-set-keys
+ "s-o" 'delete-other-windows
+ ;; "s-w" 'other-window
+ "s-c" 'delete-window)
 
 ;;; Make Emacs use environment browser, or w3m if BROWSER is not set.
 (setq browse-url-generic-program

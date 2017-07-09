@@ -62,9 +62,7 @@ See `eshell' for the numeric prefix arg."
   "b" 'buffer-menu
   "e" 'find-file
   "k" 'kill-this-buffer
-  "o" 'delete-other-windows
   "t" 'org-find-first-agenda
-  "w" 'evil-window-next
   "|" 'swap-windows)
 (when (fboundp 'magit-status)
   ;; Since it is an autoload, we cannot use `with-eval-after-load'.
