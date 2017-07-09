@@ -7,5 +7,6 @@
 # fullscreen=yes
 
 sub-codepage=utf8
+sub-auto=fuzzy
 
 save-position-on-quit
