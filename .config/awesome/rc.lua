@@ -124,9 +124,6 @@ if ostype == "Linux" then
 	local batl = batf:read("*a")
 	local batlimit = 10
 	if batl ~= "" then
-		--{{ Simple version (perf friendly)
-		-- vicious.register(batwidget, vicious.widgets.bat, '<span color="#73A9CD">$2%$1$3</span> | ', 60, "BAT0")
-		--{{ Complex version (time warning)
 		-- This functions changes the status color when batlimit is reached.
 		vicious.register(batwidget, vicious.widgets.bat,
 			function (widget, args)
@@ -184,7 +181,7 @@ awful.screen.connect_for_each_screen(function(s)
 	set_wallpaper(s)
 
 	-- Each screen has its own tag table.
-	awful.tag({ " 1 ", " 2 "," 3 "," 4 ", " 5 ⚒ ", " 6 ♫ ", "7 ✉ " }, s, awful.layout.suit.tile)
+	awful.tag({1}, s, awful.layout.suit.tile)
 
 	-- Create a promptbox for each screen
 	s.mypromptbox = awful.widget.prompt()
@@ -196,8 +193,6 @@ awful.screen.connect_for_each_screen(function(s)
 		awful.button({ }, 3, function () awful.layout.inc(-1) end),
 		awful.button({ }, 4, function () awful.layout.inc( 1) end),
 		awful.button({ }, 5, function () awful.layout.inc(-1) end)))
-	-- Create a taglist widget
-	s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist_buttons)
 
 	-- Create a tasklist widget
 	s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
@@ -248,21 +243,17 @@ move_mouse_away()
 -- }}}
 
 -- {{{ Key bindings
--- We reserve modkey+Mod1 for $EDITOR.
-
 globalkeys = awful.util.table.join(
 	awful.key({ modkey, }, "s", hotkeys_popup.show_help,
 		{description="show help", group="awesome"}),
-	awful.key({ modkey, }, "Escape", awful.tag.history.restore,
-		{description = "go back", group = "tag"}),
 
-	awful.key({ modkey, }, "j",
+	awful.key({ modkey, }, "Tab",
 		function ()
 			awful.client.focus.byidx( 1)
 		end,
 		{description = "focus next by index", group = "client"}
 	),
-	awful.key({ modkey, }, "k",
+	awful.key({ modkey, }, "Escape",
 		function ()
 			awful.client.focus.byidx(-1)
 		end,
@@ -274,27 +265,6 @@ globalkeys = awful.util.table.join(
 		{description = "swap with next client by index", group = "client"}),
 	awful.key({ modkey, "Shift" }, "k", function () awful.client.swap.byidx( -1)		end,
 		{description = "swap with previous client by index", group = "client"}),
-	awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
-		{description = "focus the next screen", group = "screen"}),
-	awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
-		{description = "focus the previous screen", group = "screen"}),
-	awful.key({ modkey, }, "Tab",
-		function ()
-			awful.client.focus.history.previous()
-			if client.focus then
-				client.focus:raise()
-			end
-		end,
-		{description = "go back", group = "client"}),
-	awful.key({ modkey }, "f",
-		function ()
-			if awful.layout.getname() == 'tile' then
-				awful.layout.set(awful.layout.suit.max)
-			else
-				awful.layout.set(awful.layout.suit.tile)
-			end
-		end,
-		{description = "toggle maximize", group = "screen"}),
 
 	-- Standard program
 	awful.key({ modkey, }, "Return", function () awful.spawn("emacsclient -a '' -n -c -e '(eshell t)'") end,
@@ -308,28 +278,12 @@ globalkeys = awful.util.table.join(
 	-- Mutt needs to be started in the folder where you want to save attachments.
 	awful.key({ modkey, }, "m",  function () awful.spawn(terminal .. " -e sh -c 'cd ~/temp && mutt'") end,
 		{description="mail user agent", group="launcher"}),
-	awful.key({ modkey, }, "a",  function () awful.spawn(terminal .. " -e cmus") end,
-		{description="music player", group="launcher"}),
-	awful.key({ modkey, "Mod1" }, "a",  function () awful.spawn("cmus-remote -u") end,
-		{description="music toggle", group="launcher"}),
-	awful.key({ modkey, "Shift" }, "a",  function () awful.spawn("cmus-remote -n") end,
-		{description="music next", group="launcher"}),
-	awful.key({ modkey, "Control" }, "a",  function () awful.spawn("cmus-remote -r") end,
-		{description="music previous", group="launcher"}),
 	awful.key({ }, "Print",  function () awful.spawn("scrot '" .. os.getenv("HOME") .. "/temp/screen-%F-%T.png'") end,
 		{description="screenshot", group="launcher"}),
-	awful.key({ modkey }, "t",  function () awful.spawn(os.getenv("EDITOR") .. " ~/personal/todo/todo.org") end,
-		{description="todo", group="launcher"}),
 
 	-- Screen lock. xlockmore is useful for LDAP login because slock does not work with it.
 	-- Don't use 'spawn_with_shell' if you want to keep Awesome's config portable.
 	awful.key({ modkey, }, "z",  function () awful.spawn("sh -c 'xlock 2>/dev/null || slock'") end,
-		{description="lock screen", group="awesome"}),
-	awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn("sh -c 'xlock 2>/dev/null || slock'") end,
-		{description="lock screen", group="awesome"}),
-	awful.key({ }, "XF86Sleep",       function () awful.util.spawn("sh -c 'xlock 2>/dev/null || slock'") end,
-		{description="lock screen", group="awesome"}),
-	awful.key({ }, "XF86Standby",     function () awful.util.spawn("sh -c 'xlock 2>/dev/null || slock'") end,
 		{description="lock screen", group="awesome"}),
 
 	-- Touchpad control
@@ -384,45 +338,16 @@ globalkeys = awful.util.table.join(
 )
 
 clientkeys = awful.util.table.join(
+	awful.key({ modkey,  }, "f", function (c) c.maximized = not c.maximized  end,
+		{description = "(un)maximize", group = "client"}),
 	awful.key({ modkey, "Shift" }, "f", function (c) c.fullscreen = not c.fullscreen  end,
 		{description = "fullscreen", group = "client"}),
 
 	awful.key({ modkey, "Shift" }, "c", function (c) c:kill() end,
 		{description = "close", group = "client"}),
 	awful.key({ modkey, }, "space", awful.client.floating.toggle,
-		{description = "toggle floating", group = "client"}),
-	awful.key({ modkey, }, "o", function (c) c:move_to_screen() end,
-		{description = "move to screen", group = "client"})
+		{description = "toggle floating", group = "client"})
 )
-
--- Bind all key numbers to tags.
--- Be careful: we use keycodes to make it works on any keyboard layout.
--- This should map on the top row of your keyboard, usually 1 to 9.
-for i = 1, #awful.screen.focused().tags do
-	globalkeys = awful.util.table.join(globalkeys,
-	-- View tag only.
-	awful.key({ modkey }, "#" .. i + 9,
-		function ()
-			local screen = awful.screen.focused()
-			local tag = screen.tags[i]
-			if tag then
-				tag:view_only()
-			end
-		end,
-		{description = "view tag #"..i, group = "tag"}),
-	-- Move client to tag.
-	awful.key({ modkey, "Shift" }, "#" .. i + 9,
-		function ()
-			if client.focus then
-				local tag = client.focus.screen.tags[i]
-				if tag then
-					client.focus:move_to_tag(tag)
-				end
-			end
-		end,
-		{description = "move focused client to tag #"..i, group = "tag"})
-	)
-end
 
 clientbuttons = awful.util.table.join(
 		awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
@@ -478,15 +403,6 @@ awful.rules.rules = {
 				"pop-up", -- e.g. Google Chrome's (detached) Developer Tools.
 			}
 	}, properties = { floating = true }},
-
-	-- Set Firefox to always map on the tag named "2" on screen 1.
-	-- { rule = { class = "Firefox" },
-	--	 properties = { screen = 1, tag = "2" } },
-	-- Only works for terminal with WM_COMMAND property?
-	{ rule = { name = "cmus" },
-		properties = { screen = 1, tag = " 6 ♫ " } },
-	{ rule = { name = "mutt" },
-		properties = { screen = 1, tag = "7 ✉ " } },
 }
 -- }}}
 
