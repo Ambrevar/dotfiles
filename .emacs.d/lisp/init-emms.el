@@ -133,7 +133,7 @@ will always use the same cover per folder."
   (let ((time emms-playing-time))
     (setq emms-playing-time 0) ; Don't disturb the time display.
     (emms-start)
-    (sleep-for 0 100) ; This is required for the player might not be ready yet.
+    (sleep-for 0 200) ; This is required for the player might not be ready yet.
     (emms-player-seek-to time)
     (emms-pause)))
 
