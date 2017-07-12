@@ -250,7 +250,10 @@ e-mail."
 (nconc package-selected-packages '(latex-math-preview))
 
 ;;; Torrent
-(nconc package-selected-packages '(tranmission))
+(nconc package-selected-packages '(transmission))
+(when (boundp 'transmission)
+  (setq transmission-refresh-modes '(transmission-mode transmission-files-mode transmission-info-mode transmission-peers-mode)
+        transmission-refresh-interval 1))
 
 ;;; Translator
 ;;; TODO: Find alternative package.
