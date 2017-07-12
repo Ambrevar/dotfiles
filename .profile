@@ -1,6 +1,7 @@
 #!/bin/sh
-## This file should be automatically sourced by the login manager. We source it
-## manually from shell rc files to make sure it works in TTY as well
+## This file should be automatically sourced by the login manager or Bash if
+## .bash_profile does not exist.  If this file is not automatically sourced,
+## do it from the shell config to me sure it applies to TTY as well.
 
 ## Mask
 ## Result for 027 is: rwxr-x---
@@ -79,10 +80,6 @@ command -v pacman >/dev/null 2>&1 && appendpath "${HOME}/.bin_pacman"
 
 
 
-## Less config. -R is needed for lesspipe colorization.
-# export LESS=' -R '
-## Make 'less' more friendly for non-text input files, see lesspipe(1).
-command -v lesspipe >/dev/null 2>&1 && eval "$(lesspipe)"
 ## Remove less history.
 LESSHISTFILE='-'
 
