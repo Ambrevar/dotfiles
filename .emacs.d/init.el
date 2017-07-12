@@ -204,6 +204,7 @@ e-mail."
 (with-eval-after-load 'org (require 'init-org))
 
 ;;; PDF
+;;; pdf-tools requires poppler built with cairo support.
 (nconc package-selected-packages '(pdf-tools))
 (when (require 'pdf-tools nil t)
   (pdf-tools-install))
