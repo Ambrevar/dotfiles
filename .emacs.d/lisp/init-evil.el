@@ -107,8 +107,8 @@ See `eshell' for the numeric prefix arg."
   (define-key helm-moccur-map (kbd "M-o") 'helm-moccur-run-goto-line-ow)
   (define-key helm-grep-map (kbd "M-o") 'helm-grep-run-other-window-action)
   (define-key helm-map (kbd "C-/") 'helm-quit-and-find-file)
-  (dolist (keymap (list helm-find-files-map helm-read-file-map))
-    (define-keys keymap
+  (dolist (map (list helm-find-files-map helm-read-file-map))
+    (define-keys map
       "M-o" 'helm-ff-run-switch-other-window
       "C-/" 'helm-ff-run-find-sh-command
       "M-h" 'helm-find-files-up-one-level
@@ -389,4 +389,16 @@ The return value is the yanked text."
     "d" 'emms-playlist-mode-kill
     "D" 'emms-playlist-mode-kill))
 
+;; Change mode-line color by Evil state.
+(setq evil-default-modeline-color (cons (face-background 'mode-line) (or (face-foreground 'mode-line) "black")))
+(defun evil-color-modeline ()
+  (let ((color (cond ((minibufferp) evil-default-modeline-color)
+                     ((evil-insert-state-p) '("#006fa0" . "#ffffff")) ; 00bb00
+                     ((evil-emacs-state-p)  '("#444488" . "#ffffff"))
+                     (t evil-default-modeline-color))))
+    (set-face-background 'mode-line (car color))
+    (set-face-foreground 'mode-line (cdr color))))
+
+(add-hook 'post-command-hook 'evil-color-modeline)
+(setq evil-mode-line-format nil)
 (provide 'init-evil)
