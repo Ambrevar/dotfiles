@@ -239,13 +239,19 @@ See `eshell' for the numeric prefix arg."
 (defun evil/eshell-set-keys ()
   (with-eval-after-load 'init-helm
     (evil-define-key 'insert eshell-mode-map "\C-e" 'helm-find-files))
-  (evil-define-key 'normal eshell-mode-map "\M-k" 'eshell-previous-prompt)
-  (evil-define-key 'normal eshell-mode-map "\M-j" 'eshell-next-prompt)
-  (evil-define-key 'normal eshell-mode-map "0" 'eshell-bol)
-  (evil-define-key 'normal eshell-mode-map (kbd "RET") 'eshell-send-input)
-  (evil-define-key 'normal eshell-mode-map (kbd "C-c C-c") 'evil/eshell-interrupt-process)
-  (evil-define-key '(normal insert) eshell-mode-map "\M-h" 'eshell-backward-argument)
-  (evil-define-key '(normal insert) eshell-mode-map "\M-l" 'eshell-forward-argument))
+  (evil-define-key 'normal eshell-mode-map
+    "[[" 'eshell-previous-prompt
+    "]]" 'eshell-next-prompt
+    "\M-k" 'eshell-previous-prompt
+    "\M-j" 'eshell-next-prompt
+    "0" 'eshell-bol
+    (kbd "RET") 'eshell-send-input
+    (kbd "C-c C-c") 'evil/eshell-interrupt-process
+    eshell-mode-map "\M-h" 'eshell-backward-argument
+    eshell-mode-map "\M-l" 'eshell-forward-argument)
+  (evil-define-key 'insert
+    eshell-mode-map "\M-h" 'eshell-backward-argument
+    "\M-l" 'eshell-forward-argument))
 (add-hook 'eshell-first-time-mode-hook 'evil/eshell-set-keys)
 
 ;; TODO: Make Evil commands react more dynamically with read-only text.
