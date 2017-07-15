@@ -247,8 +247,8 @@ See `eshell' for the numeric prefix arg."
     "0" 'eshell-bol
     (kbd "RET") 'eshell-send-input
     (kbd "C-c C-c") 'evil/eshell-interrupt-process
-    eshell-mode-map "\M-h" 'eshell-backward-argument
-    eshell-mode-map "\M-l" 'eshell-forward-argument)
+    "\M-h" 'eshell-backward-argument
+    "\M-l" 'eshell-forward-argument)
   (evil-define-key 'insert
     eshell-mode-map "\M-h" 'eshell-backward-argument
     "\M-l" 'eshell-forward-argument))
