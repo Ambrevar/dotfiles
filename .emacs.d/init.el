@@ -251,7 +251,7 @@ e-mail."
 
 ;;; Torrent
 (nconc package-selected-packages '(transmission))
-(when (boundp 'transmission)
+(when (fboundp 'transmission)
   (setq transmission-refresh-modes '(transmission-mode transmission-files-mode transmission-info-mode transmission-peers-mode)
         transmission-refresh-interval 1))
 
