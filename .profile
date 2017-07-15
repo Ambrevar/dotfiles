@@ -106,7 +106,7 @@ if [ "$(uname -o)" = "GNU/Linux" ] ; then
 	## Startup error log.
 	## dmesg
 	log_dmesg="$(dmesg | grep -i error)"
-	[ -n "$log_dmesg" ] && echo "$log_dmesg" > "$HOME/errors-dmesg.log" || rm -f "$HOME/errors-dmesg.log"
+	[ -n "$log_dmesg" ] && echo "$log_dmesg" > "$HOME/errors-dmesg.log" || rm "$HOME/errors-dmesg.log" 2>/dev/null
 	## systemd
 	if command -v systemctl >/dev/null 2>&1; then
 		count="$(systemctl show | awk -F= '$1=="NFailedUnits" {print $2; exit}')"
