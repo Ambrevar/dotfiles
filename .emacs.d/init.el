@@ -211,7 +211,7 @@ e-mail."
           (quality-arg "")
           (quality-val (completing-read "Max height resolution (0 for unlimited): " '("0" "480" "720") nil nil)))
       (setq quality-val (string-to-number quality-val))
-      (message "Opening %s was height≤%s with mpv..." (elfeed-entry-link entry) quality-val)
+      (message "Opening %s with height≤%s with mpv..." (elfeed-entry-link entry) quality-val)
       (when (< 0 quality-val)
         (setq quality-arg (format "--ytdl-format=[height<=?%s]" quality-val)))
       (start-process "elfeed-mpv" nil "mpv" quality-arg (elfeed-entry-link entry))))
@@ -258,6 +258,11 @@ e-mail."
 (nconc package-selected-packages '(sx))
 (with-eval-after-load 'sx
   (setq sx-cache-directory (concat emacs-cache-folder "sx")))
+
+;;; Syntax checking
+(nconc package-selected-packages '(flycheck helm-flycheck))
+(with-eval-after-load 'flycheck
+  (define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
 
 ;;; TeX / LaTeX / Texinfo
 (with-eval-after-load 'tex-mode (require 'init-tex))
