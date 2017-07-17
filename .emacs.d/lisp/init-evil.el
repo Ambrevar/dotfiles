@@ -45,7 +45,7 @@
   "Create an interactive Eshell buffer.
 If there is already an Eshell session active, switch to it.
 If current buffer is already an Eshell buffer, create a new one and switch to it.
-See `eshell' for the numeric prefix arg."
+See `eshell' for the numeric prefix ARG."
   (interactive "P")
   (if (eq major-mode 'eshell-mode)
       (eshell (or arg t))
@@ -276,6 +276,46 @@ See `eshell' for the numeric prefix arg."
 ;; nXML
 (evil-define-key 'normal nxml-mode-map "<" 'nxml-backward-up-element)
 
+;; Calendar
+(evil-define-key 'motion calendar-mode-map
+  "v" 'calendar-set-mark
+  "h" 'calendar-backward-day
+  "0" 'calendar-beginning-of-week
+  "$" 'calendar-end-of-week
+  "l" 'calendar-forward-day
+  "j" 'calendar-forward-week
+  "k" 'calendar-backward-week
+  "\C-f" 'calendar-scroll-left-three-months
+  ;; (kbd "<space>") 'scroll-other-window
+  "." 'calendar-goto-today
+  "<" 'calendar-scroll-right
+  ">" 'calendar-scroll-left
+  "?" 'calendar-goto-info-node
+  "D" 'diary-view-other-diary-entries
+  "M" 'calendar-lunar-phases
+  "S" 'calendar-sunrise-sunset
+  "a" 'calendar-list-holidays
+  "c" 'org-calendar-goto-agenda
+  "d" 'diary-view-entries
+  "\M-h" 'calendar-cursor-holidays
+  "m" 'diary-mark-entries
+  "o" 'calendar-other-month
+  "q" 'calendar-exit
+  "s" 'diary-show-all-entries
+  "u" 'calendar-unmark
+  "x" 'calendar-mark-holidays
+  "\C-c\C-l" 'calendar-redraw
+  "[" 'calendar-backward-year
+  "]" 'calendar-forward-year
+  "\M-<" 'calendar-beginning-of-year
+  "\M-=" 'calendar-count-days-region
+  "\M->" 'calendar-end-of-year
+  "(" 'calendar-beginning-of-month
+  ")" 'calendar-end-of-month
+  "\C-b" 'calendar-scroll-right-three-months
+  "{" 'calendar-backward-month
+  "}" 'calendar-forward-month)
+
 ;;; Emms
 ;;; It is important to set the bindings after emms-browser has loaded,
 ;;; since the mode-maps are defconst'd.
@@ -491,5 +531,20 @@ The return value is the yanked text."
     "q" 'elfeed-kill-buffer
     "s" 'elfeed-show-new-live-search
     "y" 'elfeed-show-yank))
+
+;; Add defun text-object.
+(evil-define-text-object evil-a-defun (count &optional beg end type)
+  "Select a defun."
+  (evil-select-an-object 'evil-defun beg end type count))
+(evil-define-text-object evil-inner-defun (count &optional beg end type)
+  "Select inner defun."
+  (evil-select-inner-object 'evil-defun beg end type count))
+(define-key evil-outer-text-objects-map "d" 'evil-a-defun)
+(define-key evil-inner-text-objects-map "d" 'evil-inner-defun)
+(evil-define-text-object evgeni-inner-defun (count &optional beg end type)
+  (save-excursion
+    (mark-defun)
+    (evil-range (region-beginning) (region-end) type :expanded t)))
+(define-key evil-inner-text-objects-map "m" 'evgeni-inner-defun)
 
 (provide 'init-evil)
