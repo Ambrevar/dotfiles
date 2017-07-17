@@ -205,10 +205,6 @@ See `eshell' for the numeric prefix arg."
   "\M-J" 'org-shiftmetadown
   "<" 'org-up-element)
 
-;;; Use evil-leader in Debugger until I take time to define keys properly.
-(setq evil-leader/in-all-states t)
-(setq evil-leader/no-prefix-mode-rx '("Debugger.*"))
-
 ;;; Package-menu mode
 (evil-set-initial-state 'package-menu-mode 'normal)
 (evil-define-key 'normal package-menu-mode-map "q" 'quit-window)
@@ -240,8 +236,8 @@ See `eshell' for the numeric prefix arg."
   (with-eval-after-load 'init-helm
     (evil-define-key 'insert eshell-mode-map "\C-e" 'helm-find-files))
   (evil-define-key 'normal eshell-mode-map
-    "[[" 'eshell-previous-prompt
-    "]]" 'eshell-next-prompt
+    "[" 'eshell-previous-prompt
+    "]" 'eshell-next-prompt
     "\M-k" 'eshell-previous-prompt
     "\M-j" 'eshell-next-prompt
     "0" 'eshell-bol
@@ -407,6 +403,8 @@ The return value is the yanked text."
 (add-hook 'post-command-hook 'evil-color-modeline)
 (setq evil-mode-line-format nil)
 
+;; TODO: Use motion map for transmission, emms, elfeed...?
+
 (with-eval-after-load 'transmission
   (evil-set-initial-state 'transmission-mode 'normal)
   (evil-define-key 'normal transmission-mode-map
@@ -426,7 +424,6 @@ The return value is the yanked text."
     "u" 'transmission-set-upload
     "c" 'transmission-verify
     "C" 'transmission-set-bandwidth-priority)
-
   (evil-define-key 'normal transmission-files-mode-map
     (kbd "<return>") 'transmission-find-file
     "\M-l" 'transmission-display-file
@@ -444,7 +441,6 @@ The return value is the yanked text."
     "O" 'transmission-view-file
     "U" 'transmission-files-want
     "C" 'transmission-files-priority)
-
   (evil-define-key 'normal transmission-info-mode-map
     "r" 'transmission-trackers-remove
     "c" 'transmission-copy-magnet
@@ -457,10 +453,43 @@ The return value is the yanked text."
     "x" 'transmission-move
     "I" 'transmission-trackers-add
     "C" 'transmission-set-bandwidth-priority)
-
   (evil-define-key 'normal transmission-peers-mode-map
     "S" 'tabulated-list-sort
     "i" 'transmission-info
     "q" 'quit-window))
+
+(with-eval-after-load 'elfeed
+  (evil-set-initial-state 'elfeed-search-mode 'normal)
+  (evil-define-key 'normal elfeed-search-mode-map
+    (kbd "<return>") 'elfeed-search-show-entry
+    "R" 'elfeed-search-fetch
+    "S" 'elfeed-search-set-filter
+    "o" 'elfeed-search-browse-url
+    "O" 'elfeed-play-in-mpv ; Custom function
+    "r" 'elfeed-search-update--force
+    "q" 'quit-window
+    "s" 'elfeed-search-live-filter
+    "y" 'elfeed-search-yank)
+  (evil-define-key '(normal visual) elfeed-search-mode-map
+    "+" 'elfeed-search-tag-all
+    "-" 'elfeed-search-untag-all
+    "U" 'elfeed-search-tag-all-unread
+    "u" 'elfeed-search-untag-all-unread)
+  (evil-define-key 'normal elfeed-show-mode-map
+    "+" 'elfeed-show-tag
+    "-" 'elfeed-show-untag
+    "A" 'elfeed-show-add-enclosure-to-playlist
+    "P" 'elfeed-show-play-enclosure
+    "o" 'elfeed-show-visit
+    "O" 'elfeed-play-in-mpv ; Custom function
+    "d" 'elfeed-show-save-enclosure
+    "r" 'elfeed-show-refresh
+    "]" 'elfeed-show-next
+    "[" 'elfeed-show-prev
+    "\M-j" 'elfeed-show-next
+    "\M-k" 'elfeed-show-prev
+    "q" 'elfeed-kill-buffer
+    "s" 'elfeed-show-new-live-search
+    "y" 'elfeed-show-yank))
 
 (provide 'init-evil)
