@@ -248,8 +248,8 @@ e-mail."
 (with-eval-after-load 'sh-script (require 'init-sh))
 ;;; Arch Linux PKGBUILD
 (add-to-list 'auto-mode-alist '("PKGBUILD" . sh-mode))
-;;; rc
-(nconc package-selected-packages '(rc-mode))
+;;; If we ever need to edit exotic shell configs:
+;; (nconc package-selected-packages '(fish-mode rc-mode))
 
 ;;; Srt (subtitles)
 (add-to-list 'auto-mode-alist '("\\.srt\\'" . text-mode))
