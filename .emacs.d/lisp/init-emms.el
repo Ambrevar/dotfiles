@@ -128,6 +128,7 @@ will always use the same cover per folder."
 
 ;;; Resume on restart.
 ;;; We don't use bookmarks as that could interfere with user's ones.
+;;; TODO: Don't resume if there was no track.
 (with-eval-after-load 'desktop
   (add-to-list 'desktop-globals-to-save 'emms-playing-time)
   (let ((time emms-playing-time))
