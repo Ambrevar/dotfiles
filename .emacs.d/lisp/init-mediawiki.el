@@ -15,7 +15,7 @@
  mediawiki-site-alist
  '(("Wikipedia" "http://en.wikipedia.org/w/" "Ambrevar" "" "Main Page")
    ("Wikibooks" "http://en.wikibooks.org/w/" "Ambrevar" "" "LaTeX")
-   ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Mutt")
+   ("ArchLinux" "https://wiki.archlinux.org/" "Ambrevar" "" "Main Page")
    ("WikEmacs" "https://wikemacs.org/wiki/" "Ambrevar" "" "Main Page")))
 
 (add-hook 'mediawiki-mode-hook 'visual-line-mode)

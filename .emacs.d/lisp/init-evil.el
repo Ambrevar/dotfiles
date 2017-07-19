@@ -547,4 +547,6 @@ The return value is the yanked text."
     (evil-range (region-beginning) (region-end) type :expanded t)))
 (define-key evil-inner-text-objects-map "m" 'evgeni-inner-defun)
 
+(require 'evil-mu4e)
+
 (provide 'init-evil)

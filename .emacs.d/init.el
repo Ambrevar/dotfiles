@@ -98,7 +98,7 @@
 (with-eval-after-load 'emms (require 'init-emms))
 
 ;;; Evil
-(nconc package-selected-packages '(evil evil-commentary evil-leader evil-ediff evil-magit evil-mc evil-mc-extras linum-relative))
+(nconc package-selected-packages '(evil evil-commentary evil-leader evil-ediff evil-magit evil-mc evil-mc-extras linum-relative 'evil-mu4e))
 (when (require 'evil nil t) (require 'init-evil))
 
 ;;; Eshell
@@ -160,21 +160,10 @@
 (when (fboundp 'magit-status)
   (global-set-key (kbd "C-x g") 'magit-status))
 
-;;; Mail with Mutt support.
-(add-hook 'mail-mode-hook 'mail-text)
-(defun mutt-backup-buffer ()
-  "Create a copy of the current buffer.
-This is useful for recovery in case Mutt hangs before sending the
-e-mail."
-  (when (not (boundp 'mutt-backup))
-    (set (make-local-variable 'mutt-backup) (make-temp-file (concat (buffer-name) "-"))))
-  (copy-file buffer-file-name mutt-backup t))
-(defun mutt-edit ()
-  (mail-mode)
-  ;; Just like magit commits.
-  (when (require 'with-editor nil t) (with-editor-mode))
-  (add-hook 'after-save-hook 'mutt-backup-buffer nil t))
-(add-to-list 'auto-mode-alist '("/tmp/mutt-.*" . mutt-edit))
+;;; Mail
+(when (fboundp 'mu4e)
+  (nconc package-selected-packages '(mu4e-maildirs-extension)))
+(with-eval-after-load 'mu4e (require 'init-mu4e))
 
 ;;; Makefile
 (with-eval-after-load 'make-mode (require 'init-makefile))
