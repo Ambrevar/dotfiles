@@ -231,4 +231,6 @@ See `eshell' for the numeric prefix ARG."
 
 (with-eval-after-load 'eshell (require 'init-evil-eshell))
 
+(with-eval-after-load 'pdf-view (require 'init-evil-pdf))
+
 (provide 'init-evil)
