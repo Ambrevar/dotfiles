@@ -196,7 +196,7 @@
 
 ;;; Mail
 (when (fboundp 'mu4e)
-  (nconc package-selected-packages '(mu4e-maildirs-extension)))
+  (nconc package-selected-packages '(helm-mu mu4e-maildirs-extension)))
 (with-eval-after-load 'mu4e (require 'init-mu4e))
 
 ;;; Makefile
