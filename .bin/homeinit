@@ -25,25 +25,26 @@ SOURCEDIR="$HOME/personal"
 [ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
 [ -z "$XDG_DATA_HOME" ] && XDG_DATA_HOME="$HOME/.local/share"
 
+## ln no-clobber
+lnn() {
+	if [ ! -e "$2" ] || [ -h "$2" ]; then
+		ln -svnf "$1" "$2"
+	fi
+}
+
+
 echo "==> 'temp' folder"
 mkdir -pv "$HOME/temp"
 
-echo "==> Abook"
-ln -snfv "$SOURCEDIR/contacts" "$HOME/.abook"
-
-echo "==> Mutt"
-[ -d "$SOURCEDIR/mails" ] && ln -snf "$SOURCEDIR/mails" "$XDG_DATA_HOME/mutt"
-mkdir -pv "$HOME/.cache/mutt/headers"
-mkdir -pv "$HOME/.cache/mutt/messages"
-
 echo "==> Bookmarks"
 mkdir -pv "$XDG_CONFIG_HOME/qutebrowser/bookmarks"
-ln -sfv "$SOURCEDIR/bookmarks/bookmarks" "$XDG_CONFIG_HOME/qutebrowser/bookmarks/urls"
-ln -sfv "$SOURCEDIR/bookmarks/quickmarks" "$XDG_CONFIG_HOME/qutebrowser/"
+lnn "$SOURCEDIR/bookmarks/bookmarks" "$XDG_CONFIG_HOME/qutebrowser/bookmarks/urls"
+lnn "$SOURCEDIR/bookmarks/quickmarks" "$XDG_CONFIG_HOME/qutebrowser/"
 
-echo "==> Newsbeuter"
-mkdir -pv "$XDG_DATA_HOME/newsbeuter"
-ln -sfv "$SOURCEDIR/news/urls" "$XDG_CONFIG_HOME/newsbeuter/"
+if command -v emacs >/dev/null 2>&1; then
+	echo "==> Emacs extra packages"
+	yes | emacs --batch -l ~/.emacs.d/init.el --eval '(and (package-refresh-contents) (package-install-selected-packages))'
+fi
 
 echo "==> Go path"
 mkdir -pv "$HOME/go" "$HOME/.go-tools"
@@ -62,7 +63,13 @@ if command -v go >/dev/null 2>&1; then
 		github.com/rogpeppe/godef
 fi
 
-if command -v emacs >/dev/null 2>&1; then
-	echo "==> Emacs extra packages"
-	yes | emacs --batch -l ~/.emacs.d/init.el --eval '(progn (package-refresh-contents)(package-install-selected-packages))'
-fi
+echo "==> Mail"
+lnn "$SOURCEDIR/mail/mbsyncrc" "$HOME/.mbsyncrc"
+mkdir -pv "$HOME/.cache/mail/"
+while IFS= read -r i; do
+	mkdir -pv "$i"
+done <<EOF
+$(awk '/^Path/ {$1=""; gsub(/^[\t ]+/, ""); print}' ~/.mbsyncrc
+EOF
+mbsync -a
+mu index --maildir=~/.cache/mail
