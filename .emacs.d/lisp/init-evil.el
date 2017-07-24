@@ -165,6 +165,7 @@ See `eshell' for the numeric prefix ARG."
 (setq evil-mode-line-format nil)
 
 ;; Add defun text-object.
+;; https://github.com/emacs-evil/evil/issues/874
 (evil-define-text-object evil-a-defun (count &optional beg end type)
   "Select a defun."
   (evil-select-an-object 'evil-defun beg end type count))
@@ -173,11 +174,6 @@ See `eshell' for the numeric prefix ARG."
   (evil-select-inner-object 'evil-defun beg end type count))
 (define-key evil-outer-text-objects-map "d" 'evil-a-defun)
 (define-key evil-inner-text-objects-map "d" 'evil-inner-defun)
-(evil-define-text-object evgeni-inner-defun (count &optional beg end type)
-  (save-excursion
-    (mark-defun)
-    (evil-range (region-beginning) (region-end) type :expanded t)))
-(define-key evil-inner-text-objects-map "m" 'evgeni-inner-defun)
 
 
 
