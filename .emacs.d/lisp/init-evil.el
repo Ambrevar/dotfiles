@@ -64,7 +64,7 @@ See `eshell' for the numeric prefix ARG."
 (evil-leader/set-key
   "RET" 'eshell-or-new-session
   "\\" 'toggle-window-split
-  "a" 'org-agenda
+  ;; "a" 'org-agenda
   "b" 'buffer-menu
   "e" 'find-file
   "k" 'kill-this-buffer
@@ -75,8 +75,8 @@ See `eshell' for the numeric prefix ARG."
   ;; Use S-SPC instead of SPC to browse commit details.
   (evil-leader/set-key "v" 'magit-status))
 (when (fboundp 'emms-smart-browse)
-  (evil-leader/set-key "M" 'helm-emms)
-  (evil-leader/set-key "m" 'emms-smart-browse))
+  (evil-leader/set-key "A" 'helm-emms)
+  (evil-leader/set-key "a" 'emms-smart-browse))
 (with-eval-after-load 'emms
   (evil-leader/set-key
     "p" 'emms-pause
@@ -207,7 +207,10 @@ See `eshell' for the numeric prefix ARG."
 ;;; since the mode-maps are defconst'd.
 (with-eval-after-load 'emms-browser (require 'init-evil-emms))
 
-(require 'evil-mu4e)
+(when (require 'evil-mu4e nil t)
+  (evil-set-initial-state 'mu4e-compose-mode 'insert)
+  (defun mu4e-headers-unread () (interactive) (mu4e-headers-search "flag:unread AND NOT flag:trashed"))
+  (evil-leader/set-key "m" 'mu4e-headers-unread))
 
 (with-eval-after-load 'init-helm (require 'init-evil-helm))
 

@@ -1,20 +1,25 @@
 ;;; mu4e
 
 ;; TODO: Multi-accounts, see 'contexts'.
-;; TODO: Overview of folders and their unread / flagged e-mails. Or simply use filters?
-;; TODO: Cross-folder filters?
+;; TODO: Change `display-time-mail-icon' color in modeline.
+;; TODO: Reply to all by default.
 ;; TODO: Is it possible to mbsync without attachments?
-;; TODO: Fast reply: do not prompt and always reply to all but myself.
-;; TODO: Test PGP.
 ;; TODO: Try-out BBDB and replace abook. See appendix manual.
-;; TODO: How to add attachments? See appendix manual.
-;; TODO: Test queued e-mail with smtp-*-queue. See long example in the manual.
 
-(require 'mu4e-maildirs-extension)
+(when (require 'mu4e-maildirs-extension nil t)
+  (mu4e-maildirs-extension))
+(when (require 'mu4e-alert nil t)
+  (mu4e-alert-enable-mode-line-display))
 
 (setq
  ;; Where to save attachments
  mu4e-attachment-dir "~/temp"
+
+ ;; IMAP sync.
+ mu4e-maildir "~/.cache/mail"
+ mu4e-get-mail-command "mbsync -a"
+ mu4e-update-interval 60
+ mu4e-change-filenames-when-moving t ; Needed for mbsync.
 
  ;; SMTP
  message-send-mail-function 'smtpmail-send-it
@@ -36,27 +41,25 @@
  mu4e-view-image-max-width 800
  mu4e-hide-index-messages t
 
- ;; Unicode chars for decoration might cause issues with some fonts or in terminals.
- mu4e-use-fancy-chars t
-
  ;; If you're using a dark theme, and the messages are hard to read, it
  ;; can help to change the luminosity, e.g.:
  shr-color-visible-luminance-min 80
 
  ;; Gmail-style threading.
- mu4e-headers-include-related t ; TODO: Test it.
+ mu4e-headers-include-related t
 
  ;; Because default completion can be extended (e.g. Helm, Ivy).
  mu4e-completing-read-function 'completing-read
 
  mu4e-headers-sort-direction 'ascending)
 
-;;; Since we sort in ascending diretion, we default to the end of buffer.
-(add-hook 'mu4e-headers-found-hook 'end-of-buffer)
+;; Unicode chars for decoration might cause issues with some fonts or in terminals.
+;; https://github.com/djcb/mu/issues/733
+;; https://github.com/djcb/mu/issues/1062
+;; (setq mu4e-use-fancy-chars t)
 
-;;; Bindings
-;;; Is it still useful when Helm is on? What about multiple inboxes?
-;; (setq mu4e-maildir-shortcuts '(("/Inbox" . ?i)))
+;;; Since we sort in ascending direction, we default to the end of buffer.
+(add-hook 'mu4e-headers-found-hook 'end-of-buffer)
 
 (defun mu4e-add-fortune-signature ()
   (require 'functions) ; For `call-process-to-string'.
