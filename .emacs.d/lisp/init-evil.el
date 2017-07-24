@@ -181,21 +181,8 @@ See `eshell' for the numeric prefix ARG."
 
 
 
-;; Motion map: useful for `Info-mode', `help-mode', etc.
-;; See `evil-motion-state-modes'.
-(evil-global-set-key 'motion (kbd "TAB") 'forward-button)
-(evil-global-set-key 'motion (kbd "<backtab>") 'backward-button)
-(evil-define-key 'motion Info-mode-map
-  (kbd "S-SPC") 'Info-scroll-up
-  "\C-f" 'Info-scroll-up
-  "\C-b" 'Info-scroll-down
-  "\M-sf" 'Info-goto-node
-  "gg" 'evil-goto-first-line)
-(evil-define-key 'motion help-mode-map
-  (kbd "S-SPC") 'scroll-up-command
-  "\C-f" 'scroll-up-command
-  "\C-b" 'scroll-down-command
-  "\C-o" 'help-go-back)
+(require 'init-evil-info)
+(require 'init-evil-help)
 
 (with-eval-after-load 'transmission (require 'init-evil-transmission))
 
