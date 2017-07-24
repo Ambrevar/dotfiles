@@ -90,23 +90,6 @@ See `eshell' for the numeric prefix ARG."
     "G" 'helm-grep-git-all-or-ag
     "r" 'helm-resume))
 
-
-;; Motion map: useful for `Info-mode', `help-mode', etc.
-;; See `evil-motion-state-modes'.
-(evil-global-set-key 'motion (kbd "TAB") 'forward-button)
-(evil-global-set-key 'motion (kbd "<backtab>") 'backward-button)
-(evil-define-key 'motion Info-mode-map
-  (kbd "S-SPC") 'Info-scroll-up
-  "\C-f" 'Info-scroll-up
-  "\C-b" 'Info-scroll-down
-  "\M-sf" 'Info-goto-node
-  "gg" 'evil-goto-first-line)
-(evil-define-key 'motion help-mode-map
-  (kbd "S-SPC") 'scroll-up-command
-  "\C-f" 'scroll-up-command
-  "\C-b" 'scroll-down-command
-  "\C-o" 'help-go-back)
-
 ;;; Term mode should be in emacs state. It confuses 'vi' otherwise.
 ;;; Upstream will not change this:
 ;;; https://github.com/emacs-evil/evil/issues/854#issuecomment-309085267
@@ -198,7 +181,22 @@ See `eshell' for the numeric prefix ARG."
 
 
 
-;; TODO: Use motion map for package, transmission, emms, elfeed...?
+;; Motion map: useful for `Info-mode', `help-mode', etc.
+;; See `evil-motion-state-modes'.
+(evil-global-set-key 'motion (kbd "TAB") 'forward-button)
+(evil-global-set-key 'motion (kbd "<backtab>") 'backward-button)
+(evil-define-key 'motion Info-mode-map
+  (kbd "S-SPC") 'Info-scroll-up
+  "\C-f" 'Info-scroll-up
+  "\C-b" 'Info-scroll-down
+  "\M-sf" 'Info-goto-node
+  "gg" 'evil-goto-first-line)
+(evil-define-key 'motion help-mode-map
+  (kbd "S-SPC") 'scroll-up-command
+  "\C-f" 'scroll-up-command
+  "\C-b" 'scroll-down-command
+  "\C-o" 'help-go-back)
+
 (with-eval-after-load 'transmission (require 'init-evil-transmission))
 
 (with-eval-after-load 'elfeed (require 'init-evil-elfeed))

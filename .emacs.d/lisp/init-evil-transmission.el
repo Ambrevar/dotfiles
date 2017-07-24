@@ -1,8 +1,8 @@
 ;;; Evil+Transmission
 
-(evil-set-initial-state 'transmission-mode 'normal)
+(evil-set-initial-state 'transmission-mode 'motion)
 
-(evil-define-key 'normal transmission-mode-map
+(evil-define-key 'motion transmission-mode-map
   (kbd "<return>") 'transmission-files
   "D" 'transmission-delete
   "S" 'tabulated-list-sort
@@ -20,7 +20,7 @@
   "c" 'transmission-verify
   "C" 'transmission-set-bandwidth-priority)
 
-(evil-define-key 'normal transmission-files-mode-map
+(evil-define-key 'motion transmission-files-mode-map
   (kbd "<return>") 'transmission-find-file
   "\M-l" 'transmission-display-file
   "!" 'transmission-files-command
@@ -38,7 +38,7 @@
   "U" 'transmission-files-want
   "C" 'transmission-files-priority)
 
-(evil-define-key 'normal transmission-info-mode-map
+(evil-define-key 'motion transmission-info-mode-map
   "r" 'transmission-trackers-remove
   "c" 'transmission-copy-magnet
   "d" 'transmission-set-torrent-download
@@ -51,7 +51,7 @@
   "I" 'transmission-trackers-add
   "C" 'transmission-set-bandwidth-priority)
 
-(evil-define-key 'normal transmission-peers-mode-map
+(evil-define-key 'motion transmission-peers-mode-map
   "S" 'tabulated-list-sort
   "i" 'transmission-info
   "q" 'quit-window)

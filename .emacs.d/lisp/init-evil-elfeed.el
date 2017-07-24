@@ -1,8 +1,8 @@
 ;;; Evil+Elfeed
 
-(evil-set-initial-state 'elfeed-search-mode 'normal)
+(evil-set-initial-state 'elfeed-search-mode 'motion)
 
-(evil-define-key 'normal elfeed-search-mode-map
+(evil-define-key 'motion elfeed-search-mode-map
   (kbd "<return>") 'elfeed-search-show-entry
   "R" 'elfeed-search-fetch
   "S" 'elfeed-search-set-filter

@@ -1,6 +1,7 @@
 ;;; Evil+EMMS
+
 (dolist (mode '(emms-browser-mode emms-playlist-mode))
-  (evil-set-initial-state mode 'normal))
+  (evil-set-initial-state mode 'motion))
 
 (defun evil/emms-playlist-mode-insert-newline-above ()
   "Insert a newline above point."

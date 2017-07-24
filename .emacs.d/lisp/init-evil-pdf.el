@@ -1,9 +1,9 @@
 ;;; Evil+pdftools
 
-(dolist (mode '(pdf-view-mode)) ; TODO: Add other modes?
-  (evil-set-initial-state mode 'normal))
+;; TODO: Add other modes? Looks like it's not needed.
+(evil-set-initial-state 'pdf-view-mode 'motion)
 
-(evil-define-key 'normal pdf-view-mode-map
+(evil-define-key 'motion pdf-view-mode-map
   (kbd "<return>") 'image-next-line
   "j" 'pdf-view-next-line-or-next-page
   "k" 'pdf-view-previous-line-or-previous-page
@@ -67,9 +67,9 @@
   "zm" 'pdf-view-midnight-minor-mode
   "zp" 'pdf-view-printer-minor-mode)
 
-(evil-define-key 'normal pdf-outline-minor-mode-map "o" 'pdf-outline)
+(evil-define-key 'motion pdf-outline-minor-mode-map "o" 'pdf-outline)
 
-(evil-define-key 'normal pdf-occur-buffer-mode-map
+(evil-define-key 'motion pdf-occur-buffer-mode-map
   (kbd "RET") 'pdf-occur-goto-occurrence
   "\C-o" 'pdf-occur-view-occurrence
   (kbd "SPC") 'pdf-occur-view-occurrence
