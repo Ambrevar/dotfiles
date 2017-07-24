@@ -4,6 +4,7 @@
 ;; with C-h (help prefix) and C-k (`evil-insert-digraph').  We use M- instead.
 (define-keys helm-map
   "C-\\" 'helm-toggle-resplit-and-swap-windows
+  "M-\\" 'helm-toggle-resplit-and-swap-windows
   "C-f" 'helm-next-page
   "C-b" 'helm-previous-page
   "M-h" 'helm-next-source
@@ -15,6 +16,8 @@
   "<escape>" 'helm-keyboard-quit)
 
 (evil-define-key 'normal helm-map
+  "g" 'helm-beginning-of-buffer
+  "G" 'helm-end-of-buffer
   "\C-f" 'helm-next-page
   "\C-b" 'helm-previous-page)
 
@@ -29,6 +32,6 @@
     "C-/" 'helm-ff-run-find-sh-command
     "M-h" 'helm-find-files-up-one-level
     "M-l" 'helm-execute-persistent-action
-    "C-l" nil)) ; So that the header displays the above binding.
+    "C-l" nil)) ; So the header displays the above binding.
 
 (provide 'init-evil-helm)
