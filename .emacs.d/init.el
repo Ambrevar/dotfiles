@@ -68,7 +68,7 @@
 (add-hook 'bibtex-mode-hook 'turn-off-indent-tabs)
 
 ;;; Bison/Flex
-(nconc package-selected-packages '(bison-mode))
+;; (nconc package-selected-packages '(bison-mode))
 
 ;;; C/C++
 (with-eval-after-load 'cc-mode (require 'init-cc))
