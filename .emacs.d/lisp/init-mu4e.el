@@ -1,7 +1,6 @@
 ;;; mu4e
 
-;; TODO: Multi-accounts, see 'contexts'.
-;; TODO: Change `display-time-mail-icon' color in modeline.
+;; TODO: Notifications don't work? Change `display-time-mail-icon' color in modeline.
 ;; TODO: Reply to all by default.
 ;; TODO: Is it possible to mbsync without attachments?
 ;; TODO: Try-out BBDB and replace abook. See appendix manual.
@@ -49,17 +48,18 @@
  mu4e-headers-include-related t
 
  ;; Because default completion can be extended (e.g. Helm, Ivy).
- mu4e-completing-read-function 'completing-read
-
- mu4e-headers-sort-direction 'ascending)
+ mu4e-completing-read-function 'completing-read)
 
 ;; Unicode chars for decoration might cause issues with some fonts or in terminals.
 ;; https://github.com/djcb/mu/issues/733
 ;; https://github.com/djcb/mu/issues/1062
 ;; (setq mu4e-use-fancy-chars t)
 
+;;; Sorting in ascending order is impeded by `mu4e-search-results-limit': the 500 oldest e-mails will be displayed first.
+;;; https://github.com/djcb/mu/issues/809
+;; (setq mu4e-headers-sort-direction 'ascending)
 ;;; Since we sort in ascending direction, we default to the end of buffer.
-(add-hook 'mu4e-headers-found-hook 'end-of-buffer)
+;; (add-hook 'mu4e-headers-found-hook 'end-of-buffer)
 
 (defun mu4e-add-fortune-signature ()
   (require 'functions) ; For `call-process-to-string'.
@@ -68,5 +68,7 @@
                 user-full-name
                 (call-process-to-string "fortune" "-s"))))
 (add-hook 'mu4e-compose-pre-hook 'mu4e-add-fortune-signature)
+
+(load "~/personal/mail/mu4e.el")
 
 (provide 'init-mu4e)
