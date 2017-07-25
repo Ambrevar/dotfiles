@@ -285,6 +285,12 @@
 ;;; Syntax checking
 (nconc package-selected-packages '(flycheck helm-flycheck))
 (with-eval-after-load 'flycheck
+  (defun flycheck-or-whitespace-mode ()
+    (interactive)
+    (when (derived-mode-p 'prog-mode)
+      (flycheck-mode 'toggle))
+    (whitespace-mode 'toggle))
+  (global-set-key (kbd "<f9>") 'flycheck-or-whitespace-mode)
   (define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))
 
 ;;; TeX / LaTeX / Texinfo
