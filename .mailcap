@@ -1,0 +1,2 @@
+image/*; sxiv %s
+video/*; mpv %s
