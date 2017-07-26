@@ -69,6 +69,6 @@
                 (call-process-to-string "fortune" "-s"))))
 (add-hook 'mu4e-compose-pre-hook 'mu4e-add-fortune-signature)
 
-(load "~/personal/mail/mu4e.el")
+(load "~/personal/mail/mu4e.el" t)
 
 (provide 'init-mu4e)
