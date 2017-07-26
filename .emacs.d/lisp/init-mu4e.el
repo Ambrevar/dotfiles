@@ -10,6 +10,10 @@
 (when (require 'mu4e-alert nil t)
   (mu4e-alert-enable-mode-line-display))
 
+(defun mu4e-headers-unread ()
+  (interactive)
+  (mu4e-headers-search "flag:unread AND NOT flag:trashed"))
+
 (setq
  ;; Where to save attachments
  mu4e-attachment-dir "~/temp"

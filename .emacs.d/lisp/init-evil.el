@@ -41,22 +41,6 @@
   (evil-global-set-key 'normal "gc" 'evil-commentary)
   (evil-global-set-key 'normal "gy" 'evil-commentary-yank))
 
-(defun eshell-or-new-session (&optional arg)
-  "Create an interactive Eshell buffer.
-If there is already an Eshell session active, switch to it.
-If current buffer is already an Eshell buffer, create a new one and switch to it.
-See `eshell' for the numeric prefix ARG."
-  (interactive "P")
-  (if (eq major-mode 'eshell-mode)
-      (eshell (or arg t))
-    (eshell arg)))
-
-(defun org-find-first-agenda ()
-  (interactive)
-  (when (not (boundp 'org-agenda-files))
-    (require 'org))
-  (find-file (car org-agenda-files)))
-
 ;;; Term mode should be in emacs state. It confuses 'vi' otherwise.
 ;;; Upstream will not change this:
 ;;; https://github.com/emacs-evil/evil/issues/854#issuecomment-309085267
@@ -155,9 +139,9 @@ See `eshell' for the numeric prefix ARG."
 ;;; since the mode-maps are defconst'd.
 (with-eval-after-load 'emms-browser (require 'init-evil-emms))
 
-(when (require 'evil-mu4e nil t)
-  (evil-set-initial-state 'mu4e-compose-mode 'insert)
-  (defun mu4e-headers-unread () (interactive) (mu4e-headers-search "flag:unread AND NOT flag:trashed")))
+(with-eval-after-load 'mu4e
+  (when (require 'evil-mu4e nil t)
+    (evil-set-initial-state 'mu4e-compose-mode 'insert)))
 
 (with-eval-after-load 'init-helm (require 'init-evil-helm))
 

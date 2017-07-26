@@ -33,7 +33,8 @@
    "G" 'helm-grep-git-all-or-ag
    "r" 'helm-resume))
 
-(when (require 'evil-mu4e nil t)
+(when (fboundp 'mu4e)
+  (require 'evil-mu4e nil t)
   (evil-leader/set-key "m" 'mu4e-headers-unread))
 
 (provide 'init-evil-leader)

@@ -17,6 +17,9 @@
 
 ;;; Agendas.
 (add-to-list 'org-agenda-files "~/personal/todo/todo.org")
+(defun org-find-first-agenda ()
+  (interactive)
+  (find-file (car org-agenda-files)))
 
 ;;; Set PDF association in Org-mode (original is 'default).
 (setcdr (assoc "\\.pdf\\'" org-file-apps) 'emacs)

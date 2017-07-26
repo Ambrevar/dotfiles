@@ -95,6 +95,16 @@
         (not (or (string= "" str)
                  (string-prefix-p " " str)))))
 
+(defun eshell-or-new-session (&optional arg)
+  "Create an interactive Eshell buffer.
+If there is already an Eshell session active, switch to it.
+If current buffer is already an Eshell buffer, create a new one and switch to it.
+See `eshell' for the numeric prefix ARG."
+  (interactive "P")
+  (if (eq major-mode 'eshell-mode)
+      (eshell (or arg t))
+    (eshell arg)))
+
 ;;; REVIEW: Emacs' standard functions fail when output has empty lines.
 ;;; This implementation is more reliable.
 ;;; Reported at https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27405.

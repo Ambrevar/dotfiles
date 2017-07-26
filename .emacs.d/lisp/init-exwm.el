@@ -71,16 +71,14 @@
   (exwm-input-set-key (kbd "C-6") #'evil-switch-to-windows-last-buffer))
 
 ;;; Emacs mode shortcuts.
-;; TODO: Move `org-find-first-agenda' to init-org.
 (exwm-input-set-key (kbd "s-t") #'org-find-first-agenda)
-;; TODO: Move `eshell-or-new-session' to init-eshell.
 (exwm-input-set-key (kbd "s-<return>") #'eshell-or-new-session)
-(when (require 'magit nil t)
+(when (fboundp 'magit-status)
   (exwm-input-set-key (kbd "s-v") #'magit-status))
-(when (require 'emms nil t)
+(when (fboundp 'emms)
   (exwm-input-set-key (kbd "s-a") #'emms-smart-browse)
   (exwm-input-set-key (kbd "s-A") #'emms))
-(when (require 'mu4e nil t)
+(when (fboundp 'mu4e)
   (exwm-input-set-key (kbd "s-m") #'mu4e-headers-unread))
 
 ;;; External application shortcuts.

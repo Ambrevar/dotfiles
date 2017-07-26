@@ -53,9 +53,9 @@
 
 ;;; Asymptote
 (add-to-list 'load-path "/usr/share/asymptote")
-(autoload 'asy-mode "asy-mode.el" "Asymptote major mode." t)
-(autoload 'lasy-mode "asy-mode.el" "Hybrid Asymptote/Latex major mode." t)
-(autoload 'asy-insinuate-latex "asy-mode.el" "Asymptote insinuate LaTeX." t)
+(autoload 'asy-mode "asy-mode" "Asymptote major mode." t)
+(autoload 'lasy-mode "asy-mode" "Hybrid Asymptote/Latex major mode." t)
+(autoload 'asy-insinuate-latex "asy-mode" "Asymptote insinuate LaTeX." t)
 (add-to-list 'auto-mode-alist '("\\.asy$" . asy-mode))
 
 ;;; BBCode
@@ -139,6 +139,7 @@
 ;;; Extend completion.
 (nconc package-selected-packages '(pcomplete-extension))
 (with-eval-after-load 'eshell (require 'init-eshell))
+(autoload 'eshell-or-new-session "eshell")
 
 ;;; Esup
 (nconc package-selected-packages '(esup))
@@ -200,6 +201,7 @@
 (when (fboundp 'mu4e)
   (nconc package-selected-packages '(helm-mu mu4e-maildirs-extension mu4e-alert)))
 (with-eval-after-load 'mu4e (require 'init-mu4e))
+(autoload 'mu4e-headers-unread "mu4e")
 
 ;;; Makefile
 (with-eval-after-load 'make-mode (require 'init-makefile))
@@ -245,11 +247,13 @@
 
 ;;; Org-mode
 (with-eval-after-load 'org (require 'init-org))
+(autoload 'org-find-first-agenda "org")
 
 ;;; PDF
 ;;; pdf-tools requires poppler built with cairo support.
 (nconc package-selected-packages '(pdf-tools))
 (when (require 'pdf-tools nil t)
+  ;; TODO: The reader should be compiler only when a frame is available.
   (pdf-tools-install))
 
 ;;; Perl
