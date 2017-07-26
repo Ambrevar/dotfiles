@@ -326,6 +326,10 @@
 (when (require 'wgrep nil t)
   (set-face-attribute 'wgrep-face nil :inherit 'ediff-current-diff-C :foreground 'unspecified :background 'unspecified :box nil))
 
+;;; Window manager
+(nconc package-selected-packages '(exwm))
+(when (require 'exwm nil t) (require 'init-exwm))
+
 ;;; XML / SGML
 (defun sgml-setup ()
   (setq sgml-xml-mode t)
