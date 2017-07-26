@@ -131,12 +131,13 @@ will always use the same cover per folder."
 ;;; TODO: Don't resume if there was no track.
 (with-eval-after-load 'desktop
   (add-to-list 'desktop-globals-to-save 'emms-playing-time)
-  (let ((time emms-playing-time))
-    (setq emms-playing-time 0) ; Don't disturb the time display.
-    (emms-start)
-    (sleep-for 0 200) ; This is required for the player might not be ready yet.
-    (emms-player-seek-to time)
-    (emms-pause)))
+  (when (emms-playlist-current-selected-track)
+    (let ((time emms-playing-time))
+      (setq emms-playing-time 0) ; Don't disturb the time display.
+      (emms-start)
+      (sleep-for 0 200) ; This is required for the player might not be ready yet.
+      (emms-player-seek-to time)
+      (emms-pause))))
 
 ;;; TODO: See if mpd is faster at building the db. Not so important.
 
