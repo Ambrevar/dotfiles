@@ -284,7 +284,7 @@
 
 ;;; Syntax checking
 (nconc package-selected-packages '(flycheck helm-flycheck))
-(with-eval-after-load 'flycheck
+(when (require 'flycheck nil t)
   (defun flycheck-or-whitespace-mode ()
     (interactive)
     (when (derived-mode-p 'prog-mode)
