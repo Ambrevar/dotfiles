@@ -2,11 +2,14 @@
 *.tmp
 .Xauthority
 .abook
+.authinfo*
+.bash*
 .cache
 .dbus
 .emacs.d/elpa
 .fontconfig
 .gimp*
+.go*
 .lesshst
 .local/share/Trash
 .local/share/applications/wine*
@@ -14,8 +17,12 @@
 .local/share/mime/*
 .local/share/newsbeuter
 .local/share/webkit
+.mbsyncrc
 .mtab.fuseiso
+.mu
 .mutt.*
+.*_hook
+.serverauth*
 .ssh
 .texlive*
 .wine
