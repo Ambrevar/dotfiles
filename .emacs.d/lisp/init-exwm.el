@@ -36,14 +36,21 @@
 (exwm-input-set-key (kbd "s-f") #'find-file)
 (exwm-input-set-key (kbd "s-SPC") #'exwm-floating-toggle-floating)
 
-(defun exwm-layout-toggle-fullscreen-or-delete-other-windows ()
+(defvar exwm--last-window-configuration nil "Last window configuration before calling `delete-other-windows'.")
+(defun exwm-layout-toggle-fullscreen-or-single-window ()
   (interactive)
   (if (eq major-mode 'exwm-mode)
       (exwm-layout-toggle-fullscreen)
-    ;; TODO: A toggle would be nice, so that pressing s-o again would restore the deleted windows.
-    ;; Use register?
-    (delete-other-windows)))
-(exwm-input-set-key (kbd "s-o") #'exwm-layout-toggle-fullscreen-or-delete-other-windows)
+    ;; TODO: Store window configurations in a buffer-name-indexed alist? Not
+    ;; sure that would ever be useful.
+    ;; TODO: Make the following a `toggle-single-window' defun and store in functions.el?
+    (if (/= (count-windows) 1)
+        (progn
+          (setq exwm--last-window-configuration (current-window-configuration))
+          (delete-other-windows))
+      (when exwm--last-window-configuration
+        (set-window-configuration exwm--last-window-configuration)))))
+(exwm-input-set-key (kbd "s-o") #'exwm-layout-toggle-fullscreen-or-single-window)
 
 (when (require 'functions)
   (exwm-input-set-key (kbd "s-\\") #'toggle-window-split))
