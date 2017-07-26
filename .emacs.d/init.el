@@ -39,6 +39,7 @@
 (when (require 'package nil t)
   ;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
   (setq package-user-dir (concat emacs-cache-folder "elpa"))
   (package-initialize))
 
@@ -82,40 +83,6 @@
 (nconc package-selected-packages '(company helm-company))
 (when (require 'company nil t)
   (setq company-idle-delay nil))
-
-;;; Contacts
-(nconc package-selected-packages '(bbdb))
-(when (require 'bbdb nil t)
-  ;; file where things will be saved
-  (setq bbdb-file (concat emacs-cache-folder "bbdb"))
-
-  ;; load bbdb
-  ;; (add-to-list 'load-path (concat emacsd-vendor-dir "/bbdb"))
-  ;; (require 'bbdb-loaddefs)
-  ;; (require 'bbdb)
-
-  ;; initialization
-  (bbdb-initialize 'mu4e 'gnus 'message 'anniv)
-  (bbdb-mua-auto-update-init 'mu4e 'gnus 'message 'anniv) ; TODO: Test anniv, gnus, message.
-  ;; TODO: Import from abook. See https://www.emacswiki.org/emacs/BbdbImporters#toc10.
-
-  (setq
-   bbdb-pop-up-window-size 10
-   ;; What do we do when invoking bbdb interactively
-   bbdb-mua-update-interactive-p '(query . create)
-   ;; Make sure we look at every address in a message and not only the first one.
-   bbdb-message-all-addresses t)
-
-  ;; use ; on a message to invoke bbdb interactively
-  ;; (add-hook
-  ;; 'gnus-summary-mode-hook
-  ;; (lambda ()
-  ;; (define-key gnus-summary-mode-map (kbd ";") 'bbdb-mua-edit-field)))
-
-  ;;; This is for non interactive bbdb invocation, but it was a bit too much
-  ;; (setq bbdb-update-records-p 'query)
-  )
-
 
 ;;; Debbugs
 (nconc package-selected-packages '(debbugs))
@@ -246,6 +213,7 @@
   (load "~/personal/news/elfeed.el" t))
 
 ;;; Org-mode
+(nconc package-selected-packages '(org-plus-contrib)) ; Contains latest 'org.
 (with-eval-after-load 'org (require 'init-org))
 (autoload 'org-find-first-agenda "org")
 

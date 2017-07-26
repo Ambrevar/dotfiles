@@ -28,4 +28,7 @@
 (dolist (fun '(turn-off-linum turn-off-indent-tabs turn-off-auto-fill))
   (add-hook 'org-mode-hook fun))
 
+(when (require 'org-contacts nil t)
+  (setq org-contacts-files '("~/personal/contacts/contacts.org")))
+
 (provide 'init-org)
