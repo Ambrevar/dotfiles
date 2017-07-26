@@ -22,9 +22,9 @@
 ;; (require 'exwm-systemtray)
 ;; (exwm-systemtray-enable)
 
-(exwm-input-set-key (kbd "s-r") #'exwm-reset)
 ;;; Those cannot be set globally: if Emacs would be run in another WM, the "s-"
 ;;; prefix will conflict with the WM bindings.
+(exwm-input-set-key (kbd "s-R") #'exwm-reset)
 (exwm-input-set-key (kbd "s-x") #'exwm-input-toggle-keyboard)
 (exwm-input-set-key (kbd "s-h") #'windmove-left)
 (exwm-input-set-key (kbd "s-j") #'windmove-down)
@@ -126,11 +126,11 @@
 (exwm-input-set-key (kbd "s-<kp-add>") #'exwm-start-volume-up)
 (exwm-input-set-key (kbd "s-<kp-enter>") #'exwm-start-volume-toggle)
 
-;; 's-&': Launch application. TODO: Rebind to 's-!'? s-r? (Need to rebind exwm-reset to s-R then.)
-(exwm-input-set-key (kbd "s-&")
-                    (lambda (command)
-                      (interactive (list (read-shell-command "$ ")))
-                      (start-process-shell-command command nil command)))
+(defun exwm-start ()
+  (interactive (list (read-shell-command "$ ")))
+  (start-process-shell-command command nil command))
+(exwm-input-set-key (kbd "s-&") #'exwm-start)
+(exwm-input-set-key (kbd "s-r") #'exwm-start)
 
 (exwm-enable) ; TODO: This should be left to Emacs' commandline arguments.
 
