@@ -132,7 +132,7 @@
 (with-eval-after-load 'emms (require 'init-emms))
 
 ;;; Evil
-(nconc package-selected-packages '(evil evil-commentary evil-leader evil-ediff evil-magit evil-mc evil-mc-extras linum-relative evil-mu4e))
+(nconc package-selected-packages '(evil evil-commentary evil-ediff evil-magit evil-mc evil-mc-extras linum-relative evil-mu4e))
 (when (require 'evil nil t) (require 'init-evil))
 
 ;;; Eshell
