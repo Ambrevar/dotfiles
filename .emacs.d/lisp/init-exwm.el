@@ -4,11 +4,8 @@
 (defun exwm-rename-buffer-to-title () (exwm-workspace-rename-buffer exwm-title))
 (add-hook 'exwm-update-title-hook 'exwm-rename-buffer-to-title)
 
-;; TODO: Toggle mode-line for EXWM buffers only. Test.
 (add-hook 'exwm-floating-setup-hook 'exwm-layout-hide-mode-line)
 (add-hook 'exwm-floating-exit-hook 'exwm-layout-show-mode-line)
-;; (setq exwm-workspace-minibuffer-position 'bottom)
-;; (setq exwm-workspace-display-echo-area-timeout 2)
 
 ;;; Allow non-floating resizing with mouse.
 (setq window-divider-default-bottom-width 2
@@ -16,7 +13,7 @@
 (window-divider-mode)
 
 ;; TODO: Add support for status bar (dzen2, xmobar, i3bar).
-;; TODO: Resizing floating windows with mouse does not work.
+;; TODO: Resizing floating windows with mouse does not work on Ubuntu Trusty.
 ;; TODO: How to prevent sending keys to window? ":" in Qutebrowser does not work. Issue with evil?
 ;; TODO: Spawn select programs in floating mode. (E.g. mpv, mupen64plus, mplayer, qemu, steam, .exe (wine).)
 
@@ -26,6 +23,8 @@
 ;; (exwm-systemtray-enable)
 
 (exwm-input-set-key (kbd "s-r") #'exwm-reset)
+;;; Those cannot be set globally: if Emacs would be run in another WM, the "s-"
+;;; prefix will conflict with the WM bindings.
 (exwm-input-set-key (kbd "s-x") #'exwm-input-toggle-keyboard)
 (exwm-input-set-key (kbd "s-h") #'windmove-left)
 (exwm-input-set-key (kbd "s-j") #'windmove-down)
@@ -55,11 +54,6 @@
   (exwm-input-set-key (kbd "s-g") #'helm-grep-git-or-ag)
   (exwm-input-set-key (kbd "s-G") #'helm-grep-git-all-or-ag))
 
-;; TODO: Remove evil-leader? Set all those key bindings with `global-set-key'
-;; and call `exwm-input-set-key' dynamically upon the bindings starting with
-;; `s-'? No, because that would conflict with other WM.
-;; Move evil-leader to a separate init file and remove evil-leader from package-selected-packages.
-;; Comment that it is superseded by EXWM.
 ;; TODO: Move `switch-to-last-buffer' to functions.el.
 (defun switch-to-last-buffer ()
   (interactive)
