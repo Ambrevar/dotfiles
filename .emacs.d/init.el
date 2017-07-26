@@ -190,6 +190,8 @@
   (setq auto-revert-mode-text "")
   (set-face-foreground 'magit-branch-remote "orange red")
   (setq git-commit-summary-max-length fill-column)
+  ;; Avoid conflict with WM.
+  (define-key magit-mode-map (kbd "s-<tab>") nil)
   (setq magit-diff-refine-hunk 'all))
 (when (fboundp 'magit-status)
   (global-set-key (kbd "C-x g") 'magit-status))
