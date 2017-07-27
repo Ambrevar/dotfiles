@@ -323,9 +323,10 @@
 ;;; Finalization
 
 ;;; Don't let `customize' clutter my config.
-(if (boundp 'server-socket-dir)
-    (setq custom-file (expand-file-name "custom.el" server-socket-dir))
-  (setq custom-file (expand-file-name (format "custom-%s.el" (user-uid)) temporary-file-directory)))
+(setq custom-file
+      (if (boundp 'server-socket-dir)
+          (expand-file-name "custom.el" server-socket-dir)
+        (expand-file-name (format "emacs-custom-%s.el" (user-uid)) temporary-file-directory)))
 (load custom-file t)
 
 ;;; Local config. You can use it to set system specific variables, such as the
