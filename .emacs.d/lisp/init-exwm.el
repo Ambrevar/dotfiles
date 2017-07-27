@@ -96,8 +96,8 @@
 
 ;; TODO: Check out the 'volume' package.
 (let (mixer vol-up vol-down vol-toggle)
-  (case system-type
-    (gnu/linux
+  (pcase system-type
+    ('gnu/linux
      (defun exwm-start-volume-down ()
        "Lower volume 5% with amixer"
        (interactive)
@@ -113,7 +113,7 @@
        (interactive)
        (let ((cmd "amixer set Master toggle >/dev/null"))
          (start-process-shell-command cmd nil cmd))))
-    (t
+    (_
      (defun exwm-start-volume-down ()
        "Lower volume 5% with mixer"
        (interactive)
