@@ -40,7 +40,9 @@
 (defun exwm-layout-toggle-fullscreen-or-single-window ()
   (interactive)
   (if (eq major-mode 'exwm-mode)
-      (exwm-layout-toggle-fullscreen)
+      ;; REVIEW:`exwm-layout-toggle-fullscreen' needs to be called interactively.
+      ;; See https://github.com/ch11ng/exwm/issues/282.
+      (call-interactively 'exwm-layout-toggle-fullscreen)
     ;; TODO: Store window configurations in a buffer-name-indexed alist? Not
     ;; sure that would ever be useful.
     ;; TODO: Make the following a `toggle-single-window' defun and store in functions.el?
