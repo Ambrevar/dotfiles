@@ -80,7 +80,7 @@
 (when (fboundp 'emms)
   (exwm-input-set-key (kbd "s-a") #'emms-smart-browse)
   (exwm-input-set-key (kbd "s-A") #'emms))
-(when (fboundp 'mu4e)
+(when (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path))
   (exwm-input-set-key (kbd "s-m") #'mu4e-headers-unread))
 
 ;;; External application shortcuts.
