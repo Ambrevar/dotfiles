@@ -217,13 +217,14 @@
   (unless (file-directory-p desktop-dirname)
     (make-directory desktop-dirname t))
   (setq desktop-path (list desktop-dirname))
+  (setq desktop-save t)
   ;; TODO: `compile-history' should be buffer local but that does not work.
   ;; http://user42.tuxfamily.org/compile-history-local/index.html
   ;; http://stackoverflow.com/questions/22995203/one-compile-command-per-buffer-not-directory
   ;; (add-to-list 'desktop-locals-to-save 'compile-history)
   (add-to-list 'desktop-locals-to-save 'compile-command)
   (add-to-list 'desktop-locals-to-save 'ispell-local-dictionary)
-  (desktop-save-mode 1))
+  (desktop-save-mode))
 
 ;;; GMP documentation
 (with-eval-after-load "info-look"
