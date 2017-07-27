@@ -144,6 +144,10 @@
 
 (with-eval-after-load 'mu4e
   (when (require 'evil-mu4e nil t)
+    ;; TODO: evil-mu4e needs a big overhaul, e.g. 'visual commands are not supported.
+    (evil-define-key 'motion mu4e-headers-mode-map
+      "R" 'mu4e-headers-mark-for-refile
+      "r" 'mu4e-compose-reply)
     (evil-set-initial-state 'mu4e-compose-mode 'insert)))
 
 (with-eval-after-load 'init-helm (require 'init-evil-helm))
