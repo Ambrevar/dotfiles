@@ -221,7 +221,7 @@
 ;;; pdf-tools requires poppler built with cairo support.
 (nconc package-selected-packages '(pdf-tools))
 (when (require 'pdf-tools nil t)
-  ;; TODO: The reader should be compiler only when a frame is available.
+  ;; TODO: The external reader should be compiled only when a frame is available.
   (pdf-tools-install))
 
 ;;; Perl
@@ -326,14 +326,8 @@
 (load custom-file t)
 
 ;;; Local config. You can use it to set system specific variables, such as the
-;;; external web browser or pdf viewer. You can also backport features for an
-;;; old Emacs. For instance:
+;;; external web browser or the geographical coordinates:
 ;;
-;; (defun comment-line... ;; From emacs 25
-;;
-;; (transient-mark-mode 1)
-;;
-;; ;; Fix slow startup when network is slow. Most visible with Helm and Magit with Emacs <25.
-;; (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
-
-(load "local" t t)
+;; (setq calendar-latitude 20.2158)
+;; (setq calendar-longitude 105.938)
+(load "local" t)
