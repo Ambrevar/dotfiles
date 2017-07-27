@@ -3,7 +3,6 @@
 ;; TODO: Notifications don't work? Change `display-time-mail-icon' color in modeline.
 ;; TODO: Reply to all by default.
 ;; TODO: Is it possible to mbsync without attachments?
-;; TODO: Try-out BBDB and replace abook. See appendix manual.
 
 (when (require 'mu4e-maildirs-extension nil t)
   (mu4e-maildirs-extension))
@@ -26,6 +25,9 @@
 
  ;; SMTP
  message-send-mail-function 'smtpmail-send-it
+
+ ;; Don't keep sent e-mail buffer.
+ message-kill-buffer-on-exit t
 
  ;; For reporting bugs, "C-x m", etc.
  mail-user-agent 'mu4e-user-agent
@@ -72,6 +74,9 @@
                 user-full-name
                 (call-process-to-string "fortune" "-s"))))
 (add-hook 'mu4e-compose-pre-hook 'mu4e-add-fortune-signature)
+
+;; Make unread e-mails stand out a bit.
+(set-face-foreground 'mu4e-unread-face "yellow")
 
 (load "~/personal/mail/mu4e.el" t)
 
