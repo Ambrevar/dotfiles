@@ -126,6 +126,9 @@
 (define-key evil-outer-text-objects-map "d" 'evil-a-defun)
 (define-key evil-inner-text-objects-map "d" 'evil-inner-defun)
 
+;; Without the hook, the Edebug keys (f, n, i, etc.) would get mixed up on initialization.
+(add-hook 'edebug-mode-hook 'evil-normalize-keymaps)
+
 
 
 (require 'init-evil-info)
