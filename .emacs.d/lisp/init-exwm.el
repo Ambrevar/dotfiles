@@ -48,8 +48,8 @@
     (toggle-single-window)))
 (exwm-input-set-key (kbd "s-o") #'exwm-layout-toggle-fullscreen-or-single-window)
 
-(when (require 'functions)
-  (exwm-input-set-key (kbd "s-\\") #'toggle-window-split))
+(require 'functions)
+(exwm-input-set-key (kbd "s-\\") #'toggle-window-split)
 
 (when (require 'helm-config nil t)
   (exwm-input-set-key (kbd "s-c") #'helm-resume)
