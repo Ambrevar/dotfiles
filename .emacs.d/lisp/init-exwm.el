@@ -84,40 +84,22 @@
 (exwm-input-set-key (kbd "<print>") #'exwm-start-screenshot)
 
 ;; TODO: Check out the 'volume' package.
-(let (mixer vol-up vol-down vol-toggle)
-  (pcase system-type
-    ('gnu/linux
-     (defun exwm-start-volume-down ()
-       "Lower volume 5% with amixer"
-       (interactive)
-       (let ((cmd "amixer set Master 5%- >/dev/null"))
-         (start-process-shell-command cmd nil cmd)))
-     (defun exwm-start-volume-up ()
-       "Raise volume 5% with amixer"
-       (interactive)
-       (let ((cmd "amixer set Master 5%+ >/dev/null"))
-         (start-process-shell-command cmd nil cmd)))
-     (defun exwm-start-volume-toggle ()
-       "Toggle sound with amixer"
-       (interactive)
-       (let ((cmd "amixer set Master toggle >/dev/null"))
-         (start-process-shell-command cmd nil cmd))))
-    (_
-     (defun exwm-start-volume-down ()
-       "Lower volume 5% with mixer"
-       (interactive)
-       (let ((cmd "mixer vol -5 >/dev/null"))
-         (start-process-shell-command cmd nil cmd)))
-     (defun exwm-start-volume-up ()
-       "Raise volume 5% with mixer"
-       (interactive)
-       (let ((cmd "mixer vol +5 >/dev/null"))
-         (start-process-shell-command cmd nil cmd)))
-     (defun exwm-start-volume-toggle ()
-       "Toggle sound with mixer"
-       (interactive)
-       (let ((cmd "mixer vol ^ >/dev/null"))
-         (start-process-shell-command cmd nil cmd))))))
+(defun exwm-volume (&optional up-or-down)
+  (let ((controllers '(("amixer" "set Master" "5%-" "5%+" "toggle")
+                       ("mixer" "vol" "-5" "+5" "^"))))
+    (while (not (executable-find (caar controllers)))
+      (setq controllers (cdr controllers)))
+    (when controllers
+      (setq controllers (car controllers))
+      (start-process-shell-command
+       "volume control" nil (format "%s %s %s >/dev/null"
+                                    (car controllers)
+                                    (cadr controllers)
+                                    (nth (pcase up-or-down ('down  2) ('up  3) (_  4)) controllers))))))
+
+(defun exwm-start-volume-down () (interactive) (exwm-volume 'down))
+(defun exwm-start-volume-up () (interactive) (exwm-volume 'up))
+(defun exwm-start-volume-toggle () (interactive) (exwm-volume))
 (exwm-input-set-key (kbd "s-<kp-subtract>") #'exwm-start-volume-down)
 (exwm-input-set-key (kbd "s-<kp-add>") #'exwm-start-volume-up)
 (exwm-input-set-key (kbd "s-<kp-enter>") #'exwm-start-volume-toggle)
