@@ -14,7 +14,9 @@
 
 ;; TODO: Add support for status bar (dzen2, xmobar, i3bar).
 ;; TODO: Resizing floating windows with mouse does not work on Ubuntu Trusty.
-;; TODO: How to prevent sending keys to window? ":" in Qutebrowser does not work. Issue with evil?
+;; TODO: How to prevent sending keys to window? ":" is always passed to Qutebrowser. Issue with evil?
+;; Maybe not. Just switch between char-mode and line-mode. Or check `exwm-input-line-mode-passthrough'.
+;; https://emacs.stackexchange.com/questions/33326/how-do-i-cut-and-paste-effectively-between-applications-while-using-exwm
 ;; TODO: Spawn select programs in floating mode. (E.g. mpv, mupen64plus, mplayer, qemu, steam, .exe (wine).)
 
 ;;; System tray
@@ -30,7 +32,7 @@
 (exwm-input-set-key (kbd "s-j") #'windmove-down)
 (exwm-input-set-key (kbd "s-k") #'windmove-up)
 (exwm-input-set-key (kbd "s-l") #'windmove-right)
-(exwm-input-set-key (kbd "s-c") #'kill-this-buffer)
+(exwm-input-set-key (kbd "s-C") #'kill-this-buffer)
 (exwm-input-set-key (kbd "s-|") #'swap-windows)
 (exwm-input-set-key (kbd "s-b") #'list-buffers)
 (exwm-input-set-key (kbd "s-f") #'find-file)
@@ -50,6 +52,7 @@
   (exwm-input-set-key (kbd "s-\\") #'toggle-window-split))
 
 (when (require 'helm-config nil t)
+  (exwm-input-set-key (kbd "s-c") #'helm-resume)
   (exwm-input-set-key (kbd "s-b") #'helm-mini)
   (exwm-input-set-key (kbd "s-f") #'helm-find-files)
   (exwm-input-set-key (kbd "s-g") #'helm-grep-git-or-ag)
