@@ -137,6 +137,4 @@
 (exwm-input-set-key (kbd "s-&") #'exwm-start)
 (exwm-input-set-key (kbd "s-r") #'exwm-start)
 
-(exwm-enable) ; TODO: This should be left to Emacs' commandline arguments.
-
 (provide 'init-exwm)
