@@ -131,7 +131,7 @@
 (exwm-input-set-key (kbd "s-<kp-add>") #'exwm-start-volume-up)
 (exwm-input-set-key (kbd "s-<kp-enter>") #'exwm-start-volume-toggle)
 
-(defun exwm-start ()
+(defun exwm-start (command)
   (interactive (list (read-shell-command "$ ")))
   (start-process-shell-command command nil command))
 (exwm-input-set-key (kbd "s-&") #'exwm-start)
