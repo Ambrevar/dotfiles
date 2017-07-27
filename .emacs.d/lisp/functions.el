@@ -339,6 +339,11 @@ The shell can use it to automatically change directory to it."
   (other-window 1))
 (global-set-key (kbd "C-x \\") 'swap-windows)
 
+(defun switch-to-last-buffer ()
+  "Switch to last open buffer in current window."
+  (interactive)
+  (switch-to-buffer (other-buffer (current-buffer) 1)))
+
 (defun tabify-leading ()
   "Call `tabify' on leading spaces only.
 Works on whole buffer if region is unactive."
@@ -353,6 +358,21 @@ Works on whole buffer if region is unactive."
           (setq tabify-regexp "^\t* [ \t]+")
           (tabify start end))
       (setq tabify-regexp tabify-regexp-old))))
+
+;; TODO: Store window configurations in a buffer-name-indexed alist? Not
+;; sure that would ever be useful.
+(defvar single-window--last-configuration nil "Last window configuration before calling `delete-other-windows'.")
+(defun toggle-single-window ()
+  "Un-maximize current window.
+If multiple windows are active, save window configuration and
+delete other windows.  If only one window is active and a window
+configuration was previously save, restore that configuration."
+  (interactive)
+  (if (= (count-windows) 1)
+      (when single-window--last-configuration
+        (set-window-configuration single-window--last-configuration))
+    (setq single-window--last-configuration (current-window-configuration))
+    (delete-other-windows)))
 
 (defun toggle-window-dedicated ()
   "Toggle whether the current active window is dedicated or not.

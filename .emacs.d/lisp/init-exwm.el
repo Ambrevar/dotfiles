@@ -36,22 +36,14 @@
 (exwm-input-set-key (kbd "s-f") #'find-file)
 (exwm-input-set-key (kbd "s-SPC") #'exwm-floating-toggle-floating)
 
-(defvar exwm--last-window-configuration nil "Last window configuration before calling `delete-other-windows'.")
 (defun exwm-layout-toggle-fullscreen-or-single-window ()
   (interactive)
   (if (eq major-mode 'exwm-mode)
       ;; REVIEW:`exwm-layout-toggle-fullscreen' needs to be called interactively.
       ;; See https://github.com/ch11ng/exwm/issues/282.
       (call-interactively 'exwm-layout-toggle-fullscreen)
-    ;; TODO: Store window configurations in a buffer-name-indexed alist? Not
-    ;; sure that would ever be useful.
-    ;; TODO: Make the following a `toggle-single-window' defun and store in functions.el?
-    (if (/= (count-windows) 1)
-        (progn
-          (setq exwm--last-window-configuration (current-window-configuration))
-          (delete-other-windows))
-      (when exwm--last-window-configuration
-        (set-window-configuration exwm--last-window-configuration)))))
+    (require 'functions)
+    (toggle-single-window)))
 (exwm-input-set-key (kbd "s-o") #'exwm-layout-toggle-fullscreen-or-single-window)
 
 (when (require 'functions)
@@ -63,10 +55,7 @@
   (exwm-input-set-key (kbd "s-g") #'helm-grep-git-or-ag)
   (exwm-input-set-key (kbd "s-G") #'helm-grep-git-all-or-ag))
 
-;; TODO: Move `switch-to-last-buffer' to functions.el.
-(defun switch-to-last-buffer ()
-  (interactive)
-  (switch-to-buffer (other-buffer (current-buffer) 1)))
+(require 'functions)
 (exwm-input-set-key (kbd "s-<tab>") #'switch-to-last-buffer)
 (when (require 'evil nil t)
   (exwm-input-set-key (kbd "s-<tab>") #'evil-switch-to-windows-last-buffer)
