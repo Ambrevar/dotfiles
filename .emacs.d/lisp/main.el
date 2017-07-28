@@ -8,6 +8,9 @@
 ;;; `tool-bar-mode' and `scroll-bar-mode' might not be compiled in.
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+;;; In some cases, Emacs can still decide by itself to use graphical boxes.
+;;; Force on using the minibuffer instead.
+(setq use-dialog-box nil)
 
 ;;; Remember last cursor position.
 (require 'saveplace)
