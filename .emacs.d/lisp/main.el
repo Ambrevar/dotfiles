@@ -31,7 +31,8 @@
 (setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
 
 ;;; Recent files.
-(setq recentf-save-file (concat emacs-cache-folder "recentf"))
+(setq recentf-save-file (concat emacs-cache-folder "recentf")
+      recentf-max-saved-items 40)
 
 ;;; Disable autosave features.
 (setq auto-save-default nil)
