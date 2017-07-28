@@ -14,8 +14,6 @@ done
 ## manager may merge after sourcing this file without setting the preprocessor
 ## variable, thus overwriting the value with the variable name.
 cat <<EOF | xrdb -merge
-URxvt.url-select.launcher: $BROWSER
-
 *VT100*translations: #override Ctrl Meta <KeyPress> U: exec-formatted("$BROWSER '%t'", CLIPBOARD) \n\
 	Shift <KeyPress> Up:scroll-back(1,line,m) \n\
 	Shift <KeyPress> Down:scroll-forw(1,line,m)
@@ -27,12 +25,6 @@ xkbcomp -I"$HOME/.xkb" "$HOME/.xkb/usim.xkb" $DISPLAY 2>/dev/null
 xcape -e 'Control_L=Escape'
 numlockx on
 # xinput disable "SynPS/2 Synaptics TouchPad"
-
-## This env variable is used by some program configs (e.g. ranger, awesome) to
-## get the terminal executable name.
-for i in urxvt xterm; do
-	command -v $i >/dev/null 2>&1 && export TERMCMD=$i && break
-done
 
 ## Hook. Should be sourced last.
 [ -f ~/.xprofile_hook ] && . ~/.xprofile_hook

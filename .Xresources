@@ -1,46 +1,3 @@
-!!==============================================================================
-!! URxvt.
-!! url-select, clipboard and keyboard-select are provided in Muennich perl
-!! plugins.
-
-!! Plugin dir.
-URxvt.perl-lib: .config/urxvt/
-
-! URxvt*modifier: alt
-URxvt.iso14755: False
-URxvt*saveLines: 5000
-URxvt*scrollBar: false
-
-!! URL Support.
-URxvt.perl-ext:             url-select
-URxvt.keysym.C-M-u:         perl:url-select:select_next
-URxvt.url-select.underline: true
-
-URxvt.perl-ext-common:      keyboard-select,clipboard
-URxvt.keysym.C-M-Escape:    perl:keyboard-select:activate
-URxvt.keysym.C-M-v:         perl:clipboard:paste
-URxvt.keysym.C-M-c:         perl:clipboard:paste_escaped
-URxvt.clipboard.autocopy:   true
-URxvt.clipboard.pastecmd:   xsel -o
-URxvt.clipboard.copycmd:    xsel -i
-
-!!------------------------------------------------------------------------------
-!! Fonts.
-
-!! WARNING: some Xft fonts (DejaVu, Liberation) seem to be messy with w3m image preview.
-! URxvt*font: xft:Liberation Mono:pixelsize=14
-! URxvt*font: xft:Dejavu Sans Mono:pixelsize=14
-! URxvt*font: xft:Dejavu Sans Mono:pixelsize=14:antialias=false
-! URxvt.font: xft:Bitstream Vera Sans Mono:pixelsize=14
-
-!! Non-Xft version that are OK with w3m image preview.
-! URxvt*font: -*-dejavu sans mono-*-*-*-*-*-*-*-*-*-*-iso8859-*
-! URxvt*font: -*-dejavu sans-medium-r-*-*-14-*-*-*-*-*-*-*
-
-!! Xft that are OK with w3m image preview.
-! urxvt.font:              xft:terminus:pixelsize=14
-urxvt.font:              xft:Dina:pixelsize=14
-
 !! Xft options
 ! Xft.antialias: false
 ! Xft.antialias: rgba
@@ -48,58 +5,19 @@ Xft.hinting: true
 Xft.hintstyle: hintlight
 Xft.rgba: rgb
 
-!! If not patched for letter spacing, this option might help.
-! URxvt*letterSpace: -1
-
-!!------------------------------------------------------------------------------
-!! Styles.
-
-!! Find more styles on:
-!! http://xcolors.net/
-!! http://xcolors.net/dl/derp
-!! https://bbs.archlinux.org/viewtopic.php?id=51818
-
-!! Bright values are all canonical colors except for blue and black which are
-!! not bright enough on a black background.
-URxvt.background: black
-URxvt.foreground: white
-URxvt.color0  : black
-URxvt.color1  : #8b0000
-URxvt.color2  : #228b22
-URxvt.color3  : #cdcd00
-URxvt.color4  : blue
-URxvt.color5  : #8b008b
-URxvt.color6  : #00bfff
-URxvt.color7  : #f5f5f5
-URxvt.color8  : #696969
-URxvt.color9  : red
-URxvt.color10 : green
-URxvt.color11 : yellow
-URxvt.color12 : #1e90ff
-URxvt.color13 : magenta
-URxvt.color14 : cyan
-URxvt.color15 : white
-
-!!==============================================================================
 !! Xterm
-
 xterm*termName: xterm-256color
 xterm*locale: true
-
 ! XTerm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
 ! xterm.font:              xft:Dina:pixelsize=18
 ! xterm*font       : -*-dejavu sans-medium-r-*-*-14-*-*-*-*-*-*-*
 xterm*faceName:DejaVu Sans Mono:pixelsize=14
-
 !! Make Meta-* bindings work.
 xterm*eightBitInput: false
-
 !! Fix the backspace key
 xterm*backarrowKey: false
 xterm*ttyModes: erase ^?
-
 xterm*saveLines: 4096
-
 xterm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
 xterm*on3Clicks: regex ([[:alpha:]]+://)?([[:alnum:]!#+,./=?@_~-]|(%[[:xdigit:]][[:xdigit:]]))+
 
