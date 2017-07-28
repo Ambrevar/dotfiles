@@ -307,7 +307,8 @@
    ("Africa/Nairobi" "Uganda")))
 
 ;;; Tramp
-(setq tramp-persistency-file-name (concat emacs-cache-folder "tramp"))
+(setq tramp-persistency-file-name (concat emacs-cache-folder "tramp")
+      tramp-backup-directory-alist backup-directory-alist)
 
 ;;; Frame title
 (setq frame-title-format (concat "%b" (unless (daemonp) " [serverless]")))
