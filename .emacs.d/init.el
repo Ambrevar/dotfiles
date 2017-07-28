@@ -88,7 +88,11 @@
 (nconc package-selected-packages '(debbugs))
 
 ;;; Dired
-;;; Dired is loaded after init.el, so configure it later.
+;;; Dired is loaded after init.el, so configure it only then.
+;; TODO: Improve dired-du:
+;; - Hangs when the `ls` time format is changed.
+;; - Cache recursive results.
+(nconc package-selected-packages '(dired-du))
 (with-eval-after-load 'dired (require 'init-dired))
 
 ;;; Emms
