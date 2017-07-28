@@ -207,6 +207,9 @@
   ;; Do not use `recompile' since we want to change de compilation folder to the current buffer.
   "<f6>" (lambda () (interactive) (compile compile-command)))
 
+;;; Comint mode
+(setq comint-prompt-read-only t)
+
 (defadvice desktop-owner (after pry-from-cold-dead-hands activate)
   "Don't allow dead emacsen to own the desktop file."
   (when (not (emacs-process-p ad-return-value))
