@@ -34,6 +34,10 @@
 (setq recentf-save-file (concat emacs-cache-folder "recentf")
       recentf-max-saved-items 40)
 
+;;; Save M-: history.
+(setq savehist-file (concat emacs-cache-folder "savehist"))
+(savehist-mode)
+
 ;;; Disable autosave features.
 (setq auto-save-default nil)
 (setq auto-save-list-file-prefix nil)
