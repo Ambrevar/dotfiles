@@ -1,5 +1,10 @@
 ;;; EXWM
 
+;; TODO: Comment upstream that it works well with Athena+Xaw3d except for
+;; Caps-lock when bound to both L_Ctrl escape, in which case it will procude
+;; <C-escape> in Emacs. In practice, it means that `C-` keys will works but
+;; `<escape>` will need a fast double tap on Caps Lock.
+
 ;;; Rename buffer to window title.
 (defun exwm-rename-buffer-to-title () (exwm-workspace-rename-buffer exwm-title))
 (add-hook 'exwm-update-title-hook 'exwm-rename-buffer-to-title)

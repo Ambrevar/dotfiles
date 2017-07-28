@@ -211,6 +211,12 @@
 ;;; Let Emacs auto-load/save sessions only when running the daemon.
 ;;; `server-running-p' is only useful once the daemon is started and cannot be
 ;;; used for initialization. We use `daemonp' instead.
+;;; TODO: `desktop-kill' should not query the user in `kill-emacs-hook'.
+;;; TODO: Desktop mode does not save window registers properly.
+;;; See https://groups.google.com/forum/#!topic/gnu.emacs.help/64aO_O43530
+;;; and https://www.reddit.com/r/emacs/comments/4q38s1/save_register_between_sessions/?st=j419vc7r&sh=2617ffb4
+;;; and http://debbugs.gnu.org/cgi/bugreport.cgi?bug=27422
+;;; and https://stackoverflow.com/questions/5830494/windows-configuration-to-registers#5830928.
 (when (daemonp)
   (setq history-length 250)
   (setq desktop-dirname (concat emacs-cache-folder "desktop"))

@@ -3,6 +3,7 @@
 ;; TODO: Notifications don't work? Change `display-time-mail-icon' color in modeline.
 ;; TODO: Reply to all by default.
 ;; TODO: Is it possible to mbsync without attachments?
+;; TODO: Use abbrevs in compose mode.
 
 (when (require 'mu4e-maildirs-extension nil t)
   (mu4e-maildirs-extension))

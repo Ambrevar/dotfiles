@@ -1,5 +1,16 @@
 ;;; Helm
 
+;; TODO: helm-ff should allow opening several marks externally, e.g.  sxiv for
+;; pics. See
+;; https://github.com/emacs-helm/helm/wiki/Find-Files#open-files-externally
+;; What about the default program? It currently defaults to ~/.mailcap, which is
+;; not so customizable.  Would ranger's rifle be useful here?  See
+;; https://github.com/emacs-helm/helm/issues/1796.
+
+;; TODO: helm-find in big folders sometimes leads bad results, like exact match not appearing first. Better sorting?
+;; TODO: Implement alternating-color multiline lists. See open issue.
+;; TODO: Fix typos and formatting in documentation.
+
 (when (require 'helm-descbinds nil t)
   (helm-descbinds-mode))
 
@@ -42,7 +53,7 @@
       (setq-local cursor-type nil))))
 (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
 
-;;; Add bindings to `helm-apropos`.
+;;; Add bindings to `helm-apropos`. TODO: Does not work most of the times.
 ;;; https://github.com/emacs-helm/helm/issues/1140
 (defun helm-def-source--emacs-commands (&optional default)
   (helm-build-in-buffer-source "Commands"

@@ -115,7 +115,7 @@
 (add-hook 'post-command-hook 'evil-color-modeline)
 (setq evil-mode-line-format nil)
 
-;; Add defun text-object.
+;; Add defun text-object. TODO: Does not work for "around".
 ;; https://github.com/emacs-evil/evil/issues/874
 (evil-define-text-object evil-a-defun (count &optional beg end type)
   "Select a defun."
