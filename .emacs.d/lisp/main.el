@@ -149,10 +149,13 @@
  ;; "s-w" 'other-window
  "s-c" 'delete-window)
 
-;;; Make Emacs use environment browser, or w3m if BROWSER is not set.
-(setq browse-url-generic-program
-      (or (executable-find (or (getenv "BROWSER") "")) (executable-find "w3m"))
-      browse-url-browser-function 'browse-url-generic)
+
+;;; Since `browse-url-default-browser' fails at seeing we can run xdg, force it.
+(setq browse-url-browser-function
+      (if (executable-find "xdg-open") 'browse-url-xdg-open 'browse-url-generic))
+;;; If xdg-open is not found, set Emacs URL browser to the environment browser,
+;;; or w3m if BROWSER is not set.
+(setq browse-url-generic-program (or (executable-find (or (getenv "BROWSER") "")) (executable-find "w3m")))
 
 ;;; Default ispell dictionary. If not set, Emacs uses the current locale.
 (setq ispell-dictionary "english")
