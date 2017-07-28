@@ -148,6 +148,8 @@
     (evil-define-key 'motion mu4e-headers-mode-map
       "R" 'mu4e-headers-mark-for-refile
       "r" 'mu4e-compose-reply)
+    (evil-define-key 'motion mu4e-view-mode-map
+      "gu" 'mu4e-view-go-to-url)
     (evil-set-initial-state 'mu4e-compose-mode 'insert)))
 
 (with-eval-after-load 'init-helm (require 'init-evil-helm))
