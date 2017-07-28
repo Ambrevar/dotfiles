@@ -136,8 +136,8 @@
 
 ;;; Enforce horizontal splitting. 140 means that the window is large enough to
 ;;; hold 2 other windows of 70 columns.
-(setq split-height-threshold nil)
-(setq split-width-threshold 140)
+(setq split-height-threshold nil
+      split-width-threshold 140)
 
 ;;; Windmove mode
 ;; By default, it allows easy window switching with Shift+arrows. I like to
@@ -294,6 +294,7 @@
 
 ;;; Eldoc: Disable if too distracting.
 ;; (global-eldoc-mode 0)
+;; (setq eldoc-idle-delay 0.1) ; Could be even more distracting.
 
 ;;; Replace `kill-buffer' binding by `kill-this-buffer'.
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
