@@ -5,6 +5,13 @@
 ;; <C-escape> in Emacs. In practice, it means that `C-` keys will works but
 ;; `<escape>` will need a fast double tap on Caps Lock.
 
+;; A system monitor within Emacs is only useful if not using an external tool,
+;; as is the case when using another WM.
+;; TODO: Would it be possible to have permanenet right-aligned display?
+;; https://github.com/zk-phi/symon/issues/32
+(when (require 'symon nil t)
+  (symon-mode))
+
 ;;; Rename buffer to window title.
 (defun exwm-rename-buffer-to-title () (exwm-workspace-rename-buffer exwm-title))
 (add-hook 'exwm-update-title-hook 'exwm-rename-buffer-to-title)
