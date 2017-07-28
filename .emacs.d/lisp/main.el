@@ -12,6 +12,9 @@
 ;;; Force on using the minibuffer instead.
 (setq use-dialog-box nil)
 
+;;; Timeout before echoing the prefix of an unfinished keystroke.
+(setq echo-keystrokes 0.5)
+
 ;;; Remember last cursor position.
 (require 'saveplace)
 (setq save-place-file (concat emacs-cache-folder "saveplace"))
