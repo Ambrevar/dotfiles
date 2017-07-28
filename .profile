@@ -130,49 +130,6 @@ fi
 ## Wine DLL override. This removes the annoying messages for Mono and Gecko.
 export WINEDLLOVERRIDES="mscoree,mshtml="
 
-## fzf
-if command -v fzf >/dev/null 2>&1; then
-	export FZF_DEFAULT_OPTS="\
---reverse \
---inline-info \
---height=40% \
---cycle \
---extended \
---multi \
---select-1 \
---exit-0 \
---bind=alt-a:toggle-all \
---bind=alt-b:page-up \
---bind=alt-f:page-down \
---bind=alt-h:unix-line-discard \
---bind=alt-i:toggle-up \
---bind=alt-j:down \
---bind=alt-k:up \
---bind=alt-l:accept \
---bind=alt-space:toggle-down \
---bind=alt-z:toggle-preview \
---bind=ctrl-a:select-all \
---bind=ctrl-k:kill-line \
---bind=change:top \
-"
-
-	export FZF_ALT_C_OPTS="--preview='preview {}'"
-	export FZF_BCD_OPTS=$FZF_ALT_C_OPTS
-	export FZF_CDHIST_OPTS=$FZF_ALT_C_OPTS
-	export FZF_CTRL_R_OPTS="--reverse --sort"
-	## Multiple previews might not show up when the --height is less then 100%
-	## since the 'preview' script only considers the total number of lines in the
-	## terminal window (not in the preview window).
-	export FZF_CTRL_T_OPTS="--bind=alt-l:'execute(rifle {+})' --preview='preview {+}'"
-	if [ "$(uname -o)" = "GNU/Linux" ]; then
-		## Append '/' to folder names. GNU find required.
-		export FZF_CTRL_T_COMMAND="command find -L \$dir -mindepth 1 \\( -path \$dir'*/\\.*' -o -fstype 'devfs' -o -fstype 'devtmpfs' \\) -prune \
--o -type f -print \
--o -type d -printf '%p/\n' \
--o -type l -print 2> /dev/null | sed 's#^\./##'"
-	fi
-fi
-
 ## Pacman asp root.
 if command -v asp >/dev/null 2>&1; then
 	export ASPROOT="$HOME/.cache/asp"
