@@ -16,7 +16,6 @@
 (setq echo-keystrokes 0.5)
 
 ;;; Remember last cursor position.
-(require 'saveplace)
 (setq save-place-file (concat emacs-cache-folder "saveplace"))
 (setq-default save-place-mode t)
 ;;; When the daemon is killed abruptly, places are not saved. Adding this hook
@@ -246,7 +245,6 @@
                   (nth 3 mode-value)))))
 
 ;;; Buffer names.
-(require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
 ;;; Skeleton settings
