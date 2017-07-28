@@ -1,7 +1,6 @@
 ;;; Evil+Info
 
 (evil-define-key 'motion Info-mode-map
-  (kbd "C-SPC") 'Info-scroll-up ; Custom
   "\C-j" 'Info-next
   "\C-k" 'Info-prev
   "\M-j" 'Info-next ; Custom

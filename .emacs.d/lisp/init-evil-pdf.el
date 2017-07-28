@@ -7,7 +7,7 @@
   (kbd "<return>") 'image-next-line
   "j" 'pdf-view-next-line-or-next-page
   "k" 'pdf-view-previous-line-or-previous-page
-  (kbd "C-<space>") 'pdf-view-scroll-up-or-next-page
+  (kbd "<space>") 'pdf-view-scroll-up-or-next-page
   "'" 'pdf-view-jump-to-register
   "+" 'pdf-view-enlarge
   "-" 'pdf-view-shrink
