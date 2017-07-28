@@ -1,23 +1,7 @@
 #!/bin/sh
 
-set -- "$HOME/.cache/awesome" \
-	"$HOME/.cache/emacs/backups" \
-	"$HOME/.cache/emacs/desktop" \
-	"$HOME/.cache/emacs/elpa/archives" \
-	"$HOME/.cache/emacs/elpa/gnupg" \
-	"$HOME/.cache/emacs/emacs.bmk" \
-	"$HOME/.cache/emacs/ido.last" \
-	"$HOME/.cache/emacs/saveplace" \
-	"$HOME/.cache/mutt" \
+set -- "$HOME/.cache/emacs/" \
 	"$HOME/.cache/qutebrowser" \
-	"$HOME/.cmus/autosave" \
-	"$HOME/.cmus/cache" \
-	"$HOME/.cmus/command-history" \
-	"$HOME/.cmus/lib.pl" \
-	"$HOME/.cmus/playlist.pl" \
-	"$HOME/.cmus/queue.pl" \
-	"$HOME/.cmus/resume" \
-	"$HOME/.cmus/search-history" \
 	"$HOME/.config/gtk-2.0" \
 	"$HOME/.config/gtk-3.0" \
 	"$HOME/.config/qutebrowser/bookmarks" \
@@ -29,22 +13,20 @@ set -- "$HOME/.cache/awesome" \
 	"$HOME/.gtk-bookmarks" \
 	"$HOME/.lesshst" \
 	"$HOME/.local/share/fish" \
-	"$HOME/.local/share/newsbeuter" \
 	"$HOME/.local/share/qutebrowser" \
 	"$HOME/.local/share/webkit" \
 	"$HOME/.mpv/watch_later" \
 	"$HOME/.mtap.fuseiso" \
 	"$HOME/.pulse-cookie" \
 	"$HOME/.thumbnails" \
-	"$HOME/.viminfo" \
 	"$HOME/.w3m" \
 	"$HOME/.zcompdump"
 
-echo "==> Files to be removed"
+echo "==> Files to be removed (beside trash folders):"
 echo "$@" | sed 's/ /\n/g'
 echo
 echo "==> Files to be wiped:"
-echo "Mutt passwords and ssh keys."
+echo "Mail passwords and ssh keys."
 
 CHOICE="N"
 echo
@@ -73,7 +55,7 @@ rm -rvf "$@"
 
 echo
 echo "==> Wipe critical data."
-shred -zuv ~/.mutt.pwds.cpt
+shred -zuv ~/.authinfo.gpg
 for key in ~/.ssh/*.pub; do
 	shred -zuv "$key" "${key%.pub}"
 done
