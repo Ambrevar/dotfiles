@@ -1,9 +1,10 @@
 ;;; EXWM
 
-;; TODO: Comment upstream that it works well with Athena+Xaw3d except for
-;; Caps-lock when bound to both L_Ctrl escape, in which case it will procude
-;; <C-escape> in Emacs. In practice, it means that `C-` keys will works but
-;; `<escape>` will need a fast double tap on Caps Lock.
+;; TODO: Athena+Xaw3d confuses xcape when binding Caps-lock to both L_Ctrl
+;; escape, in which case it will procude <C-escape> in Emacs. In practice, it
+;; means that `C-` keys will works but `<escape>` will need a fast double tap on
+;; Caps Lock.
+;; See https://github.com/ch11ng/exwm/issues/285.
 
 ;; A system monitor within Emacs is only useful if not using an external tool,
 ;; as is the case when using another WM.
