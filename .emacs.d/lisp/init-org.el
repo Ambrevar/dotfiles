@@ -12,6 +12,7 @@
  org-deadline-warning-days 7
  org-agenda-default-appointment-duration 60
  org-agenda-columns-add-appointments-to-effort-sum t
+ org-ellipsis " […]"
  ;; Org-mode aligns text.
  indent-tabs-mode nil)
 
