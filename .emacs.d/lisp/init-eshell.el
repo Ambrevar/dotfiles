@@ -6,6 +6,8 @@
 ;;; modules, runs their hooks and concludes with `eshell-first-time-mode-hook'
 ;;; (for the first session only) and `eshell-mode-hook'.
 
+;;; TODO: Cannot "C-c C-c" during a `sudo pacman -Syu`.
+
 ;;; REVIEW: Eshell/Shell completion fails when PATH has a non-readable element.
 ;; See https://github.com/emacs-helm/helm/issues/1785
 ;; and https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27300.

@@ -10,6 +10,8 @@
 ;; as is the case when using another WM.
 ;; TODO: Would it be possible to have permanenet right-aligned display?
 ;; https://github.com/zk-phi/symon/issues/32
+;; TODO: Sometimes dots are not printed:
+;; https://github.com/zk-phi/symon/issues/33
 (when (require 'symon nil t)
   (symon-mode))
 

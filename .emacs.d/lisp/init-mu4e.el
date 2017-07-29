@@ -4,6 +4,7 @@
 ;; TODO: Reply to all by default.
 ;; TODO: Is it possible to mbsync without attachments?
 ;; TODO: Use abbrevs in compose mode.
+;; TODO: Toggle between HTML and plain text.
 
 (when (require 'mu4e-maildirs-extension nil t)
   (mu4e-maildirs-extension))
