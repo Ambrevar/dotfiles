@@ -136,6 +136,9 @@
 (nconc package-selected-packages '(helm helm-descbinds helm-ls-git))
 (when (require 'helm-config nil t) (require 'init-helm))
 
+;;; Hex editing
+(nconc package-selected-packages '(nhexl-mode))
+
 ;;; Indentation engine fix.
 ;; (require 'smiext "init-smiext")
 
