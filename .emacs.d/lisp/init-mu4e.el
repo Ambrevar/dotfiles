@@ -4,7 +4,10 @@
 ;; TODO: Reply to all by default.
 ;; TODO: Is it possible to mbsync without attachments?
 ;; TODO: Use abbrevs in compose mode.
-;; TODO: Toggle between HTML and plain text.
+;; TODO: Do not cite when replying: https://github.com/djcb/mu/issues/1110.
+;; TODO: With mu4e-alert, default-directory remains stuck to the initial folder,
+;; which causes errors if it becomes inaccessible.
+;; See: https://github.com/iqbalansari/mu4e-alert/issues/24.
 
 (when (require 'mu4e-maildirs-extension nil t)
   (mu4e-maildirs-extension))
@@ -58,12 +61,15 @@
  ;; Because default completion can be extended (e.g. Helm, Ivy).
  mu4e-completing-read-function 'completing-read)
 
+;; Press "aV" to view in browser.
+(add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t)
+
 ;; Unicode chars for decoration might cause issues with some fonts or in terminals.
 ;; https://github.com/djcb/mu/issues/733
 ;; https://github.com/djcb/mu/issues/1062
 ;; (setq mu4e-use-fancy-chars t)
 
-;;; Sorting in ascending order is impeded by `mu4e-search-results-limit': the 500 oldest e-mails will be displayed first.
+;;; REVIEW: Sorting in ascending order is impeded by `mu4e-search-results-limit': the 500 oldest e-mails will be displayed first.
 ;;; https://github.com/djcb/mu/issues/809
 ;; (setq mu4e-headers-sort-direction 'ascending)
 ;;; Since we sort in ascending direction, we default to the end of buffer.
