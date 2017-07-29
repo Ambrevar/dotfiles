@@ -33,6 +33,7 @@ lnn() {
 }
 
 
+
 echo "==> 'temp' folder"
 mkdir -pv "$HOME/temp"
 
@@ -43,7 +44,7 @@ lnn "$SOURCEDIR/bookmarks/quickmarks" "$XDG_CONFIG_HOME/qutebrowser/"
 
 if command -v emacs >/dev/null 2>&1; then
 	echo "==> Emacs extra packages"
-	yes | emacs --batch -l ~/.emacs.d/init.el --eval '(and (package-refresh-contents) (package-install-selected-packages))'
+	yes | emacs --batch -l ~/.emacs.d/init.el --eval '(progn (package-refresh-contents) (package-install-selected-packages))'
 fi
 
 echo "==> Go path"
@@ -67,9 +68,16 @@ echo "==> Mail"
 lnn "$SOURCEDIR/mail/mbsyncrc" "$HOME/.mbsyncrc"
 mkdir -pv "$HOME/.cache/mail/"
 while IFS= read -r i; do
-	mkdir -pv "$i"
+	## We get a shell command, so we need to evaluate it to expand "~".
+	eval "$i"
 done <<EOF
-$(awk '/^Path/ {$1=""; gsub(/^[\t ]+/, ""); print}' ~/.mbsyncrc
+$(awk '/^Path/ {$1="mkdir -pv"; print}' ~/.mbsyncrc)
 EOF
+
+if [ ! -e ~/.authinfo.gpg ]; then
+	## TODO: Why does it prompt for the GPG passphrase twice per account?
+	## TODO: Does not work with --batch for some reason, so we have to spawn Emacs.
+emacs --eval '(progn (when (require '"'"'mu4e nil t) (let ((auth-sources (list "~/.authinfo.gpg")) (auth-source-save-behavior t)) (dolist (context mu4e-contexts) (mu4e-context-switch nil (mu4e-context-name context)) (funcall (plist-get (car (auth-source-search :max 1 :host smtpmail-smtp-server :port smtpmail-smtp-service :user smtpmail-smtp-user :require '"'"'(:user :secret) :create t)) :save-function))))) (kill-emacs))'
+fi
 mbsync -a
 mu index --maildir=~/.cache/mail
