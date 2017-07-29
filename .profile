@@ -176,3 +176,5 @@ export VISUAL
 ## End: Source .bashrc. The rc file should guard against non-interactive shells.
 [ "$(ps -o comm= $$)" != bash ] && return
 [ -f ~/.bashrc ] && . ~/.bashrc
+
+[ -z "$DISPLAY" ] && [ "$(tty)" = '/dev/tty1' ] && exec xinit -- vt01
