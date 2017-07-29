@@ -26,6 +26,11 @@
 ;; (setq evil-want-abbrev-expand-on-insert-exit nil)
 (setq undo-tree-mode-lighter "")
 
+(setq evil-cross-lines t
+      evil-move-beyond-eol t ; Especially useful for Edebug.
+      evil-want-fine-undo t
+      evil-symbol-word-search nil)
+
 ;; The evil-leader package has that over regular bindings that it centralizes
 ;; the leader key configuration and automatically makes it available in relevant
 ;; states.  It is not really needed with EXWM however.
