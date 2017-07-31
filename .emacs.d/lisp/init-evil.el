@@ -193,6 +193,8 @@
 
 (with-eval-after-load 'pdf-view (require 'init-evil-pdf))
 
-(require 'init-evil-term)
+(with-eval-after-load 'image-mode (require 'init-evil-image))
+
+(with-eval-after-load 'term (require 'init-evil-term))
 
 (provide 'init-evil)
