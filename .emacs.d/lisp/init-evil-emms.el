@@ -34,13 +34,13 @@ The return value is the yanked text."
   (evil/emms-playlist-mode-paste-before))
 
 (dolist (map (list emms-browser-mode-map emms-playlist-mode-map))
-  (evil-define-key 'normal map
+  (evil-define-key 'motion map
     "+" 'emms-volume-raise
     "=" 'emms-volume-raise
     "-" 'emms-volume-lower
     "u" 'emms-playlist-mode-undo))
 
-(evil-define-key 'normal emms-browser-mode-map
+(evil-define-key 'motion emms-browser-mode-map
   (kbd "C-<return>") 'emms-browser-add-tracks-and-play
   (kbd "<return>") 'emms-browser-add-tracks
   (kbd "<tab>") 'emms-browser-toggle-subitems
@@ -73,7 +73,7 @@ The return value is the yanked text."
   "s" (lookup-key emms-browser-mode-map (kbd "s"))
   "z" (lookup-key emms-browser-mode-map (kbd "W")))
 
-(evil-define-key 'normal emms-playlist-mode-map
+(evil-define-key 'motion emms-playlist-mode-map
   "o" 'evil/emms-playlist-mode-insert-newline-below
   "O" 'evil/emms-playlist-mode-insert-newline-above
   "d" 'emms-playlist-mode-kill-track
