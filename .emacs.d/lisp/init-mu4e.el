@@ -87,6 +87,10 @@
 ;; Make unread e-mails stand out a bit.
 (set-face-foreground 'mu4e-unread-face "yellow")
 
+(when (require 'helm-mu nil t)
+  (dolist (map (list mu4e-headers-mode-map mu4e-main-mode-map mu4e-view-mode-map))
+    (define-key map "\M-sf" 'helm-mu)))
+
 (load "~/personal/mail/mu4e.el" t)
 
 (provide 'init-mu4e)
