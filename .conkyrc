@@ -1,0 +1,23 @@
+out_to_x no
+background no
+cpu_avg_samples 2
+net_avg_samples 2
+no_buffers yes
+out_to_console yes
+out_to_stderr no
+extra_newline no
+update_interval 1.0
+uppercase no
+use_spacer left
+
+## Colors are in dzen2 format.
+TEXT
+^fg(grey)${time %a %d %b %R} \
+       \
+^fg(grey)CPU: ^fg(DeepSkyBlue)$cpu% \
+^fg(grey)RAM: ^fg(DeepSkyBlue)$memperc% \
+^fg(grey)RX: ^fg(DeepSkyBlue)${downspeedf eth0} \
+^fg(grey)TX: ^fg(DeepSkyBlue)${upspeedf eth0} \
+^fg(grey)sda: ^fg(DeepSkyBlue)${diskio sda}
+
+## TODO: Add battery display with low-power color change.

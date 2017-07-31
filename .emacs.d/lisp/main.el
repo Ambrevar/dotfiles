@@ -65,15 +65,16 @@
 ;;; Display defun in mode line.
 ;; (which-function-mode)
 
-(display-time)
-(setq display-time-day-and-date t
-      display-time-24hr-format t
-      display-time-default-load-average nil)
+;;; No need when we have a status bar.
+;; (display-time)
+;; (setq display-time-day-and-date t
+;;       display-time-24hr-format t
+;;       display-time-default-load-average nil)
 
-;;; Display battery status in mode line
-(display-battery-mode)
+;;; Just like time, no need when we have a status bar.
+;; (display-battery-mode)
 ;;; TODO: Battery status (%b) does not work properly.
-(setq battery-mode-line-format "[%p%%%b %t]")
+;; (setq battery-mode-line-format "[%p%%%b %t]")
 
 ;;; Line numbers
 ;;; Adding to `find-file-hook' ensures it will work for every file, regardless of
