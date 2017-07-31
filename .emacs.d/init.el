@@ -176,9 +176,7 @@
 (when (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path))
   (nconc package-selected-packages '(helm-mu mu4e-maildirs-extension mu4e-alert)))
 (with-eval-after-load 'mu4e (require 'init-mu4e))
-;; TODO: It seems that calling `mu4e-headers-unread' directly does not initialize mu4e properly:
-;; it won't fetch e-mails and won't complete addresses.
-(autoload 'mu4e-headers-unread "mu4e")
+(autoload 'mu4e-headers "mu4e")
 
 ;;; Makefile
 (with-eval-after-load 'make-mode (require 'init-makefile))
