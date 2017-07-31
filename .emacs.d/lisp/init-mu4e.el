@@ -19,8 +19,9 @@
   (mu4e-headers-search "flag:unread AND NOT flag:trashed"))
 
 (setq
- ;; Where to save attachments
+ ;; Attachments
  mu4e-attachment-dir "~/temp"
+ mu4e-save-multiple-attachments-without-asking t
 
  ;; IMAP sync.
  mu4e-maildir "~/.cache/mail"
