@@ -88,7 +88,7 @@
   (exwm-input-set-key (kbd "s-a") #'emms-smart-browse)
   (exwm-input-set-key (kbd "s-A") #'emms))
 (when (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path))
-  (exwm-input-set-key (kbd "s-m") #'mu4e-headers-unread))
+  (exwm-input-set-key (kbd "s-m") #'mu4e-headers))
 
 ;;; External application shortcuts.
 (defun exwm-start-browser () (interactive) (start-process-shell-command browse-url-generic-program nil browse-url-generic-program))

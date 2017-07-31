@@ -15,9 +15,14 @@
 (when (require 'mu4e-alert nil t)
   (mu4e-alert-enable-mode-line-display))
 
-(defun mu4e-headers-unread ()
+(defun mu4e-headers ()
+  "Like `mu4e' but show the header view.
+Default to unread messages if no"
   (interactive)
-  (mu4e-headers-search "flag:unread AND NOT flag:trashed"))
+  (mu4e~start)
+  (if (get-buffer "*mu4e-headers*" )
+      (switch-to-buffer "*mu4e-headers*")
+    (mu4e-headers-search "flag:unread AND NOT flag:trashed")))
 
 (setq
  ;; Attachments
