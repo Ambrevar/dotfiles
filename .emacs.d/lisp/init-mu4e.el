@@ -8,6 +8,7 @@
 ;; TODO: With mu4e-alert, default-directory remains stuck to the initial folder,
 ;; which causes errors if it becomes inaccessible.
 ;; See: https://github.com/iqbalansari/mu4e-alert/issues/24.
+;; TODO: Face of `message-cited-text' does not work.
 
 (when (require 'mu4e-maildirs-extension nil t)
   (mu4e-maildirs-extension))
@@ -43,6 +44,7 @@
  mu4e-headers-date-format "%F %R"
  mu4e-headers-fields '((:human-date . 16)
                        (:flags . 6)
+                       (:size . 6)
                        (:mailing-list . 10)
                        (:from . 22)
                        (:subject))
