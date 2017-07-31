@@ -84,7 +84,7 @@
 (exwm-input-set-key (kbd "s-<return>") #'eshell-or-new-session)
 (when (fboundp 'magit-status)
   (exwm-input-set-key (kbd "s-v") #'magit-status))
-(when (fboundp 'emms)
+(when (fboundp 'emms-all)
   (exwm-input-set-key (kbd "s-a") #'emms-smart-browse)
   (exwm-input-set-key (kbd "s-A") #'emms))
 (when (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path))
