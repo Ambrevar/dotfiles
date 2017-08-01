@@ -1,5 +1,7 @@
 ;;; Org mode
 
+;;; TODO: org-import should be able to parse "|" in CSV files.
+
 (define-key org-mode-map (kbd "C-c C-a") 'org-agenda)
 
 (setq

@@ -24,6 +24,7 @@
 (set-face-background 'region "#191970")
 (set-face-attribute 'isearch nil :foreground 'unspecified :background "#2f4f4f" :box "white")
 (set-face-attribute 'lazy-highlight nil :inherit 'isearch :foreground 'unspecified :background 'unspecified :box nil)
+;;; TODO: Highlight with box does not render well in Sx, ediff, occur, evil-search.
 (set-face-attribute 'highlight nil :background 'unspecified :box "white")
 (set-face-attribute 'error nil :foreground "red" :weight 'bold)
 

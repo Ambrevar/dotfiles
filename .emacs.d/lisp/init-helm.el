@@ -89,6 +89,10 @@
   (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history))
 (add-hook 'eshell-mode-hook 'helm/eshell-set-keys)
 
+;; TODO: Use helm-ff history in helm file completion.
+;; https://github.com/emacs-helm/helm/issues/1118
+;; (define-key helm-read-file-map (kbd "M-p") 'helm-ff-run-switch-to-history)
+
 ;;; Do not exclude any files from 'git grep'.
 (setq helm-grep-git-grep-command "git --no-pager grep -n%cH --color=always --full-name -e %p -- %f")
 

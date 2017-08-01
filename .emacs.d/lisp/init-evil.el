@@ -7,9 +7,12 @@
 ;; - Navigating through the marks randomly produces a "Marker points into wrong buffer" error.
 ;; https://github.com/emacs-evil/evil/issues/845#issuecomment-306050231
 
-;; TODO: Make Evil commands react more dynamically with read-only text.
+;; TODO: Make Evil commands react more dynamically with read-only text, like eshell, wdired.
 ;; Add support for I, C, D, S, s, c*, d*, R, r.
 ;; See https://github.com/emacs-evil/evil/issues/852.
+
+;; REVIEW: 'cw' fails on the last character of the line when \n does not terminate it.
+;; See https://github.com/emacs-evil/evil/issues/863.
 
 ;; Several packages handle relative line numbering:
 ;; - nlinum-relative: Seems slow as of May 2017.

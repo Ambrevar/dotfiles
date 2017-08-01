@@ -6,7 +6,18 @@
 ;;; modules, runs their hooks and concludes with `eshell-first-time-mode-hook'
 ;;; (for the first session only) and `eshell-mode-hook'.
 
+;;; TODO: Redirecting big output to file (e.g. /dev/null) is extremely slow.
+
 ;;; TODO: Cannot "C-c C-c" during a `sudo pacman -Syu`.
+
+;;; TODO: The buffer stutters when writing "in-place", e.g. pacman, git.
+;;; It seems that it does not do it as much in `emacs -Q`.
+
+;;; REVIEW: `eshell/sudo' should not read -u in command arguments.
+;;; This fails: sudo pacman -Syu --noconfirm.
+;;; http://www.gnu.org/software/emacs/manual/html_node/eshell/Built_002dins.html
+;;; https://emacs.stackexchange.com/questions/5608/how-to-let-eshell-remember-sudo-password-for-two-minutes
+;;; See http://debbugs.gnu.org/cgi/bugreport.cgi?bug=27411
 
 ;;; REVIEW: Eshell/Shell completion fails when PATH has a non-readable element.
 ;; See https://github.com/emacs-helm/helm/issues/1785
@@ -33,6 +44,10 @@
 
 ;; TODO: Hour is printed twice. We don't need to set this?
 ;; (setq eshell-ls-date-format (replace-regexp-in-string "^\\+*" "" (getenv "TIME_STYLE")))
+
+;;; TODO: ls: Sort using locale.
+
+;;; TODO: `kill -#' does not work.
 
 ;;; Leave `eshell-highlight-prompt' to t as it sets the read-only property.
 (setq eshell-prompt-function
@@ -96,6 +111,10 @@
 (add-hook 'eshell-mode-hook 'eshell-cmpl-initialize)
 
 ;;; Filter out space-beginning commands from history.
+;;; TODO: history/command hook: trim surrounding space.  Check `eshell-rewrite-command-hook'.
+;;; TODO: history: do not save failed commands to file.
+;;; TODO: history: do not store duplicates
+;;; TODO: history: Shared history?  Check apropos: "esh hist".
 (setq eshell-input-filter
       (lambda (str)
         (not (or (string= "" str)

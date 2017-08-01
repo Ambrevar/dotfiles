@@ -299,6 +299,7 @@
 ;;; Wgrep
 (nconc package-selected-packages '(wgrep-helm wgrep-pt))
 (when (require 'wgrep nil t)
+  ;; TODO: wgrep-face is not so pretty.
   (set-face-attribute 'wgrep-face nil :inherit 'ediff-current-diff-C :foreground 'unspecified :background 'unspecified :box nil))
 
 ;;; Window manager

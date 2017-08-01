@@ -1,6 +1,8 @@
 ;;; LaTeX
 ;;; WARNING: This file is loaded from a hook.
 
+;;; TODO: `beginning-of-defun'/`end-of-defun' should go to next section.
+
 ;;; We use the TeX setup.
 (require 'init-tex)
 (require 'latex-pretty-symbols nil t)

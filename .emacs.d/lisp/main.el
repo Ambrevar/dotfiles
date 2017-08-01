@@ -228,6 +228,7 @@
 ;;; Let Emacs auto-load/save sessions only when running the daemon.
 ;;; `server-running-p' is only useful once the daemon is started and cannot be
 ;;; used for initialization. We use `daemonp' instead.
+;;; TODO: Desktop does not get saved when Emacs quits.  When does it get saved?
 ;;; TODO: `desktop-kill' should not query the user in `kill-emacs-hook'.
 ;;; TODO: Desktop mode does not save window registers properly.
 ;;; See https://groups.google.com/forum/#!topic/gnu.emacs.help/64aO_O43530
@@ -301,6 +302,7 @@
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 
 ;;; Ediff
+;;; TODO: Ediff does not seem to auto-refine.  Bug?  Compare daemon and no-daemon.
 (setq ediff-window-setup-function 'ediff-setup-windows-plain
       ediff-split-window-function 'split-window-horizontally)
 

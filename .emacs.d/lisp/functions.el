@@ -427,6 +427,9 @@ This does not interfere with `subword-mode'."
     (modify-syntax-entry ?_ "_")
     (message "_ is a word delimiter")))
 
+;;; TODO: Move turn-on-* functions to 'hook-functions.el'.
+;;; Replace useless individual comments with global comment.
+
 (defun turn-on-column-number-mode ()
   "Unconditionally turn on `column-number-mode' for the current buffer."
   (set (make-variable-buffer-local 'column-number-mode) t))
