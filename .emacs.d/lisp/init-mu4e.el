@@ -5,15 +5,10 @@
 ;; TODO: Is it possible to mbsync without attachments?
 ;; TODO: Use abbrevs in compose mode.
 ;; TODO: Do not cite when replying: https://github.com/djcb/mu/issues/1110.
-;; TODO: With mu4e-alert, default-directory remains stuck to the initial folder,
-;; which causes errors if it becomes inaccessible.
-;; See: https://github.com/iqbalansari/mu4e-alert/issues/24.
 ;; TODO: Face of `message-cited-text' does not work.
 
 (when (require 'mu4e-maildirs-extension nil t)
   (mu4e-maildirs-extension))
-(when (require 'mu4e-alert nil t)
-  (mu4e-alert-enable-mode-line-display))
 
 (defun mu4e-headers ()
   "Like `mu4e' but show the header view.
