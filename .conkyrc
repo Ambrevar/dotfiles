@@ -1,23 +1,33 @@
-out_to_x no
-background no
-cpu_avg_samples 2
-net_avg_samples 2
-no_buffers yes
-out_to_console yes
-out_to_stderr no
-extra_newline no
-update_interval 1.0
-uppercase no
-use_spacer left
+-- -*- mode: lua; -*-
 
-## Colors are in dzen2 format.
-TEXT
-^fg(grey)${time %a %d %b %R} \
+conky.config = {
+	-- out_to_x = false,
+	background = false,
+	cpu_avg_samples = 2,
+	net_avg_samples = 2,
+	no_buffers = true,
+	out_to_console = true,
+	out_to_stderr = false,
+	extra_newline = false,
+	update_interval = 1.0,
+	uppercase = false,
+	use_spacer = left,
+};
+
+-- Colors are in dzen2 format.
+conky.text =
+[[^fg(grey)${time %a %d %b %R} \
        \
-^fg(grey)CPU: ^fg(DeepSkyBlue)$cpu% \
-^fg(grey)RAM: ^fg(DeepSkyBlue)$memperc% \
-^fg(grey)RX: ^fg(DeepSkyBlue)${downspeedf eth0} \
-^fg(grey)TX: ^fg(DeepSkyBlue)${upspeedf eth0} \
-^fg(grey)sda: ^fg(DeepSkyBlue)${diskio sda}
+^fg(grey)CPU:^fg(DeepSkyBlue)$cpu% \
+^fg(grey)RAM:^fg(DeepSkyBlue)$memperc% \
+^fg(grey)↓^fg(DeepSkyBlue)${eval $${downspeedf ${gw_iface}}} \
+^fg(grey)↑^fg(DeepSkyBlue)${eval $${upspeedf ${gw_iface}}} \
+^fg(grey)sda:^fg(DeepSkyBlue)${diskio sda} \
+^fg(grey)✉^fg(DeepSkyBlue)${execi 30 mu find --nocolor --sortfield=d --maxnum=500 flag:unread AND NOT flag:trashed | wc -l} \
+]]
 
-## TODO: Add battery display with low-power color change.
+-- TODO: Add battery display with low-power color change.
+-- TODO: Unread mail with native 'new_mails' does not seem to support totals.
+-- Change color when e-mails are not 0.
+-- TODO: Add playing track (emacsclient)
+-- TODO: Track all hard-drives.

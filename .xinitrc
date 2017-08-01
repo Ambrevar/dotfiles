@@ -19,7 +19,7 @@ if [ $# -eq 1 ] && command -v $1 >/dev/null 2>&1; then
 	exec $1
 else
 	if command -v dzen2 >/dev/null 2>&1 && command -v conky >/dev/null 2>&1; then
-		conky | dzen2 -p -dock -ta l -fn "Deja Vu Sans Mono" &
+		conky | dzen2 -p -dock -ta l -fn "Mono" &
 	fi
 	## `exwm-enable' has to be called before the frame is spawned.
 	emacs --daemon -f exwm-enable
