@@ -25,6 +25,9 @@
 ;; (helm-autoresize-mode 1)
 (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
 
+;;; This makes the copy and rename operations asynchronous.
+(dired-async-mode)
+
 (setq
  helm-follow-mode-persistent t
  helm-reuse-last-window-split-state t
