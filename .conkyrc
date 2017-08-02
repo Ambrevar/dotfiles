@@ -1,7 +1,7 @@
 -- -*- mode: lua; -*-
 
 conky.config = {
-	-- out_to_x = false,
+	out_to_x = false,
 	background = false,
 	cpu_avg_samples = 2,
 	net_avg_samples = 2,
@@ -22,12 +22,16 @@ conky.text =
 ^fg(grey)RAM:^fg(DeepSkyBlue)$memperc% \
 ^fg(grey)↓^fg(DeepSkyBlue)${eval $${downspeedf ${gw_iface}}} \
 ^fg(grey)↑^fg(DeepSkyBlue)${eval $${upspeedf ${gw_iface}}} \
-^fg(grey)sda:^fg(DeepSkyBlue)${diskio sda} \
+^fg(grey)♪^fg(DeepSkyBlue)${exec amixer get Master -M | grep -oE "[0-9]*%"} \
 ^fg(grey)✉^fg(DeepSkyBlue)${execi 30 mu find --nocolor --sortfield=d --maxnum=500 flag:unread AND NOT flag:trashed | wc -l} \
+^fg(grey)⚡^fg(DeepSkyBlue)${if_match ${battery_percent} <= 5}^fg(Red)${endif}${battery_short}:${battery_time} \
+^fg(grey)sda:^fg(DeepSkyBlue)${diskio sda} \
 ]]
 
--- TODO: Add battery display with low-power color change.
+-- TODO: Change symbol / color when mixer is mute.
 -- TODO: Unread mail with native 'new_mails' does not seem to support totals.
--- Change color when e-mails are not 0.
--- TODO: Add playing track (emacsclient)
+-- TODO: Change color when e-mails are not 0.
+-- TODO: Don't display hard-drive IO<1MB.
 -- TODO: Track all hard-drives.
+-- TODO: Add playing track (emacsclient)
+-- Probably need $lua+$eval for most of the TODOs.
