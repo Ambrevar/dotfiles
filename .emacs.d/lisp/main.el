@@ -17,7 +17,7 @@
 
 ;;; Remember last cursor position.
 (setq save-place-file (concat emacs-cache-folder "saveplace"))
-(setq-default save-place-mode t)
+(save-place-mode)
 ;;; When the daemon is killed abruptly, places are not saved. Adding this hook
 ;;; allows to save places at a strategic moment.
 (add-hook 'before-save-hook 'save-place-kill-emacs-hook)
