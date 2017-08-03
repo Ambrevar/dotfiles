@@ -2,20 +2,19 @@
 
 (evil-set-initial-state 'term-mode 'insert)
 
-(defun evil-term-line-mode-and-normal ()
+(defun evil-term-char-mode-entry-function ()
   (interactive)
-  (term-line-mode)
-  (evil-normal-state))
+  (when (and (= (point) (point-max)) (term-in-line-mode))
+    (term-char-mode)))
 
-(defun evil-term-char-mode-and-insert ()
+(defun evil-term-char-mode-exit-function ()
   (interactive)
-  (term-char-mode)
-  (evil-insert-state))
+  (when (term-in-char-mode)
+    (term-line-mode)))
 
-(evil-define-key 'insert term-raw-map
-  [escape] 'evil-term-line-mode-and-normal)
-
-(evil-define-key '(normal insert) term-mode-map
-  "\C-c\C-k" 'evil-term-char-mode-and-insert)
+(defun evil-term-setup ()
+  (add-hook 'evil-insert-state-entry-hook 'evil-term-char-mode-entry-function nil t)
+  (add-hook 'evil-insert-state-exit-hook 'evil-term-char-mode-exit-function nil t))
+(add-hook 'term-mode-hook 'evil-term-setup)
 
 (provide 'init-evil-term)
