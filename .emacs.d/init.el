@@ -87,6 +87,9 @@
 ;;; Debbugs
 (nconc package-selected-packages '(debbugs))
 
+;;; Diff
+(nconc package-selected-packages '(ztree))
+
 ;;; Dired
 ;;; Dired is loaded after init.el, so configure it only then.
 ;; TODO: Improve dired-du:

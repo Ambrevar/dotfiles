@@ -200,4 +200,6 @@
 
 (with-eval-after-load 'term (require 'init-evil-term))
 
+(with-eval-after-load 'ztree-diff (require 'init-evil-ztree))
+
 (provide 'init-evil)
