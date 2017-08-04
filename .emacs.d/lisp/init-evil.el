@@ -31,6 +31,7 @@
 
 (setq evil-cross-lines t
       evil-move-beyond-eol t ; Especially useful for Edebug.
+      evil-move-cursor-back nil
       evil-want-fine-undo t
       evil-symbol-word-search nil)
 
