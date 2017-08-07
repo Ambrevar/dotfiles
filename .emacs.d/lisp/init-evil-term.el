@@ -2,30 +2,38 @@
 
 (evil-set-initial-state 'term-mode 'insert)
 
+;; TODO: Set prompt regexp.
+;; TODO: Can the prompt be read-only?
+
 ;; TODO: Rebinding ESC has the drawback that programs like vi cannot use it anymore.
 ;; Workaround: switch to Emacs mode and double-press ESC.
 ;; Otherwise leave it ESC to C-cC-j.
 ;; Or bind char-mode ESC to C-cC-x?
 
-;; TODO: Move this out of Evil? No, it depends on modal editing.
+;; TODO: Move this out of Evil? No, it depends on modal editing... Actually yes,
+;; the cursor movement part can be moved to a separate function so that normal
+;; Emacs bindings can use it too.
 ;; TODO: A new line gets inserted when calling M-b, M-f in char-mode
 ;; and then switching to line-mode. Seems like it happens on the first prompt
 ;; only.
+;; TODO: More generally, prompt gets messed up when going to char mode and
+;; current point is after last char-mode's point.  See `term-char-mode'.
 (defun evil-term-char-mode-goto-point ()
   "Switch to char mode.
-To switch to char mode, just swith to insert mode somewhere on the last line of the lat prompt."
+To switch to char mode, just swith to insert mode somewhere on the last line of the last prompt."
   (interactive) ; No need for intertice if set in a hook.
   (when (get-buffer-process (current-buffer))
     ;; (term-char-mode)
     ;; (evil-insert-state)
-    ;; TODO: When going from char->line mode, point is not necessarily at the end. To come back, Insert and delete char. `term-send-backspace'.
+    ;; TODO: When going from char->line mode, point is not necessarily at the
+    ;; end. To come back, Insert and delete char. `term-send-backspace'.
     ;; Can this break text-mode programs? Or anything reading input without waiting for EOL?
     ;; TODO: Even better: if point in line mode is after last prompt on last line, find it in char mode by call enough `term-send-left' and right.  Then no need for C-cC-k.
     ;; It's important that point must be on last line, because when point is on a multi-line command, it cannot go back to the previous lines.
     (let ((last-prompt (save-excursion (goto-char (point-max)) (when (= (line-beginning-position) (line-end-position)) (backward-char)) (term-bol nil)))
           (last-bol (save-excursion (goto-char (point-max)) (when (= (line-beginning-position) (line-end-position)) (backward-char)) (line-beginning-position)))
           (ref-point (point))
-          ;; TODO: Refactor code without last-point if not be needed. Test when
+          ;; TODO: Refactor code without last-point if not needed. Test when
           ;; background program outputs beyond the char-mode commandline.
           (last-point (point)))
       ;; TODO: Optimize by setting left/right func to var.
@@ -55,7 +63,7 @@ To switch to char mode, just swith to insert mode somewhere on the last line of 
     (evil-insert-state)))
 
 ;; TODO: Test these.
-(evil-define-key '(normal insert) term-mode-map
+(evil-define-key 'normal term-mode-map
   "\C-c\C-k" 'evil-term-char-mode-insert
   (kbd "RET") 'term-send-input)
 
