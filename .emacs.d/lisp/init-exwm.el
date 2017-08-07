@@ -27,8 +27,9 @@
 
 ;;; System tray
 ;; TODO: Test and see if status bar is not a better solution.
-;; (require 'exwm-systemtray)
-;; (exwm-systemtray-enable)
+(require 'exwm-systemtray)
+(exwm-systemtray-enable)
+(setq exwm-systemtray-height 16)
 
 ;;; Those cannot be set globally: if Emacs would be run in another WM, the "s-"
 ;;; prefix will conflict with the WM bindings.
