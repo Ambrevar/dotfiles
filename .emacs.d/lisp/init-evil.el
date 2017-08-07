@@ -203,4 +203,6 @@
 
 (with-eval-after-load 'ztree-diff (require 'init-evil-ztree))
 
+(with-eval-after-load 'debug (require 'init-evil-debugger))
+
 (provide 'init-evil)
