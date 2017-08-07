@@ -25,8 +25,10 @@
   (evil-define-key 'normal eshell-mode-map
     "[" 'eshell-previous-prompt
     "]" 'eshell-next-prompt
-    "\M-k" 'eshell-previous-prompt
-    "\M-j" 'eshell-next-prompt
+    "\C-k" 'eshell-previous-prompt
+    "\C-j" 'eshell-next-prompt
+    "\M-k" 'eshell-previous-prompt ; Custom
+    "\M-j" 'eshell-next-prompt ; Custom
     "0" 'eshell-bol
     (kbd "RET") 'eshell-send-input
     (kbd "C-c C-c") 'evil/eshell-interrupt-process
