@@ -31,6 +31,7 @@
 
 (setq evil-cross-lines t
       evil-move-beyond-eol t ; Especially useful for Edebug.
+      evil-move-cursor-back nil
       evil-want-fine-undo t
       evil-symbol-word-search nil)
 
@@ -201,5 +202,7 @@
 (with-eval-after-load 'term (require 'init-evil-term))
 
 (with-eval-after-load 'ztree-diff (require 'init-evil-ztree))
+
+(with-eval-after-load 'debug (require 'init-evil-debugger))
 
 (provide 'init-evil)

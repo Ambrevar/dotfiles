@@ -6,6 +6,8 @@
 ;; TODO: Use abbrevs in compose mode.
 ;; TODO: Do not cite when replying: https://github.com/djcb/mu/issues/1110.
 ;; TODO: Face of `message-cited-text' does not work.
+;; REVIEW: Handle attachments in attached e-mails.
+;; See https://github.com/djcb/mu/issues/454#issuecomment-320616279.
 
 (when (require 'mu4e-maildirs-extension nil t)
   (mu4e-maildirs-extension))

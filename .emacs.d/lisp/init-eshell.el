@@ -171,35 +171,47 @@ See `eshell-prompt-regexp'."
 ;;; Upstream does not allow for skipping the user config:
 ;;; https://github.com/fish-shell/fish-shell/issues/4165.
 (when (executable-find "fish")
-  (setq eshell-default-completion-function
-        (lambda ()
-          (while (pcomplete-here
-                  (let* ((raw-prompt (buffer-substring-no-properties (save-excursion (eshell-bol) (point)) (point)))
-                         ;; Keep spaces at the end with OMIT-NULLS=nil in `split-string'.
-                         (toks (split-string raw-prompt split-string-default-separators nil))
-                         ;; We want the command (i.e. the first 'car') to be the
-                         ;; command.  Discard potential empty strings.
-                         (tokens (progn (while (string= (car toks) "")
-                                          (setq toks (cdr toks)))
-                                        toks))
-                         ;; Fish does not support subcommand completion. We make
-                         ;; a special case of 'sudo' and 'env' since they are
-                         ;; the most common cases involving subcommands.  See
-                         ;; https://github.com/fish-shell/fish-shell/issues/4093.
-                         (prompt (if (not (member (car tokens) '("sudo" "env")))
-                                     raw-prompt
-                                   (setq tokens (cdr tokens))
-                                   (while (and tokens
-                                               (or (string-match "^-.*" (car tokens))
-                                                   (string-match "=" (car tokens))))
-                                     ;; Skip env/sudo parameters, like LC_ALL=C.
-                                     (setq tokens (cdr tokens)))
-                                   (mapconcat 'identity tokens " "))))
-                    (mapcar (lambda (e) (car (split-string e "\t")))
-                            (split-string
-                             (with-output-to-string
-                               (with-current-buffer standard-output
-                                 (call-process "fish" nil t nil "-c" (format "complete -C'%s'" prompt))))
-                             "\n" t))))))))
+  (setq eshell-default-completion-function 'eshell-fish-completion))
+
+;; TODO: `cd ../../go/<TAB>` does not work.
+;; `cd ../../` gets folded into `./`.
+;; See https://github.com/emacs-helm/helm/issues/1832.
+(defun eshell-fish-completion ()
+  (while (pcomplete-here
+          (let ((comp-list
+                 (let* ((raw-prompt (buffer-substring-no-properties (save-excursion (eshell-bol) (point)) (point)))
+                        ;; Keep spaces at the end with OMIT-NULLS=nil in `split-string'.
+                        (toks (split-string raw-prompt split-string-default-separators nil))
+                        ;; The first non-empty `car' is the command. Discard
+                        ;; leading empty strings.
+                        (tokens (progn (while (string= (car toks) "")
+                                         (setq toks (cdr toks)))
+                                       toks))
+                        ;; Fish does not support subcommand completion. We make
+                        ;; a special case of 'sudo' and 'env' since they are
+                        ;; the most common cases involving subcommands.  See
+                        ;; https://github.com/fish-shell/fish-shell/issues/4093.
+                        (prompt (if (not (member (car tokens) '("sudo" "env")))
+                                    raw-prompt
+                                  (setq tokens (cdr tokens))
+                                  (while (and tokens
+                                              (or (string-match "^-.*" (car tokens))
+                                                  (string-match "=" (car tokens))))
+                                    ;; Skip env/sudo parameters, like LC_ALL=C.
+                                    (setq tokens (cdr tokens)))
+                                  (mapconcat 'identity tokens " "))))
+                   ;; Completion result can be a filename.  pcomplete expects
+                   ;; cannonical file names (i.e. withou '~') while fish preserves
+                   ;; non-cannonical results.  If the result contains a directory,
+                   ;; expand it.
+                   (mapcar (lambda (e)(car (split-string e "\t")))
+                           (split-string
+                            (with-output-to-string
+                              (with-current-buffer standard-output
+                                (call-process "fish" nil t nil "-c" (format "complete -C'%s'" prompt))))
+                            "\n" t)))))
+            (if (file-name-directory (car comp-list))
+                (pcomplete-dirs-or-entries)
+              comp-list)))))
 
 (provide 'init-eshell)
