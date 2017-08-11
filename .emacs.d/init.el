@@ -271,6 +271,10 @@
 (nconc package-selected-packages '(flycheck helm-flycheck))
 (when (require 'flycheck nil t) (require 'init-flycheck))
 
+;;; Terminal
+(with-eval-after-load 'term
+  (setq term-buffer-maximum-size 0))
+
 ;;; TeX / LaTeX / Texinfo
 (with-eval-after-load 'tex-mode (require 'init-tex))
 (with-eval-after-load 'texinfo (require 'init-texinfo))
