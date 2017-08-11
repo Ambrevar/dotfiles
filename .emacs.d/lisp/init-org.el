@@ -32,6 +32,7 @@
   (add-hook 'org-mode-hook fun))
 
 (when (require 'org-contacts nil t)
-  (setq org-contacts-files '("~/personal/contacts/contacts.org")))
+  (let ((contacts "~/personal/contacts/contacts.org"))
+    (when (file-exists-p contacts) (setq org-contacts-files (list contacts)))))
 
 (provide 'init-org)
