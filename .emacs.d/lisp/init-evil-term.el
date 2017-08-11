@@ -51,15 +51,17 @@
 (add-hook 'term-mode-hook 'evil-term-setup)
 
 ;;; TODO: Report `term-char-mode' fix upstream.
+;;;
 ;;; Originally, `term-char-mode' check if point is after `pmark' and if it is,
 ;;; it cuts the characters between pmark and point and sends them to the
-;;; terminal.
-;;; The idea is that when you write a commandline in char mode, then switch to
-;;; line mode and keep on writing _without moving the point_, you can go back to
-;;; char mode and keep the modifications.
+;;; terminal.  The idea is that when you write a commandline in char mode, then
+;;; switch to line mode and keep on writing _without moving the point_, you can
+;;; go back to char mode and keep the modifications.
+;;;
 ;;; I'd say this is rather useless as the point of line mode is to _move
 ;;; around_, not to do the same thing you can do in char mode.
-;;; The more sensical thing to do: erase process content, replace it with
+;;;
+;;; The more sensical thing to do: replace char-mode's commandline with
 ;;; line-mode's commandline and move char-mode point to where line-mode point
 ;;; is.
 (defun term-char-mode ()
@@ -73,23 +75,51 @@ intervention from Emacs, except for the escape character (usually C-c)."
     (use-local-map term-raw-map)
     (easy-menu-add term-terminal-menu)
     (easy-menu-add term-signals-menu)
-    (let (last-prompt
-          last-bol
-          (pmark (process-mark (get-buffer-process (current-buffer)))))
+    (let* (last-prompt
+           commandline
+           (line-mode-point (point))
+           (proc (get-buffer-process (current-buffer)))
+           (pmark (process-mark proc)))
       (save-excursion
         (goto-char (point-max))
         (when (= (line-beginning-position) (line-end-position))
+          ;; Sometimes a spurious newline gets inserted.
+          ;; Work around it by skipping back past it.
           (ignore-errors (backward-char)))
-        (setq last-prompt (term-bol nil)
-              last-bol (line-beginning-position)))
-      ;; Move char-mode point to line-mode point.
-      ;; We check if point is after both last-prompt and last-bol to handle multi-line prompts.
+        ;; If the prompt regexp is wrong or if we are on a multiline prompt, get the line-beginning-position.
+        (setq last-prompt (max (term-bol nil) (line-beginning-position))))
+
       (when (and
              (>= (point) last-prompt)
-             (>= (point) last-bol)
              (/= (point) pmark))
-        (let ((term-move (if (> (point) pmark) 'term-send-right 'term-send-left)))
-          (dotimes (_ (abs (- (point) pmark)))
+        ;; Yank last commandline.  Since prompt may not be properly recognized, we yank the whole line.
+        (setq commandline (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
+        ;; Clear line.
+        (dotimes (_ (abs (- last-prompt pmark)))
+          (term-send-backspace))
+        ;; Point could be before line-end-position, so we need to delete the trailing characters.
+        (dotimes (_ (abs (- (point-max) pmark)))
+          (term-send-del))
+        ;; Get prompt position with `process-mark'.
+        ;; TODO: We need to wait a bit to make sure the previously-sent deletions have been processed.
+        ;; This is brittle and it makes the prompt flicker once.
+        ;; It is possible to work-around this: either use `term-prompt-regexp'
+        ;; or send `term-left' enough times, wait and get it.  That latter
+        ;; solution has the advantage that it does not flickers, but it won't
+        ;; work on dash.
+        (sleep-for 0 100)
+        (setq pmark (process-mark proc))
+        ;; Remove actual prompt length from the commandline.
+        (setq commandline (substring commandline (- pmark last-prompt)))
+        ;; Send commandline to term.
+        (term-send-raw-string commandline)
+
+        ;; Move char-mode point to line-mode point. TODO: Don't do this if shell does not support cursor moves.
+        ;; We don't need to wait for process to know the pmark, it is at end-of-line.
+        (setq pmark (line-end-position))
+        ;; TODO: Point sync does not always work.
+        (let ((term-move (if (> line-mode-point pmark) 'term-send-right 'term-send-left)))
+          (dotimes (_ (abs (- line-mode-point pmark)))
             (funcall term-move)))))
     (term-update-mode-line)))
 
