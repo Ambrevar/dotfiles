@@ -21,8 +21,8 @@
 (add-hook 'after-init-hook 'reset-file-name-handler-alist)
 
 (defvar emacs-cache-folder "~/.cache/emacs/"
-  "Cache folder is everything we do not want to track along with
-  the configuration files.")
+  "Cache folder is everything we do not want to track together
+  with the configuration files.")
 (if (not (file-directory-p emacs-cache-folder))
     (make-directory emacs-cache-folder t))
 
@@ -31,9 +31,8 @@
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
 ;;; Local plugin folder for quick install. All files in this folder will be
-;;; accessible to Emacs config. This is done to separate the versioned config
-;;; files from the external packages. For instance you can put package.el in
-;;; there for Emacs <24.
+;;; accessible to Emacs config.  This is done to separate the versioned config
+;;; files from the external packages.
 (add-to-list 'load-path "~/.emacs.d/local")
 
 (when (require 'package nil t)
@@ -79,12 +78,13 @@
   (setq tab-width 2 left-margin 2))
 (add-hook 'change-log-mode-hook 'change-log-set-indent-rules)
 
-;;; Company
+;;; Completion
 (nconc package-selected-packages '(company helm-company))
 (when (require 'company nil t)
   (setq company-idle-delay nil))
 
 ;;; Debbugs
+;; TODO: Make debbugs more Evil.
 (nconc package-selected-packages '(debbugs))
 
 ;;; Diff
@@ -101,7 +101,7 @@
 ;;; Emms
 (nconc package-selected-packages '(emms emms helm-emms emms-player-mpv))
 (when (fboundp 'emms-all)
-  ;; Emms has not autoload to switch to the browser, let's add one.
+  ;; Emms has no autoload to switch to the browser, let's add one.
   (autoload 'emms-smart-browse "emms-browser" nil t))
 (with-eval-after-load 'emms (require 'init-emms))
 
@@ -132,8 +132,6 @@
 
 ;;; GUD (GDB, etc.)
 (with-eval-after-load 'gud (require 'init-gud))
-;;; JavaScript
-(add-hook 'js-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
 
 ;;; Helm
 (nconc package-selected-packages '(helm helm-descbinds helm-ls-git))
@@ -147,6 +145,9 @@
 
 ;;; Indentation style guessing.
 ;; (nconc 'package-selected-packages '(dtrt-indent))
+
+;;; JavaScript
+(add-hook 'js-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
 
 ;;; Lisp
 (dolist (hook '(lisp-mode-hook emacs-lisp-mode-hook))
@@ -175,7 +176,7 @@
   (global-set-key (kbd "C-x g") 'magit-status))
 
 ;;; Mail
-;; mu4e is usually site-local and not part of ELPA.
+;;; mu4e is usually site-local and not part of ELPA.
 (when (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path))
   (nconc package-selected-packages '(helm-mu mu4e-maildirs-extension)))
 (with-eval-after-load 'mu4e (require 'init-mu4e))
@@ -232,8 +233,7 @@
 ;;; pdf-tools requires poppler built with cairo support.
 (nconc package-selected-packages '(pdf-tools))
 (when (require 'pdf-tools nil t)
-  ;; TODO: The external reader should be compiled only when a frame is available.
-  (pdf-tools-install))
+  (pdf-tools-install t t t))
 
 ;;; Perl
 (defun perl-set-indent-rules ()
