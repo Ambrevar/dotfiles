@@ -77,6 +77,7 @@ intervention from Emacs, except for the escape character (usually C-c)."
     (easy-menu-add term-signals-menu)
     (let* (last-prompt
            commandline
+           commandline-end-position
            (line-mode-point (point))
            (proc (get-buffer-process (current-buffer)))
            (pmark (process-mark proc)))
@@ -86,14 +87,16 @@ intervention from Emacs, except for the escape character (usually C-c)."
           ;; Sometimes a spurious newline gets inserted.
           ;; Work around it by skipping back past it.
           (ignore-errors (backward-char)))
-        ;; If the prompt regexp is wrong or if we are on a multiline prompt, get the line-beginning-position.
-        (setq last-prompt (max (term-bol nil) (line-beginning-position))))
+        (setq
+         ;; If the prompt regexp is wrong or if we are on a multiline prompt, get the line-beginning-position.
+         last-prompt (max (term-bol nil) (line-beginning-position))
+         ;; Yank last commandline.  If prompt is not properly recognized, it yanks the whole line.
+         commandline (buffer-substring-no-properties last-prompt (line-end-position))
+         ;; We store the end-position here so that we don't have to wait for the
+         ;; process when we send the commandline.
+         commandline-end-position (line-end-position)))
 
-      (when (and
-             (>= (point) last-prompt)
-             (/= (point) pmark))
-        ;; Yank last commandline.  Since prompt may not be properly recognized, we yank the whole line.
-        (setq commandline (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
+      (when (>= (point) last-prompt)
         ;; Clear line.
         (dotimes (_ (abs (- last-prompt pmark)))
           (term-send-backspace))
@@ -115,12 +118,12 @@ intervention from Emacs, except for the escape character (usually C-c)."
         (term-send-raw-string commandline)
 
         ;; Move char-mode point to line-mode point. TODO: Don't do this if shell does not support cursor moves.
-        ;; We don't need to wait for process to know the pmark, it is at end-of-line.
-        (setq pmark (line-end-position))
-        ;; TODO: Point sync does not always work.
-        (let ((term-move (if (> line-mode-point pmark) 'term-send-right 'term-send-left)))
-          (dotimes (_ (abs (- line-mode-point pmark)))
-            (funcall term-move)))))
-    (term-update-mode-line)))
+        ;; Underlying shell can be retrieved with:
+        ;; (car (last (process-command (get-buffer-process (current-buffer)))))
+        (dotimes (_ (abs (- line-mode-point commandline-end-position)))
+          (term-send-left)))
+
+      ;; Finish up.
+      (term-update-mode-line))))
 
 (provide 'init-evil-term)
