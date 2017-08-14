@@ -173,9 +173,6 @@ See `eshell-prompt-regexp'."
 (when (executable-find "fish")
   (setq eshell-default-completion-function 'eshell-fish-completion))
 
-;; TODO: `cd ../../go/<TAB>` does not work.
-;; `cd ../../` gets folded into `./`.
-;; See https://github.com/emacs-helm/helm/issues/1832.
 (defun eshell-fish-completion ()
   (while (pcomplete-here
           (let ((comp-list
@@ -210,7 +207,7 @@ See `eshell-prompt-regexp'."
                               (with-current-buffer standard-output
                                 (call-process "fish" nil t nil "-c" (format "complete -C'%s'" prompt))))
                             "\n" t)))))
-            (if (file-name-directory (car comp-list))
+            (if (and comp-list (file-name-directory (car comp-list)))
                 (pcomplete-dirs-or-entries)
               comp-list)))))
 

@@ -3,66 +3,18 @@
 (evil-set-initial-state 'term-mode 'insert)
 
 ;; TODO: Set prompt regexp.
-;; TODO: Can the prompt be read-only?
+;; TODO: Can prompt be read-only?
 
 ;; TODO: Rebinding ESC has the drawback that programs like vi cannot use it anymore.
 ;; Workaround: switch to Emacs mode and double-press ESC.
-;; Otherwise leave it ESC to C-cC-j.
+;; Otherwise leave ESC to C-cC-j.
 ;; Or bind char-mode ESC to C-cC-x?
-
-;; TODO: Move this out of Evil? No, it depends on modal editing... Actually yes,
-;; the cursor movement part can be moved to a separate function so that normal
-;; Emacs bindings can use it too.
-;; TODO: A new line gets inserted when calling M-b, M-f in char-mode
-;; and then switching to line-mode. Seems like it happens on the first prompt
-;; only.
-;; TODO: More generally, prompt gets messed up when going to char mode and
-;; current point is after last char-mode's point.  See `term-char-mode'.
-(defun evil-term-char-mode-goto-point ()
-  "Switch to char mode.
-To switch to char mode, just swith to insert mode somewhere on the last line of the last prompt."
-  (interactive) ; No need for intertice if set in a hook.
-  (when (get-buffer-process (current-buffer))
-    ;; (term-char-mode)
-    ;; (evil-insert-state)
-    ;; TODO: When going from char->line mode, point is not necessarily at the
-    ;; end. To come back, Insert and delete char. `term-send-backspace'.
-    ;; Can this break text-mode programs? Or anything reading input without waiting for EOL?
-    ;; TODO: Even better: if point in line mode is after last prompt on last line, find it in char mode by call enough `term-send-left' and right.  Then no need for C-cC-k.
-    ;; It's important that point must be on last line, because when point is on a multi-line command, it cannot go back to the previous lines.
-    (let ((last-prompt (save-excursion (goto-char (point-max)) (when (= (line-beginning-position) (line-end-position)) (backward-char)) (term-bol nil)))
-          (last-bol (save-excursion (goto-char (point-max)) (when (= (line-beginning-position) (line-end-position)) (backward-char)) (line-beginning-position)))
-          (ref-point (point))
-          ;; TODO: Refactor code without last-point if not needed. Test when
-          ;; background program outputs beyond the char-mode commandline.
-          (last-point (point)))
-      ;; TODO: Optimize by setting left/right func to var.
-      (when (and (>= (point) last-prompt) (>= (point) last-bol))
-        (term-char-mode)
-        ;; Send a cursor move so that Emacs' point gets updated to the last
-        ;; char-mode position, off-by-one.
-        (term-send-left)
-        ;; If moving left did not move the cursor, we are at term-bol, so move right.
-        (when (= (point) last-point)
-          (term-send-right))
-        ;; If (point) is still last-point, it means there is no room for moving,
-        ;; i.e. commandline is empty in char-mode.  We don't need to move any
-        ;; further.
-        ;; Otherwise, move to ref-point.
-        (while (and (/= (point) last-point) (/= (point) ref-point))
-          (setq last-point (point))
-          (if (> (point) ref-point) (term-send-left) (term-send-right)))))
-    ;; TODO: Add this to insert state entry hook and remove this line.
-    (evil-insert-state)))
 
 (defun evil-term-char-mode-insert ()
   (interactive)
-  (when (term-in-line-mode)
-    (term-char-mode))
-  (unless (eq evil-state 'insert)
-    (evil-insert-state)))
+  (term-char-mode)
+  (evil-insert-state))
 
-;; TODO: Test these.
 (evil-define-key 'normal term-mode-map
   "\C-c\C-k" 'evil-term-char-mode-insert
   (kbd "RET") 'term-send-input)
@@ -80,16 +32,98 @@ To switch to char mode, just swith to insert mode somewhere on the last line of 
   "0" 'term-bol
   "$" 'term-show-maximum-output)
 
-;; Bind something to it? C-cC-c is used by Eshell for that, but it is taken here, no? Keep C-cC-k.
-;; (defun evil-term-char-mode-entry-function ()
-;;   ;; Neet to check if we have a process, this is not the case when term-mode-hook is run.
-;;   (when (and (= (point) (point-max)) (get-buffer-process (current-buffer)))
-;;     (term-char-mode)))
+(defun evil-term-char-mode-entry-function ()
+  (when (get-buffer-process (current-buffer))
+    (let (last-prompt last-bol)
+      (save-excursion
+        (goto-char (point-max))
+        (when (= (line-beginning-position) (line-end-position))
+          (ignore-errors (backward-char)))
+        (setq last-prompt (term-bol nil)
+              last-bol (line-beginning-position)))
+      ;; We check if point is after both last-prompt and last-bol to handle multi-line prompts.
+      (when (and (>= (point) last-prompt) (>= (point) last-bol))
+        (term-char-mode)))))
 
 (defun evil-term-setup ()
-  ;; (add-hook 'evil-insert-state-entry-hook 'evil-term-char-mode-entry-function nil t)
-  ;; (add-hook 'evil-insert-state-entry-hook 'evil-term-char-mode-goto-point nil t)
-  (add-hook 'evil-insert-state-exit-hook 'term-line-mode nil t))
+  (add-hook 'evil-insert-state-entry-hook 'evil-term-char-mode-entry-function)
+  (add-hook 'evil-insert-state-exit-hook 'term-line-mode))
 (add-hook 'term-mode-hook 'evil-term-setup)
+
+;;; TODO: Report `term-char-mode' fix upstream.
+;;;
+;;; Originally, `term-char-mode' check if point is after `pmark' and if it is,
+;;; it cuts the characters between pmark and point and sends them to the
+;;; terminal.  The idea is that when you write a commandline in char mode, then
+;;; switch to line mode and keep on writing _without moving the point_, you can
+;;; go back to char mode and keep the modifications.
+;;;
+;;; I'd say this is rather useless as the point of line mode is to _move
+;;; around_, not to do the same thing you can do in char mode.
+;;;
+;;; The more sensical thing to do: replace char-mode's commandline with
+;;; line-mode's commandline and move char-mode point to where line-mode point
+;;; is.
+(defun term-char-mode ()
+  "Switch to char (\"raw\") sub-mode of term mode.
+Each character you type is sent directly to the inferior without
+intervention from Emacs, except for the escape character (usually C-c)."
+  (interactive)
+  ;; FIXME: Emit message? Cfr ilisp-raw-message
+  (when (term-in-line-mode)
+    (setq term-old-mode-map (current-local-map))
+    (use-local-map term-raw-map)
+    (easy-menu-add term-terminal-menu)
+    (easy-menu-add term-signals-menu)
+    (let* (last-prompt
+           commandline
+           commandline-end-position
+           (line-mode-point (point))
+           (proc (get-buffer-process (current-buffer)))
+           (pmark (process-mark proc)))
+      (save-excursion
+        (goto-char (point-max))
+        (when (= (line-beginning-position) (line-end-position))
+          ;; Sometimes a spurious newline gets inserted.
+          ;; Work around it by skipping back past it.
+          (ignore-errors (backward-char)))
+        (setq
+         ;; If the prompt regexp is wrong or if we are on a multiline prompt, get the line-beginning-position.
+         last-prompt (max (term-bol nil) (line-beginning-position))
+         ;; Yank last commandline.  If prompt is not properly recognized, it yanks the whole line.
+         commandline (buffer-substring-no-properties last-prompt (line-end-position))
+         ;; We store the end-position here so that we don't have to wait for the
+         ;; process when we send the commandline.
+         commandline-end-position (line-end-position)))
+
+      (when (>= (point) last-prompt)
+        ;; Clear line.
+        (dotimes (_ (abs (- last-prompt pmark)))
+          (term-send-backspace))
+        ;; Point could be before line-end-position, so we need to delete the trailing characters.
+        (dotimes (_ (abs (- (point-max) pmark)))
+          (term-send-del))
+        ;; Get prompt position with `process-mark'.
+        ;; TODO: We need to wait a bit to make sure the previously-sent deletions have been processed.
+        ;; This is brittle and it makes the prompt flicker once.
+        ;; It is possible to work-around this: either use `term-prompt-regexp'
+        ;; or send `term-left' enough times, wait and get it.  That latter
+        ;; solution has the advantage that it does not flickers, but it won't
+        ;; work on dash.
+        (sleep-for 0 100)
+        (setq pmark (process-mark proc))
+        ;; Remove actual prompt length from the commandline.
+        (setq commandline (substring commandline (- pmark last-prompt)))
+        ;; Send commandline to term.
+        (term-send-raw-string commandline)
+
+        ;; Move char-mode point to line-mode point. TODO: Don't do this if shell does not support cursor moves.
+        ;; Underlying shell can be retrieved with:
+        ;; (car (last (process-command (get-buffer-process (current-buffer)))))
+        (dotimes (_ (abs (- line-mode-point commandline-end-position)))
+          (term-send-left)))
+
+      ;; Finish up.
+      (term-update-mode-line))))
 
 (provide 'init-evil-term)
