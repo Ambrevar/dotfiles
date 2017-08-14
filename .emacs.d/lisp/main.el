@@ -251,13 +251,6 @@
   (add-to-list 'desktop-locals-to-save 'ispell-local-dictionary)
   (desktop-save-mode))
 
-;;; GMP documentation
-(with-eval-after-load "info-look"
-  (let ((mode-value (assoc 'c-mode (assoc 'symbol info-lookup-alist))))
-    (setcar (nthcdr 3 mode-value)
-            (cons '("(gmp)Function Index" nil "^ -.* " "\\>")
-                  (nth 3 mode-value)))))
-
 ;;; Buffer names.
 (setq uniquify-buffer-name-style 'forward)
 

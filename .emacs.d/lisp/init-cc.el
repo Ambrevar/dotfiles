@@ -90,6 +90,13 @@ restored."
       (insert-buffer-substring formatbuf)
       (kill-buffer formatbuf))))
 
+;;; GMP documentation
+(with-eval-after-load "info-look"
+  (let ((mode-value (assoc 'c-mode (assoc 'symbol info-lookup-alist))))
+    (setcar (nthcdr 3 mode-value)
+            (cons '("(gmp)Function Index" nil "^ -.* " "\\>")
+                  (nth 3 mode-value)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Options
 
