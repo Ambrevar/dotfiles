@@ -236,12 +236,13 @@
 ;;; and http://debbugs.gnu.org/cgi/bugreport.cgi?bug=27422
 ;;; and https://stackoverflow.com/questions/5830494/windows-configuration-to-registers#5830928.
 (when (daemonp)
-  (setq history-length 250)
-  (setq desktop-dirname (concat emacs-cache-folder "desktop"))
+  (setq history-length 250
+        desktop-dirname (concat emacs-cache-folder "desktop")
+        desktop-path (list desktop-dirname)
+        desktop-save t
+        desktop-restore-eager 4)
   (unless (file-directory-p desktop-dirname)
     (make-directory desktop-dirname t))
-  (setq desktop-path (list desktop-dirname))
-  (setq desktop-save t)
   ;; TODO: `compile-history' should be buffer local but that does not work.
   ;; http://user42.tuxfamily.org/compile-history-local/index.html
   ;; http://stackoverflow.com/questions/22995203/one-compile-command-per-buffer-not-directory
