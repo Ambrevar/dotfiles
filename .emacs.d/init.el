@@ -91,6 +91,8 @@
 (nconc package-selected-packages '(debbugs))
 
 ;;; Diff
+;;; TODO: Show permissions in ztree.
+;;; See https://github.com/fourier/ztree/issues/50.
 (nconc package-selected-packages '(ztree))
 
 ;;; Dired

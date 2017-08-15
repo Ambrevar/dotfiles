@@ -2,8 +2,9 @@
 
 (evil-set-initial-state 'term-mode 'insert)
 
-;; TODO: Set prompt regexp.
-;; TODO: Can prompt be read-only?
+;; TODO: Set prompt regexp. Test next/previous prompt functions, term-bol, etc.
+;; Probably needs the same fix as Eshell.
+;; TODO: Can the prompt be read-only?
 
 ;; TODO: Rebinding ESC has the drawback that programs like vi cannot use it anymore.
 ;; Workaround: switch to Emacs mode and double-press ESC.

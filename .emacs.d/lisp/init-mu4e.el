@@ -92,6 +92,8 @@ Default to unread messages if no"
 (set-face-foreground 'mu4e-unread-face "yellow")
 
 (when (require 'helm-mu nil t)
+  ;; TODO: Preserve the search pattern in helm-mu.
+  ;; See https://github.com/emacs-helm/helm-mu/issues/42.
   (dolist (map (list mu4e-headers-mode-map mu4e-main-mode-map mu4e-view-mode-map))
     (define-key map "\M-sf" 'helm-mu)))
 
