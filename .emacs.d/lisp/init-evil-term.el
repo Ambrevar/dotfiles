@@ -35,15 +35,13 @@
 
 (defun evil-term-char-mode-entry-function ()
   (when (get-buffer-process (current-buffer))
-    (let (last-prompt last-bol)
+    (let (last-prompt)
       (save-excursion
         (goto-char (point-max))
         (when (= (line-beginning-position) (line-end-position))
           (ignore-errors (backward-char)))
-        (setq last-prompt (term-bol nil)
-              last-bol (line-beginning-position)))
-      ;; We check if point is after both last-prompt and last-bol to handle multi-line prompts.
-      (when (and (>= (point) last-prompt) (>= (point) last-bol))
+        (setq last-prompt (max (term-bol nil) (line-beginning-position))))
+      (when (>= (point) last-prompt)
         (term-char-mode)))))
 
 (defun evil-term-setup ()
@@ -97,7 +95,10 @@ intervention from Emacs, except for the escape character (usually C-c)."
          ;; process when we send the commandline.
          commandline-end-position (line-end-position)))
 
-      (when (>= (point) last-prompt)
+      (when (and (>= (point) last-prompt)
+                 ;; commandline can be empty (e.g. term is still initializing),
+                 ;; then no need to continue.
+                 (not (string-empty-p commandline)))
         ;; Clear line.
         (dotimes (_ (abs (- last-prompt pmark)))
           (term-send-backspace))
