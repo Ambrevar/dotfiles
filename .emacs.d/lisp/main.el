@@ -267,7 +267,8 @@
 
 ;;; Clipboard and primary selection.
 ;; (setq select-enable-clipboard t)
-(setq select-enable-primary t)
+(setq select-enable-primary t
+      save-interprogram-paste-before-kill t)
 
 ;;; Move mouse away.
 (mouse-avoidance-mode 'banish)
