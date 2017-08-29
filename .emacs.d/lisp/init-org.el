@@ -39,4 +39,8 @@
       (setq desktop-files-not-to-save (concat (substring desktop-files-not-to-save 0 -2) "\\|" (regexp-quote (expand-file-name contacts)) "\\)"))
       (setq org-contacts-files (list contacts)))))
 
+;;; Add keywords.
+(setq org-todo-keywords '((sequence "TODO" "REVIEW" "DONE")))
+(setq org-todo-keyword-faces '(("REVIEW" :foreground "Gold" :weight bold)))
+
 (provide 'init-org)
