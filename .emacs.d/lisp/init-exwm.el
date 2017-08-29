@@ -45,15 +45,8 @@
 (exwm-input-set-key (kbd "s-f") #'find-file)
 (exwm-input-set-key (kbd "s-SPC") #'exwm-floating-toggle-floating)
 
-(defun exwm-layout-toggle-fullscreen-or-single-window ()
-  (interactive)
-  (if (eq major-mode 'exwm-mode)
-      ;; REVIEW:`exwm-layout-toggle-fullscreen' needs to be called interactively.
-      ;; See https://github.com/ch11ng/exwm/issues/282.
-      (call-interactively 'exwm-layout-toggle-fullscreen)
-    (require 'functions)
-    (toggle-single-window)))
-(exwm-input-set-key (kbd "s-o") #'exwm-layout-toggle-fullscreen-or-single-window)
+(exwm-input-set-key (kbd "s-o") #'toggle-single-window)
+(exwm-input-set-key (kbd "s-O") #'exwm-layout-toggle-fullscreen) ; TODO: Does not work with qutebrowser.
 
 (require 'functions)
 (exwm-input-set-key (kbd "s-\\") #'toggle-window-split)
