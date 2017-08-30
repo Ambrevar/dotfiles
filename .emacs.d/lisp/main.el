@@ -120,6 +120,9 @@
 ;; (add-hook 'find-file-hook 'turn-on-fmt-before-save)
 (add-hook 'find-file-hook 'turn-on-delete-trailing-whitespace)
 
+;;; Cycle spacing instead of just-one-space.  This frees M-\.
+(global-set-key [remap just-one-space] 'cycle-spacing)
+
 ;;; Hippie expand
 ;; (global-set-key (kbd "M-/") 'hippie-expand)
 
