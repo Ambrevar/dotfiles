@@ -104,7 +104,6 @@
 ;;; Line by line scrolling
 (setq scroll-step 1)
 
-(global-set-key (kbd "<f9>") 'whitespace-mode)
 (setq
  whitespace-style
  '(face empty indentation space-after-tab space-before-tab tab-mark trailing))

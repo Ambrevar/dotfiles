@@ -135,6 +135,15 @@ Work on buffer or region. Require `tabify-leading'."
       (narrow-to-region start end)
       (delete-trailing-whitespace))))
 
+(defun flyspell-and-whitespace-mode ()
+  "Toggle `flyspell-mode' and `whitespace-mode'."
+  (interactive)
+  (if (derived-mode-p 'text-mode)
+      (flyspell-mode)
+    (if flyspell-mode (flyspell-mode 0) (flyspell-prog-mode)))
+  (whitespace-mode 'toggle))
+(global-set-key (kbd "<f9>") 'flyspell-and-whitespace-mode)
+
 (defun get-closest-pathname (&optional file)
   "Get pathname of the first instance of FILE towards root.
 If FILE is unspecified, look for 'Makefile'. If it does not find
