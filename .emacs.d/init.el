@@ -254,6 +254,12 @@
 ;;; Python
 (with-eval-after-load 'python (require 'init-python))
 
+;;; Rainbow-mode
+(nconc package-selected-packages '(rainbow-mode))
+(when (require 'rainbow-mode nil t)
+  (dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
+    (add-hook hook 'rainbow-mode)))
+
 ;;; Roff / Nroff
 (with-eval-after-load 'nroff-mode (require 'init-nroff))
 
