@@ -3,8 +3,9 @@
 ;; TODO: Notifications don't work? Change `display-time-mail-icon' color in modeline.
 ;; TODO: Reply to all by default.
 ;; TODO: Is it possible to mbsync without attachments?
-;; TODO: Use abbrevs in compose mode.
-;; TODO: Do not cite when replying: https://github.com/djcb/mu/issues/1110.
+;; REVIEW: Use abbrevs in compose mode.
+;; See https://github.com/djcb/mu/issues/1119.
+;; REVIEW: Do not cite when replying: https://github.com/djcb/mu/issues/1110.
 ;; TODO: Face of `message-cited-text' does not work.
 ;; REVIEW: Handle attachments in attached e-mails.
 ;; See https://github.com/djcb/mu/issues/454#issuecomment-320616279.
@@ -29,7 +30,7 @@ Default to unread messages if no"
  ;; IMAP sync.
  mu4e-maildir "~/.cache/mail"
  mu4e-get-mail-command "mbsync -a"
- mu4e-update-interval 60
+ mu4e-update-interval 120
  mu4e-change-filenames-when-moving t ; Needed for mbsync.
 
  ;; SMTP
