@@ -142,6 +142,7 @@
 
 (require 'init-evil-info)
 (require 'init-evil-help)
+(require 'init-evil-man)
 
 (with-eval-after-load 'transmission (require 'init-evil-transmission))
 
