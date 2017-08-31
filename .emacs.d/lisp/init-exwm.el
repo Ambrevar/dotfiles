@@ -113,4 +113,10 @@
 (exwm-input-set-key (kbd "s-&") #'exwm-start)
 (exwm-input-set-key (kbd "s-r") #'exwm-start)
 
+;;; Check for start-up errors. See ~/.profile.
+(let ((error-logs (directory-files "~" t "errors.*log$")))
+  (when error-logs
+    (warn "Error during system startup.  See %s." (mapconcat 'identity error-logs ", "))
+    (setq initial-buffer-choice (lambda () (get-buffer "*Warnings*")))))
+
 (provide 'init-exwm)
