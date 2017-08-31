@@ -41,6 +41,6 @@
 
 ;;; Add keywords.
 (setq org-todo-keywords '((sequence "TODO" "REVIEW" "DONE")))
-(setq org-todo-keyword-faces '(("REVIEW" :foreground "Gold" :weight bold)))
+(setq org-todo-keyword-faces '(("REVIEW" :inherit org-done)))
 
 (provide 'init-org)
