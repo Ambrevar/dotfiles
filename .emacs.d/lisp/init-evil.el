@@ -160,6 +160,8 @@
       "p" 'mu4e-headers-toggle-include-related
       "r" 'mu4e-compose-reply)
     (evil-define-key 'motion mu4e-view-mode-map
+      (kbd "SPC") 'mu4e-view-scroll-up-or-next
+      (kbd "TAB") 'shr-next-link
       "zf" 'mu4e-view-mark-for-flag
       "zF" 'mu4e-view-mark-for-unflag
       "R" 'mu4e-view-mark-for-refile
