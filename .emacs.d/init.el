@@ -104,7 +104,7 @@
 (with-eval-after-load 'dired (require 'init-dired))
 
 ;;; Emms
-(nconc package-selected-packages '(emms emms helm-emms emms-player-mpv))
+(nconc package-selected-packages '(emms helm-emms emms-player-mpv))
 (when (fboundp 'emms-all)
   ;; Emms has no autoload to switch to the browser, let's add one.
   (autoload 'emms-smart-browse "emms-browser" nil t))

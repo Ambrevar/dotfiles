@@ -148,9 +148,7 @@
 
 (with-eval-after-load 'elfeed (require 'init-evil-elfeed))
 
-;;; Emms: It is important to set the bindings after emms-browser has loaded,
-;;; since the mode-maps are defconst'd.
-(with-eval-after-load 'emms-browser (require 'init-evil-emms))
+(with-eval-after-load 'emms (require 'init-evil-emms))
 
 (with-eval-after-load 'mu4e
   (when (require 'evil-mu4e nil t)
