@@ -73,7 +73,9 @@
           ("sudo" "vi"))))
 
 ;;; Support for Emacs' pinentry
-;; (setq epa-pinentry-mode 'loopback) ; This will fail if gpg>=2.1 is not available.
+;;; TODO: gpg-agent seems to be misconfigured for mu4e at least:
+;;; See https://github.com/djcb/mu/issues/829.
+(setq epa-pinentry-mode 'loopback) ; This will fail if gpg>=2.1 is not available.
 (pinentry-start)
 
 ;;; Alias management possibilities:
@@ -103,6 +105,8 @@
          ("mkdir" "*mkdir -p $*")
          ("mkcd" "*mkdir -p $* && cd $1")))
     (add-to-list 'eshell-command-aliases-list alias))
+  (when (executable-find "emerge")
+    (add-to-list 'eshell-command-aliases-list '("emerge" "sudo *emerge --color y $*")))
   (eshell-write-aliases-list))
 
 ;;; Hooks
