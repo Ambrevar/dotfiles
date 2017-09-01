@@ -1,0 +1,21 @@
+#
+# app-editors/emacs -gtk -gtk3 athena Xaw3d
+#games-util/steam-launcher -steamruntime
+app-admin/conky -ncurses -X
+app-crypt/pinentry emacs
+app-editors/emacs gtk gtk3
+app-editors/emacs sound alsa xft jpeg tiff gif png svg games source libxml2 imagemagick
+app-text/poppler cairo
+dev-python/PyQt5 opengl webengine webchannel multimedia
+dev-qt/qtmultimedia gstreamer
+media-gfx/imagemagick png hdri jpeg jpeg2k lcms lzma png pango raw svg tiff webp
+media-libs/chromaprint tools
+media-libs/imlib2 gif jpeg png tiff
+media-video/ffmpeg libass libv4l mp3 opengl opus sdl theora truetype v4l vaapi vdpau vorbis wavpack webp x264 x265 xvid gnutls
+media-video/mpv v4l vaapi vdpau dvd cdda
+net-mail/isync sasl
+net-mail/mu emacs
+net-misc/curl curl_ssl_gnutls -curl_ssl_openssl
+net-misc/iputils -caps -filecaps
+x11-misc/dzen xft
+x11-terms/xterm truetype
