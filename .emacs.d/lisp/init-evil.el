@@ -206,4 +206,8 @@
 
 (with-eval-after-load 'debug (require 'init-evil-debugger))
 
+(with-eval-after-load 'debbugs (require 'init-evil-debbugs))
+
+(with-eval-after-load 'gnus (require 'init-evil-gnus))
+
 (provide 'init-evil)
