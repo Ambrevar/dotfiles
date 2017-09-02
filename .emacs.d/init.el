@@ -87,11 +87,12 @@
   (setq company-idle-delay nil))
 
 ;;; Debbugs
-;; TODO: Make debbugs more Evil.
 (nconc package-selected-packages '(debbugs))
+(with-eval-after-load 'debbugs
+  (setq debbugs-gnu-persistency-file (expand-file-name "debbugs" emacs-cache-folder)))
 
 ;;; Diff
-;;; TODO: Show permissions in ztree.
+;;; REVIEW: Show permissions in ztree.
 ;;; See https://github.com/fourier/ztree/issues/50.
 (nconc package-selected-packages '(ztree))
 
