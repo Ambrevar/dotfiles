@@ -45,9 +45,9 @@
   (setq package-user-dir (concat emacs-cache-folder "elpa"))
   (package-initialize))
 
-(require 'functions nil t)
-(require 'main nil t)
-(require 'visual nil t)
+(require 'functions)
+(require 'main)
+(require 'visual)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
