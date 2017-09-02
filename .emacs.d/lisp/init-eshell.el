@@ -8,7 +8,7 @@
 
 ;;; TODO: Redirecting big output to file (e.g. /dev/null) is extremely slow.
 
-;;; TODO: Cannot "C-c C-c" during a `sudo pacman -Syu`.
+;;; REVIEW: Cannot "C-c C-c" during a `sudo pacman -Syu`.  A bug was filed about that already.
 
 ;;; TODO: The buffer stutters when writing "in-place", e.g. pacman, git.
 ;;; It seems that it does not do it as much in `emacs -Q`.
@@ -18,10 +18,23 @@
 ;;; http://www.gnu.org/software/emacs/manual/html_node/eshell/Built_002dins.html
 ;;; https://emacs.stackexchange.com/questions/5608/how-to-let-eshell-remember-sudo-password-for-two-minutes
 ;;; See http://debbugs.gnu.org/cgi/bugreport.cgi?bug=27411
+;;; and #28323.
+
+;;; REVIEW: Eshell/TRAMP's sudo does not work with aliases.
+;;; See #28320.
 
 ;;; REVIEW: Eshell/Shell completion fails when PATH has a non-readable element.
-;; See https://github.com/emacs-helm/helm/issues/1785
-;; and https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27300.
+;;; See https://github.com/emacs-helm/helm/issues/1785
+;;; and https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27300.
+
+;;; REVIEW: 40M+ output: Stack overflow in regexp matcher
+;;; See bug#28329.
+
+;;; REVIEW: Eshell mixes stderr and stdout it seems.
+;;; Example:
+;;; $ mu find --nocolor --sortfield=d --maxnum=500 flag:unread AND NOT flag:trashed >/dev/null
+;;; mu: no matches for search expression (4)
+;;; See #21605 "24.3; Eshell not using stderr".
 
 (setq eshell-directory-name (concat emacs-cache-folder "eshell"))
 
