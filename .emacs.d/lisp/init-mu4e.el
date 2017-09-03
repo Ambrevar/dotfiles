@@ -3,7 +3,7 @@
 ;;; TODO: Reply to all by default.
 ;;; TODO: Is it possible to mbsync without attachments?
 ;;; REVIEW: Use abbrevs in compose mode.
-;;; See https://github.com/djcb/mu/issues/1119.
+;;; Fixed upstream.  See https://github.com/djcb/mu/issues/1119.
 ;;; REVIEW: Do not cite when replying: https://github.com/djcb/mu/issues/1110.
 ;;; TODO: Face of `message-cited-text' does not work.
 ;;; REVIEW: Handle attachments in attached e-mails.
