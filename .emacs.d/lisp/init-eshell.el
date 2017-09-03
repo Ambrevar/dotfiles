@@ -169,18 +169,13 @@ See `eshell-prompt-regexp'."
     (eshell-next-prompt (- n))))
 
 (when (require 'bash-completion nil t)
-  ;; REVIEW: `bash-completion-dynamic-complete' is almost what we want for eshell, it only needs a tiny modification.
-  ;; Ask upstream to change the function arguments.
-  ;; See https://github.com/szermatt/emacs-bash-completion/issues/13.
-  ;;
   ;; Sometimes `eshell-default-completion-function' does better, e.g. "gcc
   ;; <TAB>" shows .c files.
-  (setq eshell-default-completion-function
-        (lambda ()
-          (while (pcomplete-here
-                  (cl-letf (((symbol-function 'comint-line-beginning-position)
-                             #'(lambda () (save-excursion (eshell-bol) (point)))))
-                    (nth 2 (bash-completion-dynamic-complete))))))))
+  (setq eshell-default-completion-function 'eshell-bash-completion))
+
+(defun eshell-bash-completion ()
+  (while (pcomplete-here
+          (nth 2 (bash-completion-dynamic-complete-nocomint (save-excursion (eshell-bol) (point)) (point))))))
 
 ;;; If the user fish config change directory on startup, file completion will
 ;;; not be right.  One work-around is to add a "cd default-directory" before the
