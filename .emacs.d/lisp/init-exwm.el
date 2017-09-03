@@ -79,7 +79,28 @@
   (exwm-input-set-key (kbd "s-m") #'mu4e-headers))
 
 ;;; External application shortcuts.
-(defun exwm-start-browser () (interactive) (start-process-shell-command browse-url-generic-program nil browse-url-generic-program))
+(defun exwm-start-browser ()
+  "Fire-up the web browser as defined in `browse-url-generic-program'.
+If current window is the web browser already, fire-up a new window.
+If not, switch to the last open window.
+If there is none, fire it up."
+  (interactive)
+  (if (and (eq major-mode 'exwm-mode)
+           (string-match
+            (format " - %s$" (regexp-quote (file-name-nondirectory browse-url-generic-program)))
+            (buffer-name (current-buffer))))
+      (start-process-shell-command browse-url-generic-program nil browse-url-generic-program)
+    (let ((last (buffer-list)))
+      (while (and last
+                  (not (with-current-buffer (car last)
+                         (and (eq major-mode 'exwm-mode)
+                              (string-match
+                               (format " - %s$" (regexp-quote (file-name-nondirectory browse-url-generic-program)))
+                               (buffer-name (current-buffer)))))))
+        (setq last (cdr last)))
+      (if last
+          (switch-to-buffer (car last))
+        (start-process-shell-command browse-url-generic-program nil browse-url-generic-program)))))
 (exwm-input-set-key (kbd "s-w") #'exwm-start-browser)
 
 (defvar exwm-lock-program "slock" "Shell command used to lock the screen.")
