@@ -91,6 +91,7 @@ Default to unread messages if no"
 
 ;; Make unread e-mails stand out a bit.
 (set-face-foreground 'mu4e-unread-face "yellow")
+(set-face-attribute 'mu4e-flagged-face nil :inherit 'font-lock-warning-face)
 
 (when (require 'helm-mu nil t)
   ;; TODO: Preserve the search pattern in helm-mu.
