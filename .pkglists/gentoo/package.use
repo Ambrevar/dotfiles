@@ -6,8 +6,11 @@ app-crypt/pinentry emacs
 app-editors/emacs gtk gtk3
 app-editors/emacs sound alsa xft jpeg tiff gif png svg games source libxml2 imagemagick
 app-text/poppler cairo
-dev-python/PyQt5 opengl webengine webchannel multimedia
+dev-python/PyQt5 -webkit
+dev-python/PyQt5 opengl webengine webchannel multimedia sql declarative gui widgets printsupport network
 dev-qt/qtmultimedia gstreamer
+dev-qt/qtwebengine -bindist
+media-gfx/asymptote -X -boehm-gc latex
 media-gfx/imagemagick png hdri jpeg jpeg2k lcms lzma png pango raw svg tiff webp
 media-libs/chromaprint tools
 media-libs/imlib2 gif jpeg png tiff
@@ -17,5 +20,6 @@ net-mail/isync sasl
 net-mail/mu emacs
 net-misc/curl curl_ssl_gnutls -curl_ssl_openssl
 net-misc/iputils -caps -filecaps
+www-client/qutebrowser -webkit webengine
 x11-misc/dzen xft
 x11-terms/xterm truetype

@@ -21,6 +21,7 @@ app-portage/gentoolkit
 app-shells/bash-completion
 app-shells/fish
 app-text/aspell
+app-text/epspdf
 app-text/poppler
 app-text/tree
 dev-lang/go
@@ -34,12 +35,17 @@ dev-vcs/git
 games-misc/fortune-mod
 games-util/steam-launcher
 media-fonts/dejavu
+media-gfx/asymptote
 media-gfx/imagemagick
+media-gfx/pdf2svg
 media-gfx/scrot
 media-gfx/sxiv
 media-libs/chromaprint
+media-libs/gst-plugins-good
+media-libs/gst-plugins-ugly
 media-libs/libtxc_dxtn
 media-libs/mesa
+media-plugins/gst-plugins-libav
 media-sound/alsa-utils
 media-sound/mps-youtube
 media-video/ffmpeg
@@ -61,6 +67,8 @@ sys-apps/pciutils
 sys-apps/the_silver_searcher
 sys-apps/usbutils
 sys-boot/grub:2
+sys-boot/os-prober
+sys-fs/encfs
 sys-fs/ncdu
 sys-fs/ntfs3g
 sys-fs/udiskie
