@@ -1,7 +1,10 @@
 ;;; Evil+EMMS
 
-(dolist (mode '(emms-browser-mode emms-playlist-mode))
-  (evil-set-initial-state mode 'motion))
+;; emms-browser does not run any mode hook.  As such the default state is 'normal.
+;; TODO: Report upstream.
+(defun evil/emms-browser ()
+  (evil-motion-state))
+(advice-add 'emms-browser :after 'evil/emms-browser)
 
 (defun evil/emms-playlist-mode-insert-newline-above ()
   "Insert a newline above point."
@@ -40,39 +43,44 @@ The return value is the yanked text."
     "-" 'emms-volume-lower
     "u" 'emms-playlist-mode-undo))
 
-(evil-define-key 'motion emms-browser-mode-map
-  (kbd "C-<return>") 'emms-browser-add-tracks-and-play
-  (kbd "<return>") 'emms-browser-add-tracks
-  (kbd "<tab>") 'emms-browser-toggle-subitems
-  "/" 'emms-isearch-buffer ; This shows hidden items during search.
-  "g1" 'emms-browser-collapse-all
-  "g2" 'emms-browser-expand-to-level-2
-  "g3" 'emms-browser-expand-to-level-3
-  "g4" 'emms-browser-expand-to-level-4
-  "<" 'emms-browser-previous-filter
-  ">" 'emms-browser-next-filter
-  "C" 'emms-browser-clear-playlist
-  "D" 'emms-browser-delete-files
-  "g0" 'emms-browser-expand-all
-  "d" 'emms-browser-view-in-dired
-  "\C-j" 'emms-browser-next-non-track
-  "\C-k" 'emms-browser-prev-non-track
-  "\M-j" 'emms-browser-next-non-track
-  "\M-k" 'emms-browser-prev-non-track
-  "[" 'emms-browser-prev-non-track
-  "]" 'emms-browser-next-non-track
-  "{" 'emms-browser-prev-non-track
-  "}" 'emms-browser-next-non-track
-  "ga" 'emms-browse-by-artist
-  "gA" 'emms-browse-by-album
-  "gb" 'emms-browse-by-genre
-  "gy" 'emms-browse-by-year
-  "gc" 'emms-browse-by-composer
-  "gp" 'emms-browse-by-performer
-  "x" 'emms-pause
-  "s" (lookup-key emms-browser-mode-map (kbd "s"))
-  "z" (lookup-key emms-browser-mode-map (kbd "W")))
+(with-eval-after-load 'emms-browser
+  ;; TODO: Why do we need to define emms-browser-mode-map after load and not emms-playlist-mode-map?
+  (evil-define-key 'motion emms-browser-mode-map
+    (kbd "C-<return>") 'emms-browser-add-tracks-and-play
+    (kbd "<return>") 'emms-browser-add-tracks
+    (kbd "<tab>") 'emms-browser-toggle-subitems
+    (kbd "SPC") 'emms-browser-toggle-subitems
+    "/" 'emms-isearch-buffer ; This shows hidden items during search.
+    "g1" 'emms-browser-collapse-all
+    "g2" 'emms-browser-expand-to-level-2
+    "g3" 'emms-browser-expand-to-level-3
+    "g4" 'emms-browser-expand-to-level-4
+    "<" 'emms-browser-previous-filter
+    ">" 'emms-browser-next-filter
+    "C" 'emms-browser-clear-playlist
+    "D" 'emms-browser-delete-files
+    "g0" 'emms-browser-expand-all
+    "d" 'emms-browser-view-in-dired
+    "\C-j" 'emms-browser-next-non-track
+    "\C-k" 'emms-browser-prev-non-track
+    "\M-j" 'emms-browser-next-non-track ; Custom
+    "\M-k" 'emms-browser-prev-non-track ; Custom
+    "[" 'emms-browser-prev-non-track
+    "]" 'emms-browser-next-non-track
+    "{" 'emms-browser-prev-non-track
+    "}" 'emms-browser-next-non-track
+    "ga" 'emms-browse-by-artist
+    "gA" 'emms-browse-by-album
+    "gb" 'emms-browse-by-genre
+    "gy" 'emms-browse-by-year
+    "gc" 'emms-browse-by-composer
+    "gp" 'emms-browse-by-performer
+    "x" 'emms-pause
+    "s" (lookup-key emms-browser-mode-map (kbd "s"))
+    "z" (lookup-key emms-browser-mode-map (kbd "W")))
+  )
 
+(evil-set-initial-state 'emms-playlist-mode 'motion)
 (evil-define-key 'motion emms-playlist-mode-map
   "o" 'evil/emms-playlist-mode-insert-newline-below
   "O" 'evil/emms-playlist-mode-insert-newline-above
@@ -95,8 +103,8 @@ The return value is the yanked text."
   "zs" 'emms-show
   "\C-j" 'emms-next
   "\C-k" 'emms-previous
-  "\M-j" 'emms-next
-  "\M-k" 'emms-previous
+  "\M-j" 'emms-next ; Custom
+  "\M-k" 'emms-previous ; Custom
   "r" 'emms-random
   "s" 'emms-stop
   "S" (lookup-key emms-playlist-mode-map (kbd "S"))

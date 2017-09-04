@@ -135,6 +135,9 @@ will always use the same cover per folder."
       (setq emms-playing-time 0) ; Don't disturb the time display.
       (emms-start)
       (sleep-for 0 200) ; This is required for the player might not be ready yet.
+      ;; TODO: The sleep-for might make EMMS play during the time on resume.  We
+      ;; could work around that by muting the volume.  Is there a portable way
+      ;; of doing that?  It does not seem that EMMS can do this natively.
       (emms-player-seek-to time)
       (emms-pause))))
 

@@ -1,0 +1,7 @@
+app-shells/fish ~amd64
+media-sound/mps-youtube **
+media-video/mpv
+net-mail/mu ~amd64
+net-misc/youtube-dl ~amd64
+sys-fs/udiskie ~amd64
+www-client/qutebrowser **

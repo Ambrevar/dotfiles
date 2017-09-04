@@ -79,5 +79,5 @@ if [ ! -e ~/.authinfo.gpg ]; then
 	## TODO: Does not work with --batch for some reason, so we have to spawn Emacs.
 emacs --eval '(progn (when (require '"'"'mu4e nil t) (let ((auth-sources (list "~/.authinfo.gpg")) (auth-source-save-behavior t)) (dolist (context mu4e-contexts) (mu4e-context-switch nil (mu4e-context-name context)) (funcall (plist-get (car (auth-source-search :max 1 :host smtpmail-smtp-server :port smtpmail-smtp-service :user smtpmail-smtp-user :require '"'"'(:user :secret) :create t)) :save-function))))) (kill-emacs))'
 fi
-mbsync -a
+mbsync -aV
 mu index --maildir=~/.cache/mail

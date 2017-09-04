@@ -142,14 +142,13 @@
 
 (require 'init-evil-info)
 (require 'init-evil-help)
+(require 'init-evil-man)
 
 (with-eval-after-load 'transmission (require 'init-evil-transmission))
 
 (with-eval-after-load 'elfeed (require 'init-evil-elfeed))
 
-;;; Emms: It is important to set the bindings after emms-browser has loaded,
-;;; since the mode-maps are defconst'd.
-(with-eval-after-load 'emms-browser (require 'init-evil-emms))
+(with-eval-after-load 'emms (require 'init-evil-emms))
 
 (with-eval-after-load 'mu4e
   (when (require 'evil-mu4e nil t)
@@ -161,6 +160,8 @@
       "p" 'mu4e-headers-toggle-include-related
       "r" 'mu4e-compose-reply)
     (evil-define-key 'motion mu4e-view-mode-map
+      (kbd "SPC") 'mu4e-view-scroll-up-or-next
+      (kbd "TAB") 'shr-next-link
       "zf" 'mu4e-view-mark-for-flag
       "zF" 'mu4e-view-mark-for-unflag
       "R" 'mu4e-view-mark-for-refile
@@ -204,5 +205,9 @@
 (with-eval-after-load 'ztree-diff (require 'init-evil-ztree))
 
 (with-eval-after-load 'debug (require 'init-evil-debugger))
+
+(with-eval-after-load 'debbugs (require 'init-evil-debbugs))
+
+(with-eval-after-load 'gnus (require 'init-evil-gnus))
 
 (provide 'init-evil)

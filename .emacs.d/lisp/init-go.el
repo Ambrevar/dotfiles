@@ -28,7 +28,7 @@
    'identity
    '("--cyclo-over=20 --deadline=20s"
      ;; Ignore some benign errors.
-     "-e 'declaration of err shadows'"
+     "-e 'declaration of \"?err\"? shadows'"
      "-e 'error return value not checked \\(.*\\.Close\\(\\)'"
      ;; Customize linters.
      "-E misspell"

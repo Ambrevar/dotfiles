@@ -45,9 +45,9 @@
   (setq package-user-dir (concat emacs-cache-folder "elpa"))
   (package-initialize))
 
-(require 'functions nil t)
-(require 'main nil t)
-(require 'visual nil t)
+(require 'functions)
+(require 'main)
+(require 'visual)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -87,11 +87,12 @@
   (setq company-idle-delay nil))
 
 ;;; Debbugs
-;; TODO: Make debbugs more Evil.
 (nconc package-selected-packages '(debbugs))
+(with-eval-after-load 'debbugs
+  (setq debbugs-gnu-persistency-file (expand-file-name "debbugs" emacs-cache-folder)))
 
 ;;; Diff
-;;; TODO: Show permissions in ztree.
+;;; REVIEW: Show permissions in ztree.
 ;;; See https://github.com/fourier/ztree/issues/50.
 (nconc package-selected-packages '(ztree))
 
@@ -104,7 +105,7 @@
 (with-eval-after-load 'dired (require 'init-dired))
 
 ;;; Emms
-(nconc package-selected-packages '(emms emms helm-emms emms-player-mpv))
+(nconc package-selected-packages '(emms helm-emms emms-player-mpv))
 (when (fboundp 'emms-all)
   ;; Emms has no autoload to switch to the browser, let's add one.
   (autoload 'emms-smart-browse "emms-browser" nil t))

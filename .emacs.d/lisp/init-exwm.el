@@ -1,10 +1,12 @@
 ;;; EXWM
 
-;; TODO: Athena+Xaw3d confuses xcape when binding Caps-lock to both L_Ctrl
-;; escape, in which case it will procude <C-escape> in Emacs. In practice, it
-;; means that `C-` keys will works but `<escape>` will need a fast double tap on
-;; Caps Lock.
-;; See https://github.com/ch11ng/exwm/issues/285.
+;;; REVIEW: Athena+Xaw3d confuses xcape when binding Caps-lock to both L_Ctrl
+;;; escape, in which case it will procude <C-escape> in Emacs. In practice, it
+;;; means that `C-` keys will works but `<escape>` will need a fast double tap
+;;; on Caps Lock.
+;;;
+;;; See https://github.com/ch11ng/exwm/issues/285
+;;; and https://gitlab.com/interception/linux/plugins/caps2esc/issues/2.
 
 ;;; Rename buffer to window title.
 (defun exwm-rename-buffer-to-title () (exwm-workspace-rename-buffer exwm-title))
@@ -18,15 +20,11 @@
       window-divider-default-right-width 2)
 (window-divider-mode)
 
-;; TODO: Add support for status bar (dzen2, xmobar, i3bar).
-;; TODO: Resizing floating windows with mouse does not work on Ubuntu Trusty.
-;; TODO: How to prevent sending keys to window? ":" is always passed to Qutebrowser. Issue with evil?
-;; Maybe not. Just switch between char-mode and line-mode. Or check `exwm-input-line-mode-passthrough'.
-;; https://emacs.stackexchange.com/questions/33326/how-do-i-cut-and-paste-effectively-between-applications-while-using-exwm
-;; TODO: Spawn select programs in floating mode. (E.g. mpv, mupen64plus, mplayer, qemu, steam, .exe (wine).)
+;;; REVIEW: Resizing floating windows with mouse does not work on Ubuntu Trusty.
+;;; See https://github.com/ch11ng/exwm/issues/283.
+;;; TODO: Spawn select programs in floating mode. (E.g. mpv, mupen64plus, mplayer, qemu, steam, .exe (wine).)
 
 ;;; System tray
-;; TODO: Test and see if status bar is not a better solution.
 (require 'exwm-systemtray)
 (exwm-systemtray-enable)
 (setq exwm-systemtray-height 16)
@@ -46,7 +44,12 @@
 (exwm-input-set-key (kbd "s-SPC") #'exwm-floating-toggle-floating)
 
 (exwm-input-set-key (kbd "s-o") #'toggle-single-window)
-(exwm-input-set-key (kbd "s-O") #'exwm-layout-toggle-fullscreen) ; TODO: Does not work with qutebrowser.
+(exwm-input-set-key (kbd "s-O") #'exwm-layout-toggle-fullscreen)
+;;; REVIEW: How to prevent sending keys to window? ":" is always passed to
+;;; Qutebrowser. Issue with evil?  Maybe not. Just switch between char-mode and
+;;; line-mode. Or check `exwm-input-line-mode-passthrough'.
+;;; https://emacs.stackexchange.com/questions/33326/how-do-i-cut-and-paste-effectively-between-applications-while-using-exwm
+;;; See https://github.com/ch11ng/exwm/issues/298.
 
 (require 'functions)
 (exwm-input-set-key (kbd "s-\\") #'toggle-window-split)
@@ -76,7 +79,28 @@
   (exwm-input-set-key (kbd "s-m") #'mu4e-headers))
 
 ;;; External application shortcuts.
-(defun exwm-start-browser () (interactive) (start-process-shell-command browse-url-generic-program nil browse-url-generic-program))
+(defun exwm-start-browser ()
+  "Fire-up the web browser as defined in `browse-url-generic-program'.
+If current window is the web browser already, fire-up a new window.
+If not, switch to the last open window.
+If there is none, fire it up."
+  (interactive)
+  (if (and (eq major-mode 'exwm-mode)
+           (string-match
+            (format " - %s$" (regexp-quote (file-name-nondirectory browse-url-generic-program)))
+            (buffer-name (current-buffer))))
+      (start-process-shell-command browse-url-generic-program nil browse-url-generic-program)
+    (let ((last (buffer-list)))
+      (while (and last
+                  (not (with-current-buffer (car last)
+                         (and (eq major-mode 'exwm-mode)
+                              (string-match
+                               (format " - %s$" (regexp-quote (file-name-nondirectory browse-url-generic-program)))
+                               (buffer-name (current-buffer)))))))
+        (setq last (cdr last)))
+      (if last
+          (switch-to-buffer (car last))
+        (start-process-shell-command browse-url-generic-program nil browse-url-generic-program)))))
 (exwm-input-set-key (kbd "s-w") #'exwm-start-browser)
 
 (defvar exwm-lock-program "slock" "Shell command used to lock the screen.")
@@ -112,5 +136,11 @@
   (start-process-shell-command command nil command))
 (exwm-input-set-key (kbd "s-&") #'exwm-start)
 (exwm-input-set-key (kbd "s-r") #'exwm-start)
+
+;;; Check for start-up errors. See ~/.profile.
+(let ((error-logs (directory-files "~" t "errors.*log$")))
+  (when error-logs
+    (warn "Error during system startup.  See %s." (mapconcat 'identity error-logs ", "))
+    (setq initial-buffer-choice (lambda () (get-buffer "*Warnings*")))))
 
 (provide 'init-exwm)

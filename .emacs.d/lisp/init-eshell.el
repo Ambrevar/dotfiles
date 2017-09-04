@@ -8,7 +8,7 @@
 
 ;;; TODO: Redirecting big output to file (e.g. /dev/null) is extremely slow.
 
-;;; TODO: Cannot "C-c C-c" during a `sudo pacman -Syu`.
+;;; REVIEW: Cannot "C-c C-c" during a `sudo pacman -Syu`.  A bug was filed about that already.
 
 ;;; TODO: The buffer stutters when writing "in-place", e.g. pacman, git.
 ;;; It seems that it does not do it as much in `emacs -Q`.
@@ -18,10 +18,23 @@
 ;;; http://www.gnu.org/software/emacs/manual/html_node/eshell/Built_002dins.html
 ;;; https://emacs.stackexchange.com/questions/5608/how-to-let-eshell-remember-sudo-password-for-two-minutes
 ;;; See http://debbugs.gnu.org/cgi/bugreport.cgi?bug=27411
+;;; and #28323.
+
+;;; REVIEW: Eshell/TRAMP's sudo does not work with aliases.
+;;; See #28320.
 
 ;;; REVIEW: Eshell/Shell completion fails when PATH has a non-readable element.
-;; See https://github.com/emacs-helm/helm/issues/1785
-;; and https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27300.
+;;; See https://github.com/emacs-helm/helm/issues/1785
+;;; and https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27300.
+
+;;; REVIEW: 40M+ output: Stack overflow in regexp matcher
+;;; See bug#28329.
+
+;;; REVIEW: Eshell mixes stderr and stdout it seems.
+;;; Example:
+;;; $ mu find --nocolor --sortfield=d --maxnum=500 flag:unread AND NOT flag:trashed >/dev/null
+;;; mu: no matches for search expression (4)
+;;; See #21605 "24.3; Eshell not using stderr".
 
 (setq eshell-directory-name (concat emacs-cache-folder "eshell"))
 
@@ -73,7 +86,9 @@
           ("sudo" "vi"))))
 
 ;;; Support for Emacs' pinentry
-;; (setq epa-pinentry-mode 'loopback) ; This will fail if gpg>=2.1 is not available.
+;;; TODO: gpg-agent seems to be misconfigured for mu4e at least:
+;;; See https://github.com/djcb/mu/issues/829.
+(setq epa-pinentry-mode 'loopback) ; This will fail if gpg>=2.1 is not available.
 (pinentry-start)
 
 ;;; Alias management possibilities:
@@ -103,6 +118,8 @@
          ("mkdir" "*mkdir -p $*")
          ("mkcd" "*mkdir -p $* && cd $1")))
     (add-to-list 'eshell-command-aliases-list alias))
+  (when (executable-find "emerge")
+    (add-to-list 'eshell-command-aliases-list '("emerge" "sudo *emerge --color y $*")))
   (eshell-write-aliases-list))
 
 ;;; Hooks
@@ -152,18 +169,13 @@ See `eshell-prompt-regexp'."
     (eshell-next-prompt (- n))))
 
 (when (require 'bash-completion nil t)
-  ;; REVIEW: `bash-completion-dynamic-complete' is almost what we want for eshell, it only needs a tiny modification.
-  ;; Ask upstream to change the function arguments.
-  ;; See https://github.com/szermatt/emacs-bash-completion/issues/13.
-  ;;
   ;; Sometimes `eshell-default-completion-function' does better, e.g. "gcc
   ;; <TAB>" shows .c files.
-  (setq eshell-default-completion-function
-        (lambda ()
-          (while (pcomplete-here
-                  (cl-letf (((symbol-function 'comint-line-beginning-position)
-                             #'(lambda () (save-excursion (eshell-bol) (point)))))
-                    (nth 2 (bash-completion-dynamic-complete))))))))
+  (setq eshell-default-completion-function 'eshell-bash-completion))
+
+(defun eshell-bash-completion ()
+  (while (pcomplete-here
+          (nth 2 (bash-completion-dynamic-complete-nocomint (save-excursion (eshell-bol) (point)) (point))))))
 
 ;;; If the user fish config change directory on startup, file completion will
 ;;; not be right.  One work-around is to add a "cd default-directory" before the
