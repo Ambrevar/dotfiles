@@ -72,6 +72,7 @@
               ("Info lookup" . helm-info-lookup-symbol))))
 
 ;;; Make `helm-mini' almighty.
+(require 'helm-bookmark)
 (setq helm-mini-default-sources '(helm-source-buffers-list
                                   helm-source-recentf
                                   helm-source-ls-git
