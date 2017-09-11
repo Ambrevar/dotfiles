@@ -163,7 +163,20 @@
       (if (executable-find "xdg-open") 'browse-url-xdg-open 'browse-url-generic))
 ;;; If xdg-open is not found, set Emacs URL browser to the environment browser,
 ;;; or w3m if BROWSER is not set.
-(setq browse-url-generic-program (or (executable-find (or (getenv "BROWSER") "")) (executable-find "w3m")))
+;;; TODO: Upstream should be smart at this, e.g. allow using xdg without a DE.  Report.
+(setq browse-url-generic-program (or
+                                  (executable-find (or (getenv "BROWSER") ""))
+                                  (when (executable-find "xdg-mime")
+                                    (let ((desktop-browser (call-process-to-string "xdg-mime" "query" "default" "text/html")))
+                                      (substring desktop-browser 0 (string-match "\\.desktop" desktop-browser))))
+                                  (executable-find browse-url-mozilla-program)
+                                  (executable-find browse-url-firefox-program)
+                                  (executable-find browse-url-chromium-program)
+                                  (executable-find browse-url-kde-program)
+                                  (executable-find browse-url-conkeror-program)
+                                  (executable-find browse-url-chrome-program)))
+
+
 
 ;;; Default ispell dictionary. If not set, Emacs uses the current locale.
 (setq ispell-dictionary "english")
