@@ -10,7 +10,7 @@
  "C-c d" 'godoc-at-point
  "M-." #'godef-jump
  "<f5>" 'go-metalinter
- "C-<f5>" (lambda () (interactive) (go-metalinter t)))
+ "C-<f5>" 'go-metalinter-command)
 (when (require 'helm-go-package nil t)
   (local-set-key (kbd "C-c D") 'helm-go-package))
 
@@ -42,11 +42,18 @@
    " ") "Additional arguments to pass to gometalinter.")
 
 (defun go-metalinter (arg)
+  "Run gometalinter.
+With prefix argument, prompt for commandline."
   (interactive "P")
   (let ((compile-command  (format "gometalinter %s" gometalinter-args)))
     (if arg
         (call-interactively 'compile)
       (compile compile-command))))
+
+(defun go-metalinter-command ()
+  "Prompt for gometalinter commandline and run it."
+  (interactive)
+  (go-metalinter t))
 
 (defun go-set-compile-command ()
   "Set `compile-command' depending on the context.
