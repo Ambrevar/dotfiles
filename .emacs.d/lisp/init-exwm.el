@@ -139,6 +139,7 @@ If there is none, fire it up."
 (exwm-input-set-key (kbd "s-r") #'exwm-start)
 
 ;;; Check for start-up errors. See ~/.profile.
+;;; TODO: This pops 2 windows on non-EXWM EMacs (or non-daemon?).
 (let ((error-logs (directory-files "~" t "errors.*log$")))
   (when error-logs
     (warn "Error during system startup.  See %s." (mapconcat 'identity error-logs ", "))
