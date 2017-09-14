@@ -226,10 +226,18 @@
 (add-hook 'compilation-filter-hook 'compilation-colorize-buffer)
 (global-set-key (kbd "<f7>") 'previous-error)
 (global-set-key (kbd "<f8>") 'next-error)
+(defun compile-last-command ()
+  (interactive)
+  (compile compile-command))
 (define-keys prog-mode-map
   "C-<f6>" 'compile
-  ;; Do not use `recompile' since we want to change de compilation folder to the current buffer.
-  "<f6>" (lambda () (interactive) (compile compile-command)))
+  ;; Do not use `recompile' since we want to change the compilation folder for the current buffer.
+  "<f6>" 'compile-last-command)
+
+;;; REVIEW: Bug 26658 reports that cc-modes mistakenly does not make use of prog-mode-map.
+;;; The following line is a suggested work-around.
+;;; This should be fixed in Emacs 26.
+(eval-after-load 'cc-mode '(set-keymap-parent c-mode-base-map prog-mode-map))
 
 ;;; Comint mode
 (setq comint-prompt-read-only t)
