@@ -7,7 +7,9 @@
     "<f5>" 'cc-clean
     "M-." 'semantic-ia-fast-jump
     "C-c C-d" 'semantic-ia-show-summary
-    "M-TAB" 'semantic-complete-analyze-inline))
+    "M-TAB" 'semantic-complete-analyze-inline)
+  (when (require 'company nil t)
+    (define-key map (kbd "M-TAB") (if (require 'helm-company nil t) 'helm-company 'company-complete))))
 ;; (define-key map (kbd "C-c o") 'ff-find-other-file)
 
 (defvaralias 'c-basic-offset 'tab-width)
@@ -21,9 +23,6 @@
 ;;      ;; Functions.
 ;;      ("\\<\\(\\sw+\\)(" 1 'font-lock-function-name-face)
 ;;      ("\\<\\(\\sw+\\)<\\sw+>(" 1 'font-lock-function-name-face))))
-
-(when (require 'company nil t)
-  (local-set-key (kbd "M-TAB") (if (require 'helm-company nil t) 'helm-company 'company-complete)))
 
 (defvar-local cc-ldlibs "-lm -pthread"
   "Custom linker flags for C/C++ linkage.")
@@ -86,7 +85,7 @@ restored."
         (setq start (region-beginning) end (region-end))
       (setq start (point-min) end (point-max)))
     (setq status
-          (call-process-region start end "uncrustify" nil formatbuf nil "-lc" "-q" "-c" (concat (getenv "HOME") "/.uncrustify.cfg")))
+          (call-process-region start end "uncrustify" nil formatbuf nil "-lc" "-q" "-c" (expand-file-name ".uncrustify.cfg" (getenv "HOME"))))
     (if (/= status 0)
         (error "error running uncrustify")
       (delete-region start end)
@@ -109,7 +108,7 @@ restored."
 
 ;;; Extra semantic support
 ;;; Example:
-;; (when  (fboundp 'semantic-add-system-include)
+;; (when (fboundp 'semantic-add-system-include)
 ;;   (semantic-add-system-include "new/header/dir" 'c++-mode)
 ;;   (add-to-list 'auto-mode-alist (cons qt4-base-dir 'c++-mode))
 ;;   (add-hook
