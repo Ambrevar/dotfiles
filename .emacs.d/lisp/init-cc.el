@@ -1,6 +1,6 @@
-;; C/C++
+;;; C/C++
 
-;; Should we split this into mode-c and mode-c++?
+;;; TODO: Should we split this into mode-c and mode-c++?
 
 (dolist (map (list c-mode-map c++-mode-map))
   (define-keys map "C-c m" 'cc-main
@@ -35,14 +35,16 @@
   "Set compile command to be nearest Makefile or a generic command.
 The Makefile is looked up in parent folders. If no Makefile is
 found (or if NOMAKEFILE is non-nil or if function was called with
-universal argument), then a configurable command line is
-provided.\n Requires `get-closest-pathname'."
+universal argument), then a configurable commandline is
+provided."
   (interactive "P")
-  (require 'functions)
   (hack-local-variables)
-  (let ((makefile (get-closest-pathname)))
-    (if (and makefile (not nomakefile))
-        (setq compile-command (concat "make -k -C " (shell-quote-argument (file-name-directory makefile))))
+  ;; Alternatively, if a Makefile is found, we could change default directory
+  ;; and leave the compile command to "make".  Changing `default-directory'
+  ;; could have side effects though.
+  (let ((makefile-dir (locate-dominating-file "." "Makefile")))
+    (if (and makefile-dir (not nomakefile))
+        (setq compile-command (concat "make -k -C " (shell-quote-argument (file-name-directory makefile-dir))))
       (setq compile-command
             (let
                 ((c++-p (eq major-mode 'c++-mode))
@@ -61,12 +63,13 @@ provided.\n Requires `get-closest-pathname'."
 
 (defun cc-clean ()
   "Find Makefile and call the `clean' rule. If no Makefile is
-found, no action is taken. The previous `compile' command is then
+found, no action is taken. The previous `compile' command is
 restored."
   (interactive)
-  (let (compile-command (makefile (get-closest-pathname)))
-    (when makefile
-      (compile (format "make -k -f '%s' clean" makefile)))))
+  (let (compile-command
+        (makefile-dir (locate-dominating-file "." "Makefile")))
+    (when makefile-dir
+      (compile (format "make -k -C %s clean" (shell-quote-argument makefile-dir))))))
 
 ;;; It is tempting to add `cc-fmt' to the hook:
 ;; (add-hook 'before-save-hook 'cc-fmt nil t)
