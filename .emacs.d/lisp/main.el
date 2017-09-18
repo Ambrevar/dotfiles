@@ -346,4 +346,10 @@
 ;;; Frame title
 (setq frame-title-format (concat "%b" (unless (daemonp) " [serverless]")))
 
+;; Initial scratch buffer message.
+(require 'functions) ; For `fortune-scratch-message'.
+(let ((fortune (fortune-scratch-message)))
+  (when fortune
+    (setq initial-scratch-message fortune)))
+
 (provide 'main)

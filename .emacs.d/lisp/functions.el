@@ -144,6 +144,22 @@ Work on buffer or region. Require `tabify-leading'."
   (whitespace-mode 'toggle))
 (global-set-key (kbd "<f9>") 'flyspell-and-whitespace-mode)
 
+;;; From https://www.reddit.com/r/emacs/comments/70bn7v/what_do_you_have_emacs_show_when_it_starts_up/.
+;;; Supply a random fortune cookie as the *scratch* message.
+(defun fortune-scratch-message ()
+  (interactive)
+  (let ((fortune
+         (when (executable-find "fortune")
+           (with-temp-buffer
+             (shell-command "fortune" t)
+             (let ((comment-start ";;"))
+               (comment-region (point-min) (point-max)))
+             (delete-trailing-whitespace (point-min) (point-max))
+             (concat (buffer-string) "\n")))))
+    (if (called-interactively-p 'any)
+        (insert fortune)
+      fortune)))
+
 (defun global-set-keys (key def &rest bindings)
   "Like `global-set-key' but allow for defining several bindings at once.
 `KEY' must be acceptable for `kbd'."
