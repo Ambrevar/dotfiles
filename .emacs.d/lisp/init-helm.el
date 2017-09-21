@@ -6,8 +6,11 @@
 ;; What about the default program? It currently defaults to ~/.mailcap, which is
 ;; not so customizable.  Would ranger's rifle be useful here?  See
 ;; https://github.com/emacs-helm/helm/issues/1796.
+;; TODO: Batch-open torrent files automatically.  Add to mailcap?  Them as
+;; above, C-c C-x does not allow for opening several files at once.
 
-;; TODO: helm-find in big folders sometimes leads bad results, like exact match not appearing first. Better sorting?
+;; TODO: helm-find in big folders sometimes leads bad results, like exact match
+;; not appearing first. Better sorting?
 ;; TODO: Implement alternating-color multiline lists. See open issue.
 ;; TODO: Fix typos and formatting in documentation.
 
@@ -72,6 +75,7 @@
               ("Info lookup" . helm-info-lookup-symbol))))
 
 ;;; Make `helm-mini' almighty.
+(require 'helm-bookmark)
 (setq helm-mini-default-sources '(helm-source-buffers-list
                                   helm-source-recentf
                                   helm-source-ls-git
@@ -122,15 +126,20 @@ Requires `call-process-to-string' from `functions'."
       (rectangle-exchange-point-and-mark)
     (helm-all-mark-rings)))
 
+(global-set-key [remap execute-extended-command] 'helm-M-x)
+(global-set-key [remap find-file] 'helm-find-files)
+(global-set-key [remap occur] 'helm-occur)
+(global-set-key [remap list-buffers] 'helm-mini)
+;; (global-set-key [remap dabbrev-expand] 'helm-dabbrev)
+(global-set-key [remap yank-pop] 'helm-show-kill-ring)
+(global-set-key [remap exchange-point-and-mark] 'helm-mark-or-exchange-rect)
+(global-set-key [remap apropos-command] 'helm-apropos)
+(global-set-key [remap query-replace-regexp] 'helm-regexp)
+(unless (boundp 'completion-in-region-function)
+  (define-key lisp-interaction-mode-map [remap completion-at-point] 'helm-lisp-completion-at-point)
+  (define-key emacs-lisp-mode-map       [remap completion-at-point] 'helm-lisp-completion-at-point))
+
 (global-set-keys
- "M-x" 'helm-M-x
- "C-x C-f" 'helm-find-files
- "C-x C-b" 'helm-mini
- "M-y" 'helm-show-kill-ring
- "C-x C-x" 'helm-mark-or-exchange-rect
- "M-s o" 'helm-occur
- "C-h a" 'helm-apropos
- "C-M-%" 'helm-regexp
  "C-x M-g" 'helm-grep-git-or-ag
  "C-x M-G" 'helm-do-grep-ag)
 

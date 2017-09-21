@@ -1,13 +1,15 @@
-;; C/C++
+;;; C/C++
 
-;; Should we split this into mode-c and mode-c++?
+;;; TODO: Should we split this into mode-c and mode-c++?
 
 (dolist (map (list c-mode-map c++-mode-map))
   (define-keys map "C-c m" 'cc-main
     "<f5>" 'cc-clean
     "M-." 'semantic-ia-fast-jump
     "C-c C-d" 'semantic-ia-show-summary
-    "M-TAB" 'semantic-complete-analyze-inline))
+    "M-TAB" 'semantic-complete-analyze-inline)
+  (when (require 'company nil t)
+    (define-key map (kbd "M-TAB") (if (require 'helm-company nil t) 'helm-company 'company-complete))))
 ;; (define-key map (kbd "C-c o") 'ff-find-other-file)
 
 (defvaralias 'c-basic-offset 'tab-width)
@@ -22,9 +24,6 @@
 ;;      ("\\<\\(\\sw+\\)(" 1 'font-lock-function-name-face)
 ;;      ("\\<\\(\\sw+\\)<\\sw+>(" 1 'font-lock-function-name-face))))
 
-(when (require 'company nil t)
-  (local-set-key (kbd "M-TAB") (if (require 'helm-company nil t) 'helm-company 'company-complete)))
-
 (defvar-local cc-ldlibs "-lm -pthread"
   "Custom linker flags for C/C++ linkage.")
 
@@ -35,14 +34,16 @@
   "Set compile command to be nearest Makefile or a generic command.
 The Makefile is looked up in parent folders. If no Makefile is
 found (or if NOMAKEFILE is non-nil or if function was called with
-universal argument), then a configurable command line is
-provided.\n Requires `get-closest-pathname'."
+universal argument), then a configurable commandline is
+provided."
   (interactive "P")
-  (require 'functions)
   (hack-local-variables)
-  (let ((makefile (get-closest-pathname)))
-    (if (and makefile (not nomakefile))
-        (setq compile-command (concat "make -k -C " (shell-quote-argument (file-name-directory makefile))))
+  ;; Alternatively, if a Makefile is found, we could change default directory
+  ;; and leave the compile command to "make".  Changing `default-directory'
+  ;; could have side effects though.
+  (let ((makefile-dir (locate-dominating-file "." "Makefile")))
+    (if (and makefile-dir (not nomakefile))
+        (setq compile-command (concat "make -k -C " (shell-quote-argument (file-name-directory makefile-dir))))
       (setq compile-command
             (let
                 ((c++-p (eq major-mode 'c++-mode))
@@ -61,12 +62,13 @@ provided.\n Requires `get-closest-pathname'."
 
 (defun cc-clean ()
   "Find Makefile and call the `clean' rule. If no Makefile is
-found, no action is taken. The previous `compile' command is then
+found, no action is taken. The previous `compile' command is
 restored."
   (interactive)
-  (let (compile-command (makefile (get-closest-pathname)))
-    (when makefile
-      (compile (format "make -k -f '%s' clean" makefile)))))
+  (let (compile-command
+        (makefile-dir (locate-dominating-file "." "Makefile")))
+    (when makefile-dir
+      (compile (format "make -k -C %s clean" (shell-quote-argument makefile-dir))))))
 
 ;;; It is tempting to add `cc-fmt' to the hook:
 ;; (add-hook 'before-save-hook 'cc-fmt nil t)
@@ -83,7 +85,7 @@ restored."
         (setq start (region-beginning) end (region-end))
       (setq start (point-min) end (point-max)))
     (setq status
-          (call-process-region start end "uncrustify" nil formatbuf nil "-lc" "-q" "-c" (concat (getenv "HOME") "/.uncrustify.cfg")))
+          (call-process-region start end "uncrustify" nil formatbuf nil "-lc" "-q" "-c" (expand-file-name ".uncrustify.cfg" (getenv "HOME"))))
     (if (/= status 0)
         (error "error running uncrustify")
       (delete-region start end)
@@ -106,7 +108,7 @@ restored."
 
 ;;; Extra semantic support
 ;;; Example:
-;; (when  (fboundp 'semantic-add-system-include)
+;; (when (fboundp 'semantic-add-system-include)
 ;;   (semantic-add-system-include "new/header/dir" 'c++-mode)
 ;;   (add-to-list 'auto-mode-alist (cons qt4-base-dir 'c++-mode))
 ;;   (add-hook

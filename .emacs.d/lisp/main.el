@@ -163,7 +163,20 @@
       (if (executable-find "xdg-open") 'browse-url-xdg-open 'browse-url-generic))
 ;;; If xdg-open is not found, set Emacs URL browser to the environment browser,
 ;;; or w3m if BROWSER is not set.
-(setq browse-url-generic-program (or (executable-find (or (getenv "BROWSER") "")) (executable-find "w3m")))
+;;; TODO: Upstream should be smart at this, e.g. allow using xdg without a DE.  Report.
+(setq browse-url-generic-program (or
+                                  (executable-find (or (getenv "BROWSER") ""))
+                                  (when (executable-find "xdg-mime")
+                                    (let ((desktop-browser (call-process-to-string "xdg-mime" "query" "default" "text/html")))
+                                      (substring desktop-browser 0 (string-match "\\.desktop" desktop-browser))))
+                                  (executable-find browse-url-mozilla-program)
+                                  (executable-find browse-url-firefox-program)
+                                  (executable-find browse-url-chromium-program)
+                                  (executable-find browse-url-kde-program)
+                                  (executable-find browse-url-conkeror-program)
+                                  (executable-find browse-url-chrome-program)))
+
+
 
 ;;; Default ispell dictionary. If not set, Emacs uses the current locale.
 (setq ispell-dictionary "english")
@@ -213,10 +226,18 @@
 (add-hook 'compilation-filter-hook 'compilation-colorize-buffer)
 (global-set-key (kbd "<f7>") 'previous-error)
 (global-set-key (kbd "<f8>") 'next-error)
+(defun compile-last-command ()
+  (interactive)
+  (compile compile-command))
 (define-keys prog-mode-map
   "C-<f6>" 'compile
-  ;; Do not use `recompile' since we want to change de compilation folder to the current buffer.
-  "<f6>" (lambda () (interactive) (compile compile-command)))
+  ;; Do not use `recompile' since we want to change the compilation folder for the current buffer.
+  "<f6>" 'compile-last-command)
+
+;;; REVIEW: Bug 26658 reports that cc-modes mistakenly does not make use of prog-mode-map.
+;;; The following line is a suggested work-around.
+;;; This should be fixed in Emacs 26.
+(eval-after-load 'cc-mode '(set-keymap-parent c-mode-base-map prog-mode-map))
 
 ;;; Comint mode
 (setq comint-prompt-read-only t)
@@ -324,5 +345,11 @@
 
 ;;; Frame title
 (setq frame-title-format (concat "%b" (unless (daemonp) " [serverless]")))
+
+;; Initial scratch buffer message.
+(require 'functions) ; For `fortune-scratch-message'.
+(let ((fortune (fortune-scratch-message)))
+  (when fortune
+    (setq initial-scratch-message fortune)))
 
 (provide 'main)

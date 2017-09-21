@@ -87,16 +87,17 @@ If there is none, fire it up."
   (interactive)
   (if (and (eq major-mode 'exwm-mode)
            (string-match
-            (format " - %s$" (regexp-quote (file-name-nondirectory browse-url-generic-program)))
-            (buffer-name (current-buffer))))
+            ;; Only match against the end as some window names are hard to predict, e.g. "Mozilla Firefox".
+            (format "%s$" (regexp-quote (file-name-nondirectory browse-url-generic-program)))
+            (downcase (buffer-name (current-buffer)))))
       (start-process-shell-command browse-url-generic-program nil browse-url-generic-program)
     (let ((last (buffer-list)))
       (while (and last
                   (not (with-current-buffer (car last)
                          (and (eq major-mode 'exwm-mode)
                               (string-match
-                               (format " - %s$" (regexp-quote (file-name-nondirectory browse-url-generic-program)))
-                               (buffer-name (current-buffer)))))))
+                               (format "%s$" (regexp-quote (file-name-nondirectory browse-url-generic-program)))
+                               (downcase (buffer-name (current-buffer))))))))
         (setq last (cdr last)))
       (if last
           (switch-to-buffer (car last))
@@ -138,6 +139,7 @@ If there is none, fire it up."
 (exwm-input-set-key (kbd "s-r") #'exwm-start)
 
 ;;; Check for start-up errors. See ~/.profile.
+;;; TODO: This pops 2 windows on non-EXWM EMacs (or non-daemon?).
 (let ((error-logs (directory-files "~" t "errors.*log$")))
   (when error-logs
     (warn "Error during system startup.  See %s." (mapconcat 'identity error-logs ", "))

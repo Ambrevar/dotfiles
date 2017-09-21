@@ -3,6 +3,8 @@
 ;; TODO: Make bindings completely evil: <esc> then hjkl should do what is intended.
 ;; Try out and see how convenient that is.
 
+(global-set-key "\M-y" 'helm-show-kill-ring)
+
 ;; To navigate helm entries with hjkl, using the C- modifier would conflict
 ;; with C-h (help prefix) and C-k (`evil-insert-digraph').  We use M- instead.
 (define-keys helm-map
@@ -26,6 +28,7 @@
 
 (define-key helm-generic-files-map (kbd "M-o") 'helm-ff-run-switch-other-window)
 (define-key helm-buffer-map (kbd "M-o") 'helm-buffer-switch-other-window)
+(define-key helm-buffer-map (kbd "M-d") 'helm-buffer-run-kill-persistent)
 (define-key helm-moccur-map (kbd "M-o") 'helm-moccur-run-goto-line-ow)
 (define-key helm-grep-map (kbd "M-o") 'helm-grep-run-other-window-action)
 (define-key helm-map (kbd "C-/") 'helm-quit-and-find-file)

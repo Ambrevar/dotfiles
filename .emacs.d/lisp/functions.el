@@ -144,17 +144,21 @@ Work on buffer or region. Require `tabify-leading'."
   (whitespace-mode 'toggle))
 (global-set-key (kbd "<f9>") 'flyspell-and-whitespace-mode)
 
-(defun get-closest-pathname (&optional file)
-  "Get pathname of the first instance of FILE towards root.
-If FILE is unspecified, look for 'Makefile'. If it does not find
-FILE, return nil. This may not do the correct thing in presence
-of links."
-  (let* ((pwd default-directory) (file (or file "Makefile")) (target (expand-file-name file pwd)))
-    (while
-        (unless (or (file-exists-p target) (equal pwd "/"))
-          (setq pwd (expand-file-name ".." pwd))
-          (setq target (expand-file-name file pwd))))
-    (if (file-exists-p target) target nil)))
+;;; From https://www.reddit.com/r/emacs/comments/70bn7v/what_do_you_have_emacs_show_when_it_starts_up/.
+;;; Supply a random fortune cookie as the *scratch* message.
+(defun fortune-scratch-message ()
+  (interactive)
+  (let ((fortune
+         (when (executable-find "fortune")
+           (with-temp-buffer
+             (shell-command "fortune" t)
+             (let ((comment-start ";;"))
+               (comment-region (point-min) (point-max)))
+             (delete-trailing-whitespace (point-min) (point-max))
+             (concat (buffer-string) "\n")))))
+    (if (called-interactively-p 'any)
+        (insert fortune)
+      fortune)))
 
 (defun global-set-keys (key def &rest bindings)
   "Like `global-set-key' but allow for defining several bindings at once.
