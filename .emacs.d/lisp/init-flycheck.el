@@ -7,8 +7,7 @@
       (flyspell-mode)
     (flycheck-mode 'toggle)
     (if flyspell-mode (flyspell-mode 0) (flyspell-prog-mode)))
-  (whitespace-mode 'toggle)
-  (message "flyspell %s, flycheck %s, whitespace %s" flyspell-mode flycheck-mode whitespace-mode))
+  (whitespace-mode 'toggle))
 (global-set-key (kbd "<f9>") 'flycheck-and-whitespace-mode)
 
 (define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck)
