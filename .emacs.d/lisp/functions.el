@@ -457,6 +457,10 @@ This does not affect .csv files."
   "Unconditionally add the `fmt' function to `before-save-hook'."
   (add-hook 'before-save-hook 'fmt nil t))
 
+(defun turn-off-fmt-before-save ()
+  "Unconditionally add the `fmt' function to `before-save-hook'."
+  (remove-hook 'before-save-hook 'fmt t))
+
 (defun turn-off-indent-tabs ()
   "Unconditionally turn off tab indentation."
   (setq indent-tabs-mode nil))
