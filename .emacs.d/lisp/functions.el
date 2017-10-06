@@ -295,6 +295,11 @@ Hook function for skeletons."
 (defvar skeleton-markers nil
   "Markers for locations saved in `skeleton-positions'.")
 
+(defun skeleton-previous-position ()
+  "Move to previous skeleton placeholder.
+See `skeleton-next-position'."
+  (skeleton-next-position t))
+
 (defun skeleton-next-position (&optional reverse)
   "Move to next skeleton placeholder.
 If REVERSE it t, move to previous placeholder."

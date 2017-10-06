@@ -283,7 +283,7 @@
 (turn-on-skeleton-markers)
 (global-set-keys
  "C->" 'skeleton-next-position
- "C-<" (lambda () (interactive) (skeleton-next-position t)))
+ "C-<" 'skeleton-previous-position)
 
 ;;; Disable prompt (but leave warning) on git symlink.
 (setq vc-follow-symlinks t)

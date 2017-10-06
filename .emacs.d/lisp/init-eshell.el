@@ -213,7 +213,7 @@ See `eshell-prompt-regexp'."
                    ;; cannonical file names (i.e. withou '~') while fish preserves
                    ;; non-cannonical results.  If the result contains a directory,
                    ;; expand it.
-                   (mapcar (lambda (e)(car (split-string e "\t")))
+                   (mapcar (lambda (e) (car (split-string e "\t")))
                            (split-string
                             (with-output-to-string
                               (with-current-buffer standard-output
