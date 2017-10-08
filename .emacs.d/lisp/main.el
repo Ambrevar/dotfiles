@@ -184,11 +184,6 @@
   "C-<f6>" 'ispell-change-dictionary
   "<f6>" 'ispell-buffer)
 
-;;; Long paragraphs. Useful for quick navigation with backward-paragraph and
-;;; forward-paragraph. TODO: Useless?
-;; (setq paragraph-start "
-;; ")
-
 ;;; Show matching parenthesis
 (show-paren-mode 1)
 ;;; By default, there’s a small delay before showing a matching parenthesis. Set
