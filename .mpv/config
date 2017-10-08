@@ -3,9 +3,6 @@
 # ao=alsa
 # profile=opengl-hq
 
-## Starting fullscreen remove AwesomeWM borders when windowed.
-# fullscreen=yes
-
 sub-codepage=utf8
 sub-auto=fuzzy
 
