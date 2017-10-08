@@ -60,4 +60,4 @@ all files directly.
 	git fetch
 	git checkout master
 
-For the list of programs I am currently using, see the `.pkglists/` folder.
+For the list of programs I currently use, see the `.pkglists/` folder.
