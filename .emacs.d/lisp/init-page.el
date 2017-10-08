@@ -1,4 +1,4 @@
-;; page-number-mode
+;;; page-number-mode
 
 (defvar page-number--mode-line-position-without-page nil)
 
@@ -25,7 +25,7 @@ mouse-1: Display Line and Column Mode Menu")))))
                  'help-echo "Column number\n\
 mouse-1: Display Line and Column Mode Menu")))))))
 
-;; This is different from `what-page' that returns a descriptive string.
+;;; This is different from `what-page' that returns a descriptive string.
 (defun page-count ()
   "Return page count."
   (save-restriction

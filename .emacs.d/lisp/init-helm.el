@@ -1,18 +1,18 @@
 ;;; Helm
 
-;; TODO: helm-ff should allow opening several marks externally, e.g.  sxiv for
-;; pics. See
-;; https://github.com/emacs-helm/helm/wiki/Find-Files#open-files-externally
-;; What about the default program? It currently defaults to ~/.mailcap, which is
-;; not so customizable.  Would ranger's rifle be useful here?  See
-;; https://github.com/emacs-helm/helm/issues/1796.
-;; TODO: Batch-open torrent files automatically.  Add to mailcap?  Them as
-;; above, C-c C-x does not allow for opening several files at once.
+;;; TODO: helm-ff should allow opening several marks externally, e.g.  sxiv for
+;;; pics. See
+;;; https://github.com/emacs-helm/helm/wiki/Find-Files#open-files-externally
+;;; What about the default program? It currently defaults to ~/.mailcap, which is
+;;; not so customizable.  Would ranger's rifle be useful here?  See
+;;; https://github.com/emacs-helm/helm/issues/1796.
+;;; TODO: Batch-open torrent files automatically.  Add to mailcap?  Them as
+;;; above, C-c C-x does not allow for opening several files at once.
 
-;; TODO: helm-find in big folders sometimes leads bad results, like exact match
-;; not appearing first. Better sorting?
-;; TODO: Implement alternating-color multiline lists. See open issue.
-;; TODO: Fix typos and formatting in documentation.
+;;; TODO: helm-find in big folders sometimes leads bad results, like exact match
+;;; not appearing first. Better sorting?
+;;; TODO: Implement alternating-color multiline lists. See open issue.
+;;; TODO: Fix typos and formatting in documentation.
 
 (when (require 'helm-descbinds nil t)
   (helm-descbinds-mode))
@@ -96,8 +96,8 @@
   (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history))
 (add-hook 'eshell-mode-hook 'helm/eshell-set-keys)
 
-;; TODO: Use helm-ff history in helm file completion.
-;; https://github.com/emacs-helm/helm/issues/1118
+;;; TODO: Use helm-ff history in helm file completion.
+;;; https://github.com/emacs-helm/helm/issues/1118
 ;; (define-key helm-read-file-map (kbd "M-p") 'helm-ff-run-switch-to-history)
 
 ;;; Do not exclude any files from 'git grep'.

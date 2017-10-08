@@ -67,12 +67,12 @@ Default to unread messages if no"
  ;; Because default completion can be extended (e.g. Helm, Ivy).
  mu4e-completing-read-function 'completing-read)
 
-;; Press "aV" to view in browser.
+;;; Press "aV" to view in browser.
 (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t)
 
-;; Unicode chars for decoration might cause issues with some fonts or in terminals.
-;; https://github.com/djcb/mu/issues/733
-;; https://github.com/djcb/mu/issues/1062
+;;; Unicode chars for decoration might cause issues with some fonts or in terminals.
+;;; https://github.com/djcb/mu/issues/733
+;;; https://github.com/djcb/mu/issues/1062
 ;; (setq mu4e-use-fancy-chars t)
 
 ;;; REVIEW: Sorting in ascending order is impeded by `mu4e-search-results-limit': the 500 oldest e-mails will be displayed first.
@@ -89,7 +89,7 @@ Default to unread messages if no"
                 (call-process-to-string "fortune" "-s"))))
 (add-hook 'mu4e-compose-pre-hook 'mu4e-add-fortune-signature)
 
-;; Make unread e-mails stand out a bit.
+;;; Make unread e-mails stand out a bit.
 (set-face-foreground 'mu4e-unread-face "yellow")
 (set-face-attribute 'mu4e-flagged-face nil :inherit 'font-lock-warning-face)
 

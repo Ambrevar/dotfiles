@@ -1,6 +1,6 @@
-;; Texinfo
+;;; Texinfo
 
-;; We use the TeX setup.
+;;; We use the TeX setup.
 (require 'tex-mode)
 (require 'mode-tex)
 
@@ -19,7 +19,7 @@
   (set (make-local-variable 'tex-command) "texi2pdf -b")
   (tex-set-compiler))
 
-;; For some reason, Texinfo-mode forces the fill-column to 70...
+;;; For some reason, Texinfo-mode forces the fill-column to 70...
 (dolist (fun '(texinfo-set-compiler reset-fill-column))
   (add-hook 'texinfo-mode-hook fun))
 

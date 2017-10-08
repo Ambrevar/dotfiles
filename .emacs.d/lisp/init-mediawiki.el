@@ -1,9 +1,9 @@
-;; MediaWiki
+;;; MediaWiki
 
-;; This mode has numerous issue with network queries:
-;; https://github.com/hexmode/mediawiki-el/issues/
-;; Besides you can try extending `url-cookie-save-interval'.
-;; Nonetheless is mode is helpfull for syntax awareness.
+;;; This mode has numerous issue with network queries:
+;;; https://github.com/hexmode/mediawiki-el/issues/
+;;; Besides you can try extending `url-cookie-save-interval'.
+;;; Nonetheless is mode is helpfull for syntax awareness.
 
 (define-keys mediawiki-mode-map
   "C-c o" 'mediawiki-browse

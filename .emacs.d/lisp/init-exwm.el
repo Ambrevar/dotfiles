@@ -111,7 +111,7 @@ If there is none, fire it up."
 (defun exwm-start-screenshot () (interactive) (start-process-shell-command "scrot" nil "scrot ~/temp/screen-%F-%T.png"))
 (exwm-input-set-key (kbd "<print>") #'exwm-start-screenshot)
 
-;; TODO: Check out the 'volume' package.
+;;; TODO: Check out the 'volume' package.
 (defun exwm-volume (&optional up-or-down)
   (let ((controllers '(("amixer" "set Master" "5%-" "5%+" "toggle")
                        ("mixer" "vol" "-5" "+5" "^"))))

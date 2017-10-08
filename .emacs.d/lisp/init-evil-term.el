@@ -2,14 +2,14 @@
 
 (evil-set-initial-state 'term-mode 'insert)
 
-;; TODO: Set prompt regexp. Test next/previous prompt functions, term-bol, etc.
-;; Probably needs the same fix as Eshell.
-;; TODO: Can the prompt be read-only?
+;;; TODO: Set prompt regexp. Test next/previous prompt functions, term-bol, etc.
+;;; Probably needs the same fix as Eshell.
+;;; TODO: Can the prompt be read-only?
 
-;; TODO: Rebinding ESC has the drawback that programs like vi cannot use it anymore.
-;; Workaround: switch to Emacs mode and double-press ESC.
-;; Otherwise leave ESC to C-cC-j.
-;; Or bind char-mode ESC to C-cC-x?
+;;; TODO: Rebinding ESC has the drawback that programs like vi cannot use it anymore.
+;;; Workaround: switch to Emacs mode and double-press ESC.
+;;; Otherwise leave ESC to C-cC-j.
+;;; Or bind char-mode ESC to C-cC-x?
 
 (defun evil-term-char-mode-insert ()
   (interactive)
@@ -68,7 +68,7 @@
 Each character you type is sent directly to the inferior without
 intervention from Emacs, except for the escape character (usually C-c)."
   (interactive)
-  ;; FIXME: Emit message? Cfr ilisp-raw-message
+  ;; FIXME: Emit message? Cf. elisp-raw-message
   (when (term-in-line-mode)
     (setq term-old-mode-map (current-local-map))
     (use-local-map term-raw-map)

@@ -21,8 +21,8 @@
  "C-c u" 'latex-package
  "M-RET" 'latex-itemize)
 
-;; Needs dvipng.
-;; With TeXlive, the following packages are needed: psnfss, symbol, zapfding
+;;; Needs dvipng.
+;;; With TeXlive, the following packages are needed: psnfss, symbol, zapfding
 (when (and (executable-find "dvipng") (require 'latex-math-preview nil t))
   (setq latex-math-preview-cache-directory-for-insertion
         (concat emacs-cache-folder "latex-math-preview-cache"))
@@ -33,7 +33,7 @@
   (add-to-list 'latex-math-preview-usepackage-filter-alist '("color")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Functions
+;;; Functions
 
 (defun latex-itemize ()
   "Itemize current line or lines in region.
@@ -66,7 +66,7 @@ by an {itemize} environment."
         (newline-and-indent)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; LaTeX setup
+;;; LaTeX setup
 
 (setq latex-block-default "itemize")
 (setq latex-block-names '("listing" "align" "align*" "Bmatrix" "Vmatrix" "bmatrix" "matrix" "pmatrix" "smallmatrix" "vmatrix"))
@@ -81,7 +81,7 @@ by an {itemize} environment."
   ;; Need to reset the compiler because we changed tex-command, order matters.
   (tex-set-compiler))
 
-;; For some unknown reasons, `skeleton-end-hook' is set to nil in tex-mode.
+;;; For some unknown reasons, `skeleton-end-hook' is set to nil in tex-mode.
 (dolist (fun '(latex-set-compiler turn-on-orgtbl turn-on-skeleton-markers))
   ;; Since this file is loaded from `latex-mode-hook', these functions will not
   ;; be applied to the current buffer. We do it manually.
@@ -89,7 +89,7 @@ by an {itemize} environment."
   (add-hook 'latex-mode-hook fun))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Skeletons
+;;; Skeletons
 
 (define-skeleton latex-emph "Insert emph." nil "\\emph{" @ _ "}" @)
 (define-skeleton latex-slanted "Insert slanted text." nil "\\textsl{" @ _ "}" @)
@@ -146,7 +146,7 @@ The table type is any value found in `latex-table-names'."
       "\\end{" str "}" > \n
       "\\end{center}" > \n @)
 
-;; TODO: implement orgtbl directly with latex tables and remove this skel.
+;;; TODO: implement orgtbl directly with latex tables and remove this skel.
 (define-skeleton latex-orgtbl
   "Insert orgtbl skel."
   "Table name: "

@@ -143,9 +143,9 @@
       split-width-threshold 140)
 
 ;;; Windmove mode
-;; By default, it allows easy window switching with Shift+arrows. I like to
-;; stick to the home-row, but to avoid shadowing other binding I exceptionaly use
-;; 'super' (normally reserved to the WM).
+;;; By default, it allows easy window switching with Shift+arrows. I like to
+;;; stick to the home-row, but to avoid shadowing other binding I exceptionaly use
+;;; 'super' (normally reserved to the WM).
 (when (fboundp 'windmove-default-keybindings)
   (global-set-keys
    "s-h" 'windmove-left
@@ -346,7 +346,7 @@
 ;;; Frame title
 (setq frame-title-format (concat "%b" (unless (daemonp) " [serverless]")))
 
-;; Initial scratch buffer message.
+;;; Initial scratch buffer message.
 (require 'functions) ; For `fortune-scratch-message'.
 (let ((fortune (fortune-scratch-message)))
   (when fortune

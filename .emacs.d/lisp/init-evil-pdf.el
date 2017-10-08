@@ -1,6 +1,6 @@
 ;;; Evil+pdftools
 
-;; TODO: Add other modes? Looks like it's not needed.
+;;; TODO: Add other modes? Looks like it's not needed.
 (evil-set-initial-state 'pdf-view-mode 'motion)
 
 (evil-define-key 'motion pdf-view-mode-map

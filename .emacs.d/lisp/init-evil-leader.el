@@ -1,6 +1,6 @@
 ;;; Evil leader
 
-;; Leader mode and its key must be set before evil-mode.
+;;; Leader mode and its key must be set before evil-mode.
 (evil-leader/set-leader "<SPC>")
 (global-evil-leader-mode)
 
@@ -37,7 +37,7 @@
   (require 'evil-mu4e nil t)
   (evil-leader/set-key "m" 'mu4e-headers-unread))
 
-;; Since <SPC> is no longer available, as some replacements:
+;;; Since <SPC> is no longer available, as some replacements:
 (evil-define-key 'motion Info-mode-map (kbd "C-SPC") 'Info-scroll-up)
 (evil-define-key 'motion help-mode-map (kbd "C-SPC") 'scroll-up-command)
 (evil-define-key 'motion pdf-view-mode-map (kbd "C-SPC") 'pdf-view-scroll-up-or-next-page)

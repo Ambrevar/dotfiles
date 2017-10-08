@@ -1,4 +1,4 @@
-;; Makefile
+;;; Makefile
 
 (define-keys makefile-mode-map
   "C-c c" 'makefile-config

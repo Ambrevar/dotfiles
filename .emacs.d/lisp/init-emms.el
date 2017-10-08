@@ -146,7 +146,7 @@ will always use the same cover per folder."
 ;;; TODO: Delete entry from cache? See `emms-cache-del'.
 
 ;;; TODO: Browse by album-artist? libtag has the field.
-;; https://emacs.stackexchange.com/questions/10412/sort-by-artist-in-emms-with-compilation-albums/10435
+;;; https://emacs.stackexchange.com/questions/10412/sort-by-artist-in-emms-with-compilation-albums/10435
 
 ;;; TODO: Change face from purple to white?
 

@@ -55,7 +55,7 @@
  eshell-hist-ignoredups t
  eshell-destroy-buffer-when-process-dies t)
 
-;; TODO: Hour is printed twice. We don't need to set this?
+;;; TODO: Hour is printed twice. We don't need to set this?
 ;; (setq eshell-ls-date-format (replace-regexp-in-string "^\\+*" "" (getenv "TIME_STYLE")))
 
 ;;; TODO: ls: Sort using locale.

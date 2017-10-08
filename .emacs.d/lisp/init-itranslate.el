@@ -1,5 +1,5 @@
 ;;; Itranslate
-;; Translate text from Internet services
+;;; Translate text from Internet services
 
 (defvar itranslate-program "translate"
   "The translation program installed on the system.")

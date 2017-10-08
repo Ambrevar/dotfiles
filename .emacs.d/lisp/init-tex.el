@@ -1,22 +1,22 @@
-;; TeX
+;;; TeX
 
-;; The default tex-mode and AucTeX may seem quite disappointing. Let's use
-;; custom KISS functions for everything.
+;;; The default tex-mode and AucTeX may seem quite disappointing. Let's use
+;;; custom KISS functions for everything.
 
-;; Interesting options for the tex compiler:
-;; * -file-line-error-style: change the style of error report to
-;;    display file name and line first.
-;; * -halt-on-error: default.
-;; * -interaction <mode>: like -halt-on-error, you can set the way
-;;    the compilers behave on errors. Possible values for <mode> are
-;;    'batchmode', 'errorstopmode', 'nonstopmode' and 'scrollmode'.
-;; * -shell-escape: allow the use of \write18{<external command>}
-;;    from within TeX documents. This is a potential security issue.
-;; * -synctex=1: enable SyncTeX support.
-;; You may use file local variable for convenience:
-;;   % -*- tex-start-options: \"-shell-escape\"
-;; Note that -shell-escape can also be toggled with universal
-;; argument.
+;;; Interesting options for the tex compiler:
+;;; * -file-line-error-style: change the style of error report to
+;;;    display file name and line first.
+;;; * -halt-on-error: default.
+;;; * -interaction <mode>: like -halt-on-error, you can set the way
+;;;    the compilers behave on errors. Possible values for <mode> are
+;;;    'batchmode', 'errorstopmode', 'nonstopmode' and 'scrollmode'.
+;;; * -shell-escape: allow the use of \write18{<external command>}
+;;;    from within TeX documents. This is a potential security issue.
+;;; * -synctex=1: enable SyncTeX support.
+;;; You may use file local variable for convenience:
+;;;   % -*- tex-start-options: \"-shell-escape\"
+;;; Note that -shell-escape can also be toggled with universal
+;;; argument.
 
 (define-keys tex-mode-map
   "C-c C-f" nil
@@ -45,7 +45,7 @@
   :group 'tex)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Functions
+;;; Functions
 
 (defun tex-set-compiler ()
   "Set `compile-command' for TeX-based document."
@@ -111,7 +111,7 @@ This does not interfere with `subword-mode'."
   (delete-windows-on "*compilation*"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; TeX setup
+;;; TeX setup
 
 (setq-default
  tex-run-command "pdftex"
@@ -120,9 +120,9 @@ This does not interfere with `subword-mode'."
  ;; default options.
  tex-start-commands nil)
 
-;; `tex-mode' sets `indent-tabs-mode' to nil, invoking the following
-;; argument: "TABs in verbatim environments don't do what you think." Not
-;; sure how relevant this bad comment is. We revert it.
+;;; `tex-mode' sets `indent-tabs-mode' to nil, invoking the following
+;;; argument: "TABs in verbatim environments don't do what you think." Not
+;;; sure how relevant this bad comment is. We revert it.
 (dolist (fun '(turn-on-indent-tabs
                turn-on-newline-paragraph
                turn-on-newline-paragraph
@@ -130,11 +130,11 @@ This does not interfere with `subword-mode'."
                tex-set-compiler))
   (add-hook 'tex-mode-hook fun))
 
-;; Not sure how useful that is:
+;;; Not sure how useful that is:
 ;; (set (make-local-variable 'use-hard-newlines) t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Skeletons
+;;; Skeletons
 
 (define-skeleton tex-array
   "Insert array."

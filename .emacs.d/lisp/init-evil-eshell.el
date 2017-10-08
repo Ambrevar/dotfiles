@@ -1,4 +1,4 @@
-;; Evil+Eshell
+;;; Evil+Eshell
 
 (defun evil/eshell-next-prompt ()
   (when (get-text-property (point) 'read-only)

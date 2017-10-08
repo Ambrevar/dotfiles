@@ -1,9 +1,9 @@
-;; GUD
+;;; GUD
 
-;; Set GUD to display many windows by default.
+;;; Set GUD to display many windows by default.
 (setq gdb-many-windows t)
 
-;; Change GUD many-windows layout.
+;;; Change GUD many-windows layout.
 (defun gdb-setup-windows ()
   "Layout the window pattern for `gdb-many-windows'.
 Do not set `gdb-show-main' to true as we handle it manually here."

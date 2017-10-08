@@ -1,7 +1,7 @@
 ;;; Evil+Helm
 
-;; TODO: Make bindings completely evil: <esc> then hjkl should do what is intended.
-;; Try out and see how convenient that is.
+;;; TODO: Make bindings completely evil: <esc> then hjkl should do what is intended.
+;;; Try out and see how convenient that is.
 
 (global-set-key "\M-y" 'helm-show-kill-ring)
 

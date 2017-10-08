@@ -1,4 +1,4 @@
-;; Lua
+;;; Lua
 
 (defvaralias 'lua-indent-level 'tab-width)
 

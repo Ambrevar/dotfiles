@@ -377,8 +377,8 @@ Works on whole buffer if region is unactive."
           (tabify start end))
       (setq tabify-regexp tabify-regexp-old))))
 
-;; TODO: Store window configurations in a buffer-name-indexed alist? Not
-;; sure that would ever be useful.
+;;; TODO: Store window configurations in a buffer-name-indexed alist? Not
+;;; sure that would ever be useful.
 (defvar single-window--last-configuration nil "Last window configuration before calling `delete-other-windows'.")
 (defun toggle-single-window ()
   "Un-maximize current window.

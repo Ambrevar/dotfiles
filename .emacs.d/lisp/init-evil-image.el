@@ -1,6 +1,6 @@
 ;;; Evil+Image
 
-;; TODO: Why can't I set image-mode default state to 'motion?
+;;; TODO: Why can't I set image-mode default state to 'motion?
 (evil-initial-state 'image-mode 'motion)
 (add-to-list 'evil-motion-state-modes 'image-mode)
 

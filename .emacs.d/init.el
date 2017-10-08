@@ -98,9 +98,9 @@
 
 ;;; Dired
 ;;; Dired is loaded after init.el, so configure it only then.
-;; TODO: Improve dired-du:
-;; - Hangs when the `ls` time format is changed.
-;; - Cache recursive results.
+;;; TODO: Improve dired-du:
+;;; - Hangs when the `ls` time format is changed.
+;;; - Cache recursive results.
 (nconc package-selected-packages '(dired-du))
 (with-eval-after-load 'dired (require 'init-dired))
 
@@ -132,8 +132,8 @@
 (with-eval-after-load 'go-mode (require 'init-go))
 
 ;;; Graphviz dot
-;; The view command is broken but the preview command works (it displays the PNG
-;; in a new window), which is enough and probably not worth a fix.
+;;; The view command is broken but the preview command works (it displays the PNG
+;;; in a new window), which is enough and probably not worth a fix.
 (nconc package-selected-packages '(graphviz-dot-mode))
 
 ;;; GUD (GDB, etc.)

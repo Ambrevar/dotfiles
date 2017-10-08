@@ -1,7 +1,7 @@
 ;;; Evil+EMMS
 
-;; emms-browser does not run any mode hook.  As such the default state is 'normal.
-;; TODO: Report upstream.
+;;; emms-browser does not run any mode hook.  As such the default state is 'normal.
+;;; TODO: Report upstream.
 (defun evil/emms-browser ()
   (evil-motion-state))
 (advice-add 'emms-browser :after 'evil/emms-browser)

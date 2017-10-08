@@ -1,4 +1,5 @@
 ;;; Evil+Package-menu-mode
+
 (evil-set-initial-state 'package-menu-mode 'motion)
 (evil-define-key 'motion package-menu-mode-map "q" 'quit-window)
 (evil-define-key 'motion package-menu-mode-map "i" 'package-menu-mark-install)

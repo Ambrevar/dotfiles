@@ -1,4 +1,4 @@
-;; Python
+;;; Python
 
 (defun python-set-compiler ()
   "Returns the value of the shebang if any, `python-shell-interpreter' otherwise."
@@ -14,8 +14,8 @@
 
 (add-hook 'python-mode-hook 'python-set-compiler)
 
-;; Doc lookup. Requires the python.info file to be installed. See
-;; https://bitbucket.org/jonwaltman/pydoc-info/.
+;;; Doc lookup. Requires the python.info file to be installed. See
+;;; https://bitbucket.org/jonwaltman/pydoc-info/.
 ;; (add-to-list 'load-path "~/path/to/pydoc-info")
 ;; (require 'pydoc-info nil t)
 
