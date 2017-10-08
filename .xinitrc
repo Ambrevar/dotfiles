@@ -18,7 +18,7 @@ fi
 if [ $# -eq 1 ] && command -v $1 >/dev/null 2>&1; then
 	exec $1
 else
-	conky | dzen2 -p -dock -ta l -fn "Mono" &
+	conky | dzen2 -p -dock -ta l -fn "DejaVu Sans Mono" &
 	## `exwm-enable' has to be called before the frame is spawned.
 	emacs --daemon -f exwm-enable
 	exec emacsclient -c
