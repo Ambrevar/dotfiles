@@ -233,4 +233,6 @@
 
 (with-eval-after-load 'gnus (require 'init-evil-gnus))
 
+(with-eval-after-load 'cus-edit (require 'init-evil-custom))
+
 (provide 'init-evil)
