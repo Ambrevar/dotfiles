@@ -1,6 +1,7 @@
 ;;; mu4e
 
-;;; TODO: Reply to all by default.
+;;; REVIEW: Reply to all by default.
+;;; https://github.com/djcb/mu/issues/1135
 ;;; TODO: Is it possible to mbsync without attachments?
 ;;; REVIEW: Use abbrevs in compose mode.
 ;;; Fixed upstream.  See https://github.com/djcb/mu/issues/1119.
@@ -89,9 +90,15 @@ Default to unread messages if no"
                 (call-process-to-string "fortune" "-s"))))
 (add-hook 'mu4e-compose-pre-hook 'mu4e-add-fortune-signature)
 
-;;; Make unread e-mails stand out a bit.
+;;; Make some e-mails stand out a bit.
 (set-face-foreground 'mu4e-unread-face "yellow")
 (set-face-attribute 'mu4e-flagged-face nil :inherit 'font-lock-warning-face)
+
+;;; Confirmation on every mark execution is too slow to my taste.
+(defun mu4e-mark-execute-all-no-confirm ()
+  (interactive)
+  (mu4e-mark-execute-all t))
+(define-key mu4e-headers-mode-map "x" 'mu4e-mark-execute-all-no-confirm)
 
 (when (require 'helm-mu nil t)
   ;; TODO: Preserve the search pattern in helm-mu.

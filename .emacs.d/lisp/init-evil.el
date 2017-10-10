@@ -153,23 +153,27 @@
 
 (with-eval-after-load 'mu4e
   (when (require 'evil-mu4e nil t)
-    ;; TODO: evil-mu4e needs a big overhaul, e.g. 'visual commands are not supported.
+    ;; TODO: evil-mu4e needs a big overhaul, e.g. 'visual commands are not supported.  Report upstream.
     (evil-define-key 'motion mu4e-headers-mode-map
-      "zf" 'mu4e-headers-mark-for-flag
-      "zF" 'mu4e-headers-mark-for-unmark
-      "R" 'mu4e-headers-mark-for-refile
+      "i" 'mu4e-headers-mark-for-flag
+      "I" 'mu4e-headers-mark-for-unflag
+      ;; "R" 'mu4e-headers-mark-for-refile
       "p" 'mu4e-headers-toggle-include-related
       "r" 'mu4e-compose-reply)
+    (evil-define-key 'visual mu4e-headers-mode-map
+      "u" 'mu4e-headers-mark-for-unmark)
     (evil-define-key 'motion mu4e-view-mode-map
       (kbd "SPC") 'mu4e-view-scroll-up-or-next
       (kbd "TAB") 'shr-next-link
-      "zf" 'mu4e-view-mark-for-flag
-      "zF" 'mu4e-view-mark-for-unflag
-      "R" 'mu4e-view-mark-for-refile
+      "i" 'mu4e-view-mark-for-flag
+      "I" 'mu4e-view-mark-for-unflag
+      ;; "R" 'mu4e-view-mark-for-refile
       "r" 'mu4e-compose-reply
       "za" 'mu4e-view-save-attachment-multi
-      "\M-j" 'mu4e-view-headers-next
-      "\M-k" 'mu4e-view-headers-prev
+      "\C-j" 'mu4e-view-headers-next
+      "\C-k" 'mu4e-view-headers-prev
+      "\M-j" 'mu4e-view-headers-next ; Custom
+      "\M-k" 'mu4e-view-headers-prev ; Custom
       "h" 'evil-backward-char
       "zh" 'mu4e-view-toggle-html
       "gu" 'mu4e-view-go-to-url)
