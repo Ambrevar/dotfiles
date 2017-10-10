@@ -1,13 +1,11 @@
 ;;; Evil+Image
 
-;;; TODO: Why can't I set image-mode default state to 'motion?
-(evil-initial-state 'image-mode 'motion)
-(add-to-list 'evil-motion-state-modes 'image-mode)
+(evil-set-initial-state 'image-mode 'motion)
 
 (evil-define-key 'motion image-mode-map
-  "<retun>" 'image-toggle-animation
-  "<space>" 'image-scroll-up
-  "S-<space>" 'image-scroll-down
+  (kbd "<return>") 'image-toggle-animation
+  (kbd "<space>") 'image-scroll-up
+  (kbd "S-<space>") 'image-scroll-down
   "F" 'image-goto-frame
   "H" 'image-previous-frame
   "L" 'image-next-frame

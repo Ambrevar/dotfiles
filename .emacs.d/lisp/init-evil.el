@@ -1,6 +1,6 @@
 ;;; Evil
 
-;;; TODO: helm-show-yank-ring behaves like Emacs when pasting whole lines, not like Vim.
+;;; TODO: helm-show-kill-ring behaves like Emacs when pasting whole lines, not like Vim.
 
 ;;; TODO: helm-mark-ring seems to have issues with Evil:
 ;;; - The first entry is not the last position but the current one.
@@ -200,8 +200,10 @@
 
 (with-eval-after-load 'eshell (require 'init-evil-eshell))
 
+;;; TODO: `image-mode-map' is the parent of `pdf-view-mode-map'.  A bug(?) in
+;;; Evil overrides all image-mode-map bindings.
+;;; See https://github.com/emacs-evil/evil/issues/938.
 (with-eval-after-load 'pdf-view (require 'init-evil-pdf))
-
 (with-eval-after-load 'image-mode (require 'init-evil-image))
 
 (with-eval-after-load 'term (require 'init-evil-term))
