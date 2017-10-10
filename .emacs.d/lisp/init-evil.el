@@ -180,7 +180,20 @@
 (with-eval-after-load 'calendar (require 'init-evil-calendar))
 
 ;;; nXML
-(evil-define-key 'normal nxml-mode-map "<" 'nxml-backward-up-element)
+(evil-define-key 'normal nxml-mode-map
+  "\C-j" 'nxml-forward-element
+  "\C-k" 'nxml-backward-element
+  "\M-j" 'nxml-forward-element ; Custom
+  "\M-k" 'nxml-backward-element ; Custom
+  ">" 'nxml-down-element
+  "<" 'nxml-backward-up-element)
+(evil-define-key 'visual nxml-mode-map
+  "\C-j" 'nxml-forward-element
+  "\C-k" 'nxml-backward-element
+  "\M-j" 'nxml-forward-element ; Custom
+  "\M-k" 'nxml-backward-element ; Custom
+  ">" 'nxml-down-element
+  "<" 'nxml-backward-up-element)
 
 (with-eval-after-load 'magit
   (when (require 'evil-magit nil t)
