@@ -237,6 +237,8 @@
 
 ;;; PDF
 ;;; pdf-tools requires poppler built with cairo support.
+;;; We cannot defer loading as `pdf-tools-install' is required for PDF
+;;; association.
 (nconc package-selected-packages '(pdf-tools))
 (when (require 'pdf-tools nil t)
   (pdf-tools-install t t t))

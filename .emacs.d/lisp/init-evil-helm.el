@@ -1,12 +1,11 @@
 ;;; Evil+Helm
 
-;;; TODO: Make bindings completely evil: <esc> then hjkl should do what is intended.
-;;; Try out and see how convenient that is.
-
 (global-set-key "\M-y" 'helm-show-kill-ring)
 
-;; To navigate helm entries with hjkl, using the C- modifier would conflict
-;; with C-h (help prefix) and C-k (`evil-insert-digraph').  We use M- instead.
+;;; To navigate helm entries with hjkl, using the C- modifier would conflict
+;;; with C-h (help prefix) and C-k (`evil-insert-digraph').  We use M- instead.
+;;; We cannot use normal mode to navigate if we also want to use it to edit the
+;;; minibuffer content.
 (define-keys helm-map
   "C-\\" 'helm-toggle-resplit-and-swap-windows
   "M-\\" 'helm-toggle-resplit-and-swap-windows

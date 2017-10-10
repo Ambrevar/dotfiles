@@ -7,6 +7,10 @@
 ;;; (for the first session only) and `eshell-mode-hook'.
 
 ;;; TODO: Redirecting big output to file (e.g. /dev/null) is extremely slow.
+;; > cat /usr/share/dict/british-english | wc -l
+;;; The above line yields rancom results.  Plus it's much slower than
+;; > wc -l /usr/share/dict/british-english
+;;; while it should only cost an additional process to launch.
 
 ;;; REVIEW: Cannot "C-c C-c" during a `sudo pacman -Syu`.  A bug was filed about that already.
 
