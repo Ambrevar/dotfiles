@@ -20,12 +20,6 @@
       window-divider-default-right-width 2)
 (window-divider-mode)
 
-;;; REVIEW: Resizing floating windows with mouse does not work on Ubuntu Trusty.
-;;; See https://github.com/ch11ng/exwm/issues/283.
-;; exwm-input--move-keysym 1
-;; exwm-input--move-mask 64
-;; exwm-input--resize-keysym 3
-;; exwm-input--resize-mask 64
 ;;; TODO: Spawn select programs in floating mode. (E.g. mpv, mupen64plus, mplayer, qemu, steam, .exe (wine).)
 
 ;;; System tray
