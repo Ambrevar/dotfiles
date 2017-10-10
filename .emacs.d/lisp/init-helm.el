@@ -50,7 +50,8 @@
  helm-recentf-fuzzy-match t)
 
 ;;; From https://github.com/emacs-helm/helm/issues/362.
-;;; This is not perfect with evil mode as the cursor type is not right in the header line and the evil cursor remains in the minibufferl
+;;; This is not perfect with evil mode as the cursor type is not right in the
+;;; header line and the evil cursor remains in the minibuffer.
 ;;; https://emacs.stackexchange.com/questions/17058/change-cursor-type-in-helm-header-line#17097
 (setq helm-echo-input-in-header-line t)
 (defun helm-hide-minibuffer-maybe ()
@@ -146,7 +147,7 @@ Requires `call-process-to-string' from `functions'."
  "C-x M-g" 'helm-grep-git-or-ag
  "C-x M-G" 'helm-do-grep-ag)
 
-;;; We use the M-s prefix just like `occur'.
+;;; Use the M-s prefix just like `occur'.
 (define-key prog-mode-map "\M-sf" 'helm-semantic-or-imenu)
 ;;; The text-mode-map binding targets structured text modes like Markdown.
 (define-key text-mode-map "\M-sf" 'helm-semantic-or-imenu)
