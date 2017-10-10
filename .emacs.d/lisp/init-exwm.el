@@ -45,11 +45,6 @@
 
 (exwm-input-set-key (kbd "s-o") #'toggle-single-window)
 (exwm-input-set-key (kbd "s-O") #'exwm-layout-toggle-fullscreen)
-;;; REVIEW: How to prevent sending keys to window? ":" is always passed to
-;;; Qutebrowser. Issue with evil?  Maybe not. Just switch between char-mode and
-;;; line-mode. Or check `exwm-input-line-mode-passthrough'.
-;;; https://emacs.stackexchange.com/questions/33326/how-do-i-cut-and-paste-effectively-between-applications-while-using-exwm
-;;; See https://github.com/ch11ng/exwm/issues/298.
 
 (require 'functions)
 (exwm-input-set-key (kbd "s-\\") #'toggle-window-split)
