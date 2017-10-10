@@ -22,6 +22,10 @@
 
 ;;; REVIEW: Resizing floating windows with mouse does not work on Ubuntu Trusty.
 ;;; See https://github.com/ch11ng/exwm/issues/283.
+;; exwm-input--move-keysym 1
+;; exwm-input--move-mask 64
+;; exwm-input--resize-keysym 3
+;; exwm-input--resize-mask 64
 ;;; TODO: Spawn select programs in floating mode. (E.g. mpv, mupen64plus, mplayer, qemu, steam, .exe (wine).)
 
 ;;; System tray
@@ -134,10 +138,15 @@ If there is none, fire it up."
 (exwm-input-set-key (kbd "s-r") #'exwm-start)
 
 ;;; Check for start-up errors. See ~/.profile.
-;;; TODO: This pops 2 windows on non-EXWM EMacs (or non-daemon?).
 (let ((error-logs (directory-files "~" t "errors.*log$")))
   (when error-logs
     (warn "Error during system startup.  See %s." (mapconcat 'identity error-logs ", "))
-    (setq initial-buffer-choice (lambda () (get-buffer "*Warnings*")))))
+    (when (daemonp)
+      ;; Non-daemon Emacs already brings up the *Warning* buffer.
+      (setq initial-buffer-choice
+            (lambda ()
+              (let ((b (get-buffer "*Warnings*")))
+                (message "STARTUP: %s" b)
+                b))))))
 
 (provide 'init-exwm)
