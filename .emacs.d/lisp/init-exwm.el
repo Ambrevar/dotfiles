@@ -81,6 +81,8 @@ If there is none, fire it up."
   (if (and (eq major-mode 'exwm-mode)
            (string-match
             ;; Only match against the end as some window names are hard to predict, e.g. "Mozilla Firefox".
+            ;; `exwm-instance-name' is sadly not predictable either: Firefox is "Navigator".
+            ;; `exwm-class-name' might be better.
             (format "%s$" (regexp-quote (file-name-nondirectory browse-url-generic-program)))
             (downcase (buffer-name (current-buffer)))))
       (start-process-shell-command browse-url-generic-program nil browse-url-generic-program)
@@ -138,5 +140,11 @@ If there is none, fire it up."
       ;; Non-daemon Emacs already brings up the *Warning* buffer.
       (setq initial-buffer-choice
             (lambda () (get-buffer "*Warnings*"))))))
+
+;;; Some programs such as 'emacs' are better off being started in char-mode.
+(defun exwm-start-in-char-mode ()
+  (when (string= exwm-instance-name "emacs")
+    (exwm-input-release-keyboard (exwm--buffer->id (window-buffer)))))
+(add-hook 'exwm-manage-finish-hook 'exwm-start-in-char-mode)
 
 (provide 'init-exwm)
