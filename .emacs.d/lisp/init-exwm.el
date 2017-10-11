@@ -138,9 +138,6 @@ If there is none, fire it up."
     (when (daemonp)
       ;; Non-daemon Emacs already brings up the *Warning* buffer.
       (setq initial-buffer-choice
-            (lambda ()
-              (let ((b (get-buffer "*Warnings*")))
-                (message "STARTUP: %s" b)
-                b))))))
+            (lambda () (get-buffer "*Warnings*"))))))
 
 (provide 'init-exwm)
