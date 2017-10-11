@@ -1,13 +1,11 @@
 ;;; Evil+pdftools
 
-;;; TODO: Add other modes? Looks like it's not needed.
 (evil-set-initial-state 'pdf-view-mode 'motion)
-
 (evil-define-key 'motion pdf-view-mode-map
   (kbd "<return>") 'image-next-line
   "j" 'pdf-view-next-line-or-next-page
   "k" 'pdf-view-previous-line-or-previous-page
-  (kbd "<space>") 'pdf-view-scroll-up-or-next-page
+  (kbd "SPC") 'pdf-view-scroll-up-or-next-page
   "'" 'pdf-view-jump-to-register
   "+" 'pdf-view-enlarge
   "-" 'pdf-view-shrink
@@ -48,7 +46,7 @@
   "G" 'pdf-view-last-page
   "gl" 'pdf-view-goto-label
 
-  [remap evil-goto-line] 'pdf-view-goto-page
+  [remap evil-goto-line] 'pdf-view-goto-page ; TODO: Prefix argument does not work.
   "y" 'pdf-view-kill-ring-save
   "h" 'image-backward-hscroll
   "^" 'image-bol
@@ -67,7 +65,18 @@
   "zm" 'pdf-view-midnight-minor-mode
   "zp" 'pdf-view-printer-minor-mode)
 
-(evil-define-key 'motion pdf-outline-minor-mode-map "o" 'pdf-outline)
+(evil-set-initial-state 'pdf-outline-buffer-mode 'motion)
+(evil-define-key 'motion pdf-outline-buffer-mode-map
+  (kbd "RET") 'pdf-outline-follow-link
+  (kbd "M-RET") 'pdf-outline-follow-link-and-quit
+  (kbd "SPC") 'pdf-outline-display-link
+  "." 'pdf-outline-move-to-current-page
+  "G" 'pdf-outline-end-of-buffer
+  "o" 'pdf-outline-select-pdf-window
+  "<" 'pdf-outline-up-heading
+  "^" 'pdf-outline-up-heading
+  "zf" 'pdf-outline-follow-mode
+  "\C-wq" 'pdf-outline-quit-and-kill)
 
 (evil-define-key 'motion pdf-occur-buffer-mode-map
   (kbd "RET") 'pdf-occur-goto-occurrence

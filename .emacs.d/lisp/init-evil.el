@@ -217,6 +217,8 @@
 
 (with-eval-after-load 'eshell (require 'init-evil-eshell))
 
+(with-eval-after-load 'outline (require 'init-evil-outline))
+
 ;;; TODO: `image-mode-map' is the parent of `pdf-view-mode-map'.  A bug(?) in
 ;;; Evil overrides all image-mode-map bindings.
 ;;; See https://github.com/emacs-evil/evil/issues/938.
