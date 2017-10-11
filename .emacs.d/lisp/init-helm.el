@@ -187,6 +187,10 @@ Requires `call-process-to-string' from `functions'."
 ;;; Column indices might need some customizing. See `helm-top-command' and
 ;;; https://github.com/emacs-helm/helm/issues/1586.
 
+;;; Fallback on 'find' if 'locate' is not available.
+(unless (executable-find "locate")
+  (setq helm-locate-recursive-dirs-command "find %s -type d -regex .*%s.*$"))
+
 (setq helm-window-show-buffers-function 'helm-window-mosaic-fn)
 
 (provide 'init-helm)
