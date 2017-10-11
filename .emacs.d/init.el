@@ -241,6 +241,7 @@
 ;;; association.
 (nconc package-selected-packages '(pdf-tools))
 (when (require 'pdf-tools nil t)
+  (setq pdf-view-midnight-colors '("#ffffff" . "#000000"))
   (pdf-tools-install t t t))
 
 ;;; Perl
