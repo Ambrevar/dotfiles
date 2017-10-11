@@ -239,6 +239,8 @@
 ;;; pdf-tools requires poppler built with cairo support.
 ;;; We cannot defer loading as `pdf-tools-install' is required for PDF
 ;;; association.
+;;; REVIEW: `save-place' does not seem to work with pdf-tools.
+;;; See https://github.com/politza/pdf-tools/issues/18.
 (nconc package-selected-packages '(pdf-tools))
 (when (require 'pdf-tools nil t)
   (setq pdf-view-midnight-colors '("#ffffff" . "#000000"))
