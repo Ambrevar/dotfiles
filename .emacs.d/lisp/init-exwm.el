@@ -106,17 +106,16 @@ If there is none, fire it up."
 
 ;;; TODO: Check out the 'volume' package.
 (defun exwm-volume (&optional up-or-down)
-  (let ((controllers '(("amixer" "set Master" "5%-" "5%+" "toggle")
-                       ("mixer" "vol" "-5" "+5" "^"))))
+  (let ((controllers '(("amixer" . ((control . "set Master") (down . "5%-") (up . "5%+") (toggle . "toggle")))
+                       ("mixer" . ((control . "vol") (down . "-5") (up . "+5") (toggle . "^"))))))
     (while (not (executable-find (caar controllers)))
       (setq controllers (cdr controllers)))
     (when controllers
-      (setq controllers (car controllers))
       (start-process-shell-command
        "volume control" nil (format "%s %s %s >/dev/null"
-                                    (car controllers)
-                                    (cadr controllers)
-                                    (nth (pcase up-or-down ('down  2) ('up  3) (_  4)) controllers))))))
+                                    (caar controllers)
+                                    (alist-get 'control (cdar controllers))
+                                    (alist-get up-or-down (cdar controllers) (alist-get 'toggle (cdar controllers) )))))))
 
 (defun exwm-start-volume-down () (interactive) (exwm-volume 'down))
 (defun exwm-start-volume-up () (interactive) (exwm-volume 'up))
