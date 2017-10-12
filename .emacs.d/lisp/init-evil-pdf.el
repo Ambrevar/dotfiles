@@ -1,5 +1,17 @@
 ;;; Evil+pdftools
 
+(defun evil-pdf-view-goto-page (&optional page)
+  (interactive "P")
+  (if page
+      (pdf-view-goto-page page)
+    (pdf-view-last-page)))
+
+(defun evil-pdf-view-goto-first-page (&optional page)
+  (interactive "P")
+  (if page
+      (pdf-view-goto-page page)
+    (pdf-view-first-page)))
+
 (evil-set-initial-state 'pdf-view-mode 'motion)
 (evil-define-key 'motion pdf-view-mode-map
   (kbd "<return>") 'image-next-line
@@ -42,11 +54,10 @@
   "sm" 'pdf-view-set-slice-using-mouse
   "sr" 'pdf-view-reset-slice
 
-  "gg" 'pdf-view-first-page
-  "G" 'pdf-view-last-page
+  "gg" 'evil-pdf-view-goto-first-page
+  "G" 'evil-pdf-view-goto-page
   "gl" 'pdf-view-goto-label
 
-  [remap evil-goto-line] 'pdf-view-goto-page ; TODO: Prefix argument does not work.
   "y" 'pdf-view-kill-ring-save
   "h" 'image-backward-hscroll
   "^" 'image-bol
