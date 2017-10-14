@@ -273,6 +273,11 @@
 (with-eval-after-load 'sh-script (require 'init-sh))
 ;;; Arch Linux PKGBUILD
 (add-to-list 'auto-mode-alist '("PKGBUILD" . sh-mode))
+;;; Gentoo
+(add-to-list 'auto-mode-alist '("\\.ebuild\\'" . sh-mode))
+(add-to-list 'auto-mode-alist '("package\\.accept_keywords" . sh-mode))
+(add-to-list 'auto-mode-alist '("package\\.mask" . sh-mode))
+(add-to-list 'auto-mode-alist '("package\\.use" . sh-mode))
 ;;; If we ever need to edit exotic shell configs:
 ;; (nconc package-selected-packages '(fish-mode rc-mode))
 
