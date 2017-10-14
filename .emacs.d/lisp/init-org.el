@@ -44,4 +44,8 @@
 (setq org-todo-keywords '((sequence "TODO" "REVIEW" "DONE")))
 (setq org-todo-keyword-faces '(("REVIEW" :inherit org-done)))
 
+;;; Priorities.
+(setq org-priority-start-cycle-with-default nil
+      org-default-priority 66)
+
 (provide 'init-org)
