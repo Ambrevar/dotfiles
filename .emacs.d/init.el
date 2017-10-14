@@ -146,6 +146,13 @@
 ;;; Hex editing
 (nconc package-selected-packages '(nhexl-mode))
 
+;;; Image
+(nconc package-selected-packages '(image+))
+(with-eval-after-load 'image
+  (setq image-animate-loop t)
+  (add-hook 'image-mode-hook 'image-toggle-animation)
+  (require 'image+ nil t))
+
 ;;; Indentation engine fix.
 ;; (require 'smiext "init-smiext")
 
