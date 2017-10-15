@@ -75,8 +75,8 @@
   "z^" 'org-agenda-filter-by-top-headline
   "z_" 'org-agenda-filter-by-effort
   "a" 'org-agenda-archive-default-with-confirmation
-  "H" 'org-agenda-earlier
-  "L" 'org-agenda-later
+  "\M-h" 'org-agenda-earlier
+  "\M-l" 'org-agenda-later
   "c" 'org-agenda-goto-calendar
   ;; "d" 'org-agenda-day-view
   ;; "se" 'org-agenda-set-effort
