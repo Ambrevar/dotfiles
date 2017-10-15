@@ -8,6 +8,12 @@
 ;;; See https://github.com/ch11ng/exwm/issues/285
 ;;; and https://gitlab.com/interception/linux/plugins/caps2esc/issues/2.
 
+;;; TODO: Pressing "s-a" ('emms-smart-browse) loses the cursor.
+;;; Sometimes waiting helps.  Calling emms-smart-browse manually does not trigger the issue.
+;;; TODO: Spawn select programs in floating mode. (E.g. mpv, mupen64plus, mplayer, qemu, steam, .exe (wine).)
+;;; TODO: Double "s-w" should spawn a Helm list of web buffers without details
+;;; and with an option to create a new window.
+
 ;;; Rename buffer to window title.
 (defun exwm-rename-buffer-to-title () (exwm-workspace-rename-buffer exwm-title))
 (add-hook 'exwm-update-title-hook 'exwm-rename-buffer-to-title)
@@ -19,8 +25,6 @@
 (setq window-divider-default-bottom-width 2
       window-divider-default-right-width 2)
 (window-divider-mode)
-
-;;; TODO: Spawn select programs in floating mode. (E.g. mpv, mupen64plus, mplayer, qemu, steam, .exe (wine).)
 
 ;;; System tray
 (require 'exwm-systemtray)
