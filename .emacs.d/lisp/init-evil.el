@@ -225,7 +225,8 @@
   (require 'init-evil-pdf)
   ;; TODO: `image-mode-map' is the parent of `pdf-view-mode-map'.  A bug(?) in
   ;; Evil overrides all image-mode-map bindings.
-  ;; See https://github.com/emacs-evil/evil/issues/938.
+  ;; See https://github.com/emacs-evil/evil/issues/938
+  ;; and https://github.com/politza/pdf-tools/issues/324.
   ;; A workaround is to re-load the image bindings after PDF bindings are set.
   (load-library "init-evil-image"))
 

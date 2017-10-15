@@ -2,10 +2,10 @@
 
 ;;; TODO: helm-ff should allow opening several marks externally, e.g.  sxiv for
 ;;; pics. See
-;;; https://github.com/emacs-helm/helm/wiki/Find-Files#open-files-externally
-;;; What about the default program? It currently defaults to ~/.mailcap, which is
+;;; https://github.com/emacs-helm/helm/wiki/Find-Files#open-files-externally.
+;;; What about the default program?  It currently defaults to ~/.mailcap, which is
 ;;; not so customizable.  Would ranger's rifle be useful here?  See
-;;; https://github.com/emacs-helm/helm/issues/1796.
+;;; https://github.com/emacs-helm/helm/issues/1796.  There is the `openwith' package.
 
 ;;; TODO: Batch-open torrent files automatically.  Add to mailcap?  Same as
 ;;; above, C-c C-x does not allow for opening several files at once.
@@ -15,6 +15,8 @@
 
 ;;; TODO: Implement alternating-color multiline lists.
 ;;; See https://github.com/emacs-helm/helm/issues/1790.
+
+;;; TODO: Display relative line numbers in Helm.
 
 (when (require 'helm-descbinds nil t)
   (helm-descbinds-mode))

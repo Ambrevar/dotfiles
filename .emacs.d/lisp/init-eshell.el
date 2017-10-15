@@ -40,6 +40,13 @@
 ;;; mu: no matches for search expression (4)
 ;;; See #21605 "24.3; Eshell not using stderr".
 
+;;; TODO: Some parsing fails
+;;; > echo -n $PATH | sed 's/:[^:]*sophos[^:]*/:/g'
+;;; :s/:]*sophos[/:]*/:/"/
+;;; Unknown modifier character ‘/’
+;;;
+;;; > date +%Z
+
 (setq eshell-directory-name (concat emacs-cache-folder "eshell"))
 
 ;;; Use native 'sudo', system sudo asks for password every time.

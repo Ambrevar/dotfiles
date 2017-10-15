@@ -147,6 +147,18 @@
 (nconc package-selected-packages '(nhexl-mode))
 
 ;;; Image
+;;; TODO: Disable white frame.
+;;; I think it's the cursor.
+;;; Evil-mode reverts cursor changes.
+;;; TODO: Implement other sxiv features:
+;;; - Gamma
+;;; - Marks
+;;; - Gallery
+;;; TODO: Is it possible to display an image fullscreen?
+;;; TODO: Image+: Do no auto-adjust animated files
+;;; https://github.com/mhayashi1120/Emacs-imagex/issues/10
+;;; TODO: Image+: Restore animation state
+;;; https://github.com/mhayashi1120/Emacs-imagex/issues/9
 (nconc package-selected-packages '(image+))
 (with-eval-after-load 'image
   (setq image-animate-loop t)

@@ -40,6 +40,7 @@ If none, fallback on `emms-cache-cover-filter-all'.
 
 See `emms-cache-cover-filter'."
   (let (covers)
+    ;; TODO: Refactor this code.
     (dolist (ext emms-browser-covers-file-extensions)
       (setq covers (append (file-expand-wildcards (expand-file-name (concat "*front*." ext) dir)) covers))
       (setq covers (append (file-expand-wildcards (expand-file-name (concat "*Front*." ext) dir)) covers)))
