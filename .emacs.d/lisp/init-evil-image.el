@@ -31,7 +31,7 @@
   "a0" 'image-reset-speed
   "ar" 'image-reverse-speed
   "\C-c\C-c" 'image-toggle-display
-  "DEL" 'image-scroll-down)
+  (kbd "<delete>") 'image-scroll-down)
 
 (when (require 'image+ nil t)
   (evil-define-key 'motion image-mode-map
@@ -46,6 +46,6 @@
 
 (when evil-want-C-u-scroll
   (evil-define-key 'motion image-mode-map
-    "C-u" 'image-scroll-up))
+    (kbd "C-u") 'image-scroll-up))
 
 (provide 'init-evil-image)

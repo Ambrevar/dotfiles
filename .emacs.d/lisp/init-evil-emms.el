@@ -77,8 +77,7 @@ The return value is the yanked text."
     "gp" 'emms-browse-by-performer
     "x" 'emms-pause
     "s" (lookup-key emms-browser-mode-map (kbd "s"))
-    "z" (lookup-key emms-browser-mode-map (kbd "W")))
-  )
+    "z" (lookup-key emms-browser-mode-map (kbd "W"))))
 
 (evil-set-initial-state 'emms-playlist-mode 'motion)
 (evil-define-key 'motion emms-playlist-mode-map
