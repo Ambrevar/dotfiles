@@ -219,11 +219,15 @@
 
 (with-eval-after-load 'outline (require 'init-evil-outline))
 
-;;; TODO: `image-mode-map' is the parent of `pdf-view-mode-map'.  A bug(?) in
-;;; Evil overrides all image-mode-map bindings.
-;;; See https://github.com/emacs-evil/evil/issues/938.
-(with-eval-after-load 'pdf-view (require 'init-evil-pdf))
 (with-eval-after-load 'image-mode (require 'init-evil-image))
+
+(with-eval-after-load 'pdf-view
+  (require 'init-evil-pdf)
+  ;; TODO: `image-mode-map' is the parent of `pdf-view-mode-map'.  A bug(?) in
+  ;; Evil overrides all image-mode-map bindings.
+  ;; See https://github.com/emacs-evil/evil/issues/938.
+  ;; A workaround is to re-load the image bindings after PDF bindings are set.
+  (load-library "init-evil-image"))
 
 (with-eval-after-load 'term (require 'init-evil-term))
 
