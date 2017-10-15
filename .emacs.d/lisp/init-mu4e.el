@@ -82,12 +82,15 @@ Default to unread messages if no"
 ;;; Since we sort in ascending direction, we default to the end of buffer.
 ;; (add-hook 'mu4e-headers-found-hook 'end-of-buffer)
 
+(defvar mu4e-compose-fortune-p t "Whether or not to include a fortune in the signature.")
 (defun mu4e-add-fortune-signature ()
   (require 'functions) ; For `call-process-to-string'.
   (setq mu4e-compose-signature
-        (format "%s\n\n%s"
-                user-full-name
-                (call-process-to-string "fortune" "-s"))))
+        (if mu4e-compose-fortune-p
+            (format "%s\n\n%s"
+                    user-full-name
+                    (call-process-to-string "fortune" "-s"))
+          user-full-name)))
 (add-hook 'mu4e-compose-pre-hook 'mu4e-add-fortune-signature)
 
 ;;; Make some e-mails stand out a bit.
