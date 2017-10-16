@@ -193,6 +193,7 @@ Requires `call-process-to-string' from `functions'."
 (unless (executable-find "locate")
   (setq helm-locate-recursive-dirs-command "find %s -type d -regex .*%s.*$"))
 
-(setq helm-window-show-buffers-function 'helm-window-mosaic-fn)
+(setq helm-window-show-buffers-function 'helm-window-mosaic-fn
+      helm-window-prefer-horizontal-split t)
 
 (provide 'init-helm)
