@@ -63,6 +63,8 @@
 (exwm-input-set-key (kbd "s-\\") #'toggle-window-split)
 
 (when (require 'helm-config nil t)
+  (define-keys helm-map
+    "s-\\" 'helm-toggle-resplit-and-swap-windows)
   (exwm-input-set-key (kbd "s-c") #'helm-resume)
   (exwm-input-set-key (kbd "s-b") #'helm-mini)
   (exwm-input-set-key (kbd "s-f") #'helm-find-files)
