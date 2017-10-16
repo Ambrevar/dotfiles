@@ -1,53 +1,4 @@
-;;; Evil+term
-
-(evil-set-initial-state 'term-mode 'insert)
-
-;;; TODO: Set prompt regexp. Test next/previous prompt functions, term-bol, etc.
-;;; Probably needs the same fix as Eshell.
-;;; TODO: Can the prompt be read-only?
-
-;;; TODO: Rebinding ESC has the drawback that programs like vi cannot use it anymore.
-;;; Workaround: switch to Emacs mode and double-press ESC.
-;;; Otherwise leave ESC to C-cC-j.
-;;; Or bind char-mode ESC to C-cC-x?
-
-(defun evil-term-char-mode-insert ()
-  (interactive)
-  (term-char-mode)
-  (evil-insert-state))
-
-(evil-define-key 'normal term-mode-map
-  "\C-c\C-k" 'evil-term-char-mode-insert
-  (kbd "RET") 'term-send-input)
-
-(evil-define-key 'insert term-mode-map "\C-c\C-k" 'term-char-mode)
-
-(evil-define-key 'normal term-mode-map
-  "[" 'term-previous-prompt
-  "]" 'term-next-prompt
-  "\C-k" 'eshell-previous-prompt
-  "\C-j" 'eshell-next-prompt
-  "\M-k" 'eshell-previous-prompt ; Custom
-  "\M-j" 'eshell-next-prompt ; Custom
-  ;; TODO: Why not J/K? Already bound to join/look-up. Does it matter?
-  "0" 'term-bol
-  "$" 'term-show-maximum-output)
-
-(defun evil-term-char-mode-entry-function ()
-  (when (get-buffer-process (current-buffer))
-    (let (last-prompt)
-      (save-excursion
-        (goto-char (point-max))
-        (when (= (line-beginning-position) (line-end-position))
-          (ignore-errors (backward-char)))
-        (setq last-prompt (max (term-bol nil) (line-beginning-position))))
-      (when (>= (point) last-prompt)
-        (term-char-mode)))))
-
-(defun evil-term-setup ()
-  (add-hook 'evil-insert-state-entry-hook 'evil-term-char-mode-entry-function)
-  (add-hook 'evil-insert-state-exit-hook 'term-line-mode))
-(add-hook 'term-mode-hook 'evil-term-setup)
+;;; Term
 
 ;;; TODO: Report `term-char-mode' fix upstream.
 ;;;
@@ -128,4 +79,4 @@ intervention from Emacs, except for the escape character (usually C-c)."
       ;; Finish up.
       (term-update-mode-line))))
 
-(provide 'init-evil-term)
+(provide 'init-term)

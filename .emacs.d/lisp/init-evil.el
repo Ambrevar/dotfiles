@@ -141,15 +141,35 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Mode specific bindings.
 
-(require 'init-evil-info)
-(require 'init-evil-help)
-(require 'init-evil-man)
+;;; Emacs special modes
+(when (require 'evil-special-modes nil t)
+  (evil-special-modes-init))
+;; TODO: Copy extra term code.
+
+;;; nXML
+;;; TODO: Add to Emacs special modes
+(evil-define-key 'normal nxml-mode-map
+  "\C-j" 'nxml-forward-element
+  "\C-k" 'nxml-backward-element
+  "\M-j" 'nxml-forward-element ; Custom
+  "\M-k" 'nxml-backward-element ; Custom
+  ">" 'nxml-down-element
+  "<" 'nxml-backward-up-element)
+(evil-define-key 'visual nxml-mode-map
+  "\C-j" 'nxml-forward-element
+  "\C-k" 'nxml-backward-element
+  "\M-j" 'nxml-forward-element ; Custom
+  "\M-k" 'nxml-backward-element ; Custom
+  ">" 'nxml-down-element
+  "<" 'nxml-backward-up-element)
 
 (with-eval-after-load 'transmission (require 'init-evil-transmission))
 
 (with-eval-after-load 'elfeed (require 'init-evil-elfeed))
 
 (with-eval-after-load 'emms (require 'init-evil-emms))
+
+(with-eval-after-load 'image+ (require 'init-evil-image+))
 
 (with-eval-after-load 'mu4e
   (when (require 'evil-mu4e nil t)
@@ -181,24 +201,6 @@
 
 (with-eval-after-load 'init-helm (require 'init-evil-helm))
 
-(with-eval-after-load 'calendar (require 'init-evil-calendar))
-
-;;; nXML
-(evil-define-key 'normal nxml-mode-map
-  "\C-j" 'nxml-forward-element
-  "\C-k" 'nxml-backward-element
-  "\M-j" 'nxml-forward-element ; Custom
-  "\M-k" 'nxml-backward-element ; Custom
-  ">" 'nxml-down-element
-  "<" 'nxml-backward-up-element)
-(evil-define-key 'visual nxml-mode-map
-  "\C-j" 'nxml-forward-element
-  "\C-k" 'nxml-backward-element
-  "\M-j" 'nxml-forward-element ; Custom
-  "\M-k" 'nxml-backward-element ; Custom
-  ">" 'nxml-down-element
-  "<" 'nxml-backward-up-element)
-
 (with-eval-after-load 'magit
   (when (require 'evil-magit nil t)
     (evil-magit-define-key evil-magit-state 'magit-mode-map "<" 'magit-section-up)
@@ -213,33 +215,15 @@
 ;; (add-hook 'org-mode-hook 'evil-org-mode)
 ;; (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading)))
 
-(with-eval-after-load 'package (require 'init-evil-package))
-
-(with-eval-after-load 'eshell (require 'init-evil-eshell))
-
-(with-eval-after-load 'outline (require 'init-evil-outline))
-
-(with-eval-after-load 'image-mode (require 'init-evil-image))
-
-(with-eval-after-load 'pdf-view
-  (require 'init-evil-pdf)
-  ;; TODO: `image-mode-map' is the parent of `pdf-view-mode-map'.  A bug(?) in
-  ;; Evil overrides all image-mode-map bindings.
-  ;; See https://github.com/emacs-evil/evil/issues/938
-  ;; and https://github.com/politza/pdf-tools/issues/324.
-  ;; A workaround is to re-load the image bindings after PDF bindings are set.
-  (load-library "init-evil-image"))
-
-(with-eval-after-load 'term (require 'init-evil-term))
+;; TODO: `image-mode-map' is the parent of `pdf-view-mode-map'.  A bug(?) in
+;; image-mode-map and pdf-mode-map seem to conflict with Evil.
+;; See https://github.com/emacs-evil/evil/issues/938
+;; and https://github.com/politza/pdf-tools/issues/324.
+;; Changing load order only changes which mode overrides the other.
+(with-eval-after-load 'pdf-view (require 'init-evil-pdf))
 
 (with-eval-after-load 'ztree-diff (require 'init-evil-ztree))
-
-(with-eval-after-load 'debug (require 'init-evil-debugger))
-
-(with-eval-after-load 'debbugs (require 'init-evil-debbugs))
-
 (with-eval-after-load 'gnus (require 'init-evil-gnus))
-
-(with-eval-after-load 'cus-edit (require 'init-evil-custom))
+(with-eval-after-load 'debbugs (require 'init-evil-debbugs nil t))
 
 (provide 'init-evil)

@@ -31,12 +31,18 @@
 
 ;;; Store additional config in a 'lisp' subfolder and add it to the load path so
 ;;; that `require' can find the files.
-(add-to-list 'load-path "~/.emacs.d/lisp")
+(add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 
-;;; Local plugin folder for quick install. All files in this folder will be
-;;; accessible to Emacs config.  This is done to separate the versioned config
-;;; files from the external packages.
-(add-to-list 'load-path "~/.emacs.d/local")
+;;; Site Lisp folder for local packages and development.
+(defun package-refresh-load-path (path)
+  "Add every non-hidden sub-folder of PATH to `load-path'."
+  (when (file-directory-p path)
+    (dolist (dir (directory-files path t "^[^\\.]"))
+      (when (file-directory-p dir)
+        (setq load-path (add-to-list 'load-path dir))))))
+(let ((site-lisp (expand-file-name "site-lisp/" user-emacs-directory)))
+  (add-to-list 'load-path site-lisp)
+  (package-refresh-load-path site-lisp))
 
 (when (require 'package nil t)
   ;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
@@ -314,6 +320,7 @@
 
 ;;; Terminal
 (with-eval-after-load 'term
+  (require 'init-term)
   (setq term-buffer-maximum-size 0))
 
 ;;; TeX / LaTeX / Texinfo
