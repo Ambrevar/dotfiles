@@ -19,7 +19,7 @@
  "C-c l" 'latex-lstinline
  "C-c o" 'latex-orgtbl
  "C-c u" 'latex-package
- "M-RET" 'latex-itemize)
+ "M-<return>" 'latex-itemize)
 
 ;;; Needs dvipng.
 ;;; With TeXlive, the following packages are needed: psnfss, symbol, zapfding

@@ -22,7 +22,7 @@
 (evil-set-initial-state 'transmission-files-mode 'motion)
 (evil-define-key 'motion transmission-files-mode-map
   (kbd "<return>") 'transmission-find-file
-  "\M-l" 'transmission-display-file
+  (kbd "M-l") 'transmission-display-file
   "!" 'transmission-files-command
   "S" 'tabulated-list-sort
   "A" 'transmission-browse-url-of-file

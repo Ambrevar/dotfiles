@@ -13,22 +13,22 @@
   "J" 'org-shiftdown
   "K" 'org-shiftup
   "L" 'org-shiftright
-  "\M-h" 'org-metaleft
-  "\M-j" 'org-metadown
-  "\M-k" 'org-metaup
-  "\M-l" 'org-metaright
-  "\M-H" 'org-shiftmetaleft
-  "\M-J" 'org-shiftmetadown
-  "\M-K" 'org-shiftmetaup
-  "\M-L" 'org-shiftmetaright
+  (kbd "M-h") 'org-metaleft
+  (kbd "M-j") 'org-metadown
+  (kbd "M-k") 'org-metaup
+  (kbd "M-l") 'org-metaright
+  (kbd "M-H") 'org-shiftmetaleft
+  (kbd "M-J") 'org-shiftmetadown
+  (kbd "M-K") 'org-shiftmetaup
+  (kbd "M-L") 'org-shiftmetaright
   "<" 'org-up-element)
 
 (evil-set-initial-state 'org-agenda-mode 'motion)
 (evil-define-key 'motion org-agenda-mode-map
-  (kbd "TAB") 'org-agenda-goto
-  (kbd "RET") 'org-agenda-switch-to
-  (kbd "SPC") 'org-agenda-show-and-scroll-up
-  (kbd "DEL") 'org-agenda-show-scroll-down
+  (kbd "<tab>") 'org-agenda-goto
+  (kbd "<return>") 'org-agenda-switch-to
+  (kbd "<space>") 'org-agenda-show-and-scroll-up
+  (kbd "<delete>") 'org-agenda-show-scroll-down
   (kbd "<backspace>") 'org-agenda-show-scroll-down
   "dd" 'org-agenda-kill
   "u" 'org-agenda-undo
@@ -41,7 +41,7 @@
   "-" 'org-agenda-priority-down
   ;; "," 'org-agenda-priority
   "." 'org-agenda-goto-today
-  "\M-sf." 'org-agenda-filter-by-tag
+  (kbd "M-s f") 'org-agenda-filter-by-tag
   "s" 'org-agenda-set-tags
   "S" 'org-agenda-set-timer
   "<" 'org-agenda-filter-by-category
@@ -61,8 +61,8 @@
   "J" 'org-agenda-clock-goto
   ;; "L" 'org-agenda-recenter
   "gm" 'org-agenda-phases-of-moon
-  "\C-j" 'org-agenda-next-item
-  "\C-k" 'org-agenda-previous-item
+  (kbd "C-j") 'org-agenda-next-item
+  (kbd "C-k") 'org-agenda-previous-item
   ;; "Q" 'org-agenda-quit
   "q" 'org-agenda-quit
   "R" 'org-agenda-clockreport-mode
@@ -75,13 +75,13 @@
   "z^" 'org-agenda-filter-by-top-headline
   "z_" 'org-agenda-filter-by-effort
   "a" 'org-agenda-archive-default-with-confirmation
-  "\M-h" 'org-agenda-earlier
-  "\M-l" 'org-agenda-later
+  (kbd "M-h") 'org-agenda-earlier
+  (kbd "M-l") 'org-agenda-later
   "c" 'org-agenda-goto-calendar
   ;; "d" 'org-agenda-day-view
   ;; "se" 'org-agenda-set-effort
   "gr" 'org-agenda-redo-all
-  "\C-r" 'org-agenda-redo
+  (kbd "C-r") 'org-agenda-redo
   "i" 'org-agenda-diary-entry
   "gd" 'org-agenda-goto-date
   "zk" 'org-agenda-capture
@@ -105,9 +105,9 @@
   "J" 'org-agenda-priority-down
   "K" 'org-agenda-priority-up
   "L" 'org-agenda-do-date-later
-  "\M-H" 'org-agenda-todo-previousset
-  "\M-J" 'org-agenda-drag-line-forward
-  "\M-K" 'org-agenda-drag-line-backward
-  "\M-L" 'org-agenda-todo-nextset)
+  (kbd "M-H") 'org-agenda-todo-previousset
+  (kbd "M-J") 'org-agenda-drag-line-forward
+  (kbd "M-K") 'org-agenda-drag-line-backward
+  (kbd "M-L") 'org-agenda-todo-nextset)
 
 (provide 'init-evil-org)

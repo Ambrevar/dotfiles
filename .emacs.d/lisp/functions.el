@@ -404,7 +404,7 @@ from acting on it."
        "Window '%s' is dedicated"
      "Window '%s' is normal")
    (current-buffer)))
-(global-set-key [pause] 'toggle-window-dedicated)
+(global-set-key (kbd "<pause>") 'toggle-window-dedicated)
 
 (defun toggle-window-split ()
   "Switch between vertical and horizontal split.

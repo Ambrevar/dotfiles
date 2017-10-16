@@ -194,8 +194,8 @@
 ;;; Electric Pairs to auto-complete () [] {} "" etc. It works on regions.
 ;; (electric-pair-mode)
 
-;;; Spawn terminal shortcut: WM's binding is s+RET.
-(global-set-key (kbd "C-x M-RET") 'spawn-terminal)
+;;; Spawn terminal shortcut: WM's binding is s+<return>.
+(global-set-key (kbd "C-x M-<return>") 'spawn-terminal)
 
 ;;; Calendar ISO display.
 (setq calendar-week-start-day 1)
@@ -305,7 +305,7 @@
 (setq sort-fold-case t)
 
 ;;; Replace not-so-useful comment-dwim binding.
-(global-set-key "\M-;" 'comment-line)
+(global-set-key (kbd "M-;") 'comment-line)
 
 ;;; Eldoc: Disable if too distracting.
 ;; (global-eldoc-mode 0)

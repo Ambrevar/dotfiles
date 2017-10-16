@@ -2,12 +2,12 @@
 
 (evil-set-initial-state 'gnus-summary-mode 'motion)
 (evil-define-key 'motion gnus-summary-mode-map
-  (kbd "TAB") 'gnus-summary-widget-forward
+  (kbd "<tab>") 'gnus-summary-widget-forward
   (kbd "<backtab>") 'gnus-summary-widget-backward
-  (kbd "DEL") 'gnus-summary-prev-page
-  (kbd "S-SPC") 'gnus-summary-prev-page
-  (kbd "SPC") 'gnus-summary-next-page
-  (kbd "RET") 'gnus-summary-scroll-up
+  (kbd "<delete>") 'gnus-summary-prev-page
+  (kbd "S-<space>") 'gnus-summary-prev-page
+  (kbd "<space>") 'gnus-summary-next-page
+  (kbd "<return>") 'gnus-summary-scroll-up
   "zz" 'gnus-recenter
   "z#" 'gnus-summary-mark-as-processable
   "!" 'gnus-summary-execute-command

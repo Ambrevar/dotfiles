@@ -17,7 +17,7 @@
   (kbd "<return>") 'image-next-line
   "j" 'pdf-view-next-line-or-next-page
   "k" 'pdf-view-previous-line-or-previous-page
-  (kbd "SPC") 'pdf-view-scroll-up-or-next-page
+  (kbd "<space>") 'pdf-view-scroll-up-or-next-page
   "'" 'pdf-view-jump-to-register
   "+" 'pdf-view-enlarge
   "-" 'pdf-view-shrink
@@ -31,14 +31,14 @@
   "b" 'image-previous-frame
   "f" 'image-next-frame
   "m" 'pdf-view-position-to-register
-  "\C-j" 'pdf-view-next-page-command
-  "\C-k" 'pdf-view-previous-page-command
-  "\M-j" 'pdf-view-next-page-command ; Custom
-  "\M-k" 'pdf-view-previous-page-command ; Custom
+  (kbd "C-j") 'pdf-view-next-page-command
+  (kbd "C-k") 'pdf-view-previous-page-command
+  (kbd "M-j") 'pdf-view-next-page-command ; Custom
+  (kbd "M-k") 'pdf-view-previous-page-command ; Custom
   "q" 'quit-window
   "r" 'revert-buffer
-  (kbd "DEL") 'pdf-view-scroll-down-or-previous-page
-  (kbd "S-SPC") 'pdf-view-scroll-down-or-previous-page
+  (kbd "<delete>") 'pdf-view-scroll-down-or-previous-page
+  (kbd "S-<space>") 'pdf-view-scroll-down-or-previous-page
   (kbd "<C-down-mouse-1>") 'pdf-view-mouse-extend-region
   (kbd "<M-down-mouse-1>") 'pdf-view-mouse-set-region-rectangle
   (kbd "<down>") 'pdf-view-next-line-or-next-page
@@ -46,9 +46,9 @@
   (kbd "<next>") 'forward-page
   (kbd "<prior>") 'backward-page
   (kbd "<up>") 'pdf-view-previous-line-or-previous-page
-  "\C-c\C-c" 'docview-mode
+  (kbd "C-c C-c") 'docview-mode
   "zd" 'pdf-view-dark-minor-mode
-  (kbd "C-c TAB") 'pdf-view-extract-region-image
+  (kbd "C-c <tab>") 'pdf-view-extract-region-image
 
   "sb" 'pdf-view-set-slice-from-bounding-box
   "sm" 'pdf-view-set-slice-using-mouse
@@ -63,36 +63,36 @@
   "^" 'image-bol
   "$" 'image-eol
   "l" 'image-forward-hscroll
-  "\C-f" 'pdf-view-scroll-up-or-next-page
-  "\C-b" 'pdf-view-scroll-down-or-previous-page
+  (kbd "C-f") 'pdf-view-scroll-up-or-next-page
+  (kbd "C-b") 'pdf-view-scroll-down-or-previous-page
 
   "a+" 'image-increase-speed
   "a-" 'image-decrease-speed
   "a0" 'image-reset-speed
   "ar" 'image-reverse-speed
 
-  "\M-so" 'pdf-occur ; Custom
+  (kbd "M-s o") 'pdf-occur ; Custom
 
   "zm" 'pdf-view-midnight-minor-mode
   "zp" 'pdf-view-printer-minor-mode)
 
 (evil-set-initial-state 'pdf-outline-buffer-mode 'motion)
 (evil-define-key 'motion pdf-outline-buffer-mode-map
-  (kbd "RET") 'pdf-outline-follow-link
-  (kbd "M-RET") 'pdf-outline-follow-link-and-quit
-  (kbd "SPC") 'pdf-outline-display-link
+  (kbd "<return>") 'pdf-outline-follow-link
+  (kbd "M-<return>") 'pdf-outline-follow-link-and-quit
+  (kbd "<space>") 'pdf-outline-display-link
   "." 'pdf-outline-move-to-current-page
   "G" 'pdf-outline-end-of-buffer
   "o" 'pdf-outline-select-pdf-window
   "<" 'pdf-outline-up-heading
   "^" 'pdf-outline-up-heading
   "zf" 'pdf-outline-follow-mode
-  "\C-wq" 'pdf-outline-quit-and-kill)
+  (kbd "C-w q") 'pdf-outline-quit-and-kill)
 
 (evil-define-key 'motion pdf-occur-buffer-mode-map
-  (kbd "RET") 'pdf-occur-goto-occurrence
-  "\C-o" 'pdf-occur-view-occurrence
-  (kbd "SPC") 'pdf-occur-view-occurrence
+  (kbd "<return>") 'pdf-occur-goto-occurrence
+  (kbd "C-o") 'pdf-occur-view-occurrence
+  (kbd "<space>") 'pdf-occur-view-occurrence
   "A" 'pdf-occur-tablist-gather-documents
   "D" 'pdf-occur-tablist-do-delete
   "G" 'tablist-revert
@@ -109,10 +109,10 @@
   "t" 'tablist-toggle-marks
   "u" 'tablist-unmark-forward
   "x" 'pdf-occur-tablist-do-flagged-delete
-  (kbd "DEL") 'tablist-unmark-backward
-  (kbd "S-SPC") 'scroll-down-command
+  (kbd "<delete>") 'tablist-unmark-backward
+  (kbd "S-<space>") 'scroll-down-command
   (kbd "<backtab>") 'tablist-backward-column
-  "\C-c\C-e" 'tablist-export-csv
+  (kbd "C-c C-e") 'tablist-export-csv
 
   [remap evil-first-non-blank] 'tablist-move-to-major-columnj
   [remap evil-next-line] 'tablist-next-line

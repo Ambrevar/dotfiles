@@ -150,11 +150,11 @@ Requires `call-process-to-string' from `functions'."
  "C-x M-G" 'helm-do-grep-ag)
 
 ;;; Use the M-s prefix just like `occur'.
-(define-key prog-mode-map "\M-sf" 'helm-semantic-or-imenu)
+(define-key prog-mode-map (kbd "M-s f") 'helm-semantic-or-imenu)
 ;;; The text-mode-map binding targets structured text modes like Markdown.
-(define-key text-mode-map "\M-sf" 'helm-semantic-or-imenu)
+(define-key text-mode-map (kbd "M-s f") 'helm-semantic-or-imenu)
 (with-eval-after-load 'org
-  (define-key org-mode-map "\M-sf" 'helm-org-in-buffer-headings))
+  (define-key org-mode-map (kbd "M-s f") 'helm-org-in-buffer-headings))
 
 (set-face-attribute 'helm-source-header nil :inherit 'header-line :height 'unspecified :background 'unspecified :foreground 'unspecified)
 (set-face-background 'helm-selection "#4f4f4f")

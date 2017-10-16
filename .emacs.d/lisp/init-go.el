@@ -17,7 +17,7 @@
 (when (require 'company-go nil t)
   (add-hook 'go-mode-hook 'company-mode)
   (add-to-list 'company-backends 'company-go)
-  (local-set-key (kbd "M-TAB") (if (require 'helm-company nil t) 'helm-company 'company-complete)))
+  (local-set-key (kbd "M-<tab>") (if (require 'helm-company nil t) 'helm-company 'company-complete)))
 
 (setq gofmt-command "goimports")
 (setq godoc-command "godoc -ex")

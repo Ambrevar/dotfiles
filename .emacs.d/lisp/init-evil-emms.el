@@ -49,7 +49,7 @@ The return value is the yanked text."
     (kbd "C-<return>") 'emms-browser-add-tracks-and-play
     (kbd "<return>") 'emms-browser-add-tracks
     (kbd "<tab>") 'emms-browser-toggle-subitems
-    (kbd "SPC") 'emms-browser-toggle-subitems
+    (kbd "<space>") 'emms-browser-toggle-subitems
     "/" 'emms-isearch-buffer ; This shows hidden items during search.
     "g1" 'emms-browser-collapse-all
     "g2" 'emms-browser-expand-to-level-2
@@ -61,10 +61,10 @@ The return value is the yanked text."
     "D" 'emms-browser-delete-files
     "g0" 'emms-browser-expand-all
     "d" 'emms-browser-view-in-dired
-    "\C-j" 'emms-browser-next-non-track
-    "\C-k" 'emms-browser-prev-non-track
-    "\M-j" 'emms-browser-next-non-track ; Custom
-    "\M-k" 'emms-browser-prev-non-track ; Custom
+    (kbd "C-j") 'emms-browser-next-non-track
+    (kbd "C-k") 'emms-browser-prev-non-track
+    (kbd "M-j") 'emms-browser-next-non-track ; Custom
+    (kbd "M-k") 'emms-browser-prev-non-track ; Custom
     "[" 'emms-browser-prev-non-track
     "]" 'emms-browser-next-non-track
     "{" 'emms-browser-prev-non-track
@@ -100,10 +100,10 @@ The return value is the yanked text."
   "c" 'emms-playlist-mode-center-current
   "gd" 'emms-playlist-mode-goto-dired-at-point
   "zs" 'emms-show
-  "\C-j" 'emms-next
-  "\C-k" 'emms-previous
-  "\M-j" 'emms-next ; Custom
-  "\M-k" 'emms-previous ; Custom
+  (kbd "C-j") 'emms-next
+  (kbd "C-k") 'emms-previous
+  (kbd "M-j") 'emms-next ; Custom
+  (kbd "M-k") 'emms-previous ; Custom
   "r" 'emms-random
   "s" 'emms-stop
   "S" (lookup-key emms-playlist-mode-map (kbd "S"))
@@ -113,7 +113,7 @@ The return value is the yanked text."
   "G" 'emms-playlist-mode-last
   "]" 'emms-playlist-mode-next
   "[" 'emms-playlist-mode-previous
-  "M-y" 'emms-playlist-mode-yank-pop)
+  (kbd "M-y") 'emms-playlist-mode-yank-pop)
 
 (evil-define-key 'visual emms-playlist-mode-map
   "d" 'emms-playlist-mode-kill

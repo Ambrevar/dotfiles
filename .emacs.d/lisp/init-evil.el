@@ -61,7 +61,7 @@
 (when (require 'with-editor nil t)
   (add-hook 'with-editor-mode-hook 'evil-insert-state))
 
-;;; Allow for evil states in minibuffer. Double <ESC> exits.
+;;; Allow for evil states in minibuffer. Double <escape> exits.
 (dolist
     (keymap
      ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/
@@ -71,8 +71,8 @@
        minibuffer-local-completion-map
        minibuffer-local-must-match-map
        minibuffer-local-isearch-map))
-  (evil-define-key 'normal (eval keymap) [escape] 'abort-recursive-edit)
-  (evil-define-key 'normal (eval keymap) [return] 'exit-minibuffer))
+  (evil-define-key 'normal (eval keymap) (kbd "<escape>") 'abort-recursive-edit)
+  (evil-define-key 'normal (eval keymap) (kbd "<return>") 'exit-minibuffer))
 
 (defun evil-minibuffer-setup ()
   (set (make-local-variable 'evil-echo-state) nil)
@@ -83,12 +83,12 @@
   (evil-insert 1))
 (add-hook 'minibuffer-setup-hook 'evil-minibuffer-setup)
 ;;; Because of the above minibuffer-setup-hook, some bindings need be reset.
-(evil-define-key 'normal evil-ex-completion-map [escape] 'abort-recursive-edit)
-(evil-define-key 'insert evil-ex-completion-map "\M-p" 'previous-complete-history-element)
-(evil-define-key 'insert evil-ex-completion-map "\M-n" 'next-complete-history-element)
+(evil-define-key 'normal evil-ex-completion-map (kbd "<escape>") 'abort-recursive-edit)
+(evil-define-key 'insert evil-ex-completion-map (kbd "M-p") 'previous-complete-history-element)
+(evil-define-key 'insert evil-ex-completion-map (kbd "M-n") 'next-complete-history-element)
 ;;; TODO: evil-ex history binding in normal mode do not work.
-(evil-define-key 'normal evil-ex-completion-map "\M-p" 'previous-history-element)
-(evil-define-key 'normal evil-ex-completion-map "\M-n" 'next-history-element)
+(evil-define-key 'normal evil-ex-completion-map (kbd "M-p") 'previous-history-element)
+(evil-define-key 'normal evil-ex-completion-map (kbd "M-n") 'next-history-element)
 (define-keys evil-ex-completion-map
   "M-p" 'previous-history-element
   "M-n" 'next-history-element)
@@ -144,22 +144,21 @@
 ;;; Emacs special modes
 (when (require 'evil-special-modes nil t)
   (evil-special-modes-init))
-;; TODO: Copy extra term code.
 
 ;;; nXML
-;;; TODO: Add to Emacs special modes
+;;; TODO: Add to Emacs special modes?
 (evil-define-key 'normal nxml-mode-map
-  "\C-j" 'nxml-forward-element
-  "\C-k" 'nxml-backward-element
-  "\M-j" 'nxml-forward-element ; Custom
-  "\M-k" 'nxml-backward-element ; Custom
+  (kbd "C-j") 'nxml-forward-element
+  (kbd "C-k") 'nxml-backward-element
+  (kbd "M-j") 'nxml-forward-element ; Custom
+  (kbd "M-k") 'nxml-backward-element ; Custom
   ">" 'nxml-down-element
   "<" 'nxml-backward-up-element)
 (evil-define-key 'visual nxml-mode-map
-  "\C-j" 'nxml-forward-element
-  "\C-k" 'nxml-backward-element
-  "\M-j" 'nxml-forward-element ; Custom
-  "\M-k" 'nxml-backward-element ; Custom
+  (kbd "C-j") 'nxml-forward-element
+  (kbd "C-k") 'nxml-backward-element
+  (kbd "M-j") 'nxml-forward-element ; Custom
+  (kbd "M-k") 'nxml-backward-element ; Custom
   ">" 'nxml-down-element
   "<" 'nxml-backward-up-element)
 
@@ -183,17 +182,17 @@
     (evil-define-key 'visual mu4e-headers-mode-map
       "u" 'mu4e-headers-mark-for-unmark)
     (evil-define-key 'motion mu4e-view-mode-map
-      (kbd "SPC") 'mu4e-view-scroll-up-or-next
-      (kbd "TAB") 'shr-next-link
+      (kbd "<space>") 'mu4e-view-scroll-up-or-next
+      (kbd "<tab>") 'shr-next-link
       "i" 'mu4e-view-mark-for-flag
       "I" 'mu4e-view-mark-for-unflag
       ;; "R" 'mu4e-view-mark-for-refile
       "r" 'mu4e-compose-reply
       "za" 'mu4e-view-save-attachment-multi
-      "\C-j" 'mu4e-view-headers-next
-      "\C-k" 'mu4e-view-headers-prev
-      "\M-j" 'mu4e-view-headers-next ; Custom
-      "\M-k" 'mu4e-view-headers-prev ; Custom
+      (kbd "C-j") 'mu4e-view-headers-next
+      (kbd "C-k") 'mu4e-view-headers-prev
+      (kbd "M-j") 'mu4e-view-headers-next ; Custom
+      (kbd "M-k") 'mu4e-view-headers-prev ; Custom
       "h" 'evil-backward-char
       "zh" 'mu4e-view-toggle-html
       "gu" 'mu4e-view-go-to-url)

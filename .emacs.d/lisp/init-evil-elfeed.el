@@ -30,8 +30,8 @@
   "r" 'elfeed-show-refresh
   "]" 'elfeed-show-next
   "[" 'elfeed-show-prev
-  "\M-j" 'elfeed-show-next
-  "\M-k" 'elfeed-show-prev
+  (kbd "C-j") 'elfeed-show-next
+  (kbd "C-k") 'elfeed-show-prev
   "q" 'elfeed-kill-buffer
   "s" 'elfeed-show-new-live-search
   "y" 'elfeed-show-yank)

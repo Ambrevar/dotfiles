@@ -7,9 +7,9 @@
     "<f5>" 'cc-clean
     "M-." 'semantic-ia-fast-jump
     "C-c C-d" 'semantic-ia-show-summary
-    "M-TAB" 'semantic-complete-analyze-inline)
+    "M-<tab>" 'semantic-complete-analyze-inline)
   (when (require 'company nil t)
-    (define-key map (kbd "M-TAB") (if (require 'helm-company nil t) 'helm-company 'company-complete))))
+    (define-key map (kbd "M-<tab>") (if (require 'helm-company nil t) 'helm-company 'company-complete))))
 ;; (define-key map (kbd "C-c o") 'ff-find-other-file)
 
 (defvaralias 'c-basic-offset 'tab-width)

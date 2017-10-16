@@ -22,8 +22,8 @@
 (evil-define-key 'normal helm-map
   "g" 'helm-beginning-of-buffer
   "G" 'helm-end-of-buffer
-  "\C-f" 'helm-next-page
-  "\C-b" 'helm-previous-page)
+  (kbd "C-f") 'helm-next-page
+  (kbd "C-b") 'helm-previous-page)
 
 (define-key helm-generic-files-map (kbd "M-o") 'helm-ff-run-switch-other-window)
 (define-key helm-buffer-map (kbd "M-o") 'helm-buffer-switch-other-window)

@@ -3,9 +3,9 @@
 (evil-set-initial-state 'ztree-mode 'motion)
 
 (evil-define-key 'motion ztree-mode-map
-  (kbd "TAB") 'ztree-jump-side
-  (kbd "RET") 'ztree-perform-action
-  (kbd "SPC") 'ztree-perform-soft-action
+  (kbd "<tab>") 'ztree-jump-side
+  (kbd "<return>") 'ztree-perform-action
+  (kbd "<space>") 'ztree-perform-soft-action
   "gr" 'ztree-refresh-buffer
   "q" 'quit-window
   "x" 'ztree-toggle-expand-subtree)

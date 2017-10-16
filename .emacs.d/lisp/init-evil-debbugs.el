@@ -3,11 +3,11 @@
 (evil-set-initial-state 'debbugs-gnu-mode 'motion)
 
 (evil-define-key 'motion debbugs-gnu-mode-map
-  (kbd "TAB") 'forward-button
+  (kbd "<tab>") 'forward-button
   (kbd "<backtab>") 'backward-button
-  (kbd "RET") 'debbugs-gnu-select-report
-  (kbd "SPC") 'scroll-up-command
-  "\M-sf" 'debbugs-gnu-narrow-to-status
+  (kbd "<return>") 'debbugs-gnu-select-report
+  (kbd "<space>") 'scroll-up-command
+  (kbd "M-s f") 'debbugs-gnu-narrow-to-status
   "gB" 'debbugs-gnu-show-blocking-reports
   "c" 'debbugs-gnu-send-control-message
   "r" 'debbugs-gnu-show-all-blocking-reports
