@@ -42,6 +42,18 @@ c.url.searchengines = {
 }
 
 config.bind(',v', 'spawn mpv {url}')
+config.bind('yy', 'yank -s')
+config.bind('yY', 'yank')
+config.bind('yd', 'yank -s domain')
+config.bind('yD', 'yank domain')
+config.bind('yp', 'yank -s pretty-url')
+config.bind('yP', 'yank pretty-url')
+config.bind('yt', 'yank -s title')
+config.bind('yT', 'yank title')
+config.bind('pp', 'open -- {primary}')
+config.bind('pP', 'open -- {clipboard}')
+config.bind('Pp', 'open -t -- {primary}')
+config.bind('PP', 'open -t -- {clipboard}')
 
 ## Uncomment this to still load settings configured via autoconfig.yml
 # config.load_autoconfig()
