@@ -16,6 +16,12 @@
  org-agenda-columns-add-appointments-to-effort-sum t
  org-ellipsis " […]"
  org-adapt-indentation nil
+ ;; Add keywords.
+ org-todo-keywords '((sequence "TODO" "REVIEW" "DONE"))
+ org-todo-keyword-faces '(("REVIEW" :inherit org-done))
+ ;; Priorities.
+ org-priority-start-cycle-with-default nil
+ org-default-priority 66
  ;; Org-mode aligns text.
  indent-tabs-mode nil)
 
@@ -39,13 +45,5 @@
       ;; loaded.  The buffer usually need not be restored by a desktop session.
       (setq desktop-files-not-to-save (concat (substring desktop-files-not-to-save 0 -2) "\\|" (regexp-quote (expand-file-name contacts)) "\\)"))
       (setq org-contacts-files (list contacts)))))
-
-;;; Add keywords.
-(setq org-todo-keywords '((sequence "TODO" "REVIEW" "DONE")))
-(setq org-todo-keyword-faces '(("REVIEW" :inherit org-done)))
-
-;;; Priorities.
-(setq org-priority-start-cycle-with-default nil
-      org-default-priority 66)
 
 (provide 'init-org)
