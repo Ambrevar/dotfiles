@@ -54,7 +54,13 @@
 (exwm-input-set-key (kbd "s-|") #'swap-windows)
 (exwm-input-set-key (kbd "s-b") #'list-buffers)
 (exwm-input-set-key (kbd "s-f") #'find-file)
-(exwm-input-set-key (kbd "s-SPC") #'exwm-floating-toggle-floating)
+(exwm-input-set-key (kbd "s-<space>") #'exwm-floating-toggle-non-helm-floating)
+
+;;; REVIEW: https://github.com/ch11ng/exwm/issues/314
+(defun exwm-floating-toggle-non-helm-floating ()
+  (interactive)
+  (unless (minibufferp)
+    (exwm-floating-toggle-floating)))
 
 (exwm-input-set-key (kbd "s-o") #'toggle-single-window)
 (exwm-input-set-key (kbd "s-O") #'exwm-layout-toggle-fullscreen)
