@@ -23,8 +23,6 @@
 ;;; TODO: helm-mini with follow-mode hangs when using EXWM.
 ;;; https://github.com/emacs-helm/helm/issues/1889
 
-;;; TODO: "s-<space>" in Helm buffers loses the cursor.  Make a special case?
-
 ;;; Rename buffer to window title.
 (defun exwm-rename-buffer-to-title () (exwm-workspace-rename-buffer exwm-title))
 (add-hook 'exwm-update-title-hook 'exwm-rename-buffer-to-title)
@@ -54,7 +52,7 @@
 (exwm-input-set-key (kbd "s-|") #'swap-windows)
 (exwm-input-set-key (kbd "s-b") #'list-buffers)
 (exwm-input-set-key (kbd "s-f") #'find-file)
-(exwm-input-set-key (kbd "s-<space>") #'exwm-floating-toggle-non-helm-floating)
+(exwm-input-set-key (kbd "s-SPC") #'exwm-floating-toggle-non-helm-floating)
 
 ;;; REVIEW: https://github.com/ch11ng/exwm/issues/314
 (defun exwm-floating-toggle-non-helm-floating ()

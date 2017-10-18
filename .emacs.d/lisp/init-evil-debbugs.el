@@ -6,7 +6,7 @@
   (kbd "<tab>") 'forward-button
   (kbd "<backtab>") 'backward-button
   (kbd "<return>") 'debbugs-gnu-select-report
-  (kbd "<space>") 'scroll-up-command
+  (kbd "SPC") 'scroll-up-command
   (kbd "M-s f") 'debbugs-gnu-narrow-to-status
   "gB" 'debbugs-gnu-show-blocking-reports
   "c" 'debbugs-gnu-send-control-message

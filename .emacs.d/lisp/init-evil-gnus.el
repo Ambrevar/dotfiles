@@ -5,8 +5,8 @@
   (kbd "<tab>") 'gnus-summary-widget-forward
   (kbd "<backtab>") 'gnus-summary-widget-backward
   (kbd "<delete>") 'gnus-summary-prev-page
-  (kbd "S-<space>") 'gnus-summary-prev-page
-  (kbd "<space>") 'gnus-summary-next-page
+  (kbd "S-SPC") 'gnus-summary-prev-page
+  (kbd "SPC") 'gnus-summary-next-page
   (kbd "<return>") 'gnus-summary-scroll-up
   "zz" 'gnus-recenter
   "z#" 'gnus-summary-mark-as-processable

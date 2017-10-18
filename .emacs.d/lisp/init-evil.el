@@ -182,7 +182,7 @@
     (evil-define-key 'visual mu4e-headers-mode-map
       "u" 'mu4e-headers-mark-for-unmark)
     (evil-define-key 'motion mu4e-view-mode-map
-      (kbd "<space>") 'mu4e-view-scroll-up-or-next
+      (kbd "SPC") 'mu4e-view-scroll-up-or-next
       (kbd "<tab>") 'shr-next-link
       "i" 'mu4e-view-mark-for-flag
       "I" 'mu4e-view-mark-for-unflag

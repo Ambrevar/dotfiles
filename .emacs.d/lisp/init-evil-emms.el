@@ -49,7 +49,7 @@ The return value is the yanked text."
     (kbd "C-<return>") 'emms-browser-add-tracks-and-play
     (kbd "<return>") 'emms-browser-add-tracks
     (kbd "<tab>") 'emms-browser-toggle-subitems
-    (kbd "<space>") 'emms-browser-toggle-subitems
+    (kbd "SPC") 'emms-browser-toggle-subitems
     "/" 'emms-isearch-buffer ; This shows hidden items during search.
     "g1" 'emms-browser-collapse-all
     "g2" 'emms-browser-expand-to-level-2

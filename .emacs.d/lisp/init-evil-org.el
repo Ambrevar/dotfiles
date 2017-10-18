@@ -28,13 +28,14 @@
 (evil-set-initial-state 'org-agenda-mode 'motion)
 (evil-define-key 'motion org-agenda-mode-map
   ;; TODO: Bind date selection from miniprompt to S-<hjkl>.
+  ;; Must be in org-read-date-minibuffer-local-map.
   ;; TODO: Unused keys: D, x, X, o, p, P
 
   (kbd "<tab>") 'org-agenda-goto
   (kbd "<return>") 'org-agenda-switch-to
   (kbd "S-<return>") 'org-agenda-recenter
 
-  (kbd "<space>") 'org-agenda-show-and-scroll-up
+  (kbd "SPC") 'org-agenda-show-and-scroll-up
   (kbd "<delete>") 'org-agenda-show-scroll-down
   (kbd "<backspace>") 'org-agenda-show-scroll-down
 

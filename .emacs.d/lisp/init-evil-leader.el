@@ -1,7 +1,7 @@
 ;;; Evil leader
 
 ;;; Leader mode and its key must be set before evil-mode.
-(evil-leader/set-leader "<space>")
+(evil-leader/set-leader "SPC")
 (global-evil-leader-mode)
 
 (evil-leader/set-key
@@ -15,7 +15,7 @@
  "|" 'swap-windows)
 (when (fboundp 'magit-status)
   ;; Since it is an autoload, we cannot use `with-eval-after-load'.
-  ;; Use S-<space> instead of <space> to browse commit details.
+  ;; Use S-SPC instead of SPC to browse commit details.
   (evil-leader/set-key "v" 'magit-status))
 (when (fboundp 'emms-smart-browse)
   (evil-leader/set-key "A" 'helm-emms)
@@ -38,8 +38,8 @@
   (evil-leader/set-key "m" 'mu4e-headers-unread))
 
 ;;; Since <SPC> is no longer available, as some replacements:
-(evil-define-key 'motion Info-mode-map (kbd "C-<space>") 'Info-scroll-up)
-(evil-define-key 'motion help-mode-map (kbd "C-<space>") 'scroll-up-command)
-(evil-define-key 'motion pdf-view-mode-map (kbd "C-<space>") 'pdf-view-scroll-up-or-next-page)
+(evil-define-key 'motion Info-mode-map (kbd "C-SPC") 'Info-scroll-up)
+(evil-define-key 'motion help-mode-map (kbd "C-SPC") 'scroll-up-command)
+(evil-define-key 'motion pdf-view-mode-map (kbd "C-SPC") 'pdf-view-scroll-up-or-next-page)
 
 (provide 'init-evil-leader)

@@ -5,7 +5,7 @@
 (evil-define-key 'motion ztree-mode-map
   (kbd "<tab>") 'ztree-jump-side
   (kbd "<return>") 'ztree-perform-action
-  (kbd "<space>") 'ztree-perform-soft-action
+  (kbd "SPC") 'ztree-perform-soft-action
   "gr" 'ztree-refresh-buffer
   "q" 'quit-window
   "x" 'ztree-toggle-expand-subtree)

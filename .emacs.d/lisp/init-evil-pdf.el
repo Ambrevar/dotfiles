@@ -17,7 +17,7 @@
   (kbd "<return>") 'image-next-line
   "j" 'pdf-view-next-line-or-next-page
   "k" 'pdf-view-previous-line-or-previous-page
-  (kbd "<space>") 'pdf-view-scroll-up-or-next-page
+  (kbd "SPC") 'pdf-view-scroll-up-or-next-page
   "'" 'pdf-view-jump-to-register
   "+" 'pdf-view-enlarge
   "-" 'pdf-view-shrink
@@ -38,7 +38,7 @@
   "q" 'quit-window
   "r" 'revert-buffer
   (kbd "<delete>") 'pdf-view-scroll-down-or-previous-page
-  (kbd "S-<space>") 'pdf-view-scroll-down-or-previous-page
+  (kbd "S-SPC") 'pdf-view-scroll-down-or-previous-page
   (kbd "<C-down-mouse-1>") 'pdf-view-mouse-extend-region
   (kbd "<M-down-mouse-1>") 'pdf-view-mouse-set-region-rectangle
   (kbd "<down>") 'pdf-view-next-line-or-next-page
@@ -80,7 +80,7 @@
 (evil-define-key 'motion pdf-outline-buffer-mode-map
   (kbd "<return>") 'pdf-outline-follow-link
   (kbd "M-<return>") 'pdf-outline-follow-link-and-quit
-  (kbd "<space>") 'pdf-outline-display-link
+  (kbd "SPC") 'pdf-outline-display-link
   "." 'pdf-outline-move-to-current-page
   "G" 'pdf-outline-end-of-buffer
   "o" 'pdf-outline-select-pdf-window
@@ -92,7 +92,7 @@
 (evil-define-key 'motion pdf-occur-buffer-mode-map
   (kbd "<return>") 'pdf-occur-goto-occurrence
   (kbd "C-o") 'pdf-occur-view-occurrence
-  (kbd "<space>") 'pdf-occur-view-occurrence
+  (kbd "SPC") 'pdf-occur-view-occurrence
   "A" 'pdf-occur-tablist-gather-documents
   "D" 'pdf-occur-tablist-do-delete
   "G" 'tablist-revert
@@ -110,7 +110,7 @@
   "u" 'tablist-unmark-forward
   "x" 'pdf-occur-tablist-do-flagged-delete
   (kbd "<delete>") 'tablist-unmark-backward
-  (kbd "S-<space>") 'scroll-down-command
+  (kbd "S-SPC") 'scroll-down-command
   (kbd "<backtab>") 'tablist-backward-column
   (kbd "C-c C-e") 'tablist-export-csv
 
