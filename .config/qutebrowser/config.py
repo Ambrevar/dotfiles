@@ -11,7 +11,7 @@ c.hints.uppercase = True
 c.input.partial_timeout = 2000
 c.tabs.tabs_are_windows = True
 c.tabs.show = "multiple"
-c.window.title_format = "{title}{title_sep}{host}{title_sep}qutebrowser"
+c.window.title_format = "{title}{title_sep}{host}"
 c.url.searchengines = {
     "DEFAULT": "https://duckduckgo.com/?q={}",
     "arch": "http://wiki.archlinux.org/index.php?title=Special%3ASearch&search={}&go=Go",
