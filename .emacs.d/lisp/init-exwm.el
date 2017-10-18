@@ -94,6 +94,27 @@
 (when (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path))
   (exwm-input-set-key (kbd "s-m") #'mu4e-headers))
 
+(defun exwm/helm-browser-buffers ()
+  "Preconfigured `helm' to list browser buffers."
+  (interactive)
+  (helm :sources
+        (helm-build-sync-source (concat exwm-class-name " buffers")
+          :candidates
+          (delq nil (mapcar
+                     (lambda (buf)
+                       (if (with-current-buffer buf
+                             (and (eq major-mode 'exwm-mode)
+                                  (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program))))
+                           (buffer-name buf)
+                         nil)) (buffer-list)))
+          ;; TODO: Support multiple candidates.
+          ;; TODO: Support other-window / other-frame.
+          :action '(("Switch to browser buffer" . (lambda (candidate) (switch-to-buffer (get-buffer candidate))))
+                    ("Switch to browser buffer in other window" . (lambda (candidate) (switch-to-buffer-other-window (get-buffer candidate))))
+                    ("Switch to browser buffer in other frame" . (lambda (candidate) (switch-to-buffer-other-frame (get-buffer candidate))))))
+        :keymap helm-buffer-map ; TODO: Need only "C-c o" and "C-c C-o".
+        :buffer "*exwm/helm browser*"))
+
 ;;; External application shortcuts.
 (defun exwm-start-browser ()
   "Fire-up the web browser as defined in `browse-url-generic-program'.
@@ -102,20 +123,15 @@ If not, switch to the last open window.
 If there is none, fire it up."
   (interactive)
   (if (and (eq major-mode 'exwm-mode)
-           (string-match
-            ;; Only match against the end as some window names are hard to predict, e.g. "Mozilla Firefox".
-            ;; `exwm-instance-name' is sadly not predictable either: Firefox is "Navigator".
-            ;; `exwm-class-name' might be better.
-            (format "%s$" (regexp-quote (file-name-nondirectory browse-url-generic-program)))
-            (downcase (buffer-name (current-buffer)))))
-      (start-process-shell-command browse-url-generic-program nil browse-url-generic-program)
+           (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program)))
+      (if (and (require 'helm-config nil t) helm-mode)
+          (exwm/helm-browser-buffers)
+        (start-process-shell-command browse-url-generic-program nil browse-url-generic-program))
     (let ((last (buffer-list)))
       (while (and last
                   (not (with-current-buffer (car last)
                          (and (eq major-mode 'exwm-mode)
-                              (string-match
-                               (format "%s$" (regexp-quote (file-name-nondirectory browse-url-generic-program)))
-                               (downcase (buffer-name (current-buffer))))))))
+                              (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program))))))
         (setq last (cdr last)))
       (if last
           (switch-to-buffer (car last))
