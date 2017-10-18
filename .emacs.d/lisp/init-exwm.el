@@ -97,35 +97,36 @@
 ;;; External application shortcuts.
 
 ;;; Web browser
-(defvar exwm/helm-browser-map
-  (let ((map (make-sparse-keymap)))
-    (set-keymap-parent map helm-map)
-    (define-key map (kbd "C-c o")     'helm-buffer-switch-other-window)
-    (define-key map (kbd "C-c C-o")   'helm-buffer-switch-other-frame)
-    (define-key map (kbd "M-D")       'helm-buffer-run-kill-buffers)
-    map)
-  "Keymap for browser source in Helm.")
+(with-eval-after-load 'helm
+  (defvar exwm/helm-browser-map
+    (let ((map (make-sparse-keymap)))
+      (set-keymap-parent map helm-map)
+      (define-key map (kbd "C-c o")     'helm-buffer-switch-other-window)
+      (define-key map (kbd "C-c C-o")   'helm-buffer-switch-other-frame)
+      (define-key map (kbd "M-D")       'helm-buffer-run-kill-buffers)
+      map)
+    "Keymap for browser source in Helm.")
 
-(defun exwm/helm-browser-buffers ()
-  "Preconfigured `helm' to list browser buffers."
-  (interactive)
-  (helm :sources
-        (helm-build-sync-source (concat (or exwm-class-name (file-name-nondirectory browse-url-generic-program)) " buffers")
-          :candidates
-          (delq nil (mapcar
-                     (lambda (buf)
-                       (if (with-current-buffer buf
-                             (and (eq major-mode 'exwm-mode)
-                                  (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program))))
-                           (buffer-name buf)
-                         nil))
-                     (buffer-list)))
-          :action '(("Switch to browser buffer(s)" . helm-buffer-switch-buffers)
-                    ("Switch to browser buffer(s) in other window `C-c o'" . helm-buffer-switch-buffers-other-window)
-                    ("Switch to browser buffer in other frame `C-c C-o'" . switch-to-buffer-other-frame)
-                    ("Kill browser buffer(s)" . helm-kill-marked-buffers))
-          :keymap exwm/helm-browser-map)
-        :buffer "*exwm/helm browser*"))
+  (defun exwm/helm-browser-buffers ()
+    "Preconfigured `helm' to list browser buffers."
+    (interactive)
+    (helm :sources
+          (helm-build-sync-source (concat (or exwm-class-name (file-name-nondirectory browse-url-generic-program)) " buffers")
+            :candidates
+            (delq nil (mapcar
+                       (lambda (buf)
+                         (if (with-current-buffer buf
+                               (and (eq major-mode 'exwm-mode)
+                                    (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program))))
+                             (buffer-name buf)
+                           nil))
+                       (buffer-list)))
+            :action '(("Switch to browser buffer(s)" . helm-buffer-switch-buffers)
+                      ("Switch to browser buffer(s) in other window `C-c o'" . helm-buffer-switch-buffers-other-window)
+                      ("Switch to browser buffer in other frame `C-c C-o'" . switch-to-buffer-other-frame)
+                      ("Kill browser buffer(s)" . helm-kill-marked-buffers))
+            :keymap exwm/helm-browser-map)
+          :buffer "*exwm/helm browser*")))
 
 (defun exwm-start-browser ()
   "Fire-up the web browser as defined in `browse-url-generic-program'.
@@ -135,7 +136,7 @@ If there is none, fire it up."
   (interactive)
   (if (and (eq major-mode 'exwm-mode)
            (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program)))
-      (if (and (require 'helm-config nil t) helm-mode)
+      (if (fboundp 'exwm/helm-browser-buffers)
           (exwm/helm-browser-buffers)
         (start-process-shell-command browse-url-generic-program nil browse-url-generic-program))
     (let ((last (buffer-list)))
