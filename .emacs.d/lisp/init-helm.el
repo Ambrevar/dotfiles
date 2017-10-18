@@ -49,7 +49,10 @@
  helm-eshell-fuzzy-match t
  helm-imenu-fuzzy-match t
  helm-M-x-fuzzy-match t
- helm-recentf-fuzzy-match t)
+ helm-recentf-fuzzy-match t
+
+ helm-window-show-buffers-function 'helm-window-mosaic-fn
+ helm-window-prefer-horizontal-split t)
 
 ;;; From https://github.com/emacs-helm/helm/issues/362.
 ;;; This is not perfect with evil mode as the cursor type is not right in the
@@ -192,8 +195,5 @@ Requires `call-process-to-string' from `functions'."
 ;;; Fallback on 'find' if 'locate' is not available.
 (unless (executable-find "locate")
   (setq helm-locate-recursive-dirs-command "find %s -type d -regex .*%s.*$"))
-
-(setq helm-window-show-buffers-function 'helm-window-mosaic-fn
-      helm-window-prefer-horizontal-split t)
 
 (provide 'init-helm)
