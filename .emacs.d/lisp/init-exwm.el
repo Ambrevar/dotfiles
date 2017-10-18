@@ -82,7 +82,8 @@
   (exwm-input-set-key (kbd "C-6") #'evil-switch-to-windows-last-buffer))
 
 ;;; Emacs mode shortcuts.
-(exwm-input-set-key (kbd "s-t") #'org-find-first-agenda)
+(exwm-input-set-key (kbd "s-t") #'org-switch-agenda-file)
+(exwm-input-set-key (kbd "s-T") #'org-switch-agenda-file-other-window)
 (exwm-input-set-key (kbd "s-<return>") #'eshell-or-new-session)
 (when (fboundp 'magit-status)
   (exwm-input-set-key (kbd "s-v") #'magit-status))

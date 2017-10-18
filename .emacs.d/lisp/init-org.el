@@ -27,9 +27,23 @@
 
 ;;; Agendas.
 (add-to-list 'org-agenda-files "~/personal/todo/todo.org")
-(defun org-find-first-agenda ()
+(defun org-switch-agenda-file (&optional other-window)
+  "Switch between org-agenda and the first org-agenda-files."
+  (interactive "P")
+  (if (and buffer-file-name
+           (member (expand-file-name buffer-file-name) (mapcar 'expand-file-name org-agenda-files)))
+      (org-agenda)
+    (let ((b (find-buffer-visiting (car org-agenda-files))))
+      (if b
+          (if (get-buffer-window b)
+              (select-window (get-buffer-window b))
+            (funcall (if other-window 'switch-to-buffer-other-window 'switch-to-buffer) b))
+        (funcall (if other-window 'find-file-other-window 'find-file) (car org-agenda-files))))))
+
+(defun org-switch-agenda-file-other-window ()
+  "Like `org-switch-agenda-file' but use other window when possible."
   (interactive)
-  (find-file (car org-agenda-files)))
+  (org-switch-agenda-file t))
 
 ;;; Set PDF association in Org-mode (original is 'default).
 (setcdr (assoc "\\.pdf\\'" org-file-apps) 'emacs)

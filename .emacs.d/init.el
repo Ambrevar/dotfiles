@@ -258,7 +258,8 @@
 ;;; Org-mode
 (nconc package-selected-packages '(org-plus-contrib)) ; Contains latest 'org.
 (with-eval-after-load 'org (require 'init-org))
-(autoload 'org-find-first-agenda "org")
+(autoload 'org-switch-agenda-file "org")
+(autoload 'org-switch-agenda-file-other-window "org")
 
 ;;; PDF
 ;;; pdf-tools requires poppler built with cairo support.
