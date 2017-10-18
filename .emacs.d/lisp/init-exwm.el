@@ -52,10 +52,10 @@
 (exwm-input-set-key (kbd "s-|") #'swap-windows)
 (exwm-input-set-key (kbd "s-b") #'list-buffers)
 (exwm-input-set-key (kbd "s-f") #'find-file)
-(exwm-input-set-key (kbd "s-SPC") #'exwm-floating-toggle-non-helm-floating)
+(exwm-input-set-key (kbd "s-SPC") #'exwm-floating-safe-toggle-floating)
 
 ;;; REVIEW: https://github.com/ch11ng/exwm/issues/314
-(defun exwm-floating-toggle-non-helm-floating ()
+(defun exwm-floating-safe-toggle-floating ()
   (interactive)
   (unless (minibufferp)
     (exwm-floating-toggle-floating)))
