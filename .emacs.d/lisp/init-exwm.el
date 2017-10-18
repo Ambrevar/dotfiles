@@ -107,11 +107,9 @@
                                   (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program))))
                            (buffer-name buf)
                          nil)) (buffer-list)))
-          ;; TODO: Support multiple candidates.
-          ;; TODO: Support other-window / other-frame.
-          :action '(("Switch to browser buffer" . (lambda (candidate) (switch-to-buffer (get-buffer candidate))))
-                    ("Switch to browser buffer in other window" . (lambda (candidate) (switch-to-buffer-other-window (get-buffer candidate))))
-                    ("Switch to browser buffer in other frame" . (lambda (candidate) (switch-to-buffer-other-frame (get-buffer candidate))))))
+          :action '(("Switch to browser buffer" . (lambda (_candidate) (helm-window-show-buffers (mapcar 'get-buffer (helm-marked-candidates)))))
+                    ("Switch to browser buffer in other window" . (lambda (_candidate) (helm-window-show-buffers (mapcar 'get-buffer (helm-marked-candidates)) t)))
+                    ("Switch to browser buffer in other frame" . (lambda (_candidate) (helm-buffer-switch-other-frame (mapcar 'get-buffer (helm-marked-candidates)))))))
         :keymap helm-buffer-map ; TODO: Need only "C-c o" and "C-c C-o".
         :buffer "*exwm/helm browser*"))
 
