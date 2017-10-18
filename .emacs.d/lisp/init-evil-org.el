@@ -1,30 +1,40 @@
 ;;; Evil+Org
 ;;; Remap org-mode meta keys for convenience
 ;;; - org-evil: Not as polished as of May 2017.
-;;; - evil-org: Depends on MELPA's org-mode, too big a dependency for me.
+;;; - evil-org: Depends on MELPA's org-mode.
 ;;; See https://github.com/Somelauw/evil-org-mode/blob/master/doc/keythemes.org for inspiration.
 
-;; TODO: M-j is shadowed.  Also set calendar movements.
+;;; TODO: Do not depend on MELPA org but org-plus-contrib.
+
+;;; TODO: J is shadowed.  Also set calendar movements.
 ;;; See https://github.com/Somelauw/evil-org-mode/issues/15.
 
-(evil-define-key 'normal org-mode-map
-  (kbd "M-<return>") (lambda () (interactive) (evil-insert 1) (org-meta-return))
-  "H" 'org-shiftleft
-  "J" 'org-shiftdown
-  "K" 'org-shiftup
-  "L" 'org-shiftright
-  (kbd "M-h") 'org-metaleft
-  (kbd "M-j") 'org-metadown
-  (kbd "M-k") 'org-metaup
-  (kbd "M-l") 'org-metaright
-  (kbd "M-H") 'org-shiftmetaleft
-  (kbd "M-J") 'org-shiftmetadown
-  (kbd "M-K") 'org-shiftmetaup
-  (kbd "M-L") 'org-shiftmetaright
-  "<" 'org-up-element)
+;; (evil-define-key 'normal org-mode-map
+;;   (kbd "M-<return>") (lambda () (interactive) (evil-insert 1) (org-meta-return))
+;;   "H" 'org-shiftleft
+;;   "J" 'org-shiftdown
+;;   "K" 'org-shiftup
+;;   "L" 'org-shiftright
+;;   (kbd "M-h") 'org-metaleft
+;;   (kbd "M-j") 'org-metadown
+;;   (kbd "M-k") 'org-metaup
+;;   (kbd "M-l") 'org-metaright
+;;   (kbd "M-H") 'org-shiftmetaleft
+;;   (kbd "M-J") 'org-shiftmetadown
+;;   (kbd "M-K") 'org-shiftmetaup
+;;   (kbd "M-L") 'org-shiftmetaright
+;; "<" 'org-up-element)
 
-;; Horizontal movements have little use, so we override "f" and "t", ";" and
-;; ",", "|".  We keep "w", "b", "e", "ge" and the upcase versions.
+(when (require 'evil-org nil t)
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (evil-org-set-key-theme '(navigation insert textobjects additional))) ; shift? (shadows J) rsi todo heading
+
+(defun evil-org-agenda-todo ()
+  (interactive)
+  (org-agenda-todo t))
+
+;;; Horizontal movements have little use, so we override "f" and "t", ";" and
+;;; ",", "|".  We keep "w", "b", "e", "ge" and the upcase versions.
 (evil-set-initial-state 'org-agenda-mode 'motion)
 (evil-define-key 'motion org-agenda-mode-map
   ;; TODO: Bind date selection from miniprompt to S-<hjkl>.
@@ -42,18 +52,18 @@
   ;; Motion
   "j" 'org-agenda-next-line
   "k" 'org-agenda-previous-line
-  (kbd "]") 'org-agenda-earlier
-  (kbd "[") 'org-agenda-later
-  (kbd "C-k") 'org-agenda-previous-item
   (kbd "C-j") 'org-agenda-next-item
+  (kbd "C-k") 'org-agenda-previous-item
+  (kbd "[") 'org-agenda-earlier
+  (kbd "]") 'org-agenda-later
 
   ;; Manipulation
   ;; We follow standard org-mode bindings (not org-agenda bindings):
   ;; <HJKL> change todo items and priorities.
   ;; M-<jk> drag lines.
   ;; M-<hl> cannot demote/promote, we use it for "do-date".
-  "H" 'org-agenda-todo-previousset
-  "L" 'org-agenda-todo-nextset
+  "H" 'evil-org-agenda-todo
+  "L" 'org-agenda-todo
   "J" 'org-agenda-priority-down
   "K" 'org-agenda-priority-up
   (kbd "M-j") 'org-agenda-drag-line-forward
