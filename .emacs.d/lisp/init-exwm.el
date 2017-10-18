@@ -11,8 +11,6 @@
 ;;; TODO: Pressing "s-a" ('emms-smart-browse) loses the cursor.
 ;;; Sometimes waiting helps.  Calling emms-smart-browse manually does not trigger the issue.
 ;;; TODO: Spawn select programs in floating mode. (E.g. mpv, mupen64plus, mplayer, qemu, steam, .exe (wine).)
-;;; TODO: Double "s-w" should spawn a Helm list of web buffers without details
-;;; and with an option to create a new window.
 ;;; TODO: Separate EXWM buffers and Emacs buffers in `helm-mini'?
 
 ;;; TODO: Rendering issue with Qutebrowser
@@ -94,6 +92,20 @@
 (when (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path))
   (exwm-input-set-key (kbd "s-m") #'mu4e-headers))
 
+
+
+;;; External application shortcuts.
+
+;;; Web browser
+(defvar exwm/helm-browser-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map helm-map)
+    (define-key map (kbd "C-c o")     'helm-buffer-switch-other-window)
+    (define-key map (kbd "C-c C-o")   'helm-buffer-switch-other-frame)
+    (define-key map (kbd "M-D")       'helm-buffer-run-kill-buffers)
+    map)
+  "Keymap for browser source in Helm.")
+
 (defun exwm/helm-browser-buffers ()
   "Preconfigured `helm' to list browser buffers."
   (interactive)
@@ -106,14 +118,15 @@
                              (and (eq major-mode 'exwm-mode)
                                   (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program))))
                            (buffer-name buf)
-                         nil)) (buffer-list)))
-          :action '(("Switch to browser buffer" . (lambda (_candidate) (helm-window-show-buffers (mapcar 'get-buffer (helm-marked-candidates)))))
-                    ("Switch to browser buffer in other window" . (lambda (_candidate) (helm-window-show-buffers (mapcar 'get-buffer (helm-marked-candidates)) t)))
-                    ("Switch to browser buffer in other frame" . (lambda (_candidate) (helm-buffer-switch-other-frame (mapcar 'get-buffer (helm-marked-candidates)))))))
-        :keymap helm-buffer-map ; TODO: Need only "C-c o" and "C-c C-o".
+                         nil))
+                     (buffer-list)))
+          :action '(("Switch to browser buffer(s)" . helm-buffer-switch-buffers)
+                    ("Switch to browser buffer(s) in other window `C-c o'" . helm-buffer-switch-buffers-other-window)
+                    ("Switch to browser buffer in other frame `C-c C-o'" . switch-to-buffer-other-frame)
+                    ("Kill browser buffer(s)" . helm-kill-marked-buffers))
+          :keymap exwm/helm-browser-map)
         :buffer "*exwm/helm browser*"))
 
-;;; External application shortcuts.
 (defun exwm-start-browser ()
   "Fire-up the web browser as defined in `browse-url-generic-program'.
 If current window is the web browser already, fire-up a new window.
@@ -136,13 +149,16 @@ If there is none, fire it up."
         (start-process-shell-command browse-url-generic-program nil browse-url-generic-program)))))
 (exwm-input-set-key (kbd "s-w") #'exwm-start-browser)
 
+;;; Lock screen
 (defvar exwm-lock-program "slock" "Shell command used to lock the screen.")
 (defun exwm-start-lock () (interactive) (start-process-shell-command exwm-lock-program nil exwm-lock-program))
 (exwm-input-set-key (kbd "s-z") #'exwm-start-lock)
 
+;;; Screenshot
 (defun exwm-start-screenshot () (interactive) (start-process-shell-command "scrot" nil "scrot ~/temp/screen-%F-%T.png"))
 (exwm-input-set-key (kbd "<print>") #'exwm-start-screenshot)
 
+;;; Volume control
 ;;; TODO: Check out the 'volume' package.
 (defun exwm-volume (&optional up-or-down)
   (let ((controllers '(("amixer" . ((control . "set Master") (down . "5%-") (up . "5%+") (toggle . "toggle")))
