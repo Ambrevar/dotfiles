@@ -110,7 +110,7 @@
   "Preconfigured `helm' to list browser buffers."
   (interactive)
   (helm :sources
-        (helm-build-sync-source (concat exwm-class-name " buffers")
+        (helm-build-sync-source (concat (or exwm-class-name (file-name-nondirectory browse-url-generic-program)) " buffers")
           :candidates
           (delq nil (mapcar
                      (lambda (buf)
