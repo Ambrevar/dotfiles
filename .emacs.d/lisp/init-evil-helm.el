@@ -41,6 +41,7 @@
     "C-l" nil)) ; So the header displays the above binding.
 
 (with-eval-after-load 'init-exwm
+  (define-keys exwm/helm-browser-map "M-d" 'helm-buffer-run-kill-persistent)
   (define-keys exwm/helm-browser-map "M-o" 'helm-buffer-switch-other-window))
 
 (provide 'init-evil-helm)

@@ -99,12 +99,15 @@
 ;;; Web browser
 (with-eval-after-load 'helm
   ;; TODO: When follow-mode is one, multiselection is broken.
+  ;; TODO: Default value should be last browser window.
+  ;; TODO: kill-persistent is not persistent.
   (defvar exwm/helm-browser-map
     (let ((map (make-sparse-keymap)))
       (set-keymap-parent map helm-map)
       (define-key map (kbd "C-c o")     'helm-buffer-switch-other-window)
       (define-key map (kbd "C-c C-o")   'helm-buffer-switch-other-frame)
       (define-key map (kbd "M-D")       'helm-buffer-run-kill-buffers)
+      (define-key map (kbd "C-c d")     'helm-buffer-run-kill-persistent)
       map)
     "Keymap for browser source in Helm.")
 
