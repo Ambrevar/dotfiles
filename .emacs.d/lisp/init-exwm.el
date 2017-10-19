@@ -10,7 +10,7 @@
 
 ;;; TODO: Pressing "s-a" ('emms-smart-browse) loses the cursor.
 ;;; Sometimes waiting helps.  Calling emms-smart-browse manually does not trigger the issue.
-;;; TODO: Spawn select programs in floating mode. (E.g. mpv, mupen64plus, mplayer, qemu, steam, .exe (wine).)
+;;; TODO: Spawn select programs in floating mode? (E.g. mpv, mupen64plus, mplayer, qemu, steam, .exe (wine).)
 ;;; TODO: Separate EXWM buffers and Emacs buffers in `helm-mini'?
 
 ;;; TODO: Rendering issue with Qutebrowser
@@ -98,7 +98,7 @@
 
 ;;; Web browser
 (with-eval-after-load 'helm
-  ;; TODO: When follow-mode is one, multiselection is broken.
+  ;; TODO: When follow-mode is on, multiselection is broken.
   ;; TODO: Default value should be last browser window.
   ;; TODO: kill-persistent is not persistent.
   (defvar exwm/helm-browser-map
