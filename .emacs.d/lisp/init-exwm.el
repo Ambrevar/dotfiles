@@ -98,8 +98,8 @@
 
 ;;; Web browser
 (with-eval-after-load 'helm
+  ;; TODO: Post on EXWM's wiki once all TODOs are fixed.
   ;; TODO: When follow-mode is on, multiselection is broken.
-  ;; TODO: Default value should be last browser window.
   ;; TODO: kill-persistent is not persistent.
   (defvar exwm/helm-browser-map
     (let ((map (make-sparse-keymap)))
@@ -117,14 +117,19 @@
     (helm :sources
           (helm-build-sync-source (concat (or exwm-class-name (file-name-nondirectory browse-url-generic-program)) " buffers")
             :candidates
-            (delq nil (mapcar
-                       (lambda (buf)
-                         (if (with-current-buffer buf
-                               (and (eq major-mode 'exwm-mode)
-                                    (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program))))
-                             (buffer-name buf)
-                           nil))
-                       (buffer-list)))
+            (let (
+                  (bufs (delq nil (mapcar
+                                   (lambda (buf)
+                                     (if (with-current-buffer buf
+                                           (and (eq major-mode 'exwm-mode)
+                                                (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program))))
+                                         (buffer-name buf)
+                                       nil))
+                                   (buffer-list)))))
+              (when bufs
+                ;; Move first buffer (current) to last position.
+                (setcdr (last bufs) (list (pop bufs))))
+              bufs)
             :action '(("Switch to browser buffer(s)" . helm-buffer-switch-buffers)
                       ("Switch to browser buffer(s) in other window `C-c o'" . helm-buffer-switch-buffers-other-window)
                       ("Switch to browser buffer in other frame `C-c C-o'" . switch-to-buffer-other-frame)
