@@ -99,7 +99,10 @@
 ;;; Web browser
 (with-eval-after-load 'helm
   ;; TODO: Post on EXWM's wiki once all TODOs are fixed.
-  ;; TODO: When follow-mode is on, multiselection is broken.
+  ;; Publish on MELPA?  Maybe with generic code for EXWM buffers with column
+  ;; containing the class name, and and emacs-buffers helm source too.
+  ;; REVIEW: When follow-mode is on, multiselection is broken.
+  ;; TODO: s-w s-w loses focus.
   ;; TODO: kill-persistent is not persistent.
   (defvar exwm/helm-browser-map
     (let ((map (make-sparse-keymap)))
@@ -108,8 +111,12 @@
       (define-key map (kbd "C-c C-o")   'helm-buffer-switch-other-frame)
       (define-key map (kbd "M-D")       'helm-buffer-run-kill-buffers)
       (define-key map (kbd "C-c d")     'helm-buffer-run-kill-persistent)
+      ;; (define-key map (kbd "C-c d")     'exwm/helm-browsers-run-kill-persistent)
       map)
     "Keymap for browser source in Helm.")
+
+  (defun exwm/helm-update ()
+    (message "EXWM/HELM"))
 
   (defun exwm/helm-browser-buffers ()
     "Preconfigured `helm' to list browser buffers."
@@ -134,8 +141,14 @@
                       ("Switch to browser buffer(s) in other window `C-c o'" . helm-buffer-switch-buffers-other-window)
                       ("Switch to browser buffer in other frame `C-c C-o'" . switch-to-buffer-other-frame)
                       ("Kill browser buffer(s)" . helm-kill-marked-buffers))
+            ;; When follow-mode is on, the persistent-action allows for multiple candidate selection.
+            :persistent-action 'helm-buffers-list-persistent-action
+            :update 'exwm/helm-update
             :keymap exwm/helm-browser-map)
-          :buffer "*exwm/helm browser*")))
+          :buffer "*exwm/helm browser*"))
+
+  ;; REVIEW: Does this work?
+  (add-to-list 'helm-source-names-using-follow "exwm/helm browser"))
 
 (defun exwm-start-browser (&optional other-window)
   "Fire-up the web browser as defined in `browse-url-generic-program'.
