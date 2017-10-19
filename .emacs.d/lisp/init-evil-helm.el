@@ -20,6 +20,10 @@
   "<escape>" 'helm-keyboard-quit)
 
 (evil-define-key 'normal helm-map
+  "h" 'helm-next-source
+  "j" 'helm-next-line
+  "k" 'helm-previous-line
+  "l" 'helm-execute-persistent-action
   "g" 'helm-beginning-of-buffer
   "G" 'helm-end-of-buffer
   (kbd "C-f") 'helm-next-page
@@ -38,7 +42,10 @@
     "C-/" 'helm-ff-run-find-sh-command
     "M-h" 'helm-find-files-up-one-level
     "M-l" 'helm-execute-persistent-action
-    "C-l" nil)) ; So the header displays the above binding.
+    "C-l" nil) ; So the header displays the above binding.
+  (evil-define-key 'normal map
+    "h" 'helm-find-files-up-one-level
+    "l" 'helm-execute-persistent-action))
 
 (with-eval-after-load 'init-exwm
   (define-keys exwm/helm-browser-map "M-d" 'helm-buffer-run-kill-persistent)
