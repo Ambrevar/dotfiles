@@ -98,6 +98,7 @@
 
 ;;; Web browser
 (with-eval-after-load 'helm
+  ;; TODO: When follow-mode is one, multiselection is broken.
   (defvar exwm/helm-browser-map
     (let ((map (make-sparse-keymap)))
       (set-keymap-parent map helm-map)
@@ -128,16 +129,19 @@
             :keymap exwm/helm-browser-map)
           :buffer "*exwm/helm browser*")))
 
-(defun exwm-start-browser ()
+(defun exwm-start-browser (&optional other-window)
   "Fire-up the web browser as defined in `browse-url-generic-program'.
 If current window is the web browser already, fire-up a new window.
 If not, switch to the last open window.
-If there is none, fire it up."
-  (interactive)
+If there is none, fire it up.
+
+With prefix argument or if OTHER-WINDOW is non-nil, open in other window."
+  (interactive "P")
   (if (and (eq major-mode 'exwm-mode)
            (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program)))
       (if (fboundp 'exwm/helm-browser-buffers)
           (exwm/helm-browser-buffers)
+        (when other-window (other-window 1))
         (start-process-shell-command browse-url-generic-program nil browse-url-generic-program))
     (let ((last (buffer-list)))
       (while (and last
@@ -146,9 +150,15 @@ If there is none, fire it up."
                               (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program))))))
         (setq last (cdr last)))
       (if last
-          (switch-to-buffer (car last))
+          (funcall (if other-window 'switch-to-buffer-other-window 'switch-to-buffer) (car last))
+        (select-window (split-window))
         (start-process-shell-command browse-url-generic-program nil browse-url-generic-program)))))
+(defun exwm-start-browser-other-window ()
+  "Like `exwm-start-browser' but use other window if possible."
+  (interactive)
+  (exwm-start-browser t))
 (exwm-input-set-key (kbd "s-w") #'exwm-start-browser)
+(exwm-input-set-key (kbd "s-W") #'exwm-start-browser-other-window)
 
 ;;; Lock screen
 (defvar exwm-lock-program "slock" "Shell command used to lock the screen.")
