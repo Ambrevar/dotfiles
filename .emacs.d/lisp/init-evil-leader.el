@@ -24,6 +24,7 @@
   (evil-leader/set-key
    "p" 'emms-pause
    "n" 'emms-next))
+
 (with-eval-after-load 'init-helm
   (evil-leader/set-key
    "b" 'helm-mini

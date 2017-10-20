@@ -150,13 +150,20 @@
 
 (defun eshell-or-new-session (&optional arg)
   "Create an interactive Eshell buffer.
-If there is already an Eshell session active, switch to it.
-If current buffer is already an Eshell buffer, create a new one and switch to it.
+Switch to last Eshell session if any.
+Otherwise create a new one and switch to it.
 See `eshell' for the numeric prefix ARG."
   (interactive "P")
-  (if (eq major-mode 'eshell-mode)
+  (if (or arg (eq major-mode 'eshell-mode))
       (eshell (or arg t))
-    (eshell arg)))
+    (let ((last (buffer-list)))
+      (while (and last
+                  (not (with-current-buffer (car last)
+                         (eq major-mode 'eshell-mode))))
+        (setq last (cdr last)))
+      (if last
+          (switch-to-buffer (car last))
+        (eshell (or arg t))))))
 
 ;;; REVIEW: Emacs' standard functions fail when output has empty lines.
 ;;; This implementation is more reliable.

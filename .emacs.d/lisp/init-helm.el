@@ -16,7 +16,8 @@
 ;;; TODO: Implement alternating-color multiline lists.
 ;;; See https://github.com/emacs-helm/helm/issues/1790.
 
-;;; TODO: Display relative line numbers in Helm.
+(when (require 'linum-relative nil t)
+  (helm-linum-relative-mode 1))
 
 (when (require 'helm-descbinds nil t)
   (helm-descbinds-mode))
@@ -53,6 +54,49 @@
 
  helm-window-show-buffers-function 'helm-window-mosaic-fn
  helm-window-prefer-horizontal-split t)
+
+;;; REVIEW: Windowing configuration is way complicated.  See
+;;; https://github.com/emacs-helm/helm/issues/1902.
+(defun helm-custom-display-buffer (buffer)
+  "Custom function to display `helm-buffer' BUFFER."
+  (display-buffer
+   buffer `(nil . ((window-height . ,helm-display-buffer-default-height)
+                   (window-width  . ,helm-display-buffer-default-width))))
+  (helm-log-run-hook 'helm-window-configuration-hook))
+(defun helm-split-window-combined-fn (window)
+  "Helm window splitting that combined most standard features.
+
+- With C-u, split inside. With C-u C-u, use same window.
+- Else use biggest other window when available.
+- Else split horizontally if width>height, vertically otherwise."
+  (cond
+   ((or (minibufferp helm-current-buffer)
+        (and
+         (not (one-window-p t))
+         (not (equal current-prefix-arg '(4)))
+         (not (equal current-prefix-arg '(16)))))
+    ;; Find biggest window.
+    (let (biggest (maxarea 0))
+      (dolist (w (window-list))
+        (unless (eq w (selected-window))
+          (let ((area (* (window-pixel-width w) (window-pixel-height w))))
+            (when (> area maxarea)
+              (setq maxarea area
+                    biggest w)))))
+      biggest))
+   ((equal current-prefix-arg '(16))
+    ;; Same window.
+    (selected-window))
+   (t
+    ;; If split inside or if unique window.
+    (split-window (selected-window) nil
+                  (if (> (window-pixel-width) (window-pixel-height))
+                      'right
+                    'below)))))
+(setq helm-display-function 'helm-custom-display-buffer
+      helm-split-window-preferred-function 'helm-split-window-combined-fn)
+
+
 
 ;;; From https://github.com/emacs-helm/helm/issues/362.
 ;;; This is not perfect with evil mode as the cursor type is not right in the

@@ -41,7 +41,7 @@
         (funcall (if other-window 'find-file-other-window 'find-file) (car org-agenda-files))))))
 
 (defun org-switch-agenda-file-other-window ()
-  "Like `org-switch-agenda-file' but use other window when possible."
+  "Like `org-switch-agenda-file' but use other window if possible."
   (interactive)
   (org-switch-agenda-file t))
 

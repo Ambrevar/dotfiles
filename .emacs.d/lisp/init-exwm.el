@@ -10,7 +10,7 @@
 
 ;;; TODO: Pressing "s-a" ('emms-smart-browse) loses the cursor.
 ;;; Sometimes waiting helps.  Calling emms-smart-browse manually does not trigger the issue.
-;;; TODO: Spawn select programs in floating mode. (E.g. mpv, mupen64plus, mplayer, qemu, steam, .exe (wine).)
+;;; TODO: Spawn select programs in floating mode? (E.g. mpv, mupen64plus, mplayer, qemu, steam, .exe (wine).)
 ;;; TODO: Separate EXWM buffers and Emacs buffers in `helm-mini'?
 
 ;;; TODO: Rendering issue with Qutebrowser
@@ -98,14 +98,25 @@
 
 ;;; Web browser
 (with-eval-after-load 'helm
+  ;; TODO: Post on EXWM's wiki once all TODOs are fixed.
+  ;; Publish on MELPA?  Maybe with generic code for EXWM buffers with column
+  ;; containing the class name, and and emacs-buffers helm source too.
+  ;; REVIEW: When follow-mode is on, multiselection is broken.
+  ;; TODO: s-w s-w loses focus.
+  ;; TODO: kill-persistent is not persistent.
   (defvar exwm/helm-browser-map
     (let ((map (make-sparse-keymap)))
       (set-keymap-parent map helm-map)
       (define-key map (kbd "C-c o")     'helm-buffer-switch-other-window)
       (define-key map (kbd "C-c C-o")   'helm-buffer-switch-other-frame)
       (define-key map (kbd "M-D")       'helm-buffer-run-kill-buffers)
+      (define-key map (kbd "C-c d")     'helm-buffer-run-kill-persistent)
+      ;; (define-key map (kbd "C-c d")     'exwm/helm-browsers-run-kill-persistent)
       map)
     "Keymap for browser source in Helm.")
+
+  (defun exwm/helm-update ()
+    (message "EXWM/HELM"))
 
   (defun exwm/helm-browser-buffers ()
     "Preconfigured `helm' to list browser buffers."
@@ -113,31 +124,45 @@
     (helm :sources
           (helm-build-sync-source (concat (or exwm-class-name (file-name-nondirectory browse-url-generic-program)) " buffers")
             :candidates
-            (delq nil (mapcar
-                       (lambda (buf)
-                         (if (with-current-buffer buf
-                               (and (eq major-mode 'exwm-mode)
-                                    (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program))))
-                             (buffer-name buf)
-                           nil))
-                       (buffer-list)))
+            (let (
+                  (bufs (delq nil (mapcar
+                                   (lambda (buf)
+                                     (if (with-current-buffer buf
+                                           (and (eq major-mode 'exwm-mode)
+                                                (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program))))
+                                         (buffer-name buf)
+                                       nil))
+                                   (buffer-list)))))
+              (when bufs
+                ;; Move first buffer (current) to last position.
+                (setcdr (last bufs) (list (pop bufs))))
+              bufs)
             :action '(("Switch to browser buffer(s)" . helm-buffer-switch-buffers)
                       ("Switch to browser buffer(s) in other window `C-c o'" . helm-buffer-switch-buffers-other-window)
                       ("Switch to browser buffer in other frame `C-c C-o'" . switch-to-buffer-other-frame)
                       ("Kill browser buffer(s)" . helm-kill-marked-buffers))
+            ;; When follow-mode is on, the persistent-action allows for multiple candidate selection.
+            :persistent-action 'helm-buffers-list-persistent-action
+            :update 'exwm/helm-update
             :keymap exwm/helm-browser-map)
-          :buffer "*exwm/helm browser*")))
+          :buffer "*exwm/helm browser*"))
 
-(defun exwm-start-browser ()
+  ;; REVIEW: Does this work?
+  (add-to-list 'helm-source-names-using-follow "exwm/helm browser"))
+
+(defun exwm-start-browser (&optional other-window)
   "Fire-up the web browser as defined in `browse-url-generic-program'.
 If current window is the web browser already, fire-up a new window.
 If not, switch to the last open window.
-If there is none, fire it up."
-  (interactive)
+If there is none, fire it up.
+
+With prefix argument or if OTHER-WINDOW is non-nil, open in other window."
+  (interactive "P")
   (if (and (eq major-mode 'exwm-mode)
            (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program)))
       (if (fboundp 'exwm/helm-browser-buffers)
           (exwm/helm-browser-buffers)
+        (when other-window (other-window 1))
         (start-process-shell-command browse-url-generic-program nil browse-url-generic-program))
     (let ((last (buffer-list)))
       (while (and last
@@ -146,9 +171,15 @@ If there is none, fire it up."
                               (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program))))))
         (setq last (cdr last)))
       (if last
-          (switch-to-buffer (car last))
+          (funcall (if other-window 'switch-to-buffer-other-window 'switch-to-buffer) (car last))
+        (select-window (split-window))
         (start-process-shell-command browse-url-generic-program nil browse-url-generic-program)))))
+(defun exwm-start-browser-other-window ()
+  "Like `exwm-start-browser' but use other window if possible."
+  (interactive)
+  (exwm-start-browser t))
 (exwm-input-set-key (kbd "s-w") #'exwm-start-browser)
+(exwm-input-set-key (kbd "s-W") #'exwm-start-browser-other-window)
 
 ;;; Lock screen
 (defvar exwm-lock-program "slock" "Shell command used to lock the screen.")

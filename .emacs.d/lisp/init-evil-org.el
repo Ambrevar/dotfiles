@@ -6,29 +6,55 @@
 
 ;;; TODO: Do not depend on MELPA org but org-plus-contrib.
 
-;;; TODO: J is shadowed.  Also set calendar movements.
-;;; See https://github.com/Somelauw/evil-org-mode/issues/15.
-
-;; (evil-define-key 'normal org-mode-map
-;;   (kbd "M-<return>") (lambda () (interactive) (evil-insert 1) (org-meta-return))
-;;   "H" 'org-shiftleft
-;;   "J" 'org-shiftdown
-;;   "K" 'org-shiftup
-;;   "L" 'org-shiftright
-;;   (kbd "M-h") 'org-metaleft
-;;   (kbd "M-j") 'org-metadown
-;;   (kbd "M-k") 'org-metaup
-;;   (kbd "M-l") 'org-metaright
-;;   (kbd "M-H") 'org-shiftmetaleft
-;;   (kbd "M-J") 'org-shiftmetadown
-;;   (kbd "M-K") 'org-shiftmetaup
-;;   (kbd "M-L") 'org-shiftmetaright
-;; "<" 'org-up-element)
-
 (when (require 'evil-org nil t)
   (add-hook 'org-mode-hook 'evil-org-mode)
-  (evil-org-set-key-theme '(navigation insert textobjects additional))) ; shift? (shadows J) rsi todo heading
+  ;; No need for 'rsi, 'insert, 'shift (I use custom definition), 'todo 'heading.
+  (evil-org-set-key-theme '(navigation textobjects additional)))
 
+;;; REVIEW: Report upstream: https://github.com/Somelauw/evil-org-mode/issues/25.
+(defun evil-org-meta-return ()
+  "Like `org-meta-return' but switch to insert mode."
+  (interactive)
+  (evil-insert 1)
+  (org-meta-return))
+
+(defun evil-org-shiftleft ()
+  (interactive)
+  ;; TODO: Use `org-at-heading-or-item-p' instead?
+  (if (org-on-heading-p)
+      (org-shiftleft)
+    (evil-window-top)))
+
+(defun evil-org-shiftright ()
+  (interactive)
+  (if (org-on-heading-p)
+      (org-shiftright)
+    (evil-window-bottom)))
+
+(defun evil-org-shiftup ()
+  (interactive)
+  (if (org-on-heading-p)
+      (org-shiftup)
+    (evil-lookup)))
+
+(defun evil-org-shiftdown ()
+  (interactive)
+  (if (org-on-heading-p)
+      (org-shiftdown)
+    (call-interactively 'evil-join)))
+
+(evil-define-key 'normal evil-org-mode-map
+  "H" 'evil-org-shiftleft
+  "J" 'evil-org-shiftdown
+  "K" 'evil-org-shiftup
+  "L" 'evil-org-shiftright
+  "^" 'org-up-element ; Evil-Magit-inspired. TODO: Suggest upstream.
+  "<" 'org-up-element ; Custom
+  ">" 'org-down-element ; Custom
+  (kbd "M-<return>") 'evil-org-meta-return)
+
+;;; TODO: Set org-agenda bindings
+;;; See https://github.com/Somelauw/evil-org-mode/issues/15.
 (defun evil-org-agenda-todo ()
   (interactive)
   (org-agenda-todo t))
