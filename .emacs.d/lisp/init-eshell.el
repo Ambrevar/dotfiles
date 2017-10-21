@@ -115,22 +115,24 @@
   ;;; TODO: This conflicts with `evil-define-key' during the initialization of
   ;;; the first eshell session: the map in insert-mode will not take the changes
   ;;; into account. Going to normal mode and back to insert mode works.
-  (eshell-read-aliases-list)
+  ;;;
+  ;;; If we read the alias list here, it means we make commandline-defined aliases persistent.
+  ;;  (eshell-read-aliases-list)
   (dolist
       (alias
        '(("l" "ls -1 $*")
          ("la" "ls -lAh $*")
          ("ll" "ls -lh $*")
-         ;; ("ls" "ls -F $*")
+         ;; ("ls" "ls -F $*") ; not supported
          ;; ("emacs" "find-file $1")
-         ;; ("em" "find-file $*")
-         ("cp" "*cp -i $*")
-         ("mv" "*mv -i $*")
-         ("mkdir" "*mkdir -p $*")
-         ("mkcd" "*mkdir -p $* && cd $1")))
+         ;; ("cp" "eshell/cp -iv $*") ; TODO: Aliasing eshell/{cp,mv,ln} does not work.
+         ;; ("mv" "eshell/mv -iv $*")
+         ("cp" "*cp -iv $*")
+         ("mv" "*mv -iv $*")
+         ("rm" "eshell/rm -v $*")
+         ("mkdir" "eshell/mkdir -p $*")
+         ("mkcd" "eshell/mkdir -p $* && cd $1")))
     (add-to-list 'eshell-command-aliases-list alias))
-  (when (executable-find "emerge")
-    (add-to-list 'eshell-command-aliases-list '("emerge" "sudo *emerge --color y $*")))
   (eshell-write-aliases-list))
 
 ;;; Hooks
