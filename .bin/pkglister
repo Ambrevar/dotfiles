@@ -24,8 +24,10 @@ fi
 
 ## Gentoo
 if command -v emerge >/dev/null 2>&1; then
-	mkdir -p "$PKG_ROOT/gentoo"
+	mkdir -p "$PKG_ROOT/gentoo/package.use"
+	mkdir -p "$PKG_ROOT/gentoo/package.accept_keywords"
 	cp /var/lib/portage/world  "$PKG_ROOT/gentoo/"
-	sed -n '/^# Auto-generated/q;p' /etc/portage/package.use | LC_ALL=C sort >"$PKG_ROOT/gentoo/package.use"
-	sed -n '/^# /q;p' /etc/portage/package.accept_keywords | LC_ALL=C sort >"$PKG_ROOT/gentoo/package.accept_keywords"
+	grep '^USE=' /etc/portage/make.conf > "$PKG_ROOT/gentoo/make.conf"
+	cp /etc/portage/package.use/manual  "$PKG_ROOT/gentoo/package.use/manual"
+	cp /etc/portage/package.accept_keywords/manual  "$PKG_ROOT/gentoo/package.accept_keywords/manual"
 fi

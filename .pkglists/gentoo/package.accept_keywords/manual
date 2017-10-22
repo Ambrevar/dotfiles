@@ -8,7 +8,3 @@ sci-physics/bullet ~amd64
 
 ## Python
 =dev-lang/python-3.6.1-r1 ~amd64
-
-## Golang
-## TODO: Broken ebuild?
-# dev-go/go-tools **
