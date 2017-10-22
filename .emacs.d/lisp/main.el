@@ -237,28 +237,31 @@
 ;;; Comint mode
 (setq comint-prompt-read-only t)
 
-(defadvice desktop-owner (after pry-from-cold-dead-hands activate)
-  "Don't allow dead emacsen to own the desktop file."
-  (when (not (emacs-process-p ad-return-value))
-    (setq ad-return-value nil)))
-
 ;;; Desktop-mode
-;;; Let Emacs auto-load/save sessions only when running the daemon.
-;;; `server-running-p' is only useful once the daemon is started and cannot be
-;;; used for initialization. We use `daemonp' instead.
-;;; TODO: Desktop does not get saved when Emacs quits.  When does it get saved?
+;;; REVIEW: Desktop does not get saved when Emacs quits.
+;;; See http://debbugs.gnu.org/cgi/bugreport.cgi?bug=28945.
 ;;; TODO: `desktop-kill' should not query the user in `kill-emacs-hook'.
 ;;; TODO: Desktop mode does not save window registers properly.
 ;;; See https://groups.google.com/forum/#!topic/gnu.emacs.help/64aO_O43530
 ;;; and https://www.reddit.com/r/emacs/comments/4q38s1/save_register_between_sessions/?st=j419vc7r&sh=2617ffb4
 ;;; and http://debbugs.gnu.org/cgi/bugreport.cgi?bug=27422
 ;;; and https://stackoverflow.com/questions/5830494/windows-configuration-to-registers#5830928.
+(defadvice desktop-owner (after pry-from-cold-dead-hands activate)
+  "Don't allow dead emacsen to own the desktop file."
+  (when (not (emacs-process-p ad-return-value))
+    (setq ad-return-value nil)))
 (when (daemonp)
+  ;; Let Emacs auto-load/save sessions only when running the daemon.
+  ;; `server-running-p' is only useful once the daemon is started and cannot be
+  ;; used for initialization. We use `daemonp' instead.
   (setq history-length 250
+        ;; TODO: Default timer (30) is way to high: for somebody too frenzy, the
+        ;; timer might never be saved.  Report.
+        desktop-auto-save-timeout 5
         desktop-dirname (concat emacs-cache-folder "desktop")
         desktop-path (list desktop-dirname)
-        desktop-save t
-        desktop-restore-eager 4)
+        ;; desktop-restore-eager 4 ; Can be annoying as you don't have your last-loaded buffers immediately.
+        desktop-save t)
   (unless (file-directory-p desktop-dirname)
     (make-directory desktop-dirname t))
   ;; TODO: `compile-history' should be buffer local but that does not work.
