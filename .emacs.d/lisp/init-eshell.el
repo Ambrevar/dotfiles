@@ -127,11 +127,11 @@
          ;; ("emacs" "find-file $1")
          ;; ("cp" "eshell/cp -iv $*") ; TODO: Aliasing eshell/{cp,mv,ln} does not work.
          ;; ("mv" "eshell/mv -iv $*")
-         ("cp" "*cp -iv $*")
-         ("mv" "*mv -iv $*")
-         ("rm" "eshell/rm -v $*")
-         ("mkdir" "eshell/mkdir -p $*")
-         ("mkcd" "eshell/mkdir -p $* && cd $1")))
+         ("cpv" "cp -iv $*") ; TODO: "sudo" does not work on aliases.
+         ("mvv" "mv -iv $*")
+         ("rmv" "rm -v $*")
+         ("md" "eshell/mkdir -p $*")
+         ("mkcd" "eshell/mkdir -p $* && cd $1"))) ; TODO: Does not work because mkdir exits with nil?
     (add-to-list 'eshell-command-aliases-list alias))
   (eshell-write-aliases-list))
 
