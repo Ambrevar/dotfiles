@@ -4,8 +4,21 @@
 ## do it from the shell config to me sure it applies to TTY as well.
 
 ## Mask
-## Result for 027 is: rwxr-x---
-umask 027
+## Result for 027 is "rwxr-x---".  022 is the popular default.
+##
+## As a result applications make the bad assumption # that "others" have access.
+## Another drawback of 027 is that is behaves badly with default sudo config: for
+## instance "sudo mkdir foo" will effectively create a "foo" folder whose owner
+## is root and with permission 027, even if root's umask is 022.  This is
+## usually very bad.
+## See https://wiki.archlinux.org/index.php/Sudo#Permissive_umask.
+##
+## It is possible to override sudo's umask by adding the following to the
+## sudoers file:
+##
+## Defaults umask = 0022
+## Defaults umask_override
+# umask 027
 
 
 
