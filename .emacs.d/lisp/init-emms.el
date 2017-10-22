@@ -134,12 +134,17 @@ will always use the same cover per folder."
   (when (emms-playlist-current-selected-track)
     (let ((time emms-playing-time))
       (setq emms-playing-time 0) ; Don't disturb the time display.
+      (and (memq 'emms-player-mpv emms-player-list)
+           (executable-find "mpv")
+           (push "--mute=yes" emms-player-mpv-parameters))
       (emms-start)
-      (sleep-for 0 200) ; This is required for the player might not be ready yet.
-      ;; TODO: The sleep-for might make EMMS play during the time on resume.  We
-      ;; could work around that by muting the volume.  Is there a portable way
-      ;; of doing that?  It does not seem that EMMS can do this natively.
-      (emms-player-seek-to time)
+      (sleep-for 0 300) ; This is required for the player might not be ready yet.
+      ;; TODO: This 'sleep-for' is a kludge and upstream should provide a provision for it.
+      (with-demoted-errors "EMMS error: %S" (emms-player-seek-to time))
+      (and (memq 'emms-player-mpv emms-player-list)
+           (executable-find "mpv")
+           (pop emms-player-mpv-parameters)
+           (call-process-shell-command (emms-player-mpv--format-command "mute") nil nil nil))
       (emms-pause))))
 
 ;;; TODO: See if mpd is faster at building the db. Not so important.
