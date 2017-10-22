@@ -239,21 +239,7 @@
 
 ;;; News
 (nconc package-selected-packages '(elfeed))
-(with-eval-after-load 'elfeed
-  (setq elfeed-db-directory (concat emacs-cache-folder "elfeed"))
-  (defun elfeed-play-in-mpv ()
-    ;; TODO: Wrap around `elfeed-search-browse-url'/`elfeed-show-visit'?
-    (interactive)
-    (let ((entry (if (eq major-mode 'elfeed-show-mode) elfeed-show-entry (elfeed-search-selected :single)))
-          (quality-arg "")
-          (quality-val (completing-read "Max height resolution (0 for unlimited): " '("0" "480" "720") nil nil)))
-      (setq quality-val (string-to-number quality-val))
-      (message "Opening %s with height≤%s with mpv..." (elfeed-entry-link entry) quality-val)
-      (when (< 0 quality-val)
-        (setq quality-arg (format "--ytdl-format=[height<=?%s]" quality-val)))
-      (start-process "elfeed-mpv" nil "mpv" quality-arg (elfeed-entry-link entry))))
-  (define-key elfeed-search-mode-map "v" #'elfeed-play-in-mpv)
-  (load "~/personal/news/elfeed.el" t))
+(with-eval-after-load 'elfeed (require 'init-elfeed))
 
 ;;; Org-mode
 (nconc package-selected-packages '(org-plus-contrib)) ; Contains latest 'org.

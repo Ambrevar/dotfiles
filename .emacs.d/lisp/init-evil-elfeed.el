@@ -1,7 +1,6 @@
 ;;; Evil+Elfeed
 
 (evil-set-initial-state 'elfeed-search-mode 'motion)
-
 (evil-define-key 'motion elfeed-search-mode-map
   (kbd "<return>") 'elfeed-search-show-entry
   "R" 'elfeed-search-fetch
@@ -13,19 +12,19 @@
   "s" 'elfeed-search-live-filter
   "y" 'elfeed-search-yank)
 
-(evil-define-key '(normal visual) elfeed-search-mode-map
+(evil-define-key '(motion visual) elfeed-search-mode-map
   "+" 'elfeed-search-tag-all
   "-" 'elfeed-search-untag-all
   "U" 'elfeed-search-tag-all-unread
   "u" 'elfeed-search-untag-all-unread)
 
-(evil-define-key 'normal elfeed-show-mode-map
+(evil-set-initial-state 'elfeed-show-mode 'motion)
+(evil-define-key 'motion elfeed-show-mode-map
   "+" 'elfeed-show-tag
   "-" 'elfeed-show-untag
   "A" 'elfeed-show-add-enclosure-to-playlist
   "P" 'elfeed-show-play-enclosure
   "o" 'elfeed-show-visit
-  "O" 'elfeed-play-in-mpv ; Custom function
   "d" 'elfeed-show-save-enclosure
   "r" 'elfeed-show-refresh
   "]" 'elfeed-show-next
@@ -35,5 +34,13 @@
   "q" 'elfeed-kill-buffer
   "s" 'elfeed-show-new-live-search
   "y" 'elfeed-show-yank)
+
+;;; Custom
+(evil-define-key 'motion elfeed-search-mode-map
+  (kbd "<return>") 'elfeed-visit-or-play-with-mpv
+  "o" 'elfeed-visit-or-play-with-mpv)
+(evil-define-key 'motion elfeed-show-mode-map
+  (kbd "<return>") 'elfeed-visit-or-play-with-mpv
+  "o" 'elfeed-visit-or-play-with-mpv)
 
 (provide 'init-evil-elfeed)
