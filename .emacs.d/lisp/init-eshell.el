@@ -140,16 +140,32 @@
 (add-hook 'eshell-mode-hook 'turn-off-nobreak-char-display)
 (add-hook 'eshell-mode-hook 'eshell-cmpl-initialize)
 
+;;; History
 ;;; Filter out space-beginning commands from history.
 ;;; TODO: history/command hook: trim surrounding space.  Check `eshell-rewrite-command-hook'.
 ;;; TODO: history: do not save failed commands to file.
-;;; TODO: history: do not store duplicates
-;;; TODO: history: Shared history?  Check apropos: "esh hist".
+;;; TODO: history: do not store duplicates.  Push unique command to front of the list.
 (setq eshell-input-filter
       (lambda (str)
         (not (or (string= "" str)
                  (string-prefix-p " " str)))))
 
+;;; Shared history.
+(defvar eshell-history-global-ring nil
+  "The history ring shared across Eshell sessions.")
+
+(defun eshell-hist-use-global-history ()
+  "Make Eshell history shared across different sessions."
+  (unless eshell-history-global-ring
+    (let (eshell-history-ring)
+      (when eshell-history-file-name
+        (eshell-read-history nil t))
+      (setq eshell-history-global-ring eshell-history-ring))
+    (unless eshell-history-ring (setq eshell-history-global-ring (make-ring eshell-history-size))))
+  (setq eshell-history-ring eshell-history-global-ring))
+(add-hook 'eshell-mode-hook 'eshell-hist-use-global-history)
+
+;;; Spawning
 (defun eshell-or-new-session (&optional arg)
   "Create an interactive Eshell buffer.
 Switch to last Eshell session if any.
@@ -197,6 +213,7 @@ See `eshell-prompt-regexp'."
   (while (pcomplete-here
           (nth 2 (bash-completion-dynamic-complete-nocomint (save-excursion (eshell-bol) (point)) (point))))))
 
+;;; TODO: Publish fish completion.
 ;;; If the user fish config change directory on startup, file completion will
 ;;; not be right.  One work-around is to add a "cd default-directory" before the
 ;;; "complete", but that's brittle because of unreliable shell escaping.
