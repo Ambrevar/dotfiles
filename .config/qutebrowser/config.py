@@ -57,6 +57,10 @@ config.bind('pp', 'open -- {primary}')
 config.bind('pP', 'open -- {clipboard}')
 config.bind('Pp', 'open -t -- {primary}')
 config.bind('PP', 'open -t -- {clipboard}')
+config.bind('<alt-h>', 'completion-item-focus prev-category', mode='command')
+config.bind('<alt-l>', 'completion-item-focus next-category', mode='command')
+config.bind('<alt-j>', 'completion-item-focus next', mode='command')
+config.bind('<alt-k>', 'completion-item-focus prev', mode='command')
 
 ## Uncomment this to still load settings configured via autoconfig.yml
 # config.load_autoconfig()
