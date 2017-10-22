@@ -267,9 +267,13 @@
 ;;; association.
 ;;; REVIEW: `save-place' does not seem to work with pdf-tools.
 ;;; See https://github.com/politza/pdf-tools/issues/18.
+;;; TODO: windmove fails when selecting text and then moving up/down.
+;;; It only fails if in evil mode.
 (nconc package-selected-packages '(pdf-tools))
 (when (require 'pdf-tools nil t)
-  (setq pdf-view-midnight-colors '("#ffffff" . "#000000"))
+  ;; (setq pdf-view-midnight-colors '("#ffffff" . "#000000"))
+  (setq pdf-view-midnight-colors '("#ff9900" . "#0a0a12" )) ; Amber
+  (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
   (pdf-tools-install t t t))
 
 ;;; Perl
