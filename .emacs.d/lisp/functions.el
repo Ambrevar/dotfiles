@@ -152,8 +152,9 @@ Work on buffer or region. Require `tabify-leading'."
          (when (executable-find "fortune")
            (with-temp-buffer
              (shell-command "fortune" t)
-             (let ((comment-start ";;"))
-               (comment-region (point-min) (point-max)))
+             (while (not (eobp))
+               (insert ";; ")
+               (forward-line))
              (delete-trailing-whitespace (point-min) (point-max))
              (concat (buffer-string) "\n")))))
     (if (called-interactively-p 'any)
