@@ -1,5 +1,9 @@
 ;;; EXWM
 
+;;; When stating the client from .xinitrc, `save-buffer-kill-terminal' will
+;;; for-kill Emacs before it can run through `kill-emacs-hook'.
+(global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
+
 ;;; REVIEW: Athena+Xaw3d confuses xcape when binding Caps-lock to both L_Ctrl
 ;;; escape, in which case it will procude <C-escape> in Emacs. In practice, it
 ;;; means that `C-` keys will works but `<escape>` will need a fast double tap
