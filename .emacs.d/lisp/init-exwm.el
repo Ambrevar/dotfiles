@@ -172,7 +172,7 @@ With prefix argument or if OTHER-WINDOW is non-nil, open in other window."
         (setq last (cdr last)))
       (if last
           (funcall (if other-window 'switch-to-buffer-other-window 'switch-to-buffer) (car last))
-        (select-window (split-window))
+        (when other-window (select-window (split-window-sensibly)))
         (start-process-shell-command browse-url-generic-program nil browse-url-generic-program)))))
 (defun exwm-start-browser-other-window ()
   "Like `exwm-start-browser' but use other window if possible."
