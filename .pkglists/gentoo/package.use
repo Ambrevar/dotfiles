@@ -1,25 +1,60 @@
-#
-# app-editors/emacs -gtk -gtk3 athena Xaw3d
-#games-util/steam-launcher -steamruntime
-app-admin/conky -ncurses -X
-app-crypt/pinentry emacs
-app-editors/emacs gtk gtk3
+## TODO: Try the "static" USE flag to link some executables statically.
+## TODO: Install light TeXlive.
+
+## Python
+## TODO: Do no systematically install python2_7.
+# Enabling additional implementation in addition to the profile default
+*/* PYTHON_TARGETS: -python3_4 python3_6 python2_7
+# Replacing the profile default with specific implementation
+*/* PYTHON_SINGLE_TARGET: -* python3_6
+dev-libs/gobject-introspection PYTHON_SINGLE_TARGET: -* python2_7
+app-text/asciidoc PYTHON_SINGLE_TARGET: -* python2_7
+# app-misc/ca-certificates PYTHON_TARGETS: -* python2_7 PYTHON_SINGLE_TARGET: -* python2_7
+sci-calculators/units PYTHON_TARGETS: -* python2_7 PYTHON_SINGLE_TARGET: -* python2_7
+# dev-python/pyyaml PYTHON_TARGET: -* python2_7
+
+## TODO: Out of date?
+# app-text/texlive-core -X
+# www-client/qutebrowser -webkit webengine
+
+## Emacs
 app-editors/emacs sound alsa xft jpeg tiff gif png svg games source libxml2 imagemagick
+app-editors/emacs gtk gtk3
+# app-editors/emacs -gtk -gtk3 athena Xaw3d
+net-mail/mu emacs doc
+net-mail/isync sasl
+app-crypt/pinentry emacs
 app-text/poppler cairo
-dev-python/PyQt5 -webkit
+media-libs/imlib2 gif jpeg png tiff
+media-gfx/imagemagick png hdri jpeg jpeg2k lcms lzma png pango raw svg tiff webp
+net-misc/curl curl_ssl_gnutls -curl_ssl_openssl
+
+## Media
+media-libs/chromaprint tools
+media-video/ffmpeg libass libv4l mp3 opengl opus sdl theora truetype v4l vaapi vdpau vorbis wavpack webp x264 x265 xvid gnutls doc
+media-video/mpv v4l vaapi vdpau dvd cdda doc
+media-gfx/sxiv exif gif
+
+## Misc
+app-admin/conky -ncurses -X
+x11-misc/dzen xft
+media-gfx/asymptote -X -boehm-gc latex
+x11-terms/xterm truetype
+
+## Qutebrowser
 dev-python/PyQt5 opengl webengine webchannel multimedia sql declarative gui widgets printsupport network
 dev-qt/qtmultimedia gstreamer
-dev-qt/qtwebengine -bindist
-media-gfx/asymptote -X -boehm-gc latex
-media-gfx/imagemagick png hdri jpeg jpeg2k lcms lzma png pango raw svg tiff webp
-media-libs/chromaprint tools
-media-libs/imlib2 gif jpeg png tiff
-media-video/ffmpeg libass libv4l mp3 opengl opus sdl theora truetype v4l vaapi vdpau vorbis wavpack webp x264 x265 xvid gnutls
-media-video/mpv v4l vaapi vdpau dvd cdda
-net-mail/isync sasl
-net-mail/mu emacs
-net-misc/curl curl_ssl_gnutls -curl_ssl_openssl
-net-misc/iputils -caps -filecaps
-www-client/qutebrowser -webkit webengine
-x11-misc/dzen xft
-x11-terms/xterm truetype
+dev-python/PyQt5 -webkit
+## Pin qtwebengine since it takes forever to compile.
+=dev-qt/qtwebengine-5.7.1-r2:5 -bindist widgets
+
+## Portage
+app-portage/eix doc
+
+## Steam
+## TODO: Try steam runtime (get rid of 32-bit applications.
+games-util/steam-launcher -steamruntime
+
+## OpenMW
+dev-games/mygui -ogre
+media-libs/libsdl2 opengl

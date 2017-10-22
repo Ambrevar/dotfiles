@@ -1,7 +1,14 @@
 app-shells/fish ~amd64
-media-sound/mps-youtube **
-media-video/mpv
 net-mail/mu ~amd64
-net-misc/youtube-dl ~amd64
 sys-fs/udiskie ~amd64
-www-client/qutebrowser **
+media-sound/mps-youtube **
+
+## OpenMW
+sci-physics/bullet ~amd64
+
+## Python
+=dev-lang/python-3.6.1-r1 ~amd64
+
+## Golang
+## TODO: Broken ebuild?
+# dev-go/go-tools **
