@@ -240,7 +240,8 @@
 ;;; Desktop-mode
 ;;; REVIEW: Desktop does not get saved when Emacs quits.
 ;;; See http://debbugs.gnu.org/cgi/bugreport.cgi?bug=28945.
-;;; TODO: `desktop-kill' should not query the user in `kill-emacs-hook'.
+;;; REVIEW: `desktop-kill' should not query the user in `kill-emacs-hook'.
+;;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28943
 ;;; TODO: Desktop mode does not save window registers properly.
 ;;; See https://groups.google.com/forum/#!topic/gnu.emacs.help/64aO_O43530
 ;;; and https://www.reddit.com/r/emacs/comments/4q38s1/save_register_between_sessions/?st=j419vc7r&sh=2617ffb4
@@ -255,8 +256,9 @@
   ;; `server-running-p' is only useful once the daemon is started and cannot be
   ;; used for initialization. We use `daemonp' instead.
   (setq history-length 250
-        ;; TODO: Default timer (30) is way to high: for somebody too frenzy, the
-        ;; timer might never be saved.  Report.
+        ;; REVIEW: Default timer (30) is way to high: for somebody too frenzy, the
+        ;; timer might never be saved.  See
+        ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28943.
         desktop-auto-save-timeout 5
         desktop-dirname (concat emacs-cache-folder "desktop")
         desktop-path (list desktop-dirname)
