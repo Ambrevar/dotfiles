@@ -95,7 +95,8 @@
 ;;; Debbugs
 (nconc package-selected-packages '(debbugs))
 (with-eval-after-load 'debbugs
-  (setq debbugs-gnu-persistency-file (expand-file-name "debbugs" emacs-cache-folder)))
+  (setq debbugs-gnu-all-severities t
+        debbugs-gnu-persistency-file (expand-file-name "debbugs" emacs-cache-folder)))
 
 ;;; Diff
 ;;; REVIEW: Show permissions in ztree.
