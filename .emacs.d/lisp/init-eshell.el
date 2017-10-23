@@ -6,6 +6,12 @@
 ;;; modules, runs their hooks and concludes with `eshell-first-time-mode-hook'
 ;;; (for the first session only) and `eshell-mode-hook'.
 
+;;; REVIEW: ANSI coloring goes wrong sometimes.  Quite often with emerge/eix.
+;;; Fixed in #27407.
+(require 'patch-eshell)
+
+;;; TODO: Sometimes transmission-daemon does not start from Eshell.
+
 ;;; TODO: Redirecting big output to file (e.g. /dev/null) is extremely slow.
 ;; > cat /usr/share/dict/british-english | wc -l
 ;;; The above line yields rancom results.  Plus it's much slower than
@@ -23,9 +29,6 @@
 ;;; https://emacs.stackexchange.com/questions/5608/how-to-let-eshell-remember-sudo-password-for-two-minutes
 ;;; See http://debbugs.gnu.org/cgi/bugreport.cgi?bug=27411
 ;;; and #28323.
-
-;;; REVIEW: Eshell/TRAMP's sudo does not work with aliases.
-;;; See #28320.
 
 ;;; REVIEW: Eshell/Shell completion fails when PATH has a non-readable element.
 ;;; See https://github.com/emacs-helm/helm/issues/1785
@@ -123,11 +126,16 @@
        '(("l" "ls -1 $*")
          ("la" "ls -lAh $*")
          ("ll" "ls -lh $*")
+         ;; TODO: Aliasing eshell/{cp,mv,ln} does not work.
+         ;; TODO: "sudo" does not work on aliases.
+         ;; See bug #27168.
+         ;; REVIEW: Eshell/TRAMP's sudo does not work with aliases.
+         ;; See #28320.
          ;; ("ls" "ls -F $*") ; not supported
          ;; ("emacs" "find-file $1")
-         ;; ("cp" "eshell/cp -iv $*") ; TODO: Aliasing eshell/{cp,mv,ln} does not work.
+         ;; ("cp" "eshell/cp -iv $*")
          ;; ("mv" "eshell/mv -iv $*")
-         ("cpv" "cp -iv $*") ; TODO: "sudo" does not work on aliases.
+         ("cpv" "cp -iv $*")
          ("mvv" "mv -iv $*")
          ("rmv" "rm -v $*")
          ("md" "eshell/mkdir -p $*")
