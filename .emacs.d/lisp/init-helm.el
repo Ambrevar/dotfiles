@@ -41,6 +41,7 @@
 ;;; This makes the copy and rename operations asynchronous.
 (dired-async-mode)
 
+;;; Generic configuration.
 (setq
  helm-follow-mode-persistent t
  helm-reuse-last-window-split-state t
@@ -60,14 +61,6 @@
  helm-window-show-buffers-function 'helm-window-mosaic-fn
  helm-window-prefer-horizontal-split t)
 
-;;; REVIEW: Windowing configuration is way complicated.  See
-;;; https://github.com/emacs-helm/helm/issues/1902.
-(defun helm-custom-display-buffer (buffer)
-  "Custom function to display `helm-buffer' BUFFER."
-  (display-buffer
-   buffer `(nil . ((window-height . ,helm-display-buffer-default-height)
-                   (window-width  . ,helm-display-buffer-default-width))))
-  (helm-log-run-hook 'helm-window-configuration-hook))
 (defun helm-split-window-combined-fn (window)
   "Helm window splitting that combined most standard features.
 
@@ -98,10 +91,7 @@
                   (if (> (window-pixel-width) (window-pixel-height))
                       'right
                     'below)))))
-(setq helm-display-function 'helm-custom-display-buffer
-      helm-split-window-preferred-function 'helm-split-window-combined-fn)
-
-
+(setq helm-split-window-preferred-function 'helm-split-window-combined-fn)
 
 ;;; From https://github.com/emacs-helm/helm/issues/362.
 ;;; This is not perfect with evil mode as the cursor type is not right in the
