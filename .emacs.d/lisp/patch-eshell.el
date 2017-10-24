@@ -92,4 +92,26 @@ This is done after all necessary filtering has been done."
         (eshell-interactive-print prompt)))
     (run-hooks 'eshell-after-prompt-hook)))
 
+;;; Fix 27405, expected in Emacs 26.1.
+;;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27405
+;;; Emacs' standard functions fail when output has empty lines.
+;;; The following implementation is more reliable.
+(with-eval-after-load 'em-prompt
+  (defun eshell-next-prompt (n)
+    "Move to end of Nth next prompt in the buffer.
+See `eshell-prompt-regexp'."
+    (interactive "p")
+    (re-search-forward eshell-prompt-regexp nil t n)
+    (when eshell-highlight-prompt
+      (while (not (get-text-property (line-beginning-position) 'read-only) )
+        (re-search-forward eshell-prompt-regexp nil t n)))
+    (eshell-skip-prompt))
+
+  (defun eshell-previous-prompt (n)
+    "Move to end of Nth previous prompt in the buffer.
+See `eshell-prompt-regexp'."
+    (interactive "p")
+    (backward-char)
+    (eshell-next-prompt (- n))))
+
 (provide 'patch-eshell)

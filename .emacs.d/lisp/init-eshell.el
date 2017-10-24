@@ -50,6 +50,13 @@
 ;;;
 ;;; > date +%Z
 
+;;; TODO: Hour is printed twice. We don't need to set this?
+;; (setq eshell-ls-date-format (replace-regexp-in-string "^\\+*" "" (getenv "TIME_STYLE")))
+
+;;; TODO: ls: Sort using locale.
+
+;;; TODO: `kill -#' does not work.
+
 (setq eshell-directory-name (concat emacs-cache-folder "eshell"))
 
 ;;; Use native 'sudo', system sudo asks for password every time.
@@ -69,13 +76,6 @@
  eshell-hist-ignoredups t
  eshell-destroy-buffer-when-process-dies t)
 
-;;; TODO: Hour is printed twice. We don't need to set this?
-;; (setq eshell-ls-date-format (replace-regexp-in-string "^\\+*" "" (getenv "TIME_STYLE")))
-
-;;; TODO: ls: Sort using locale.
-
-;;; TODO: `kill -#' does not work.
-
 ;;; Leave `eshell-highlight-prompt' to t as it sets the read-only property.
 (setq eshell-prompt-function
       (lambda nil
@@ -92,12 +92,13 @@
 (setq-default eshell-prompt-regexp "^> ")
 
 (with-eval-after-load 'em-term
-  (nconc eshell-visual-commands
-         '("abook" "alsamixer" "cmus" "fzf" "htop" "mpsyt" "mpv" "mutt" "ncdu" "newsbeuter" "pinentry-curses" "ranger" "watch" "wifi-menu"))
+  (dolist (p '("abook" "alsamixer" "cmus" "dtach" "fzf" "htop" "mpsyt" "mpv" "mutt" "ncdu" "newsbeuter" "pinentry-curses" "ranger" "watch" "wifi-menu"))
+    (add-to-list 'eshell-visual-commands p))
   (setq eshell-visual-subcommands
-        '(("git" "log" "l" "lol" "diff" "d" "dc" "show")
-          ("sudo" "wifi-menu")
-          ("sudo" "vi"))))
+        '(("git" "log" "diff" "show"
+           "l" "lol" "d" "dc") ; aliases
+          ("sudo" "wifi-menu") ; Arch Linux
+          ("sudo" "vi" "visudo"))))
 
 ;;; Support for Emacs' pinentry
 ;;; TODO: gpg-agent seems to be misconfigured for mu4e at least:
@@ -120,7 +121,7 @@
   ;;; into account. Going to normal mode and back to insert mode works.
   ;;;
   ;;; If we read the alias list here, it means we make commandline-defined aliases persistent.
-  ;;  (eshell-read-aliases-list)
+  ;; (eshell-read-aliases-list)
   (dolist
       (alias
        '(("l" "ls -1 $*")
@@ -190,27 +191,6 @@ See `eshell' for the numeric prefix ARG."
       (if last
           (switch-to-buffer (car last))
         (eshell (or arg t))))))
-
-;;; REVIEW: Emacs' standard functions fail when output has empty lines.
-;;; This implementation is more reliable.
-;;; Reported at https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27405.
-(with-eval-after-load 'em-prompt
-  (defun eshell-next-prompt (n)
-    "Move to end of Nth next prompt in the buffer.
-See `eshell-prompt-regexp'."
-    (interactive "p")
-    (re-search-forward eshell-prompt-regexp nil t n)
-    (when eshell-highlight-prompt
-      (while (not (get-text-property (line-beginning-position) 'read-only) )
-        (re-search-forward eshell-prompt-regexp nil t n)))
-    (eshell-skip-prompt))
-
-  (defun eshell-previous-prompt (n)
-    "Move to end of Nth previous prompt in the buffer.
-See `eshell-prompt-regexp'."
-    (interactive "p")
-    (backward-char)
-    (eshell-next-prompt (- n))))
 
 (when (require 'bash-completion nil t)
   ;; Sometimes `eshell-default-completion-function' does better, e.g. "gcc
