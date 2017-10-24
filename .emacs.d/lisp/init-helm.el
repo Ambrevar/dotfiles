@@ -173,7 +173,8 @@ Requires `call-process-to-string' from `functions'."
 (global-set-key [remap list-buffers] 'helm-mini)
 ;; (global-set-key [remap dabbrev-expand] 'helm-dabbrev)
 (global-set-key [remap yank-pop] 'helm-show-kill-ring)
-(global-set-key [remap exchange-point-and-mark] 'helm-mark-or-exchange-rect)
+;;; Do not remap 'exchange-point-and-mark, Evil needs it in visual mode.
+(global-set-key (kbd "C-x C-x") 'helm-mark-or-exchange-rect)
 (global-set-key [remap apropos-command] 'helm-apropos)
 (global-set-key [remap query-replace-regexp] 'helm-regexp)
 (unless (boundp 'completion-in-region-function)
