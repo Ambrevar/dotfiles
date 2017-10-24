@@ -18,7 +18,7 @@
  org-adapt-indentation nil
  ;; Add keywords.
  org-todo-keywords '((sequence "TODO" "REVIEW" "DONE"))
- org-todo-keyword-faces '(("REVIEW" :inherit org-done))
+ ;; org-todo-keyword-faces '(("REVIEW" :inherit org-done))
  ;; Priorities.
  org-priority-start-cycle-with-default nil
  org-default-priority 66
