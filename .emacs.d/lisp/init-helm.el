@@ -26,8 +26,13 @@
   (setq wgrep-auto-save-buffer t
         wgrep-enable-key (kbd "C-x C-q")))
 
-;;; Require helm-ls-git unconditionally, this makes following config easier.
-(require 'helm-ls-git)
+(when (require 'helm-ls-git nil t)
+  ;; `helm-source-ls-git' must be defined manually.
+  ;; See https://github.com/emacs-helm/helm-ls-git/issues/34.
+  (setq helm-source-ls-git
+        (and (memq 'helm-source-ls-git helm-ls-git-default-sources)
+             (helm-make-source "Git files" 'helm-ls-git-source
+               :fuzzy-match helm-ls-git-fuzzy-match))))
 
 (helm-mode 1)
 ;; (helm-autoresize-mode 1)
@@ -129,19 +134,12 @@
 
 ;;; Make `helm-mini' almighty.
 (require 'helm-bookmark)
-(setq helm-mini-default-sources '(helm-source-buffers-list
+(setq helm-mini-default-sources `(helm-source-buffers-list
                                   helm-source-recentf
-                                  helm-source-ls-git
+                                  ,(when (boundp 'helm-source-ls-git) 'helm-source-ls-git)
                                   helm-source-bookmarks
                                   helm-source-bookmark-set
                                   helm-source-buffer-not-found))
-
-;;; `helm-source-ls-git' must be defined manually.
-;;; See https://github.com/emacs-helm/helm-ls-git/issues/34.
-(setq helm-source-ls-git
-      (and (memq 'helm-source-ls-git helm-ls-git-default-sources)
-           (helm-make-source "Git files" 'helm-ls-git-source
-             :fuzzy-match helm-ls-git-fuzzy-match)))
 
 ;;; Eshell
 (defun helm/eshell-set-keys ()
