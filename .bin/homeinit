@@ -46,7 +46,13 @@ if command -v emacs >/dev/null 2>&1; then
 	echo "==> Emacs extra packages"
 	yes | emacs --batch -l ~/.emacs.d/init.el --eval '(progn (package-refresh-contents) (package-install-selected-packages))'
 	mkdir -pv ~/.emacs.d/site-lisp
-	git clone https://github.com/Ambrevar/evil-special-modes ~/.emacs.d/site-lisp/evil-special-modes
+	if [ -e ~/.emacs.d/site-lisp/evil-special-modes ]; then
+		pushd ~/.emacs.d/site-lisp/evil-special-modes
+		git pull
+		popd
+	else
+		git clone https://github.com/Ambrevar/evil-special-modes ~/.emacs.d/site-lisp/evil-special-modes
+	fi
 fi
 
 echo "==> Go path"
