@@ -102,6 +102,8 @@
 ;;; REVIEW: Show permissions in ztree.
 ;;; See https://github.com/fourier/ztree/issues/50.
 (nconc package-selected-packages '(ztree))
+(when (require 'evil-diff nil t)
+  (add-hook 'diff-mode-hook 'evil-diff-init))
 
 ;;; Dired
 ;;; Dired is loaded after init.el, so configure it only then.
