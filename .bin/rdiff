@@ -6,11 +6,8 @@ Usage: ${0##*/} [OPTIONS] DIR1 DIR2
 
 Use rsync to display a folder tree diff between DIR1 and DIR2.
 
-
 Additional rsync OPTIONS can be used, such as '-t, --times'.
-
-Lookup rsync(1) for '-i, --itemize-changes' for the legend.
-
+Lookup '-i, --itemize-changes' in rsync(1) for the legend.
 EOF
 }
 
