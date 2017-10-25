@@ -32,7 +32,16 @@ lnn() {
 	fi
 }
 
-
+## git-update <repo> <dest-folder>
+git-update() {
+	if [ -e "$2" ]; then
+		pushd "$2"
+		git pull
+		popd
+	else
+		git clone "$1" "$2"
+	fi
+}
 
 echo "==> 'temp' folder"
 mkdir -pv "$HOME/temp"
@@ -46,13 +55,8 @@ if command -v emacs >/dev/null 2>&1; then
 	echo "==> Emacs extra packages"
 	yes | emacs --batch -l ~/.emacs.d/init.el --eval '(progn (package-refresh-contents) (package-install-selected-packages))'
 	mkdir -pv ~/.emacs.d/site-lisp
-	if [ -e ~/.emacs.d/site-lisp/evil-special-modes ]; then
-		pushd ~/.emacs.d/site-lisp/evil-special-modes
-		git pull
-		popd
-	else
-		git clone https://github.com/Ambrevar/evil-special-modes ~/.emacs.d/site-lisp/evil-special-modes
-	fi
+	git-update https://github.com/Ambrevar/evil-special-modes ~/.emacs.d/site-lisp/evil-special-modes
+	git-update https://github.com/Ambrevar/emacs-fish-completion ~/.emacs.d/site-lisp/fish-completion
 fi
 
 echo "==> Go path"
