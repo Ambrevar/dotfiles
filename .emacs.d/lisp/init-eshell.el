@@ -6,6 +6,9 @@
 ;;; modules, runs their hooks and concludes with `eshell-first-time-mode-hook'
 ;;; (for the first session only) and `eshell-mode-hook'.
 
+;; Emacs pinentry for GPG.
+(require 'main)
+
 ;;; REVIEW: ANSI coloring goes wrong sometimes.  Quite often with emerge/eix.
 ;;; Fixed in #27407.
 (require 'patch-eshell)
@@ -99,12 +102,6 @@
            "l" "lol" "d" "dc") ; aliases
           ("sudo" "wifi-menu") ; Arch Linux
           ("sudo" "vi" "visudo"))))
-
-;;; Support for Emacs' pinentry
-;;; TODO: gpg-agent seems to be misconfigured for mu4e at least:
-;;; See https://github.com/djcb/mu/issues/829.
-(setq epa-pinentry-mode 'loopback) ; This will fail if gpg>=2.1 is not available.
-(pinentry-start)
 
 ;;; Alias management possibilities:
 ;;; - Version eshell-alias and store it in user-emacs-directory. Simplest and

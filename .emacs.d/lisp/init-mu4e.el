@@ -11,6 +11,9 @@
 ;;; See https://github.com/djcb/mu/issues/454#issuecomment-320616279.
 ;;; TODO: <tab> should go to next link in text e-mails too.
 
+;; Emacs pinentry for GPG.
+(require 'main)
+
 (when (require 'mu4e-maildirs-extension nil t)
   (mu4e-maildirs-extension))
 

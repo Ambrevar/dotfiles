@@ -352,4 +352,9 @@
   (when fortune
     (setq initial-scratch-message fortune)))
 
+;;; Support for Emacs pinentry.
+;;; Required for eshell/sudo and everything relying on GPG queries.
+(setq epa-pinentry-mode 'loopback) ; This will fail if gpg>=2.1 is not available.
+(pinentry-start)
+
 (provide 'main)
