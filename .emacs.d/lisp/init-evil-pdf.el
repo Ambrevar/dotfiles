@@ -14,67 +14,83 @@
 
 (evil-set-initial-state 'pdf-view-mode 'motion)
 (evil-define-key 'motion pdf-view-mode-map
+  ;; motion
   (kbd "<return>") 'image-next-line
   "j" 'pdf-view-next-line-or-next-page
   "k" 'pdf-view-previous-line-or-previous-page
   (kbd "SPC") 'pdf-view-scroll-up-or-next-page
+  (kbd "S-SPC") 'pdf-view-scroll-down-or-previous-page
+  (kbd "<delete>") 'pdf-view-scroll-down-or-previous-page
+  (kbd "C-f") 'pdf-view-scroll-up-or-next-page
+  (kbd "C-b") 'pdf-view-scroll-down-or-previous-page
+  "]" 'pdf-view-next-page-command
+  "[" 'pdf-view-previous-page-command
+  (kbd "C-j") 'pdf-view-next-page-command
+  (kbd "C-k") 'pdf-view-previous-page-command
+  (kbd "<next>") 'forward-page
+  (kbd "<prior>") 'backward-page
+  (kbd "<down>") 'pdf-view-next-line-or-next-page
+  (kbd "<up>") 'pdf-view-previous-line-or-previous-page
+  "gg" 'evil-pdf-view-goto-first-page
+  "G" 'evil-pdf-view-goto-page
+
+  ;; mark
   "'" 'pdf-view-jump-to-register
+  "m" 'pdf-view-position-to-register
+
   "+" 'pdf-view-enlarge
   "-" 'pdf-view-shrink
   "0" 'pdf-view-scale-reset
   "=" 'pdf-view-enlarge
+
+  ;; TODO: Why is this here?
+  "a+" 'image-increase-speed
+  "a-" 'image-decrease-speed
+  "a0" 'image-reset-speed
+  "ar" 'image-reverse-speed
   "F" 'image-goto-frame
-  "H" 'pdf-view-fit-height-to-window
-  "P" 'pdf-view-fit-page-to-window
-  "Q" 'kill-this-buffer
-  "W" 'pdf-view-fit-width-to-window
   "b" 'image-previous-frame
   "f" 'image-next-frame
-  "m" 'pdf-view-position-to-register
-  (kbd "C-j") 'pdf-view-next-page-command
-  (kbd "C-k") 'pdf-view-previous-page-command
-  (kbd "M-j") 'pdf-view-next-page-command ; Custom
-  (kbd "M-k") 'pdf-view-previous-page-command ; Custom
-  "q" 'quit-window
-  "r" 'revert-buffer
-  (kbd "<delete>") 'pdf-view-scroll-down-or-previous-page
-  (kbd "S-SPC") 'pdf-view-scroll-down-or-previous-page
+  "h" 'image-backward-hscroll
+  "^" 'image-bol
+  "$" 'image-eol
+  "l" 'image-forward-hscroll
+
+  "H" 'pdf-view-fit-height-to-window ; evil-image has "H"
+  "P" 'pdf-view-fit-page-to-window
+  "W" 'pdf-view-fit-width-to-window ; evil-image has "W"
+
+  ;; update
+  "gr" 'revert-buffer
+
   (kbd "<C-down-mouse-1>") 'pdf-view-mouse-extend-region
   (kbd "<M-down-mouse-1>") 'pdf-view-mouse-set-region-rectangle
-  (kbd "<down>") 'pdf-view-next-line-or-next-page
   (kbd "<down-mouse-1>")  'pdf-view-mouse-set-region
-  (kbd "<next>") 'forward-page
-  (kbd "<prior>") 'backward-page
-  (kbd "<up>") 'pdf-view-previous-line-or-previous-page
+
   (kbd "C-c C-c") 'docview-mode
-  "zd" 'pdf-view-dark-minor-mode
   (kbd "C-c <tab>") 'pdf-view-extract-region-image
 
   "sb" 'pdf-view-set-slice-from-bounding-box
   "sm" 'pdf-view-set-slice-using-mouse
   "sr" 'pdf-view-reset-slice
 
-  "gg" 'evil-pdf-view-goto-first-page
-  "G" 'evil-pdf-view-goto-page
+  ;; goto
   "gl" 'pdf-view-goto-label
 
   "y" 'pdf-view-kill-ring-save
-  "h" 'image-backward-hscroll
-  "^" 'image-bol
-  "$" 'image-eol
-  "l" 'image-forward-hscroll
-  (kbd "C-f") 'pdf-view-scroll-up-or-next-page
-  (kbd "C-b") 'pdf-view-scroll-down-or-previous-page
 
-  "a+" 'image-increase-speed
-  "a-" 'image-decrease-speed
-  "a0" 'image-reset-speed
-  "ar" 'image-reverse-speed
+  ;; search
+  (kbd "M-s o") 'pdf-occur ; TODO: bad binding
 
-  (kbd "M-s o") 'pdf-occur ; Custom
-
+  "zd" 'pdf-view-dark-minor-mode
   "zm" 'pdf-view-midnight-minor-mode
-  "zp" 'pdf-view-printer-minor-mode)
+  "zp" 'pdf-view-printer-minor-mode
+
+  ;; quit
+  "q" 'quit-window
+  "Q" 'kill-this-buffer
+  "ZQ" 'kill-this-buffer
+  "ZZ" 'quit-window)
 
 (evil-set-initial-state 'pdf-outline-buffer-mode 'motion)
 (evil-define-key 'motion pdf-outline-buffer-mode-map
@@ -82,32 +98,55 @@
   (kbd "M-<return>") 'pdf-outline-follow-link-and-quit
   (kbd "SPC") 'pdf-outline-display-link
   "." 'pdf-outline-move-to-current-page
-  "G" 'pdf-outline-end-of-buffer
   "o" 'pdf-outline-select-pdf-window
-  "<" 'pdf-outline-up-heading
+
+  "G" 'pdf-outline-end-of-buffer
   "^" 'pdf-outline-up-heading
-  "zf" 'pdf-outline-follow-mode
-  (kbd "C-w q") 'pdf-outline-quit-and-kill)
+  "<" 'pdf-outline-up-heading ; TODO: Don't set this by default?
+
+  "zf" 'pdf-outline-follow-mode ; helm has "C-c C-f".
+
+  ;; quit
+  (kbd "C-w q") 'pdf-outline-quit-and-kill ; TODO: Do we need to set this? I think no.
+  "q" 'quit-window
+  "ZQ" 'quit-window
+  "ZZ" 'pdf-outline-quit-and-kill)
 
 (evil-define-key 'motion pdf-occur-buffer-mode-map
   (kbd "<return>") 'pdf-occur-goto-occurrence
-  (kbd "C-o") 'pdf-occur-view-occurrence
+  (kbd "o") 'pdf-occur-view-occurrence
+  (kbd "C-o") 'pdf-occur-view-occurrence ; TODO: "o" is a better binding.
   (kbd "SPC") 'pdf-occur-view-occurrence
+
   "A" 'pdf-occur-tablist-gather-documents
   "D" 'pdf-occur-tablist-do-delete
-  "G" 'tablist-revert
-  "K" 'pdf-occur-abost-search
+
+  ;; sort
   "S" 'tabulated-list-sort
+
+  ;; update
+  "G" 'tablist-revert
+
+  "K" 'pdf-occur-abort-search
+
+  ;; mark
+  "*m" 'tablist-mark-forward
+  "m" 'tablist-mark-forward
+  "t" 'tablist-toggle-marks
+  "u" 'tablist-unmark-forward
   "U" 'tablist-unmark-all-marks
+  "*!" 'tablist-unmark-all-marks
+  "*c" 'tablist-change-marks
+  "*n" 'tablist-mark-items-numeric
+  "*r" 'tablist-mark-items-regexp
+  "%"  'tablist-mark-items-regexp
+
   "a" 'tablist-flag-forward
+
   ;; "f" 'tablist-find-entry ; TODO: Equivalent to 'pdf-occur-goto-occurrence?
   "r" 'pdf-occur-revert-buffer-with-args
   "d" 'tablist-do-kill-lines
-  "m" 'tablist-mark-forward
-  "q" 'tablist-quit
   "s" 'tablist-sort
-  "t" 'tablist-toggle-marks
-  "u" 'tablist-unmark-forward
   "x" 'pdf-occur-tablist-do-flagged-delete
   (kbd "<delete>") 'tablist-unmark-backward
   (kbd "S-SPC") 'scroll-down-command
@@ -118,6 +157,8 @@
   [remap evil-next-line] 'tablist-next-line
   [remap evil-previous-line] 'tablist-previous-line
 
+  ;; filter
+  ;; TODO: See if overriding "/" is a good idea.
   "/!" 'tablist-negate-filter
   "//" 'tablist-display-filter
   "/=" 'tablist-push-equal-filter
@@ -133,12 +174,9 @@
   "/t" 'tablist-toggle-first-filter-logic
   "/z" 'tablist-suspend-filter
 
-  "*!" 'tablist-unmark-all-marks
-  "*c" 'tablist-change-marks
-  "*m" 'tablist-mark-forward
-  "*n" 'tablist-mark-items-numeric
-  "*r" 'tablist-mark-items-regexp
-
-  "%m"  'tablist-mark-items-regexp)
+  ;; quit
+  "q" 'tablist-quit
+  "ZQ" 'tablist-quit
+  "ZZ" 'tablist-quit)
 
 (provide 'init-evil-pdf)

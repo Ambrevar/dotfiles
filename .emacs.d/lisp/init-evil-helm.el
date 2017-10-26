@@ -1,6 +1,6 @@
 ;;; Evil+Helm
 
-(global-set-key "\M-y" 'helm-show-kill-ring)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
 ;;; To navigate helm entries with hjkl, using the C- modifier would conflict
 ;;; with C-h (help prefix) and C-k (`evil-insert-digraph').  We use M- instead.
@@ -20,12 +20,11 @@
   "<escape>" 'helm-keyboard-quit)
 
 (evil-define-key 'normal helm-map
-  "h" 'helm-next-source
   "j" 'helm-next-line
   "k" 'helm-previous-line
-  "l" 'helm-execute-persistent-action
   "g" 'helm-beginning-of-buffer
   "G" 'helm-end-of-buffer
+  "SPC" 'helm-toggle-visible-mark
   (kbd "C-f") 'helm-next-page
   (kbd "C-b") 'helm-previous-page)
 
@@ -38,14 +37,13 @@
 
 (dolist (map (list helm-find-files-map helm-read-file-map))
   (define-keys map
+    "M-." 'helm-end-of-buffer
+    "M-," 'helm-beginning-of-buffer
     "M-o" 'helm-ff-run-switch-other-window
     "C-/" 'helm-ff-run-find-sh-command
     "M-h" 'helm-find-files-up-one-level
     "M-l" 'helm-execute-persistent-action
-    "C-l" nil) ; So the header displays the above binding.
-  (evil-define-key 'normal map
-    "h" 'helm-find-files-up-one-level
-    "l" 'helm-execute-persistent-action))
+    "C-l" nil)) ; So the header displays the above binding.
 
 (with-eval-after-load 'init-exwm
   (define-keys exwm/helm-browser-map "M-d" 'helm-buffer-run-kill-persistent)

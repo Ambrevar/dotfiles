@@ -6,18 +6,27 @@
   (kbd "<tab>") 'ztree-jump-side
   (kbd "<return>") 'ztree-perform-action
   (kbd "SPC") 'ztree-perform-soft-action
+
+  "x" 'ztree-toggle-expand-subtree
+
+  ;; update
   "gr" 'ztree-refresh-buffer
+
+  ;; quit
   "q" 'quit-window
-  "x" 'ztree-toggle-expand-subtree)
+  "ZQ" 'quit-window
+  "ZZ" 'quit-window)
 
 (evil-define-minor-mode-key 'motion 'ztreediff-mode
   "C" 'ztree-diff-copy
   "D" 'ztree-diff-delete-file
   "zH" 'ztree-diff-toggle-show-filtered-files
-  "R" 'ztree-diff-full-rescan
   "d" 'ztree-diff-simple-diff-files
   "zh" 'ztree-diff-toggle-show-equal-files
-  "r" 'ztree-diff-partial-rescan
-  "gf" 'ztree-diff-view-file)
+  "gf" 'ztree-diff-view-file
+
+  ;; update
+  "gr" 'ztree-diff-partial-rescan
+  "gR" 'ztree-diff-full-rescan)
 
 (provide 'init-evil-ztree)

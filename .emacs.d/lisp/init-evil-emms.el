@@ -46,77 +46,95 @@ The return value is the yanked text."
 (with-eval-after-load 'emms-browser
   ;; TODO: Why do we need to define emms-browser-mode-map after load and not emms-playlist-mode-map?
   (evil-define-key 'motion emms-browser-mode-map
-    (kbd "C-<return>") 'emms-browser-add-tracks-and-play
     (kbd "<return>") 'emms-browser-add-tracks
+    (kbd "C-<return>") 'emms-browser-add-tracks-and-play
+    "x" 'emms-pause ; TODO: bad binding
+
     (kbd "<tab>") 'emms-browser-toggle-subitems
     (kbd "SPC") 'emms-browser-toggle-subitems
-    "/" 'emms-isearch-buffer ; This shows hidden items during search.
     "g1" 'emms-browser-collapse-all
     "g2" 'emms-browser-expand-to-level-2
     "g3" 'emms-browser-expand-to-level-3
     "g4" 'emms-browser-expand-to-level-4
-    "<" 'emms-browser-previous-filter
-    ">" 'emms-browser-next-filter
-    "C" 'emms-browser-clear-playlist
-    "D" 'emms-browser-delete-files
     "g0" 'emms-browser-expand-all
-    "d" 'emms-browser-view-in-dired
-    (kbd "C-j") 'emms-browser-next-non-track
-    (kbd "C-k") 'emms-browser-prev-non-track
-    (kbd "M-j") 'emms-browser-next-non-track ; Custom
-    (kbd "M-k") 'emms-browser-prev-non-track ; Custom
-    "[" 'emms-browser-prev-non-track
-    "]" 'emms-browser-next-non-track
-    "{" 'emms-browser-prev-non-track
-    "}" 'emms-browser-next-non-track
     "ga" 'emms-browse-by-artist
     "gA" 'emms-browse-by-album
     "gb" 'emms-browse-by-genre
     "gy" 'emms-browse-by-year
     "gc" 'emms-browse-by-composer
     "gp" 'emms-browse-by-performer
-    "x" 'emms-pause
+
+    "/" 'emms-isearch-buffer ; This shows hidden items during search.
+
+    ;; filter
+    "<" 'emms-browser-previous-filter
+    ">" 'emms-browser-next-filter
+
     "s" (lookup-key emms-browser-mode-map (kbd "s"))
-    "z" (lookup-key emms-browser-mode-map (kbd "W"))))
+    "z" (lookup-key emms-browser-mode-map (kbd "W"))
+
+    "C" 'emms-browser-clear-playlist
+    "D" 'emms-browser-delete-files
+    "d" 'emms-browser-view-in-dired
+
+    ;; motion
+    (kbd "C-j") 'emms-browser-next-non-track
+    (kbd "C-k") 'emms-browser-prev-non-track
+    ;; (kbd "M-j") 'emms-browser-next-non-track ; Custom
+    ;; (kbd "M-k") 'emms-browser-prev-non-track ; Custom
+    "[" 'emms-browser-prev-non-track
+    "]" 'emms-browser-next-non-track))
 
 (evil-set-initial-state 'emms-playlist-mode 'motion)
 (evil-define-key 'motion emms-playlist-mode-map
-  "o" 'evil/emms-playlist-mode-insert-newline-below
-  "O" 'evil/emms-playlist-mode-insert-newline-above
-  "d" 'emms-playlist-mode-kill-track
   (kbd "<return>") 'emms-playlist-mode-play-smart
-  "P" 'evil/emms-playlist-mode-paste-before
-  "p" 'evil/emms-playlist-mode-paste-after
-  "u" 'emms-playlist-mode-undo
-  "<" 'emms-seek-backward
-  ">" 'emms-seek-forward
-  "C" 'emms-playlist-mode-clear
-  "D" 'emms-playlist-mode-kill-track
-  "ze" 'emms-tag-editor-edit
-  "x" 'emms-pause
-  "R" 'emms-tag-editor-rename
-  "a" 'emms-playlist-mode-add-contents
-  "zp" 'emms-playlist-set-playlist-buffer
-  "c" 'emms-playlist-mode-center-current
-  "gd" 'emms-playlist-mode-goto-dired-at-point
-  "zs" 'emms-show
-  (kbd "C-j") 'emms-next
-  (kbd "C-k") 'emms-previous
-  (kbd "M-j") 'emms-next ; Custom
-  (kbd "M-k") 'emms-previous ; Custom
+  "x" 'emms-pause ; TODO: bad binding
   "r" 'emms-random
   "s" 'emms-stop
-  "S" (lookup-key emms-playlist-mode-map (kbd "S"))
-  "zf" (lookup-key emms-playlist-mode-map (kbd "/"))
-  "zff" 'emms-playlist-limit-to-all
+  "]" 'emms-next
+  "[" 'emms-previous
+  "<" 'emms-seek-backward
+  ">" 'emms-seek-forward
+  (kbd "C-j") 'emms-next
+  (kbd "C-k") 'emms-previous
+  ;; (kbd "M-j") 'emms-next ; Custom
+  ;; (kbd "M-k") 'emms-previous ; Custom
+
+  ;; motion
   "gg" 'emms-playlist-mode-first
   "G" 'emms-playlist-mode-last
   "]" 'emms-playlist-mode-next
   "[" 'emms-playlist-mode-previous
+
+  ;; "d" 'emms-playlist-mode-kill-track
+  "D" 'emms-playlist-mode-kill-track ; emms-browser uses "D"
+  "C" 'emms-playlist-mode-clear
+  "O" 'evil/emms-playlist-mode-insert-newline-above
+  "o" 'evil/emms-playlist-mode-insert-newline-below
+  "P" 'evil/emms-playlist-mode-paste-before
+  "p" 'evil/emms-playlist-mode-paste-after
+
+  "u" 'emms-playlist-mode-undo
+
+  "ze" 'emms-tag-editor-edit
+  "R" 'emms-tag-editor-rename
+
+  "c" 'emms-playlist-mode-center-current
+  "gd" 'emms-playlist-mode-goto-dired-at-point ; TODO: Use "d"?
+
+  "zs" 'emms-show
+  "a" 'emms-playlist-mode-add-contents
+  "zp" 'emms-playlist-set-playlist-buffer
+
+  ;; filter
+  "S" (lookup-key emms-playlist-mode-map (kbd "S"))
+  "zf" (lookup-key emms-playlist-mode-map (kbd "/"))
+  "zff" 'emms-playlist-limit-to-all
+
   (kbd "M-y") 'emms-playlist-mode-yank-pop)
 
 (evil-define-key 'visual emms-playlist-mode-map
-  "d" 'emms-playlist-mode-kill
+  ;; "d" 'emms-playlist-mode-kill
   "D" 'emms-playlist-mode-kill)
 
 (provide 'init-evil-emms)
