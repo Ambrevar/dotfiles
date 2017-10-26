@@ -33,7 +33,7 @@ lnn() {
 }
 
 ## git-update <repo> <dest-folder>
-git-update() {
+git_update() {
 	if [ -e "$2" ]; then
 		pushd "$2"
 		git pull
@@ -52,11 +52,12 @@ lnn "$SOURCEDIR/bookmarks/bookmarks" "$XDG_CONFIG_HOME/qutebrowser/bookmarks/url
 lnn "$SOURCEDIR/bookmarks/quickmarks" "$XDG_CONFIG_HOME/qutebrowser/"
 
 if command -v emacs >/dev/null 2>&1; then
-	echo "==> Emacs extra packages"
+	echo "==> Emacs ELPA packages"
 	yes | emacs --batch -l ~/.emacs.d/init.el --eval '(progn (package-refresh-contents) (package-install-selected-packages))'
+	echo "==> Emacs extra packages"
 	mkdir -pv ~/.emacs.d/site-lisp
-	git-update https://github.com/Ambrevar/evil-special-modes ~/.emacs.d/site-lisp/evil-special-modes
-	git-update https://github.com/Ambrevar/emacs-fish-completion ~/.emacs.d/site-lisp/fish-completion
+	git_update https://github.com/Ambrevar/evil-special-modes ~/.emacs.d/site-lisp/evil-special-modes
+	git_update https://github.com/Ambrevar/emacs-fish-completion ~/.emacs.d/site-lisp/fish-completion
 fi
 
 echo "==> Go path"
