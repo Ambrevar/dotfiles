@@ -1,11 +1,9 @@
 ;;; Evil
 
-;;; TODO: helm-show-kill-ring behaves like Emacs when pasting whole lines, not like Vim.
+;;; REVIEW: helm-mark-ring seems to have issues with Evil.
+(require 'patch-mark)
 
-;;; TODO: helm-mark-ring seems to have issues with Evil:
-;;; - The first entry is not the last position but the current one.
-;;; - Navigating through the marks randomly produces a "Marker points into wrong buffer" error.
-;;; https://github.com/emacs-evil/evil/issues/845#issuecomment-306050231
+;;; TODO: helm-show-kill-ring behaves like Emacs when pasting whole lines, not like Vim.
 
 ;;; TODO: Make Evil commands react more dynamically with read-only text, like eshell, wdired.
 ;;; Add support for I, C, D, S, s, c*, d*, R, r.
@@ -58,6 +56,7 @@
 ;;; For git commit, web edits and others.
 ;;; Since `with-editor-mode' is not a major mode, `evil-set-initial-state' cannot
 ;;; be used.
+;;; This requires Eshell, shells and more.
 (when (require 'with-editor nil t)
   (add-hook 'with-editor-mode-hook 'evil-insert-state))
 
