@@ -20,9 +20,6 @@
   (setq file-name-handler-alist default-file-name-handler-alist))
 (add-hook 'after-init-hook 'reset-file-name-handler-alist)
 
-;;; Enable debug during loading.
-(setq debug-on-error t)
-
 (defvar emacs-cache-folder "~/.cache/emacs/"
   "Cache folder is everything we do not want to track together
   with the configuration files.")
@@ -376,9 +373,6 @@
           (expand-file-name "custom.el" server-socket-dir)
         (expand-file-name (format "emacs-custom-%s.el" (user-uid)) temporary-file-directory)))
 (load custom-file t)
-
-;;; Disable debug now we are done with init.
-(setq debug-on-error nil)
 
 ;;; Local config. You can use it to set system specific variables, such as the
 ;;; external web browser or the geographical coordinates:
