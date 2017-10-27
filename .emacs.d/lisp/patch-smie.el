@@ -61,4 +61,4 @@ in `smie-align'."
            ;; the function itself.
            (current-column)))))))
 
-(provide 'smiext)
+(provide 'patch-smie)

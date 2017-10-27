@@ -333,9 +333,9 @@
 
 ;;; Translator
 ;;; TODO: Find alternative package.
-(autoload 'itranslate "init-itranslate" nil t)
-(autoload 'itranslate-lines "init-itranslate" nil t)
-(autoload 'itranslate-region "init-itranslate" nil t)
+(autoload 'itranslate "package-itranslate" nil t)
+(autoload 'itranslate-lines "package-itranslate" nil t)
+(autoload 'itranslate-region "package-itranslate" nil t)
 
 ;;; Web forms.
 ;;; Remove auto-fill in web edits because wikis and forums do not like it.
