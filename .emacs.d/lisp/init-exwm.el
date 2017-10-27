@@ -55,6 +55,7 @@
 (exwm-input-set-key (kbd "s-b") #'list-buffers)
 (exwm-input-set-key (kbd "s-f") #'find-file)
 ;; The following can only apply to EXWM buffers, else it could have unexpected effects.
+(push ?\s-  exwm-input-prefix-keys)
 (define-key exwm-mode-map (kbd "s-SPC") #'exwm-floating-toggle-floating)
 
 (exwm-input-set-key (kbd "s-o") #'toggle-single-window)
