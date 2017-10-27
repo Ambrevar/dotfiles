@@ -101,8 +101,8 @@
   ;; TODO: Post on EXWM's wiki once all TODOs are fixed.
   ;; Publish on MELPA?  Maybe with generic code for EXWM buffers with column
   ;; containing the class name, and and emacs-buffers helm source too.
-  ;; REVIEW: When follow-mode is on, multiselection is broken.
   ;; TODO: s-w s-w loses focus.
+  ;; TODO: Helm buffer does not die.
   ;; TODO: kill-persistent is not persistent.
   (defvar exwm/helm-browser-map
     (let ((map (make-sparse-keymap)))
@@ -122,7 +122,7 @@
     "Preconfigured `helm' to list browser buffers."
     (interactive)
     (helm :sources
-          (helm-build-sync-source (concat (or exwm-class-name (file-name-nondirectory browse-url-generic-program)) " buffers")
+          (helm-build-sync-source "exwm/helm browser buffers"
             :candidates
             (let (
                   (bufs (delq nil (mapcar
@@ -147,8 +147,7 @@
             :keymap exwm/helm-browser-map)
           :buffer "*exwm/helm browser*"))
 
-  ;; REVIEW: Does this work?
-  (add-to-list 'helm-source-names-using-follow "exwm/helm browser"))
+  (add-to-list 'helm-source-names-using-follow "exwm/helm browser buffers"))
 
 (defun exwm-start-browser (&optional other-window)
   "Fire-up the web browser as defined in `browse-url-generic-program'.
