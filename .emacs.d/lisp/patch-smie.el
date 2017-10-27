@@ -1,4 +1,7 @@
 ;;; Hack around SMIE
+;;; This was intended to fix some undesirable behaviour related to forced alignment in indentation with Lua.
+;;; See https://github.com/immerrr/lua-mode/issues/31.
+;;; 2017-10-27: Not sure this is still valid.
 (require 'smie)
 
 (defcustom smie-align nil "Whether to align function arguments.")
