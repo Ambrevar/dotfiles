@@ -30,8 +30,9 @@
 (setq evil-cross-lines t
       evil-move-beyond-eol t ; Especially useful for Edebug.
       evil-move-cursor-back nil
-      evil-want-fine-undo t
-      evil-symbol-word-search nil)
+      evil-want-fine-undo t)
+
+(setq-default evil-symbol-word-search t)
 
 ;;; The evil-leader package has that over regular bindings that it centralizes
 ;;; the leader key configuration and automatically makes it available in relevant
