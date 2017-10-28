@@ -1,10 +1,15 @@
+=www-client/qutebrowser-1.0.2 ~amd64
 app-shells/fish ~amd64
 net-mail/mu ~amd64
 sys-fs/udiskie ~amd64
 media-sound/mps-youtube **
+net-misc/youtube-dl ~amd64
+=dev-vcs/gitstats-0_pre20151223 ~amd64
 
 ## OpenMW
 sci-physics/bullet ~amd64
 
 ## Python
 =dev-lang/python-3.6.1-r1 ~amd64
+=dev-python/pafy-0.5.3.1 ~amd64
+

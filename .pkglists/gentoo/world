@@ -17,6 +17,7 @@ app-editors/nano
 app-editors/nvi
 app-emacs/emms
 app-misc/ca-certificates
+app-misc/dtach
 app-misc/trash-cli
 app-misc/vlock
 app-portage/cpuid2cpuflags
@@ -27,6 +28,7 @@ app-portage/pfl
 app-portage/repoman
 app-shells/bash-completion
 app-shells/fish
+app-shells/mpv-bash-completion
 app-text/aspell
 app-text/epspdf
 app-text/poppler
@@ -49,6 +51,7 @@ games-misc/fortune-mod
 games-util/steam-launcher
 media-fonts/dejavu
 media-gfx/asymptote
+media-gfx/gimp
 media-gfx/imagemagick
 media-gfx/pdf2svg
 media-gfx/scrot
@@ -101,6 +104,7 @@ sys-process/htop
 sys-process/lsof
 www-client/qutebrowser
 x11-apps/mesa-progs
+x11-apps/xrandr
 x11-base/xorg-drivers
 x11-base/xorg-server
 x11-libs/gtkglext

@@ -2,20 +2,64 @@
 ## TODO: Install light TeXlive.
 
 ## Python
-## TODO: Do no systematically install python2_7.
-# Enabling additional implementation in addition to the profile default
-*/* PYTHON_TARGETS: -python3_4 python3_6 python2_7
-# Replacing the profile default with specific implementation
+## To find out which package needs python2_7 and cannot use python3_6
+## > equery -C hasuse -F '$category/$name' python_targets_python2_7 > python2_7.log
+## > equery -C hasuse -F '$category/$name' python_targets_python3_6 > python3_6.log
+## > comm -23 python2_7.log python3_6.log
+## TODO: Find a better set of commands.
+## Enabling additional implementation in addition to the profile default
+*/* PYTHON_TARGETS: -* python3_6
+## Replacing the profile default with specific implementation
 */* PYTHON_SINGLE_TARGET: -* python3_6
-dev-libs/gobject-introspection PYTHON_SINGLE_TARGET: -* python2_7
-app-text/asciidoc PYTHON_SINGLE_TARGET: -* python2_7
-# app-misc/ca-certificates PYTHON_TARGETS: -* python2_7 PYTHON_SINGLE_TARGET: -* python2_7
-sci-calculators/units PYTHON_TARGETS: -* python2_7 PYTHON_SINGLE_TARGET: -* python2_7
-# dev-python/pyyaml PYTHON_TARGET: -* python2_7
+## Package-specific requirements
+app-admin/eclean-kernel PYTHON_TARGETS: python2_7
+app-misc/trash-cli PYTHON_TARGETS: python2_7
+app-portage/cpuid2cpuflags PYTHON_TARGETS: python2_7
+app-portage/pfl PYTHON_TARGETS: python2_7
+app-text/asciidoc PYTHON_TARGETS: python2_7 PYTHON_SINGLE_TARGET: python2_7
+dev-lang/yasm PYTHON_TARGETS: python2_7
+dev-libs/boost PYTHON_TARGETS: python2_7
+dev-libs/glib PYTHON_TARGETS: python2_7
+dev-libs/gobject-introspection PYTHON_TARGETS: python2_7 PYTHON_SINGLE_TARGET: python2_7
+dev-libs/libnl PYTHON_TARGETS: python2_7
+dev-libs/libxslt PYTHON_TARGETS: python2_7
+dev-libs/protobuf PYTHON_TARGETS: python2_7
+dev-python/docopt PYTHON_TARGETS: python2_7
+dev-python/enum34 PYTHON_TARGETS: python2_7
+dev-python/ipaddress PYTHON_TARGETS: python2_7
+dev-python/m2crypto PYTHON_TARGETS: python2_7
+dev-python/notify-python PYTHON_TARGETS: python2_7
+dev-python/pdfrw PYTHON_TARGETS: python2_7
+dev-python/pygobject PYTHON_TARGETS: python2_7
+dev-python/pygtk PYTHON_TARGETS: python2_7
+dev-python/pyxattr PYTHON_TARGETS: python2_7
+dev-python/rst2pdf PYTHON_TARGETS: python2_7
+dev-util/boost-build PYTHON_TARGETS: python2_7
+dev-util/gdbus-codegen PYTHON_TARGETS: python2_7
+dev-util/scons PYTHON_TARGETS: python2_7
+dev-vcs/git PYTHON_TARGETS: python2_7
+dev-vcs/gitstats PYTHON_TARGETS: python2_7
+gnome-base/libglade PYTHON_TARGETS: python2_7
+media-gfx/asymptote PYTHON_TARGETS: python2_7
+media-gfx/gimp PYTHON_TARGETS: python2_7
+media-libs/alsa-lib PYTHON_TARGETS: python2_7
+media-libs/lensfun PYTHON_TARGETS: python2_7
+media-video/mpv PYTHON_TARGETS: python2_7
+media-video/subdl PYTHON_TARGETS: python2_7
+net-misc/youtube-dl PYTHON_TARGETS: python2_7
+sci-calculators/units PYTHON_TARGETS: python2_7 PYTHON_SINGLE_TARGET: python2_7
+sci-libs/gdal PYTHON_TARGETS: python2_7
+sys-apps/kmod PYTHON_TARGETS: python2_7
+sys-apps/usbutils PYTHON_TARGETS: python2_7
+sys-devel/llvm PYTHON_TARGETS: python2_7
+sys-fs/udiskie PYTHON_TARGETS: python2_7
+dev-python/docutils PYTHON_TARGETS: python2_7
+sys-apps/portage PYTHON_TARGETS: python2_7
+dev-python/setuptools PYTHON_TARGETS: python2_7
+dev-python/pyyaml PYTHON_TARGETS: python2_7
 
 ## TODO: Out of date?
 # app-text/texlive-core -X
-# www-client/qutebrowser -webkit webengine
 
 ## Emacs
 app-editors/emacs sound alsa xft jpeg tiff gif png svg games source libxml2 imagemagick
@@ -38,7 +82,7 @@ media-gfx/sxiv exif gif
 ## Misc
 app-admin/conky -ncurses -X
 x11-misc/dzen xft
-media-gfx/asymptote -X -boehm-gc latex
+media-gfx/asymptote -X -boehm-gc -latex emacs examples
 x11-terms/xterm truetype
 
 ## Qutebrowser
