@@ -122,18 +122,30 @@ TO-STRING."
 
 (defun fmt ()
   "(Un)tabify, indent and delete trailing whitespace.
+
 Tabify if `indent-tabs-mode' is true, otherwise use spaces.
-Work on buffer or region. Require `tabify-leading'."
+Work on buffer or region.
+
+If `fmt-inhinit-p' is non-nil, it does nothing.
+
+Require `tabify-leading'."
   (interactive)
-  (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
-        (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-max)))))
-    (if indent-tabs-mode
-        (tabify-leading)
-      (untabify start end))
-    (indent-region start end)
-    (save-restriction
-      (narrow-to-region start end)
-      (delete-trailing-whitespace))))
+  (unless fmt-inhibit-p
+    (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
+          (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-max)))))
+      (if indent-tabs-mode
+          (tabify-leading)
+        (untabify start end))
+      (indent-region start end)
+      (save-restriction
+        (narrow-to-region start end)
+        (delete-trailing-whitespace)))))
+
+(defcustom fmt-inhibit-p t
+  "Do not run `fmt' if non-nil.
+As this is not friendly to foreign projects, `fmt' should be run
+selectively."
+  :safe 'null)
 
 (defun flyspell-and-whitespace-mode ()
   "Toggle `flyspell-mode' and `whitespace-mode'."
@@ -446,8 +458,8 @@ This does not interfere with `subword-mode'."
     (modify-syntax-entry ?_ "_")
     (message "_ is a word delimiter")))
 
-;;; TODO: Move turn-on-* functions to 'hook-functions.el'.
-;;; Replace useless individual comments with global comment.
+;;; TODO: Move turn-on-* functions to 'hook-functions.el'?
+;;; Replace useless individual comments with a single global comment.
 
 (defun turn-on-column-number-mode ()
   "Unconditionally turn on `column-number-mode' for the current buffer."
@@ -464,7 +476,7 @@ This does not affect .csv files."
   (add-hook 'before-save-hook 'fmt nil t))
 
 (defun turn-off-fmt-before-save ()
-  "Unconditionally add the `fmt' function to `before-save-hook'."
+  "Unconditionally remove the `fmt' function to `before-save-hook'."
   (remove-hook 'before-save-hook 'fmt t))
 
 (defun turn-off-indent-tabs ()

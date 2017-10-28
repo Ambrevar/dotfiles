@@ -185,7 +185,7 @@
   (add-hook hook 'turn-on-fmt-before-save)
   (add-hook hook 'turn-on-tab-width-to-8) ; Because some existing code uses tabs.
   (add-hook hook 'turn-off-indent-tabs)) ; Should not use tabs.
-(define-key lisp-mode-shared-map "\M-." 'find-symbol-at-point)
+(define-key lisp-mode-shared-map (kbd "M-.") 'find-symbol-at-point)
 ;;; Common LISP
 (setq inferior-lisp-program "clisp")
 
