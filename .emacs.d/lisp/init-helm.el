@@ -135,7 +135,8 @@
 (defun helm/eshell-set-keys ()
   (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
   (define-key eshell-mode-map (kbd "M-s") nil) ; Useless when we have 'helm-eshell-history.
-  (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history))
+  (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)
+  (define-key eshell-mode-map (kbd "M-s f") 'helm-eshell-prompts-all))
 (add-hook 'eshell-mode-hook 'helm/eshell-set-keys)
 
 ;;; TODO: Use helm-ff history in helm file completion.
