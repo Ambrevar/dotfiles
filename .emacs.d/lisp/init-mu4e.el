@@ -108,7 +108,7 @@ Default to unread messages if no"
 
 (when (require 'helm-mu nil t)
   (dolist (map (list mu4e-headers-mode-map mu4e-main-mode-map mu4e-view-mode-map))
-    (define-key map "\M-sf" 'helm-mu)))
+    (define-key map "s" 'helm-mu)))
 
 (load "~/personal/mail/mu4e.el" t)
 
