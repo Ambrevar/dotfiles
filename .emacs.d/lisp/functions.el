@@ -352,13 +352,20 @@ The shell can use it to automatically change directory to it."
     (when (executable-find term)
       (start-process "dummy" nil "env" (concat "SHELL_CD=" (expand-file-name default-directory)) term))))
 
-(defun swap-windows ()
-  "If 2 windows are up, swap them."
+(defun swap-windows (&optional w1 w2)
+  "If 2 windows are up, swap them.
+Else if W1 is a window, swap it with current window.
+If W2 is a window too, swap both."
   (interactive)
-  (unless (= 2 (count-windows))
-    (error "There are not 2 windows"))
-  (let* ((w1 (car (window-list)))
-         (w2 (nth 1 (window-list)))
+  (unless (or (= 2 (count-windows))
+              (windowp w1)
+              (windowp w2))
+    (error "Ambiguous window selection"))
+  (let* ((w1 (or w1 (car (window-list))))
+         (w2 (or w2
+                 (if (eq w1 (car (window-list)))
+                     (nth 1 (window-list))
+                   (car (window-list)))))
          (b1 (window-buffer w1))
          (b2 (window-buffer w2))
          (s1 (window-start w1))
@@ -367,8 +374,25 @@ The shell can use it to automatically change directory to it."
     (set-window-buffer w2 b1)
     (set-window-start w1 s2)
     (set-window-start w2 s1))
-  (other-window 1))
+  (select-window w1))
 (global-set-key (kbd "C-x \\") 'swap-windows)
+
+(defun swap-windows-left ()
+  "Swap current window with the window to the left."
+  (interactive)
+  (swap-windows (window-in-direction 'left)))
+(defun swap-windows-below ()
+  "Swap current window with the window below."
+  (interactive)
+  (swap-windows (window-in-direction 'below)))
+(defun swap-windows-above ()
+  "Swap current window with the window above."
+  (interactive)
+  (swap-windows (window-in-direction 'above)))
+(defun swap-windows-right ()
+  "Swap current window with the window to the right."
+  (interactive)
+  (swap-windows (window-in-direction 'right)))
 
 (defun switch-to-last-buffer ()
   "Switch to last open buffer in current window."

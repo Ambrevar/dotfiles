@@ -51,18 +51,22 @@
 (exwm-input-set-key (kbd "s-k") #'windmove-up)
 (exwm-input-set-key (kbd "s-l") #'windmove-right)
 (exwm-input-set-key (kbd "s-D") #'kill-this-buffer)
-(exwm-input-set-key (kbd "s-|") #'swap-windows)
 (exwm-input-set-key (kbd "s-b") #'list-buffers)
 (exwm-input-set-key (kbd "s-f") #'find-file)
+
+(when (require 'functions)
+  (exwm-input-set-key (kbd "s-\\") #'toggle-window-split)
+  (exwm-input-set-key (kbd "s-H") 'swap-windows-left)
+  (exwm-input-set-key (kbd "s-J") 'swap-windows-below)
+  (exwm-input-set-key (kbd "s-K") 'swap-windows-above)
+  (exwm-input-set-key (kbd "s-L") 'swap-windows-right))
+
 ;; The following can only apply to EXWM buffers, else it could have unexpected effects.
 (push ?\s-  exwm-input-prefix-keys)
 (define-key exwm-mode-map (kbd "s-SPC") #'exwm-floating-toggle-floating)
 
 (exwm-input-set-key (kbd "s-o") #'toggle-single-window)
 (exwm-input-set-key (kbd "s-O") #'exwm-layout-toggle-fullscreen)
-
-(require 'functions)
-(exwm-input-set-key (kbd "s-\\") #'toggle-window-split)
 
 (with-eval-after-load 'helm
   ;; Need `with-eval-after-load' here since 'helm-map is not defined in 'helm-config.
