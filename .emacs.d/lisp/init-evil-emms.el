@@ -1,5 +1,9 @@
 ;;; Evil+EMMS
 
+;;; TODO: Make all play bindings consistent across modes "stop, pause, volume, next/previous, fast-forward/backward".
+
+;;; TODO: Add bindings to search map.
+
 ;;; emms-browser does not run any mode hook.  As such the default state is 'normal.
 ;;; TODO: Report upstream.
 (defun evil/emms-browser ()
@@ -46,12 +50,22 @@ The return value is the yanked text."
 (with-eval-after-load 'emms-browser
   ;; TODO: Why do we need to define emms-browser-mode-map after load and not emms-playlist-mode-map?
   (evil-define-key 'motion emms-browser-mode-map
+    ;; playback controls
+    "x" 'emms-pause
+    "X" 'emms-stop
+    "r" 'emms-random
+    "<" 'emms-seek-backward
+    ">" 'emms-seek-forward
     (kbd "<return>") 'emms-browser-add-tracks
     (kbd "C-<return>") 'emms-browser-add-tracks-and-play
-    "x" 'emms-pause ; TODO: bad binding
+
+    ;; motion
+    "[" 'emms-browser-prev-non-track
+    "]" 'emms-browser-next-non-track
 
     (kbd "<tab>") 'emms-browser-toggle-subitems
     (kbd "SPC") 'emms-browser-toggle-subitems
+    ;; TODO: Use S-<tab>?
     "g1" 'emms-browser-collapse-all
     "g2" 'emms-browser-expand-to-level-2
     "g3" 'emms-browser-expand-to-level-3
@@ -67,38 +81,28 @@ The return value is the yanked text."
     "/" 'emms-isearch-buffer ; This shows hidden items during search.
 
     ;; filter
-    "<" 'emms-browser-previous-filter
-    ">" 'emms-browser-next-filter
+    ;; "" 'emms-browser-previous-filter ; TODO: What does this do?
+    ;; "" 'emms-browser-next-filter
 
     "s" (lookup-key emms-browser-mode-map (kbd "s"))
-    "z" (lookup-key emms-browser-mode-map (kbd "W"))
+    "g" (lookup-key emms-browser-mode-map (kbd "W")) ;; TODO: This breaks other evil keys.
 
     "C" 'emms-browser-clear-playlist
     "D" 'emms-browser-delete-files
     "d" 'emms-browser-view-in-dired
-
-    ;; motion
-    (kbd "C-j") 'emms-browser-next-non-track
-    (kbd "C-k") 'emms-browser-prev-non-track
-    ;; (kbd "M-j") 'emms-browser-next-non-track ; Custom
-    ;; (kbd "M-k") 'emms-browser-prev-non-track ; Custom
-    "[" 'emms-browser-prev-non-track
-    "]" 'emms-browser-next-non-track))
+    "gd" 'emms-playlist-mode-goto-dired-at-point)) ; "d" does the same, keep "gd" for consistency.
 
 (evil-set-initial-state 'emms-playlist-mode 'motion)
 (evil-define-key 'motion emms-playlist-mode-map
-  (kbd "<return>") 'emms-playlist-mode-play-smart
-  "x" 'emms-pause ; TODO: bad binding
+  ;; playback controls
+  "x" 'emms-pause
+  "X" 'emms-stop
   "r" 'emms-random
-  "s" 'emms-stop
-  "]" 'emms-next
-  "[" 'emms-previous
   "<" 'emms-seek-backward
   ">" 'emms-seek-forward
   (kbd "C-j") 'emms-next
   (kbd "C-k") 'emms-previous
-  ;; (kbd "M-j") 'emms-next ; Custom
-  ;; (kbd "M-k") 'emms-previous ; Custom
+  (kbd "<return>") 'emms-playlist-mode-play-smart
 
   ;; motion
   "gg" 'emms-playlist-mode-first
@@ -106,7 +110,6 @@ The return value is the yanked text."
   "]" 'emms-playlist-mode-next
   "[" 'emms-playlist-mode-previous
 
-  ;; "d" 'emms-playlist-mode-kill-track
   "D" 'emms-playlist-mode-kill-track ; emms-browser uses "D"
   "C" 'emms-playlist-mode-clear
   "O" 'evil/emms-playlist-mode-insert-newline-above
@@ -119,8 +122,8 @@ The return value is the yanked text."
   "ze" 'emms-tag-editor-edit
   "R" 'emms-tag-editor-rename
 
-  "c" 'emms-playlist-mode-center-current
-  "gd" 'emms-playlist-mode-goto-dired-at-point ; TODO: Use "d"?
+  "." 'emms-playlist-mode-center-current
+  "gd" 'emms-playlist-mode-goto-dired-at-point ; "d" does the same, keep "gd" for consistency.
 
   "zs" 'emms-show
   "a" 'emms-playlist-mode-add-contents
@@ -128,8 +131,8 @@ The return value is the yanked text."
 
   ;; filter
   "S" (lookup-key emms-playlist-mode-map (kbd "S"))
-  "zf" (lookup-key emms-playlist-mode-map (kbd "/"))
-  "zff" 'emms-playlist-limit-to-all
+  "s" (lookup-key emms-playlist-mode-map (kbd "/"))
+  ;; "" 'emms-playlist-limit-to-all ; TODO: Test.
 
   (kbd "M-y") 'emms-playlist-mode-yank-pop)
 
