@@ -1,5 +1,9 @@
 ;;; Emms
 
+;;; TODO: See if mpd is faster at building the db. Not so important.
+;;; TODO: Change face from purple to white?
+;;; TODO: Delete entry from cache? See `emms-cache-del'.
+
 (setq emms-directory (concat emacs-cache-folder "emms"))
 (emms-all)
 (emms-history-load)
@@ -147,13 +151,25 @@ will always use the same cover per folder."
            (call-process-shell-command (emms-player-mpv--format-command "mute") nil nil nil))
       (emms-pause))))
 
-;;; TODO: See if mpd is faster at building the db. Not so important.
+;;; Browse by album-artist.
+(defun emms-browser-get-track-custom (track type)
+  "Return TYPE from TRACK.
+This function uses 'info-albumartistsort, 'info-albumartist,
+'info-artistsort, 'info-originalyear, 'info-originaldate and
+'info-date symbols, if available for TRACK."
+  (cond ((eq type 'info-artist)
+         (or (emms-track-get track 'info-albumartistsort)
+             (emms-track-get track 'info-albumartist)
+             (emms-track-get track 'info-artistsort)
+             (emms-track-get track 'info-artist "<unknown>")))
+        ((eq type 'info-year)
+         (let ((date (or (emms-track-get track 'info-originaldate)
+                         (emms-track-get track 'info-originalyear)
+                         (emms-track-get track 'info-date)
+                         (emms-track-get track 'info-year "<unknown>"))))
+           (ph-extract-year-from-date date)))
+        (t (emms-track-get track type "<unknown>"))))
 
-;;; TODO: Delete entry from cache? See `emms-cache-del'.
-
-;;; TODO: Browse by album-artist? libtag has the field.
-;;; https://emacs.stackexchange.com/questions/10412/sort-by-artist-in-emms-with-compilation-albums/10435
-
-;;; TODO: Change face from purple to white?
+(setq emms-browser-get-track-field-function #'emms-browser-get-track-custom)
 
 (provide 'init-emms)
