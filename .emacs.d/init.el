@@ -291,6 +291,7 @@
 (add-to-list 'auto-mode-alist '("PKGBUILD" . sh-mode))
 ;;; Gentoo
 (add-to-list 'auto-mode-alist '("\\.ebuild\\'" . sh-mode))
+(add-to-list 'auto-mode-alist '("\\.eclass\\'" . sh-mode))
 (add-to-list 'auto-mode-alist '("package\\.accept_keywords" . sh-mode))
 (add-to-list 'auto-mode-alist '("package\\.mask" . sh-mode))
 (add-to-list 'auto-mode-alist '("package\\.use" . sh-mode))
