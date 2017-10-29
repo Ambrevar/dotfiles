@@ -370,8 +370,12 @@ If W2 is a window too, swap both."
          (b2 (window-buffer w2))
          (s1 (window-start w1))
          (s2 (window-start w2)))
-    (set-window-buffer w1 b2)
-    (set-window-buffer w2 b1)
+    (with-temp-buffer
+      ;; Some buffers like EXWM buffers can only be in one live buffer at once.
+      ;; Switch to a dummy buffer in w2 so that we don't display any buffer twice.
+      (set-window-buffer w2 (current-buffer))
+      (set-window-buffer w1 b2)
+      (set-window-buffer w2 b1))
     (set-window-start w1 s2)
     (set-window-start w2 s1))
   (select-window w1))
