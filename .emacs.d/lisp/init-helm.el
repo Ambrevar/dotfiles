@@ -231,4 +231,11 @@ Requires `call-process-to-string' from `functions'."
 (unless (executable-find "locate")
   (setq helm-locate-recursive-dirs-command "find %s -type d -regex .*%s.*$"))
 
+;;; Convenience.
+(defun helm-toggle-visible-mark-backwards ()
+  (interactive)
+  (helm-toggle-visible-mark)
+  (helm-previous-line 2))
+(define-key helm-map (kbd "S-SPC") 'helm-toggle-visible-mark-backwards)
+
 (provide 'init-helm)

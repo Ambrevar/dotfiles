@@ -24,7 +24,8 @@
   "k" 'helm-previous-line
   "g" 'helm-beginning-of-buffer
   "G" 'helm-end-of-buffer
-  "SPC" 'helm-toggle-visible-mark
+  (kbd "SPC") 'helm-toggle-visible-mark
+  ;; (kbd "S-SPC") 'evil-helm-toggle-visible-mark-backwards
   (kbd "C-f") 'helm-next-page
   (kbd "C-b") 'helm-previous-page)
 
