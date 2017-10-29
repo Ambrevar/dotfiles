@@ -74,6 +74,8 @@
     "s-\\" 'helm-toggle-resplit-and-swap-windows)
   (exwm-input-set-key (kbd "s-c") #'helm-resume)
   (exwm-input-set-key (kbd "s-b") #'helm-mini)
+  (with-eval-after-load 'emms
+    (exwm-input-set-key (kbd "s-A") #'helm-emms))
   (exwm-input-set-key (kbd "s-f") #'helm-find-files)
   (exwm-input-set-key (kbd "s-g") #'helm-grep-git-or-ag)
   (exwm-input-set-key (kbd "s-G") #'helm-grep-git-all-or-ag))
