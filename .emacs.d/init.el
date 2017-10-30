@@ -123,7 +123,7 @@
 
 ;;; Eshell
 ;;; Extend completion.
-(nconc package-selected-packages '(pcomplete-extension))
+(nconc package-selected-packages '(pcomplete-extension pcmpl-args pcmpl-git))
 (with-eval-after-load 'eshell (require 'init-eshell))
 (autoload 'eshell-or-new-session "eshell")
 
