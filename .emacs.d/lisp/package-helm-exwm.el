@@ -1,52 +1,56 @@
 ;;; helm-exwm
 
-(defun foo ()
+;; The following works, so `kill-buffer' on an EXWM window is fine.
+(defun helm-exwm-kill-all ()
   (dolist (b (buffer-list))
-    (let (victim count)
-      (with-current-buffer b
-        (when (string-match "duck" (buffer-name))
-          (setq victim b)))
-      (when victim
-        (setq count (kill-buffer victim))
-        (message "HELM killed %s" count)))))
-
+    (with-current-buffer b
+      (when (eq major-mode 'exwm-mode)
+        (message "helm-exwm: Killing %s..." b)
+        (kill-buffer b)
+        (message "helm-exwm: Killed.")))))
 
 ;; TODO: Post on EXWM's wiki once all TODOs are fixed.
 ;; Publish on MELPA?  Maybe with generic code for EXWM buffers with column
 ;; containing the class name, and and emacs-buffers helm source too.
 
-;; TODO: Change namespace to helm-exwm.
-
 ;; TODO: s-w s-w loses focus.
-;; We should get
-;;   helm: Error: Trying to run helm within a running helm session
-;; but we don't.
+;; We don't get the expected error:
+;;   "helm: Error: Trying to run helm within a running helm session"
 
 ;; TODO: Helm buffer does not die?
+
 ;; TODO: kill-persistent is not persistent.
 
-;; TODO: Killing buffers message "Killed 0 buffer(s)".
+;; REVIEW: Killing buffers message "Killed 0 buffer(s)".
 ;; See https://github.com/ch11ng/exwm/issues/322.
+;; A workaround would be to discard the result of kill-buffer and print the
+;; count manually.
 
-(defvar exwm/helm-browser-map
+(defvar helm-exwm-browser-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map helm-map)
     (define-key map (kbd "C-c o")     'helm-buffer-switch-other-window)
     (define-key map (kbd "C-c C-o")   'helm-buffer-switch-other-frame)
     (define-key map (kbd "M-D")       'helm-buffer-run-kill-buffers)
-    (define-key map (kbd "C-c d")     'helm-buffer-run-kill-persistent)
-    ;; (define-key map (kbd "C-c d")     'exwm/helm-browsers-run-kill-persistent)
+    ;; (define-key map (kbd "C-c d")     'helm-buffer-run-kill-persistent)
+    (define-key map (kbd "C-c d")     'helm-exwm-buffer-run-kill-persistent)
     map)
   "Keymap for browser source in Helm.")
 
-;; (defun exwm/helm-update ()
-;; (message "EXWM/HELM"))
+;;; This fails to be persistent, nothing is run after kill-buffer.
+(defun helm-exwm-buffer-run-kill-persistent ()
+  "Kill buffer without quitting helm."
+  (interactive)
+  (message "before")
+  (kill-buffer (car (helm-marked-candidates)))
+  (message "after"))
+;; (put 'helm-exwm-buffer-run-kill-persistent 'helm-only t)
 
-(defun exwm/helm-browser-buffers ()
+(defun helm-exwm-browser-buffers ()
   "Preconfigured `helm' to list browser buffers."
   (interactive)
   (helm :sources
-        (helm-build-sync-source "exwm/helm browser buffers"
+        (helm-build-sync-source "helm-exwm browser buffers"
           :candidates
           (let ((bufs (delq nil (mapcar
                                  (lambda (buf)
@@ -59,19 +63,19 @@
             (when bufs
               ;; Move first buffer (current) to last position.
               (setcdr (last bufs) (list (pop bufs))))
-            (message "HELM %s" bufs)
             bufs)
           :action '(("Switch to browser buffer(s)" . helm-buffer-switch-buffers)
                     ("Switch to browser buffer(s) in other window `C-c o'" . helm-buffer-switch-buffers-other-window)
                     ("Switch to browser buffer in other frame `C-c C-o'" . switch-to-buffer-other-frame)
                     ("Kill browser buffer(s)" . helm-kill-marked-buffers))
           ;; When follow-mode is on, the persistent-action allows for multiple candidate selection.
-          ;; :persistent-action 'helm-buffers-list-persistent-action
-          ;; :update 'exwm/helm-update
-          :keymap exwm/helm-browser-map)
-        :buffer "*exwm/helm browser*"))
+          :persistent-action 'helm-buffers-list-persistent-action
+          ;; :update 'helm-exwm-update
+          :keymap helm-exwm-browser-map)
+        :buffer "*helm-exwm browser*"))
 
-(add-to-list 'helm-source-names-using-follow "exwm/helm browser buffers"))
+;; (add-to-list 'helm-source-names-using-follow "helm-exwm browser buffers"))
+;; (setq helm-source-names-using-follow nil)
 
 (defun exwm-start-browser (&optional other-window)
   "Fire-up the web browser as defined in `browse-url-generic-program'.
@@ -83,8 +87,8 @@ With prefix argument or if OTHER-WINDOW is non-nil, open in other window."
   (interactive "P")
   (if (and (eq major-mode 'exwm-mode)
            (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program)))
-      (if (fboundp 'exwm/helm-browser-buffers)
-          (exwm/helm-browser-buffers)
+      (if (fboundp 'helm-exwm-browser-buffers)
+          (helm-exwm-browser-buffers)
         (when other-window (other-window 1))
         (start-process-shell-command browse-url-generic-program nil browse-url-generic-program))
     (let ((last (buffer-list)))
