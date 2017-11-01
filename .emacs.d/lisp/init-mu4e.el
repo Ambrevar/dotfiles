@@ -40,6 +40,9 @@ Default to unread messages if no"
  ;; SMTP
  message-send-mail-function 'smtpmail-send-it
 
+ ;; Don't bother me with context on startup.
+ mu4e-context-policy nil
+
  ;; Don't keep sent e-mail buffer.
  message-kill-buffer-on-exit t
 
