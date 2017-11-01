@@ -58,38 +58,6 @@
 (when (require 'with-editor nil t)
   (add-hook 'with-editor-mode-hook 'evil-insert-state))
 
-;;; Allow for evil states in minibuffer. Double <escape> exits.
-(dolist
-    (keymap
-     ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/
-     ;; Text-from-Minibuffer.html#Definition of minibuffer-local-map
-     '(minibuffer-local-map
-       minibuffer-local-ns-map
-       minibuffer-local-completion-map
-       minibuffer-local-must-match-map
-       minibuffer-local-isearch-map))
-  (evil-define-key 'normal (eval keymap) (kbd "<escape>") 'abort-recursive-edit)
-  (evil-define-key 'normal (eval keymap) (kbd "<return>") 'exit-minibuffer))
-
-(defun evil-minibuffer-setup ()
-  (set (make-local-variable 'evil-echo-state) nil)
-  ;; (evil-set-initial-state 'mode 'insert) is the evil-proper
-  ;; way to do this, but the minibuffer doesn't have a mode.
-  ;; The alternative is to create a minibuffer mode (here), but
-  ;; then it may conflict with other packages' if they do the same.
-  (evil-insert 1))
-(add-hook 'minibuffer-setup-hook 'evil-minibuffer-setup)
-;;; Because of the above minibuffer-setup-hook, some bindings need be reset.
-(evil-define-key 'normal evil-ex-completion-map (kbd "<escape>") 'abort-recursive-edit)
-(evil-define-key 'insert evil-ex-completion-map (kbd "M-p") 'previous-complete-history-element)
-(evil-define-key 'insert evil-ex-completion-map (kbd "M-n") 'next-complete-history-element)
-;;; TODO: evil-ex history binding in normal mode do not work.
-(evil-define-key 'normal evil-ex-completion-map (kbd "M-p") 'previous-history-element)
-(evil-define-key 'normal evil-ex-completion-map (kbd "M-n") 'next-history-element)
-(define-keys evil-ex-completion-map
-  "M-p" 'previous-history-element
-  "M-n" 'next-history-element)
-
 ;;; Go-to-definition.
 ;;; From https://emacs.stackexchange.com/questions/608/evil-map-keybindings-the-vim-way.
 (evil-global-set-key
@@ -140,7 +108,9 @@
 
 ;;; Emacs special modes
 (when (require 'evil-special-modes nil t)
-  (evil-special-modes-init))
+  (evil-special-modes-init)
+  (require 'evil-minibuffer)
+  (evil-minibuffer-init))
 
 ;;; nXML
 ;;; TODO: Add to Emacs special modes?
