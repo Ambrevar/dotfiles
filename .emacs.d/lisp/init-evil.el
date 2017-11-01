@@ -1,8 +1,5 @@
 ;;; Evil
 
-;;; REVIEW: helm-mark-ring seems to have issues with Evil.
-(require 'patch-mark)
-
 ;;; TODO: helm-show-kill-ring behaves like Emacs when pasting whole lines, not like Vim.
 
 ;;; TODO: Make Evil commands react more dynamically with read-only text, like eshell, wdired.
