@@ -189,6 +189,7 @@ See `eshell' for the numeric prefix ARG."
           (switch-to-buffer (car last))
         (eshell (or arg t))))))
 
+;;; Completion
 (when (require 'bash-completion nil t)
   (defun eshell-bash-completion ()
     (while (pcomplete-here
@@ -199,6 +200,13 @@ See `eshell' for the numeric prefix ARG."
 
 (when (and (executable-find "fish")
            (require 'fish-completion nil t))
-  (fish-completion-eshell-global-toggle))
+  (fish-completion-eshell-toggle-globally))
+
+;;; Auto-suggestion
+(when (require 'package-eshell-autosuggest)
+  (add-hook 'eshell-mode-hook 'company-mode)
+  (when (require 'helm-config nil t)
+    (define-key company-active-map (kbd "M-p") 'helm-eshell-history))
+  (add-hook 'eshell-mode-hook 'eshell-setup-autosuggest))
 
 (provide 'init-eshell)
