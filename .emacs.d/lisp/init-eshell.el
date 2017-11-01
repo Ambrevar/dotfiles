@@ -84,6 +84,8 @@
       (lambda nil
         (let ((path (abbreviate-file-name (eshell/pwd))))
           (concat
+           (when eshell-status-p
+             (or (eshell-status-display) ""))
            (format
             (propertize "(%s@%s)" 'face '(:weight bold))
             (propertize (user-login-name) 'face '(:foreground "cyan"))
@@ -219,5 +221,26 @@ See `eshell' for the numeric prefix ARG."
   (when (require 'helm-config nil t)
     (define-key company-active-map (kbd "M-p") 'helm-eshell-history))
   (add-hook 'eshell-mode-hook 'eshell-setup-autosuggest))
+
+;;; Extra execution information
+(defvar eshell-status-p t
+  "If non-nil, display status before prompt.")
+(defvar eshell-status--last-command-time nil)
+(make-variable-buffer-local 'eshell-status--last-command-time)
+(defvar eshell-status-min-duration-before-display 1
+  "If a command takes more time than this, display its duration.")
+
+(defun eshell-status-display ()
+  (when eshell-status--last-command-time
+    (let ((duration (time-subtract (current-time) eshell-status--last-command-time)))
+      (when (> (time-to-seconds duration) eshell-status-min-duration-before-display)
+        (format "#[STATUS] duration %ss, end time %s\n"
+                (format-time-string "%S" duration)
+                (format-time-string "%F %T" (current-time)))))))
+
+(defun eshell-status-record ()
+  (setq eshell-status--last-command-time (current-time)))
+
+(add-hook 'eshell-pre-command-hook 'eshell-status-record)
 
 (provide 'init-eshell)
