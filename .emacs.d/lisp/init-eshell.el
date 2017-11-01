@@ -85,19 +85,19 @@
         (let ((path (abbreviate-file-name (eshell/pwd))))
           (concat
            (when eshell-status-p
-             (or (eshell-status-display) ""))
+             (or (propertize (eshell-status-display) 'face font-lock-comment-face) ""))
            (format
             (propertize "(%s@%s)" 'face '(:weight bold))
             (propertize (user-login-name) 'face '(:foreground "cyan"))
             (propertize (system-name) 'face '(:foreground "cyan")))
-           (if (and (require 'magit nil t) (magit-get-current-branch))
+           (if (and (require 'magit nil t) (or (magit-get-current-branch) (magit-get-current-tag)))
                (let* ((root (abbreviate-file-name (magit-rev-parse "--show-toplevel")))
                       (after-root (substring-no-properties path (min (length path) (1+ (length root))))))
                  (format
                   (propertize "[%s/%s@%s]" 'face '(:weight bold))
                   (propertize root 'face `(:foreground ,(if (= (user-uid) 0) "orange" "gold")))
                   (propertize after-root 'face `(:foreground ,(if (= (user-uid) 0) "red" "green") :weight bold))
-                  (magit-get-current-branch)))
+                  (or (magit-get-current-branch) (magit-get-current-tag))))
              (format
               (propertize "[%s]" 'face '(:weight bold))
               (propertize path 'face `(:foreground ,(if (= (user-uid) 0) "red" "green") :weight bold))))
