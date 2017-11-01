@@ -132,9 +132,9 @@
   ;; mark
   "*m" 'tablist-mark-forward
   "m" 'tablist-mark-forward
-  "t" 'tablist-toggle-marks
+  "~" 'tablist-toggle-marks
   "u" 'tablist-unmark-forward
-  "U" 'tablist-unmark-all-marks
+  "M" 'tablist-unmark-all-marks
   "*!" 'tablist-unmark-all-marks
   "*c" 'tablist-change-marks
   "*n" 'tablist-mark-items-numeric
