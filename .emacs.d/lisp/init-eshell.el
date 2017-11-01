@@ -85,10 +85,21 @@
         (let ((path (abbreviate-file-name (eshell/pwd))))
           (concat
            (format
-            (propertize "(%s@%s)[%s]\n>" 'face '(:weight bold))
+            (propertize "(%s@%s)" 'face '(:weight bold))
             (propertize (user-login-name) 'face '(:foreground "cyan"))
-            (propertize (system-name) 'face '(:foreground "cyan"))
-            (propertize path 'face `(:foreground ,(if (= (user-uid) 0) "red" "green") :weight bold)))
+            (propertize (system-name) 'face '(:foreground "cyan")))
+           (if (and (require 'magit nil t) (magit-get-current-branch))
+               (let* ((root (abbreviate-file-name (magit-rev-parse "--show-toplevel")))
+                      (after-root (substring-no-properties path (min (length path) (1+ (length root))))))
+                 (format
+                  (propertize "[%s/%s@%s]" 'face '(:weight bold))
+                  (propertize root 'face `(:foreground ,(if (= (user-uid) 0) "orange" "gold")))
+                  (propertize after-root 'face `(:foreground ,(if (= (user-uid) 0) "red" "green") :weight bold))
+                  (magit-get-current-branch)))
+             (format
+              (propertize "[%s]" 'face '(:weight bold))
+              (propertize path 'face `(:foreground ,(if (= (user-uid) 0) "red" "green") :weight bold))))
+           (propertize "\n>" 'face '(:weight bold))
            " "))))
 ;;; If the prompt spans over multiple lines, the regexp should match
 ;;; last line only.
