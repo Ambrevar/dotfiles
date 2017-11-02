@@ -58,6 +58,8 @@
  helm-M-x-fuzzy-match t
  helm-recentf-fuzzy-match t
 
+ helm-buffers-end-truncated-string "…"
+
  helm-window-show-buffers-function 'helm-window-mosaic-fn
  helm-window-prefer-horizontal-split t)
 
