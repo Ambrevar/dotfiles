@@ -47,8 +47,8 @@
     "C-l" nil)) ; So the header displays the above binding.
 
 (with-eval-after-load 'package-helm-exwm
-  (define-keys helm-exwm-browser-map "M-d" 'helm-buffer-run-kill-persistent)
-  (define-keys helm-exwm-browser-map "M-o" 'helm-buffer-switch-other-window))
+  (define-keys helm-exwm-map "M-d" 'helm-buffer-run-kill-persistent)
+  (define-keys helm-exwm-map "M-o" 'helm-buffer-switch-other-window))
 
 ;; `helm-mark-or-exchange-rect' is not needed with Evil.
 (global-set-key (kbd "C-x C-x") 'helm-all-mark-rings)
