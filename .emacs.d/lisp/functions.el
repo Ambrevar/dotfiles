@@ -493,6 +493,10 @@ This does not interfere with `subword-mode'."
   "Unconditionally turn on `column-number-mode' for the current buffer."
   (set (make-variable-buffer-local 'column-number-mode) t))
 
+(defun turn-on-complete-filename ()
+  "Unconditionally turn on `comint-dynamic-complete-filename' for the current buffer."
+  (add-to-list 'completion-at-point-functions 'comint-dynamic-complete-filename))
+
 (defun turn-on-delete-trailing-whitespace ()
   "Add the `delete-trailing-whitespace' function to `before-save-hook'.
 This does not affect .csv files."
