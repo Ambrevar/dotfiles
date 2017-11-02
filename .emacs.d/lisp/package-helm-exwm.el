@@ -12,7 +12,7 @@
 ;;; This fails to be persistent, nothing is run after kill-buffer.
 (defun helm-exwm-buffer-run-kill-persistent ()
   "Kill buffer without quitting helm."
-  (interactive)
+  ;; (interactive)
   (with-helm-alive-p
     (helm-attrset 'kill-action '(helm-exwm-buffers-persistent-kill . never-split))
     (helm-execute-persistent-action 'kill-action)))
@@ -20,7 +20,7 @@
 
 (defun helm-exwm-buffers-persistent-kill ()
   "Kill buffer without quitting helm."
-  (interactive)
+  ;; (interactive)
   (message "before")
   (kill-buffer (car (helm-marked-candidates)))
   (message "after"))
@@ -42,11 +42,12 @@
 (defvar helm-exwm-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map helm-map)
-    (define-key map (kbd "C-c o")     'helm-buffer-switch-other-window)
-    (define-key map (kbd "C-c C-o")   'helm-buffer-switch-other-frame)
-    (define-key map (kbd "M-D")       'helm-buffer-run-kill-buffers)
-    ;; (define-key map (kbd "C-c d")     'helm-buffer-run-kill-persistent)
-    (define-key map (kbd "C-c d")     'helm-exwm-buffer-run-kill-persistent)
+    (define-key map (kbd "C-c o")   'helm-buffer-switch-other-window)
+    (define-key map (kbd "C-c C-o") 'helm-buffer-switch-other-frame)
+    (define-key map (kbd "M-D")     'helm-buffer-run-kill-buffers)
+    ;; (define-key map (kbd "C-c d")   'helm-buffer-run-kill-persistent)
+    ;; (define-key map (kbd "C-c d")   'helm-exwm-buffer-run-kill-persistent)
+    (define-key map (kbd "C-]")     'helm-exwm-toggle-buffers-details)
     map)
   "Keymap for browser source in Helm.")
 
@@ -67,11 +68,20 @@ If CLASS is nil, then list all EXWM buffers."
       (setcdr (last bufs) (list (pop bufs))))
     bufs))
 
+;; TODO: When on one random buffer, preselect goes back to first.
+(defun helm-exwm-toggle-buffers-details ()
+  (interactive)
+  (with-helm-alive-p
+    (let ((preselect (helm-buffer--get-preselection
+                      (helm-get-selection))))
+      (setq helm-buffer-details-flag (not helm-buffer-details-flag))
+      (helm-force-update preselect))))
+(put 'helm-exwm-toggle-buffers-details 'helm-only t)
+
 (defvar helm-exwm-buffer-max-length 52
   "Max length of EXWM buffer names before truncating.
 When disabled (nil) use the longest buffer-name length found")
 
-;; TODO: Add detail toggle.
 (defun helm-exwm-highlight-buffers (buffers)
   "Transformer function to highlight BUFFERS list.
 Should be called after others transformers i.e (boring buffers)."
