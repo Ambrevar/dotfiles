@@ -85,7 +85,7 @@
         (let ((path (abbreviate-file-name (eshell/pwd))))
           (concat
            (when eshell-status-p
-             (or (propertize (eshell-status-display) 'face font-lock-comment-face) ""))
+             (propertize (or (eshell-status-display) "") 'face font-lock-comment-face))
            (format
             (propertize "(%s@%s)" 'face '(:weight bold))
             (propertize (user-login-name) 'face '(:foreground "cyan"))
