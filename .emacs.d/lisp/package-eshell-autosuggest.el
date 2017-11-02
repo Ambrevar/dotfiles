@@ -1,3 +1,5 @@
+;;; REVIEW: Delete this once on MELPA.
+;;; See https://github.com/melpa/melpa/pull/5094.
 (require 'company)
 
 (defun company-eshell-autosuggest-candidates (prefix)
