@@ -13,19 +13,21 @@
   "d" 'debbugs-gnu-display-status
 
   ;; filtering
-  (kbd "M-s f") 'debbugs-gnu-narrow-to-status ; TODO: bad binding
+  (kbd "s") 'debbugs-gnu-narrow-to-status
+  ;; "S" 'debbugs-gnu-widen ; Useless if we can just press "s RET" (empty filter).
+  "S" 'debbugs-gnu-toggle-suppress
+  "r" 'debbugs-gnu-show-all-blocking-reports
 
   ;; sorting
-  "s" 'debbugs-gnu-toggle-sort
-  "S" 'tabulated-list-sort
+  "o" 'debbugs-gnu-toggle-sort
+  "O" 'tabulated-list-sort
 
   ;; show
   "gB" 'debbugs-gnu-show-blocking-reports
-  "r" 'debbugs-gnu-show-all-blocking-reports
   "gb" 'debbugs-gnu-show-blocked-by-reports
-  "i" 'debbugs-gnu-toggle-tag
-  "o" 'debbugs-gnu-widen
-  "x" 'debbugs-gnu-toggle-suppress ; TODO: bad binding
+
+  ;; marking
+  "m" 'debbugs-gnu-toggle-tag
 
   ;; update
   "gr" 'debbugs-gnu-rescan
