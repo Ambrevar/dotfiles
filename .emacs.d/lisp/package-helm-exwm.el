@@ -26,6 +26,7 @@
 ;; A workaround would be to discard the result of kill-buffer and print the
 ;; count manually.
 
+;;; TODO: Rename to helm-exwm-map.
 (defvar helm-exwm-browser-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map helm-map)
@@ -41,29 +42,44 @@
 (defun helm-exwm-buffer-run-kill-persistent ()
   "Kill buffer without quitting helm."
   (interactive)
+  (with-helm-alive-p
+    (helm-attrset 'kill-action '(helm-exwm-buffers-persistent-kill . never-split))
+    (helm-execute-persistent-action 'kill-action)))
+(put 'helm-exwm-buffer-run-kill-persistent 'helm-only t)
+
+(defun helm-exwm-buffers-persistent-kill ()
+  "Kill buffer without quitting helm."
+  (interactive)
   (message "before")
   (kill-buffer (car (helm-marked-candidates)))
   (message "after"))
-;; (put 'helm-exwm-buffer-run-kill-persistent 'helm-only t)
 
+(defun helm-exwm-generic-candidates (class-name)
+  (let ((bufs (delq nil (mapcar
+                         (lambda (buf)
+                           (if (with-current-buffer buf
+                                 (and (eq major-mode 'exwm-mode)
+                                      (string= (downcase exwm-class-name) class-name)))
+                               (buffer-name buf)
+                             nil))
+                         (buffer-list)))))
+    (when (> (length bufs) 1)
+      ;; Move first buffer (current) to last position.
+      (setcdr (last bufs) (list (pop bufs))))
+    bufs))
+
+(defun helm-exwm-browser-candidates ()
+  (message "HELM")
+  (helm-exwm-generic-candidates (file-name-nondirectory browse-url-generic-program)))
+
+;;; TODO: Make the candidate function and argument.
 (defun helm-exwm-browser-buffers ()
   "Preconfigured `helm' to list browser buffers."
   (interactive)
   (helm :sources
-        (helm-build-sync-source "helm-exwm browser buffers"
-          :candidates
-          (let ((bufs (delq nil (mapcar
-                                 (lambda (buf)
-                                   (if (with-current-buffer buf
-                                         (and (eq major-mode 'exwm-mode)
-                                              (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program))))
-                                       (buffer-name buf)
-                                     nil))
-                                 (buffer-list)))))
-            (when bufs
-              ;; Move first buffer (current) to last position.
-              (setcdr (last bufs) (list (pop bufs))))
-            bufs)
+        (helm-build-sync-source "EXWM buffers"
+          :candidates 'helm-exwm-browser-candidates
+          ;; TODO: Make action variable?  Maybe not necessary if this function become generic.
           :action '(("Switch to browser buffer(s)" . helm-buffer-switch-buffers)
                     ("Switch to browser buffer(s) in other window `C-c o'" . helm-buffer-switch-buffers-other-window)
                     ("Switch to browser buffer in other frame `C-c C-o'" . switch-to-buffer-other-frame)
@@ -72,11 +88,13 @@
           :persistent-action 'helm-buffers-list-persistent-action
           ;; :update 'helm-exwm-update
           :keymap helm-exwm-browser-map)
-        :buffer "*helm-exwm browser*"))
+        :buffer "*helm-exwm*"))
 
-;; (add-to-list 'helm-source-names-using-follow "helm-exwm browser buffers"))
+;; (add-to-list 'helm-source-names-using-follow "helm-exwm"))
 ;; (setq helm-source-names-using-follow nil)
 
+;;; TODO: Use namespace.
+;;; TODO: Make generic function with class-name and program arguments.
 (defun exwm-start-browser (&optional other-window)
   "Fire-up the web browser as defined in `browse-url-generic-program'.
 If current window is the web browser already, fire-up a new window.
