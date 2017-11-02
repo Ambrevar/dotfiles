@@ -186,6 +186,8 @@
   (add-hook hook 'turn-on-tab-width-to-8) ; Because some existing code uses tabs.
   (add-hook hook 'turn-off-indent-tabs)) ; Should not use tabs.
 (define-key lisp-mode-shared-map (kbd "M-.") 'find-symbol-at-point)
+(setq-mode-local emacs-lisp-mode completion-at-point-functions '(elisp-completion-at-point comint-dynamic-complete-filename t))
+
 ;;; Common LISP
 (setq inferior-lisp-program "clisp")
 
