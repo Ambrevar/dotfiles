@@ -129,6 +129,12 @@ If CLASS is nil, then list all EXWM buffers."
           :keymap helm-exwm-map)
         :buffer "*helm-exwm*"))
 
+;; TODO: Allow for several classes, and allow for class exclusion.
+;; Or pass lambda taking window as parameter? This is more flexible and allows
+;; for comparing anything.  Lambda return value must be the program name.
+;; (defun helm-exwm-browser-filter (buffer)
+;;    (when (string= (downcase exwm-class-name) (file-name-nondirectory browse-url-generic-program))
+;;      browse-url-generic-program))
 (defun helm-exwm-switch (class &optional program other-window)
   "Switch to some EXWM windows belonging to CLASS.
 
