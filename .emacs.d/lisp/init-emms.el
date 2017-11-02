@@ -167,8 +167,17 @@ This function uses 'info-albumartistsort, 'info-albumartist,
                          (emms-track-get track 'info-originalyear)
                          (emms-track-get track 'info-date)
                          (emms-track-get track 'info-year "<unknown>"))))
-           (ph-extract-year-from-date date)))
+           (emms-extract-year-from-date date)))
         (t (emms-track-get track type "<unknown>"))))
+
+(defun emms-extract-year-from-date (date)
+  "Try to extract year part from DATE.
+Return DATE if the year cannot be extracted."
+  (let ((year (nth 5 (parse-time-string date))))
+    (if year (number-to-string year)
+      (if (string-match "^[ \t]*[0-9]\\{4\\}" date)
+          (substring date (match-beginning 0) (match-end 0))
+        date))))
 
 (setq emms-browser-get-track-field-function #'emms-browser-get-track-custom)
 
