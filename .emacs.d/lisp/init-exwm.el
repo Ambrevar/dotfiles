@@ -74,8 +74,6 @@
     "s-\\" 'helm-toggle-resplit-and-swap-windows)
   (exwm-input-set-key (kbd "s-c") #'helm-resume)
   (exwm-input-set-key (kbd "s-b") #'helm-mini)
-  (with-eval-after-load 'emms
-    (exwm-input-set-key (kbd "s-A") #'helm-emms))
   (exwm-input-set-key (kbd "s-f") #'helm-find-files)
   (exwm-input-set-key (kbd "s-g") #'helm-grep-git-or-ag)
   (exwm-input-set-key (kbd "s-G") #'helm-grep-git-all-or-ag))
@@ -94,7 +92,9 @@
   (exwm-input-set-key (kbd "s-v") #'magit-status))
 (when (fboundp 'emms-all)
   (exwm-input-set-key (kbd "s-a") #'emms-smart-browse)
-  (exwm-input-set-key (kbd "s-A") #'emms))
+  (if (fboundp 'helm-emms)
+      (exwm-input-set-key (kbd "s-A") #'helm-emms)
+    (exwm-input-set-key (kbd "s-A") #'emms)))
 (when (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path))
   (exwm-input-set-key (kbd "s-m") #'mu4e-headers))
 
