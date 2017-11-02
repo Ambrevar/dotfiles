@@ -234,8 +234,8 @@ See `eshell' for the numeric prefix ARG."
   (when eshell-status--last-command-time
     (let ((duration (time-subtract (current-time) eshell-status--last-command-time)))
       (when (> (time-to-seconds duration) eshell-status-min-duration-before-display)
-        (format "#[STATUS] duration %ss, end time %s\n"
-                (format-time-string "%S" duration)
+        (format "#[STATUS] duration %.3fs, end time %s\n"
+                (time-to-seconds duration)
                 (format-time-string "%F %T" (current-time)))))))
 
 (defun eshell-status-record ()
