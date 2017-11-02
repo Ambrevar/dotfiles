@@ -16,7 +16,6 @@
 ;; containing the class name.
 
 ;; TODO: Write a emacs-buffers helm source to filter out EXWM buffers from buffer list.
-;; Write an all-exwm buffer source.
 
 ;; REVIEW: Helm buffer does not die?  Seems to be fixed.
 
@@ -54,12 +53,15 @@
   (kill-buffer (car (helm-marked-candidates)))
   (message "after"))
 
-(defun helm-exwm-candidates (class)
+(defun helm-exwm-candidates (&optional class)
+  "Return the list of EXWM buffers belonging to CLASS.
+
+If CLASS is nil, then list all EXWM buffers."
   (let ((bufs (delq nil (mapcar
                          (lambda (buf)
                            (if (with-current-buffer buf
                                  (and (eq major-mode 'exwm-mode)
-                                      (string= (downcase exwm-class-name) class)))
+                                      (or (not class) (string= (downcase exwm-class-name) class))))
                                (buffer-name buf)
                              nil))
                          (buffer-list)))))
@@ -68,8 +70,11 @@
       (setcdr (last bufs) (list (pop bufs))))
     bufs))
 
-(defun helm-exwm-buffers (class)
-  "Preconfigured `helm' to list EXWM buffers belonging to CLASS."
+(defun helm-exwm-buffers (&optional class)
+  "Preconfigured `helm' to list EXWM buffers belonging to CLASS.
+
+If CLASS is nil, then list all EXWM buffers."
+  (interactive)
   (helm :sources
         (helm-build-sync-source "EXWM buffers"
           :candidates (helm-exwm-candidates class)
