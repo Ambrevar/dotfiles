@@ -9,11 +9,24 @@
         (kill-buffer b)
         (message "helm-exwm: Killed.")))))
 
+;;; This fails to be persistent, nothing is run after kill-buffer.
+(defun helm-exwm-buffer-run-kill-persistent ()
+  "Kill buffer without quitting helm."
+  (interactive)
+  (with-helm-alive-p
+    (helm-attrset 'kill-action '(helm-exwm-buffers-persistent-kill . never-split))
+    (helm-execute-persistent-action 'kill-action)))
+(put 'helm-exwm-buffer-run-kill-persistent 'helm-only t)
+
+(defun helm-exwm-buffers-persistent-kill ()
+  "Kill buffer without quitting helm."
+  (interactive)
+  (message "before")
+  (kill-buffer (car (helm-marked-candidates)))
+  (message "after"))
+
 ;; TODO: Publish on MELPA.
 ;; TODO: Post on EXWM's wiki once on MELPA.
-
-;; TODO: Maybe generic code for EXWM buffers with column
-;; containing the class name.
 
 ;; TODO: Write a emacs-buffers helm source to filter out EXWM buffers from buffer list.
 
@@ -37,22 +50,6 @@
     map)
   "Keymap for browser source in Helm.")
 
-;;; This fails to be persistent, nothing is run after kill-buffer.
-(defun helm-exwm-buffer-run-kill-persistent ()
-  "Kill buffer without quitting helm."
-  (interactive)
-  (with-helm-alive-p
-    (helm-attrset 'kill-action '(helm-exwm-buffers-persistent-kill . never-split))
-    (helm-execute-persistent-action 'kill-action)))
-(put 'helm-exwm-buffer-run-kill-persistent 'helm-only t)
-
-(defun helm-exwm-buffers-persistent-kill ()
-  "Kill buffer without quitting helm."
-  (interactive)
-  (message "before")
-  (kill-buffer (car (helm-marked-candidates)))
-  (message "after"))
-
 (defun helm-exwm-candidates (&optional class)
   "Return the list of EXWM buffers belonging to CLASS.
 
@@ -70,6 +67,35 @@ If CLASS is nil, then list all EXWM buffers."
       (setcdr (last bufs) (list (pop bufs))))
     bufs))
 
+(defvar helm-exwm-buffer-max-length 52
+  "Max length of EXWM buffer names before truncating.
+When disabled (nil) use the longest buffer-name length found")
+
+;; TODO: Add detail toggle.
+(defun helm-exwm-highlight-buffers (buffers)
+  "Transformer function to highlight BUFFERS list.
+Should be called after others transformers i.e (boring buffers)."
+  (cl-loop for i in buffers
+           for (name class) = (list i (with-current-buffer i exwm-class-name))
+           for truncbuf = (if (> (string-width name) helm-exwm-buffer-max-length)
+                              (helm-substring-by-width
+                               name helm-exwm-buffer-max-length
+                               helm-buffers-end-truncated-string)
+                            (concat name
+                                    (make-string
+                                     (- (+ helm-exwm-buffer-max-length
+                                           (length helm-buffers-end-truncated-string))
+                                        (string-width name))
+                                     ? )))
+           collect           (let ((helm-pattern (helm-buffers--pattern-sans-filters
+                                                  (and helm-buffers-fuzzy-matching ""))))
+                               (cons (if helm-buffer-details-flag
+                                         (concat
+                                          (funcall helm-fuzzy-matching-highlight-fn truncbuf)
+                                          "  " (propertize class 'face 'helm-buffer-process))
+                                       (funcall helm-fuzzy-matching-highlight-fn name))
+                                     (get-buffer i)))))
+
 (defun helm-exwm-buffers (&optional class)
   "Preconfigured `helm' to list EXWM buffers belonging to CLASS.
 
@@ -78,6 +104,7 @@ If CLASS is nil, then list all EXWM buffers."
   (helm :sources
         (helm-build-sync-source "EXWM buffers"
           :candidates (helm-exwm-candidates class)
+          :candidate-transformer 'helm-exwm-highlight-buffers
           :action '(("Switch to browser buffer(s)" . helm-buffer-switch-buffers)
                     ("Switch to browser buffer(s) in other window `C-c o'" . helm-buffer-switch-buffers-other-window)
                     ("Switch to browser buffer in other frame `C-c C-o'" . switch-to-buffer-other-frame)
