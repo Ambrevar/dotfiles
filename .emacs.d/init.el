@@ -340,6 +340,7 @@
 ;;; This works for qutebrowser, but may need changes for other browsers.
 (defun browser-edit ()
   (when (require 'with-editor nil t) (with-editor-mode))
+  (text-mode)
   (auto-fill-mode -1))
 (add-to-list 'auto-mode-alist `(,(concat (getenv "BROWSER") "-editor-*") . browser-edit))
 
