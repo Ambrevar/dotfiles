@@ -18,13 +18,7 @@
 ;; TODO: Write a emacs-buffers helm source to filter out EXWM buffers from buffer list.
 ;; Write an all-exwm buffer source.
 
-;; TODO: s-w s-w loses focus.
-;; We don't get the expected error:
-;;   "helm: Error: Trying to run helm within a running helm session"
-;; Instead, another s-w shows
-;;   "Aborting an helm session running in background"
-
-;; TODO: Helm buffer does not die?
+;; REVIEW: Helm buffer does not die?  Seems to be fixed.
 
 ;; TODO: kill-persistent is not persistent.
 
@@ -98,24 +92,28 @@ If there is none, start PROGRAM.
 If PROGRAM is nil, it defaults to CLASS.
 
 With prefix argument or if OTHER-WINDOW is non-nil, open in other window."
-  (setq program (or program class)
-        other-window (or other-window current-prefix-arg))
-  (if (and (eq major-mode 'exwm-mode)
-           (string= (downcase exwm-class-name) class))
-      (if (fboundp 'helm-exwm-buffers)
-          (helm-exwm-buffers class)
-        (when other-window (other-window 1))
-        (start-process-shell-command program nil program))
-    (let ((last (buffer-list)))
-      (while (and last
-                  (not (with-current-buffer (car last)
-                         (and (eq major-mode 'exwm-mode)
-                              (string= (downcase exwm-class-name) class)))))
-        (setq last (cdr last)))
-      (if last
-          (funcall (if other-window 'switch-to-buffer-other-window 'switch-to-buffer) (car last))
-        (when other-window (select-window (split-window-sensibly)))
-        (start-process-shell-command program nil program)))))
+  ;; If current window is not in `exwm-mode' we switch to it.  Therefore we must
+  ;; also make sure that current window is not a Helm buffer, otherwise calling
+  ;; this function will lose focus in Helm.
+  (unless helm-alive-p
+    (setq program (or program class)
+          other-window (or other-window current-prefix-arg))
+    (if (and (eq major-mode 'exwm-mode)
+             (string= (downcase exwm-class-name) class))
+        (if (fboundp 'helm-exwm-buffers)
+            (helm-exwm-buffers class)
+          (when other-window (other-window 1))
+          (start-process-shell-command program nil program))
+      (let ((last (buffer-list)))
+        (while (and last
+                    (not (with-current-buffer (car last)
+                           (and (eq major-mode 'exwm-mode)
+                                (string= (downcase exwm-class-name) class)))))
+          (setq last (cdr last)))
+        (if last
+            (funcall (if other-window 'switch-to-buffer-other-window 'switch-to-buffer) (car last))
+          (when other-window (select-window (split-window-sensibly)))
+          (start-process-shell-command program nil program))))))
 
 (defun helm-exwm-switch-browser ()
   "Switch to some `browse-url-generic-program' windows.
