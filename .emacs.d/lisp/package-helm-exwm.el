@@ -1,5 +1,6 @@
 ;;; helm-exwm
 
+;; TODO: kill-persistent is not persistent.
 ;; The following works, so `kill-buffer' on an EXWM window is fine.
 (defun helm-exwm-kill-all ()
   (dolist (b (buffer-list))
@@ -25,16 +26,30 @@
   (kill-buffer (car (helm-marked-candidates)))
   (message "after"))
 
+;; TODO: When on one random buffer, preselect goes back to first.
+(defun helm-exwm-toggle-buffers-details ()
+  (interactive)
+  (with-helm-alive-p
+    (let ((preselect (helm-buffer--get-preselection
+                      (helm-get-selection))))
+      ;; (message "HELM preselect [%S]" preselect)
+      ;; (message "HELM selection [%S]" (helm-get-selection))
+      (setq helm-buffer-details-flag (not helm-buffer-details-flag))
+      ;; TODO: `helm-force-update' seems to be necessary to be necessary to
+      ;; update the buffer live.  It is not the case for helm-buffers-list
+      ;; though.  Why?
+      ;; (helm-update preselect))))
+      (helm-force-update preselect))))
+(put 'helm-exwm-toggle-buffers-details 'helm-only t)
+
 ;; TODO: Publish on MELPA.
 ;; TODO: Post on EXWM's wiki once on MELPA.
 
 ;; TODO: Write a emacs-buffers helm source to filter out EXWM buffers from buffer list.
 
-;; REVIEW: Helm buffer does not die?  Seems to be fixed.
+;; REVIEW: Helm buffer does not die?  Seems to be OK.
 
-;; TODO: kill-persistent is not persistent.
-
-;; REVIEW: Killing buffers message "Killed 0 buffer(s)".
+;; REVIEW: Message when killing some buffers: "Killed 0 buffer(s)".
 ;; See https://github.com/ch11ng/exwm/issues/322.
 ;; A workaround would be to discard the result of kill-buffer and print the
 ;; count manually.
@@ -68,16 +83,6 @@ If CLASS is nil, then list all EXWM buffers."
       (setcdr (last bufs) (list (pop bufs))))
     bufs))
 
-;; TODO: When on one random buffer, preselect goes back to first.
-(defun helm-exwm-toggle-buffers-details ()
-  (interactive)
-  (with-helm-alive-p
-    (let ((preselect (helm-buffer--get-preselection
-                      (helm-get-selection))))
-      (setq helm-buffer-details-flag (not helm-buffer-details-flag))
-      (helm-force-update preselect))))
-(put 'helm-exwm-toggle-buffers-details 'helm-only t)
-
 (defvar helm-exwm-buffer-max-length 52
   "Max length of EXWM buffer names before truncating.
 When disabled (nil) use the longest buffer-name length found")
@@ -97,14 +102,14 @@ Should be called after others transformers i.e (boring buffers)."
                                            (length helm-buffers-end-truncated-string))
                                         (string-width name))
                                      ? )))
-           collect           (let ((helm-pattern (helm-buffers--pattern-sans-filters
-                                                  (and helm-buffers-fuzzy-matching ""))))
-                               (cons (if helm-buffer-details-flag
-                                         (concat
-                                          (funcall helm-fuzzy-matching-highlight-fn truncbuf)
-                                          "  " (propertize class 'face 'helm-buffer-process))
-                                       (funcall helm-fuzzy-matching-highlight-fn name))
-                                     (get-buffer i)))))
+           collect (let ((helm-pattern (helm-buffers--pattern-sans-filters
+                                        (and helm-buffers-fuzzy-matching ""))))
+                     (cons (if helm-buffer-details-flag
+                               (concat
+                                (funcall helm-fuzzy-matching-highlight-fn truncbuf)
+                                "  " (propertize class 'face 'helm-buffer-process))
+                             (funcall helm-fuzzy-matching-highlight-fn name))
+                           (get-buffer i)))))
 
 (defun helm-exwm-buffers (&optional class)
   "Preconfigured `helm' to list EXWM buffers belonging to CLASS.
@@ -121,7 +126,6 @@ If CLASS is nil, then list all EXWM buffers."
                     ("Kill browser buffer(s)" . helm-kill-marked-buffers))
           ;; When follow-mode is on, the persistent-action allows for multiple candidate selection.
           :persistent-action 'helm-buffers-list-persistent-action
-          ;; :update 'helm-exwm-update
           :keymap helm-exwm-map)
         :buffer "*helm-exwm*"))
 
