@@ -9,9 +9,14 @@
         (kill-buffer b)
         (message "helm-exwm: Killed.")))))
 
-;; TODO: Post on EXWM's wiki once all TODOs are fixed.
-;; Publish on MELPA?  Maybe with generic code for EXWM buffers with column
-;; containing the class name, and and emacs-buffers helm source too.
+;; TODO: Publish on MELPA.
+;; TODO: Post on EXWM's wiki once on MELPA.
+
+;; TODO: Maybe generic code for EXWM buffers with column
+;; containing the class name.
+
+;; TODO: Write a emacs-buffers helm source to filter out EXWM buffers from buffer list.
+;; Write an all-exwm buffer source.
 
 ;; TODO: s-w s-w loses focus.
 ;; We don't get the expected error:
@@ -69,8 +74,8 @@
       (setcdr (last bufs) (list (pop bufs))))
     bufs))
 
-(defun helm-exwm-windows (class)
-  "Preconfigured `helm' to list EXWM windows belonging to CLASS."
+(defun helm-exwm-buffers (class)
+  "Preconfigured `helm' to list EXWM buffers belonging to CLASS."
   (helm :sources
         (helm-build-sync-source "EXWM buffers"
           :candidates (helm-exwm-candidates class)
@@ -83,9 +88,6 @@
           ;; :update 'helm-exwm-update
           :keymap helm-exwm-map)
         :buffer "*helm-exwm*"))
-
-;; (add-to-list 'helm-source-names-using-follow "helm-exwm"))
-;; (setq helm-source-names-using-follow nil)
 
 (defun helm-exwm-switch (class &optional program other-window)
   "Switch to some EXWM windows belonging to CLASS.
@@ -100,8 +102,8 @@ With prefix argument or if OTHER-WINDOW is non-nil, open in other window."
         other-window (or other-window current-prefix-arg))
   (if (and (eq major-mode 'exwm-mode)
            (string= (downcase exwm-class-name) class))
-      (if (fboundp 'helm-exwm-windows)
-          (helm-exwm-windows class)
+      (if (fboundp 'helm-exwm-buffers)
+          (helm-exwm-buffers class)
         (when other-window (other-window 1))
         (start-process-shell-command program nil program))
     (let ((last (buffer-list)))
@@ -129,10 +131,10 @@ See `helm-exwm-start'."
   (interactive)
   (helm-exwm-switch (file-name-nondirectory browse-url-generic-program) browse-url-generic-program t))
 
-(exwm-input-set-key (kbd "s-w") #'helm-exwm-start-browser)
-(exwm-input-set-key (kbd "s-W") #'helm-exwm-start-browser-other-window)
+(exwm-input-set-key (kbd "s-w") #'helm-exwm-switch-browser)
+(exwm-input-set-key (kbd "s-W") #'helm-exwm-switch-browser-other-window)
 
-;; (defun helm-exwm-browser-candidates ()
-;; (helm-exwm-generic-candidates (file-name-nondirectory browse-url-generic-program)))
+;; (add-to-list 'helm-source-names-using-follow "helm-exwm"))
+;; (setq helm-source-names-using-follow nil)
 
 (provide 'package-helm-exwm)
