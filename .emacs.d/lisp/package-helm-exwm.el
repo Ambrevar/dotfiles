@@ -26,14 +26,14 @@
   (kill-buffer (car (helm-marked-candidates)))
   (message "after"))
 
-;; TODO: When on one random buffer, preselect goes back to first.
+;; REVIEW: When on one random buffer, preselect goes back to first.
+;; See https://github.com/emacs-helm/helm/issues/1911.
 (defun helm-exwm-toggle-buffers-details ()
   (interactive)
   (with-helm-alive-p
     (let ((preselect (helm-buffer--get-preselection
                       (helm-get-selection))))
       ;; (message "HELM preselect [%S]" preselect)
-      ;; (message "HELM selection [%S]" (helm-get-selection))
       (setq helm-buffer-details-flag (not helm-buffer-details-flag))
       ;; TODO: `helm-force-update' seems to be necessary to be necessary to
       ;; update the buffer live.  It is not the case for helm-buffers-list
