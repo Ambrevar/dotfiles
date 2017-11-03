@@ -116,6 +116,18 @@ If FILTER is nil, then list all EXWM buffers."
       (setcdr (last bufs) (list (pop bufs))))
     bufs))
 
+(defun helm-exwm-build-source (&optional filter)
+  (helm-build-sync-source "EXWM buffers"
+    :candidates (helm-exwm-candidates filter)
+    :candidate-transformer 'helm-exwm-highlight-buffers
+    :action '(("Switch to buffer(s)" . helm-buffer-switch-buffers)
+              ("Switch to buffer(s) in other window `C-c o'" . helm-buffer-switch-buffers-other-window)
+              ("Switch to buffer in other frame `C-c C-o'" . switch-to-buffer-other-frame)
+              ("Kill buffer(s) `M-D`" . helm-kill-marked-buffers))
+    ;; When follow-mode is on, the persistent-action allows for multiple candidate selection.
+    :persistent-action 'helm-buffers-list-persistent-action
+    :keymap helm-exwm-map))
+
 (defun helm-exwm (&optional filter)
   "Preconfigured `helm' to list EXWM buffers allowed by FILTER.
 
@@ -134,17 +146,7 @@ Example: List all EXWM buffers but those running XTerm or the URL browser.
                   ((file-name-nondirectory browse-url-generic-program) nil)
                   (_ t)))))"
   (interactive)
-  (helm :sources
-        (helm-build-sync-source "EXWM buffers"
-          :candidates (helm-exwm-candidates filter)
-          :candidate-transformer 'helm-exwm-highlight-buffers
-          :action '(("Switch to buffer(s)" . helm-buffer-switch-buffers)
-                    ("Switch to buffer(s) in other window `C-c o'" . helm-buffer-switch-buffers-other-window)
-                    ("Switch to buffer in other frame `C-c C-o'" . switch-to-buffer-other-frame)
-                    ("Kill buffer(s) `M-D`" . helm-kill-marked-buffers))
-          ;; When follow-mode is on, the persistent-action allows for multiple candidate selection.
-          :persistent-action 'helm-buffers-list-persistent-action
-          :keymap helm-exwm-map)
+  (helm :sources (helm-exwm-build-source filter)
         :buffer "*helm-exwm*"))
 
 
@@ -165,14 +167,12 @@ With prefix argument or if OTHER-WINDOW is non-nil, open in other window."
                     (string= (downcase exwm-class-name) class))))
       (if (and (eq major-mode 'exwm-mode)
                (funcall filter))
-          ;; filter: (string= (downcase exwm-class-name) class))
           (helm-exwm filter)
         (let ((last (buffer-list)))
           (while (and last
                       (not (with-current-buffer (car last)
                              (and (eq major-mode 'exwm-mode)
                                   (funcall filter)))))
-            ;; (string= (downcase exwm-class-name) class)))))
             (setq last (cdr last)))
           (if last
               (funcall (if other-window 'switch-to-buffer-other-window 'switch-to-buffer) (car last))
