@@ -9,6 +9,14 @@
 ;; Emacs pinentry for GPG.
 (require 'main)
 
+;;; TODO: If history contains read-only text (e.g. accidental insertion of the prompt),
+;;; `eshell-write-history' won't work.  Fix as follows:
+;; (let ((start (point))
+;;       (command (ring-ref ring index)))
+;;   ;; Errors follows: this should insert non-read-only text.
+;;   (remove-text-properties 0 (length command) '(read-only t) command)
+;;   (insert command ?\n)
+
 ;;; REVIEW: ANSI coloring goes wrong sometimes.  Quite often with emerge/eix.
 ;;; Fixed in #27407.
 (require 'patch-eshell)
