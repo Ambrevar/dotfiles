@@ -2,29 +2,29 @@
 
 ;; TODO: kill-persistent is not persistent.
 ;; The following works, so `kill-buffer' on an EXWM window is fine.
-(defun helm-exwm-kill-all ()
-  (dolist (b (buffer-list))
-    (with-current-buffer b
-      (when (eq major-mode 'exwm-mode)
-        (message "helm-exwm: Killing %s..." b)
-        (kill-buffer b)
-        (message "helm-exwm: Killed.")))))
-
-;;; This fails to be persistent, nothing is run after kill-buffer.
-(defun helm-exwm-buffer-run-kill-persistent ()
-  "Kill buffer without quitting helm."
-  ;; (interactive)
-  (with-helm-alive-p
-    (helm-attrset 'kill-action '(helm-exwm-buffers-persistent-kill . never-split))
-    (helm-execute-persistent-action 'kill-action)))
-(put 'helm-exwm-buffer-run-kill-persistent 'helm-only t)
-
-(defun helm-exwm-buffers-persistent-kill ()
-  "Kill buffer without quitting helm."
-  ;; (interactive)
-  (message "before")
-  (kill-buffer (car (helm-marked-candidates)))
-  (message "after"))
+;; (defun helm-exwm-kill-all ()
+;;   (dolist (b (buffer-list))
+;;     (with-current-buffer b
+;;       (when (eq major-mode 'exwm-mode)
+;;         (message "helm-exwm: Killing %s..." b)
+;;         (kill-buffer b)
+;;         (message "helm-exwm: Killed.")))))
+;;
+;; ;;; This fails to be persistent, nothing is run after kill-buffer.
+;; (defun helm-exwm-buffer-run-kill-persistent ()
+;;   "Kill buffer without quitting helm."
+;;   ;; (interactive)
+;;   (with-helm-alive-p
+;;     (helm-attrset 'kill-action '(helm-exwm-buffers-persistent-kill . never-split))
+;;     (helm-execute-persistent-action 'kill-action)))
+;; (put 'helm-exwm-buffer-run-kill-persistent 'helm-only t)
+;;
+;; (defun helm-exwm-buffers-persistent-kill ()
+;;   "Kill buffer without quitting helm."
+;;   ;; (interactive)
+;;   (message "before")
+;;   (kill-buffer (car (helm-marked-candidates)))
+;;   (message "after"))
 
 ;; REVIEW: When on one random buffer, preselect goes back to first.
 ;; See https://github.com/emacs-helm/helm/issues/1911.
@@ -83,10 +83,15 @@ If CLASS is nil, then list all EXWM buffers."
       (setcdr (last bufs) (list (pop bufs))))
     bufs))
 
-(defvar helm-exwm-buffer-max-length 52
+(defvar helm-exwm-buffer-max-length 51
   "Max length of EXWM buffer names before truncating.
-When disabled (nil) use the longest buffer-name length found")
+When disabled (nil) use the longest buffer-name length found.
 
+See `helm-buffer-max-length`.  This variable's default is so that
+the EXWM class starts at the column of the open parenthesis in
+`helm-buffers-list' detailed view.")
+
+;; Inspired by `helm-highlight-buffers'.
 (defun helm-exwm-highlight-buffers (buffers)
   "Transformer function to highlight BUFFERS list.
 Should be called after others transformers i.e (boring buffers)."
