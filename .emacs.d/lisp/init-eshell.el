@@ -210,19 +210,6 @@ See `eshell' for the numeric prefix ARG."
           (switch-to-buffer (car last))
         (eshell (or arg t))))))
 
-;;; Completion
-(when (require 'bash-completion nil t)
-  (defun eshell-bash-completion ()
-    (while (pcomplete-here
-            (nth 2 (bash-completion-dynamic-complete-nocomint (save-excursion (eshell-bol) (point)) (point))))))
-  ;; Sometimes `eshell-default-completion-function' does better, e.g. "gcc
-  ;; <TAB>" shows .c files.
-  (setq eshell-default-completion-function 'eshell-bash-completion))
-
-(when (and (executable-find "fish")
-           (require 'fish-completion nil t))
-  (fish-completion-eshell-toggle-globally))
-
 ;;; Auto-suggestion
 (when (require 'package-eshell-autosuggest)
   (add-hook 'eshell-mode-hook 'company-mode)
