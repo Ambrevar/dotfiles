@@ -26,21 +26,6 @@
 ;;   (kill-buffer (car (helm-marked-candidates)))
 ;;   (message "after"))
 
-;; REVIEW: When on one random buffer, preselect goes back to first.
-;; See https://github.com/emacs-helm/helm/issues/1911.
-(defun helm-exwm-toggle-buffers-details ()
-  (interactive)
-  (with-helm-alive-p
-    (let ((preselect (helm-buffer--get-preselection
-                      (helm-get-selection))))
-      ;; (message "HELM preselect [%S]" preselect)
-      (setq helm-buffer-details-flag (not helm-buffer-details-flag))
-      ;; TODO: `helm-force-update' seems to be necessary to be necessary to
-      ;; update the buffer live.  It is not the case for helm-buffers-list
-      ;; though.  Why?
-      ;; (helm-update preselect))))
-      (helm-force-update preselect))))
-(put 'helm-exwm-toggle-buffers-details 'helm-only t)
 
 ;; TODO: Publish on MELPA.
 ;; TODO: Post on EXWM's wiki once on MELPA.
@@ -86,6 +71,24 @@ Should be called after others transformers i.e (boring buffers)."
                                 "  " (propertize class 'face 'helm-buffer-process))
                              (funcall helm-fuzzy-matching-highlight-fn name))
                            (get-buffer i)))))
+
+(defun helm-exwm-toggle-buffers-details ()
+  (interactive)
+  (with-helm-alive-p
+    (let* ((buf (helm-get-selection))
+           ;; `helm-buffer--get-preselection' uses `helm-buffer-max-length'.
+           (helm-buffer-max-length helm-exwm-buffer-max-length)
+           (preselect (helm-buffer--get-preselection buf)))
+      (setq helm-buffer-details-flag (not helm-buffer-details-flag))
+      ;; TODO: `helm-force-update' seems to be necessary to be necessary to
+      ;; update the buffer live.  It is not the case for helm-buffers-list
+      ;; though.  Why?
+      (helm-force-update (lambda ()
+                           (helm-awhile (re-search-forward preselect nil t)
+                             (helm-mark-current-line)
+                             (when (equal buf (helm-get-selection))
+                               (cl-return t))))))))
+(put 'helm-exwm-toggle-buffers-details 'helm-only t)
 
 (defvar helm-exwm-map
   (let ((map (make-sparse-keymap)))
@@ -149,6 +152,7 @@ Example: List all EXWM buffers but those running XTerm or the URL browser.
   (helm :sources (helm-exwm-build-source filter)
         :buffer "*helm-exwm*"))
 
+
 
 (defun helm-exwm-switch (class &optional program other-window)
   "Switch to some EXWM windows belonging to CLASS.
