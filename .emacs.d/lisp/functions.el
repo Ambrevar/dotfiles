@@ -495,7 +495,7 @@ This does not interfere with `subword-mode'."
 
 (defun turn-on-complete-filename ()
   "Unconditionally turn on `comint-dynamic-complete-filename' for the current buffer."
-  (add-to-list 'completion-at-point-functions 'comint-dynamic-complete-filename))
+  (add-to-list 'completion-at-point-functions 'comint-dynamic-complete-filename t))
 
 (defun turn-on-delete-trailing-whitespace ()
   "Add the `delete-trailing-whitespace' function to `before-save-hook'.
