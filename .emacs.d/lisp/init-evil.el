@@ -162,7 +162,7 @@
       (kbd "M-k") 'mu4e-view-headers-prev ; Custom
       "h" 'evil-backward-char
       "zh" 'mu4e-view-toggle-html
-      "gu" 'mu4e-view-go-to-url)
+      "gx" 'mu4e-view-go-to-url)
     (evil-set-initial-state 'mu4e-compose-mode 'insert)))
 
 (with-eval-after-load 'init-helm (require 'init-evil-helm))

@@ -65,7 +65,7 @@
   "T" 'transmission-trackers-remove
 
   ;; goto URL
-  "gu" 'transmission-browse-url-of-file ; See mu4e.
+  "gx" 'transmission-browse-url-of-file ; See mu4e.
 
   ;; quit
   "q" 'transmission-quit
