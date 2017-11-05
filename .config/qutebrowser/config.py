@@ -18,6 +18,7 @@ c.url.searchengines = {
     "aur": "https://aur.archlinux.org/packages.php?O=0&K={}&do_Search=Go",
     "ctan": "http://www.ctan.org/search?phrase={}",
     "dd": "http://devdocs.io/#q={}",
+    "edb": "https://debbugs.gnu.org/cgi/pkgreport.cgi?package=emacs;include=subject%3A{};repeatmerged=on;archive=both",
     "gd": "https://godoc.org/?q={}",
     "gentoo": "https://wiki.gentoo.org/index.php?title=Special%3ASearch&search={}&go=Go",
     "gi": "https://www.google.com/search?site=imghp&tbm=isch&source=hp&biw=1676&bih=997&q={}",
