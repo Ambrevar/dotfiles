@@ -9,13 +9,9 @@
 ;; Emacs pinentry for GPG.
 (require 'main)
 
-;;; TODO: If history contains read-only text (e.g. accidental insertion of the prompt),
-;;; `eshell-write-history' won't work.  Fix as follows:
-;; (let ((start (point))
-;;       (command (ring-ref ring index)))
-;;   ;; Errors follows: this should insert non-read-only text.
-;;   (remove-text-properties 0 (length command) '(read-only t) command)
-;;   (insert command ?\n)
+;;; REVIEW: If history contains read-only text (e.g. accidental insertion of the prompt),
+;;; `eshell-write-history' won't work.
+;;; See #29153.
 
 ;;; REVIEW: ANSI coloring goes wrong sometimes.  Quite often with emerge/eix.
 ;;; Fixed in #27407.
@@ -23,11 +19,12 @@
 
 ;;; TODO: Sometimes transmission-daemon does not start from Eshell.
 
-;;; TODO: Redirecting big output to file (e.g. /dev/null) is extremely slow.
+;;; REVIEW: Redirecting big output to file (e.g. /dev/null) is extremely slow.
 ;; > cat /usr/share/dict/british-english | wc -l
 ;;; The above line yields rancom results.  Plus it's much slower than
 ;; > wc -l /usr/share/dict/british-english
 ;;; while it should only cost an additional process to launch.
+;;; See #29154.
 
 ;;; REVIEW: Cannot "C-c C-c" during a `sudo pacman -Syu`.  A bug was filed about that already.
 
@@ -54,26 +51,28 @@
 ;;; mu: no matches for search expression (4)
 ;;; See #21605 "24.3; Eshell not using stderr".
 
-;;; TODO: Some parsing fails
+;;; REVIEW: Some parsing fails
 ;;; > echo -n $PATH | sed 's/:[^:]*sophos[^:]*/:/g'
 ;;; :s/:]*sophos[/:]*/:/"/
 ;;; Unknown modifier character ‘/’
 ;;;
 ;;; > date +%Z
+;;; See #29157.
 
 ;;; TODO: Hour is printed twice. We don't need to set this?
 ;; (setq eshell-ls-date-format (replace-regexp-in-string "^\\+*" "" (getenv "TIME_STYLE")))
 
 ;;; TODO: ls: Sort using locale.
 
-;;; TODO: `kill -#' does not work.
+;;; REVIEW: `kill -#' does not work.
+;;; See #29156.
 
 (setq eshell-directory-name (concat emacs-cache-folder "eshell"))
 
 ;;; Use native 'sudo', system sudo asks for password every time.
 (require 'em-tramp)
 
-(with-eval-after-load "esh-module" ; Need a file name because `provide' is before the definition of `eshell-modules-list. TODO: Report.
+(with-eval-after-load 'esh-module
   ;; Don't print the banner.
   (delq 'eshell-banner eshell-modules-list)
   (push 'eshell-tramp eshell-modules-list))
