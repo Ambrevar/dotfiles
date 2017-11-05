@@ -181,4 +181,12 @@ Return DATE if the year cannot be extracted."
 
 (setq emms-browser-get-track-field-function #'emms-browser-get-track-custom)
 
+(when (require 'helm-emms nil t)
+  (setq helm-emms-default-sources
+        '(helm-source-emms-dired
+          helm-source-emms-files ; Disable for a huge speed-up.
+          helm-source-emms-streams)))
+
+(require 'patch-emms)
+
 (provide 'init-emms)
