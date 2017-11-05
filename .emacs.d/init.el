@@ -123,7 +123,7 @@
 
 ;;; Eshell
 ;;; Extend completion.
-(nconc package-selected-packages '(pcomplete-extension pcmpl-args pcmpl-git))
+(nconc package-selected-packages '(fish-completion pcomplete-extension pcmpl-args pcmpl-git))
 (when (and (executable-find "fish")
            (require 'fish-completion nil t))
   (global-fish-completion-mode))
