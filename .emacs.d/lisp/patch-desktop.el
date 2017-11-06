@@ -59,6 +59,7 @@ Using it may cause conflicts.  Use it anyway? " owner)))))
             ;; disabled when loading the desktop fails with errors,
             ;; thus not overwriting the desktop with broken contents.
             (setq desktop-autosave-was-enabled
+                  ;; PATCH
                   (memq 'desktop-auto-save-set-timer (default-toplevel-value 'window-configuration-change-hook)))
             (desktop-auto-save-disable)
             ;; Evaluate desktop buffer and remember when it was modified.

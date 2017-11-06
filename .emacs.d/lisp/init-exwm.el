@@ -15,14 +15,13 @@
 ;;; TODO: Pressing "s-a" ('emms-smart-browse) loses the cursor.
 ;;; Sometimes waiting helps.  Calling emms-smart-browse manually does not trigger the issue.
 ;;; TODO: Spawn select programs in floating mode? (E.g. mpv, mupen64plus, mplayer, qemu, steam, .exe (wine).)
-;;; TODO: Separate EXWM buffers and Emacs buffers in `helm-mini'?
 
 ;;; TODO: Rendering issue with Qutebrowser
 ;;; Sometimes need to change window configuration
 ;;; https://github.com/ch11ng/exwm/issues/300
 ;;; Step to reproduce EXWM freeze
 
-;;; TODO: helm-mini with follow-mode hangs when using EXWM.
+;;; REVIEW: helm-mini with follow-mode hangs when using EXWM.
 ;;; https://github.com/emacs-helm/helm/issues/1889
 
 ;;; Rename buffer to window title.

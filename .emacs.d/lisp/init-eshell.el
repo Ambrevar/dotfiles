@@ -44,6 +44,28 @@
 
 ;;; REVIEW: 40M+ output: Stack overflow in regexp matcher
 ;;; See bug#28329.
+;;; I guess the chunking is significant too.  Could you try saving
+;;; the output chunks, with this:
+;;
+;; (defvar eshell-chunk-number 0)
+;; (defconst eshell-output-chunk-dir "eshell-output")
+;; (make-directory eshell-output-chunk-dir t)
+;;
+;; (defun catch-eshell-output-chunk ()
+;;   (write-region eshell-last-output-block-begin
+;;                 eshell-last-output-end
+;;                 (format "%s/chunk.%d"
+;;                         eshell-output-chunk-dir
+;;                         eshell-chunk-number)
+;;                 nil :quiet)
+;;   (setq eshell-chunk-number (1+ eshell-chunk-number)))
+;;
+;; (add-hook 'eshell-output-filter-functions
+;;           'catch-eshell-output-chunk)
+;;;
+;;; And then afterwards 'cat eshell-output/chunk.*' should hopefully
+;;; reproduce it?
+
 
 ;;; REVIEW: Eshell mixes stderr and stdout it seems.
 ;;; Example:

@@ -246,7 +246,8 @@
 ;;; See https://groups.google.com/forum/#!topic/gnu.emacs.help/64aO_O43530
 ;;; and https://www.reddit.com/r/emacs/comments/4q38s1/save_register_between_sessions/?st=j419vc7r&sh=2617ffb4
 ;;; and http://debbugs.gnu.org/cgi/bugreport.cgi?bug=27422
-;;; and https://stackoverflow.com/questions/5830494/windows-configuration-to-registers#5830928.
+;;; and https://stackoverflow.com/questions/5830494/windows-configuration-to-registers#5830928
+;;; and https://www.reddit.com/r/emacs/comments/7au3hj/how_do_you_manage_your_emacs_windows_and_stay_sane/dpfbg3a/?context=3.
 (defadvice desktop-owner (after pry-from-cold-dead-hands activate)
   "Don't allow dead emacsen to own the desktop file."
   (when (not (emacs-process-p ad-return-value))
