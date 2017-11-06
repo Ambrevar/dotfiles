@@ -2,32 +2,9 @@
 
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
-;;; To navigate helm entries with hjkl, using the C- modifier would conflict
-;;; with C-h (help prefix) and C-k (`evil-insert-digraph').  We use M- instead.
-;;; We cannot use normal mode to navigate if we also want to use it to edit the
-;;; minibuffer content.
 (define-keys helm-map
-  "C-\\" 'helm-toggle-resplit-and-swap-windows
-  "M-\\" 'helm-toggle-resplit-and-swap-windows
-  "C-f" 'helm-next-page
-  "C-b" 'helm-previous-page
-  "M-h" 'helm-next-source
-  "M-j" 'helm-next-line
-  "M-k" 'helm-previous-line
-  "M-l" 'helm-execute-persistent-action
-  "M-." 'helm-end-of-buffer
-  "M-," 'helm-beginning-of-buffer
-  "<escape>" 'helm-keyboard-quit)
-
-(evil-define-key 'normal helm-map
-  "j" 'helm-next-line
-  "k" 'helm-previous-line
-  "g" 'helm-beginning-of-buffer
-  "G" 'helm-end-of-buffer
-  (kbd "SPC") 'helm-toggle-visible-mark
-  ;; (kbd "S-SPC") 'evil-helm-toggle-visible-mark-backwards
-  (kbd "C-f") 'helm-next-page
-  (kbd "C-b") 'helm-previous-page)
+  "C-\\" 'helm-toggle-resplit-and-swap-windows ; Becauste C-t is taken by evil-mv.
+  "M-\\" 'helm-toggle-resplit-and-swap-windows)
 
 (define-key helm-generic-files-map (kbd "M-o") 'helm-ff-run-switch-other-window)
 (define-key helm-buffer-map (kbd "M-o") 'helm-buffer-switch-other-window)
@@ -41,10 +18,7 @@
     "M-." 'helm-end-of-buffer
     "M-," 'helm-beginning-of-buffer
     "M-o" 'helm-ff-run-switch-other-window
-    "C-/" 'helm-ff-run-find-sh-command
-    "M-h" 'helm-find-files-up-one-level
-    "M-l" 'helm-execute-persistent-action
-    "C-l" nil)) ; So the header displays the above binding.
+    "C-/" 'helm-ff-run-find-sh-command))
 
 (with-eval-after-load 'package-helm-exwm
   (define-keys helm-exwm-map "M-d" 'helm-buffer-run-kill-persistent)
