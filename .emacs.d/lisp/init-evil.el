@@ -106,11 +106,39 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Mode specific bindings.
 
-;;; Emacs special modes
-(when (require 'evil-special-modes nil t)
-  (evil-special-modes-init)
+(when (require 'evil-collection nil t)
+  (evil-collection-init)
   (require 'evil-minibuffer)
   (evil-minibuffer-init))
+
+(with-eval-after-load 'elfeed
+  ;; Custom
+  (evil-define-key 'motion elfeed-search-mode-map
+    (kbd "<return>") 'elfeed-visit-or-play-with-mpv
+    "o" 'elfeed-visit-or-play-with-mpv)
+  (evil-define-key 'motion elfeed-show-mode-map
+    (kbd "<return>") 'elfeed-visit-or-play-with-mpv
+    "o" 'elfeed-visit-or-play-with-mpv))
+
+(with-eval-after-load 'init-helm (require 'init-evil-helm))
+
+;; TODO: Delete this.
+;; (with-eval-after-load 'debbugs (require 'init-evil-debbugs nil t))
+;; (with-eval-after-load 'emms (require 'init-evil-emms))
+;; TODO: `image-mode-map' is the parent of `pdf-view-mode-map'.  A bug(?) in
+;; image-mode-map and pdf-mode-map seem to conflict with Evil.
+;; See https://github.com/emacs-evil/evil/issues/938
+;; and https://github.com/politza/pdf-tools/issues/324.
+;; Changing load order only changes which mode overrides the other.
+;; (with-eval-after-load 'pdf-view (require 'init-evil-pdf))
+;; (with-eval-after-load 'image+ (require 'init-evil-image+))
+;; (with-eval-after-load 'transmission (require 'init-evil-transmission))
+;; (with-eval-after-load 'ztree-diff (require 'init-evil-ztree))
+;;; Emacs special modes
+;; (when (require 'evil-special-modes nil t)
+;; (evil-special-modes-init)
+;; (require 'evil-minibuffer)
+;; (evil-minibuffer-init))
 
 ;;; nXML
 ;;; TODO: Add to Emacs special modes?
@@ -128,14 +156,6 @@
   (kbd "M-k") 'nxml-backward-element ; Custom
   ">" 'nxml-down-element
   "<" 'nxml-backward-up-element)
-
-(with-eval-after-load 'transmission (require 'init-evil-transmission))
-
-(with-eval-after-load 'elfeed (require 'init-evil-elfeed))
-
-(with-eval-after-load 'emms (require 'init-evil-emms))
-
-(with-eval-after-load 'image+ (require 'init-evil-image+))
 
 (with-eval-after-load 'mu4e
   (when (require 'evil-mu4e nil t)
@@ -165,8 +185,6 @@
       "gx" 'mu4e-view-go-to-url)
     (evil-set-initial-state 'mu4e-compose-mode 'insert)))
 
-(with-eval-after-load 'init-helm (require 'init-evil-helm))
-
 (with-eval-after-load 'magit
   (when (require 'evil-magit nil t)
     (evil-magit-define-key evil-magit-state 'magit-mode-map "<" 'magit-section-up)
@@ -181,15 +199,6 @@
 ;; (add-hook 'org-mode-hook 'evil-org-mode)
 ;; (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading)))
 
-;; TODO: `image-mode-map' is the parent of `pdf-view-mode-map'.  A bug(?) in
-;; image-mode-map and pdf-mode-map seem to conflict with Evil.
-;; See https://github.com/emacs-evil/evil/issues/938
-;; and https://github.com/politza/pdf-tools/issues/324.
-;; Changing load order only changes which mode overrides the other.
-(with-eval-after-load 'pdf-view (require 'init-evil-pdf))
-
-(with-eval-after-load 'ztree-diff (require 'init-evil-ztree))
 (with-eval-after-load 'gnus (require 'init-evil-gnus))
-(with-eval-after-load 'debbugs (require 'init-evil-debbugs nil t))
 
 (provide 'init-evil)

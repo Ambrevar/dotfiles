@@ -1,5 +1,7 @@
 ;;; Evil leader
 
+;;; TODO: Remove evil leader config?
+
 ;;; Leader mode and its key must be set before evil-mode.
 (evil-leader/set-leader "SPC")
 (global-evil-leader-mode)
