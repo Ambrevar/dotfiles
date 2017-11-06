@@ -26,11 +26,8 @@
 ;;   (kill-buffer (car (helm-marked-candidates)))
 ;;   (message "after"))
 
-
 ;; TODO: Publish on MELPA.
 ;; TODO: Post on EXWM's wiki once on MELPA.
-
-;; TODO: Write a emacs-buffers helm source to filter out EXWM buffers from buffer list.
 
 ;; REVIEW: Helm buffer does not die?  Seems to be OK.
 
@@ -102,25 +99,31 @@ Should be called after others transformers i.e (boring buffers)."
     map)
   "Keymap for browser source in Helm.")
 
+(defvar helm-exwm-buffers-list-cache nil)
+
 (defun helm-exwm-candidates (&optional filter)
   "Return the list of EXWM buffers allowed by FILTER.
 
 If FILTER is nil, then list all EXWM buffers."
-  (let ((bufs (delq nil (mapcar
-                         (lambda (buf)
-                           (if (with-current-buffer buf
-                                 (and (eq major-mode 'exwm-mode)
-                                      (or (not filter) (funcall filter))))
-                               (buffer-name buf)
-                             nil))
-                         (buffer-list)))))
-    (when (> (length bufs) 1)
-      ;; Move first buffer (current) to last position.
-      (setcdr (last bufs) (list (pop bufs))))
-    bufs))
+  (setq helm-exwm-buffers-list-cache
+        (let ((bufs (delq nil (mapcar
+                               (lambda (buf)
+                                 (if (with-current-buffer buf
+                                       (and (eq major-mode 'exwm-mode)
+                                            (or (not filter) (funcall filter))))
+                                     (buffer-name buf)
+                                   nil))
+                               (buffer-list)))))
+          (when (> (length bufs) 1)
+            ;; Move first buffer (current) to last position.
+            (setcdr (last bufs) (list (pop bufs))))
+          bufs)))
 
 (defun helm-exwm-build-source (&optional filter)
   (helm-build-sync-source "EXWM buffers"
+    ;; :init (function (lambda () (helm-exwm-candidates filter))) ; TODO: Quote?
+    ;; :init (helm-exwm-candidates filter) ; TODO: Quote?
+    ;; :candidates helm-exwm-buffers-list-cache
     :candidates (helm-exwm-candidates filter)
     :candidate-transformer 'helm-exwm-highlight-buffers
     :action '(("Switch to buffer(s)" . helm-buffer-switch-buffers)
@@ -129,6 +132,7 @@ If FILTER is nil, then list all EXWM buffers."
               ("Kill buffer(s) `M-D`" . helm-kill-marked-buffers))
     ;; When follow-mode is on, the persistent-action allows for multiple candidate selection.
     :persistent-action 'helm-buffers-list-persistent-action
+    :update (function (lambda () (helm-exwm-candidates filter)))
     :keymap helm-exwm-map))
 
 (defun helm-exwm (&optional filter)
@@ -202,5 +206,27 @@ See `helm-exwm-switch'."
 
 ;; (add-to-list 'helm-source-names-using-follow "helm-exwm"))
 ;; (setq helm-source-names-using-follow nil)
+
+;;; TODO: Separate EXWM buffers and Emacs buffers in `helm-mini'?
+;; TODO: Write a emacs-buffers helm source to filter out EXWM buffers from buffer list.
+;; TODO: Cannot display both helm-source-buffers-list and helm-exwm-emacs-buffers-source
+;; TODO: Normalize names?
+;; TODO: Does not auto-update.
+;; TODO: Keymap?  Should be empty, no?
+(defun helm-exwm-build-emacs-buffers-source ()
+  "Build a Helm source for all non-EXWM buffers."
+  (helm-make-source "Emacs buffers" 'helm-source-buffers
+    ;; :buffer-list (lambda () (delete nil (mapcar (lambda (b) (with-current-buffer b (unless (eq major-mode 'exwm-mode) b))) (helm-buffer-list))))
+    ;; :buffer-list (lambda () (helm-buffer-list))
+    :buffer-list (lambda () (delete nil (mapcar (lambda (b) (with-current-buffer b (unless (eq major-mode 'exwm-mode) (buffer-name b)))) (buffer-list))))
+    ;; :keymap helm-ls-git-buffer-map
+    ))
+
+(setq helm-exwm-emacs-buffers-source (helm-exwm-build-emacs-buffers-source))
+(setq helm-exwm-source (helm-exwm-build-source))
+;; (setq helm-exwm-source 'helm-exwm-build-source)
+;; (helm :sources (helm-exwm-emacs-buffers-source)
+;; :ff-transformer-show-only-basename nil
+;; :buffer "*helm exwm emacs*")
 
 (provide 'package-helm-exwm)
