@@ -58,7 +58,9 @@
  helm-M-x-fuzzy-match t
  helm-recentf-fuzzy-match t
 
+ ;; https://github.com/emacs-helm/helm/issues/1910
  helm-buffers-end-truncated-string "…"
+ helm-buffer-max-length 22
 
  helm-window-show-buffers-function 'helm-window-mosaic-fn
  helm-window-prefer-horizontal-split t)
