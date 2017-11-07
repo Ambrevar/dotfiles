@@ -57,7 +57,7 @@ if command -v emacs >/dev/null 2>&1; then
 	echo "==> Emacs extra packages"
 	mkdir -pv ~/.emacs.d/site-lisp
 	git_update https://github.com/jojojames/evil-collection ~/.emacs.d/site-lisp/evil-collection
-	git_update https://github.com/emacs-helm/helm-~/.emacs.d/site-lisp/evil-collection
+	git_update https://github.com/emacs-helm/helm-exwm ~/.emacs.d/site-lisp/helm-exwm
 	# git_update https://github.com/Ambrevar/evil-special-modes ~/.emacs.d/site-lisp/evil-special-modes
 	# git_update https://github.com/Ambrevar/emacs-fish-completion ~/.emacs.d/site-lisp/fish-completion
 fi
