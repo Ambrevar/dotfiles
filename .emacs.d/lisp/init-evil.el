@@ -31,11 +31,6 @@
 
 (setq-default evil-symbol-word-search t)
 
-;;; The evil-leader package has that over regular bindings that it centralizes
-;;; the leader key configuration and automatically makes it available in relevant
-;;; states.  It is not really needed with EXWM however.
-(when (require 'evil-leader nil t) (require 'init-evil-leader))
-
 ;;; Commenting.
 ;;; M-; comments next line in VISUAL. This is because of a different newline
 ;;; definition between Emacs and Vim.
@@ -122,26 +117,8 @@
 
 (with-eval-after-load 'init-helm (require 'init-evil-helm))
 
-;; TODO: Delete this.
-;; (with-eval-after-load 'debbugs (require 'init-evil-debbugs nil t))
-;; (with-eval-after-load 'emms (require 'init-evil-emms))
-;; TODO: `image-mode-map' is the parent of `pdf-view-mode-map'.  A bug(?) in
-;; image-mode-map and pdf-mode-map seem to conflict with Evil.
-;; See https://github.com/emacs-evil/evil/issues/938
-;; and https://github.com/politza/pdf-tools/issues/324.
-;; Changing load order only changes which mode overrides the other.
-;; (with-eval-after-load 'pdf-view (require 'init-evil-pdf))
-;; (with-eval-after-load 'image+ (require 'init-evil-image+))
-;; (with-eval-after-load 'transmission (require 'init-evil-transmission))
-;; (with-eval-after-load 'ztree-diff (require 'init-evil-ztree))
-;;; Emacs special modes
-;; (when (require 'evil-special-modes nil t)
-;; (evil-special-modes-init)
-;; (require 'evil-minibuffer)
-;; (evil-minibuffer-init))
-
 ;;; nXML
-;;; TODO: Add to Emacs special modes?
+;;; TODO: Add to evil-collection?
 (evil-define-key 'normal nxml-mode-map
   (kbd "C-j") 'nxml-forward-element
   (kbd "C-k") 'nxml-backward-element
