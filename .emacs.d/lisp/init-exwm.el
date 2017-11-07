@@ -100,10 +100,22 @@
 
 
 ;;; External application shortcuts.
-
-;;; Web browser
-(with-eval-after-load 'helm
-  (require 'package-helm-exwm))
+(when (require 'helm-exwm nil t)
+  (add-to-list 'helm-source-names-using-follow "EXWM buffers")
+  (setq helm-exwm-emacs-buffers-source (helm-exwm-build-emacs-buffers-source))
+  (setq helm-exwm-source (helm-exwm-build-source))
+  (setq helm-mini-default-sources `(
+                                    ;; helm-source-buffers-list
+                                    helm-exwm-emacs-buffers-source
+                                    ;; helm-exwm-source ; TODO: Unusable as long as the source does not refresh automatically.
+                                    helm-source-recentf
+                                    ,(when (boundp 'helm-source-ls-git) 'helm-source-ls-git)
+                                    helm-source-bookmarks
+                                    helm-source-bookmark-set
+                                    helm-source-buffer-not-found))
+  ;; Web browser
+  (exwm-input-set-key (kbd "s-w") #'helm-exwm-switch-browser)
+  (exwm-input-set-key (kbd "s-W") #'helm-exwm-switch-browser-other-window))
 
 ;;; Lock screen
 (defvar exwm-lock-program "slock" "Shell command used to lock the screen.")

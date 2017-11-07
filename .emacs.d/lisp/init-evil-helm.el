@@ -20,7 +20,7 @@
     "M-o" 'helm-ff-run-switch-other-window
     "C-/" 'helm-ff-run-find-sh-command))
 
-(with-eval-after-load 'package-helm-exwm
+(with-eval-after-load 'helm-exwm
   (define-keys helm-exwm-map "M-d" 'helm-buffer-run-kill-persistent)
   (define-keys helm-exwm-map "M-o" 'helm-buffer-switch-other-window))
 
