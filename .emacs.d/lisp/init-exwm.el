@@ -104,10 +104,8 @@
   (add-to-list 'helm-source-names-using-follow "EXWM buffers")
   (setq helm-exwm-emacs-buffers-source (helm-exwm-build-emacs-buffers-source))
   (setq helm-exwm-source (helm-exwm-build-source))
-  (setq helm-mini-default-sources `(
-                                    ;; helm-source-buffers-list
-                                    helm-exwm-emacs-buffers-source
-                                    ;; helm-exwm-source ; TODO: Unusable as long as the source does not refresh automatically.
+  (setq helm-mini-default-sources `(helm-exwm-emacs-buffers-source
+                                    helm-exwm-source
                                     helm-source-recentf
                                     ,(when (boundp 'helm-source-ls-git) 'helm-source-ls-git)
                                     helm-source-bookmarks
