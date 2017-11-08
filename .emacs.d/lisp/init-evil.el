@@ -171,10 +171,8 @@
 
 (require 'evil-ediff nil t)
 
-(with-eval-after-load 'org (require 'init-evil-org))
-;; (when (require 'evil-org nil t)
-;; (add-hook 'org-mode-hook 'evil-org-mode)
-;; (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading)))
+(when (require 'evil-org nil t)
+  (with-eval-after-load 'org (require 'init-evil-org)))
 
 (with-eval-after-load 'gnus (require 'init-evil-gnus))
 
