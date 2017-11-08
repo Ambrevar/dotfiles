@@ -260,4 +260,10 @@ See `eshell' for the numeric prefix ARG."
 
 (add-hook 'eshell-pre-command-hook 'eshell-status-record)
 
+;;; Detach
+(when (require 'package-eshell-detach nil t)
+  (defun eshell-detach-set-keys ()
+    (define-key eshell-mode-map (kbd "S-<return>") 'eshell-detach-send-input))
+  (add-hook 'eshell-mode-hook 'eshell-detach-set-keys))
+
 (provide 'init-eshell)
