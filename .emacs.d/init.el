@@ -317,7 +317,7 @@
 
 ;;; Terminal
 (with-eval-after-load 'term
-  (require 'init-term)
+  ;; (require 'init-term)
   (setq term-buffer-maximum-size 0))
 
 ;;; TeX / LaTeX / Texinfo
