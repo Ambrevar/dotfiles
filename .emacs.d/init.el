@@ -118,20 +118,20 @@
 (with-eval-after-load 'emms (require 'init-emms))
 
 ;;; Evil
-(nconc package-selected-packages '(evil evil-commentary evil-ediff evil-magit evil-mc evil-mc-extras linum-relative evil-mu4e))
+(nconc package-selected-packages '(evil
+                                   evil-commentary evil-mc evil-mc-extras linum-relative
+                                   evil-ediff evil-magit evil-mu4e evil-org))
 (when (require 'evil nil t) (require 'init-evil))
 
 ;;; Eshell
 ;;; Extend completion.
-(nconc package-selected-packages '(fish-completion pcomplete-extension pcmpl-args pcmpl-git))
+(nconc package-selected-packages '(fish-completion bash-completion
+                                                   pcomplete-extension pcmpl-args pcmpl-git))
 (when (and (executable-find "fish")
            (require 'fish-completion nil t))
   (global-fish-completion-mode))
 (with-eval-after-load 'eshell (require 'init-eshell))
 (autoload 'eshell-or-new-session "eshell")
-
-;;; Esup
-(nconc package-selected-packages '(esup))
 
 ;;; GLSL
 (nconc package-selected-packages '(glsl-mode))
@@ -251,6 +251,9 @@
 (with-eval-after-load 'org (require 'init-org))
 (autoload 'org-switch-agenda-file "org")
 (autoload 'org-switch-agenda-file-other-window "org")
+
+;;; Packaging
+(nconc package-selected-packages '(esup package-lint))
 
 ;;; PDF
 ;;; pdf-tools requires poppler built with cairo support.
