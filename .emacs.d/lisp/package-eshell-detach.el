@@ -28,13 +28,16 @@ The end command will be
 
   \"`eshell-detach-shell' -c { { <command>; } > >(tee stdout) } 2> >(tee stderr) | tee stdout+stderr\"")
 
-;; TODO: Set the detach character?
+;; TODO: Set the detach character?  No need when `C-c C-c` suffices.
 (defvar eshell-detach-detach-character "^\\"
   "Charcter to press to detach dtach, i.e. leave the process run in the background.
 The character syntax follows terminal notations, not Emacs.")
 
 (defvar eshell-detach-detach-character-binding "C-\\"
   "The Emacs binding matching `eshell-detach-detach-character'.")
+
+(defvar eshell-detach-socket-ext ".socket"
+  "The file name extension for the socket fo `eshell-detach-program'.")
 
 (defvar eshell-detach-stdout-ext ".stdout"
   "If non-nil and a string, stdout will also be saved to file named after the socket with this extension appened.
@@ -62,12 +65,14 @@ The 'tee' program is required.")
   (let* (
          ;; TODO: temp-file should not exist for dtach to start?  That forces us
          ;; to use make-temp-file which is vulnerable to race condition.
-         (socket (make-temp-name
-                  (expand-file-name
-                   (concat "dtach-"
-                           (replace-regexp-in-string "[^A-Za-z0-9=-]" "_" input)
-                           "-" (format-time-string "%F-%R:%S") "-")
-                   eshell-detach-directory)))
+         (socket (concat
+                  (make-temp-name
+                   (expand-file-name
+                    (concat "dtach-"
+                            (replace-regexp-in-string "[^A-Za-z0-9=-]" "_" input)
+                            "-" (format-time-string "%F-%R:%S") "-")
+                    eshell-detach-directory))
+                  eshell-detach-socket-ext))
          (stdout (if eshell-detach-stdout-ext (concat socket eshell-detach-stdout-ext) nil))
          (stderr (if eshell-detach-stderr-ext (concat socket eshell-detach-stderr-ext) nil))
          (stdout+stderr (if eshell-detach-stdout+stderr-ext (concat socket eshell-detach-stdout+stderr-ext) nil))
@@ -83,6 +88,26 @@ The 'tee' program is required.")
                               (shell-quote-argument (or stderr ""))
                               (shell-quote-argument (or stdout+stderr "")))))
     (format "%s -c %s -z %s -c %s" eshell-detach-program socket eshell-detach-shell (shell-quote-argument commandline))))
+
+(defun eshell-detach--list-sockets ()
+  "List sockets of `eshell-detach-program'."
+  (file-expand-wildcards (concat
+                          (expand-file-name "dtach-"
+                                            eshell-detach-directory)
+                          "*" eshell-detach-socket-ext)))
+
+(defun eshell-detach-attach ()
+  "Attach to a running session of `eshell-detach-program'."
+  (interactive)
+  (let ((socket (completing-read "Attach to session: " (eshell-detach--list-sockets) nil t)))
+    (when socket
+      (when (or (eshell-interactive-process)
+                (/= (point) eshell-last-output-end))
+        (eshell-interrupt-process))
+      (goto-char (point-max))
+      ;; TODO: Redraw method?
+      (insert eshell-detach-program " -a " (shell-quote-argument socket))
+      (eshell-send-input))))
 
 ;;; This is almost an exact copy of `eshell-send-input'.
 (defun eshell-detach-send-input (&optional use-region queue-p no-newline)
