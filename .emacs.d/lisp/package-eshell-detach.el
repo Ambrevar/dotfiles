@@ -3,17 +3,20 @@
 ;; Instead of sending the command prompt to Eshell, send it to a bash shell run in a dtach session.
 ;; dtach allows the user to disconnect (quit Eshell or even Emacs) while the command keeps going.
 ;; Stderr and stdout can be both displayed on screen and redirected to a file thanks to the `tee' program.
-
+;;
 ;; dtach allows the commandline (that is, bash) to run in the background.
 ;; bash allows for:
-;; - pausing the execution of the program;
+;; - using `tee' to separate stdout/stderr, output both in files and on screen;
 ;; - executing pipe lines (e.g. grep foo | sed ... | cut | wc).  dtach cannot do that alone.
 ;;
-;; Bash is necessary here because if we want to run Eshell within dtach, we need to run Emacs in --batch mode.
+;; Bash is necessary here.  If we want to run Eshell within dtach, we would need
+;; to run Emacs in --batch mode:
+;;
 ;;   emacs --batch --eval '(progn (eshell) (insert "echo hello") (eshell-send-input))'
+;;
 ;; Issues: --batch sends to stderr.  How do we redirect the output to the real stdout/stderr?
 
-;;; TODO: Remove bash / tee / dtach dependencies.
+;;; TODO: Remove bash / tee / dtach dependencies?  I don't think dtach can be removed.
 ;;; See if `make-process' is the way to go: it supports stderr/stdout separation and stop/cont.
 ;;; Re-use `eshell-gather-process-output'?  Re-implement?
 
@@ -33,12 +36,12 @@ The end command will be
   \"`eshell-detach-shell' -c { { <command>; } > >(tee stdout) } 2> >(tee stderr) | tee stdout+stderr\"")
 
 ;; TODO: Set the detach character?  No need when `C-c C-c` suffices.
-(defvar eshell-detach-detach-character "^\\"
-  "Charcter to press to detach dtach, i.e. leave the process run in the background.
-The character syntax follows terminal notations, not Emacs.")
-
-(defvar eshell-detach-detach-character-binding "C-\\"
-  "The Emacs binding matching `eshell-detach-detach-character'.")
+;; (defvar eshell-detach-detach-character "^\\"
+;;   "Charcter to press to detach dtach, i.e. leave the process run in the background.
+;; The character syntax follows terminal notations, not Emacs.")
+;;
+;; (defvar eshell-detach-detach-character-binding "C-\\"
+;;   "The Emacs binding matching `eshell-detach-detach-character'.")
 
 (defvar eshell-detach-socket-ext ".socket"
   "The file name extension for the socket fo `eshell-detach-program'.")
@@ -58,6 +61,20 @@ The 'tee' program is required.")
 (defvar eshell-detach-directory (if server-socket-dir server-socket-dir temporary-file-directory)
   "The directory where to store the dtach socket and the logs.")
 
+(defvar eshell-detach-file-pattern-function 'eshell-detach-default-file-pattern
+  "Function that takes the commandline as argument and returns
+  the name of all the dtach-related files (output and socket).")
+
+(defun eshell-detach-default-file-pattern (commandline)
+  "Create a pattern made of the alphanumerical translation of the commandline.
+Characters that don't fit are replaced with '_'.
+An ISO date string is appended.
+
+Suitable for `eshell-detach-file-pattern-function'."
+  (format "-%s-%s-"
+          (replace-regexp-in-string "[^A-Za-z0-9=-]" "_" commandline)
+          (format-time-string "%F-%R:%S")))
+
 ;; `eshell-named-command-hook' is not the way to go as it won't take pipelines.  What about
 ;; `eshell-rewrite-command-hook'?
 (defun eshell-detach-rewrite-input (input)
@@ -69,22 +86,18 @@ The 'tee' program is required.")
   (let* (
          ;; TODO: temp-file should not exist for dtach to start?  That forces us
          ;; to use make-temp-file which is vulnerable to race condition.
-         ;; TODO: Make this a user-defined function so that the user can choose
-         ;; how the files are grouped (e.g. by command or by date).
-         (socket (concat
-                  (make-temp-name
-                   (expand-file-name
-                    (concat "dtach-"
-                            (replace-regexp-in-string "[^A-Za-z0-9=-]" "_" input)
-                            "-" (format-time-string "%F-%R:%S") "-")
-                    eshell-detach-directory))
-                  eshell-detach-socket-ext))
-         (stdout (if eshell-detach-stdout-ext (concat socket eshell-detach-stdout-ext) nil))
-         (stderr (if eshell-detach-stderr-ext (concat socket eshell-detach-stderr-ext) nil))
-         (stdout+stderr (if eshell-detach-stdout+stderr-ext (concat socket eshell-detach-stdout+stderr-ext) nil))
-         ;; The following test command was inspired by
-         ;; https://stackoverflow.com/questions/21465297/tee-stdout-and-stderr-to-separate-files-while-retaining-them-on-their-respective
-         ;; { { echo stdout; echo stderr >&2; } > >(tee stdout.txt ); } 2> >(tee stderr.txt ) | tee stdout+stderr.txt
+         (socket (make-temp-name
+                  (expand-file-name
+                   (concat "dtach" (funcall eshell-detach-file-pattern-function input))
+                   eshell-detach-directory)))
+         (stdout (and eshell-detach-stdout-ext (concat socket eshell-detach-stdout-ext)))
+         (stderr (and eshell-detach-stderr-ext (concat socket eshell-detach-stderr-ext)))
+         (stdout+stderr (and eshell-detach-stdout+stderr-ext (concat socket eshell-detach-stdout+stderr-ext)))
+         (socket (concat socket eshell-detach-socket-ext))
+         ;; The following bash command was inspired by
+         ;; https://stackoverflow.com/questions/21465297/tee-stdout-and-stderr-to-separate-files-while-retaining-them-on-their-respective.
+         ;;
+         ;;   { { echo stdout; echo stderr >&2; } > >(tee stdout.txt ); } 2> >(tee stderr.txt ) | tee stdout+stderr.txt
          (commandline (format "{ { %s; }%s }%s %s; for i in %s %s %s; do [ ! -s \"$i\" ] && rm -- \"$i\"; done"
                               input
                               (if stdout (format " > >(tee %s );" stdout) "")
