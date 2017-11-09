@@ -263,7 +263,9 @@ See `eshell' for the numeric prefix ARG."
 ;;; Detach
 (when (require 'package-eshell-detach nil t)
   (defun eshell-detach-set-keys ()
-    (define-key eshell-mode-map (kbd "S-<return>") 'eshell-detach-send-input))
+    (define-key eshell-mode-map (kbd "C-c C-z") 'eshell-detach-stop)
+    (define-key eshell-mode-map (kbd "S-<return>") 'eshell-detach-send-input)
+    (define-key eshell-mode-map (kbd "C-<return>") 'eshell-detach-attach))
   (add-hook 'eshell-mode-hook 'eshell-detach-set-keys))
 
 (provide 'init-eshell)

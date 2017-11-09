@@ -13,6 +13,10 @@
 ;;   emacs --batch --eval '(progn (eshell) (insert "echo hello") (eshell-send-input))'
 ;; Issues: --batch sends to stderr.  How do we redirect the output to the real stdout/stderr?
 
+;;; TODO: Remove bash / tee / dtach dependencies.
+;;; See if `make-process' is the way to go: it supports stderr/stdout separation and stop/cont.
+;;; Re-use `eshell-gather-process-output'?  Re-implement?
+
 (defvar eshell-detach-program "dtach"
   "The `dtach' program.")
 
@@ -65,6 +69,8 @@ The 'tee' program is required.")
   (let* (
          ;; TODO: temp-file should not exist for dtach to start?  That forces us
          ;; to use make-temp-file which is vulnerable to race condition.
+         ;; TODO: Make this a user-defined function so that the user can choose
+         ;; how the files are grouped (e.g. by command or by date).
          (socket (concat
                   (make-temp-name
                    (expand-file-name
@@ -194,101 +200,101 @@ newline."
                (run-hooks 'eshell-post-command-hook)
                (insert-and-inherit input)))))))))
 
-;;; TODO: Remove bash / tee / dtach dependencies.
-;;; See if `make-process' is the way to go: it supports stderr/stdout separation and stop/cont.
-;;; Re-use `eshell-gather-process-output'?  Re-implement?
+
 
-;; TODO: Add C-c C-z binding for pausing.
 ;; TODO: Pause/resume on Eshell.
 ;; Bash is one way:
 ;; (local-set-key (kbd "C-z") 'self-insert-command)
 ;; Pressing self-inserted "C-z RET" works.
 ;; That only works for interactive shells, not with `bash -c'.
+;;; esh-proc.el has `eshell-stop-process' but that's not seem to work.  Maybe it
+;;; does not propagate properly.
 
-;; TODO: If we run in current Eshell, can we send C-\? Try unbinding or self-insert.
-;;; esh-proc.el has `eshell-stop-process' but that's not seem to work.  Maybe it does not propagate properly.
-
-;; Graph:
-;; dtach (client)
-;; - dtach (daemon)
-;;   - bash (pipe of bash running process and tee of stdout+stderr)
-;;     - bash (process)
-;;       - bash (tee of stdout)
-;;       - bash (tee of stderr)
-;; We want to send a signal to "bash (process)".
-;; We cannot predict how many process the command will start and we need top send signals to all of them.
-;; TODO: Refactor.
-;; TODO: Order by deepest child first so that we kill in order.
-(defun eshell-detach-graph ()
+;; TODO: Order by deepest child first so that we kill in order?  Not sure it matters.
+(defun eshell-detach-children ()
   "Return the list of recursive children of dtach except the dtach daemon."
-  (let (dtach-daemon
-        dtach-client
-        bash-root
-        bash-middle
-        bash-child1
-        bash-child2
-        bash-command-process-list
-        result)
-    (let* ((pids (list-system-processes))
-           (ppids (mapcar (lambda (p) (cons (alist-get 'ppid (process-attributes p)) p)) pids)))
-      (setq dtach-client (process-id (eshell-interactive-process)))
-      (message "dtach client: %S" (alist-get 'args (process-attributes dtach-client))) ; debug only
-
-      ;; Get dtach daemon.
+  ;; The process graph when a dtach session is first created is as follows:
+  ;;
+  ;; dtach (client)
+  ;; - dtach (daemon)
+  ;;   - bash (tee of stdout+stderr)
+  ;;     - bash (process)
+  ;;       - bash (tee of stdout)
+  ;;       - bash (tee of stderr)
+  ;;
+  ;; When attaching, then dtach (client) is no longer the parent of the daemon.
+  ;; We want to send a signal to "bash (process)".  We cannot predict how many
+  ;; processes the command will start so we to send signals to all children.
+  (let* ((dtach-client (process-id (eshell-interactive-process)))
+         dtach-daemon
+         result
+         pids
+         ppids)
+    (if (or (null dtach-client) (not (string= (alist-get 'comm (process-attributes dtach-client)) "dtach")))
+        (message "Current interactive process is not dtach")
+      (setq pids (list-system-processes)
+            ppids (mapcar (lambda (p) (cons (alist-get 'ppid (process-attributes p)) p)) pids))
+      ;; Query dtach daemon.
+      ;; Could be the child of the client.
       (setq dtach-daemon (alist-get dtach-client ppids))
       (when (null dtach-daemon)
-        ;; If we are attaching to a socket, the client daemon is forket and thus
+        ;; If we are attaching to a socket, the client daemon is forked and thus
         ;; it is not a child of the client.
-        ;; WARNING: Brittle code ahead.
-        (let ((pids pids)) ; Save `pids'.
+        ;; WARNING: Brittle trick ahead: We find the daemon by finding the
+        ;; "dtach" process which 3 argument is the same socket as the client.
+        (let ((pids pids) ; Save `pids'.
+              (dtach-client-socket (nth 2 (split-string (alist-get 'args (process-attributes dtach-client))))))
           (while (and pids (null dtach-daemon))
-            ;; TODO: Use if-let to save process-attributes.
-            (when (and (/= (car pids) dtach-client)
-                       (string= (alist-get 'comm (process-attributes (car pids))) "dtach")
-                       ;; Socket is the third substring.
-                       (string=
-                        (nth 2 (split-string (alist-get 'args (process-attributes (car pids)))))
-                        (nth 2 (split-string (alist-get 'args (process-attributes dtach-client))))))
-              (setq dtach-daemon (car pids)))
+            (let ((attr (process-attributes (car pids))))
+              (when (and (/= (car pids) dtach-client)
+                         (string= (alist-get 'comm attr) "dtach")
+                         ;; Socket is the third substring.
+                         (string= (nth 2 (split-string (alist-get 'args attr))) dtach-client-socket))
+                (setq dtach-daemon (car pids))))
             (setq pids (cdr pids)))))
 
-      ;; Get children.
+      ;; Query children.
       (if (null dtach-daemon)
           (message "Cannot find associated dtach daemon")
-        ;; (if (string= (alist-get 'comm (process-attributes dtach-daemon)) "dtach")
-        (setq bash-root (alist-get dtach-daemon ppids))
-        ;; (setq bash-root dtach-daemon ppids
-        ;;       dtach-daemon nil))
-        (push bash-root result)
-        ;; Add all recursive children of bash-root to result.
+        ;; The first (and only) child of dtach is the main bash session.
+        (push (alist-get dtach-daemon ppids) result)
+        ;; Add all recursive children of the main bash session to `result'.
         (let ((l 0))
           (while (/= l (length ppids))
             (setq l (length ppids))
             (let (newppids)
               (while ppids
                 (when (member (caar ppids) result)
-                  (push (cdar ppids)  result))
+                  (push (cdar ppids) result))
                 (pop ppids))
-              (setq ppids newppids)))))
-      (message "bash tree %s" result)
-      ;; (sort result '<) ; Debug only
-      result)))
+              (setq ppids newppids))))))
+    result))
 
 (defun eshell-detach-stop ()
+  "If `eshell-interactive-process' is dtach, pause all children processes.
+The processes can be resumed with `eshell-detach-continue'."
   (interactive)
-  ;; TODO: TSTP? STOP?
-  (eshell-detach-signal 'STOP (eshell-detach-graph)))
+  ;; The TSTP is not the right signal since we are not "at terminal".
+  (let ((children (eshell-detach-children)))
+    (when children
+      (eshell-detach-signal 'STOP children))))
 
 (defun eshell-detach-continue ()
+  "If `eshell-interactive-process' is dtach, resume all children processes.
+The processes can be pause with `eshell-detach-stop'."
   (interactive)
-  (eshell-detach-signal 'CONT (eshell-detach-graph)))
+  (let ((children (eshell-detach-children)))
+    (when children
+      (eshell-detach-signal 'CONT children))))
 
 ;; Inpsired by `helm-top-sh'.
 (defun eshell-detach-signal (sig pids)
-  "Run `kill' shell command with signal SIG on PIDs."
-  (message "kill -%s %s exited with status %s"
-           sig (mapconcat 'number-to-string pids " ")
-           (apply #'call-process
-                  "kill" nil nil nil (format "-%s" sig) (mapcar 'number-to-string pids))))
+  "Run `kill' shell command with signal SIG on PIDs.
+PIDs is a list of numbers."
+  (let ((pids (mapcar 'number-to-string pids)))
+    (message "kill -%s %s exited with status %s"
+             sig (mapconcat 'identity pids " ")
+             (apply #'call-process
+                    "kill" nil nil nil (format "-%s" sig) pids))))
 
 (provide 'package-eshell-detach)
