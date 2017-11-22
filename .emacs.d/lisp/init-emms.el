@@ -4,8 +4,12 @@
 ;;; TODO: Change face from purple to white?
 ;;; TODO: Delete entry from cache? See `emms-cache-del'.
 
+(with-eval-after-load 'emms-browser
+  (load "patch-emms"))
+
 (setq emms-directory (concat emacs-cache-folder "emms"))
 (emms-all)
+;; TODO: emms-all causes some "require"d files to be loaded twice if called after, say, emms-browser was loaded.
 (emms-history-load)
 (emms-default-players)
 (when (require 'emms-player-mpv nil t)
@@ -186,7 +190,5 @@ Return DATE if the year cannot be extracted."
         '(helm-source-emms-dired
           helm-source-emms-files ; Disable for a huge speed-up.
           helm-source-emms-streams)))
-
-(require 'patch-emms)
 
 (provide 'init-emms)

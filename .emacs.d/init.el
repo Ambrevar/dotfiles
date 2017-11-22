@@ -113,8 +113,8 @@
 ;;; Emms
 (nconc package-selected-packages '(emms helm-emms emms-player-mpv))
 (when (fboundp 'emms-all)
-  ;; Emms has no autoload to switch to the browser, let's add one.
-  (autoload 'emms-smart-browse "emms-browser" nil t))
+  ;; TODO: Emms has no autoload to switch to the browser, let's add one.
+  (autoload 'emms-smart-browse "init-emms" nil t))
 (with-eval-after-load 'emms (require 'init-emms))
 
 ;;; Evil

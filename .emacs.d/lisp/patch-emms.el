@@ -18,7 +18,7 @@
             ("n" . ,name)
             ;; PATCH
             ;; ("y" . ,(emms-track-get track 'info-year))
-            ("y" . ,(emms-track-get track 'info-date))
+            ("y" . ,(or (emms-track-get track 'info-date) (emms-track-get track 'info-year)))
             ("A" . ,(emms-track-get track 'info-album))
             ("a" . ,(emms-track-get track 'info-artist))
             ("C" . ,(emms-track-get track 'info-composer))
@@ -79,7 +79,7 @@
 (defun emms-browser-year-number (track)
   "Return a string representation of a track's year.
 This will be in the form '(1998) '."
-  (let ((year (or (emms-track-get track 'info-year) (emms-track-get track 'info-date))))
+  (let ((year (or (emms-track-get track 'info-date) (emms-track-get track 'info-year))))
     (if (or (not (stringp year)) (string= year "0"))
         ""
       (concat
