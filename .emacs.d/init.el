@@ -359,7 +359,7 @@
   (set-face-attribute 'wgrep-face nil :inherit 'ediff-current-diff-C :foreground 'unspecified :background 'unspecified :box nil))
 
 ;;; Window manager
-(nconc package-selected-packages '(exwm))
+(nconc package-selected-packages '(exwm helm-exwm))
 (when (require 'exwm nil t) (require 'init-exwm))
 
 ;;; XML / SGML
