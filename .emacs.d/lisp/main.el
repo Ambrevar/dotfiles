@@ -240,6 +240,7 @@
 ;;; Desktop-mode
 ;;; REVIEW: Desktop does not get saved when Emacs quits.
 ;;; See http://debbugs.gnu.org/cgi/bugreport.cgi?bug=28945.
+(load "patch-desktop")
 ;;; REVIEW: `desktop-kill' should not query the user in `kill-emacs-hook'.
 ;;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28943
 ;;; TODO: Desktop mode does not save window registers properly.
