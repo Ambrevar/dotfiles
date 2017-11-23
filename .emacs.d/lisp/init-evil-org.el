@@ -21,25 +21,25 @@
 (defun evil-org-shiftleft ()
   (interactive)
   ;; TODO: Use `org-at-heading-or-item-p' instead?
-  (if (org-on-heading-p)
+  (if (or (org-on-heading-p) (org-at-planning-p))
       (org-shiftleft)
     (evil-window-top)))
 
 (defun evil-org-shiftright ()
   (interactive)
-  (if (org-on-heading-p)
+  (if (or (org-on-heading-p) (org-at-planning-p))
       (org-shiftright)
     (evil-window-bottom)))
 
 (defun evil-org-shiftup ()
   (interactive)
-  (if (org-on-heading-p)
+  (if (or (org-on-heading-p) (org-at-planning-p))
       (org-shiftup)
     (evil-lookup)))
 
 (defun evil-org-shiftdown ()
   (interactive)
-  (if (org-on-heading-p)
+  (if (or (org-on-heading-p) (org-at-planning-p))
       (org-shiftdown)
     (call-interactively 'evil-join)))
 
