@@ -28,7 +28,6 @@
 .gnupg
 .go*
 .lesshst
-.local/
 .local/share/Trash
 .local/share/applications/wine*
 .local/share/icons

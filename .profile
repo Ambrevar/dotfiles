@@ -88,8 +88,8 @@ fi
 ## Last PATH entries.
 appendpath "/usr/lib/surfraw"
 appendpath "${HOME}/personal/games/launchers"
-appendpath "${HOME}/.bin"
-command -v pacman >/dev/null 2>&1 && appendpath "${HOME}/.bin_pacman"
+appendpath "${HOME}/.local/bin"
+command -v pacman >/dev/null 2>&1 && appendpath "${HOME}/.local/bin/pacman"
 
 
 
@@ -162,25 +162,27 @@ VISUAL="$EDITOR"
 export GIT_EDITOR
 export VISUAL
 
-
+## $HOME software install
+## See http://nullprogram.com/blog/2017/06/19/.
+export C_INCLUDE_PATH=$HOME/.local/include
+export CPLUS_INCLUDE_PATH=$HOME/.local/include
+export LIBRARY_PATH=$HOME/.local/lib
+export PKG_CONFIG_PATH=$HOME/.local/lib/pkgconfig
+prependpath "$HOME/local/usr/share/info" INFOPATH
+prependpath "$HOME/local/usr/share/man" MANPATH
+## If you install a library in your home directory that is also installed on the
+## system, and then run a system program, it may be linked against your library
+## rather than the library installed on the system as was originally
+## intended. This could have detrimental effects.
+# export LD_LIBRARY_PATH=$HOME/.local/lib
 
 ## Hook. Should be sourced last
 [ -f ~/.profile_hook ] && . ~/.profile_hook
 ## Hook example
 #
-# appendpath "${HOME}/local/usr/bin"
-# prependpath "${HOME}/local/usr/share/info" INFOPATH
-# prependpath "${HOME}/local/usr/share/man" MANPATH
-#
-# appendpath "$HOME/local/usr/include" C_INCLUDE_PATH
-# appendpath "$HOME/local/usr/include" CPLUS_INCLUDE_PATH
-# appendpath "$HOME/local/usr/lib" LIBRARY_PATH
 # export CPPFLAGS=-I$HOME/local/usr/include
 # export LDFLAGS=-L$HOME/local/usr/lib
 #
-# appendpath "${HOME}/local/usr/lib/pkgconfig" PKG_CONFIG_PATH
-#
-# appendpath "${HOME}/local/usr/lib/" LD_LIBRARY_PATH
 # appendpath "$HOME/local/usr/lib/python2.7/dist-packages/" PYTHONPATH
 # export LUA_CPATH="$HOME/local/usr/lib/lib?.so;$(lua -e "print(package.cpath)")"
 #
