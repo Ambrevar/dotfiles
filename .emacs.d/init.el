@@ -127,6 +127,7 @@
 ;;; Extend completion.
 (nconc package-selected-packages '(fish-completion bash-completion
                                                    pcomplete-extension pcmpl-args pcmpl-git))
+(nconc package-selected-packages '(company-eshell-autosuggest))
 (when (and (executable-find "fish")
            (require 'fish-completion nil t))
   (global-fish-completion-mode))

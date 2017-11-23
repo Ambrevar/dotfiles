@@ -232,7 +232,11 @@ See `eshell' for the numeric prefix ARG."
         (eshell (or arg t))))))
 
 ;;; Auto-suggestion
-(when (require 'package-eshell-autosuggest)
+(when (require 'company-eshell-autosuggest nil t)
+  (defun eshell-setup-autosuggest ()
+    (setq-local company-idle-delay 0.5)
+    (setq-local company-backends '(company-eshell-autosuggest))
+    (setq-local company-frontends '(company-preview-frontend)))
   (add-hook 'eshell-mode-hook 'company-mode)
   (when (require 'helm-config nil t)
     (define-key company-active-map (kbd "M-p") 'helm-eshell-history))
