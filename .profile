@@ -140,8 +140,11 @@ if [ "$(uname -o)" = "GNU/Linux" ] ; then
 	fi
 fi
 
-## Wine DLL override. This removes the annoying messages for Mono and Gecko.
+## Wine DLL overrides.
+## Remove the annoying messages for Mono and Gecko.
 export WINEDLLOVERRIDES="mscoree,mshtml="
+## Do not create desktop links or start menu entries.
+export WINEDLLOVERRIDES="$WINEDLLOVERRIDES;winemenubuilder.exe=d"
 
 ## Pacman asp root.
 if command -v asp >/dev/null 2>&1; then
