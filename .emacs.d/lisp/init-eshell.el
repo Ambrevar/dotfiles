@@ -137,7 +137,7 @@
 (setq-default eshell-prompt-regexp "^> ")
 
 (with-eval-after-load 'em-term
-  (dolist (p '("abook" "alsamixer" "cmus" "dtach" "fzf" "htop" "mpsyt" "mpv" "mutt" "ncdu" "newsbeuter" "pinentry-curses" "ranger" "watch" "wifi-menu"))
+  (dolist (p '("abook" "alsamixer" "cmus" "fzf" "htop" "mpsyt" "mpv" "mutt" "ncdu" "newsbeuter" "pinentry-curses" "ranger" "watch" "wifi-menu"))
     (add-to-list 'eshell-visual-commands p))
   (setq eshell-visual-subcommands
         '(("git" "log" "diff" "show"
