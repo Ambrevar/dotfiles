@@ -164,12 +164,14 @@ export VISUAL
 
 ## $HOME software install
 ## See http://nullprogram.com/blog/2017/06/19/.
-export C_INCLUDE_PATH=$HOME/.local/include
-export CPLUS_INCLUDE_PATH=$HOME/.local/include
-export LIBRARY_PATH=$HOME/.local/lib
-export PKG_CONFIG_PATH=$HOME/.local/lib/pkgconfig
-prependpath "$HOME/local/usr/share/info" INFOPATH
-prependpath "$HOME/local/usr/share/man" MANPATH
+## The variables should not contain paths to non-existing folders as it may
+## break compilers.
+prependpath "$HOME/.local/include" C_INCLUDE_PATH
+prependpath "$HOME/.local/include" CPLUS_INCLUDE_PATH
+prependpath "$HOME/.local/lib" LIBRARY_PATH
+prependpath "$HOME/.local/lib/pkgconfig" PKG_CONFIG_PATH
+prependpath "$HOME/.local/share/info" INFOPATH
+prependpath "$HOME/.local/share/man" MANPATH
 ## If you install a library in your home directory that is also installed on the
 ## system, and then run a system program, it may be linked against your library
 ## rather than the library installed on the system as was originally
