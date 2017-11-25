@@ -10,13 +10,16 @@ mount () {
 	DEV_COUNT="$(cdemu device-mapping | awk 'END {print NR-3}')"
 
 	if cdemu status | grep -q "$1"; then
-		echo "Image alredy mounted."
+		echo >&2 "Image alredy mounted"
 		return
 	fi
 
 	if [ "$DEVICE" -gt "$DEV_COUNT" ]; then
 		while [ "$DEVICE" -gt "$DEV_COUNT" ]; do
-			cdemu add-device
+			if ! cdemu add-device; then
+				echo >&2 "Error adding device"
+				return
+			fi
 			DEV_COUNT="$(cdemu device-mapping | awk 'END {print NR-3}')"
 		done
 
@@ -122,6 +125,11 @@ for i in udiskie cdemu realpath; do
 		exit 1
 	fi
 done
+
+if ! cdemu status >/dev/null 2>&1; then
+	echo >&2 "CDemu failed to start"
+	return
+fi
 
 if $OPT_UNMOUNT; then
 	for i ; do
