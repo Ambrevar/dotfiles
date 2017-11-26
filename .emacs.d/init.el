@@ -30,6 +30,13 @@
 ;;; that `require' can find the files.
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 
+(when (require 'package nil t)
+  ;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+  (setq package-user-dir (concat emacs-cache-folder "elpa"))
+  (package-initialize))
+
 ;;; Site Lisp folder for local packages and development.
 (defun package-refresh-load-path (path)
   "Add every non-hidden sub-folder of PATH to `load-path'."
@@ -40,13 +47,6 @@
 (let ((site-lisp (expand-file-name "site-lisp/" user-emacs-directory)))
   (add-to-list 'load-path site-lisp)
   (package-refresh-load-path site-lisp))
-
-(when (require 'package nil t)
-  ;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-  (setq package-user-dir (concat emacs-cache-folder "elpa"))
-  (package-initialize))
 
 (require 'functions)
 (require 'main)
@@ -114,6 +114,7 @@
 (nconc package-selected-packages '(emms helm-emms emms-player-mpv))
 (when (fboundp 'emms-all)
   ;; TODO: Emms has no autoload to switch to the browser, let's add one.
+  ;; Mail sent to emms-help.
   (autoload 'emms-smart-browse "init-emms" nil t))
 (with-eval-after-load 'emms (require 'init-emms))
 

@@ -145,7 +145,7 @@ Require `tabify-leading'."
   "Do not run `fmt' if non-nil.
 As this is not friendly to foreign projects, `fmt' should be run
 selectively."
-  :safe 'null)
+  :safe 'booleanp)
 
 (defun flyspell-and-whitespace-mode ()
   "Toggle `flyspell-mode' and `whitespace-mode'."
