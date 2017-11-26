@@ -16,6 +16,9 @@
 ;;; TODO: Implement alternating-color multiline lists.
 ;;; See https://github.com/emacs-helm/helm/issues/1790.
 
+;;; TODO: Impement helm-portage (currently helm-gentoo).
+;;; TODO: Implement helm-pacman.
+
 (when (require 'linum-relative nil t)
   (helm-linum-relative-mode 1))
 

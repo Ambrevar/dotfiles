@@ -3,6 +3,9 @@
 
 ;;; TODO: `beginning-of-defun'/`end-of-defun' should go to next section.
 
+;;; TODO: Replace init-tex, init-texinfo and init-latex with AucTeX.
+;;; Only keep some skeletons.
+
 ;;; We use the TeX setup.
 (require 'init-tex)
 (require 'latex-pretty-symbols nil t)

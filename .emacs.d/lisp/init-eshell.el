@@ -81,6 +81,11 @@
 ;;; > date +%Z
 ;;; See #29157.
 
+;;; TODO: Change face of eshell/* commands in commandline to avoid confusion
+;;; with system programs.
+
+;;; TODO: Merge/re-use documentation of eshell/* commands with their docstring.
+
 ;;; TODO: Hour is printed twice. We don't need to set this?
 ;; (setq eshell-ls-date-format (replace-regexp-in-string "^\\+*" "" (getenv "TIME_STYLE")))
 
@@ -158,6 +163,7 @@
   ;;; TODO: This conflicts with `evil-define-key' during the initialization of
   ;;; the first eshell session: the map in insert-mode will not take the changes
   ;;; into account. Going to normal mode and back to insert mode works.
+  ;;; Note: Evil has fixed some issues in the meantime.  Also test with `evil-define-key*'.
   ;;;
   ;;; If we read the alias list here, it means we make commandline-defined aliases persistent.
   ;; (eshell-read-aliases-list)
@@ -237,6 +243,8 @@ See `eshell' for the numeric prefix ARG."
     (setq-local company-idle-delay 0.5)
     (setq-local company-backends '(company-eshell-autosuggest))
     (setq-local company-frontends '(company-preview-frontend)))
+  ;; TODO: Fix https://github.com/jojojames/evil-collection/issues/41.
+  (define-key company-active-map (kbd "<tab>") 'company-select-next-if-tooltip-visible-or-complete-selection)
   (add-hook 'eshell-mode-hook 'company-mode)
   (when (require 'helm-config nil t)
     (define-key company-active-map (kbd "M-p") 'helm-eshell-history))
