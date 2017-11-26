@@ -57,6 +57,8 @@ dev-python/docutils PYTHON_TARGETS: python2_7
 sys-apps/portage PYTHON_TARGETS: python2_7
 dev-python/setuptools PYTHON_TARGETS: python2_7
 dev-python/pyyaml PYTHON_TARGETS: python2_7
+>=dev-python/future-0.15.2 python_targets_python2_7
+dev-python/requests python_targets_python2_7
 
 ## TODO: Out of date?
 # app-text/texlive-core -X
@@ -102,3 +104,6 @@ games-util/steam-launcher -steamruntime
 ## OpenMW
 dev-games/mygui -ogre
 media-libs/libsdl2 opengl
+
+## Wine
+app-emulation/wine-any -mono

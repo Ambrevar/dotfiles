@@ -1,10 +1,15 @@
-=www-client/qutebrowser-1.0.2 ~amd64
+app-editors/emacs ~amd64
+app-emacs/emms ~amd64
+app-emulation/wine-any ~amd64
 app-shells/fish ~amd64
-net-mail/mu ~amd64
-sys-fs/udiskie ~amd64
+dev-util/uncrustify ~amd64
+dev-vcs/gitstats ~amd64
 media-sound/mps-youtube **
+net-mail/mu ~amd64
 net-misc/youtube-dl ~amd64
-=dev-vcs/gitstats-0_pre20151223 ~amd64
+sci-calculators/units ~amd64
+sys-fs/udiskie ~amd64
+www-client/qutebrowser ~amd64
 
 ## OpenMW
 sci-physics/bullet ~amd64
