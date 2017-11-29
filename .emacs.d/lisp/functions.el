@@ -503,6 +503,10 @@ This does not affect .csv files."
   (unless (string= (file-name-extension buffer-file-name) "csv")
     (add-hook 'before-save-hook 'delete-trailing-whitespace nil t)))
 
+(defun turn-off-delete-trailing-whitespace ()
+  "Unconditionally remove the `delete-trailing-whitespace' function to `before-save-hook'."
+  (remove-hook 'before-save-hook 'delete-trailing-whitespace t))
+
 (defun turn-on-fmt-before-save ()
   "Unconditionally add the `fmt' function to `before-save-hook'."
   (add-hook 'before-save-hook 'fmt nil t))
