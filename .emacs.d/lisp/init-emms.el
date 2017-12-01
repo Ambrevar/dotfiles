@@ -19,7 +19,7 @@
   (setq emms-player-mpv-input-file (expand-file-name "emms-mpv-input-file" emms-directory))
   (setq emms-player-list '(emms-player-mpv emms-player-mplayer-playlist emms-player-mplayer)))
 
-(setq emms-source-file-default-directory "~/music/"
+(setq emms-source-file-default-directory (expand-file-name "~/music")
       emms-source-file-directory-tree-function 'emms-source-file-directory-tree-find)
 
 (add-to-list 'emms-info-functions 'emms-info-cueinfo)
