@@ -91,6 +91,7 @@
   (exwm-input-set-key (kbd "s-v") #'magit-status))
 (when (fboundp 'emms-all)
   (exwm-input-set-key (kbd "s-a") #'emms-smart-browse)
+  (exwm-input-set-key (kbd "S-s-<kp-enter>") #'emms-pause)
   (if (fboundp 'helm-emms)
       (exwm-input-set-key (kbd "s-A") #'helm-emms)
     (exwm-input-set-key (kbd "s-A") #'emms)))
