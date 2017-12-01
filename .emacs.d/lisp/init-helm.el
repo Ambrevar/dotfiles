@@ -240,10 +240,9 @@ Requires `call-process-to-string' from `functions'."
   (setq helm-locate-recursive-dirs-command "find %s -type d -regex .*%s.*$"))
 
 ;;; Convenience.
-(defun helm-toggle-visible-mark-backwards ()
-  (interactive)
-  (helm-toggle-visible-mark)
-  (helm-previous-line 2))
+(defun helm-toggle-visible-mark-backwards (arg)
+  (interactive "p")
+  (helm-toggle-visible-mark (- arg)))
 (define-key helm-map (kbd "S-SPC") 'helm-toggle-visible-mark-backwards)
 
 (provide 'init-helm)
