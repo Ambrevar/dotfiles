@@ -7,9 +7,6 @@
 ;; No need for 'insert, 'shift (I use custom definitions), 'todo 'heading.
 (evil-org-set-key-theme '(navigation textobjects additional))
 
-;; TODO: Setup evil-org-agenda when merged.
-(require 'evil-org-agenda nil t)
-
 ;;; This won't get merged upstream.  See
 ;;; https://github.com/Somelauw/evil-org-mode/issues/25.
 (defun evil-org-meta-return ()

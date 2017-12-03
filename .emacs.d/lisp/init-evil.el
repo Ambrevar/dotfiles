@@ -172,7 +172,10 @@
 (require 'evil-ediff nil t)
 
 (when (require 'evil-org nil t)
-  (with-eval-after-load 'org (require 'init-evil-org)))
+  (with-eval-after-load 'org (require 'init-evil-org))
+  (with-eval-after-load 'org-agenda
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys)))
 
 (with-eval-after-load 'gnus (require 'init-evil-gnus))
 
