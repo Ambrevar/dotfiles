@@ -185,7 +185,7 @@
          ("mvv" "mv -iv $*")
          ("rmv" "rm -v $*")
          ("md" "eshell/mkdir -p $*")
-         ("mkcd" "eshell/mkdir -p $* && cd $1"))) ; TODO: Does not work because mkdir exits with nil?
+         ("mkcd" "eshell/mkdir -p $* ; cd $1"))) ; TODO: Does not work because mkdir exits with nil?
     (add-to-list 'eshell-command-aliases-list alias))
   (eshell-write-aliases-list))
 
