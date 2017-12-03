@@ -267,6 +267,7 @@
         ;; desktop-restore-eager 4 ; Can be annoying as you don't have your last-loaded buffers immediately.
         desktop-save t)
   (add-to-list 'desktop-modes-not-to-save 'pdf-view-mode)
+  (add-to-list 'desktop-modes-not-to-save 'image-mode)
   (unless (file-directory-p desktop-dirname)
     (make-directory desktop-dirname t))
   ;; TODO: `compile-history' should be buffer local but that does not work.
