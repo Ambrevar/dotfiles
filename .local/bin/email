@@ -1,0 +1,37 @@
+#!emacs --script
+
+(require 'message)
+(require 'smtpmail)
+
+(setq
+ message-sent-message-via '(mail mail)
+ message-send-mail-function 'smtpmail-send-it)
+
+(unless (file-exists-p "~/.emailrc")
+  (error "Missing ~/.emailrc.  Need the following:
+(setq
+ smtpmail-smtp-server \"smtp.example.org\"
+ user-mail-address \"john.doe@example.org\"
+ user-full-name \"John Doe\")"))
+(load "~/.emailrc" nil)
+
+(unless (file-exists-p "~/.authinfo.gpg")
+  (error (format "Missing ~/.authinfo.gpg.  Need the following:
+machine %s login MYLOGIN port 25 password MYPASSWORD" smtpmail-smtp-server)))
+
+(when (< (length command-line-args-left) 3)
+  (error (format "Usage: %s SUBJECT BODY-FILE TO..." (file-name-nondirectory (nth 2 command-line-args)))))
+
+(with-temp-buffer
+  (insert (format "
+From: %s <%s>
+To: %s
+Subject: %s
+--text follows this line--
+
+"
+               user-full-name user-mail-address
+               (mapconcat 'identity (cddr command-line-args-left) ", ")
+               (nth 0 command-line-args-left)))
+  (insert-file-contents-literally (nth 1 command-line-args-left))
+  (message-send))
