@@ -19,8 +19,11 @@
   (error (format "Missing ~/.authinfo.gpg.  Need the following:
 machine %s login MYLOGIN port 25 password MYPASSWORD" smtpmail-smtp-server)))
 
-(when (< (length command-line-args-left) 3)
-  (error (format "Usage: %s SUBJECT BODY-FILE TO..." (file-name-nondirectory (nth 2 command-line-args)))))
+(when (< (length command-line-args-left) 2)
+  (error (format "Usage: %s SUBJECT TO...
+
+The e-mail body is read from the standard input (stdin)."
+                 (file-name-nondirectory (nth 2 command-line-args)))))
 
 (with-temp-buffer
   (insert (format "
@@ -31,7 +34,7 @@ Subject: %s
 
 "
                user-full-name user-mail-address
-               (mapconcat 'identity (cddr command-line-args-left) ", ")
+               (mapconcat 'identity (cdr command-line-args-left) ", ")
                (nth 0 command-line-args-left)))
-  (insert-file-contents-literally (nth 1 command-line-args-left))
+  (insert (read-from-minibuffer ""))
   (message-send))
