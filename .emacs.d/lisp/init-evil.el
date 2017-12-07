@@ -103,8 +103,8 @@
 
 (when (require 'evil-collection nil t)
   (evil-collection-init)
-  (require 'evil-minibuffer)
-  (evil-minibuffer-init))
+  (require 'evil-collection-minibuffer)
+  (evil-collection-minibuffer-init))
 
 (with-eval-after-load 'elfeed
   ;; Custom
