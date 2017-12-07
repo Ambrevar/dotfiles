@@ -266,6 +266,7 @@
         desktop-path (list desktop-dirname)
         ;; desktop-restore-eager 4 ; Can be annoying as you don't have your last-loaded buffers immediately.
         desktop-save t)
+  (desktop-save-mode)
   (add-to-list 'desktop-modes-not-to-save 'pdf-view-mode)
   (add-to-list 'desktop-modes-not-to-save 'image-mode)
   (unless (file-directory-p desktop-dirname)
@@ -275,8 +276,7 @@
   ;; http://stackoverflow.com/questions/22995203/one-compile-command-per-buffer-not-directory
   ;; (add-to-list 'desktop-locals-to-save 'compile-history)
   (add-to-list 'desktop-locals-to-save 'compile-command)
-  (add-to-list 'desktop-locals-to-save 'ispell-local-dictionary)
-  (desktop-save-mode))
+  (add-to-list 'desktop-locals-to-save 'ispell-local-dictionary))
 
 ;;; Buffer names.
 (setq uniquify-buffer-name-style 'forward)
