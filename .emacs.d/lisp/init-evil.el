@@ -104,7 +104,7 @@
 (when (require 'evil-collection nil t)
   (evil-collection-init)
   (require 'evil-collection-minibuffer)
-  (evil-collection-minibuffer-init))
+  (evil-collection-minibuffer-setup))
 
 (with-eval-after-load 'elfeed
   ;; Custom
