@@ -114,16 +114,17 @@
     (kbd "S-<return>") 'elfeed-visit-or-play-with-mpv))
 
 ;; Custom Helm
-(global-set-key (kbd "M-y") 'helm-show-kill-ring)
-(define-keys helm-map
-  "C-\\" 'helm-toggle-resplit-and-swap-windows ; Becauste C-t is taken by evil-mc.
-  "M-\\" 'helm-toggle-resplit-and-swap-windows)
-(dolist (map (list helm-find-files-map helm-read-file-map))
-  (define-keys map
-    "M-." 'helm-end-of-buffer
-    "M-," 'helm-beginning-of-buffer))
-;; `helm-mark-or-exchange-rect' is not needed with Evil.
-(global-set-key (kbd "C-x C-x") 'helm-all-mark-rings)
+(with-eval-after-load 'helm
+  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+  (define-keys helm-map
+    "C-\\" 'helm-toggle-resplit-and-swap-windows ; Becauste C-t is taken by evil-mc.
+    "M-\\" 'helm-toggle-resplit-and-swap-windows)
+  (dolist (map (list helm-find-files-map helm-read-file-map))
+    (define-keys map
+      "M-." 'helm-end-of-buffer
+      "M-," 'helm-beginning-of-buffer))
+  ;; `helm-mark-or-exchange-rect' is not needed with Evil.
+  (global-set-key (kbd "C-x C-x") 'helm-all-mark-rings))
 
 ;;; nXML
 ;;; TODO: Add to evil-collection?
