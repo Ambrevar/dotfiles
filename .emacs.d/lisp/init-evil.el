@@ -109,11 +109,9 @@
 (with-eval-after-load 'elfeed
   ;; Custom
   (evil-define-key 'motion elfeed-search-mode-map
-    (kbd "<return>") 'elfeed-visit-or-play-with-mpv
-    "o" 'elfeed-visit-or-play-with-mpv)
+    (kbd "S-<return>") 'elfeed-visit-or-play-with-mpv)
   (evil-define-key 'motion elfeed-show-mode-map
-    (kbd "<return>") 'elfeed-visit-or-play-with-mpv
-    "o" 'elfeed-visit-or-play-with-mpv))
+    (kbd "S-<return>") 'elfeed-visit-or-play-with-mpv))
 
 ;; Custom Helm
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
