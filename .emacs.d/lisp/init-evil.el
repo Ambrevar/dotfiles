@@ -102,6 +102,7 @@
 ;;; Mode specific bindings.
 
 (when (require 'evil-collection nil t)
+  (setq evil-collection-term-sync-state-and-mode-p t)
   (evil-collection-init)
   (require 'evil-collection-minibuffer)
   (evil-collection-minibuffer-setup))
