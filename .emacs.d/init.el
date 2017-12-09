@@ -127,6 +127,7 @@
 (nconc package-selected-packages '(company-eshell-autosuggest))
 (when (and (executable-find "fish")
            (require 'fish-completion nil t))
+  (setq fish-completion-fallback-on-bash-p t)
   (global-fish-completion-mode))
 (with-eval-after-load 'eshell (require 'init-eshell))
 (autoload 'eshell-or-new-session "eshell")
