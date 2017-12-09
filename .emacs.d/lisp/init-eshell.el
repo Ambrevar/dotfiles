@@ -192,7 +192,6 @@
 ;;; Hooks
 ;;; `nobreak-char-display' makes some output look weird, e.g. with 'tree'.
 (add-hook 'eshell-mode-hook 'turn-off-nobreak-char-display)
-(add-hook 'eshell-mode-hook 'eshell-cmpl-initialize)
 
 ;;; History
 ;;; Filter out space-beginning commands from history.
@@ -244,7 +243,8 @@ See `eshell' for the numeric prefix ARG."
     (setq-local company-backends '(company-eshell-autosuggest))
     (setq-local company-frontends '(company-preview-frontend)))
   ;; TODO: Fix https://github.com/jojojames/evil-collection/issues/41.
-  (define-key company-active-map (kbd "<tab>") 'company-select-next-if-tooltip-visible-or-complete-selection)
+  ;; (define-key company-active-map (kbd "<tab>") 'company-select-next-if-tooltip-visible-or-complete-selection)
+  ;; (add-to-list 'company-frontends 'company-tng-frontend)
   (add-hook 'eshell-mode-hook 'company-mode)
   (when (require 'helm-config nil t)
     (define-key company-active-map (kbd "M-p") 'helm-eshell-history))
