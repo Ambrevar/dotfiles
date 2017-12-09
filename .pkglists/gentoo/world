@@ -5,6 +5,7 @@ app-admin/sudo
 app-admin/sysklogd
 app-arch/atool
 app-arch/p7zip
+app-arch/unrar
 app-arch/unshield
 app-cdr/cdemu
 app-crypt/ccrypt
@@ -29,12 +30,14 @@ app-portage/layman
 app-portage/pfl
 app-portage/repoman
 app-shells/bash-completion
+app-shells/dash
 app-shells/fish
 app-shells/mpv-bash-completion
 app-text/aspell
 app-text/epspdf
 app-text/poppler
 app-text/tree
+app-text/unrtf
 dev-games/mygui
 dev-lang/go
 dev-lang/nasm
@@ -76,6 +79,7 @@ media-video/ffmpeg
 media-video/mediainfo
 media-video/mpv
 media-video/subdl
+net-analyzer/nethogs
 net-mail/isync
 net-mail/mu
 net-misc/curl
