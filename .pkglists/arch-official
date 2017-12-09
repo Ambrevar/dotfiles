@@ -36,6 +36,7 @@ chromaprint
 chromium
 chrpath
 cloc
+conky
 coreutils
 cowsay
 cpupower
@@ -62,6 +63,7 @@ dosfstools
 driconf
 dtach
 dvdbackup
+dzen2
 e2fsprogs
 elfutils
 emacs
