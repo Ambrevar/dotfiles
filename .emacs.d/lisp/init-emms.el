@@ -75,6 +75,7 @@ This function uses 'info-albumartistsort, 'info-albumartist,
           helm-source-emms-files ; Disable for a huge speed-up.
           helm-source-emms-streams)))
 
-(load "patch-emms-cover")
+;;; Cover thumbnails.
+(setq emms-browser-covers 'emms-browser-cache-thumbnail)
 
 (provide 'init-emms)
