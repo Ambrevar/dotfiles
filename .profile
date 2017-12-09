@@ -85,6 +85,9 @@ if [ -d "$HOME/go" ]; then
 	command -v godoc >/dev/null 2>&1 && godoc -http :6060 -play 2>/dev/null &
 fi
 
+## Cask
+appendpath "$HOME/.cask/bin"
+
 ## Last PATH entries.
 appendpath "/usr/lib/surfraw"
 appendpath "${HOME}/personal/games/launchers"
