@@ -238,17 +238,11 @@ See `eshell' for the numeric prefix ARG."
 
 ;;; Auto-suggestion
 (when (require 'company-eshell-autosuggest nil t)
-  (defun eshell-setup-autosuggest ()
-    (setq-local company-idle-delay 0.5)
-    (setq-local company-backends '(company-eshell-autosuggest))
-    (setq-local company-frontends '(company-preview-frontend)))
-  ;; TODO: Fix https://github.com/jojojames/evil-collection/issues/41.
-  ;; (define-key company-active-map (kbd "<tab>") 'company-select-next-if-tooltip-visible-or-complete-selection)
-  ;; (add-to-list 'company-frontends 'company-tng-frontend)
-  (add-hook 'eshell-mode-hook 'company-mode)
+  (setq company-eshell-autosuggest-delay 0.5)
+  (add-hook 'eshell-mode-hook 'company-eshell-autosuggest-mode)
+  (define-key company-eshell-autosuggest-active-map (kbd "<tab>") 'company-complete-selection)
   (when (require 'helm-config nil t)
-    (define-key company-active-map (kbd "M-p") 'helm-eshell-history))
-  (add-hook 'eshell-mode-hook 'eshell-setup-autosuggest))
+    (define-key company-active-map (kbd "M-p") 'helm-eshell-history)))
 
 ;;; Extra execution information
 (defvar eshell-status-p t
