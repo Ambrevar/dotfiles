@@ -2,7 +2,7 @@
 
 ;;; We use the TeX setup.
 (require 'tex-mode)
-(require 'mode-tex)
+(require 'init-tex)
 
 (local-set-key (kbd "C-c C-b") 'texinfo-menu-update)
 
