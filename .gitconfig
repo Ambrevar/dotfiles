@@ -42,3 +42,12 @@ suppresscc = author
 # sendemail.confir = auto
 aliasfiletype = mutt
 # aliasesfile = ~/.mutt.d/aliases
+
+[core]
+pager = cat
+
+[man]
+viewer = catman
+
+[man "catman"]
+cmd = man -P cat

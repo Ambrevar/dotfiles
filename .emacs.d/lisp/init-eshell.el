@@ -145,9 +145,11 @@
   (dolist (p '("abook" "alsamixer" "cmus" "fzf" "htop" "mpsyt" "mpv" "mutt" "ncdu" "newsbeuter" "pinentry-curses" "ranger" "watch" "wifi-menu"))
     (add-to-list 'eshell-visual-commands p))
   (setq eshell-visual-subcommands
-        '(("git" "log" "diff" "show"
-           "l" "lol" "d" "dc") ; aliases
-          ("sudo" "wifi-menu") ; Arch Linux
+        ;; Some Git commands use a pager by default.
+        ;; Either invoke the subcommands in a term ("visual") or configure Git
+        ;; to disable the pager globally.
+        ;; '(("git" "log" "diff" "show")
+        '(("sudo" "wifi-menu") ; Arch Linux
           ("sudo" "vi" "visudo"))))
 
 ;;; Alias management possibilities:
