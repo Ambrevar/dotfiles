@@ -76,14 +76,16 @@
 
 ;;; Outline mode
 (with-eval-after-load 'outline
-  (set-face-attribute 'outline-1 nil :inherit 'font-lock-warning-face)
-  (set-face-foreground 'outline-2 "Gold")
-  (set-face-foreground 'outline-3 "SpringGreen")
-  (set-face-foreground 'outline-4 "LightSlateBlue")
-  (set-face-foreground 'outline-5 "SlateGrey")
-  (set-face-foreground 'outline-6 "SeaGreen")
-  (set-face-foreground 'outline-7 "DarkSlateGray4")
-  (set-face-foreground 'outline-8 "DarkSlateBlue"))
+  ;; (set-face-attribute 'outline-1 nil :inherit 'font-lock-warning-face)
+  (set-face-attribute 'outline-1 nil :weight 'bold :foreground "#CBAC42")
+  (set-face-attribute 'outline-2 nil :weight 'bold :foreground "#7BBF11")
+  (set-face-attribute 'outline-3 nil :weight 'bold :foreground "#BC684F")
+  (set-face-attribute 'outline-4 nil :weight 'bold :foreground "#4C95BF")
+  (set-face-attribute 'outline-5 nil :weight 'bold :foreground "SeaGreen")
+  (set-face-attribute 'outline-6 nil :weight 'bold :foreground "DarkSlateGray4")
+  (set-face-attribute 'outline-7 nil :weight 'bold :foreground "DarkSlateBlue")
+  (set-face-attribute 'outline-8 nil :weight 'bold :foreground "Gold"))
+
 
 ;;; show-paren
 (with-eval-after-load 'paren
