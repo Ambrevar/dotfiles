@@ -246,7 +246,7 @@
 (with-eval-after-load 'elfeed (require 'init-elfeed))
 
 ;;; Org-mode
-(nconc package-selected-packages '(org-plus-contrib)) ; Contains latest 'org.
+(nconc package-selected-packages '(org-plus-contrib org-bullets)) ; org-plus contains latest Org mode.
 (with-eval-after-load 'org (require 'init-org))
 (autoload 'org-switch-agenda-file "org")
 (autoload 'org-switch-agenda-file-other-window "org")

@@ -62,4 +62,7 @@
                                         (regexp-quote (expand-file-name contacts))))
       (setq org-contacts-files (list contacts)))))
 
+(when (require 'org-bullets nil t)
+  (add-hook 'org-mode-hook 'org-bullets-mode))
+
 (provide 'init-org)
