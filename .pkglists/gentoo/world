@@ -25,6 +25,7 @@ app-misc/trash-cli
 app-misc/vlock
 app-portage/cpuid2cpuflags
 app-portage/eix
+app-portage/genlop
 app-portage/gentoolkit
 app-portage/layman
 app-portage/pfl
@@ -93,6 +94,7 @@ net-wireless/wpa_supplicant
 sci-calculators/units
 sci-libs/gdal
 sci-physics/bullet
+sys-apps/dmidecode
 sys-apps/inxi
 sys-apps/nawk
 sys-apps/pciutils
