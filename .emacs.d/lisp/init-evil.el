@@ -66,7 +66,9 @@
 ;;; It shadows C-n/p (`evil-paste-pop'), but we use `helm-show-kill-ring' on
 ;;; another binding.
 (when (require 'evil-mc nil t)
-  (global-evil-mc-mode 1)
+  ;; (global-evil-mc-mode 1)
+  (add-hook 'text-mode-hook 'evil-mc-mode)
+  (add-hook 'prog-mode-hook 'evil-mc-mode)
   (define-key evil-mc-key-map (kbd "C-<mouse-1>") 'evil-mc-toggle-cursor-on-click)
   (set-face-attribute 'evil-mc-cursor-default-face nil :inherit nil :inverse-video nil :box "white")
   (when (require 'evil-mc-extras nil t)
