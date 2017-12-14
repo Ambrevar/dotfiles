@@ -101,6 +101,12 @@
 
 
 ;;; External application shortcuts.
+(defun exwm-start (command)
+  (interactive (list (read-shell-command "$ ")))
+  (start-process-shell-command command nil command))
+(exwm-input-set-key (kbd "s-&") #'exwm-start)
+(exwm-input-set-key (kbd "s-r") #'exwm-start)
+
 (when (require 'helm-exwm nil t)
   (add-to-list 'helm-source-names-using-follow "EXWM buffers")
   (setq helm-exwm-emacs-buffers-source (helm-exwm-build-emacs-buffers-source))
@@ -114,6 +120,8 @@
                                     helm-source-buffer-not-found))
   (define-keys helm-exwm-map "M-d" 'helm-buffer-run-kill-persistent)
   (define-keys helm-exwm-map "M-o" 'helm-buffer-switch-other-window)
+  ;; Launcher
+  (exwm-input-set-key (kbd "s-r") 'helm-run-external-command)
   ;; Web browser
   (exwm-input-set-key (kbd "s-w") #'helm-exwm-switch-browser)
   (exwm-input-set-key (kbd "s-W") #'helm-exwm-switch-browser-other-window))
@@ -147,12 +155,6 @@
 (exwm-input-set-key (kbd "s-<kp-subtract>") #'exwm-start-volume-down)
 (exwm-input-set-key (kbd "s-<kp-add>") #'exwm-start-volume-up)
 (exwm-input-set-key (kbd "s-<kp-enter>") #'exwm-start-volume-toggle)
-
-(defun exwm-start (command)
-  (interactive (list (read-shell-command "$ ")))
-  (start-process-shell-command command nil command))
-(exwm-input-set-key (kbd "s-&") #'exwm-start)
-(exwm-input-set-key (kbd "s-r") #'exwm-start)
 
 ;;; Check for start-up errors. See ~/.profile.
 (let ((error-logs (directory-files "~" t "errors.*log$")))
