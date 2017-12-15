@@ -57,9 +57,9 @@
     (when (file-exists-p contacts)
       ;; When used to auto-complete e-mail addresses, the file is automatically
       ;; loaded.  The buffer usually need not be restored by a desktop session.
-      (setq desktop-files-not-to-save (if (>= (length desktop-files-not-to-save) 2)
-                                          (concat (substring desktop-files-not-to-save 0 -2) "\\|" (regexp-quote (expand-file-name contacts)) "\\)")
-                                        (regexp-quote (expand-file-name contacts))))
+      (when desktop-save-mode
+        (setq desktop-files-not-to-save
+              (concat (substring desktop-files-not-to-save 0 -2) "\\|" (regexp-quote (expand-file-name contacts)) "\\)")))
       (setq org-contacts-files (list contacts)))))
 
 (when (require 'org-bullets nil t)
