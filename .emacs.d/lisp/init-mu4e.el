@@ -123,6 +123,15 @@ Default to unread messages if no"
                         (and msg (member 'signed (mu4e-message-field msg :flags))))
                 (mml-secure-message-sign-pgpmime)))))
 
+
+;;; Org capture
+;;; TODO: Adapt to personal agenda.
+(when (require 'org-mu4e nil t)
+  (setq org-capture-templates
+        '(("t" "todo" entry (file+headline "~/todo.org" "Tasks")
+           "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
+  (setq org-mu4e-link-query-in-headers-mode nil))
+
 (load "~/personal/mail/mu4e.el" t)
 
 (provide 'init-mu4e)
