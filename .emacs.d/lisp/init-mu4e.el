@@ -125,11 +125,10 @@ Default to unread messages if no"
 
 
 ;;; Org capture
-;;; TODO: Adapt to personal agenda.
 (when (require 'org-mu4e nil t)
-  (setq org-capture-templates
-        '(("t" "todo" entry (file+headline "~/todo.org" "Tasks")
-           "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
+  (dolist (map mu4e-view-mode-map mu4e-headers-mode-map)
+    ;; Org mode has "C-c C-t" for 'org-todo.
+    (define-key map (kbd "C-c C-t") 'org-mu4e-store-and-capture))
   (setq org-mu4e-link-query-in-headers-mode nil))
 
 (load "~/personal/mail/mu4e.el" t)
