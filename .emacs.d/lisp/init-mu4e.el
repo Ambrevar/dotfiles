@@ -126,7 +126,7 @@ Default to unread messages if no"
 
 ;;; Org capture
 (when (require 'org-mu4e nil t)
-  (dolist (map mu4e-view-mode-map mu4e-headers-mode-map)
+  (dolist (map (list mu4e-view-mode-map mu4e-headers-mode-map))
     ;; Org mode has "C-c C-t" for 'org-todo.
     (define-key map (kbd "C-c C-t") 'org-mu4e-store-and-capture))
   (setq org-mu4e-link-query-in-headers-mode nil))
