@@ -46,6 +46,8 @@ c.url.searchengines = {
 }
 
 config.bind(',v', 'spawn mpv {url}')
+config.bind(',t', 'hint links spawn transmission-remote -a {hint-url}')
+config.bind(',T', 'hint -r links spawn transmission-remote -a {hint-url}')
 config.bind('yy', 'yank -s')
 config.bind('yY', 'yank')
 config.bind('yd', 'yank -s domain')
