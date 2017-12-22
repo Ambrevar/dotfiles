@@ -19,7 +19,6 @@ bison
 blender
 bridge-utils
 bullet
-busybox
 bzip2
 cabextract
 cairo
@@ -93,8 +92,8 @@ fuse2
 fuseiso
 gaupol
 gawk
-gcc-libs-multilib
-gcc-multilib
+gcc
+gcc-libs
 gcolor2
 gdb
 gens-gs
@@ -219,7 +218,6 @@ p7zip
 pacgraph
 pacman
 parallel
-pari
 parted
 patch
 pciutils
@@ -241,9 +239,8 @@ psmisc
 pstotext
 pwgen
 python-keyutils
-qt5-webkit
 qutebrowser
-ranger
+racket-minimal
 rawtherapee
 rclone
 recode
@@ -281,7 +278,6 @@ the_silver_searcher
 time
 timidity++
 timidity-freepats
-tmux
 tor
 transmission-cli
 trash-cli
@@ -308,7 +304,6 @@ v4l-utils
 valgrind
 vhba-module
 vi
-vicious
 vorbis-tools
 vsftpd
 w3m
