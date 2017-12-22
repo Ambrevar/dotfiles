@@ -183,11 +183,14 @@
 
 (require 'evil-ediff nil t)
 
-(when (require 'evil-org nil t)
-  (with-eval-after-load 'org (require 'init-evil-org))
-  (with-eval-after-load 'org-agenda
-    (require 'evil-org-agenda)
-    (evil-org-agenda-set-keys)))
+(with-eval-after-load 'org
+  ;; Don't require evil-org before org is loaded.
+  ;; Elfeed-link is loaded after org.
+  (when (require 'evil-org nil t)
+    (require 'init-evil-org)
+    (with-eval-after-load 'org-agenda
+      (require 'evil-org-agenda)
+      (evil-org-agenda-set-keys))))
 
 (with-eval-after-load 'gnus (require 'init-evil-gnus))
 
