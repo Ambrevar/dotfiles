@@ -1,0 +1,33 @@
+#!/bin/sh
+
+if [ "$1" = "-h" ]; then
+	cat <<EOF>&2
+Usage: ${0##*/} [OPTIONS]
+
+With no argument, open Transmission's interface. Otherwise, run
+transmission-remote with the provided options.
+
+In both cases if transmission-daemon is not running it will be started
+beforehand.
+
+EOF
+	exit
+fi
+
+for i in transmission-daemon transmission-remote ; do
+	if ! command -v $i >/dev/null 2>&1; then
+		echo >&2 "'$i' not found"
+		exit 1
+	fi
+done
+
+## The command is often displayed as transmission-da.
+## The 'sleep' is needed here to give the daemon some time to start. 1 sec
+## should be enough on most system.
+ps -U "$USER" -o comm= | grep -q transmission-da || { transmission-daemon && echo "Daemon started" && sleep 1 ; }
+
+if [ $# -eq 0 ]; then
+	$BROWSER http://localhost:9091/
+else
+	transmission-remote "$@"
+fi
