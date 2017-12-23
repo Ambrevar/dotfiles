@@ -332,7 +332,9 @@
 
 ;;; Torrent
 (nconc package-selected-packages '(transmission))
-(when (fboundp 'transmission)
+(with-eval-after-load 'transmission
+  (call-process "transmission-daemon")
+  (sleep-for 1)
   (setq transmission-refresh-modes '(transmission-mode transmission-files-mode transmission-info-mode transmission-peers-mode)
         transmission-refresh-interval 1))
 
