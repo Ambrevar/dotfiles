@@ -103,9 +103,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Mode specific bindings.
 
+;; Note: Config must be done before `require'-ing evil-collection.
+(setq evil-collection-setup-minibuffer t
+      evil-collection-term-sync-state-and-mode-p t)
 (when (require 'evil-collection nil t)
-  (setq evil-collection-setup-minibuffer t
-        evil-collection-term-sync-state-and-mode-p t)
   (evil-collection-init))
 
 (with-eval-after-load 'elfeed
