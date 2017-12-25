@@ -24,6 +24,7 @@ c.url.searchengines = {
     "gi": "https://www.google.com/search?site=imghp&tbm=isch&source=hp&biw=1676&bih=997&q={}",
     "gm": "https://maps.google.com/maps?q={}",
     "gp": "http://localhost:6060/pkg/{}",
+    "gr": "https://www.goodreads.com/search?q={}",
     "imdb": "http://www.imdb.com/find?q={}&s=all",
     "leo": "http://dict.leo.org/frde/index_de.html#/search={}",
     "mba": "http://musicbrainz.org/search?query={}&type=artist&method=indexed",
