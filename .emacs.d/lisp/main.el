@@ -361,4 +361,7 @@
 (setq epa-pinentry-mode 'loopback) ; This will fail if gpg>=2.1 is not available.
 (pinentry-start)
 
+;;; EWW
+(setq eww-bookmarks-directory "~/personal/bookmarks")
+
 (provide 'main)
