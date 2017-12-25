@@ -64,7 +64,6 @@ This function uses 'info-albumartistsort, 'info-albumartist,
                          (emms-track-get track 'info-date)
                          (emms-track-get track 'info-year "<unknown>"))))
            (emms-format-date-to-year date)))
-        ;; (emms-extract-year-from-date date)))
         (t (emms-track-get track type "<unknown>"))))
 
 (setq emms-browser-get-track-field-function #'emms-browser-get-track-custom)
