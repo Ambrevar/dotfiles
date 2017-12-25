@@ -48,6 +48,9 @@
   (add-to-list 'load-path site-lisp)
   (package-refresh-load-path site-lisp))
 
+;;; Local config.  See below for an example usage.
+(load "local-before" t)
+
 (require 'functions)
 (require 'main)
 (require 'visual)
@@ -390,4 +393,4 @@
 ;;
 ;; (setq calendar-latitude 20.2158)
 ;; (setq calendar-longitude 105.938)
-(load "local" t)
+(load "local-after" t)
