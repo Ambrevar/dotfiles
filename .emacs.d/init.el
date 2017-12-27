@@ -320,6 +320,9 @@
 (nconc package-selected-packages '(flycheck helm-flycheck))
 (when (require 'flycheck nil t) (require 'init-flycheck))
 
+;;; System packages
+(nconc package-selected-packages '(helm-system-packages))
+
 ;;; Terminal
 (with-eval-after-load 'term
   ;; (require 'init-term)
