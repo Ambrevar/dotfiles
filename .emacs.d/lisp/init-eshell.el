@@ -239,10 +239,10 @@ See `eshell' for the numeric prefix ARG."
         (eshell (or arg t))))))
 
 ;;; Auto-suggestion
-(when (require 'company-eshell-autosuggest nil t)
-  (setq company-eshell-autosuggest-delay 0.5)
-  (add-hook 'eshell-mode-hook 'company-eshell-autosuggest-mode)
-  (define-key company-eshell-autosuggest-active-map (kbd "<tab>") 'company-complete-selection)
+(when (require 'esh-autosuggest nil t)
+  (setq esh-autosuggest-delay 0.5)
+  (add-hook 'eshell-mode-hook 'esh-autosuggest-mode)
+  (define-key esh-autosuggest-active-map (kbd "<tab>") 'company-complete-selection)
   (when (require 'helm-config nil t)
     (define-key company-active-map (kbd "M-p") 'helm-eshell-history)))
 
