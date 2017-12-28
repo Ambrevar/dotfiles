@@ -31,6 +31,7 @@ c.url.searchengines = {
     "mbr": "http://musicbrainz.org/search?query={}&type=release&method=indexed",
     "mwr": "http://openmw.readthedocs.io/en/master/search.html?q={}&check_keywords=yes&area=default",
     "mww": "https://wiki.openmw.org/index.php?search={}&title=Special%3ASearch&go=Go",
+    "osm": "https://www.openstreetmap.org/search?query={}",
     "so": "http://stackoverflow.com/search?q={}",
     "torrent": "https://kickass.unblocked.live/search.php?q={}",
     "tpb": "https://ukpirate.click/s/?q={}",
