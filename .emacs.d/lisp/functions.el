@@ -112,6 +112,15 @@ TO-STRING."
     (error (message "Invalid expression")
            (insert (current-kill 0)))))
 
+(defun eval-last-sexp-and-replace (arg)
+  "Like `eval-last-sexp' but vall `eval-and-replace' with double prefix arg."
+  (interactive "P")
+  (message "%S" arg)
+  (if (equal current-prefix-arg '(16))
+      (eval-and-replace)
+    (eval-last-sexp arg)))
+(global-set-key (kbd "C-x C-e") 'eval-last-sexp-and-replace)
+
 (defun find-symbol-at-point ()
   "Find directly the symbol at point, i.e. go to definition."
   (interactive)
