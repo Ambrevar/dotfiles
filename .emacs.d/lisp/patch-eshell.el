@@ -207,4 +207,11 @@ See `eshell-prompt-regexp'."
     (define-key eshell-command-map [(control ?l)] 'eshell-list-history)
     (define-key eshell-command-map [(control ?x)] 'eshell-get-next-from-history)))
 
+;;; Fix 29854, expected in Emacs 26.1?
+(setq
+ ansi-color-apply-face-function
+ (lambda (beg end face)
+   (when face
+     (put-text-property beg end 'face face))))
+
 (provide 'patch-eshell)
