@@ -121,6 +121,7 @@
 (nconc package-selected-packages '(evil
                                    evil-commentary evil-mc evil-mc-extras linum-relative
                                    evil-ediff evil-magit evil-mu4e evil-org evil-collection))
+(setq evil-want-integration nil)
 (when (require 'evil nil t) (require 'init-evil))
 
 ;;; Eshell
