@@ -72,6 +72,10 @@ if command -v pacman >/dev/null 2>&1; then
 	if $OPT_UPDATE && [ -f ~/.pkglists/arch-aur ]; then
 		pacaur --noconfirm --noedit -y --needed "$(cat ~/.pkglists/arch-aur)"
 	fi
+	pacman_list=$(pacman -Qdtq)
+	if [ -n "$pacman_list" ]; then
+		sudo pacman --noconfirm -Rs "$pacman_list"
+	fi
 fi
 
 echo "==> 'temp' folder"
