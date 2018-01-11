@@ -29,6 +29,9 @@ SOURCEDIR="$HOME/personal"
 
 ## ln no-clobber
 lnn() {
+	if [ -d "$2" ]; then
+		set -- "$1" "$2/$(basename "$1")"
+	fi
 	if [ ! -e "$2" ] || [ -h "$2" ]; then
 		ln -svnf "$1" "$2"
 	fi
