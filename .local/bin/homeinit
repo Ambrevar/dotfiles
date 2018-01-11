@@ -9,14 +9,16 @@ Initialize home folder.
 
 Options:
 
-  -u: Update Go tools.
+  -u: Update packages, etc.
 
 EOF
 	exit
 fi
 
+OPT_UPDATE=false
 OPT_GO=""
 if [ "$1" = "-u" ]; then
+	OPT_UPDATE=true
 	OPT_GO="-u"
 	shift
 fi
@@ -43,6 +45,32 @@ git_update() {
 	fi
 }
 
+echo "==> System packages"
+if command -v pacman >/dev/null 2>&1; then
+	pacman_list=""
+	if [ -f ~/.pkglists/arch-official ]; then
+		pacman_list="$(cat ~/.pkglists/arch-official)"
+	fi
+	sudo pacman --noconfirm -S --needed base base-devel $pacman_list
+	if ! command -v cower >/dev/null 2>&1; then
+		mkdir -p /tmp/cower
+		pushd /tmp/cower
+		curl https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower > PKGBUILD
+		makepkg --noconfirm -si
+		popd
+	fi
+	if ! command -v pacaur >/dev/null 2>&1; then
+		mkdir -p /tmp
+		cower -d pacaur
+		pushd /tmp/pacaur
+		makepkg --noconfirm -si
+		popd
+	fi
+	if $OPT_UPDATE && [ -f ~/.pkglists/arch-aur ]; then
+		pacaur --noconfirm --noedit -y --needed "$(cat ~/.pkglists/arch-aur)"
+	fi
+fi
+
 echo "==> 'temp' folder"
 mkdir -pv "$HOME/temp"
 
@@ -52,8 +80,10 @@ lnn "$SOURCEDIR/bookmarks/bookmarks" "$XDG_CONFIG_HOME/qutebrowser/bookmarks/url
 lnn "$SOURCEDIR/bookmarks/quickmarks" "$XDG_CONFIG_HOME/qutebrowser/"
 
 if command -v emacs >/dev/null 2>&1; then
-	echo "==> Emacs ELPA packages"
-	yes | emacs --batch -l ~/.emacs.d/init.el --eval '(progn (package-refresh-contents) (package-install-selected-packages))'
+	if $OPT_UPDATE; then
+		echo "==> Emacs ELPA packages"
+		yes | emacs --batch -l ~/.emacs.d/init.el --eval '(progn (package-refresh-contents) (package-install-selected-packages))'
+	fi
 	echo "==> Emacs extra packages"
 	mkdir -pv ~/.emacs.d/site-lisp
 fi
@@ -78,17 +108,22 @@ fi
 echo "==> Mail"
 lnn "$SOURCEDIR/mail/mbsyncrc" "$HOME/.mbsyncrc"
 mkdir -pv "$HOME/.cache/mail/"
-while IFS= read -r i; do
-	## We get a shell command, so we need to evaluate it to expand "~".
-	eval "$i"
-done <<EOF
+if $OPT_UPDATE; then
+	while IFS= read -r i; do
+		## We get a shell command, so we need to evaluate it to expand "~".
+		eval "$i"
+	done <<EOF
 $(awk '/^Path/ {$1="mkdir -pv"; print}' ~/.mbsyncrc)
 EOF
+fi
 
 if [ ! -e ~/.authinfo.gpg ]; then
 	## TODO: Why does it prompt for the GPG passphrase twice per account?
 	## TODO: Does not work with --batch for some reason, so we have to spawn Emacs.
 emacs --eval '(progn (when (require '"'"'mu4e nil t) (let ((auth-sources (list "~/.authinfo.gpg")) (auth-source-save-behavior t)) (dolist (context mu4e-contexts) (mu4e-context-switch nil (mu4e-context-name context)) (funcall (plist-get (car (auth-source-search :max 1 :host smtpmail-smtp-server :port smtpmail-smtp-service :user smtpmail-smtp-user :require '"'"'(:user :secret) :create t)) :save-function))))) (kill-emacs))'
 fi
-mbsync -aV
-mu index --maildir=~/.cache/mail
+
+if $OPT_UPDATE; then
+	mbsync -aV
+	mu index --maildir=~/.cache/mail
+fi
