@@ -176,7 +176,10 @@
                                   (executable-find browse-url-conkeror-program)
                                   (executable-find browse-url-chrome-program)))
 
-
+;;; Extend MIME-types support (Matroska/mkv).
+(with-eval-after-load 'mailcap
+  (add-to-list 'mailcap-mime-extensions '(".webm" . "video/webm"))
+  (add-to-list 'mailcap-mime-extensions '(".mkv" . "video/x-matroska")))
 
 ;;; Default ispell dictionary. If not set, Emacs uses the current locale.
 (setq ispell-dictionary "english")
