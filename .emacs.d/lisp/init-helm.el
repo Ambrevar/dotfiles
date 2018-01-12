@@ -50,7 +50,7 @@
  helm-reuse-last-window-split-state t
  helm-display-header-line nil
  helm-findutils-search-full-path t
- helm-show-completion-use-special-display nil
+ helm-show-completion-display-function nil
  helm-completion-mode-string ""
  helm-dwim-target 'completion
 
