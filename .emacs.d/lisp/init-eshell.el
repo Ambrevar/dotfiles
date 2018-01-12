@@ -212,11 +212,9 @@
 (defun eshell-hist-use-global-history ()
   "Make Eshell history shared across different sessions."
   (unless eshell-history-global-ring
-    (let (eshell-history-ring)
-      (when eshell-history-file-name
-        (eshell-read-history nil t))
-      (setq eshell-history-global-ring eshell-history-ring))
-    (unless eshell-history-ring (setq eshell-history-global-ring (make-ring eshell-history-size))))
+    (when eshell-history-file-name
+      (eshell-read-history nil t))
+    (setq eshell-history-global-ring (or eshell-history-ring (make-ring eshell-history-size))))
   (setq eshell-history-ring eshell-history-global-ring))
 (add-hook 'eshell-mode-hook 'eshell-hist-use-global-history)
 
