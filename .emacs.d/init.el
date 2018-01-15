@@ -324,6 +324,7 @@
 
 ;;; System packages
 (nconc package-selected-packages '(helm-system-packages))
+(global-set-key (kbd "C-x c #") 'helm-system-packages)
 
 ;;; Terminal
 (with-eval-after-load 'term
