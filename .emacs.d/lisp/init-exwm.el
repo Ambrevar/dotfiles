@@ -119,7 +119,7 @@
                                     helm-source-bookmark-set
                                     helm-source-buffer-not-found))
   (define-keys helm-exwm-map "M-d" 'helm-buffer-run-kill-persistent)
-  (define-keys helm-exwm-map "M-o" 'helm-buffer-switch-other-window)
+  (define-keys helm-exwm-map "S-<return>" 'helm-buffer-switch-other-window)
   ;; Launcher
   (exwm-input-set-key (kbd "s-r") 'helm-run-external-command)
   ;; Web browser
