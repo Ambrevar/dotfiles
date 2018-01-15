@@ -26,5 +26,8 @@ xcape -e 'Control_L=Escape'
 numlockx on
 # xinput disable "SynPS/2 Synaptics TouchPad"
 
+## Lock screen on sleep.
+xss-lock slock &
+
 ## Hook. Should be sourced last.
 [ -f ~/.xprofile_hook ] && . ~/.xprofile_hook
