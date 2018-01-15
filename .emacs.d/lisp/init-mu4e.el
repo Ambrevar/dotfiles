@@ -34,8 +34,8 @@ Default to unread messages if no"
  ;; IMAP sync.
  mu4e-maildir "~/.cache/mail"
  mu4e-get-mail-command "mbsync -a"
- mu4e-update-interval 120
- mu4e-change-filenames-when-moving t ; Needed for mbsync.
+ mu4e-update-interval 90
+ mu4e-change-filenames-when-moving t ; Preferred for mbsync according to the man page.
 
  ;; SMTP
  message-send-mail-function 'smtpmail-send-it
@@ -70,6 +70,9 @@ Default to unread messages if no"
 
  ;; Gmail-style threading.
  mu4e-headers-include-related t
+
+ ;; Gmail likes format=flowed(?)
+ ;; mu4e-compose-format-flowed
 
  ;; Because default completion can be extended (e.g. Helm, Ivy).
  mu4e-completing-read-function 'completing-read)
