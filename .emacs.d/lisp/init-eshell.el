@@ -98,6 +98,8 @@
 
 ;;; Use native 'sudo', system sudo asks for password every time.
 (require 'em-tramp)
+(setq password-cache t)
+(setq password-cache-expiry nil)
 
 (with-eval-after-load 'esh-module
   ;; Don't print the banner.
