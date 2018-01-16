@@ -156,6 +156,8 @@
       "p" 'mu4e-headers-toggle-include-related
       "r" 'mu4e-compose-reply)
     (evil-define-key 'visual mu4e-headers-mode-map
+      "d" 'mu4e-headers-mark-for-trash
+      "D" 'mu4e-headers-mark-for-delete
       "u" 'mu4e-headers-mark-for-unmark)
     (evil-define-key 'motion mu4e-view-mode-map
       (kbd "SPC") 'mu4e-view-scroll-up-or-next
@@ -172,7 +174,9 @@
       "h" 'evil-backward-char
       "zh" 'mu4e-view-toggle-html
       "gx" 'mu4e-view-go-to-url)
-    (evil-set-initial-state 'mu4e-compose-mode 'insert)))
+    (evil-set-initial-state 'mu4e-compose-mode 'insert)
+    (evil-define-key 'normal mu4e-compose-mode-map
+      "gg" 'mu4e-compose-goto-top)))
 
 (with-eval-after-load 'magit
   (when (require 'evil-magit nil t)
