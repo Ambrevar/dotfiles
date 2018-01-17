@@ -96,10 +96,10 @@
 
 (setq eshell-directory-name (concat emacs-cache-folder "eshell"))
 
-;;; Use native 'sudo', system sudo asks for password every time.
+;;; Use TRAMP to use Eshell as root.
 (require 'em-tramp)
 (setq password-cache t)
-(setq password-cache-expiry nil)
+(setq password-cache-expiry 3600)
 
 (with-eval-after-load 'esh-module
   ;; Don't print the banner.
