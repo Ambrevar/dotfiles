@@ -5,13 +5,14 @@ c.content.cache.size = 5242880
 c.downloads.location.directory = "~/temp"
 c.downloads.location.prompt = False
 c.downloads.location.remember = True
-c.editor.command = ["emacsclient", "{}"]
+c.editor.command = ["emacsclient", "+{line}:{column}", "{}"]
 c.hints.scatter = False
 c.hints.uppercase = True
 c.input.partial_timeout = 2000
 c.tabs.tabs_are_windows = True
 c.tabs.show = "multiple"
 c.window.title_format = "{title}{title_sep}{host}"
+c.session.lazy_restore = True
 c.url.searchengines = {
     "DEFAULT": "https://duckduckgo.com/?q={}",
     "arch": "http://wiki.archlinux.org/index.php?title=Special%3ASearch&search={}&go=Go",
@@ -62,6 +63,7 @@ config.bind('pp', 'open -- {primary}')
 config.bind('pP', 'open -- {clipboard}')
 config.bind('Pp', 'open -t -- {primary}')
 config.bind('PP', 'open -t -- {clipboard}')
+config.bind('<ctrl-e>', 'edit-command', mode='command')
 config.bind('<alt-h>', 'completion-item-focus prev-category', mode='command')
 config.bind('<alt-l>', 'completion-item-focus next-category', mode='command')
 config.bind('<alt-j>', 'completion-item-focus next', mode='command')
