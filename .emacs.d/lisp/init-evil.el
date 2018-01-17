@@ -206,7 +206,6 @@
       "<" 'org-up-element ; Custom
       ">" 'org-down-element ; Custom
       (kbd "M-<return>") 'evil-org-meta-return)
-    (require 'init-evil-org)
     (with-eval-after-load 'org-agenda
       (require 'evil-org-agenda)
       (evil-org-agenda-set-keys))))
