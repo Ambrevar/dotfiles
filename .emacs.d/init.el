@@ -38,6 +38,8 @@
   (package-initialize))
 
 ;;; Site Lisp folder for local packages and development.
+;; We need to roll it out manually since we want it first in the `load-path',
+;; while `normal-top-level-add-subdirs-to-load-path' appends it to the very end.
 (defun package-refresh-load-path (path)
   "Add every non-hidden sub-folder of PATH to `load-path'."
   (when (file-directory-p path)
