@@ -3,9 +3,6 @@
 
 ;;; TODO: `beginning-of-defun'/`end-of-defun' should go to next section.
 
-;;; TODO: Replace init-tex, init-texinfo and init-latex with AucTeX.
-;;; Only keep some skeletons.
-
 ;;; We use the TeX setup.
 (require 'init-tex)
 (require 'latex-pretty-symbols nil t)
@@ -13,17 +10,16 @@
 ;;; Since current buffer is a LaTeX one, we can use `local-set-key'.
 (local-set-keys
  "C-c m" 'latex-article
- "C-c C-a" 'latex-insert-table
- "C-c C-c" 'latex-smallcaps
- "C-c C-e" 'latex-emph
- "C-c C-l" 'latex-slanted
- "C-c C-s" 'latex-insert-section
- "C-c C-u" 'latex-superscript
  "C-c l" 'latex-lstinline
- "C-c o" 'latex-orgtbl
- "C-c u" 'latex-package
- "M-<return>" 'latex-itemize)
+ "C-c o" 'latex-orgtbl)
 
+(dolist (fun '(turn-on-orgtbl turn-on-skeleton-markers))
+  ;; Since this file is loaded from `latex-mode-hook', these functions will not
+  ;; be applied to the current buffer.  We do it manually.
+  (funcall fun)
+  (add-hook 'latex-mode-hook fun))
+
+;;; latex-math-preview
 ;;; Needs dvipng.
 ;;; With TeXlive, the following packages are needed: psnfss, symbol, zapfding
 (when (and (executable-find "dvipng") (require 'latex-math-preview nil t))
@@ -35,119 +31,27 @@
   ;; Any color package should be filtered out as they will have unexpected impact on coloring.
   (add-to-list 'latex-math-preview-usepackage-filter-alist '("color")))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Functions
-
-(defun latex-itemize ()
-  "Itemize current line or lines in region.
-Prepend \\item to the beginning of the lines if not already
-there, otherwise insert it on next line. If region, surround it
-by an {itemize} environment."
-  (interactive)
-  (let (min max)
-    (if (not (use-region-p))
-        (if (string-match "\\item" (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
-            (progn
-              (goto-char (line-end-position))
-              (newline)
-              (insert "\\item "))
-          (goto-char (line-beginning-position))
-          (insert "\\item")
-          (just-one-space))
-      ;; On region:
-      (let ((end-marker (set-marker (make-marker) (region-end))))
-        (goto-char (region-beginning))
-        (goto-char (line-beginning-position))
-        (insert "\\begin{itemize}")
-        (newline-and-indent)
-        (while (and (< (line-beginning-position) end-marker) (not (eobp)))
-          (insert "\\item")
-          (just-one-space)
-          (indent-according-to-mode)
-          (forward-line))
-        (insert "\\end{itemize}")
-        (newline-and-indent)))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; LaTeX setup
-
-(setq latex-block-default "itemize")
-(setq latex-block-names '("listing" "align" "align*" "Bmatrix" "Vmatrix" "bmatrix" "matrix" "pmatrix" "smallmatrix" "vmatrix"))
-
-(dolist (block '("listing" "verbatim" "verbatim*"))
-  (add-to-list 'latex-block-body-alist `(,block nil '(delete-horizontal-space t) _)))
-
-(defun latex-set-compiler ()
-  (set (make-local-variable 'tex-extension-list)
-       '("aux" "bbl" "blg" "glg" "glo" "gls" "idx" "ilg" "ind" "lof" "log" "maf" "mt" "mtc" "nav" "out" "snm" "synctex" "synctex.gz" "tns" "toc" "xdy"))
-  (set (make-local-variable 'tex-command) "pdflatex")
-  ;; Need to reset the compiler because we changed tex-command, order matters.
-  (tex-set-compiler))
-
 ;;; For some unknown reasons, `skeleton-end-hook' is set to nil in tex-mode.
-(dolist (fun '(latex-set-compiler turn-on-orgtbl turn-on-skeleton-markers))
-  ;; Since this file is loaded from `latex-mode-hook', these functions will not
-  ;; be applied to the current buffer. We do it manually.
-  (funcall fun)
-  (add-hook 'latex-mode-hook fun))
+;; (dolist (fun '(latex-set-compiler turn-on-orgtbl turn-on-skeleton-markers))
+;;   ;; Since this file is loaded from `latex-mode-hook', these functions will not
+;;   ;; be applied to the current buffer. We do it manually.
+;;   (funcall fun)
+;;   (add-hook 'latex-mode-hook fun))
+
+(with-eval-after-load 'latex ; AUCTeX
+  (advice-add 'LaTeX-insert-item :before (lambda () (end-of-line)))
+
+  (with-eval-after-load 'font-latex
+    (set-face-foreground 'font-latex-sectioning-5-face "white"))
+
+  ;; TODO: Add "tabu" and "longtabu" to environment list.
+
+  (require 'tex-fold)
+  (add-hook 'LaTeX-mode-hook 'TeX-fold-mode)
+  (add-hook 'find-file-hook 'TeX-fold-buffer t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Skeletons
-
-(define-skeleton latex-emph "Insert emph." nil "\\emph{" @ _ "}" @)
-(define-skeleton latex-slanted "Insert slanted text." nil "\\textsl{" @ _ "}" @)
-(define-skeleton latex-smallcaps "Insert smallcaps text." nil "\\textsc{" @ _ "}" @)
-(define-skeleton latex-superscript "Insert supercript text." nil "\\textsuperscript{" @ _ "}" @)
-(define-skeleton latex-package "Use package." "Package: " \n "\\usepackage[" @ "]{" @ _ "}" \n @)
-
-(defvar latex-section-default "section")
-(defvar latex-section-names
-  '("part" "part*" "chapter" "chapter*" "section*" "subsection" "subsection*"
-    "subsubsection" "subsubsection*" "paragraph" "paragraph*" "subparagraph" "subparagraph*")
-  "Standard LaTeX section names.")
-
-(define-skeleton latex-insert-section
-  "Insert section at point.
-Puts point to section title. Section are auto-completed from
-`latex-section-names'."
-  (let ((choice (completing-read (format "LaTeX section name [%s]: "
-                                         latex-section-default)
-                                 latex-section-names
-                                 nil nil nil nil latex-section-default)))
-    (setq latex-section-default choice)
-    (unless (member choice latex-section-names)
-      ;; Remember new block names for later completion.
-      (push choice latex-section-names))
-    choice)
-  \n "\\" str "{" @ _ "}" @)
-
-(defvar latex-table-default "tabular")
-(defvar latex-table-names
-  '("tabular" "tabu" "tabular*" "tabularx" "tabulary" "longtabu")
-  "Standard LaTeX table names.")
-
-(define-skeleton latex-insert-table
-  "Create a table at point.
-The table type is any value found in `latex-table-names'."
-  (let ((choice (completing-read (format "LaTeX table type [%s]: "
-                                         latex-table-default)
-                                 latex-table-names
-                                 nil nil nil nil latex-table-default)))
-    (setq latex-table-default choice)
-    (unless (member choice latex-table-names)
-      ;; Remember new block names for later completion.
-      (push choice latex-table-names))
-    choice)
-  '(require 'functions)
-  \n "\\begin{center}" > \n
-  "\\begin{" str "}{"
-  '(setq v1 (skeleton-read "Format: " "ll"))
-  v1 "}" > \n
-  '(setq v2 (count-occurences "[a-z]" v1))
-  @ (mapconcat 'identity (split-string (make-string v2 ?&) "" t) " ") " \\\\" \n
-    @ _ "\\\\" \n
-      "\\end{" str "}" > \n
-      "\\end{center}" > \n @)
 
 ;;; TODO: implement orgtbl directly with latex tables and remove this skel.
 (define-skeleton latex-orgtbl

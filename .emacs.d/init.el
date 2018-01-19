@@ -334,12 +334,11 @@
   (setq term-buffer-maximum-size 0))
 
 ;;; TeX / LaTeX / Texinfo
-(with-eval-after-load 'tex-mode (require 'init-tex))
-(with-eval-after-load 'texinfo (require 'init-texinfo))
-;;; LaTeX is defined in the same file as TeX. To separate the loading, we add it
-;;; to the hook.
+(nconc package-selected-packages '(auctex latex-math-preview))
+(with-eval-after-load 'tex (require 'init-tex))
+;; LaTeX is defined in the same file as TeX.  To separate the loading, we add it
+;; to the hook.
 (add-hook 'latex-mode-hook (lambda () (require 'init-latex)))
-(nconc package-selected-packages '(latex-math-preview))
 
 ;;; Torrent
 (nconc package-selected-packages '(transmission))
