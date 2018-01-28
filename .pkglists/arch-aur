@@ -12,5 +12,4 @@ pacaur
 sdlmame-wout-toolkits
 tespeed-git
 texlive-dummy
-translate-git
-xss-lock
+translate-shell

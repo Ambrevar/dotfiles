@@ -245,6 +245,7 @@ racket-minimal
 rawtherapee
 rclone
 recode
+recordmydesktop
 reiserfsprogs
 rfkill
 rmlint
@@ -352,6 +353,7 @@ xorg-xrdb
 xorg-xset
 xosd
 xsel
+xss-lock
 xterm
 xz
 youtube-dl
