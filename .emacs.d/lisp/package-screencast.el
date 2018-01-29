@@ -1,6 +1,5 @@
 ;;; screencast.el
 
-;; TODO: Add option to remove temp .png.  Toggle with prefix?
 ;; TODO: Add countdown?
 ;; TODO: Message which key to use to stop the video.  Make it customizable.  Use
 ;; minor mode.
@@ -36,12 +35,16 @@ various programs run here.")
 (defvar screencast-output-dir (expand-file-name "Videos/emacs/" "~")
   "Default output directory.")
 
+(defvar screencast-autoremove-screenshots-p t
+  "If non nil, remove the temporary screenshots after a successful compilation of the GIF.")
+
 (defvar screencast--binding-backup nil)
 (defvar screencast--frames nil)
 
 ;; TODO: Capture on scrolling (e.g. program outputting to Eshell buffer).
 ;; Use timer?
 (defun screencast-capture ()
+  "Save result of `screencast-program' to `screencast-output-dir'."
   (let* ((time (current-time))
          (file (expand-file-name
                 (format-time-string "screen-%F-%T-%3N.png" time)
@@ -50,6 +53,8 @@ various programs run here.")
     (push (cons time file) screencast--frames)))
 
 (defun screencast-start ()
+  "Start recording the GIF.
+A screenshot is taken before every command runs."
   (interactive)
   (setq screencast--binding-backup (lookup-key global-map (kbd "<f12>")))
   (global-set-key (kbd "<f12>") 'screencast-stop)
@@ -59,6 +64,7 @@ various programs run here.")
   (add-hook 'pre-command-hook 'screencast-capture))
 
 (defun screencast-stop ()
+  "Stop recording and compile GIF."
   (interactive)
   (remove-hook 'pre-command-hook 'screencast-capture)
   (global-set-key (kbd "<f12>") screencast--binding-backup)
@@ -75,22 +81,28 @@ various programs run here.")
             delays)
       (setq index (1+ index)
             frames (cdr frames)))
-    (let ((output (expand-file-name
+    (let (status
+          (output (expand-file-name
                    (format-time-string "output-%F-%T.gif" (current-time))
                    screencast-output-dir)))
-      (apply 'call-process
-             screencast-convert-program
-             nil (list (get-buffer-create screencast-log) t) nil
-             (append
-              screencast-convert-args
-              (mapcar 'cdr screencast--frames)
-              ;; Delays must come after the file arguments.
-              (apply 'nconc delays)
-              (list output)))
+      (setq status
+            (apply 'call-process
+                   screencast-convert-program
+                   nil (list (get-buffer-create screencast-log) t) nil
+                   (append
+                    screencast-convert-args
+                    (mapcar 'cdr screencast--frames)
+                    ;; Delays must come after the file arguments.
+                    (apply 'nconc delays)
+                    (list output))))
       (when screencast-optimize-p
         (apply 'call-process
                screencast-optimize-program
                nil (list (get-buffer-create screencast-log) t) nil
                (append
                 screencast-optimize-args
-                (list output)))))))
+                (list output)))))
+    (when (and screencast-autoremove-screenshots-p
+               (= status 0))
+      (dolist (f screencast--frames)
+        (delete-file (cdr f))))))
