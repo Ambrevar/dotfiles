@@ -179,6 +179,7 @@
 ;;; Extend MIME-types support (Matroska/mkv).
 (with-eval-after-load 'mailcap
   (add-to-list 'mailcap-mime-extensions '(".webm" . "video/webm"))
+  (add-to-list 'mailcap-mime-extensions '(".mp4" . "video/mpeg"))
   (add-to-list 'mailcap-mime-extensions '(".mkv" . "video/x-matroska")))
 
 ;;; Default ispell dictionary. If not set, Emacs uses the current locale.
