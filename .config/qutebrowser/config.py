@@ -68,6 +68,8 @@ config.bind('<alt-h>', 'completion-item-focus prev-category', mode='command')
 config.bind('<alt-l>', 'completion-item-focus next-category', mode='command')
 config.bind('<alt-j>', 'completion-item-focus next', mode='command')
 config.bind('<alt-k>', 'completion-item-focus prev', mode='command')
+config.bind('<alt-[>', 'completion-item-focus prev-category', mode='command')
+config.bind('<alt-]>', 'completion-item-focus next-category', mode='command')
 
 ## Uncomment this to still load settings configured via autoconfig.yml
 # config.load_autoconfig()
