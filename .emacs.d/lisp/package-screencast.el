@@ -2,23 +2,42 @@
 
 ;; TODO: Add option to remove temp .png.  Toggle with prefix?
 ;; TODO: Add countdown?
-;; TODO: Message which key to use to stop the video.  Make it customizable.
-;; TODO: Prompt for output?
-;; TODO: Run `gifsicle -b -O3` on result?  Make it customizable.
+;; TODO: Message which key to use to stop the video.  Make it customizable.  Use
+;; minor mode.
+;; TODO: Prompt for output path?
 
-(defvar screencast-program "scrot")
-;; TODO: Select window.
-(defvar screencast-args '("-q" "25"))
+(defvar screencast-program "scrot"
+  "A program for taking screenshots.")
 
-(defvar screencast-log "*screencast-log*")
+(defvar screencast-args '("--quality" "25")
+  "Arguments to `screencast-program'.
+\"scrot\" can use `--focused' to only capture the focused window.")
 
-(defvar screencast-convert-program "convert")
-(defvar screencast-convert-args '("-delay" "100" "-loop" "0" "-dither" "None" "-colors" "80" "-fuzz" "40%" "-layers" "OptimizeFrame"))
+(defvar screencast-log "*screencast-log*"
+  "Name of the buffer logging the actions.
+The log is made of the standard output and standard error of the
+various programs run here.")
+
+(defvar screencast-convert-program "convert"
+  "A program for converting the screenshots to a GIF.")
+
+(defvar screencast-convert-args '("-delay" "100" "-loop" "0" "-dither" "None" "-colors" "80" "-fuzz" "40%" "-layers" "OptimizeFrame")
+  "Arguments to `screencast-convert-program'.")
+
+(defvar screencast-optimize-p t
+  "If non-nil, run `screencast-optimize-program' over the resulting GIF.")
+
+(defvar screencast-optimize-program "gifsicle"
+  "A program for optimizing GIF files.")
+
+(defvar screencast-optimize-args '("--batch" "--optimize=3")
+  "Arguments to `screencast-optimize-program'.")
+
+(defvar screencast-output-dir (expand-file-name "Videos/emacs/" "~")
+  "Default output directory.")
 
 (defvar screencast--binding-backup nil)
 (defvar screencast--frames nil)
-
-(defvar screencast-output-dir (expand-file-name "Videos/emacs/" "~"))
 
 ;; TODO: Capture on scrolling (e.g. program outputting to Eshell buffer).
 ;; Use timer?
@@ -56,14 +75,22 @@
             delays)
       (setq index (1+ index)
             frames (cdr frames)))
-    (apply 'call-process
-           screencast-convert-program
-           nil (list (get-buffer-create screencast-log) t) nil
-           (append
-            screencast-convert-args
-            (mapcar 'cdr screencast--frames)
-            ;; Delays must come after the file arguments.
-            (apply 'nconc delays)
-            (list (expand-file-name
+    (let ((output (expand-file-name
                    (format-time-string "output-%F-%T.gif" (current-time))
-                   screencast-output-dir))))))
+                   screencast-output-dir)))
+      (apply 'call-process
+             screencast-convert-program
+             nil (list (get-buffer-create screencast-log) t) nil
+             (append
+              screencast-convert-args
+              (mapcar 'cdr screencast--frames)
+              ;; Delays must come after the file arguments.
+              (apply 'nconc delays)
+              (list output)))
+      (when screencast-optimize-p
+        (apply 'call-process
+               screencast-optimize-program
+               nil (list (get-buffer-create screencast-log) t) nil
+               (append
+                screencast-optimize-args
+                (list output)))))))
