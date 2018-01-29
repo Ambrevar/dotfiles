@@ -81,6 +81,12 @@
 ;;; Bison/Flex
 ;; (nconc package-selected-packages '(bison-mode))
 
+;;; Camcorder
+(nconc package-selected-packages '(camcorder))
+(with-eval-after-load 'camcorder
+  (setq camcorder-gif-output-directory "~/temp"
+        camcorder-output-directory "~/temp"))
+
 ;;; C/C++
 (with-eval-after-load 'cc-mode (require 'init-cc))
 
