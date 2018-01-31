@@ -1,7 +1,11 @@
 [Added Associations]
 image/jpeg=sxiv.desktop
 video/H264=mpv.desktop
+text/html=qutebrowser.desktop
 
 [Default Applications]
+image/jpeg=sxiv.desktop
+image/png=sxiv.desktop
+text/html=qutebrowser.desktop
 x-scheme-handler/http=qutebrowser.desktop
 x-scheme-handler/https=qutebrowser.desktop
