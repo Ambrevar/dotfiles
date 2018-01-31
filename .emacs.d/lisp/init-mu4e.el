@@ -116,16 +116,27 @@ Default to unread messages if no"
   (dolist (map (list mu4e-headers-mode-map mu4e-main-mode-map mu4e-view-mode-map))
     (define-key map "s" 'helm-mu)))
 
-;;; Sign for specific addresses when parent message is signed or if
-;;; `mu4e-compose-signed-p' is non-nil.
 (defvar mu4e-compose-signed-p nil)
-(add-hook 'mu4e-compose-mode-hook
-          (defun mu4e-compose-maybe-signed ()
-            (let ((msg mu4e-compose-parent-message))
-              (when (or mu4e-compose-signed-p
-                        (and msg (member 'signed (mu4e-message-field msg :flags))))
-                (mml-secure-message-sign-pgpmime)))))
+(defvar mu4e-compose-signed-and-crypted-p nil)
+(defun mu4e-compose-maybe-signed-and-crypted ()
+  "Maybe sign or encrypt+sign message.
+Message is signed or encrypted+signed when replying to a signed or encrypted
+message, respectively.
 
+Alternatively, message is signed or encrypted+signed if
+`mu4e-compose-signed-p' or `mu4e-compose-signed-and-crypted-p' is
+non-nil, respectively.
+
+This function is suitable for `mu4e-compose-mode-hook'."
+  (let ((msg mu4e-compose-parent-message))
+    (cond
+     ((or mu4e-compose-signed-and-crypted-p
+          (and msg (member 'encrypted (mu4e-message-field msg :flags))))
+      (mml-secure-message-sign-encrypt))
+     ((or mu4e-compose-signed-p
+          (and msg (member 'signed (mu4e-message-field msg :flags))))
+      (mml-secure-message-sign-pgpmime)))))
+(add-hook 'mu4e-compose-mode-hook 'mu4e-compose-maybe-signed-and-crypted)
 
 ;;; Org capture
 (when (require 'org-mu4e nil t)
