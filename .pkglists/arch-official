@@ -222,6 +222,7 @@ pacgraph
 pacman
 parallel
 parted
+pass
 patch
 pciutils
 pcmciautils
