@@ -267,6 +267,9 @@
 ;;; Packaging
 (nconc package-selected-packages '(esup package-lint))
 
+;;; Pass
+(nconc package-selected-packages '(helm-pass))
+
 ;;; PDF
 ;;; pdf-tools requires poppler built with cairo support.
 ;;; We cannot defer loading as `pdf-tools-install' is required for PDF
