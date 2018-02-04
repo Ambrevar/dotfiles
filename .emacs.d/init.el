@@ -369,10 +369,30 @@
         transmission-refresh-interval 1))
 
 ;;; Translator
-;;; TODO: Find alternative package.
-(autoload 'itranslate "package-itranslate" nil t)
-(autoload 'itranslate-lines "package-itranslate" nil t)
-(autoload 'itranslate-region "package-itranslate" nil t)
+(nconc package-selected-packages '(google-translate))
+(when (require 'google-translate nil t)
+  (require 'google-translate-default-ui)
+  ;; (global-set-key "\C-ct" 'google-translate-at-point)
+  ;; (global-set-key "\C-cT" 'google-translate-query-translate)
+  (defun google-translate-line ()
+    "Translate current line and insert result after it, separated by ' = '."
+    (interactive)
+    (let* ((langs (google-translate-read-args nil nil))
+           (source-language (car langs))
+           (target-language (cadr langs))
+           text
+           result)
+      (end-of-line)
+      (just-one-space)
+      (setq text (buffer-substring-no-properties
+                  (line-beginning-position) (line-end-position)))
+      (setq result (with-temp-buffer
+                     (google-translate-translate
+                      source-language target-language
+                      text
+                      'current-buffer)
+                     (buffer-string))
+            (insert "= " result)))))
 
 ;;; Web forms.
 ;;; Remove auto-fill in web edits because wikis and forums do not like it.
