@@ -82,10 +82,12 @@
 ;; (nconc package-selected-packages '(bison-mode))
 
 ;;; Camcorder
-(nconc package-selected-packages '(camcorder))
+;; (nconc package-selected-packages '(camcorder))
 (with-eval-after-load 'camcorder
-  (setq camcorder-gif-output-directory "~/temp"
-        camcorder-output-directory "~/temp"))
+  (setq camcorder-output-directory (expand-file-name "temp" "~")
+        camcorder-gif-output-directory camcorder-output-directory)
+  (setq camcorder-recording-command '("recordmydesktop" " --fps 10 --no-sound --windowid " window-id " -o " file))
+  (add-to-list 'camcorder-gif-conversion-commands '("ffmpeg-slow" "ffmpeg -i " input-file " -vf 'fps=10,scale=1024:-1:flags=lanczos' " gif-file)))
 
 ;;; C/C++
 (with-eval-after-load 'cc-mode (require 'init-cc))
