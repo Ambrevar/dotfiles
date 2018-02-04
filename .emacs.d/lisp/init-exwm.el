@@ -75,6 +75,8 @@
   (exwm-input-set-key (kbd "s-b") #'helm-mini)
   (exwm-input-set-key (kbd "s-f") #'helm-find-files)
   (exwm-input-set-key (kbd "s-F") #'helm-locate)
+  (when (fboundp 'helm-locate-meta)
+    (exwm-input-set-key (kbd "s-F") #'helm-locate-meta))
   (exwm-input-set-key (kbd "s-g") #'helm-grep-git-or-ag)
   (exwm-input-set-key (kbd "s-G") #'helm-grep-git-all-or-ag))
 

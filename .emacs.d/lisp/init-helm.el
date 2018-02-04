@@ -239,6 +239,35 @@ Requires `call-process-to-string' from `functions'."
 (unless (executable-find "locate")
   (setq helm-locate-recursive-dirs-command "find %s -type d -regex .*%s.*$"))
 
+(defun helm-locate-create-or-update-db (db root &optional update)
+  "See `helm-locate-meta'."
+  (let ((was-missing (not (file-exists-p db))))
+    (when (or update was-missing)
+      (if (= (shell-command
+              (funcall helm-locate-create-db-function
+                       db
+                       root))
+             0)
+          (message "locatedb file `%s' %s" db (if was-missing "created" "updated"))
+        (error "Failed to %s locatedb file `%s'" db (if was-missing "create" "update"))))))
+(defun helm-locate-meta (&optional update)
+  "Like `helm-locate' but also use the databases found in /media and /run/media.
+With prefix argument, UPDATE the databases."
+  (interactive "P")
+  (let ((user-db (expand-file-name "~/.cache/locate.db")))
+    (helm-locate-create-or-update-db user-db "/" update)
+    (helm-locate-with-db
+     (mapconcat 'identity
+                (append (list user-db)
+                        (mapc
+                         (lambda (db)
+                           (helm-locate-create-or-update-db db (file-name-directory db) update))
+                         (apply 'append (mapcar
+                                         (lambda (root) (file-expand-wildcards (concat root "/*/locate.db")))
+                                         (list (concat "/run/media/" (user-login-name)) "/media")))))
+                ":")
+     nil (thing-at-point 'filename))))
+
 ;;; Convenience.
 (defun helm-toggle-visible-mark-backwards (arg)
   (interactive "p")
