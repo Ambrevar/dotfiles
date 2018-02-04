@@ -19,18 +19,17 @@ set -- "$HOME/.cache/emacs/" \
 	"$HOME/.mtap.fuseiso" \
 	"$HOME/.pulse-cookie" \
 	"$HOME/.thumbnails" \
-	"$HOME/.w3m" \
-	"$HOME/.zcompdump"
+	"$HOME/.w3m"
 
-echo "==> Files to be removed (beside trash folders):"
+echo "==> Files to be removed (beside trash):"
 echo "$@" | sed 's/ /\n/g'
 echo
-echo "==> Files to be wiped:"
-echo "Mail passwords and ssh keys."
+echo "==> Files to be securely wiped:"
+echo "Mail passwords."
 
 CHOICE="N"
 echo
-echo ":: Close all applications before cleaning."
+echo ":: WARNING: Please close all applications before cleaning."
 echo "==> Clean home? [y/N]"
 read -r CHOICE
 case "$CHOICE" in
@@ -41,23 +40,23 @@ Y|y) ;;
 esac
 
 echo
-echo "==> Empty trash."
+echo "==> Empty trash:"
 if ! command -v trash-empty >/dev/null 2>&1; then
-	echo ":: 'trash-empty' not installed, you have to clean other drives manually."
+	echo ":: 'trash-empty' not installed, you must clean other drives manually."
 	rm -rvf "$HOME/.local/share/Trash"
 else
 	trash-empty
 fi
 
 echo
-echo "==> Remove dotfiles."
+echo "==> Remove dotfiles:"
 rm -rvf "$@"
 
 echo
-echo "==> Wipe critical data."
+echo "==> Wipe critical data:"
 shred -zuv ~/.authinfo.gpg
 for key in ~/.ssh/*.pub; do
-	shred -zuv "$key" "${key%.pub}"
+	echo "WARNING: Found SSH keys."
 done
 if [ -n "$(gpg --list-secret-keys)" ]; then
 	echo "WARNING: Found PGP secret keys."
