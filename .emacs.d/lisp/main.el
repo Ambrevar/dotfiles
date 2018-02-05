@@ -255,10 +255,6 @@
 ;;; and http://debbugs.gnu.org/cgi/bugreport.cgi?bug=27422
 ;;; and https://stackoverflow.com/questions/5830494/windows-configuration-to-registers#5830928
 ;;; and https://www.reddit.com/r/emacs/comments/7au3hj/how_do_you_manage_your_emacs_windows_and_stay_sane/dpfbg3a/?context=3.
-(defadvice desktop-owner (after pry-from-cold-dead-hands activate)
-  "Don't allow dead emacsen to own the desktop file."
-  (when (not (emacs-process-p ad-return-value))
-    (setq ad-return-value nil)))
 (when (daemonp)
   ;; Let Emacs auto-load/save sessions only when running the daemon.
   ;; `server-running-p' is only useful once the daemon is started and cannot be
