@@ -23,12 +23,3 @@ else
 	emacs --daemon -f exwm-enable
 	exec emacsclient -c
 fi
-
-## TODO: When the session is terminated, some forked processes must be closed
-## manually. This can automated by setting a shell 'trap' in .profile when
-## logged from a TTY. The trick does not work from an X login manager. This file
-## could be the place where to clean everything, but it will not be parsed by
-## some login managers. Beside, systemd sessions may sigkill all user apps on
-## logoff, preventing a clean termination.
-# ssh-agent -k
-## See if exec'ing "ssh-agent <WM>" is a better idea.
