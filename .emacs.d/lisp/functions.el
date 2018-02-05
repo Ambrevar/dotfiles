@@ -25,27 +25,11 @@
 ;;   (interactive "r")
 ;;   ...
 
-(defun beginning-of-next-defun ()
-  "Move forward to the beginning of a defun.
-Useful when bound to a key opposed to `beginning-of-defun'."
-  (interactive)
-  (beginning-of-defun -1))
-(global-set-key (kbd "C-M-e") 'beginning-of-next-defun)
-
 (defun call-process-to-string (program &rest args)
   "Call PROGRAM with ARGS and return output."
   (with-output-to-string
     (with-current-buffer standard-output
       (apply 'call-process program nil t nil args))))
-
-(defun count-occurences (regex string)
-  "Return number of times REGEX occurs in STRING.
-If you want to operate on buffer, use `how-many' instead."
-  (let ((start 0) (matches 0))
-    (while (string-match regex string start)
-      (setq start (match-end 0))
-      (setq matches (1+ matches)))
-    matches))
 
 (defun define-keys (map key def &rest bindings)
   "Like `define-key' but allow for defining several bindings at once.
@@ -54,42 +38,6 @@ If you want to operate on buffer, use `how-many' instead."
     (define-key map (kbd key) def)
     (setq key (pop bindings)
           def (pop bindings))))
-
-(defun duplicate (arg)
-  "Duplicate the current line or region ARG times.
-If there's no region, the current line will be duplicated. However, if
-there's a region, all lines that region covers will be duplicated."
-  (interactive "p")
-  (let (beg
-        end
-        (origin (point))
-        (auto-fill-p (symbol-value 'auto-fill-function)))
-    (when (and (use-region-p) (> (point) (mark)))
-      (exchange-point-and-mark))
-    (setq beg (line-beginning-position))
-    (when (use-region-p)
-      (exchange-point-and-mark))
-    (setq end (line-end-position))
-    (let ((region (buffer-substring-no-properties beg end)))
-      (auto-fill-mode -1)
-      (dotimes (i arg)
-        (goto-char end)
-        (newline)
-        (insert region)
-        (setq end (point)))
-      (if auto-fill-p (auto-fill-mode))
-      (goto-char (+ origin (* (length region) arg) arg)))))
-(global-set-key (kbd "C-x M-d") 'duplicate)
-
-(defun emacs-process-p (pid)
-  "If PID is the process ID of an Emacs process, return t, else nil.
-Also returns nil if pid is nil."
-  (when pid
-    (let ((attributes (process-attributes pid)) (cmd))
-      (dolist (attr attributes)
-        (if (string= "comm" (car attr))
-            (setq cmd (cdr attr))))
-      (if (and cmd (or (string= "emacs" cmd) (string= "emacs.exe" cmd))) t))))
 
 (defun escape-region (&optional regex to-string)
   "Escape double-quotes and backslashes.
@@ -101,33 +49,6 @@ TO-STRING."
   (unless to-string (setq to-string "\\\\\\1"))
   (while (re-search-forward regex (if (use-region-p) (region-end) (point-max)) t)
     (replace-match to-string)))
-
-(defun eval-and-replace ()
-  "Replace the last sexp with its value."
-  (interactive)
-  (backward-kill-sexp)
-  (condition-case nil
-      (prin1 (eval (read (current-kill 0)))
-             (current-buffer))
-    (error (message "Invalid expression")
-           (insert (current-kill 0)))))
-
-(defun eval-last-sexp-and-replace (arg)
-  "Like `eval-last-sexp' but vall `eval-and-replace' with double prefix arg."
-  (interactive "P")
-  (message "%S" arg)
-  (if (equal current-prefix-arg '(16))
-      (eval-and-replace)
-    (eval-last-sexp arg)))
-(global-set-key (kbd "C-x C-e") 'eval-last-sexp-and-replace)
-
-(defun find-symbol-at-point ()
-  "Find directly the symbol at point, i.e. go to definition."
-  (interactive)
-  (let ((sym (symbol-at-point)))
-    (if (boundp sym)
-        (find-variable sym)
-      (find-function sym))))
 
 (defun fmt ()
   "(Un)tabify, indent and delete trailing whitespace.
@@ -198,26 +119,6 @@ selectively."
     (indent-region oldpoint (point))
     (newline-and-indent)))
 
-(defun insert-file-name (filename &optional args)
-  "Insert name of file FILENAME into buffer after point.
-Prefixed with \\[universal-argument], expand the file name to its
-fully canonicalized path. See `expand-file-name'.
-
-Prefixed with \\[negative-argument], use relative path to file
-name from current directory, `default-directory'. See
-`file-relative-name'.
-
-The default with no prefix is to insert the file name exactly as
-it appears in the minibuffer prompt."
-  ;; Based on insert-file in Emacs -- ashawley 20080926
-  (interactive "*fInsert file name: \nP")
-  (cond ((eq '- args)
-         (insert (file-relative-name filename)))
-        ((not (null args))
-         (insert (expand-file-name filename)))
-        (t
-         (insert filename))))
-
 (defun local-set-keys (key def &rest bindings)
   "Like `local-set-key' but allow for defining several bindings at once.
 `KEY' must be acceptable for `kbd'."
@@ -225,22 +126,6 @@ it appears in the minibuffer prompt."
     (local-set-key (kbd key) def)
     (setq key (pop bindings)
           def (pop bindings))))
-
-(defun mark-word-from-beginning (&optional arg allow-extend)
-  "Set the point at the beginning of the word and call `mark-word'.
-ARG and ALLOW-EXTEND are the same."
-  (interactive "P\np")
-  (cond ((and allow-extend
-              (or (and (eq last-command this-command) (mark t))
-                  (region-active-p)))
-         (mark-word arg allow-extend))
-        (t
-         ;; The next line makes sure the word at point gets selected if point is
-         ;; on the first letter. We need to ignore error if point is at EOF.
-         (ignore-errors (forward-char))
-         (backward-word)
-         (mark-word arg allow-extend))))
-(global-set-key (kbd "M-@") 'mark-word-from-beginning)
 
 (defun move-border-left (arg)
   "Move window border in a natural manner.
@@ -273,25 +158,6 @@ If DIR-LEFT is t, then move left, otherwise move right."
   (if (= (count-windows) 2)
       (move-border-left-or-right arg nil)))
 (global-set-key (kbd "M-)") 'move-border-right)
-
-;;; Almost useless compared to Helm-file M-R. However helm does not change
-;;; current directory.
-(defun rename-buffer-and-file ()
-  "Renames current buffer and file it is visiting."
-  (interactive)
-  (let ((name (buffer-name))
-        (filename (buffer-file-name)))
-    (if (not (and filename (file-exists-p filename)))
-        (error "Buffer '%s' is not visiting a file!" name)
-      (let ((new-name (read-file-name "New name: " filename)))
-        (cond ((get-buffer new-name)
-               (error "A buffer named '%s' already exists!" new-name))
-              (t
-               (rename-file filename new-name 1)
-               (rename-buffer new-name)
-               (set-visited-file-name new-name)
-               (set-buffer-modified-p nil)
-               (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
 
 (defun reset-fill-column ()
   "Reset `fill-column' to its default value."
@@ -351,15 +217,6 @@ Do not fold case with \\[universal-argument] or non-nil ARG."
       (delete-trailing-whitespace start end)
       (delete-duplicate-lines start end)
       (sort-lines nil start end))))
-
-(defun spawn-terminal ()
-  "Spawn terminal asynchronously.
-The SHELL_CD environement variable is set to `default-directory'.
-The shell can use it to automatically change directory to it."
-  (interactive)
-  (let ((term (or (getenv "TERMCMD") "xterm")))
-    (when (executable-find term)
-      (start-process "dummy" nil "env" (concat "SHELL_CD=" (expand-file-name default-directory)) term))))
 
 (defun swap-windows (&optional w1 w2)
   "If 2 windows are up, swap them.

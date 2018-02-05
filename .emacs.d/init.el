@@ -202,7 +202,6 @@
   (add-hook hook 'turn-on-complete-filename)
   (add-hook hook 'turn-on-tab-width-to-8) ; Because some existing code uses tabs.
   (add-hook hook 'turn-off-indent-tabs)) ; Should not use tabs.
-(define-key lisp-mode-shared-map (kbd "M-.") 'find-symbol-at-point)
 
 ;;; Common LISP
 (setq inferior-lisp-program "clisp")
