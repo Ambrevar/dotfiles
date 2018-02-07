@@ -31,9 +31,13 @@
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 
 (when (require 'package nil t)
-  ;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+  ;; TODO: MELPA's https sometimes return
+  ;;   emacs melpa invalid: certificate host does not match hostname
+  ;; Try the following:
+  ;;   (setq tls-checktrust nil)
+  (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")))
+  (add-to-list 'package-archives '("melpa" . "https://melpa.milkbox.net/packages/"))
+  (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
   (setq package-user-dir (concat emacs-cache-folder "elpa"))
   (package-initialize))
 
