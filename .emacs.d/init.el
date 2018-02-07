@@ -201,11 +201,28 @@
 (add-hook 'js-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
 
 ;;; Lisp
+(nconc package-selected-packages '(lispy lispyville))
+(with-eval-after-load 'lispyville
+  (lispyville-set-key-theme
+   '(operators
+     c-w
+     (escape insert)
+     slurp/barf-lispy
+     additional
+     mark
+     (additional-movement normal visual motion))))
+(defun init-lispy ()
+  (when (require 'lispy nil t)
+    (set-face-foreground 'lispy-face-hint "#FF00FF")
+    (when (require 'lispyville nil t)
+      (add-hook 'lispy-mode-hook 'lispyville-mode)))
+  (lispy-mode))
 (dolist (hook '(lisp-mode-hook emacs-lisp-mode-hook))
   (add-hook hook 'turn-on-fmt-before-save)
   (add-hook hook 'turn-on-complete-filename)
   (add-hook hook 'turn-on-tab-width-to-8) ; Because some existing code uses tabs.
-  (add-hook hook 'turn-off-indent-tabs)) ; Should not use tabs.
+  (add-hook hook 'turn-off-indent-tabs)   ; Should not use tabs.
+  (add-hook hook 'init-lispy))
 
 ;;; Common LISP
 (setq inferior-lisp-program "clisp")
