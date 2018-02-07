@@ -239,6 +239,7 @@ Requires `call-process-to-string' from `functions'."
 (unless (executable-find "locate")
   (setq helm-locate-recursive-dirs-command "find %s -type d -regex .*%s.*$"))
 
+;; See https://github.com/emacs-helm/helm/issues/1962.
 (defun helm-locate-create-or-update-db (db root &optional update)
   "See `helm-locate-meta'."
   (let ((was-missing (not (file-exists-p db))))
