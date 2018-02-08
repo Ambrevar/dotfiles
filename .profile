@@ -145,6 +145,8 @@ if [ "$(uname -o)" = "GNU/Linux" ] ; then
 	## If already started, the new process will replace the old one.
 	if command -v udiskie >/dev/null 2>&1; then
 		udiskie &
+	elif command -v devmon >/dev/null 2>&1; then
+		devmon &
 	fi
 fi
 
