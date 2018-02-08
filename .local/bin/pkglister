@@ -31,3 +31,8 @@ if command -v emerge >/dev/null 2>&1; then
 	cp /etc/portage/package.use/manual  "$PKG_ROOT/gentoo/package.use/manual"
 	cp /etc/portage/package.accept_keywords/manual  "$PKG_ROOT/gentoo/package.accept_keywords/manual"
 fi
+
+## Void Linux
+if command -v xbps-query >/dev/null 2>&1; then
+	xbps-query -m | sed 's/-[^-]\+$//' >"$PKG_ROOT/void-official"
+fi
