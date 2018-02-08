@@ -37,6 +37,7 @@ c.url.searchengines = {
     "so": "http://stackoverflow.com/search?q={}",
     "torrent": "https://kickass.unblocked.live/search.php?q={}",
     "tpb": "https://ukpirate.click/s/?q={}",
+    "void": "https://wiki.voidlinux.eu/index.php?search={}&title=Special%3ASearch&go=Go",
     "w": "http://en.wikipedia.org/wiki/Special:Search?search={}",
     "wb": "http://en.wikibooks.org/wiki/Special:Search?search={}",
     "wbf": "http://fr.wikibooks.org/wiki/Special:Search?search={}",
