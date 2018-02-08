@@ -158,6 +158,9 @@
 (exwm-input-set-key (kbd "s-<kp-subtract>") #'exwm-start-volume-down)
 (exwm-input-set-key (kbd "s-<kp-add>") #'exwm-start-volume-up)
 (exwm-input-set-key (kbd "s-<kp-enter>") #'exwm-start-volume-toggle)
+(exwm-input-set-key (kbd "s--") #'exwm-start-volume-down)
+(exwm-input-set-key (kbd "s-=") #'exwm-start-volume-up)
+(exwm-input-set-key (kbd "s-0") #'exwm-start-volume-toggle)
 
 ;;; Check for start-up errors. See ~/.profile.
 (let ((error-logs (directory-files "~" t "errors.*log$")))
