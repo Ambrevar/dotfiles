@@ -276,4 +276,17 @@ See `eshell' for the numeric prefix ARG."
     (define-key eshell-mode-map (kbd "C-<return>") 'eshell-detach-attach))
   (add-hook 'eshell-mode-hook 'eshell-detach-set-keys))
 
+
+(when (string= (file-symlink-p (executable-find "man")) "mandoc")
+  ;; Some systems like Void Linux use mandoc instead of man and do not know the
+  ;; --nj, --nh flags.
+  (defun pcmpl-args-mandoc-man-function (name)
+    (let ((process-environment process-environment))
+      ;; Setting MANWIDTH to a high number makes most paragraphs fit on a single
+      ;; line, reducing the number of false positives that result from lines
+      ;; starting with `-' that aren't really options.
+      (push "MANWIDTH=10000" process-environment)
+      (pcmpl-args-process-file "man" "--" name)))
+  (setq pcmpl-args-man-function 'pcmpl-args-mandoc-man-function))
+
 (provide 'init-eshell)
