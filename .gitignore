@@ -37,6 +37,7 @@
 .mtab.fuseiso
 .mu
 .nv/
+.password-store
 .pfl.info
 .pki
 .pulse-cookie
