@@ -98,6 +98,8 @@
   (if (fboundp 'helm-emms)
       (exwm-input-set-key (kbd "s-A") #'helm-emms)
     (exwm-input-set-key (kbd "s-A") #'emms)))
+(when (fboundp 'helm-pass)
+  (exwm-input-set-key (kbd "s-p") #'helm-pass))
 (when (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path))
   (exwm-input-set-key (kbd "s-m") #'mu4e-headers))
 
