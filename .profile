@@ -120,7 +120,6 @@ fi
 export GPG_TTY=$(tty)
 # Refresh gpg-agent tty in case user switches into an X session
 gpg-connect-agent updatestartuptty /bye >/dev/null
-eval $(keychain --eval --quiet --agents gpg)
 
 ## Linux specific
 if [ "$(uname -o)" = "GNU/Linux" ] ; then
