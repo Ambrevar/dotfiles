@@ -159,6 +159,7 @@
 
 
 ;;; Since `browse-url-default-browser' fails at seeing we can run xdg, force it.
+(require 'browse-url)
 (setq browse-url-browser-function
       (if (executable-find "xdg-open") 'browse-url-xdg-open 'browse-url-generic))
 ;;; If xdg-open is not found, set Emacs URL browser to the environment browser,
