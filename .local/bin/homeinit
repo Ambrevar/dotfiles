@@ -114,6 +114,7 @@ fi
 
 echo "==> Mail"
 lnn "$SOURCEDIR/mail/mbsyncrc" "$HOME/.mbsyncrc"
+lnn "$SOURCEDIR/mail/authinfo.gpg" "$HOME/.authinfo.gpg"
 mkdir -pv "$HOME/.cache/mail/"
 if $OPT_UPDATE; then
 	while IFS= read -r i; do
@@ -122,12 +123,6 @@ if $OPT_UPDATE; then
 	done <<EOF
 $(awk '/^Path/ {$1="mkdir -pv"; print}' ~/.mbsyncrc)
 EOF
-fi
-
-if [ ! -e ~/.authinfo.gpg ]; then
-	## TODO: Why does it prompt for the GPG passphrase twice per account?
-	## TODO: Does not work with --batch for some reason, so we have to spawn Emacs.
-emacs --eval '(progn (when (require '"'"'mu4e nil t) (let ((auth-sources (list "~/.authinfo.gpg")) (auth-source-save-behavior t)) (dolist (context mu4e-contexts) (mu4e-context-switch nil (mu4e-context-name context)) (funcall (plist-get (car (auth-source-search :max 1 :host smtpmail-smtp-server :port smtpmail-smtp-service :user smtpmail-smtp-user :require '"'"'(:user :secret) :create t)) :save-function))))) (kill-emacs))'
 fi
 
 if $OPT_UPDATE; then
