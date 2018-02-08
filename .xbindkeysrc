@@ -1,0 +1,13 @@
+## ALSA volume
+"amixer set Master 5%-"
+	XF86AudioLowerVolume
+"amixer set Master 5%+"
+	XF86AudioRaiseVolume
+"amixer set Master toggle"
+	XF86AudioMute
+
+## Screen brightness
+"xbacklight -inc 10"
+	XF86MonBrightnessUp
+"xbacklight -dec 10"
+	XF86MonBrightnessDown

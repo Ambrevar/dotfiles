@@ -26,6 +26,7 @@ xkbcomp -I"$HOME/.xkb" "$HOME/.xkb/usim.xkb" $DISPLAY 2>/dev/null
 xcape -e 'Control_L=Escape'
 numlockx on
 # xinput disable "SynPS/2 Synaptics TouchPad"
+xbindkeys
 
 ## Lock screen on sleep.
 xss-lock slock &
