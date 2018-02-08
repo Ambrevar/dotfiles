@@ -265,7 +265,7 @@
         ;; timer might never be saved.  See
         ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28943.
         desktop-auto-save-timeout 5
-        desktop-dirname (concat emacs-cache-folder "desktop")
+        desktop-dirname (expand-file-name "desktop" emacs-cache-folder)
         desktop-path (list desktop-dirname)
         ;; desktop-restore-eager 4 ; Can be annoying as you don't have your last-loaded buffers immediately.
         desktop-save t)
