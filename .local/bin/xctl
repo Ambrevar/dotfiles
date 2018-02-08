@@ -22,7 +22,7 @@ current=$(xrandr | sed -n "/current/{n;p;q}" | cut -f1 -d" ")
 # xrandr | awk 'NR==2 {print $1; exit}'
 
 if [ $# -eq 0 ]; then
-	xrandr --output "$current" --auto --transform none && \
+	xrandr --output "$current" --auto --transform none --brightness 1 && \
 		xrandr -s "$(xrandr | awk '/^ / {print $1;exit}')"
 	exit
 fi
