@@ -78,11 +78,6 @@ if command -v pacman >/dev/null 2>&1; then
 	fi
 fi
 
-if command -v locate >/dev/null 2>&1; then
-	echo "==> locate: Update database'"
-	sudo updatedb
-fi
-
 echo "==> 'temp' folder"
 mkdir -pv "$HOME/temp"
 
