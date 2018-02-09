@@ -2,7 +2,7 @@
 
 ;; TODO: Add countdown?
 ;; TODO: Message which key to use to stop the video.  Make it customizable.  Use
-;; minor mode.
+;; minor mode?
 ;; TODO: Prompt for output path?
 
 (defvar screencast-program "scrot"
@@ -101,8 +101,8 @@ A screenshot is taken before every command runs."
                nil (list (get-buffer-create screencast-log) t) nil
                (append
                 screencast-optimize-args
-                (list output)))))
-    (when (and screencast-autoremove-screenshots-p
-               (= status 0))
-      (dolist (f screencast--frames)
-        (delete-file (cdr f))))))
+                (list output))))
+      (when (and screencast-autoremove-screenshots-p
+                 (= status 0))
+        (dolist (f screencast--frames)
+          (delete-file (cdr f)))))))
