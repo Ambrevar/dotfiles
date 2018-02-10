@@ -22,7 +22,7 @@ conky.text =
 ^fg(grey)RAM:^fg(DeepSkyBlue)${if_match ${to_bytes $memeasyfree} < 536870912}^fg(Red)${endif}$memperc% \
 ^fg(grey)↓^fg(DeepSkyBlue)${eval $${downspeedf ${gw_iface}}} \
 ^fg(grey)↑^fg(DeepSkyBlue)${eval $${upspeedf ${gw_iface}}} \
-^fg(grey)♪^fg(DeepSkyBlue)${exec amixer get Master -M | grep -oE "[0-9]*%"} \
+${if_match "${exec amixer get Master -M | grep -oE '\[on\]'}" == "[on]"}^fg(grey)♪^fg(DeepSkyBlue)${exec amixer get Master -M | grep -oE "[0-9]*%"}${endif} \
 ${if_existing .mu/}^fg(grey)✉^fg(DeepSkyBlue)${execi 30 mu find --nocolor --sortfield=d --maxnum=500 flag:unread AND NOT flag:trashed | wc -l} ${endif}\
 ${if_match $battery_percent != 0}^fg(grey)⚡^fg(DeepSkyBlue)${if_match ${battery_percent} <= 5}^fg(Red)${endif}${battery_short}:${battery_time} ${endif}\
 ${if_match ${to_bytes ${diskio sda}} > 1048576}^fg(grey)sda:^fg(DeepSkyBlue)${diskio sda}${endif} \
@@ -30,7 +30,6 @@ ${if_match ${to_bytes ${diskio sdb}} > 1048576}^fg(grey)sdb:^fg(DeepSkyBlue)${di
 ${if_match ${to_bytes ${diskio sdc}} > 1048576}^fg(grey)sdc:^fg(DeepSkyBlue)${diskio sdc}${endif} \
 ]]
 
--- TODO: Change symbol / color when mixer is mute.
 -- TODO: Unread mail with native 'new_mails' does not seem to support totals.
 -- TODO: Change color when e-mails are not 0?
 -- TODO: Add playing track (emacsclient)
