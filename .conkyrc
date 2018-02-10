@@ -29,10 +29,10 @@ ${if_match $battery_percent != 0}^fg(grey)⚡^fg(DeepSkyBlue)${if_match ${batter
 ${if_match ${to_bytes ${diskio sda}} > 1048576}^fg(grey)sda:^fg(DeepSkyBlue)${diskio sda}${endif} \
 ${if_match ${to_bytes ${diskio sdb}} > 1048576}^fg(grey)sdb:^fg(DeepSkyBlue)${diskio sdb}${endif} \
 ${if_match ${to_bytes ${diskio sdc}} > 1048576}^fg(grey)sdc:^fg(DeepSkyBlue)${diskio sdc}${endif} \
+${if_match "${execi 5 emacsclient -e '(and (fboundp (quote emms-playlist-current-selected-track)) (emms-playlist-current-selected-track) (emms-track-description (emms-playlist-current-selected-track)))'}" != "nil"}^fg(grey)♪^fg(DeepSkyBlue)${execi 5 emacsclient -e '(emms-track-description (emms-playlist-current-selected-track))' | tr -d '"'}${endif} \
 ]]
 
 -- TODO: Unread mail with native 'new_mails' does not seem to support totals.
 -- TODO: Change color when e-mails are not 0?
--- TODO: Add playing track (emacsclient)
 -- TODO: Conditional display of network, sound.
 -- Probably need $lua+$eval for most of the TODOs.
