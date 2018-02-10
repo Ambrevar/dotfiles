@@ -21,11 +21,14 @@
       emms-source-file-directory-tree-function 'emms-source-file-directory-tree-find)
 
 (add-to-list 'emms-info-functions 'emms-info-cueinfo)
-(when (executable-find "emms-print-metadata")
-  (require 'emms-info-libtag)
-  (add-to-list 'emms-info-functions 'emms-info-libtag)
-  (delete 'emms-info-ogginfo emms-info-functions)
-  (delete 'emms-info-mp3info emms-info-functions))
+(if (executable-find "emms-print-metadata")
+    (progn
+      (require 'emms-info-libtag)
+      (add-to-list 'emms-info-functions 'emms-info-libtag)
+      (delete 'emms-info-ogginfo emms-info-functions)
+      (delete 'emms-info-mp3info emms-info-functions))
+  (add-to-list 'emms-info-functions 'emms-info-ogginfo)
+  (add-to-list 'emms-info-functions 'emms-info-mp3info))
 
 ;;; Resume on restart.
 ;;; We don't use bookmarks as that could interfere with user's ones.
