@@ -1,5 +1,8 @@
 ImageMagick
 alsa-utils
+aspell
+aspell-en
+aspell-fr
 atool
 audacity
 autoconf
@@ -35,10 +38,13 @@ lsof
 man-db
 mediainfo
 mlocate
+mp3info
 mpd
+mps-youtube
 mpv
 mu
 mu4e
+nawk
 ncdu
 ntfs-3g
 optipng
@@ -59,6 +65,8 @@ uncrustify
 units
 valgrind
 void-repo-multilib
+void-repo-nonfree
+vorbis-tools
 vsftpd
 wine-32bit
 wireshark
