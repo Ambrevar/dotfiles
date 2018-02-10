@@ -12,6 +12,7 @@ conky.config = {
 	update_interval = 1.0,
 	uppercase = false,
 	use_spacer = left,
+	times_in_seconds = true,
 };
 
 -- Colors are in dzen2 format.
@@ -24,7 +25,7 @@ conky.text =
 ^fg(grey)↑^fg(DeepSkyBlue)${eval $${upspeedf ${gw_iface}}} \
 ${if_match "${exec amixer get Master -M | grep -oE '\[on\]'}" == "[on]"}^fg(grey)♪^fg(DeepSkyBlue)${exec amixer get Master -M | grep -oE "[0-9]*%"}${endif} \
 ${if_existing .mu/}^fg(grey)✉^fg(DeepSkyBlue)${execi 30 mu find --nocolor --sortfield=d --maxnum=500 flag:unread AND NOT flag:trashed | wc -l} ${endif}\
-${if_match $battery_percent != 0}^fg(grey)⚡^fg(DeepSkyBlue)${if_match ${battery_percent} <= 5}^fg(Red)${endif}${battery_short}:${battery_time} ${endif}\
+${if_match $battery_percent != 0}^fg(grey)⚡^fg(DeepSkyBlue)${if_match ${battery_time} <= 600}^fg(Red)${endif}${battery_short}: ${format_time ${battery_time} "(\dd )(\hh )\mmin"} ${endif}\
 ${if_match ${to_bytes ${diskio sda}} > 1048576}^fg(grey)sda:^fg(DeepSkyBlue)${diskio sda}${endif} \
 ${if_match ${to_bytes ${diskio sdb}} > 1048576}^fg(grey)sdb:^fg(DeepSkyBlue)${diskio sdb}${endif} \
 ${if_match ${to_bytes ${diskio sdc}} > 1048576}^fg(grey)sdc:^fg(DeepSkyBlue)${diskio sdc}${endif} \
