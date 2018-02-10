@@ -7,7 +7,7 @@
 	XF86AudioMute
 
 ## Screen brightness
-"xbacklight -inc 10"
+"xbacklight -inc 20"
 	XF86MonBrightnessUp
-"xbacklight -dec 10"
+"xbacklight -dec 20"
 	XF86MonBrightnessDown
