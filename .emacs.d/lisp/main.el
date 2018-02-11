@@ -245,9 +245,6 @@
 (setq comint-prompt-read-only t)
 
 ;;; Desktop-mode
-;;; REVIEW: Desktop does not get saved when Emacs quits.
-;;; See http://debbugs.gnu.org/cgi/bugreport.cgi?bug=28945.
-(load "patch-desktop")
 ;;; REVIEW: `desktop-kill' should not query the user in `kill-emacs-hook'.
 ;;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28943
 ;;; TODO: Desktop mode does not save window registers properly.
@@ -257,19 +254,27 @@
 ;;; and https://stackoverflow.com/questions/5830494/windows-configuration-to-registers#5830928
 ;;; and https://www.reddit.com/r/emacs/comments/7au3hj/how_do_you_manage_your_emacs_windows_and_stay_sane/dpfbg3a/?context=3.
 (when (daemonp)
-  ;; Let Emacs auto-load/save sessions only when running the daemon.
+  ;; Auto-load/save sessions only when running the daemon.
   ;; `server-running-p' is only useful once the daemon is started and cannot be
-  ;; used for initialization. We use `daemonp' instead.
+  ;; used for initialization.  Use `daemonp' instead.
+  (require 'desktop)
+  (load "patch-desktop")
   (setq history-length 250
-        ;; REVIEW: Default timer (30) is way to high: for somebody too frenzy, the
-        ;; timer might never be saved.  See
+        ;; Default timer (30) is way too high: for somebody too frenzy, the timer
+        ;; might never be saved.  See
         ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28943.
         desktop-auto-save-timeout 5
         desktop-dirname (expand-file-name "desktop" emacs-cache-folder)
         desktop-path (list desktop-dirname)
         ;; desktop-restore-eager 4 ; Can be annoying as you don't have your last-loaded buffers immediately.
+        desktop-load-locked-desktop 'ask
+        desktop-restore-frames nil
         desktop-save t)
-  (desktop-save-mode)
+  (defun desktop-init (_frame)
+    (desktop-save-mode)
+    (desktop-read)
+    (remove-hook 'after-make-frame-functions 'desktop-init))
+  (add-hook 'after-make-frame-functions 'desktop-init) ; This does not fix the window register restoration.
   (add-to-list 'desktop-modes-not-to-save 'pdf-view-mode)
   (add-to-list 'desktop-modes-not-to-save 'image-mode)
   (unless (file-directory-p desktop-dirname)

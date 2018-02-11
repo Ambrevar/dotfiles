@@ -121,3 +121,26 @@ Using it may cause conflicts.  Use it anyway? " owner)))))
         (run-hooks 'desktop-no-desktop-file-hook))
       (message "No desktop file.")
       nil)))
+
+;;; Fix 30421
+;;; Return nil if the PID found is not owned by a process named Emacs.
+;;; This assumes that no other name would be using the desktop file.
+;;; Upstream decided not to do this because of possible clashes when emacs
+;;; process is running remotely.  Start desktop-mode in
+;;; `after-make-frame-functions' instead.
+;; (defun desktop-owner (&optional dirname)
+;;   "Return the PID of the Emacs process that owns the desktop file in DIRNAME.
+;; Return nil if no desktop file found or no Emacs process is using it.
+;; DIRNAME omitted or nil means use `desktop-dirname'."
+;;   (let (owner
+;;         (file (desktop-full-lock-name dirname)))
+;;     (and (file-exists-p file)
+;;          (ignore-errors
+;;            (with-temp-buffer
+;;              (insert-file-contents-literally file)
+;;              (goto-char (point-min))
+;;              (setq owner (read (current-buffer)))
+;;              (integerp owner)
+;;              (process-attributes owner)
+;;              (string= "emacs" (alist-get 'comm (process-attributes owner)))))
+;;          owner)))
