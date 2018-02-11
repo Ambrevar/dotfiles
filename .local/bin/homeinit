@@ -9,17 +9,17 @@ Initialize home folder.
 
 Options:
 
-  -u: Update packages, etc.
+  -u: Skip large updates (packages, etc.)
 
 EOF
 	exit
 fi
 
-OPT_UPDATE=false
-OPT_GO=""
+OPT_UPDATE=true
+OPT_GO="-u"
 if [ "$1" = "-u" ]; then
-	OPT_UPDATE=true
-	OPT_GO="-u"
+	OPT_UPDATE=false
+	OPT_GO=""
 	shift
 fi
 
