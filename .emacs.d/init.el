@@ -285,6 +285,7 @@
 ;;; News
 (nconc package-selected-packages '(elfeed))
 (with-eval-after-load 'elfeed (require 'init-elfeed))
+(autoload 'elfeed-switch-back "elfeed")
 
 ;;; Org-mode
 (nconc package-selected-packages '(org-plus-contrib org-bullets)) ; org-plus contains latest Org mode.

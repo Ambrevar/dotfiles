@@ -103,6 +103,7 @@
   (exwm-input-set-key (kbd "s-p") #'helm-pass))
 (when (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path))
   (exwm-input-set-key (kbd "s-m") #'mu4e-headers))
+(exwm-input-set-key (kbd "s-n") #'elfeed-switch-back) ; "n" for "news"
 (exwm-input-set-key (kbd "s-e") #'eww-switch-back)
 (exwm-input-set-key (kbd "s-E") #'eww)
 

@@ -35,6 +35,14 @@ See `elfeed-play-with-mpv'."
 
 (define-key elfeed-search-mode-map "v" #'elfeed-play-in-mpv)
 
+(defun elfeed-switch-back ()
+  "Back to the last elfeed buffer, entry or search."
+  (interactive)
+  (let ((buffer (get-buffer "*elfeed-entry*")))
+    (if buffer
+        (switch-to-buffer buffer)
+      (elfeed))))
+
 (load "~/personal/news/elfeed.el" t)
 
 (provide 'init-elfeed)
