@@ -14,21 +14,29 @@
       (setq quality-arg (format "--ytdl-format=[height<=?%s]" quality-val)))
     (start-process "elfeed-mpv" nil "mpv" quality-arg (elfeed-entry-link entry))))
 
-(defvar elfeed-mpv-patterns
-  '("youtu\\.?be")
-  "List of regexp to match against elfeed entry link to know
-whether to use mpv to visit the link.")
+(defun elfeed-open-with-eww ()
+  "Open in eww with `eww-readable'."
+  (interactive)
+  (let ((entry (if (eq major-mode 'elfeed-show-mode) elfeed-show-entry (elfeed-search-selected :single))))
+    (eww  (elfeed-entry-link entry))
+    (add-hook 'eww-after-render-hook 'eww-readable nil t)))
 
-(defun elfeed-visit-or-play-with-mpv ()
-  "Play in mpv if entry link matches `elfeed-mpv-patterns', visit otherwise.
-See `elfeed-play-with-mpv'."
+(defvar elfeed-visit-patterns
+  '(("youtu\\.?be" . elfeed-play-with-mpv)
+    ("phoronix" . elfeed-open-with-eww))
+  "List of (regexps . function) to match against elfeed entry link to know
+whether how to visit the link.")
+
+(defun elfeed-visit-maybe-external ()
+  "Visit with external function if entry link matches `elfeed-visit-patterns',
+visit otherwise."
   (interactive)
   (let ((entry (if (eq major-mode 'elfeed-show-mode) elfeed-show-entry (elfeed-search-selected :single)))
-        (patterns elfeed-mpv-patterns))
-    (while (and patterns (not (string-match (car elfeed-mpv-patterns) (elfeed-entry-link entry))))
+        (patterns elfeed-visit-patterns))
+    (while (and patterns (not (string-match (caar patterns) (elfeed-entry-link entry))))
       (setq patterns (cdr patterns)))
     (if patterns
-        (elfeed-play-with-mpv)
+        (funcall (cdar patterns))
       (if (eq major-mode 'elfeed-search-mode)
           (elfeed-search-browse-url)
         (elfeed-show-visit)))))
