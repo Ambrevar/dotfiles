@@ -177,6 +177,7 @@
                                   (executable-find browse-url-kde-program)
                                   (executable-find browse-url-conkeror-program)
                                   (executable-find browse-url-chrome-program)))
+(setq shr-external-browser browse-url-browser-function)
 
 ;;; Extend MIME-types support for videos.
 (with-eval-after-load 'mailcap
