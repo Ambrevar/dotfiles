@@ -43,6 +43,13 @@ visit otherwise."
 
 (define-key elfeed-search-mode-map "v" #'elfeed-play-in-mpv)
 
+(defun elfeed-kill-entry ()
+  "Like `elfeed-kill-buffer' but pop elfeed search."
+  (interactive)
+  (elfeed-kill-buffer)
+  (switch-to-buffer "*elfeed-search*"))
+(define-key elfeed-show-mode-map "q" #'elfeed-kill-entry)
+
 (defun elfeed-switch-back ()
   "Back to the last elfeed buffer, entry or search."
   (interactive)
