@@ -150,6 +150,10 @@
 (with-eval-after-load 'eshell (require 'init-eshell))
 (autoload 'eshell-or-new-session "eshell")
 
+;;; Eww
+(with-eval-after-load 'eww (require 'init-eww))
+(autoload 'eww-switch-back "eww")
+
 ;;; GLSL
 (nconc package-selected-packages '(glsl-mode))
 
