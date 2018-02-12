@@ -64,6 +64,7 @@
 (push ?\s-  exwm-input-prefix-keys)
 (define-key exwm-mode-map (kbd "s-SPC") #'exwm-floating-toggle-floating)
 
+(exwm-input-set-key (kbd "s-i") #'follow-delete-other-windows-and-split)
 (exwm-input-set-key (kbd "s-o") #'toggle-single-window)
 (exwm-input-set-key (kbd "s-O") #'exwm-layout-toggle-fullscreen)
 
