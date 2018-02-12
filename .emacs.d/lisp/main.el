@@ -23,7 +23,8 @@
 (add-hook 'before-save-hook 'save-place-kill-emacs-hook)
 
 ;;; Network files
-(setq url-cookie-file (concat emacs-cache-folder "url.cookies"))
+(setq url-cookie-file (concat emacs-cache-folder "url.cookies")
+      url-cache-directory (expand-file-name "url/cache" emacs-cache-folder))
 (with-eval-after-load 'nsm
   (setq nsm-settings-file (concat emacs-cache-folder "network-security.data")))
 
