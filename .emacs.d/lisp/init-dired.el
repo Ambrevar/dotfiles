@@ -2,13 +2,13 @@
 ;;; WARNING: This file is loaded unconditionally on startup.
 ;;; We cannot assume that current buffer is in dired-mode.
 
-(define-keys dired-mode-map
-  "C-c h" 'dired-toggle-humansize
-  "<left>" 'dired-up-directory
-  "<right>" 'dired-find-file
-  "SPC" 'dired-mark
-  "<backspace>" 'dired-up-directory
-  "b" 'dired-up-directory)
+(ambrevar/define-keys dired-mode-map
+                      "C-c h" 'dired-toggle-humansize
+                      "<left>" 'dired-up-directory
+                      "<right>" 'dired-find-file
+                      "SPC" 'dired-mark
+                      "<backspace>" 'dired-up-directory
+                      "b" 'dired-up-directory)
 
 (when (require 'dired+ nil t)
   (toggle-diredp-find-file-reuse-dir 1))

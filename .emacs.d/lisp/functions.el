@@ -25,13 +25,13 @@
 ;;   (interactive "r")
 ;;   ...
 
-(defun call-process-to-string (program &rest args)
+(defun ambrevar/call-process-to-string (program &rest args)
   "Call PROGRAM with ARGS and return output."
   (with-output-to-string
     (with-current-buffer standard-output
       (apply 'call-process program nil t nil args))))
 
-(defun define-keys (map key def &rest bindings)
+(defun ambrevar/define-keys (map key def &rest bindings)
   "Like `define-key' but allow for defining several bindings at once.
 `KEY' must be acceptable for `kbd'."
   (while key
@@ -39,7 +39,7 @@
     (setq key (pop bindings)
           def (pop bindings))))
 
-(defun escape-region (&optional regex to-string)
+(defun ambrevar/escape-region (&optional regex to-string)
   "Escape double-quotes and backslashes.
 This is useful for writing Elisp strings containing those
 characters. The optional parameters let you control the replacement of REGEX for
@@ -50,7 +50,7 @@ TO-STRING."
   (while (re-search-forward regex (if (use-region-p) (region-end) (point-max)) t)
     (replace-match to-string)))
 
-(defun fmt ()
+(defun ambrevar/fmt ()
   "(Un)tabify, indent and delete trailing whitespace.
 
 Tabify if `indent-tabs-mode' is true, otherwise use spaces.
@@ -58,26 +58,26 @@ Work on buffer or region.
 
 If `fmt-inhinit-p' is non-nil, it does nothing.
 
-Require `tabify-leading'."
+Require `ambrevar/tabify-leading'."
   (interactive)
-  (unless fmt-inhibit-p
+  (unless ambrevar/fmt-inhibit-p
     (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
           (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-max)))))
       (if indent-tabs-mode
-          (tabify-leading)
+          (ambrevar/tabify-leading)
         (untabify start end))
       (indent-region start end)
       (save-restriction
         (narrow-to-region start end)
         (delete-trailing-whitespace)))))
 
-(defcustom fmt-inhibit-p t
-  "Do not run `fmt' if non-nil.
+(defcustom ambrevar/fmt-inhibit-p t
+  "Do not run `ambrevar/fmt' if non-nil.
 As this is not friendly to foreign projects, `fmt' should be run
 selectively."
   :safe 'booleanp)
 
-(defun flyspell-and-whitespace-mode ()
+(defun ambrevar/flyspell-and-whitespace-mode ()
   "Toggle `flyspell-mode' and `whitespace-mode'."
   (interactive)
   (if (derived-mode-p 'text-mode)
@@ -88,7 +88,7 @@ selectively."
 
 ;;; From https://www.reddit.com/r/emacs/comments/70bn7v/what_do_you_have_emacs_show_when_it_starts_up/.
 ;;; Supply a random fortune cookie as the *scratch* message.
-(defun fortune-scratch-message ()
+(defun ambrevar/fortune-scratch-message ()
   (interactive)
   (let ((fortune
          (when (executable-find "fortune")
@@ -103,7 +103,7 @@ selectively."
         (insert fortune)
       fortune)))
 
-(defun global-set-keys (key def &rest bindings)
+(defun ambrevar/global-set-keys (key def &rest bindings)
   "Like `global-set-key' but allow for defining several bindings at once.
 `KEY' must be acceptable for `kbd'."
   (while key
@@ -111,7 +111,7 @@ selectively."
     (setq key (pop bindings)
           def (pop bindings))))
 
-(defun insert-and-indent (text)
+(defun ambrevar/insert-and-indent (text)
   "Insert indented TEXT at point."
   (interactive "s Text: ")
   (let ((oldpoint  (point)))
@@ -119,7 +119,7 @@ selectively."
     (indent-region oldpoint (point))
     (newline-and-indent)))
 
-(defun local-set-keys (key def &rest bindings)
+(defun ambrevar/local-set-keys (key def &rest bindings)
   "Like `local-set-key' but allow for defining several bindings at once.
 `KEY' must be acceptable for `kbd'."
   (while key
@@ -127,7 +127,7 @@ selectively."
     (setq key (pop bindings)
           def (pop bindings))))
 
-(defun move-border-left (arg)
+(defun ambrevar/move-border-left (arg)
   "Move window border in a natural manner.
 If this is a window with its right edge being the edge of the
 screen, enlarge the window horizontally. If this is a window with
@@ -139,7 +139,7 @@ Enlarge/Shrink by ARG columns, or 5 if ARG is nil."
       (move-border-left-or-right arg t)))
 (global-set-key (kbd "M-(") 'move-border-left)
 
-(defun move-border-left-or-right (arg dir-left)
+(defun ambrevar/move-border-left-or-right (arg dir-left)
   "Wrapper around ‘move-border-left’ and ‘move-border-right’.
 ARG is the number of columns to move.
 If DIR-LEFT is t, then move left, otherwise move right."
@@ -152,18 +152,18 @@ If DIR-LEFT is t, then move left, otherwise move right."
         (shrink-window arg t)
       (enlarge-window arg t))))
 
-(defun move-border-right (arg)
+(defun ambrevar/move-border-right (arg)
   "See `move-border-left'."
   (interactive "P")
   (if (= (count-windows) 2)
       (move-border-left-or-right arg nil)))
 (global-set-key (kbd "M-)") 'move-border-right)
 
-(defun reset-fill-column ()
+(defun ambrevar/reset-fill-column ()
   "Reset `fill-column' to its default value."
   (setq fill-column (default-value 'fill-column)))
 
-(defun shell-last-command ()
+(defun ambrevar/shell-last-command ()
   "Run last shell command."
   (interactive)
   (let ((last (car shell-command-history)))
@@ -172,7 +172,7 @@ If DIR-LEFT is t, then move left, otherwise move right."
       (error "Shell command history is empty"))))
 (global-set-key (kbd "C-M-!") 'shell-last-command)
 
-(defun skeleton-make-markers ()
+(defun ambrevar/skeleton-make-markers ()
   "Save last skeleton markers in a list.
 Hook function for skeletons."
   (while skeleton-markers
@@ -183,12 +183,12 @@ Hook function for skeletons."
 (defvar skeleton-markers nil
   "Markers for locations saved in `skeleton-positions'.")
 
-(defun skeleton-previous-position ()
+(defun ambrevar/skeleton-previous-position ()
   "Move to previous skeleton placeholder.
 See `skeleton-next-position'."
   (skeleton-next-position t))
 
-(defun skeleton-next-position (&optional reverse)
+(defun ambrevar/skeleton-next-position (&optional reverse)
   "Move to next skeleton placeholder.
 If REVERSE it t, move to previous placeholder."
   (interactive "P")
@@ -207,7 +207,7 @@ If REVERSE it t, move to previous placeholder."
        (pos (goto-char pos))
        (t (goto-char (car skeleton-markers)))))))
 
-(defun sort-lines-unique (arg)
+(defun ambrevar/sort-lines-unique (arg)
   "Remove trailing white space, then duplicate lines, then sort the result.
 Do not fold case with \\[universal-argument] or non-nil ARG."
   (interactive "P")
@@ -218,7 +218,7 @@ Do not fold case with \\[universal-argument] or non-nil ARG."
       (delete-duplicate-lines start end)
       (sort-lines nil start end))))
 
-(defun swap-windows (&optional w1 w2)
+(defun ambrevar/swap-windows (&optional w1 w2)
   "If 2 windows are up, swap them.
 Else if W1 is a window, swap it with current window.
 If W2 is a window too, swap both."
@@ -247,29 +247,29 @@ If W2 is a window too, swap both."
   (select-window w1))
 (global-set-key (kbd "C-x \\") 'swap-windows)
 
-(defun swap-windows-left ()
+(defun ambrevar/swap-windows-left ()
   "Swap current window with the window to the left."
   (interactive)
   (swap-windows (window-in-direction 'left)))
-(defun swap-windows-below ()
+(defun ambrevar/swap-windows-below ()
   "Swap current window with the window below."
   (interactive)
   (swap-windows (window-in-direction 'below)))
-(defun swap-windows-above ()
+(defun ambrevar/swap-windows-above ()
   "Swap current window with the window above."
   (interactive)
   (swap-windows (window-in-direction 'above)))
-(defun swap-windows-right ()
+(defun ambrevar/swap-windows-right ()
   "Swap current window with the window to the right."
   (interactive)
   (swap-windows (window-in-direction 'right)))
 
-(defun switch-to-last-buffer ()
+(defun ambrevar/switch-to-last-buffer ()
   "Switch to last open buffer in current window."
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
 
-(defun tabify-leading ()
+(defun ambrevar/tabify-leading ()
   "Call `tabify' on leading spaces only.
 Works on whole buffer if region is unactive."
   (interactive)
@@ -287,7 +287,7 @@ Works on whole buffer if region is unactive."
 ;;; TODO: Store window configurations in a buffer-name-indexed alist? Not
 ;;; sure that would ever be useful.
 (defvar single-window--last-configuration nil "Last window configuration before calling `delete-other-windows'.")
-(defun toggle-single-window ()
+(defun ambrevar/toggle-single-window ()
   "Un-maximize current window.
 If multiple windows are active, save window configuration and
 delete other windows.  If only one window is active and a window
@@ -299,7 +299,7 @@ configuration was previously save, restore that configuration."
     (setq single-window--last-configuration (current-window-configuration))
     (delete-other-windows)))
 
-(defun toggle-window-dedicated ()
+(defun ambrevar/toggle-window-dedicated ()
   "Toggle whether the current active window is dedicated or not.
 Run it in each window you want to 'freeze', i.e. prevent Emacs
 from acting on it."
@@ -313,7 +313,7 @@ from acting on it."
    (current-buffer)))
 (global-set-key (kbd "<pause>") 'toggle-window-dedicated)
 
-(defun toggle-window-split ()
+(defun ambrevar/toggle-window-split ()
   "Switch between vertical and horizontal split.
 It only works for frames with exactly two windows."
   (interactive)
@@ -341,7 +341,7 @@ It only works for frames with exactly two windows."
           (if this-win-2nd (other-window 1))))))
 (global-set-key (kbd "C-x C-\\") 'toggle-window-split)
 
-(defun toggle-word-delim ()
+(defun ambrevar/toggle-word-delim ()
   "Make underscore part of the word syntax or not.
 This does not interfere with `subword-mode'."
   (interactive)
@@ -355,75 +355,75 @@ This does not interfere with `subword-mode'."
 ;;; TODO: Move turn-on-* functions to 'hook-functions.el'?
 ;;; Replace useless individual comments with a single global comment.
 
-(defun turn-on-column-number-mode ()
+(defun ambrevar/turn-on-column-number-mode ()
   "Unconditionally turn on `column-number-mode' for the current buffer."
   (set (make-variable-buffer-local 'column-number-mode) t))
 
-(defun turn-on-complete-filename ()
+(defun ambrevar/turn-on-complete-filename ()
   "Unconditionally turn on `comint-dynamic-complete-filename' for the current buffer."
   (add-to-list 'completion-at-point-functions 'comint-dynamic-complete-filename t))
 
-(defun turn-on-delete-trailing-whitespace ()
+(defun ambrevar/turn-on-delete-trailing-whitespace ()
   "Add the `delete-trailing-whitespace' function to `before-save-hook'.
 This does not affect .csv files."
   (unless (string= (file-name-extension buffer-file-name) "csv")
     (add-hook 'before-save-hook 'delete-trailing-whitespace nil t)))
 
-(defun turn-off-delete-trailing-whitespace ()
+(defun ambrevar/turn-off-delete-trailing-whitespace ()
   "Unconditionally remove the `delete-trailing-whitespace' function to `before-save-hook'."
   (remove-hook 'before-save-hook 'delete-trailing-whitespace t))
 
-(defun turn-on-fmt-before-save ()
+(defun ambrevar/turn-on-fmt-before-save ()
   "Unconditionally add the `fmt' function to `before-save-hook'."
   (add-hook 'before-save-hook 'fmt nil t))
 
-(defun turn-off-fmt-before-save ()
-  "Unconditionally remove the `fmt' function to `before-save-hook'."
-  (remove-hook 'before-save-hook 'fmt t))
+(defun ambrevar/turn-off-fmt-before-save ()
+  "Unconditionally remove the `ambrevar/fmt' function to `before-save-hook'."
+  (remove-hook 'before-save-hook 'ambrevar/fmt t))
 
-(defun turn-off-indent-tabs ()
+(defun ambrevar/turn-off-indent-tabs ()
   "Unconditionally turn off tab indentation."
   (setq indent-tabs-mode nil))
 
-(defun turn-on-indent-tabs ()
+(defun ambrevar/turn-on-indent-tabs ()
   "Unconditionally turn on tab indentation."
   (setq indent-tabs-mode t))
 
-(defun turn-off-line-number-mode ()
+(defun ambrevar/turn-off-line-number-mode ()
   "Unconditionally turn off `line-number-mode' fur the current buffer.."
   (set (make-variable-buffer-local 'line-number-mode) nil))
 
-(defun turn-off-linum ()
+(defun ambrevar/turn-off-linum ()
   "Unconditionally turn off Linum mode."
   (linum-mode 0))
 
-(defun turn-on-newline-paragraph ()
+(defun ambrevar/turn-on-newline-paragraph ()
   "Unconditionally make of newlines the start of a paragraph."
   (set (make-local-variable 'paragraph-start) "
 "))
 
-(defun turn-off-nobreak-char-display ()
+(defun ambrevar/turn-off-nobreak-char-display ()
   (set (make-local-variable 'nobreak-char-display) nil))
 
-(defun turn-on-skeleton-markers ()
+(defun ambrevar/turn-on-skeleton-markers ()
   "Allow skeletons to make markers to ease field navigation."
   (add-hook 'skeleton-end-hook 'skeleton-make-markers))
 
-(defun turn-on-tab-width-to-4 ()
+(defun ambrevar/turn-on-tab-width-to-4 ()
   "Unconditionally set tab width to 4."
   (setq tab-width 4))
 
-(defun turn-on-tab-width-to-8 ()
+(defun ambrevar/turn-on-tab-width-to-8 ()
   "Unconditionally set tab width to 8."
   (setq tab-width 8))
 
-(defun unfill-paragraph ()
+(defun ambrevar/unfill-paragraph ()
   "Paragraph at point is unwrapped on one single line."
   (interactive)
   (let ((fill-column (point-max)))
     (fill-paragraph nil)))
 
-(defun unfill-region ()
+(defun ambrevar/unfill-region ()
   "Unfill all paragraphs found in current region.
 Each paragraph stand on its line."
   (interactive)

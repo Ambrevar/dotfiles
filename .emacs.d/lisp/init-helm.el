@@ -68,7 +68,7 @@
  helm-window-show-buffers-function 'helm-window-mosaic-fn
  helm-window-prefer-horizontal-split t)
 
-(defun helm-split-window-combined-fn (window)
+(defun ambrevar/helm-split-window-combined-fn (window)
   "Helm window splitting that combined most standard features.
 
 - With C-u, split inside. With C-u C-u, use same window.
@@ -98,25 +98,25 @@
                   (if (> (window-pixel-width) (window-pixel-height))
                       'right
                     'below)))))
-(setq helm-split-window-preferred-function 'helm-split-window-combined-fn)
+(setq helm-split-window-preferred-function 'ambrevar/helm-split-window-combined-fn)
 
 ;;; From https://github.com/emacs-helm/helm/issues/362.
 ;;; This is not perfect with evil mode as the cursor type is not right in the
 ;;; header line and the evil cursor remains in the minibuffer.
 ;;; https://emacs.stackexchange.com/questions/17058/change-cursor-type-in-helm-header-line#17097
 (setq helm-echo-input-in-header-line t)
-(defun helm-hide-minibuffer-maybe ()
+(defun ambrevar/helm-hide-minibuffer-maybe ()
   (when (with-helm-buffer helm-echo-input-in-header-line)
     (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
       (overlay-put ov 'window (selected-window))
       (overlay-put ov 'face (let ((bg-color (face-background 'default nil)))
                               `(:background ,bg-color :foreground ,bg-color)))
       (setq-local cursor-type nil))))
-(add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
+(add-hook 'helm-minibuffer-set-up-hook 'ambrevar/helm-hide-minibuffer-maybe)
 
 ;;; Add bindings to `helm-apropos`. TODO: Does not work most of the times.
 ;;; https://github.com/emacs-helm/helm/issues/1140
-(defun helm-def-source--emacs-commands (&optional default)
+(defun ambrevar/helm-def-source--emacs-commands (&optional default)
   (helm-build-in-buffer-source "Commands"
     :init `(lambda ()
              (helm-apropos-init 'commandp ,default))
@@ -139,12 +139,12 @@
                                   helm-source-buffer-not-found))
 
 ;;; Eshell
-(defun helm/eshell-set-keys ()
+(defun ambrevar/helm/eshell-set-keys ()
   (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
   (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)
   (define-key eshell-mode-map (kbd "M-s") nil) ; Useless when we have 'helm-eshell-history.
   (define-key eshell-mode-map (kbd "M-s f") 'helm-eshell-prompts-all))
-(add-hook 'eshell-mode-hook 'helm/eshell-set-keys)
+(add-hook 'eshell-mode-hook 'ambrevar/helm/eshell-set-keys)
 
 ;;; TODO: Use helm-ff history in helm file completion.
 ;;; https://github.com/emacs-helm/helm/issues/1118
@@ -153,23 +153,23 @@
 ;;; Do not exclude any files from 'git grep'.
 (setq helm-grep-git-grep-command "git --no-pager grep -n%cH --color=always --full-name -e %p -- %f")
 
-(defun helm-grep-git-or-ag (arg)
+(defun ambrevar/helm-grep-git-or-ag (arg)
   "Run `helm-grep-do-git-grep' if possible; fallback to `helm-do-grep-ag' otherwise.
 Requires `call-process-to-string' from `functions'."
   (interactive "P")
   (require 'vc)
   (require 'functions)
   (if (and (vc-find-root default-directory ".git")
-           (or arg (split-string (call-process-to-string "git" "ls-files" "-z") "\0" t)))
+           (or arg (split-string (ambrevar/call-process-to-string "git" "ls-files" "-z") "\0" t)))
       (helm-grep-do-git-grep arg)
     (helm-do-grep-ag nil)))
 
-(defun helm-grep-git-all-or-ag ()
+(defun ambrevar/helm-grep-git-all-or-ag ()
   "Run `helm-grep-do-git-grep' over all git files."
   (interactive)
   (helm-grep-do-git-grep t))
 
-(defun helm-mark-or-exchange-rect ()
+(defun ambrevar/helm-mark-or-exchange-rect ()
   "Run `helm-all-mark-rings-before-mark-point' or `rectangle-exchange-point-and-mark' if in rectangle-mark-mode."
   (interactive)
   (if rectangle-mark-mode
@@ -183,15 +183,15 @@ Requires `call-process-to-string' from `functions'."
 ;; (global-set-key [remap dabbrev-expand] 'helm-dabbrev)
 (global-set-key [remap yank-pop] 'helm-show-kill-ring)
 ;;; Do not remap 'exchange-point-and-mark, Evil needs it in visual mode.
-(global-set-key (kbd "C-x C-x") 'helm-mark-or-exchange-rect)
+(global-set-key (kbd "C-x C-x") 'ambrevar/helm-mark-or-exchange-rect)
 (global-set-key [remap apropos-command] 'helm-apropos)
 (global-set-key [remap query-replace-regexp] 'helm-regexp)
 (unless (boundp 'completion-in-region-function)
   (define-key lisp-interaction-mode-map [remap completion-at-point] 'helm-lisp-completion-at-point)
   (define-key emacs-lisp-mode-map       [remap completion-at-point] 'helm-lisp-completion-at-point))
 
-(global-set-keys
- "C-x M-g" 'helm-grep-git-or-ag
+(ambrevar/global-set-keys
+ "C-x M-g" 'ambrevar/helm-grep-git-or-ag
  "C-x M-G" 'helm-do-grep-ag)
 
 ;;; Use the M-s prefix just like `occur'.

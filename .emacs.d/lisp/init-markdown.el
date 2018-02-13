@@ -7,6 +7,6 @@
 
 (define-key markdown-mode-map "\M-'" 'markdown-blockquote-region)
 
-(add-hook 'markdown-mode-hook 'turn-on-newline-paragraph)
+(add-hook 'markdown-mode-hook 'ambrevar/turn-on-newline-paragraph)
 
 (provide 'init-markdown)

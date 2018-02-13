@@ -4,7 +4,7 @@
 ;;; Reported at https://github.com/dominikh/go-mode.el/issues/191.
 (use-local-map go-mode-map)
 
-(local-set-keys
+(ambrevar/local-set-keys
  "C-c m" 'go-main
  "C-c D" 'godoc
  "C-c d" 'godoc-at-point
@@ -87,12 +87,12 @@ Note that the -cover test flag is left out since it shifts line numbers."
     ;; Requires `call-process-to-string' from `functions'."
     (require 'functions)
     (setq go-guru-command
-          (concat (replace-regexp-in-string "\n$" "" (call-process-to-string "go" "env" "GOTOOLDIR")) "/guru"))))
+          (concat (replace-regexp-in-string "\n$" "" (ambrevar/call-process-to-string "go" "env" "GOTOOLDIR")) "/guru"))))
 
-(defun go-turn-on-gofmt-before-save ()
+(defun ambrevar/go-turn-on-gofmt-before-save ()
   (add-hook 'before-save-hook #'gofmt-before-save nil t))
 
-(add-hook 'go-mode-hook 'go-turn-on-gofmt-before-save)
+(add-hook 'go-mode-hook 'ambrevar/go-turn-on-gofmt-before-save)
 
 (when (require 'go-eldoc nil t)
   (add-hook 'go-mode-hook 'go-eldoc-setup))

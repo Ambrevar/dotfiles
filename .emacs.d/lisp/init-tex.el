@@ -1,7 +1,7 @@
 ;;; TeX
 
-(dolist (fun '(turn-on-indent-tabs
-               ;; turn-on-newline-paragraph
+(dolist (fun '(ambrevar/turn-on-indent-tabs
+               ;; ambrevar/turn-on-newline-paragraph
                prettify-symbols-mode))
   (add-hook 'tex-mode-hook fun))
 

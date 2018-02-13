@@ -5,11 +5,11 @@
 ;;; Besides you can try extending `url-cookie-save-interval'.
 ;;; Nonetheless is mode is helpfull for syntax awareness.
 
-(define-keys mediawiki-mode-map
-  "C-c o" 'mediawiki-browse
-  "M-g" nil ; This shadows M-g M-g.
-  "C-x C-s" 'save-buffer
-  "C-c M-s" 'mediawiki-save)
+(ambrevar/define-keys mediawiki-mode-map
+                      "C-c o" 'mediawiki-browse
+                      "M-g" nil ; This shadows M-g M-g.
+                      "C-x C-s" 'save-buffer
+                      "C-c M-s" 'mediawiki-save)
 
 (setq
  mediawiki-site-alist

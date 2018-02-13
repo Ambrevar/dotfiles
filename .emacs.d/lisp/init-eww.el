@@ -3,7 +3,7 @@
 (setq eww-bookmarks-directory "~/personal/bookmarks"
       eww-download-directory "~/temp")
 
-(defun eww-switch-back ()
+(defun ambrevar/eww-switch-back ()
   "Switch to the *eww* buffer."
   (interactive)
   (let ((buffer (get-buffer "*eww*")))

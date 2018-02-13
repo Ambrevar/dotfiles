@@ -54,32 +54,32 @@
 (exwm-input-set-key (kbd "s-f") #'find-file)
 
 (when (require 'functions)
-  (exwm-input-set-key (kbd "s-\\") #'toggle-window-split)
-  (exwm-input-set-key (kbd "s-H") 'swap-windows-left)
-  (exwm-input-set-key (kbd "s-J") 'swap-windows-below)
-  (exwm-input-set-key (kbd "s-K") 'swap-windows-above)
-  (exwm-input-set-key (kbd "s-L") 'swap-windows-right))
+  (exwm-input-set-key (kbd "s-\\") 'ambrevar/toggle-window-split)
+  (exwm-input-set-key (kbd "s-H") 'ambrevar/swap-windows-left)
+  (exwm-input-set-key (kbd "s-J") 'ambrevar/swap-windows-below)
+  (exwm-input-set-key (kbd "s-K") 'ambrevar/swap-windows-above)
+  (exwm-input-set-key (kbd "s-L") 'ambrevar/swap-windows-right))
 
 ;; The following can only apply to EXWM buffers, else it could have unexpected effects.
 (push ?\s-  exwm-input-prefix-keys)
 (define-key exwm-mode-map (kbd "s-SPC") #'exwm-floating-toggle-floating)
 
 (exwm-input-set-key (kbd "s-i") #'follow-delete-other-windows-and-split)
-(exwm-input-set-key (kbd "s-o") #'toggle-single-window)
+(exwm-input-set-key (kbd "s-o") #'ambrevar/toggle-single-window)
 (exwm-input-set-key (kbd "s-O") #'exwm-layout-toggle-fullscreen)
 
 (with-eval-after-load 'helm
   ;; Need `with-eval-after-load' here since 'helm-map is not defined in 'helm-config.
-  (define-keys helm-map
-    "s-\\" 'helm-toggle-resplit-and-swap-windows)
+  (ambrevar/define-keys helm-map
+                        "s-\\" 'helm-toggle-resplit-and-swap-windows)
   (exwm-input-set-key (kbd "s-c") #'helm-resume)
   (exwm-input-set-key (kbd "s-b") #'helm-mini)
   (exwm-input-set-key (kbd "s-f") #'helm-find-files)
   (exwm-input-set-key (kbd "s-F") #'helm-locate)
   (when (fboundp 'helm-locate-meta)
     (exwm-input-set-key (kbd "s-F") #'helm-locate-meta))
-  (exwm-input-set-key (kbd "s-g") #'helm-grep-git-or-ag)
-  (exwm-input-set-key (kbd "s-G") #'helm-grep-git-all-or-ag))
+  (exwm-input-set-key (kbd "s-g") 'ambrevar/helm-grep-git-or-ag)
+  (exwm-input-set-key (kbd "s-G") 'ambrevar/helm-grep-git-all-or-ag))
 
 (require 'functions)
 (exwm-input-set-key (kbd "s-<tab>") #'switch-to-last-buffer)
@@ -88,9 +88,9 @@
   (exwm-input-set-key (kbd "C-6") #'evil-switch-to-windows-last-buffer))
 
 ;;; Emacs mode shortcuts.
-(exwm-input-set-key (kbd "s-t") #'org-switch-agenda-file)
-(exwm-input-set-key (kbd "s-T") #'org-switch-agenda-file-other-window)
-(exwm-input-set-key (kbd "s-<return>") #'eshell-or-new-session)
+(exwm-input-set-key (kbd "s-t") #'ambrevar/org-switch-agenda-file)
+(exwm-input-set-key (kbd "s-T") #'ambrevar/org-switch-agenda-file-other-window)
+(exwm-input-set-key (kbd "s-<return>") #'ambrevar/eshell-or-new-session)
 (when (fboundp 'magit-status)
   (exwm-input-set-key (kbd "s-v") #'magit-status))
 (when (fboundp 'emms-all)
@@ -103,8 +103,8 @@
   (exwm-input-set-key (kbd "s-p") #'helm-pass))
 (when (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path))
   (exwm-input-set-key (kbd "s-m") #'mu4e-headers))
-(exwm-input-set-key (kbd "s-n") #'elfeed-switch-back) ; "n" for "news"
-(exwm-input-set-key (kbd "s-e") #'eww-switch-back)
+(exwm-input-set-key (kbd "s-n") #'ambrevar/elfeed-switch-back) ; "n" for "news"
+(exwm-input-set-key (kbd "s-e") #'ambrevar/eww-switch-back)
 (exwm-input-set-key (kbd "s-E") #'eww)
 
 
@@ -127,8 +127,8 @@
                                     helm-source-bookmarks
                                     helm-source-bookmark-set
                                     helm-source-buffer-not-found))
-  (define-keys helm-exwm-map "M-d" 'helm-buffer-run-kill-persistent)
-  (define-keys helm-exwm-map "S-<return>" 'helm-buffer-switch-other-window)
+  (ambrevar/define-keys helm-exwm-map "M-d" 'helm-buffer-run-kill-persistent)
+  (ambrevar/define-keys helm-exwm-map "S-<return>" 'helm-buffer-switch-other-window)
   ;; Launcher
   (exwm-input-set-key (kbd "s-r") 'helm-run-external-command)
   ;; Web browser

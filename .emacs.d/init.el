@@ -9,22 +9,22 @@
 
 ;;; Speed up init.
 ;;; Temporarily reduce garbage collection during startup. Inspect `gcs-done'.
-(defun reset-gc-cons-threshold ()
+(defun ambrevar/reset-gc-cons-threshold ()
   (setq gc-cons-threshold (car (get 'gc-cons-threshold 'standard-value))))
 (setq gc-cons-threshold (* 64 1024 1024))
-(add-hook 'after-init-hook 'reset-gc-cons-threshold)
+(add-hook 'after-init-hook 'ambrevar/reset-gc-cons-threshold)
 ;;; Temporarily disable the file name handler.
 (setq default-file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
-(defun reset-file-name-handler-alist ()
+(defun ambrevar/reset-file-name-handler-alist ()
   (setq file-name-handler-alist default-file-name-handler-alist))
-(add-hook 'after-init-hook 'reset-file-name-handler-alist)
+(add-hook 'after-init-hook 'ambrevar/reset-file-name-handler-alist)
 
-(defvar emacs-cache-folder "~/.cache/emacs/"
+(defvar ambrevar/emacs-cache-folder "~/.cache/emacs/"
   "Cache folder is everything we do not want to track together
   with the configuration files.")
-(if (not (file-directory-p emacs-cache-folder))
-    (make-directory emacs-cache-folder t))
+(if (not (file-directory-p ambrevar/emacs-cache-folder))
+    (make-directory ambrevar/emacs-cache-folder t))
 
 ;;; Store additional config in a 'lisp' subfolder and add it to the load path so
 ;;; that `require' can find the files.
@@ -38,13 +38,13 @@
   (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")))
   (add-to-list 'package-archives '("melpa" . "https://melpa.milkbox.net/packages/"))
   (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
-  (setq package-user-dir (concat emacs-cache-folder "elpa"))
+  (setq package-user-dir (concat ambrevar/emacs-cache-folder "elpa"))
   (package-initialize))
 
 ;;; Site Lisp folder for local packages and development.
 ;; We need to roll it out manually since we want it first in the `load-path',
 ;; while `normal-top-level-add-subdirs-to-load-path' appends it to the very end.
-(defun package-refresh-load-path (path)
+(defun ambrevar/package-refresh-load-path (path)
   "Add every non-hidden sub-folder of PATH to `load-path'."
   (when (file-directory-p path)
     (dolist (dir (directory-files path t "^[^\\.]"))
@@ -52,7 +52,7 @@
         (setq load-path (add-to-list 'load-path dir))))))
 (let ((site-lisp (expand-file-name "site-lisp/" user-emacs-directory)))
   (add-to-list 'load-path site-lisp)
-  (package-refresh-load-path site-lisp))
+  (ambrevar/package-refresh-load-path site-lisp))
 
 ;;; Local config.  See below for an example usage.
 (load "local-before" t)
@@ -80,7 +80,7 @@
 ;;; Bibtex
 (setq bibtex-entry-format '(opts-or-alts required-fields numerical-fields whitespace realign last-comma delimiters braces sort-fields))
 (setq bibtex-field-delimiters 'double-quotes)
-(add-hook 'bibtex-mode-hook 'turn-off-indent-tabs)
+(add-hook 'bibtex-mode-hook 'ambrevar/turn-off-indent-tabs)
 
 ;;; Bison/Flex
 ;; (nconc package-selected-packages '(bison-mode))
@@ -97,9 +97,9 @@
 (with-eval-after-load 'cc-mode (require 'init-cc))
 
 ;;; ChangeLog
-(defun change-log-set-indent-rules ()
+(defun ambrevar/change-log-set-indent-rules ()
   (setq tab-width 2 left-margin 2))
-(add-hook 'change-log-mode-hook 'change-log-set-indent-rules)
+(add-hook 'change-log-mode-hook 'ambrevar/change-log-set-indent-rules)
 
 ;;; Completion
 (nconc package-selected-packages '(company helm-company))
@@ -110,7 +110,7 @@
 (nconc package-selected-packages '(debbugs))
 (with-eval-after-load 'debbugs
   (setq debbugs-gnu-all-severities t
-        debbugs-gnu-persistency-file (expand-file-name "debbugs" emacs-cache-folder)))
+        debbugs-gnu-persistency-file (expand-file-name "debbugs" ambrevar/emacs-cache-folder)))
 
 ;;; Diff
 ;;; REVIEW: Show permissions in ztree.
@@ -215,18 +215,18 @@
      additional
      mark
      (additional-movement normal visual motion))))
-(defun init-lispy ()
+(defun ambrevar/init-lispy ()
   (when (require 'lispy nil t)
     (set-face-foreground 'lispy-face-hint "#FF00FF")
     (when (require 'lispyville nil t)
       (add-hook 'lispy-mode-hook 'lispyville-mode))
     (lispy-mode)))
 (dolist (hook '(lisp-mode-hook emacs-lisp-mode-hook))
-  (add-hook hook 'turn-on-fmt-before-save)
-  (add-hook hook 'turn-on-complete-filename)
-  (add-hook hook 'turn-on-tab-width-to-8) ; Because some existing code uses tabs.
-  (add-hook hook 'turn-off-indent-tabs)   ; Should not use tabs.
-  (add-hook hook 'init-lispy))
+  (add-hook hook 'ambrevar/turn-on-fmt-before-save)
+  (add-hook hook 'ambrevar/turn-on-complete-filename)
+  (add-hook hook 'ambrevar/turn-on-tab-width-to-8) ; Because some existing code uses tabs.
+  (add-hook hook 'ambrevar/turn-off-indent-tabs)   ; Should not use tabs.
+  (add-hook hook 'ambrevar/init-lispy))
 
 ;;; Common LISP
 (setq inferior-lisp-program "clisp")
@@ -267,10 +267,10 @@
 
 ;;; Matlab / Octave
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode)) ; matlab
-(defun octave-set-comment-start ()
+(defun ambrevar/octave-set-comment-start ()
   "Set comment character to '%' to be Matlab-compatible."
   (set (make-local-variable 'comment-start) "% "))
-(add-hook 'octave-mode-hook 'octave-set-comment-start)
+(add-hook 'octave-mode-hook 'ambrevar/octave-set-comment-start)
 
 ;;; Maxima
 (autoload 'maxima-mode "maxima" "Maxima mode" t)
@@ -315,12 +315,12 @@
   (pdf-tools-install t t t))
 
 ;;; Perl
-(defun perl-set-indent-rules ()
+(defun ambrevar/perl-set-indent-rules ()
   (defvaralias 'perl-indent-level 'tab-width))
-(defun perl-set-compiler ()
+(defun ambrevar/perl-set-compiler ()
   (setq compile-command (concat "perl " (shell-quote-argument buffer-file-name))))
-(add-hook 'perl-mode-hook 'perl-set-indent-rules)
-(add-hook 'perl-mode-hook 'perl-set-compiler)
+(add-hook 'perl-mode-hook 'ambrevar/perl-set-indent-rules)
+(add-hook 'perl-mode-hook 'ambrevar/perl-set-compiler)
 
 ;;; po
 (nconc package-selected-packages '(po-mode))
@@ -356,7 +356,7 @@
 ;;; StackExchange
 (nconc package-selected-packages '(sx))
 (with-eval-after-load 'sx
-  (setq sx-cache-directory (concat emacs-cache-folder "sx")))
+  (setq sx-cache-directory (concat ambrevar/emacs-cache-folder "sx")))
 
 ;;; Syntax checking
 (nconc package-selected-packages '(flycheck helm-flycheck))
@@ -384,14 +384,14 @@
   ;; `transmission' will fail to start and will not run any hook if the daemon
   ;; is not up yet.
   ;; We need to advice the function :before to guarantee it starts.
-  (defun transmission-start-daemon ()
+  (defun ambrevar/transmission-start-daemon ()
     (unless (member "transmission-da"
                     (mapcar
                      (lambda (pid) (alist-get 'comm (process-attributes pid)))
                      (list-system-processes)))
       (call-process "transmission-daemon")
       (sleep-for 1)))
-  (advice-add 'transmission :before 'transmission-start-daemon)
+  (advice-add 'transmission :before 'ambrevar/transmission-start-daemon)
   (setq transmission-refresh-modes '(transmission-mode transmission-files-mode transmission-info-mode transmission-peers-mode)
         transmission-refresh-interval 1))
 
@@ -401,7 +401,7 @@
   (require 'google-translate-default-ui)
   ;; (global-set-key "\C-ct" 'google-translate-at-point)
   ;; (global-set-key "\C-cT" 'google-translate-query-translate)
-  (defun google-translate-line ()
+  (defun ambrevar/google-translate-line ()
     "Translate current line and insert result after it, separated by ' = '."
     (interactive)
     (let* ((langs (google-translate-read-args nil nil))
@@ -424,11 +424,11 @@
 ;;; Web forms.
 ;;; Remove auto-fill in web edits because wikis and forums do not like it.
 ;;; This works for qutebrowser, but may need changes for other browsers.
-(defun browser-edit ()
+(defun ambrevar/browser-edit ()
   (when (require 'with-editor nil t) (with-editor-mode))
   (text-mode)
   (auto-fill-mode -1))
-(add-to-list 'auto-mode-alist `(,(concat (getenv "BROWSER") "-editor-*") . browser-edit))
+(add-to-list 'auto-mode-alist `(,(concat (getenv "BROWSER") "-editor-*") . ambrevar/browser-edit))
 
 ;;; Wgrep
 (nconc package-selected-packages '(wgrep-helm wgrep-pt))
@@ -441,16 +441,16 @@
 (when (require 'exwm nil t) (require 'init-exwm))
 
 ;;; XML / SGML
-(defun sgml-setup ()
+(defun ambrevar/sgml-setup ()
   (setq sgml-xml-mode t)
   ;; (toggle-truncate-lines) ; This seems to slow down Emacs.
   (turn-off-auto-fill))
-(add-hook 'sgml-mode-hook 'sgml-setup)
+(add-hook 'sgml-mode-hook 'ambrevar/sgml-setup)
 (with-eval-after-load 'nxml-mode
   (set-face-foreground 'nxml-element-local-name "gold1")
   (defvaralias 'nxml-child-indent 'tab-width))
 ;;; Because XML is hard to read.
-(add-hook 'nxml-mode-hook 'turn-on-tab-width-to-4)
+(add-hook 'nxml-mode-hook 'ambrevar/turn-on-tab-width-to-4)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Finalization

@@ -1,10 +1,10 @@
 ;;; Makefile
 
-(define-keys makefile-mode-map
-  "C-c c" 'makefile-config
-  "C-c d" 'makefile-doc
-  "C-c m" 'makefile-main
-  "C-c s" 'makefile-c)
+(ambrevar/define-keys makefile-mode-map
+                      "C-c c" 'makefile-config
+                      "C-c d" 'makefile-doc
+                      "C-c m" 'makefile-main
+                      "C-c s" 'makefile-c)
 
 (define-skeleton makefile-main
   "Insert root Makefile." nil

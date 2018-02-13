@@ -98,7 +98,7 @@ Default to unread messages if no"
         (if mu4e-compose-fortune-p
             (format "%s\n\n%s"
                     user-full-name
-                    (call-process-to-string "fortune" "-s"))
+                    (ambrevar/call-process-to-string "fortune" "-s"))
           user-full-name)))
 (add-hook 'mu4e-compose-pre-hook 'mu4e-add-fortune-signature)
 

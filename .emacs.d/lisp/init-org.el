@@ -6,7 +6,7 @@
 
 (setq
  ;; Move annoying babel folder.
- org-babel-temporary-directory (concat emacs-cache-folder "babel")
+ org-babel-temporary-directory (concat ambrevar/emacs-cache-folder "babel")
  ;; Disable line splitting on M-RET.
  org-M-RET-may-split-line '((default))
  org-insert-heading-respect-content t
@@ -27,7 +27,7 @@
 
 ;;; Agendas.
 (add-to-list 'org-agenda-files "~/personal/todo/todo.org")
-(defun org-switch-agenda-file (&optional other-window)
+(defun ambrevar/org-switch-agenda-file (&optional other-window)
   "Switch between org-agenda and the first org-agenda-files."
   (interactive "P")
   (if (and buffer-file-name
@@ -40,16 +40,16 @@
             (funcall (if other-window 'switch-to-buffer-other-window 'switch-to-buffer) b))
         (funcall (if other-window 'find-file-other-window 'find-file) (car org-agenda-files))))))
 
-(defun org-switch-agenda-file-other-window ()
-  "Like `org-switch-agenda-file' but use other window if possible."
+(defun ambrevar/org-switch-agenda-file-other-window ()
+  "Like `ambrevar/org-switch-agenda-file' but use other window if possible."
   (interactive)
-  (org-switch-agenda-file t))
+  (ambrevar/org-switch-agenda-file t))
 
 ;;; Set PDF association in Org-mode (original is 'default).
 (setcdr (assoc "\\.pdf\\'" org-file-apps) 'emacs)
 
 ;;; Hooks.
-(dolist (fun '(turn-off-linum turn-off-indent-tabs turn-off-auto-fill))
+(dolist (fun '(ambrevar/turn-off-linum ambrevar/turn-off-indent-tabs turn-off-auto-fill))
   (add-hook 'org-mode-hook fun))
 
 (when (require 'org-contacts nil t)

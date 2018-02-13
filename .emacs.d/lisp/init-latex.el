@@ -8,12 +8,12 @@
 (require 'latex-pretty-symbols nil t)
 
 ;;; Since current buffer is a LaTeX one, we can use `local-set-key'.
-(local-set-keys
+(ambrevar/local-set-keys
  "C-c m" 'latex-article
  "C-c l" 'latex-lstinline
  "C-c o" 'latex-orgtbl)
 
-(dolist (fun '(turn-on-orgtbl turn-on-skeleton-markers))
+(dolist (fun '(turn-on-orgtbl ambrevar/turn-on-skeleton-markers))
   ;; Since this file is loaded from `latex-mode-hook', these functions will not
   ;; be applied to the current buffer.  We do it manually.
   (funcall fun)
@@ -24,7 +24,7 @@
 ;;; With TeXlive, the following packages are needed: psnfss, symbol, zapfding
 (when (and (executable-find "dvipng") (require 'latex-math-preview nil t))
   (setq latex-math-preview-cache-directory-for-insertion
-        (concat emacs-cache-folder "latex-math-preview-cache"))
+        (concat ambrevar/emacs-cache-folder "latex-math-preview-cache"))
   (local-set-key (kbd "C-c p") 'latex-math-preview-expression)
   (local-set-key (kbd "C-c j") 'latex-math-preview-insert-symbol)
   (local-set-key (kbd "C-c C-j") 'latex-math-preview-last-symbol-again)
@@ -32,7 +32,7 @@
   (add-to-list 'latex-math-preview-usepackage-filter-alist '("color")))
 
 ;;; For some unknown reasons, `skeleton-end-hook' is set to nil in tex-mode.
-;; (dolist (fun '(latex-set-compiler turn-on-orgtbl turn-on-skeleton-markers))
+;; (dolist (fun '(latex-set-compiler turn-on-orgtbl ambrevar/turn-on-skeleton-markers))
 ;;   ;; Since this file is loaded from `latex-mode-hook', these functions will not
 ;;   ;; be applied to the current buffer. We do it manually.
 ;;   (funcall fun)

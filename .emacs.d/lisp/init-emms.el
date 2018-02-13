@@ -4,7 +4,7 @@
 ;;; TODO: Change face from purple to white?
 ;;; TODO: Delete entry from cache? See `emms-cache-del'.
 
-(setq emms-directory (concat emacs-cache-folder "emms"))
+(setq emms-directory (concat ambrevar/emacs-cache-folder "emms"))
 (emms-all)
 ;; TODO: emms-all causes some "require"d files to be loaded twice if called after, say, emms-browser was loaded.
 (emms-history-load)

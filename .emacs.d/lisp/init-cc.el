@@ -3,11 +3,11 @@
 ;;; TODO: Should we split this into mode-c and mode-c++?
 
 (dolist (map (list c-mode-map c++-mode-map))
-  (define-keys map "C-c m" 'cc-main
-    "<f5>" 'cc-clean
-    "M-." 'semantic-ia-fast-jump
-    "C-c C-d" 'semantic-ia-show-summary
-    "M-<tab>" 'semantic-complete-analyze-inline)
+  (ambrevar/define-keys map "C-c m" 'cc-main
+                        "<f5>" 'cc-clean
+                        "M-." 'semantic-ia-fast-jump
+                        "C-c C-d" 'semantic-ia-show-summary
+                        "M-<tab>" 'semantic-complete-analyze-inline)
   (when (require 'company nil t)
     (define-key map (kbd "M-<tab>") (if (require 'helm-company nil t) 'helm-company 'company-complete))))
 ;; (define-key map (kbd "C-c o") 'ff-find-other-file)
@@ -103,7 +103,7 @@ restored."
 ;;; Options
 
 ;;; Semanticdb folders must be set before starting semantic.
-(setq semanticdb-default-save-directory (concat emacs-cache-folder "semanticdb"))
+(setq semanticdb-default-save-directory (concat ambrevar/emacs-cache-folder "semanticdb"))
 (semantic-mode 1)
 
 ;;; Extra semantic support

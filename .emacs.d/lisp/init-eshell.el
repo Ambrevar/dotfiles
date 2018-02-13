@@ -94,7 +94,7 @@
 ;;; REVIEW: `kill -#' does not work.
 ;;; See #29156.
 
-(setq eshell-directory-name (concat emacs-cache-folder "eshell"))
+(setq eshell-directory-name (concat ambrevar/emacs-cache-folder "eshell"))
 
 ;;; Use TRAMP to use Eshell as root.
 (require 'em-tramp)
@@ -120,8 +120,8 @@
       (lambda nil
         (let ((path (abbreviate-file-name (eshell/pwd))))
           (concat
-           (when eshell-status-p
-             (propertize (or (eshell-status-display) "") 'face font-lock-comment-face))
+           (when ambrevar/eshell-status-p
+             (propertize (or (ambrevar/eshell-status-display) "") 'face font-lock-comment-face))
            (format
             (propertize "(%s@%s)" 'face '(:weight bold))
             (propertize (user-login-name) 'face '(:foreground "cyan"))
@@ -195,7 +195,7 @@
 
 ;;; Hooks
 ;;; `nobreak-char-display' makes some output look weird, e.g. with 'tree'.
-(add-hook 'eshell-mode-hook 'turn-off-nobreak-char-display)
+(add-hook 'eshell-mode-hook 'ambrevar/turn-off-nobreak-char-display)
 
 ;;; History
 ;;; Filter out space-beginning commands from history.
@@ -208,20 +208,20 @@
                  (string-prefix-p " " str)))))
 
 ;;; Shared history.
-(defvar eshell-history-global-ring nil
+(defvar ambrevar/eshell-history-global-ring nil
   "The history ring shared across Eshell sessions.")
 
-(defun eshell-hist-use-global-history ()
+(defun ambrevar/eshell-hist-use-global-history ()
   "Make Eshell history shared across different sessions."
-  (unless eshell-history-global-ring
+  (unless ambrevar/eshell-history-global-ring
     (when eshell-history-file-name
       (eshell-read-history nil t))
-    (setq eshell-history-global-ring (or eshell-history-ring (make-ring eshell-history-size))))
-  (setq eshell-history-ring eshell-history-global-ring))
-(add-hook 'eshell-mode-hook 'eshell-hist-use-global-history)
+    (setq ambrevar/eshell-history-global-ring (or eshell-history-ring (make-ring eshell-history-size))))
+  (setq eshell-history-ring ambrevar/eshell-history-global-ring))
+(add-hook 'eshell-mode-hook 'ambrevar/eshell-hist-use-global-history)
 
 ;;; Spawning
-(defun eshell-or-new-session (&optional arg)
+(defun ambrevar/eshell-or-new-session (&optional arg)
   "Create an interactive Eshell buffer.
 Switch to last Eshell session if any.
 Otherwise create a new one and switch to it.
@@ -247,46 +247,46 @@ See `eshell' for the numeric prefix ARG."
     (define-key company-active-map (kbd "M-p") 'helm-eshell-history)))
 
 ;;; Extra execution information
-(defvar eshell-status-p t
+(defvar ambrevar/eshell-status-p t
   "If non-nil, display status before prompt.")
-(defvar eshell-status--last-command-time nil)
-(make-variable-buffer-local 'eshell-status--last-command-time)
-(defvar eshell-status-min-duration-before-display 1
+(defvar ambrevar/eshell-status--last-command-time nil)
+(make-variable-buffer-local 'ambrevar/eshell-status--last-command-time)
+(defvar ambrevar/eshell-status-min-duration-before-display 1
   "If a command takes more time than this, display its duration.")
 
-(defun eshell-status-display ()
-  (when eshell-status--last-command-time
-    (let ((duration (time-subtract (current-time) eshell-status--last-command-time)))
-      (setq eshell-status--last-command-time nil)
-      (when (> (time-to-seconds duration) eshell-status-min-duration-before-display)
+(defun ambrevar/eshell-status-display ()
+  (when ambrevar/eshell-status--last-command-time
+    (let ((duration (time-subtract (current-time) ambrevar/eshell-status--last-command-time)))
+      (setq ambrevar/eshell-status--last-command-time nil)
+      (when (> (time-to-seconds duration) ambrevar/eshell-status-min-duration-before-display)
         (format "#[STATUS] End time %s, duration %.3fs\n"
                 (format-time-string "%F %T" (current-time))
                 (time-to-seconds duration))))))
 
-(defun eshell-status-record ()
-  (setq eshell-status--last-command-time (current-time)))
+(defun ambrevar/eshell-status-record ()
+  (setq ambrevar/eshell-status--last-command-time (current-time)))
 
-(add-hook 'eshell-pre-command-hook 'eshell-status-record)
+(add-hook 'eshell-pre-command-hook 'ambrevar/eshell-status-record)
 
 ;;; Detach
 (when (require 'package-eshell-detach nil t)
-  (defun eshell-detach-set-keys ()
+  (defun ambrevar/eshell-detach-set-keys ()
     (define-key eshell-mode-map (kbd "C-c C-z") 'eshell-detach-stop)
     (define-key eshell-mode-map (kbd "S-<return>") 'eshell-detach-send-input)
     (define-key eshell-mode-map (kbd "C-<return>") 'eshell-detach-attach))
-  (add-hook 'eshell-mode-hook 'eshell-detach-set-keys))
+  (add-hook 'eshell-mode-hook 'ambrevar/eshell-detach-set-keys))
 
 
 (when (string= (file-symlink-p (executable-find "man")) "mandoc")
   ;; Some systems like Void Linux use mandoc instead of man and do not know the
   ;; --nj, --nh flags.
-  (defun pcmpl-args-mandoc-man-function (name)
+  (defun ambrevar/pcmpl-args-mandoc-man-function (name)
     (let ((process-environment process-environment))
       ;; Setting MANWIDTH to a high number makes most paragraphs fit on a single
       ;; line, reducing the number of false positives that result from lines
       ;; starting with `-' that aren't really options.
       (push "MANWIDTH=10000" process-environment)
       (pcmpl-args-process-file "man" "--" name)))
-  (setq pcmpl-args-man-function 'pcmpl-args-mandoc-man-function))
+  (setq pcmpl-args-man-function 'ambrevar/pcmpl-args-mandoc-man-function))
 
 (provide 'init-eshell)

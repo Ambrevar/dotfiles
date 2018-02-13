@@ -16,27 +16,27 @@
 (setq echo-keystrokes 0.5)
 
 ;;; Remember last cursor position.
-(setq save-place-file (concat emacs-cache-folder "saveplace"))
+(setq save-place-file (concat ambrevar/emacs-cache-folder "saveplace"))
 (save-place-mode)
 ;;; When the daemon is killed abruptly, places are not saved. Adding this hook
 ;;; allows to save places at a strategic moment.
 (add-hook 'before-save-hook 'save-place-kill-emacs-hook)
 
 ;;; Network files
-(setq url-cookie-file (concat emacs-cache-folder "url.cookies")
-      url-cache-directory (expand-file-name "url/cache" emacs-cache-folder))
+(setq url-cookie-file (concat ambrevar/emacs-cache-folder "url.cookies")
+      url-cache-directory (expand-file-name "url/cache" ambrevar/emacs-cache-folder))
 (with-eval-after-load 'nsm
-  (setq nsm-settings-file (concat emacs-cache-folder "network-security.data")))
+  (setq nsm-settings-file (concat ambrevar/emacs-cache-folder "network-security.data")))
 
 ;;; Bookmark file to cache folder.
-(setq bookmark-default-file (concat emacs-cache-folder "emacs.bmk"))
+(setq bookmark-default-file (concat ambrevar/emacs-cache-folder "emacs.bmk"))
 
 ;;; Recent files.
-(setq recentf-save-file (concat emacs-cache-folder "recentf")
+(setq recentf-save-file (concat ambrevar/emacs-cache-folder "recentf")
       recentf-max-saved-items 40)
 
 ;;; Save M-: history.
-(setq savehist-file (concat emacs-cache-folder "savehist"))
+(setq savehist-file (concat ambrevar/emacs-cache-folder "savehist"))
 (savehist-mode)
 
 ;;; Disable autosave features.
@@ -45,7 +45,7 @@
 
 ;;; Place backup files in specific directory.
 (setq backup-directory-alist
-      `(("." . ,(concat emacs-cache-folder "backups/"))))
+      `(("." . ,(concat ambrevar/emacs-cache-folder "backups/"))))
 
 ;;; Default mode
 (setq-default major-mode 'text-mode)
@@ -81,8 +81,8 @@
 ;;; Adding to `find-file-hook' ensures it will work for every file, regardless of
 ;;; the mode, but it won't work for buffers without files nor on mode change.
 (dolist (hook '(prog-mode-hook text-mode-hook))
-  (add-hook hook 'turn-on-column-number-mode)
-  (add-hook hook 'turn-off-line-number-mode)
+  (add-hook hook 'ambrevar/turn-on-column-number-mode)
+  (add-hook hook 'ambrevar/turn-off-line-number-mode)
   (add-hook hook 'linum-mode))
 ;;; Emacs-nox does not display a fringe after the linum: Setting linum-format in
 ;;; linum-before-numbering-hook is not the right approach as it will change the
@@ -118,8 +118,8 @@
 ;;; WARNING: this can break some configuration files needing whitespaces at the
 ;;; end. This can also slow down saving on big files.  Some modes (e.g. lisp) run
 ;;; `fmt' in their local hook, which is redundant with this.
-;; (add-hook 'find-file-hook 'turn-on-fmt-before-save)
-(add-hook 'find-file-hook 'turn-on-delete-trailing-whitespace)
+;; (add-hook 'find-file-hook 'ambrevar/turn-on-fmt-before-save)
+(add-hook 'find-file-hook 'ambrevar/turn-on-delete-trailing-whitespace)
 
 ;;; Cycle spacing instead of just-one-space.  This frees M-\.
 (global-set-key [remap just-one-space] 'cycle-spacing)
@@ -148,12 +148,12 @@
 ;;; stick to the home-row, but to avoid shadowing other binding I exceptionaly use
 ;;; 'super' (normally reserved to the WM).
 (when (fboundp 'windmove-default-keybindings)
-  (global-set-keys
+  (ambrevar/global-set-keys
    "s-h" 'windmove-left
    "s-j" 'windmove-down
    "s-k" 'windmove-up
    "s-l" 'windmove-right))
-(global-set-keys
+(ambrevar/global-set-keys
  "s-o" 'delete-other-windows
  ;; "s-w" 'other-window
  "s-c" 'delete-window)
@@ -169,7 +169,7 @@
 (setq browse-url-generic-program (or
                                   (executable-find (or (getenv "BROWSER") ""))
                                   (when (executable-find "xdg-mime")
-                                    (let ((desktop-browser (call-process-to-string "xdg-mime" "query" "default" "text/html")))
+                                    (let ((desktop-browser (ambrevar/call-process-to-string "xdg-mime" "query" "default" "text/html")))
                                       (substring desktop-browser 0 (string-match "\\.desktop" desktop-browser))))
                                   (executable-find browse-url-mozilla-program)
                                   (executable-find browse-url-firefox-program)
@@ -189,9 +189,9 @@
 
 ;;; Default ispell dictionary. If not set, Emacs uses the current locale.
 (setq ispell-dictionary "english")
-(define-keys text-mode-map
-  "C-<f6>" 'ispell-change-dictionary
-  "<f6>" 'ispell-buffer)
+(ambrevar/define-keys text-mode-map
+                      "C-<f6>" 'ispell-change-dictionary
+                      "<f6>" 'ispell-buffer)
 
 ;;; Show matching parenthesis
 (show-paren-mode 1)
@@ -233,10 +233,10 @@
 (defun compile-last-command ()
   (interactive)
   (compile compile-command))
-(define-keys prog-mode-map
-  "C-<f6>" 'compile
-  ;; Do not use `recompile' since we want to change the compilation folder for the current buffer.
-  "<f6>" 'compile-last-command)
+(ambrevar/define-keys prog-mode-map
+                      "C-<f6>" 'compile
+                      ;; Do not use `recompile' since we want to change the compilation folder for the current buffer.
+                      "<f6>" 'compile-last-command)
 
 ;;; REVIEW: Bug 26658 reports that cc-modes mistakenly does not make use of prog-mode-map.
 ;;; The following line is a suggested work-around.
@@ -266,7 +266,7 @@
         ;; might never be saved.  See
         ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28943.
         desktop-auto-save-timeout 5
-        desktop-dirname (expand-file-name "desktop" emacs-cache-folder)
+        desktop-dirname (expand-file-name "desktop" ambrevar/emacs-cache-folder)
         desktop-path (list desktop-dirname)
         ;; desktop-restore-eager 4 ; Can be annoying as you don't have your last-loaded buffers immediately.
         desktop-load-locked-desktop 'ask
@@ -294,8 +294,8 @@
 ;;; Skeleton settings
 ;;; Do not expand abbrevs in skeletons.
 (setq-default skeleton-further-elements '((abbrev-mode nil)))
-(turn-on-skeleton-markers)
-(global-set-keys
+(ambrevar/turn-on-skeleton-markers)
+(ambrevar/global-set-keys
  "C->" 'skeleton-next-position
  "C-<" 'skeleton-previous-position)
 
@@ -313,7 +313,7 @@
 (global-unset-key (kbd "C-<down-mouse-1>"))
 
 ;;; Scroll zooming.
-(global-set-keys
+(ambrevar/global-set-keys
  "C-<wheel-down>" 'text-scale-decrease
  "C-<mouse-5>" 'text-scale-decrease
  "C-<wheel-up>" 'text-scale-increase
@@ -354,15 +354,15 @@
    ("Africa/Nairobi" "Uganda")))
 
 ;;; Tramp
-(setq tramp-persistency-file-name (concat emacs-cache-folder "tramp")
+(setq tramp-persistency-file-name (concat ambrevar/emacs-cache-folder "tramp")
       tramp-backup-directory-alist backup-directory-alist)
 
 ;;; Frame title
 (setq frame-title-format (concat "%b" (unless (daemonp) " [serverless]")))
 
 ;;; Initial scratch buffer message.
-(require 'functions) ; For `fortune-scratch-message'.
-(let ((fortune (fortune-scratch-message)))
+(require 'functions) ; For `ambrevar/fortune-scratch-message'.
+(let ((fortune (ambrevar/fortune-scratch-message)))
   (when fortune
     (setq initial-scratch-message fortune)))
 
