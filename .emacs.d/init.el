@@ -176,6 +176,11 @@
 ;;; Hex editing
 (nconc package-selected-packages '(nhexl-mode))
 
+;;; Iedit
+(nconc package-selected-packages '(iedit))
+(when (require 'iedit nil t)
+  (global-set-key (kbd "C-;") 'iedit-mode))
+
 ;;; Image
 ;;; TODO: Disable white frame.
 ;;; I think it's the cursor.
