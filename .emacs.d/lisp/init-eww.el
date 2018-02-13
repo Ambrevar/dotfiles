@@ -9,6 +9,6 @@
   (let ((buffer (get-buffer "*eww*")))
     (if buffer
         (switch-to-buffer buffer)
-      (eww))))
+      (call-interactively 'eww))))
 
 (provide 'init-eww)
