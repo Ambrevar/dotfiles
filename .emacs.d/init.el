@@ -216,14 +216,29 @@
 ;;; Lisp
 (nconc package-selected-packages '(lispy lispyville))
 (with-eval-after-load 'lispyville
+  ;; TODO: Use '=' to indent.
+  ;; TODO: lispy-occur: helm-occur does not restrict to region.
   (lispyville-set-key-theme
-   '(operators
-     c-w
+   '(operators            ; Add equivalent for lispy-delete?
+     c-w                  ; Bind M-backspace to lispyville-delete-backward-word?
      (escape insert)
-     slurp/barf-lispy
-     additional
-     mark
-     (additional-movement normal visual motion))))
+     slurp/barf-cp
+     ;; (mark insert)
+     mark-toggle                        ; TODO: Check out readme.
+     ))
+  (lispyville--define-key '(motion normal insert)
+    (kbd "M-h") #'lispyville-previous-opening
+    (kbd "M-l") #'lispyville-next-opening
+    (kbd "M-j") #'lispy-down
+    (kbd "M-k") #'lispy-up
+    (kbd "M-H") #'lispy-move-left
+    (kbd "M-J") #'lispyville-drag-forward
+    (kbd "M-K") #'lispyville-drag-backward
+    (kbd "M-L") #'lispy-move-right
+    (kbd "C-x C-e") #'lispy-eval)
+  (lispyville--define-key '(motion normal)
+    "Y" 'lispy-new-copy
+    "D" 'lispy-kill))
 (defun ambrevar/init-lispy ()
   (when (require 'lispy nil t)
     (set-face-foreground 'lispy-face-hint "#FF00FF")
