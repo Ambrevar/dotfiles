@@ -226,7 +226,7 @@
       (add-hook 'lispy-mode-hook 'lispyville-mode))
     (lispy-mode)))
 (dolist (hook '(lisp-mode-hook emacs-lisp-mode-hook))
-  (add-hook hook 'ambrevar/turn-on-fmt-before-save)
+  (add-hook hook 'ambrevar/turn-on-prettify-before-save)
   (add-hook hook 'ambrevar/turn-on-complete-filename)
   (add-hook hook 'ambrevar/turn-on-tab-width-to-8) ; Because some existing code uses tabs.
   (add-hook hook 'ambrevar/turn-off-indent-tabs)   ; Should not use tabs.

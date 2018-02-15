@@ -71,11 +71,11 @@ restored."
       (compile (format "make -k -C %s clean" (shell-quote-argument makefile-dir))))))
 
 ;;; It is tempting to add `ambrevar/cc-fmt' to the hook:
-;; (add-hook 'before-save-hook 'ambrevar/cc-fmt nil t)
+;; (add-hook 'before-save-hook 'ambrevar/cc-prettify nil t)
 ;;; Unlike Go however, there is no formatting standard and thus this would break
 ;;; the formatting rules of every third-party C file that does not follow the
 ;;; same style.
-(defun ambrevar/cc-fmt ()
+(defun ambrevar/cc-prettify ()
   "Run uncrustify(1) on current buffer or region."
   (interactive)
   (let  (status

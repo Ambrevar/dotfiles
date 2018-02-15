@@ -117,8 +117,8 @@
 ;;; Add formatting functions to the buffer-local `before-save-hook'.
 ;;; WARNING: this can break some configuration files needing whitespaces at the
 ;;; end. This can also slow down saving on big files.  Some modes (e.g. lisp) run
-;;; `fmt' in their local hook, which is redundant with this.
-;; (add-hook 'find-file-hook 'ambrevar/turn-on-fmt-before-save)
+;;; `ambrevar/prettify' in their local hook, which is redundant with this.
+;; (add-hook 'find-file-hook 'ambrevar/turn-on-prettify-before-save)
 (add-hook 'find-file-hook 'ambrevar/turn-on-delete-trailing-whitespace)
 
 ;;; Cycle spacing instead of just-one-space.  This frees M-\.

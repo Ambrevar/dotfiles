@@ -50,17 +50,17 @@ TO-STRING."
   (while (re-search-forward regex (if (use-region-p) (region-end) (point-max)) t)
     (replace-match to-string)))
 
-(defun ambrevar/fmt ()
+(defun ambrevar/prettify ()
   "(Un)tabify, indent and delete trailing whitespace.
 
 Tabify if `indent-tabs-mode' is true, otherwise use spaces.
 Work on buffer or region.
 
-If `ambrevar/fmt-inhinit-p' is non-nil, it does nothing.
+If `ambrevar/prettify-inhibit-p' is non-nil, it does nothing.
 
 Require `ambrevar/tabify-leading'."
   (interactive)
-  (unless ambrevar/fmt-inhibit-p
+  (unless ambrevar/prettify-inhibit-p
     (let ((start (set-marker (make-marker) (if (use-region-p) (region-beginning) (point-min))))
           (end (set-marker (make-marker) (if (use-region-p) (region-end) (point-max)))))
       (if indent-tabs-mode
@@ -71,9 +71,9 @@ Require `ambrevar/tabify-leading'."
         (narrow-to-region start end)
         (delete-trailing-whitespace)))))
 
-(defcustom ambrevar/fmt-inhibit-p t
-  "Do not run `ambrevar/fmt' if non-nil.
-As this is not friendly to foreign projects, `ambrevar/fmt' should be run
+(defcustom ambrevar/prettify-inhibit-p t
+  "Do not run `ambrevar/prettify' if non-nil.
+As this is not friendly to foreign projects, `ambrevar/prettify' should be run
 selectively."
   :safe 'booleanp)
 
@@ -373,13 +373,13 @@ This does not affect .csv files."
   "Unconditionally remove the `delete-trailing-whitespace' function to `before-save-hook'."
   (remove-hook 'before-save-hook 'delete-trailing-whitespace t))
 
-(defun ambrevar/turn-on-fmt-before-save ()
-  "Unconditionally add the `ambrevar/fmt' function to `before-save-hook'."
-  (add-hook 'before-save-hook 'ambrevar/fmt nil t))
+(defun ambrevar/turn-on-prettify-before-save ()
+  "Unconditionally add the `ambrevar/prettify' function to `before-save-hook'."
+  (add-hook 'before-save-hook 'ambrevar/prettify nil t))
 
-(defun ambrevar/turn-off-fmt-before-save ()
-  "Unconditionally remove the `ambrevar/fmt' function to `before-save-hook'."
-  (remove-hook 'before-save-hook 'ambrevar/fmt t))
+(defun ambrevar/turn-off-prettify-before-save ()
+  "Unconditionally remove the `ambrevar/prettify' function to `before-save-hook'."
+  (remove-hook 'before-save-hook 'ambrevar/prettify t))
 
 (defun ambrevar/turn-off-indent-tabs ()
   "Unconditionally turn off tab indentation."

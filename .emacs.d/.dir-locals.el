@@ -1,1 +1,1 @@
-((nil . ((ambrevar/fmt-inhibit-p . nil))))
+((nil . ((ambrevar/prettify-inhibit-p . nil))))
