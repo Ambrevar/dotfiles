@@ -179,6 +179,9 @@
                                   (executable-find browse-url-chrome-program)))
 (setq shr-external-browser browse-url-browser-function)
 
+;; shr
+(setq shr-width (string-to-number (or (getenv "MANWIDTH") "80")))
+
 ;;; Extend MIME-types support for videos.
 (with-eval-after-load 'mailcap
   (add-to-list 'mailcap-mime-extensions '(".webm" . "video/webm"))
