@@ -94,15 +94,21 @@
   (if (fboundp 'helm-emms)
       (exwm-input-set-key (kbd "s-A") #'helm-emms)
     (exwm-input-set-key (kbd "s-A") #'emms)))
-(when (fboundp 'helm-pass)
-  (exwm-input-set-key (kbd "s-p") #'helm-pass))
 (when (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path))
   (exwm-input-set-key (kbd "s-m") #'ambrevar/mu4e-headers))
 (exwm-input-set-key (kbd "s-n") #'ambrevar/elfeed-switch-back) ; "n" for "news"
 (exwm-input-set-key (kbd "s-e") #'ambrevar/eww-switch-back)
 (exwm-input-set-key (kbd "s-E") #'eww)
 
-
+(when (fboundp 'helm-pass)
+  (defun ambrevar/helm-pass-for-page ()
+    "Default prompt to current exwm-title"
+    (interactive)
+    (helm :sources 'helm-source-pass
+          :input (and exwm-title
+                      (car (last (split-string exwm-title " "))))
+          :buffer "*helm-pass*"))
+  (exwm-input-set-key (kbd "s-p") #'ambrevar/helm-pass-for-page))
 
 ;;; External application shortcuts.
 (defun ambrevar/exwm-start (command)
