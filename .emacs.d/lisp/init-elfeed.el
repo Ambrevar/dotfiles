@@ -27,7 +27,7 @@
   "List of (regexps . function) to match against elfeed entry link to know
 whether how to visit the link.")
 
-(defun elfeed-ambrevar/visit-maybe-external ()
+(defun ambrevar/elfeed-visit-maybe-external ()
   "Visit with external function if entry link matches `ambrevar/elfeed-visit-patterns',
 visit otherwise."
   (interactive)
