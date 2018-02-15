@@ -214,4 +214,19 @@ See `eshell-prompt-regexp'."
    (when face
      (put-text-property beg end 'face face))))
 
+;;; REVIEW: Ignore dups in the entire ring, not just the last entry.
+;;; Reported upstream, see #30466.
+(defun eshell-add-input-to-history (input)
+  "Add the string INPUT to the history ring.
+Input is entered into the input history ring, if the value of
+variable `eshell-input-filter' returns non-nil when called on the
+input."
+  (when (funcall eshell-input-filter input)
+    (when eshell-hist-ignoredups
+      (ring-remove eshell-history-ring
+                   (ring-member eshell-history-ring input)))
+    (eshell-put-history input))
+  (setq eshell-save-history-index eshell-history-index)
+  (setq eshell-history-index nil))
+
 (provide 'patch-eshell)

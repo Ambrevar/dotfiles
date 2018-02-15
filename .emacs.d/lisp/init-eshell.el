@@ -193,12 +193,13 @@
 
 ;;; History
 ;;; Filter out space-beginning commands from history.
-;;; TODO: history/command hook: trim surrounding space.  Check `eshell-rewrite-command-hook'.
-;;; TODO: history: do not save failed commands to file.
-;;; TODO: history: do not store duplicates.  Push unique command to front of the list.
+;;; TODO: history/command hook: trim spaces.  Check `eshell-rewrite-command-hook'.
+;;; TODO: history: do not save failed Eshell commands (See `eshell-last-command-status')
+;;; Eshell commands always return 0.
 (setq eshell-input-filter
       (lambda (str)
-        (not (or (string= "" str)
+        (not (or (/= eshell-last-command-status 0)
+                 (string= "" str)
                  (string-prefix-p " " str)))))
 
 ;;; Shared history.
