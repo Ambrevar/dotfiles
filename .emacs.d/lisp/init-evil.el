@@ -88,6 +88,7 @@
 
 ;;; Add defun text-object. TODO: Does not work for "around".
 ;;; https://github.com/emacs-evil/evil/issues/874
+;;; See Evil-cleverparens?
 (evil-define-text-object evil-a-defun (count &optional beg end type)
   "Select a defun."
   (evil-select-an-object 'evil-defun beg end type count))

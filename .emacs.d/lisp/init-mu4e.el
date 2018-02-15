@@ -3,15 +3,13 @@
 ;;; REVIEW: Reply to all by default.
 ;;; https://github.com/djcb/mu/issues/1135
 ;;; TODO: Is it possible to mbsync without attachments?
-;;; REVIEW: Use abbrevs in compose mode.
-;;; Fixed upstream.  See https://github.com/djcb/mu/issues/1119.
 ;;; REVIEW: Do not cite when replying: https://github.com/djcb/mu/issues/1110.
 ;;; TODO: Face of `message-cited-text' does not work.
 ;;; REVIEW: Handle attachments in attached e-mails.
 ;;; See https://github.com/djcb/mu/issues/454#issuecomment-320616279.
 ;;; TODO: <tab> should go to next link in text e-mails too.
 
-;; Emacs pinentry for GPG.
+;; We need 'main' to setup pinentry-emacs for GPG.
 (require 'main)
 
 (when (require 'mu4e-maildirs-extension nil t)

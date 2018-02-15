@@ -17,7 +17,8 @@
 ;;; Fixed in #27407.
 (require 'patch-eshell)
 
-;;; TODO: Sometimes transmission-daemon does not start from Eshell.
+;;; REVIEW: Sometimes transmission-daemon does not start from Eshell.
+;;; See #30465.
 
 ;;; REVIEW: Redirecting big output to file (e.g. /dev/null) is extremely slow.
 ;; > cat /usr/share/dict/british-english | wc -l
@@ -164,11 +165,6 @@
 ;;; `eshell/alias' is too slow as it reads and write the file on each definition.
 ;;; Let's write manually instead.
 (with-eval-after-load 'em-alias
-  ;;; TODO: This conflicts with `evil-define-key' during the initialization of
-  ;;; the first eshell session: the map in insert-mode will not take the changes
-  ;;; into account. Going to normal mode and back to insert mode works.
-  ;;; Note: Evil has fixed some issues in the meantime.  Also test with `evil-define-key*'.
-  ;;;
   ;;; If we read the alias list here, it means we make commandline-defined aliases persistent.
   ;; (eshell-read-aliases-list)
   (dolist
@@ -177,10 +173,8 @@
          ("la" "ls -lAh $*")
          ("ll" "ls -lh $*")
          ;; TODO: Aliasing eshell/{cp,mv,ln} does not work.
-         ;; TODO: "sudo" does not work on aliases.
-         ;; See bug #27168.
          ;; REVIEW: Eshell/TRAMP's sudo does not work with aliases.
-         ;; See #28320.
+         ;; See #28320, #27168.
          ;; ("ls" "ls -F $*") ; not supported
          ;; ("emacs" "find-file $1")
          ;; ("cp" "eshell/cp -iv $*")
@@ -189,7 +183,7 @@
          ("mvv" "mv -iv $*")
          ("rmv" "rm -v $*")
          ("md" "eshell/mkdir -p $*")
-         ("mkcd" "eshell/mkdir -p $* ; cd $1"))) ; TODO: Does not work because mkdir exits with nil?
+         ("mkcd" "eshell/mkdir -p $* ; cd $1"))) ; TODO: '&&' does not work because mkdir exits with nil?
     (add-to-list 'eshell-command-aliases-list alias))
   (eshell-write-aliases-list))
 

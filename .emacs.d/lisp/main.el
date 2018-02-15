@@ -163,9 +163,9 @@
 (require 'browse-url)
 (setq browse-url-browser-function
       (if (executable-find "xdg-open") 'browse-url-xdg-open 'browse-url-generic))
-;;; If xdg-open is not found, set Emacs URL browser to the environment browser,
+;;; REVIEW: If xdg-open is not found, set Emacs URL browser to the environment browser,
 ;;; or w3m if BROWSER is not set.
-;; REVIEW: https://debbugs.gnu.org/cgi/bugreport.cgi?bug=18986
+;;; See https://debbugs.gnu.org/cgi/bugreport.cgi?bug=18986.
 (setq browse-url-generic-program (or
                                   (executable-find (or (getenv "BROWSER") ""))
                                   (when (executable-find "xdg-mime")

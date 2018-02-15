@@ -12,8 +12,9 @@
 ;;; See https://github.com/ch11ng/exwm/issues/285
 ;;; and https://gitlab.com/interception/linux/plugins/caps2esc/issues/2.
 
-;;; TODO: Pressing "s-a" ('emms-smart-browse) loses the cursor.
+;;; REVIEW: Pressing "s-a" ('emms-smart-browse) loses the cursor.
 ;;; Sometimes waiting helps.  Calling emms-smart-browse manually does not trigger the issue.
+;;; https://github.com/ch11ng/exwm/issues/366
 
 ;;; REVIEW: helm-mini with follow-mode hangs when using EXWM.
 ;;; https://github.com/emacs-helm/helm/issues/1889
