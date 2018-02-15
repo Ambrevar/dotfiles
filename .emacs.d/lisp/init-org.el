@@ -21,7 +21,7 @@
  ;; org-todo-keyword-faces '(("REVIEW" :inherit org-done))
  ;; Priorities.
  org-priority-start-cycle-with-default nil
- org-default-priority 66
+ org-default-priority 67
  ;; Org-mode aligns text.
  indent-tabs-mode nil)
 
