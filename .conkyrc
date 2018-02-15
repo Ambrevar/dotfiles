@@ -23,7 +23,7 @@ conky.text =
 ^fg(grey)RAM:^fg(DeepSkyBlue)${if_match ${to_bytes $memeasyfree} < 536870912}^fg(Red)${endif}$memperc% \
 ^fg(grey)↓^fg(DeepSkyBlue)${eval $${downspeedf ${gw_iface}}} \
 ^fg(grey)↑^fg(DeepSkyBlue)${upspeedf wlp2s0} \
-${if_match "${exec amixer get Master -M | grep -oE '\[on\]'}" == "[on]"}^fg(grey)♪^fg(DeepSkyBlue)${exec amixer get Master -M | grep -oE "[0-9]*%"}${endif} \
+${if_match "${exec pactl list sinks | awk '/^\tMute:/ {print $2}'}" == "no"}^fg(grey)♪^fg(DeepSkyBlue)${exec pactl list sinks | awk '/^\tVolume:/ {print $5}'}${endif} \
 ${if_existing .mu/}^fg(grey)✉^fg(DeepSkyBlue)${execi 30 mu find --nocolor --sortfield=d --maxnum=500 flag:unread AND NOT flag:trashed | wc -l} ${endif}\
 ${if_match $battery_percent != 0}^fg(grey)⚡^fg(DeepSkyBlue)${if_match ${battery_time} <= 600}^fg(Red)${endif}${battery_short}: ${format_time ${battery_time} "(\dd )(\hh )\mmin"} ${endif}\
 ${if_match ${to_bytes ${diskio nvme0n1}} > 1048576}^fg(grey)nvme0n1:^fg(DeepSkyBlue)${diskio nvme0n1}${endif} \

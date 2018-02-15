@@ -442,6 +442,7 @@
 
 ;;; Window manager
 (nconc package-selected-packages '(exwm helm-exwm))
+(nconc package-selected-packages '(pulseaudio-control))
 (when (require 'exwm nil t) (require 'init-exwm))
 
 ;;; XML / SGML

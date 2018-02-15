@@ -14,12 +14,6 @@
 
 ;;; TODO: Pressing "s-a" ('emms-smart-browse) loses the cursor.
 ;;; Sometimes waiting helps.  Calling emms-smart-browse manually does not trigger the issue.
-;;; TODO: Spawn select programs in floating mode? (E.g. mpv, mupen64plus, mplayer, qemu, steam, .exe (wine).)
-
-;;; TODO: Rendering issue with Qutebrowser
-;;; Sometimes need to change window configuration
-;;; https://github.com/ch11ng/exwm/issues/300
-;;; Step to reproduce EXWM freeze
 
 ;;; REVIEW: helm-mini with follow-mode hangs when using EXWM.
 ;;; https://github.com/emacs-helm/helm/issues/1889
@@ -144,28 +138,13 @@
 (exwm-input-set-key (kbd "<print>") #'ambrevar/exwm-start-screenshot)
 
 ;;; Volume control
-;;; TODO: Check out the 'volume' package.
-(defun ambrevar/exwm-volume (&optional up-or-down)
-  (let ((controllers '(("amixer" . ((control . "set Master") (down . "5%-") (up . "5%+") (toggle . "toggle")))
-                       ("mixer" . ((control . "vol") (down . "-5") (up . "+5") (toggle . "^"))))))
-    (while (not (executable-find (caar controllers)))
-      (setq controllers (cdr controllers)))
-    (when controllers
-      (start-process-shell-command
-       "volume control" nil (format "%s %s %s >/dev/null"
-                                    (caar controllers)
-                                    (alist-get 'control (cdar controllers))
-                                    (alist-get up-or-down (cdar controllers) (alist-get 'toggle (cdar controllers) )))))))
-
-(defun ambrevar/exwm-start-volume-down () (interactive) (ambrevar/exwm-volume 'down))
-(defun ambrevar/exwm-start-volume-up () (interactive) (ambrevar/exwm-volume 'up))
-(defun ambrevar/exwm-start-volume-toggle () (interactive) (ambrevar/exwm-volume))
-(exwm-input-set-key (kbd "s-<kp-subtract>") #'ambrevar/exwm-start-volume-down)
-(exwm-input-set-key (kbd "s-<kp-add>") #'ambrevar/exwm-start-volume-up)
-(exwm-input-set-key (kbd "s-<kp-enter>") #'ambrevar/exwm-start-volume-toggle)
-(exwm-input-set-key (kbd "s--") #'ambrevar/exwm-start-volume-down)
-(exwm-input-set-key (kbd "s-=") #'ambrevar/exwm-start-volume-up)
-(exwm-input-set-key (kbd "s-0") #'ambrevar/exwm-start-volume-toggle)
+(when (require 'pulseaudio-control nil t)
+  (exwm-input-set-key (kbd "s-<kp-subtract>") #'pulseaudio-control-decrease-volume)
+  (exwm-input-set-key (kbd "s-<kp-add>") #'pulseaudio-control-increase-volume)
+  (exwm-input-set-key (kbd "s-<kp-enter>") #'pulseaudio-control-toggle-current-sink-mute)
+  (exwm-input-set-key (kbd "s--") #'pulseaudio-control-decrease-volume)
+  (exwm-input-set-key (kbd "s-=") #'pulseaudio-control-increase-volume)
+  (exwm-input-set-key (kbd "s-0") #'pulseaudio-control-toggle-current-sink-mute))
 
 ;;; Check for start-up errors. See ~/.profile.
 (let ((error-logs (directory-files "~" t "errors.*log$")))
