@@ -1,12 +1,12 @@
 ;;; Makefile
 
 (ambrevar/define-keys makefile-mode-map
-                      "C-c c" 'makefile-config
-                      "C-c d" 'makefile-doc
-                      "C-c m" 'makefile-main
-                      "C-c s" 'makefile-c)
+                      "C-c c" 'ambrevar/makefile-config
+                      "C-c d" 'ambrevar/makefile-doc
+                      "C-c m" 'ambrevar/makefile-main
+                      "C-c s" 'ambrevar/makefile-c)
 
-(define-skeleton makefile-main
+(define-skeleton ambrevar/makefile-main
   "Insert root Makefile." nil
   "ROOT = .
 include ${ROOT}/config.mk
@@ -86,7 +86,7 @@ uninstall:
   -rmdir -p ${DESTDIR}${licensedir}/${cmdname}
 " > \n)
 
-(define-skeleton makefile-doc
+(define-skeleton ambrevar/makefile-doc
   "Insert documentation Makefile." nil
   ".SUFFIXES: .in
 
@@ -105,7 +105,7 @@ clean:
   rm -f ${manpages}
 " > \n)
 
-(define-skeleton makefile-c
+(define-skeleton ambrevar/makefile-c
   "Insert Makefile for building c." nil
   "ROOT ?= ..
 include ${ROOT}/config.mk
@@ -137,7 +137,7 @@ deps = ${sources:.c=.d}
 -include ${deps}
 " > \n)
 
-(define-skeleton makefile-config
+(define-skeleton ambrevar/makefile-config
   "Insert Makefile config." nil
   "## This file is included by all (sub-)makefiles.
 
@@ -145,9 +145,9 @@ deps = ${sources:.c=.d}
 appname = Name
 authors = Pierre Neidhardt
 cmdname = name
-url = http://ambrevar.bitbucket.org/
+url =
 version = 1.0
-year = 2014
+year = " (format-time-string "%Y") "
 
 ## Folders.
 srcdir = src

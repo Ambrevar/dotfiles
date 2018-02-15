@@ -4,7 +4,7 @@
 
 (dolist (map (list c-mode-map c++-mode-map))
   (ambrevar/define-keys map "C-c m" 'cc-main
-                        "<f5>" 'cc-clean
+                        "<f5>" 'ambrevar/cc-clean
                         "M-." 'semantic-ia-fast-jump
                         "C-c C-d" 'semantic-ia-show-summary
                         "M-<tab>" 'semantic-complete-analyze-inline)
@@ -24,13 +24,13 @@
 ;;      ("\\<\\(\\sw+\\)(" 1 'font-lock-function-name-face)
 ;;      ("\\<\\(\\sw+\\)<\\sw+>(" 1 'font-lock-function-name-face))))
 
-(defvar-local cc-ldlibs "-lm -pthread"
+(defvar-local ambrevar/cc-ldlibs "-lm -pthread"
   "Custom linker flags for C/C++ linkage.")
 
-(defvar-local cc-ldflags ""
+(defvar-local ambrevar/cc-ldflags ""
   "Custom linker libs for C/C++ linkage.")
 
-(defun cc-set-compiler (&optional nomakefile)
+(defun ambrevar/cc-set-compiler (&optional nomakefile)
   "Set compile command to be nearest Makefile or a generic command.
 The Makefile is looked up in parent folders. If no Makefile is
 found (or if NOMAKEFILE is non-nil or if function was called with
@@ -57,10 +57,10 @@ provided."
                       (if c++-p
                           (or (getenv "CXXFLAGS") "-Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0")
                         (or (getenv "CFLAGS") "-ansi -pedantic -std=c11 -Wall -Wextra -Wshadow -DDEBUG=9 -g3 -O0"))
-                      (or (getenv "LDFLAGS") cc-ldflags)
-                      (or (getenv "LDLIBS") cc-ldlibs)))))))
+                      (or (getenv "LDFLAGS") ambrevar/cc-ldflags)
+                      (or (getenv "LDLIBS") ambrevar/cc-ldlibs)))))))
 
-(defun cc-clean ()
+(defun ambrevar/cc-clean ()
   "Find Makefile and call the `clean' rule. If no Makefile is
 found, no action is taken. The previous `compile' command is
 restored."
@@ -70,12 +70,12 @@ restored."
     (when makefile-dir
       (compile (format "make -k -C %s clean" (shell-quote-argument makefile-dir))))))
 
-;;; It is tempting to add `cc-fmt' to the hook:
-;; (add-hook 'before-save-hook 'cc-fmt nil t)
+;;; It is tempting to add `ambrevar/cc-fmt' to the hook:
+;; (add-hook 'before-save-hook 'ambrevar/cc-fmt nil t)
 ;;; Unlike Go however, there is no formatting standard and thus this would break
 ;;; the formatting rules of every third-party C file that does not follow the
 ;;; same style.
-(defun cc-fmt ()
+(defun ambrevar/cc-fmt ()
   "Run uncrustify(1) on current buffer or region."
   (interactive)
   (let  (status
@@ -102,8 +102,7 @@ restored."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Options
 
-;;; Semanticdb folders must be set before starting semantic.
-(setq semanticdb-default-save-directory (concat ambrevar/emacs-cache-folder "semanticdb"))
+;;; Make sure Semanticdb folders is set before starting semantic.
 (semantic-mode 1)
 
 ;;; Extra semantic support
@@ -144,7 +143,7 @@ restored."
 (dolist (hook '(c-mode-hook c++-mode-hook))
   (when (require 'company nil t)
     (add-hook hook 'company-mode))
-  (add-hook hook 'cc-set-compiler))
+  (add-hook hook 'ambrevar/cc-set-compiler))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Skeletons

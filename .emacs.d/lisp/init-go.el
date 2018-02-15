@@ -5,12 +5,12 @@
 (use-local-map go-mode-map)
 
 (ambrevar/local-set-keys
- "C-c m" 'go-main
+ "C-c m" 'ambrevar/go-main
  "C-c D" 'godoc
  "C-c d" 'godoc-at-point
  "M-." #'godef-jump
- "<f5>" 'go-metalinter
- "C-<f5>" 'go-metalinter-command)
+ "<f5>" 'ambrevar/go-metalinter
+ "C-<f5>" 'ambrevar/go-metalinter-command)
 (when (require 'helm-go-package nil t)
   (local-set-key (kbd "C-c D") 'helm-go-package))
 
@@ -23,7 +23,7 @@
 (setq godoc-command "godoc -ex")
 (setq godoc-and-godef-command "godoc -ex")
 
-(defvar-local gometalinter-args
+(defvar-local ambrevar/gometalinter-args
   (mapconcat
    'identity
    '("--cyclo-over=20 --deadline=20s"
@@ -41,21 +41,21 @@
      "-E gofmt")
    " ") "Additional arguments to pass to gometalinter.")
 
-(defun go-metalinter (arg)
+(defun ambrevar/go-metalinter (arg)
   "Run gometalinter.
 With prefix argument, prompt for commandline."
   (interactive "P")
-  (let ((compile-command  (format "gometalinter %s" gometalinter-args)))
+  (let ((compile-command  (format "gometalinter %s" ambrevar/gometalinter-args)))
     (if arg
         (call-interactively 'compile)
       (compile compile-command))))
 
-(defun go-metalinter-command ()
+(defun ambrevar/go-metalinter-command ()
   "Prompt for gometalinter commandline and run it."
   (interactive)
-  (go-metalinter t))
+  (ambrevar/go-metalinter t))
 
-(defun go-set-compile-command ()
+(defun ambrevar/go-set-compile-command ()
   "Set `compile-command' depending on the context.
 
 - go install: file is in GOPATH and is not a test file.
@@ -65,13 +65,13 @@ With prefix argument, prompt for commandline."
 Note that the -cover test flag is left out since it shifts line numbers."
   (interactive)
   (setq compile-command
-        (if (go-buffer-in-gopath-p)
+        (if (ambrevar/go-buffer-in-gopath-p)
             (if (string-match "_test.[gG][oO]$" buffer-file-name)
                 "go test -v -run ."
               "go install")
           (concat "go run " (shell-quote-argument buffer-file-name)))))
 
-(defun go-buffer-in-gopath-p ()
+(defun ambrevar/go-buffer-in-gopath-p ()
   (if (not buffer-file-name)
       nil
     (let ((dir (expand-file-name (file-name-directory buffer-file-name))) (looping t) (gopath (split-string (getenv "GOPATH") ":")))
@@ -97,14 +97,14 @@ Note that the -cover test flag is left out since it shifts line numbers."
 (when (require 'go-eldoc nil t)
   (add-hook 'go-mode-hook 'go-eldoc-setup))
 
-(add-hook 'go-mode-hook 'go-set-compile-command)
+(add-hook 'go-mode-hook 'ambrevar/go-set-compile-command)
 
-(defun godoc-setup ()
+(defun ambrevar/godoc-setup ()
   (setq tab-width 8))
 
-(add-hook 'godoc-mode-hook 'godoc-setup)
+(add-hook 'godoc-mode-hook 'ambrevar/godoc-setup)
 
-(define-skeleton go-main
+(define-skeleton ambrevar/go-main
   "Insert main function with basic includes."
   nil
   > "package main" "\n" \n

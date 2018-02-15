@@ -9,9 +9,9 @@
 
 ;;; Since current buffer is a LaTeX one, we can use `local-set-key'.
 (ambrevar/local-set-keys
- "C-c m" 'latex-article
- "C-c l" 'latex-lstinline
- "C-c o" 'latex-orgtbl)
+ "C-c m" 'ambrevar/latex-article
+ "C-c l" 'ambrevar/latex-lstinline
+ "C-c o" 'ambrevar/latex-orgtbl)
 
 (dolist (fun '(turn-on-orgtbl ambrevar/turn-on-skeleton-markers))
   ;; Since this file is loaded from `latex-mode-hook', these functions will not
@@ -54,7 +54,7 @@
 ;;; Skeletons
 
 ;;; TODO: implement orgtbl directly with latex tables and remove this skel.
-(define-skeleton latex-orgtbl
+(define-skeleton ambrevar/latex-orgtbl
   "Insert orgtbl skel."
   "Table name: "
   > "\\begin{center}" \n
@@ -67,18 +67,18 @@
   "%$" \n
   "\\end{comment}" > \n @)
 
-(define-skeleton latex-lstinline
+(define-skeleton ambrevar/latex-lstinline
   "Insert inline listing." nil
   "\\lstinline @" @ _ "@" @)
 
-(define-skeleton latex-graphics
+(define-skeleton ambrevar/latex-graphics
   "Insert centered picture."
   nil
   > "\\begin{center}" \n
   "\\includegraphics[width=" @ (skeleton-read "Width: " "\\linewidth") "]{" @ _ "}" \n
   "\\end{center}" > \n @)
 
-(define-skeleton latex-article
+(define-skeleton ambrevar/latex-article
   "Insert article template."
   nil
   > "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -121,7 +121,7 @@
 \\let\\thedate\\@date
 \\makeatother" \n
 
-'(setq latex-setup-list '(latex-preamble-aliases latex-preamble-tables latex-preamble-listing))
+'(setq latex-setup-list '(ambrevar/latex-preamble-aliases ambrevar/latex-preamble-tables ambrevar/latex-preamble-listing))
 '(while (and latex-setup-list
              (= (read-key (concat "Insert " (symbol-name (car latex-setup-list)) "? (y)")) ?y))
    (newline-and-indent)
@@ -185,7 +185,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " \n)
 
-(define-skeleton latex-preamble-aliases
+(define-skeleton ambrevar/latex-preamble-aliases
   "Insert setup template."
   nil
   > "%%=============================================================================
@@ -201,7 +201,7 @@
 \\def\\ie{\\textsl{i.e.}\\xspace}
 \\def\\eg{\\textsl{e.g.}\\xspace}" \n)
 
-(define-skeleton latex-preamble-tables
+(define-skeleton ambrevar/latex-preamble-tables
   "Insert setup template."
   nil
   > "%%==============================================================================
@@ -210,7 +210,7 @@
 \\usepackage{longtable}
 \\usepackage{tabu}" \n)
 
-(define-skeleton latex-preamble-graphics
+(define-skeleton ambrevar/latex-preamble-graphics
   "Insert setup template."
   nil
   > "%%==============================================================================
@@ -224,7 +224,7 @@
 "\\end{tikzpicture}" > \n
 "}" > \n)
 
-(define-skeleton latex-preamble-listing
+(define-skeleton ambrevar/latex-preamble-listing
   "Insert listing setup template."
   ;; WARNING: we need to put a '-' at the very end so that the cursor will end
   ;; there. Otherwise it will be placed at the beginning. This is due to some

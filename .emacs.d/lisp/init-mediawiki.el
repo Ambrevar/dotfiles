@@ -21,7 +21,7 @@
 (add-hook 'mediawiki-mode-hook 'visual-line-mode)
 (add-hook 'mediawiki-mode-hook 'turn-off-auto-fill)
 
-(define-skeleton mediawiki-tt
+(define-skeleton ambrevar/mediawiki-tt
   "Insert truetype text."
   nil "<tt>" @ _ "</tt>" @)
 

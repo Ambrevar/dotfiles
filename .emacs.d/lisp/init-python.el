@@ -1,6 +1,6 @@
 ;;; Python
 
-(defun python-set-compiler ()
+(defun ambrevar/python-set-compiler ()
   "Returns the value of the shebang if any, `python-shell-interpreter' otherwise."
   (when buffer-file-name
     (let* ((firstline
@@ -12,7 +12,7 @@
       (setq compile-command
             (concat interpreter " " (shell-quote-argument buffer-file-name))))))
 
-(add-hook 'python-mode-hook 'python-set-compiler)
+(add-hook 'python-mode-hook 'ambrevar/python-set-compiler)
 
 ;;; Doc lookup. Requires the python.info file to be installed. See
 ;;; https://bitbucket.org/jonwaltman/pydoc-info/.

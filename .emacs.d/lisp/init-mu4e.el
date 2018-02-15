@@ -17,9 +17,9 @@
 (when (require 'mu4e-maildirs-extension nil t)
   (mu4e-maildirs-extension))
 
-(defun mu4e-headers ()
+(defun ambrevar/mu4e-headers ()
   "Like `mu4e' but show the header view.
-Default to unread messages if no"
+Default to unread messages if the header buffer does not already exist."
   (interactive)
   (mu4e~start)
   (if (get-buffer "*mu4e-headers*" )
@@ -91,52 +91,52 @@ Default to unread messages if no"
 ;;; Since we sort in ascending direction, we default to the end of buffer.
 ;; (add-hook 'mu4e-headers-found-hook 'end-of-buffer)
 
-(defvar mu4e-compose-fortune-p t "Whether or not to include a fortune in the signature.")
-(defun mu4e-add-fortune-signature ()
+(defvar ambrevar/mu4e-compose-fortune-p t "Whether or not to include a fortune in the signature.")
+(defun ambrevar/mu4e-add-fortune-signature ()
   (require 'functions) ; For `call-process-to-string'.
   (setq mu4e-compose-signature
-        (if mu4e-compose-fortune-p
+        (if ambrevar/mu4e-compose-fortune-p
             (format "%s\n\n%s"
                     user-full-name
                     (ambrevar/call-process-to-string "fortune" "-s"))
           user-full-name)))
-(add-hook 'mu4e-compose-pre-hook 'mu4e-add-fortune-signature)
+(add-hook 'mu4e-compose-pre-hook 'ambrevar/mu4e-add-fortune-signature)
 
 ;;; Make some e-mails stand out a bit.
 (set-face-foreground 'mu4e-unread-face "yellow")
 (set-face-attribute 'mu4e-flagged-face nil :inherit 'font-lock-warning-face)
 
 ;;; Confirmation on every mark execution is too slow to my taste.
-(defun mu4e-mark-execute-all-no-confirm ()
+(defun ambrevar/mu4e-mark-execute-all-no-confirm ()
   (interactive)
   (mu4e-mark-execute-all t))
-(define-key mu4e-headers-mode-map "x" 'mu4e-mark-execute-all-no-confirm)
+(define-key mu4e-headers-mode-map "x" 'ambrevar/mu4e-mark-execute-all-no-confirm)
 
 (when (require 'helm-mu nil t)
   (dolist (map (list mu4e-headers-mode-map mu4e-main-mode-map mu4e-view-mode-map))
     (define-key map "s" 'helm-mu)))
 
-(defvar mu4e-compose-signed-p nil)
-(defvar mu4e-compose-signed-and-crypted-p nil)
-(defun mu4e-compose-maybe-signed-and-crypted ()
+(defvar ambrevar/mu4e-compose-signed-p nil)
+(defvar ambrevar/mu4e-compose-signed-and-crypted-p nil)
+(defun ambrevar/mu4e-compose-maybe-signed-and-crypted ()
   "Maybe sign or encrypt+sign message.
 Message is signed or encrypted+signed when replying to a signed or encrypted
 message, respectively.
 
 Alternatively, message is signed or encrypted+signed if
-`mu4e-compose-signed-p' or `mu4e-compose-signed-and-crypted-p' is
+`ambrevar/mu4e-compose-signed-p' or `ambrevar/mu4e-compose-signed-and-crypted-p' is
 non-nil, respectively.
 
 This function is suitable for `mu4e-compose-mode-hook'."
   (let ((msg mu4e-compose-parent-message))
     (cond
-     ((or mu4e-compose-signed-and-crypted-p
+     ((or ambrevar/mu4e-compose-signed-and-crypted-p
           (and msg (member 'encrypted (mu4e-message-field msg :flags))))
       (mml-secure-message-sign-encrypt))
-     ((or mu4e-compose-signed-p
+     ((or ambrevar/mu4e-compose-signed-p
           (and msg (member 'signed (mu4e-message-field msg :flags))))
       (mml-secure-message-sign-pgpmime)))))
-(add-hook 'mu4e-compose-mode-hook 'mu4e-compose-maybe-signed-and-crypted)
+(add-hook 'mu4e-compose-mode-hook 'ambrevar/mu4e-compose-maybe-signed-and-crypted)
 
 ;;; Org capture
 (when (require 'org-mu4e nil t)

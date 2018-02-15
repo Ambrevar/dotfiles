@@ -215,7 +215,7 @@ Requires `call-process-to-string' from `functions'."
 (setq helm-source-names-using-follow '("Occur" "Git-Grep" "AG" "mark-ring" "Org Headings"))
 
 ;;; From https://www.reddit.com/r/emacs/comments/5q922h/removing_dot_files_in_helmfindfiles_menu/.
-(defun helm-skip-dots (old-func &rest args)
+(defun ambrevar/helm-skip-dots (old-func &rest args)
   "Skip . and .. initially in helm-find-files.  First call OLD-FUNC with ARGS."
   (apply old-func args)
   (let ((sel (helm-get-selection)))
@@ -224,8 +224,8 @@ Requires `call-process-to-string' from `functions'."
   (let ((sel (helm-get-selection))) ; if we reached .. move back
     (if (and (stringp sel) (string-match "/\\.\\.$" sel))
         (helm-previous-line 1))))
-(advice-add #'helm-preselect :around #'helm-skip-dots)
-(advice-add #'helm-ff-move-to-first-real-candidate :around #'helm-skip-dots)
+(advice-add #'helm-preselect :around #'ambrevar/helm-skip-dots)
+(advice-add #'helm-ff-move-to-first-real-candidate :around #'ambrevar/helm-skip-dots)
 
 (with-eval-after-load 'desktop
   (add-to-list 'desktop-globals-to-save 'helm-ff-history))
@@ -240,8 +240,8 @@ Requires `call-process-to-string' from `functions'."
   (setq helm-locate-recursive-dirs-command "find %s -type d -regex .*%s.*$"))
 
 ;; See https://github.com/emacs-helm/helm/issues/1962.
-(defun helm-locate-create-or-update-db (db root &optional update)
-  "See `helm-locate-meta'."
+(defun ambrevar/helm-locate-create-or-update-db (db root &optional update)
+  "See `ambrevar/helm-locate-meta'."
   (let ((was-missing (not (file-exists-p db))))
     (when (or update was-missing)
       (if (= (shell-command
@@ -251,18 +251,18 @@ Requires `call-process-to-string' from `functions'."
              0)
           (message "locatedb file `%s' %s" db (if was-missing "created" "updated"))
         (error "Failed to %s locatedb file `%s'" db (if was-missing "create" "update"))))))
-(defun helm-locate-meta (&optional update)
+(defun ambrevar/helm-locate-meta (&optional update)
   "Like `helm-locate' but also use the databases found in /media and /run/media.
 With prefix argument, UPDATE the databases."
   (interactive "P")
   (let ((user-db (expand-file-name "~/.cache/locate.db")))
-    (helm-locate-create-or-update-db user-db "/" update)
+    (ambrevar/helm-locate-create-or-update-db user-db "/" update)
     (helm-locate-with-db
      (mapconcat 'identity
                 (append (list user-db)
                         (mapc
                          (lambda (db)
-                           (helm-locate-create-or-update-db db (file-name-directory db) update))
+                           (ambrevar/helm-locate-create-or-update-db db (file-name-directory db) update))
                          (apply 'append (mapcar
                                          (lambda (root) (file-expand-wildcards (concat root "/*/locate.db")))
                                          (list (concat "/run/media/" (user-login-name)) "/media")))))
@@ -270,9 +270,9 @@ With prefix argument, UPDATE the databases."
      nil (thing-at-point 'filename))))
 
 ;;; Convenience.
-(defun helm-toggle-visible-mark-backwards (arg)
+(defun ambrevar/helm-toggle-visible-mark-backwards (arg)
   (interactive "p")
   (helm-toggle-visible-mark (- arg)))
-(define-key helm-map (kbd "S-SPC") 'helm-toggle-visible-mark-backwards)
+(define-key helm-map (kbd "S-SPC") 'ambrevar/helm-toggle-visible-mark-backwards)
 
 (provide 'init-helm)

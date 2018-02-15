@@ -113,8 +113,6 @@
         debbugs-gnu-persistency-file (expand-file-name "debbugs" ambrevar/emacs-cache-folder)))
 
 ;;; Diff
-;;; REVIEW: Show permissions in ztree.
-;;; See https://github.com/fourier/ztree/issues/50.
 ;;; TODO: In diff-mode, both `[[` and `C-M-a` do not go back to previous index
 ;;; once they are at the beginning of an index.
 (nconc package-selected-packages '(ztree))
@@ -148,11 +146,11 @@
   (setq fish-completion-fallback-on-bash-p t)
   (global-fish-completion-mode))
 (with-eval-after-load 'eshell (require 'init-eshell))
-(autoload 'eshell-or-new-session "eshell")
+(autoload 'ambrevar/eshell-or-new-session "eshell")
 
 ;;; Eww
 (with-eval-after-load 'eww (require 'init-eww))
-(autoload 'eww-switch-back "eww")
+(autoload 'ambrevar/eww-switch-back "eww")
 
 ;;; GLSL
 (nconc package-selected-packages '(glsl-mode))
@@ -185,12 +183,13 @@
 ;;; TODO: Disable white frame.
 ;;; I think it's the cursor.
 ;;; Evil-mode reverts cursor changes.
+;; (set-face-foreground 'cursor "black")
 ;;; TODO: Implement other sxiv features:
 ;;; - Gamma
 ;;; - Marks
 ;;; - Gallery
 ;;; TODO: Is it possible to display an image fullscreen?
-;;; TODO: Image+: Do no auto-adjust animated files
+;;; TODO: Image+: Dot no auto-adjust animated files
 ;;; https://github.com/mhayashi1120/Emacs-imagex/issues/10
 ;;; TODO: Image+: Restore animation state
 ;;; https://github.com/mhayashi1120/Emacs-imagex/issues/9
@@ -261,7 +260,7 @@
   ;; (nconc package-selected-packages '(mu4e-maildirs-extension))
   (nconc package-selected-packages '(helm-mu)))
 (with-eval-after-load 'mu4e (require 'init-mu4e))
-(autoload 'mu4e-headers "mu4e")
+(autoload 'ambrevar/mu4e-headers "mu4e")
 
 ;;; Makefile
 (with-eval-after-load 'make-mode (require 'init-makefile))
@@ -290,13 +289,13 @@
 ;;; News
 (nconc package-selected-packages '(elfeed))
 (with-eval-after-load 'elfeed (require 'init-elfeed))
-(autoload 'elfeed-switch-back "elfeed")
+(autoload 'ambrevar/elfeed-switch-back "elfeed")
 
 ;;; Org-mode
 (nconc package-selected-packages '(org-plus-contrib org-bullets)) ; org-plus contains latest Org mode.
 (with-eval-after-load 'org (require 'init-org))
-(autoload 'org-switch-agenda-file "org")
-(autoload 'org-switch-agenda-file-other-window "org")
+(autoload 'ambrevar/org-switch-agenda-file "org")
+(autoload 'ambrevar/org-switch-agenda-file-other-window "org")
 
 ;;; Packaging
 (nconc package-selected-packages '(esup package-lint))
@@ -311,7 +310,7 @@
 ;;; REVIEW: `save-place' does not seem to work with pdf-tools.
 ;;; See https://github.com/politza/pdf-tools/issues/18.
 ;;; TODO: windmove fails when selecting text and then moving up/down.
-;;; It only fails if in evil mode.
+;;; It only fails in Evil mode.
 (nconc package-selected-packages '(pdf-tools))
 (when (require 'pdf-tools nil t)
   ;; (setq pdf-view-midnight-colors '("#ffffff" . "#000000"))

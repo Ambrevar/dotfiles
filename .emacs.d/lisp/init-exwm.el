@@ -25,8 +25,8 @@
 ;;; https://github.com/emacs-helm/helm/issues/1889
 
 ;;; Rename buffer to window title.
-(defun exwm-rename-buffer-to-title () (exwm-workspace-rename-buffer exwm-title))
-(add-hook 'exwm-update-title-hook 'exwm-rename-buffer-to-title)
+(defun ambrevar/exwm-rename-buffer-to-title () (exwm-workspace-rename-buffer exwm-title))
+(add-hook 'exwm-update-title-hook 'ambrevar/exwm-rename-buffer-to-title)
 
 (add-hook 'exwm-floating-setup-hook 'exwm-layout-hide-mode-line)
 (add-hook 'exwm-floating-exit-hook 'exwm-layout-show-mode-line)
@@ -76,13 +76,13 @@
   (exwm-input-set-key (kbd "s-b") #'helm-mini)
   (exwm-input-set-key (kbd "s-f") #'helm-find-files)
   (exwm-input-set-key (kbd "s-F") #'helm-locate)
-  (when (fboundp 'helm-locate-meta)
-    (exwm-input-set-key (kbd "s-F") #'helm-locate-meta))
+  (when (fboundp 'ambrevar/helm-locate-meta)
+    (exwm-input-set-key (kbd "s-F") #'ambrevar/helm-locate-meta))
   (exwm-input-set-key (kbd "s-g") 'ambrevar/helm-grep-git-or-ag)
   (exwm-input-set-key (kbd "s-G") 'ambrevar/helm-grep-git-all-or-ag))
 
 (require 'functions)
-(exwm-input-set-key (kbd "s-<tab>") #'switch-to-last-buffer)
+(exwm-input-set-key (kbd "s-<tab>") #'ambrevar/switch-to-last-buffer)
 (when (require 'evil nil t)
   (exwm-input-set-key (kbd "s-<tab>") #'evil-switch-to-windows-last-buffer)
   (exwm-input-set-key (kbd "C-6") #'evil-switch-to-windows-last-buffer))
@@ -102,7 +102,7 @@
 (when (fboundp 'helm-pass)
   (exwm-input-set-key (kbd "s-p") #'helm-pass))
 (when (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path))
-  (exwm-input-set-key (kbd "s-m") #'mu4e-headers))
+  (exwm-input-set-key (kbd "s-m") #'ambrevar/mu4e-headers))
 (exwm-input-set-key (kbd "s-n") #'ambrevar/elfeed-switch-back) ; "n" for "news"
 (exwm-input-set-key (kbd "s-e") #'ambrevar/eww-switch-back)
 (exwm-input-set-key (kbd "s-E") #'eww)
@@ -110,11 +110,11 @@
 
 
 ;;; External application shortcuts.
-(defun exwm-start (command)
+(defun ambrevar/exwm-start (command)
   (interactive (list (read-shell-command "$ ")))
   (start-process-shell-command command nil command))
-(exwm-input-set-key (kbd "s-&") #'exwm-start)
-(exwm-input-set-key (kbd "s-r") #'exwm-start)
+(exwm-input-set-key (kbd "s-&") #'ambrevar/exwm-start)
+(exwm-input-set-key (kbd "s-r") #'ambrevar/exwm-start)
 
 (when (require 'helm-exwm nil t)
   (add-to-list 'helm-source-names-using-follow "EXWM buffers")
@@ -136,17 +136,16 @@
   (exwm-input-set-key (kbd "s-W") #'helm-exwm-switch-browser-other-window))
 
 ;;; Lock screen
-(defvar exwm-lock-program "slock" "Shell command used to lock the screen.")
-(defun exwm-start-lock () (interactive) (start-process-shell-command exwm-lock-program nil exwm-lock-program))
-(exwm-input-set-key (kbd "s-z") #'exwm-start-lock)
+(defun ambrevar/exwm-start-lock () (interactive) (start-process "slock" nil "slock"))
+(exwm-input-set-key (kbd "s-z") #'ambrevar/exwm-start-lock)
 
 ;;; Screenshot
-(defun exwm-start-screenshot () (interactive) (start-process-shell-command "scrot" nil "scrot ~/temp/screen-%F-%T.png"))
-(exwm-input-set-key (kbd "<print>") #'exwm-start-screenshot)
+(defun ambrevar/exwm-start-screenshot () (interactive) (start-process-shell-command "scrot" nil "scrot ~/temp/screen-%F-%T.png"))
+(exwm-input-set-key (kbd "<print>") #'ambrevar/exwm-start-screenshot)
 
 ;;; Volume control
 ;;; TODO: Check out the 'volume' package.
-(defun exwm-volume (&optional up-or-down)
+(defun ambrevar/exwm-volume (&optional up-or-down)
   (let ((controllers '(("amixer" . ((control . "set Master") (down . "5%-") (up . "5%+") (toggle . "toggle")))
                        ("mixer" . ((control . "vol") (down . "-5") (up . "+5") (toggle . "^"))))))
     (while (not (executable-find (caar controllers)))
@@ -158,15 +157,15 @@
                                     (alist-get 'control (cdar controllers))
                                     (alist-get up-or-down (cdar controllers) (alist-get 'toggle (cdar controllers) )))))))
 
-(defun exwm-start-volume-down () (interactive) (exwm-volume 'down))
-(defun exwm-start-volume-up () (interactive) (exwm-volume 'up))
-(defun exwm-start-volume-toggle () (interactive) (exwm-volume))
-(exwm-input-set-key (kbd "s-<kp-subtract>") #'exwm-start-volume-down)
-(exwm-input-set-key (kbd "s-<kp-add>") #'exwm-start-volume-up)
-(exwm-input-set-key (kbd "s-<kp-enter>") #'exwm-start-volume-toggle)
-(exwm-input-set-key (kbd "s--") #'exwm-start-volume-down)
-(exwm-input-set-key (kbd "s-=") #'exwm-start-volume-up)
-(exwm-input-set-key (kbd "s-0") #'exwm-start-volume-toggle)
+(defun ambrevar/exwm-start-volume-down () (interactive) (ambrevar/exwm-volume 'down))
+(defun ambrevar/exwm-start-volume-up () (interactive) (ambrevar/exwm-volume 'up))
+(defun ambrevar/exwm-start-volume-toggle () (interactive) (ambrevar/exwm-volume))
+(exwm-input-set-key (kbd "s-<kp-subtract>") #'ambrevar/exwm-start-volume-down)
+(exwm-input-set-key (kbd "s-<kp-add>") #'ambrevar/exwm-start-volume-up)
+(exwm-input-set-key (kbd "s-<kp-enter>") #'ambrevar/exwm-start-volume-toggle)
+(exwm-input-set-key (kbd "s--") #'ambrevar/exwm-start-volume-down)
+(exwm-input-set-key (kbd "s-=") #'ambrevar/exwm-start-volume-up)
+(exwm-input-set-key (kbd "s-0") #'ambrevar/exwm-start-volume-toggle)
 
 ;;; Check for start-up errors. See ~/.profile.
 (let ((error-logs (directory-files "~" t "errors.*log$")))
@@ -178,9 +177,9 @@
             (lambda () (get-buffer "*Warnings*"))))))
 
 ;;; Some programs such as 'emacs' are better off being started in char-mode.
-(defun exwm-start-in-char-mode ()
+(defun ambrevar/exwm-start-in-char-mode ()
   (when (string= exwm-instance-name "emacs")
     (exwm-input-release-keyboard (exwm--buffer->id (window-buffer)))))
-(add-hook 'exwm-manage-finish-hook 'exwm-start-in-char-mode)
+(add-hook 'exwm-manage-finish-hook 'ambrevar/exwm-start-in-char-mode)
 
 (provide 'init-exwm)

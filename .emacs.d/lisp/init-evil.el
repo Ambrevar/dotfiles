@@ -76,14 +76,14 @@
 
 ;;; Change mode-line color by Evil state.
 (setq evil-default-modeline-color (cons (face-background 'mode-line) (or (face-foreground 'mode-line) "black")))
-(defun evil-color-modeline ()
+(defun ambrevar/evil-color-modeline ()
   (let ((color (cond ((minibufferp) evil-default-modeline-color)
                      ((evil-insert-state-p) '("#006fa0" . "#ffffff")) ; 00bb00
                      ((evil-emacs-state-p)  '("#444488" . "#ffffff"))
                      (t evil-default-modeline-color))))
     (set-face-background 'mode-line (car color))
     (set-face-foreground 'mode-line (cdr color))))
-(add-hook 'post-command-hook 'evil-color-modeline)
+(add-hook 'post-command-hook 'ambrevar/evil-color-modeline)
 (setq evil-mode-line-format nil)
 
 ;;; Add defun text-object. TODO: Does not work for "around".
@@ -198,7 +198,7 @@
     (add-hook 'org-mode-hook 'evil-org-mode)
     ;; No need for 'insert, 'shift (I use custom definitions), 'todo 'heading.
     (evil-org-set-key-theme '(navigation textobjects additional shift))
-    (defun evil-org-meta-return ()
+    (defun ambrevar/evil-org-meta-return ()
       "Like `org-meta-return' but switch to insert mode."
       (interactive)
       (evil-insert 1)
@@ -207,7 +207,7 @@
       "^" 'org-up-element ; Evil-Magit-inspired. TODO: Suggest upstream.
       "<" 'org-up-element ; Custom
       ">" 'org-down-element ; Custom
-      (kbd "M-<return>") 'evil-org-meta-return)
+      (kbd "M-<return>") 'ambrevar/evil-org-meta-return)
     (with-eval-after-load 'org-agenda
       (require 'evil-org-agenda)
       (evil-org-agenda-set-keys))))

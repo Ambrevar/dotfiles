@@ -224,19 +224,19 @@
 ;;; Some commands ignore that compilation-mode is a "dumb" terminal and still display colors.
 ;;; Thus we render those colors.
 (require 'ansi-color)
-(defun compilation-colorize-buffer ()
+(defun ambrevar/compilation-colorize-buffer ()
   (when (eq major-mode 'compilation-mode)
     (ansi-color-apply-on-region compilation-filter-start (point-max))))
-(add-hook 'compilation-filter-hook 'compilation-colorize-buffer)
+(add-hook 'compilation-filter-hook 'ambrevar/compilation-colorize-buffer)
 (global-set-key (kbd "<f7>") 'previous-error)
 (global-set-key (kbd "<f8>") 'next-error)
-(defun compile-last-command ()
+(defun ambrevar/compile-last-command ()
   (interactive)
   (compile compile-command))
 (ambrevar/define-keys prog-mode-map
                       "C-<f6>" 'compile
                       ;; Do not use `recompile' since we want to change the compilation folder for the current buffer.
-                      "<f6>" 'compile-last-command)
+                      "<f6>" 'ambrevar/compile-last-command)
 
 ;;; REVIEW: Bug 26658 reports that cc-modes mistakenly does not make use of prog-mode-map.
 ;;; The following line is a suggested work-around.
@@ -272,11 +272,11 @@
         desktop-load-locked-desktop 'ask
         desktop-restore-frames nil
         desktop-save t)
-  (defun desktop-init (_frame)
+  (defun ambrevar/desktop-init (_frame)
     (desktop-save-mode)
     (desktop-read)
-    (remove-hook 'after-make-frame-functions 'desktop-init))
-  (add-hook 'after-make-frame-functions 'desktop-init) ; This does not fix the window register restoration.
+    (remove-hook 'after-make-frame-functions 'ambrevar/desktop-init))
+  (add-hook 'after-make-frame-functions 'ambrevar/desktop-init) ; This does not fix the window register restoration.
   (add-to-list 'desktop-modes-not-to-save 'pdf-view-mode)
   (add-to-list 'desktop-modes-not-to-save 'image-mode)
   (unless (file-directory-p desktop-dirname)
@@ -370,5 +370,8 @@
 ;;; Required for eshell/sudo and everything relying on GPG queries.
 (setq epa-pinentry-mode 'loopback) ; This will fail if gpg>=2.1 is not available.
 (pinentry-start)
+
+;;; Semanticdb folders must be set before starting semantic.
+(setq semanticdb-default-save-directory (concat ambrevar/emacs-cache-folder "semanticdb"))
 
 (provide 'main)

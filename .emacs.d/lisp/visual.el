@@ -122,7 +122,7 @@
 ;;; Key notes highlighting. We need to apply it to the mode hook since
 ;;; font-lock-add-keywords has no inheritance support.
 (set-face-foreground 'font-lock-warning-face "DarkOrange")
-(defun fontify-comment-tag ()
+(defun ambrevar/fontify-comment-tag ()
   (font-lock-add-keywords
    nil
    ;; See https://en.wikipedia.org/wiki/Comment_(computer_programming)#Tags.
@@ -130,7 +130,7 @@
     (lambda (keyword) `(,(concat "\\<\\(" keyword "\\):") 1 font-lock-warning-face prepend))
     '("FIXME\\(([^)]+)\\)?" "HACK" "OPTIMIZE\\(([^)]+)\\)?" "REVIEW\\(([^)]+)\\)?" "TODO\\(([^)]+)\\)?" "UNDONE" "UX" "WARNING" "XXX"))))
 (dolist (hook '(prog-mode-hook text-mode-hook))
-  (add-hook hook 'fontify-comment-tag))
+  (add-hook hook 'ambrevar/fontify-comment-tag))
 
 ;;; Man pages
 (with-eval-after-load 'man

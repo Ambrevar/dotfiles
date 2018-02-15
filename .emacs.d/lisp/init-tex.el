@@ -5,7 +5,7 @@
                prettify-symbols-mode))
   (add-hook 'tex-mode-hook fun))
 
-(defun tex-toggle-escape-char ()
+(defun ambrevar/tex-toggle-escape-char ()
   "Make backslash part of the word syntax or not.
 This does not interfere with `subword-mode'."
   (interactive)

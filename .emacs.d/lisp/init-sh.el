@@ -12,7 +12,7 @@
 (set-face-foreground 'sh-heredoc "#00bfff")
 (set-face-bold 'sh-heredoc nil)
 
-(defun sh-set-compiler ()
+(defun ambrevar/sh-set-compiler ()
   "Set shell interpreter.
 Set `sh-shell', `sh-shell-file' and `compile-command' according to the following rules:
 - Look at shabang.
@@ -53,21 +53,21 @@ The advantages of this function over the vanilla code are:
   (when (stringp buffer-file-name)
     (setq compile-command (concat sh-shell-file " " (shell-quote-argument buffer-file-name)))))
 
-(defun sh-set-indent-rules ()
+(defun ambrevar/sh-set-indent-rules ()
   (setq sh-indent-for-case-label 0
         sh-indent-for-case-alt '+))
 
-(defun sh-set-prompt ()
+(defun ambrevar/sh-set-prompt ()
   (set (make-local-variable 'defun-prompt-regexp)
        (concat "^\\(function[ \t]\\|[[:alnum:]_]+[ \t]+()[ \t]+\\)")))
 
 ;;; Hooks
-(dolist (fun '(sh-set-indent-rules sh-set-prompt sh-set-compiler))
+(dolist (fun '(ambrevar/sh-set-indent-rules ambrevar/sh-set-prompt ambrevar/sh-set-compiler))
   (add-hook 'sh-mode-hook fun))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-skeleton sh-commands-or-die
+(define-skeleton ambrevar/sh-commands-or-die
   "Insert a loop that exits if any of the commands is not found in path."
   "Command names: "
   > "for i " @ str "; do" \n
@@ -77,14 +77,14 @@ The advantages of this function over the vanilla code are:
   "fi" > \n
   "done" > \n \n)
 
-(define-skeleton sh-ifcommand
+(define-skeleton ambrevar/sh-ifcommand
   "Insert a test to check if command is found in path."
   "Command name: "
   > "if command -v " @ str " >/dev/null 2>&1; then" \n
   > @ _ \n
   "fi" > \n)
 
-(define-skeleton sh-while-getopts
+(define-skeleton ambrevar/sh-while-getopts
   "Insert a getops prototype."
   "optstring: "
   > "usage() {" \n
@@ -121,7 +121,7 @@ EOF
 "exit 1" \n
 "fi" > \n)
 
-(define-skeleton sh-while-read
+(define-skeleton ambrevar/sh-while-read
   "Insert a while read loop."
   nil
   > "while IFS= read -r i; do" \n

@@ -51,7 +51,7 @@
       (emms-pause))))
 
 ;;; Browse by album-artist.
-(defun emms-browser-get-track-custom (track type)
+(defun ambrevar/emms-browser-get-track-custom (track type)
   "Return TYPE from TRACK.
 This function uses 'info-albumartistsort, 'info-albumartist,
 'info-artistsort, 'info-originalyear, 'info-originaldate and
@@ -69,7 +69,7 @@ This function uses 'info-albumartistsort, 'info-albumartist,
            (emms-format-date-to-year date)))
         (t (emms-track-get track type "<unknown>"))))
 
-(setq emms-browser-get-track-field-function #'emms-browser-get-track-custom)
+(setq emms-browser-get-track-field-function #'ambrevar/emms-browser-get-track-custom)
 
 (when (require 'helm-emms nil t)
   (setq helm-emms-default-sources
@@ -80,15 +80,15 @@ This function uses 'info-albumartistsort, 'info-albumartist,
 ;;; Cover thumbnails.
 (setq emms-browser-covers 'emms-browser-cache-thumbnail)
 
-(defun emms-browser-add-tracks-and-maybe-play ()
+(defun ambrevar/emms-browser-add-tracks-and-maybe-play ()
   "Like `emms-browser-add-tracks' but play immediately if nothing
 is currently playing."
   (interactive)
   (if emms-player-playing-p
       (emms-browser-add-tracks)
     (emms-browser-add-tracks-and-play)))
-(define-key emms-browser-mode-map (kbd "<return>") 'emms-browser-add-tracks-and-maybe-play)
+(define-key emms-browser-mode-map (kbd "<return>") 'ambrevar/emms-browser-add-tracks-and-maybe-play)
 (when (fboundp 'evil-define-key)
-  (evil-define-key '(normal motion) emms-browser-mode-map (kbd "<return>") 'emms-browser-add-tracks-and-maybe-play))
+  (evil-define-key '(normal motion) emms-browser-mode-map (kbd "<return>") 'ambrevar/emms-browser-add-tracks-and-maybe-play))
 
 (provide 'init-emms)

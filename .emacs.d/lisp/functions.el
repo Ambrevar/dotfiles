@@ -56,7 +56,7 @@ TO-STRING."
 Tabify if `indent-tabs-mode' is true, otherwise use spaces.
 Work on buffer or region.
 
-If `fmt-inhinit-p' is non-nil, it does nothing.
+If `ambrevar/fmt-inhinit-p' is non-nil, it does nothing.
 
 Require `ambrevar/tabify-leading'."
   (interactive)
@@ -73,7 +73,7 @@ Require `ambrevar/tabify-leading'."
 
 (defcustom ambrevar/fmt-inhibit-p t
   "Do not run `ambrevar/fmt' if non-nil.
-As this is not friendly to foreign projects, `fmt' should be run
+As this is not friendly to foreign projects, `ambrevar/fmt' should be run
 selectively."
   :safe 'booleanp)
 
@@ -353,7 +353,7 @@ This does not interfere with `subword-mode'."
     (message "_ is a word delimiter")))
 
 ;;; TODO: Move turn-on-* functions to 'hook-functions.el'?
-;;; Replace useless individual comments with a single global comment.
+;;; And replace useless individual comments with a single global comment.
 
 (defun ambrevar/turn-on-column-number-mode ()
   "Unconditionally turn on `column-number-mode' for the current buffer."
@@ -374,8 +374,8 @@ This does not affect .csv files."
   (remove-hook 'before-save-hook 'delete-trailing-whitespace t))
 
 (defun ambrevar/turn-on-fmt-before-save ()
-  "Unconditionally add the `fmt' function to `before-save-hook'."
-  (add-hook 'before-save-hook 'fmt nil t))
+  "Unconditionally add the `ambrevar/fmt' function to `before-save-hook'."
+  (add-hook 'before-save-hook 'ambrevar/fmt nil t))
 
 (defun ambrevar/turn-off-fmt-before-save ()
   "Unconditionally remove the `ambrevar/fmt' function to `before-save-hook'."

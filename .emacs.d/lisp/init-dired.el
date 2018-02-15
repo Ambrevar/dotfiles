@@ -3,7 +3,7 @@
 ;;; We cannot assume that current buffer is in dired-mode.
 
 (ambrevar/define-keys dired-mode-map
-                      "C-c h" 'dired-toggle-humansize
+                      "C-c h" 'ambrevar/dired-toggle-humansize
                       "<left>" 'dired-up-directory
                       "<right>" 'dired-find-file
                       "SPC" 'dired-mark
@@ -22,7 +22,7 @@
 ;;; dired-internal-noselect is a lower level function, so it is faster. WARNING:
 ;;; Not sure if it is equivalent though.
 ;; (dired dired-directory dired-listing-switches)
-(defun dired-set-listing-switches ()
+(defun ambrevar/dired-set-listing-switches ()
   (dired-internal-noselect dired-directory dired-listing-switches))
 
 (setq wdired-allow-to-change-permissions t)
@@ -37,9 +37,9 @@
        '("\\.\\(jpe?g\\|png\\|git\\)$" "sxiv")
        '("\\.\\(mkv\\|mpe?g\\|avi\\|mp4\\|ogm\\)$" "mpv")))
 
-(defvar dired-showing-humansize t "If dired is displaying humansize or not.")
+(defvar ambrevar/dired-showing-humansize t "If dired is displaying humansize or not.")
 
-(defun dired-toggle-humansize ()
+(defun ambrevar/dired-toggle-humansize ()
   "Toggle displaying humansize in dired."
   (interactive)
   (let ((switch-regexp "\\(\\`\\| \\)-\\([a-gi-zA-Z]*\\)\\(h\\)\\([^ ]*\\)")
@@ -51,18 +51,18 @@
                 (replace-match "" t t dired-actual-switches))
         (setq dired-actual-switches
               (replace-match "" t t dired-actual-switches 3))))
-    (if dired-showing-humansize
-        (setq dired-showing-humansize nil)
+    (if ambrevar/dired-showing-humansize
+        (setq ambrevar/dired-showing-humansize nil)
       (progn
         (setq dired-actual-switches
               (concat dired-actual-switches
                       (if (string-match-p "\\`-[[:alnum:]]+\\'"
                                           dired-actual-switches)
                           "h" " -h")))
-        (setq dired-showing-humansize t))))
+        (setq ambrevar/dired-showing-humansize t))))
   (revert-buffer))
 
-(dolist (fun '(dired-omit-mode dired-set-listing-switches))
+(dolist (fun '(dired-omit-mode ambrevar/dired-set-listing-switches))
   (add-hook 'dired-mode-hook fun))
 
 (provide 'init-dired)
