@@ -61,18 +61,11 @@
    (evil-execute-in-emacs-state)
    (call-interactively (key-binding (kbd "M-.")))))
 
-;;; Multiple cursors.
-;;; This shadows evil-magit's "gr", but we can use "?g" for that instead.
-;;; It shadows C-n/p (`evil-paste-pop'), but we use `helm-show-kill-ring' on
-;;; another binding.
-(when (require 'evil-mc nil t)
-  ;; (global-evil-mc-mode 1)
-  (add-hook 'text-mode-hook 'evil-mc-mode)
-  (add-hook 'prog-mode-hook 'evil-mc-mode)
-  (define-key evil-mc-key-map (kbd "C-<mouse-1>") 'evil-mc-toggle-cursor-on-click)
-  (set-face-attribute 'evil-mc-cursor-default-face nil :inherit nil :inverse-video nil :box "white")
-  (when (require 'evil-mc-extras nil t)
-    (global-evil-mc-extras-mode 1)))
+;;; Multiedit
+(when (require 'evil-multiedit nil t)
+  ;; REVIEW: Some bindings are missing:
+  ;; See https://github.com/hlissner/evil-multiedit/issues/20.
+  (evil-multiedit-default-keybinds))
 
 ;;; Change mode-line color by Evil state.
 (setq evil-default-modeline-color (cons (face-background 'mode-line) (or (face-foreground 'mode-line) "black")))
@@ -122,9 +115,6 @@
 ;; Custom Helm
 (with-eval-after-load 'helm
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
-  (ambrevar/define-keys helm-map
-                        "C-\\" 'helm-toggle-resplit-and-swap-windows ; Becauste C-t is taken by evil-mc.
-                        "M-\\" 'helm-toggle-resplit-and-swap-windows)
   (dolist (map (list helm-find-files-map helm-read-file-map))
     (ambrevar/define-keys map
                           "M-." 'helm-end-of-buffer

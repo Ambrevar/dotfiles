@@ -131,7 +131,7 @@
 
 ;;; Evil
 (nconc package-selected-packages '(evil
-                                   evil-commentary evil-mc evil-mc-extras linum-relative
+                                   evil-commentary evil-multiedit linum-relative
                                    evil-ediff evil-magit evil-mu4e evil-org evil-collection))
 (setq evil-want-integration nil)
 (when (require 'evil nil t) (require 'init-evil))
@@ -151,6 +151,11 @@
 ;;; Eww
 (with-eval-after-load 'eww (require 'init-eww))
 (autoload 'ambrevar/eww-switch-back "eww")
+
+;;; Expand region.
+(nconc package-selected-packages '(expand-region))
+(when  (require 'expand-region nil t)
+  (global-set-key (kbd "C-=") 'er/expand-region))
 
 ;;; GLSL
 (nconc package-selected-packages '(glsl-mode))
