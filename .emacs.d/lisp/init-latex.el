@@ -23,8 +23,6 @@
 ;;; Needs dvipng.
 ;;; With TeXlive, the following packages are needed: psnfss, symbol, zapfding
 (when (and (executable-find "dvipng") (require 'latex-math-preview nil t))
-  (setq latex-math-preview-cache-directory-for-insertion
-        (concat ambrevar/emacs-cache-folder "latex-math-preview-cache"))
   (local-set-key (kbd "C-c p") 'latex-math-preview-expression)
   (local-set-key (kbd "C-c j") 'latex-math-preview-insert-symbol)
   (local-set-key (kbd "C-c C-j") 'latex-math-preview-last-symbol-again)

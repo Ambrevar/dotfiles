@@ -1,6 +1,6 @@
 ;;; Elfeed
 
-(setq elfeed-db-directory (concat ambrevar/emacs-cache-folder "elfeed"))
+(setq elfeed-db-directory (expand-file-name "elfeed" user-emacs-directory))
 
 (defun ambrevar/elfeed-play-with-mpv ()
   "Play entry link with mpv."

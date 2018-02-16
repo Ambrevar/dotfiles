@@ -96,8 +96,6 @@
 ;;; REVIEW: `kill -#' does not work.
 ;;; See #29156.
 
-(setq eshell-directory-name (concat ambrevar/emacs-cache-folder "eshell"))
-
 ;;; Use TRAMP to use Eshell as root.
 (require 'em-tramp)
 (setq password-cache t)

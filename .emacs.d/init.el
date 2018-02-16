@@ -20,15 +20,13 @@
   (setq file-name-handler-alist default-file-name-handler-alist))
 (add-hook 'after-init-hook 'ambrevar/reset-file-name-handler-alist)
 
-(defvar ambrevar/emacs-cache-folder "~/.cache/emacs/"
-  "Cache folder is everything we do not want to track together
-  with the configuration files.")
-(if (not (file-directory-p ambrevar/emacs-cache-folder))
-    (make-directory ambrevar/emacs-cache-folder t))
-
 ;;; Store additional config in a 'lisp' subfolder and add it to the load path so
 ;;; that `require' can find the files.
+;;; This must be done before moving `user-emacs-directory'.
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
+
+;;; Move user-emacs-directory so that user files don't mix with cache files.
+(setq user-emacs-directory "~/.cache/emacs/")
 
 (when (require 'package nil t)
   ;; TODO: MELPA's https sometimes return
@@ -38,7 +36,6 @@
   (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")))
   (add-to-list 'package-archives '("melpa" . "https://melpa.milkbox.net/packages/"))
   (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
-  (setq package-user-dir (concat ambrevar/emacs-cache-folder "elpa"))
   (package-initialize))
 
 ;;; Site Lisp folder for local packages and development.
@@ -50,7 +47,7 @@
     (dolist (dir (directory-files path t "^[^\\.]"))
       (when (file-directory-p dir)
         (setq load-path (add-to-list 'load-path dir))))))
-(let ((site-lisp (expand-file-name "site-lisp/" user-emacs-directory)))
+(let ((site-lisp (expand-file-name "site-lisp/" "~/.local/share/emacs/")))
   (add-to-list 'load-path site-lisp)
   (ambrevar/package-refresh-load-path site-lisp))
 
@@ -109,8 +106,7 @@
 ;;; Debbugs
 (nconc package-selected-packages '(debbugs))
 (with-eval-after-load 'debbugs
-  (setq debbugs-gnu-all-severities t
-        debbugs-gnu-persistency-file (expand-file-name "debbugs" ambrevar/emacs-cache-folder)))
+  (setq debbugs-gnu-all-severities t))
 
 ;;; Diff
 ;;; TODO: In diff-mode, both `[[` and `C-M-a` do not go back to previous index
@@ -383,8 +379,6 @@
 
 ;;; StackExchange
 (nconc package-selected-packages '(sx))
-(with-eval-after-load 'sx
-  (setq sx-cache-directory (concat ambrevar/emacs-cache-folder "sx")))
 
 ;;; Syntax checking
 (nconc package-selected-packages '(flycheck helm-flycheck))

@@ -5,8 +5,6 @@
 (define-key org-mode-map (kbd "C-c C-a") 'org-agenda)
 
 (setq
- ;; Move annoying babel folder.
- org-babel-temporary-directory (concat ambrevar/emacs-cache-folder "babel")
  ;; Disable line splitting on M-RET.
  org-M-RET-may-split-line '((default))
  org-insert-heading-respect-content t

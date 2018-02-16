@@ -16,36 +16,20 @@
 (setq echo-keystrokes 0.5)
 
 ;;; Remember last cursor position.
-(setq save-place-file (concat ambrevar/emacs-cache-folder "saveplace"))
 (save-place-mode)
 ;;; When the daemon is killed abruptly, places are not saved. Adding this hook
 ;;; allows to save places at a strategic moment.
 (add-hook 'before-save-hook 'save-place-kill-emacs-hook)
 
-;;; Network files
-(setq url-cookie-file (concat ambrevar/emacs-cache-folder "url.cookies")
-      url-cache-directory (expand-file-name "url/cache" ambrevar/emacs-cache-folder))
-(with-eval-after-load 'nsm
-  (setq nsm-settings-file (concat ambrevar/emacs-cache-folder "network-security.data")))
-
-;;; Bookmark file to cache folder.
-(setq bookmark-default-file (concat ambrevar/emacs-cache-folder "emacs.bmk"))
-
 ;;; Recent files.
-(setq recentf-save-file (concat ambrevar/emacs-cache-folder "recentf")
-      recentf-max-saved-items 40)
+(setq recentf-max-saved-items 40)
 
 ;;; Save M-: history.
-(setq savehist-file (concat ambrevar/emacs-cache-folder "savehist"))
 (savehist-mode)
 
 ;;; Disable autosave features.
 (setq auto-save-default nil)
 (setq auto-save-list-file-prefix nil)
-
-;;; Place backup files in specific directory.
-(setq backup-directory-alist
-      `(("." . ,(concat ambrevar/emacs-cache-folder "backups/"))))
 
 ;;; Default mode
 (setq-default major-mode 'text-mode)
@@ -273,8 +257,6 @@
         ;; might never be saved.  See
         ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28943.
         desktop-auto-save-timeout 5
-        desktop-dirname (expand-file-name "desktop" ambrevar/emacs-cache-folder)
-        desktop-path (list desktop-dirname)
         ;; desktop-restore-eager 4 ; Can be annoying as you don't have your last-loaded buffers immediately.
         desktop-load-locked-desktop 'ask
         desktop-restore-frames nil
@@ -286,8 +268,6 @@
   (add-hook 'after-make-frame-functions 'ambrevar/desktop-init) ; This does not fix the window register restoration.
   (add-to-list 'desktop-modes-not-to-save 'pdf-view-mode)
   (add-to-list 'desktop-modes-not-to-save 'image-mode)
-  (unless (file-directory-p desktop-dirname)
-    (make-directory desktop-dirname t))
   ;; TODO: `compile-history' should be buffer local but that does not work.
   ;; http://user42.tuxfamily.org/compile-history-local/index.html
   ;; http://stackoverflow.com/questions/22995203/one-compile-command-per-buffer-not-directory
@@ -360,10 +340,6 @@
    ("Australia/Melbourne" "Melbourne")
    ("Africa/Nairobi" "Uganda")))
 
-;;; Tramp
-(setq tramp-persistency-file-name (concat ambrevar/emacs-cache-folder "tramp")
-      tramp-backup-directory-alist backup-directory-alist)
-
 ;;; Frame title
 (setq frame-title-format (concat "%b" (unless (daemonp) " [serverless]")))
 
@@ -378,8 +354,5 @@
 (setq epa-pinentry-mode 'loopback) ; This will fail if gpg>=2.1 is not available.
 (when (require 'pinentry nil t)
   (pinentry-start))
-
-;;; Semanticdb folders must be set before starting semantic.
-(setq semanticdb-default-save-directory (concat ambrevar/emacs-cache-folder "semanticdb"))
 
 (provide 'main)

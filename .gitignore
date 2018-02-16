@@ -22,7 +22,6 @@
 .config/transmission-daemon/stats.json
 .config/transmission-daemon/torrents/
 .dbus
-.emacs.d/site-lisp/
 .fontconfig
 .gimp*
 .gnupg
@@ -30,6 +29,7 @@
 .lesshst
 .local/share/Trash
 .local/share/applications/wine*
+.local/share/emacs
 .local/share/icons
 .local/share/mime/*
 .mbsyncrc
