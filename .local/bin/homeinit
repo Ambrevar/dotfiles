@@ -86,7 +86,41 @@ mkdir -pv "$XDG_CONFIG_HOME/qutebrowser/bookmarks"
 lnn "$SOURCEDIR/bookmarks/bookmarks" "$XDG_CONFIG_HOME/qutebrowser/bookmarks/urls"
 lnn "$SOURCEDIR/bookmarks/quickmarks" "$XDG_CONFIG_HOME/qutebrowser/"
 
+echo "==> 'projects' folder"
+mkdir -pv "$HOME/projects"
+
+if ! command -v emacs >/dev/null 2>&1 || \
+		 [ $(emacs --batch --eval '(message "%s" emacs-major-version)') -lt 26 ]; then
+	pushd "$HOME/project"
+	git clone https://git.savannah.gnu.org/git/emacs.git
+	mkdir -p ../emacs-build
+	cd ../emacs-build
+	../emacs/configure \
+		--disable-gtk-deprecation-warnings \
+		--without-pop \
+		--without-kerberos \
+		--without-kerberos5 \
+		--with-x-toolkit=gtk3 \
+		--with-jpeg \
+		--with-tiff \
+		--with-gif \
+		--with-png \
+		--with-rsvg \
+		--with-xml2 \
+		--with-imagemagick \
+		--with-xft \
+		--with-libotf \
+		--without-gsettings \
+		--without-gconf \
+		--with-gnutls \
+		--with-modules \
+		--with-threads
+	popd
+	sudo make install
+fi
+
 if command -v emacs >/dev/null 2>&1; then
+	mkdir -pv "$HOME/.cache/emacs/"
 	if $OPT_UPDATE; then
 		echo "==> Emacs ELPA packages"
 		yes | emacs --batch -l ~/.emacs.d/init.el --eval '(progn (package-refresh-contents) (package-install-selected-packages))'
