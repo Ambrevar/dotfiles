@@ -231,11 +231,12 @@
     (kbd "M-l") #'lispyville-next-opening
     (kbd "M-j") #'lispy-down
     (kbd "M-k") #'lispy-up
-    (kbd "M-H") #'lispy-move-left
+    (kbd "M-H") #'lispy-up-slurp ; lispy-down-slurp?
     (kbd "M-J") #'lispyville-drag-forward
     (kbd "M-K") #'lispyville-drag-backward
-    (kbd "M-L") #'lispy-move-right
-    (kbd "C-x C-e") #'lispy-eval)
+    (kbd "M-L") #'lispy-move-right ; lispy-up-slurp?
+    (kbd "C-x C-e") #'lispy-eval
+    (kbd "M-;") #'lispy-comment)
   (lispyville--define-key '(motion normal)
     "Y" 'lispy-new-copy
     "D" 'lispy-kill))
