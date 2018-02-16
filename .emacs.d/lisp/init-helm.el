@@ -16,8 +16,9 @@
 ;;; TODO: Implement alternating-color multiline lists.
 ;;; See https://github.com/emacs-helm/helm/issues/1790.
 
-(when (require 'linum-relative nil t)
-  (helm-linum-relative-mode 1))
+(when (< emacs-major-version 26)
+  (when (require 'linum-relative nil t)
+    (helm-linum-relative-mode 1)))
 
 (when (require 'helm-descbinds nil t)
   (helm-descbinds-mode))

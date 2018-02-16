@@ -347,6 +347,9 @@
 (add-hook 'perl-mode-hook 'ambrevar/perl-set-indent-rules)
 (add-hook 'perl-mode-hook 'ambrevar/perl-set-compiler)
 
+;;; Pinentry
+(nconc package-selected-packages '(pinentry)) ; pinentry.el was remombed from Emacs 26.
+
 ;;; po
 (nconc package-selected-packages '(po-mode))
 

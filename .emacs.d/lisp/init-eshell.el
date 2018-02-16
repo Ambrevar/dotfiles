@@ -15,7 +15,8 @@
 
 ;;; REVIEW: ANSI coloring goes wrong sometimes.  Quite often with emerge/eix.
 ;;; Fixed in #27407.
-(require 'patch-eshell)
+(when (< emacs-major-version 26)
+  (require 'patch-eshell))
 
 ;;; REVIEW: Sometimes transmission-daemon does not start from Eshell.
 ;;; See #30465.

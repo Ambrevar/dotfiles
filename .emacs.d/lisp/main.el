@@ -83,7 +83,10 @@
 (dolist (hook '(prog-mode-hook text-mode-hook))
   (add-hook hook 'ambrevar/turn-on-column-number-mode)
   (add-hook hook 'ambrevar/turn-off-line-number-mode)
-  (add-hook hook 'linum-mode))
+  (if (>= emacs-major-version 26)
+      (add-hook hook 'display-line-numbers-mode)
+    (add-hook hook 'linum-mode)))
+(setq display-line-numbers-type 'relative)
 ;;; Emacs-nox does not display a fringe after the linum: Setting linum-format in
 ;;; linum-before-numbering-hook is not the right approach as it will change the
 ;;; type of linum-format in the middle. See linum-update-window.
@@ -160,14 +163,15 @@
 
 
 ;;; Since `browse-url-default-browser' fails at seeing we can run xdg, force it.
-(require 'browse-url)
-(setq browse-url-browser-function
-      (if (executable-find "xdg-open") 'browse-url-xdg-open 'browse-url-generic))
-;;; REVIEW: If xdg-open is not found, set Emacs URL browser to the environment browser,
-;;; or w3m if BROWSER is not set.
-;;; See https://debbugs.gnu.org/cgi/bugreport.cgi?bug=18986.
+(when (<  emacs-major-version 26)
+  (require 'browse-url)
+  (setq browse-url-browser-function
+        (if (executable-find "xdg-open") 'browse-url-xdg-open 'browse-url-generic)))
+;; REVIEW: If xdg-open is not found, set Emacs URL browser to the environment browser,
+;; or w3m if BROWSER is not set.
+;; See https://debbugs.gnu.org/cgi/bugreport.cgi?bug=18986.
 (setq browse-url-generic-program (or
-                                  (executable-find (or (getenv "BROWSER") ""))
+                                  (executable-find (or (getenv "BROWSER") "")) ; TODO: Still need this in Emacs 26?
                                   (when (executable-find "xdg-mime")
                                     (let ((desktop-browser (ambrevar/call-process-to-string "xdg-mime" "query" "default" "text/html")))
                                       (substring desktop-browser 0 (string-match "\\.desktop" desktop-browser))))
@@ -372,7 +376,8 @@
 ;;; Support for Emacs pinentry.
 ;;; Required for eshell/sudo and everything relying on GPG queries.
 (setq epa-pinentry-mode 'loopback) ; This will fail if gpg>=2.1 is not available.
-(pinentry-start)
+(when (require 'pinentry nil t)
+  (pinentry-start))
 
 ;;; Semanticdb folders must be set before starting semantic.
 (setq semanticdb-default-save-directory (concat ambrevar/emacs-cache-folder "semanticdb"))

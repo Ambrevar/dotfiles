@@ -34,11 +34,12 @@
 ;;; Blinking cursor is on only when Emacs is not daemonized.
 (blink-cursor-mode 0)
 
-;;; Line numbers. Graphic version has a gray bar separating text from line
+;;; Line numbers.
+;;; Graphic version has a gray bar separating text from line
 ;;; numbers, so we can leave the background black.
 (if (display-graphic-p)
     (set-face-background 'shadow "black")
-  (set-face-background 'shadow   "#1c1c1c"))
+  (set-face-background 'shadow "#1c1c1c"))
 
 ;;; Whitespace mode
 (with-eval-after-load 'whitespace
