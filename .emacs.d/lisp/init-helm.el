@@ -226,6 +226,10 @@ Requires `call-process-to-string' from `functions'."
 (advice-add #'helm-ff-move-to-first-real-candidate :around #'ambrevar/helm-skip-dots)
 
 (with-eval-after-load 'desktop
+  (add-to-list 'desktop-globals-to-save 'kmacro-ring)
+  (add-to-list 'desktop-globals-to-save 'last-kbd-macro)
+  (add-to-list 'desktop-globals-to-save 'kmacro-counter)
+  (add-to-list 'desktop-globals-to-save 'kmacro-counter-format)
   (add-to-list 'desktop-globals-to-save 'helm-ff-history))
 
 (helm-top-poll-mode)
@@ -272,5 +276,7 @@ With prefix argument, UPDATE the databases."
   (interactive "p")
   (helm-toggle-visible-mark (- arg)))
 (define-key helm-map (kbd "S-SPC") 'ambrevar/helm-toggle-visible-mark-backwards)
+
+(global-set-key  (kbd "C-<f4>") 'helm-execute-kmacro)
 
 (provide 'init-helm)
