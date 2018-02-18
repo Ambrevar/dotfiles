@@ -214,7 +214,7 @@
      ;; (mark insert)
      mark-toggle                        ; TODO: Check out readme.
      ))
-  (lispyville--define-key '(motion normal insert)
+  (lispyville--define-key '(motion normal)
     (kbd "M-h") #'lispyville-previous-opening
     (kbd "M-l") #'lispyville-next-opening
     (kbd "M-j") #'lispy-down
