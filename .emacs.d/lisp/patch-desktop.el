@@ -46,7 +46,7 @@ It returns t if a desktop file was loaded, nil otherwise."
           (if (and owner
                    (memq desktop-load-locked-desktop '(nil ask))
                    (or (null desktop-load-locked-desktop)
-                       (daemonp)
+                       (and (daemonp) (= (length (visible-frame-list)) 1)) ; PATCH
                        (not (y-or-n-p (format "Warning: desktop file appears to be in use by PID %s.\n\
 Using it may cause conflicts.  Use it anyway? " owner)))))
               (let ((default-directory desktop-dirname))
@@ -59,12 +59,17 @@ Using it may cause conflicts.  Use it anyway? " owner)))))
             ;; disabled when loading the desktop fails with errors,
             ;; thus not overwriting the desktop with broken contents.
             (setq desktop-autosave-was-enabled
-                  ;; PATCH
-                  (memq 'desktop-auto-save-set-timer (default-toplevel-value 'window-configuration-change-hook)))
+                  (memq 'desktop-auto-save-set-timer
+                        ;; Use the toplevel value of the hook, in case some
+                        ;; feature makes window-configuration-change-hook
+                        ;; buffer-local, and puts there stuff which
+                        ;; doesn't include our timer.
+                        (default-toplevel-value
+                          'window-configuration-change-hook)))
             (desktop-auto-save-disable)
             ;; Evaluate desktop buffer and remember when it was modified.
-            (load (desktop-full-file-name) t t t)
             (setq desktop-file-modtime (nth 5 (file-attributes (desktop-full-file-name))))
+            (load (desktop-full-file-name) t t t)
             ;; If it wasn't already, mark it as in-use, to bother other
             ;; desktop instances.
             (unless (eq (emacs-pid) owner)
@@ -128,6 +133,7 @@ Using it may cause conflicts.  Use it anyway? " owner)))))
 ;;; Upstream decided not to do this because of possible clashes when emacs
 ;;; process is running remotely.  Start desktop-mode in
 ;;; `after-make-frame-functions' instead.
+;; TODO: Upstream provision does not seem to work.  Test again.
 ;; (defun desktop-owner (&optional dirname)
 ;;   "Return the PID of the Emacs process that owns the desktop file in DIRNAME.
 ;; Return nil if no desktop file found or no Emacs process is using it.

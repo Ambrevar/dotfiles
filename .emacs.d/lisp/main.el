@@ -258,13 +258,14 @@
         ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=28943.
         desktop-auto-save-timeout 5
         ;; desktop-restore-eager 4 ; Can be annoying as you don't have your last-loaded buffers immediately.
-        desktop-load-locked-desktop 'ask
+        ;; desktop-load-locked-desktop 'ask
         desktop-restore-frames nil
         desktop-save t)
-  (defun ambrevar/desktop-init (_frame)
-    (desktop-save-mode)
-    (desktop-read)
-    (remove-hook 'after-make-frame-functions 'ambrevar/desktop-init))
+  (defun ambrevar/desktop-init (frame)
+    (when (frame-parameter frame 'client)
+      (desktop-save-mode)
+      (desktop-read)
+      (remove-hook 'after-make-frame-functions 'ambrevar/desktop-init)))
   (add-hook 'after-make-frame-functions 'ambrevar/desktop-init) ; This does not fix the window register restoration.
   (add-to-list 'desktop-modes-not-to-save 'pdf-view-mode)
   (add-to-list 'desktop-modes-not-to-save 'image-mode)
