@@ -104,6 +104,7 @@
   (defun ambrevar/helm-pass-for-page ()
     "Default prompt to current exwm-title"
     (interactive)
+    (require 'helm-pass)
     (helm :sources 'helm-source-pass
           :input (and exwm-title
                       (car (last (split-string exwm-title " "))))
