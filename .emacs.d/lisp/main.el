@@ -356,4 +356,7 @@
 (when (require 'pinentry nil t)
   (pinentry-start))
 
+;;; Edebug
+;; (setq edebug-trace t)
+
 (provide 'main)
