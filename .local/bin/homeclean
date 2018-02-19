@@ -1,14 +1,15 @@
 #!/bin/sh
 
-set -- "$HOME/.cache/emacs/" \
+set -- "$HOME/.bash_history" \
+	"$HOME/.cache/chromium" \
+	"$HOME/.cache/emacs/" \
+	"$HOME/.cache/locatedb/" \
 	"$HOME/.cache/qutebrowser" \
+	"$HOME/.cache/thumbnails" \
 	"$HOME/.config/gtk-2.0" \
 	"$HOME/.config/gtk-3.0" \
 	"$HOME/.config/qutebrowser/bookmarks" \
 	"$HOME/.config/qutebrowser/quickmarks" \
-	"$HOME/.config/ranger/bookmarks" \
-	"$HOME/.config/ranger/history" \
-	"$HOME/.config/ranger/tagged" \
 	"$HOME/.fehbg" \
 	"$HOME/.gtk-bookmarks" \
 	"$HOME/.lesshst" \
@@ -17,15 +18,14 @@ set -- "$HOME/.cache/emacs/" \
 	"$HOME/.local/share/webkit" \
 	"$HOME/.mpv/watch_later" \
 	"$HOME/.mtap.fuseiso" \
+	"$HOME/.mu" \
 	"$HOME/.pulse-cookie" \
 	"$HOME/.thumbnails" \
+	"$HOME/.tramp_history" \
 	"$HOME/.w3m"
 
 echo "==> Files to be removed (beside trash):"
 echo "$@" | sed 's/ /\n/g'
-echo
-echo "==> Files to be securely wiped:"
-echo "Mail passwords."
 
 CHOICE="N"
 echo
@@ -53,8 +53,16 @@ echo "==> Remove dotfiles:"
 rm -rvf "$@"
 
 echo
-echo "==> Wipe critical data:"
-shred -zuv ~/.authinfo.gpg
+echo "==> Critical data:"
+if [ -e ~/.cache/mail ]; then
+	echo "WARNING: Found ~/.cache/mail."
+fi
+if [ -e ~/.password-store ]; then
+	echo "WARNING: Found ~/.password-store."
+fi
+if [ -e ~/personal ]; then
+	echo "WARNING: Found ~/personal."
+fi
 for key in ~/.ssh/*.pub; do
 	echo "WARNING: Found SSH keys."
 done
