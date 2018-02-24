@@ -155,6 +155,7 @@
     (evil-define-key 'motion mu4e-view-mode-map
       (kbd "SPC") 'mu4e-view-scroll-up-or-next
       (kbd "<tab>") 'shr-next-link
+      (kbd "<backtab>") 'shr-previous-link
       "i" 'mu4e-view-mark-for-flag
       "I" 'mu4e-view-mark-for-unflag
       ;; "R" 'mu4e-view-mark-for-refile
