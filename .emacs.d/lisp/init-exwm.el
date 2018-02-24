@@ -107,7 +107,9 @@
     (require 'helm-pass)
     (helm :sources 'helm-source-pass
           :input (and exwm-title
-                      (car (last (split-string exwm-title " "))))
+                      (let* ((url (car (last (split-string exwm-title " "))))
+                             (domain (split-string url "\\.")))
+                        (concat (nth (- (length domain) 2) domain) "." (nth (1- (length domain)) domain))))
           :buffer "*helm-pass*"))
   (exwm-input-set-key (kbd "s-p") #'ambrevar/helm-pass-for-page))
 
