@@ -51,6 +51,7 @@
  helm-show-completion-display-function nil
  helm-completion-mode-string ""
  helm-dwim-target 'completion
+ helm-echo-input-in-header-line t
 
  helm-apropos-fuzzy-match t
  helm-buffers-fuzzy-matching t
@@ -97,20 +98,6 @@
                       'right
                     'below)))))
 (setq helm-split-window-preferred-function 'ambrevar/helm-split-window-combined-fn)
-
-;;; From https://github.com/emacs-helm/helm/issues/362.
-;;; This is not perfect with evil mode as the cursor type is not right in the
-;;; header line and the evil cursor remains in the minibuffer.
-;;; https://emacs.stackexchange.com/questions/17058/change-cursor-type-in-helm-header-line#17097
-(setq helm-echo-input-in-header-line t)
-(defun ambrevar/helm-hide-minibuffer-maybe ()
-  (when (with-helm-buffer helm-echo-input-in-header-line)
-    (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
-      (overlay-put ov 'window (selected-window))
-      (overlay-put ov 'face (let ((bg-color (face-background 'default nil)))
-                              `(:background ,bg-color :foreground ,bg-color)))
-      (setq-local cursor-type nil))))
-(add-hook 'helm-minibuffer-set-up-hook 'ambrevar/helm-hide-minibuffer-maybe)
 
 ;;; Add bindings to `helm-apropos`. TODO: Does not work most of the times.
 ;;; https://github.com/emacs-helm/helm/issues/1140
