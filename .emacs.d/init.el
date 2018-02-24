@@ -226,6 +226,8 @@
     (kbd "C-x C-e") #'lispy-eval
     (kbd "M-;") #'lispy-comment)
   (lispyville--define-key '(motion normal)
+    "q" 'lispy-ace-paren
+    "Q" 'lispy-ace-symbol
     "Y" 'lispy-new-copy
     "D" 'lispy-kill))
 (defun ambrevar/init-lispy ()
