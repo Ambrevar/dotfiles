@@ -14,7 +14,7 @@ List of commands and their options:
   compress [OPTIONS]
     Compress PDFs.
     -c: Compress raster graphics at the expense of a quality loss.
-    -n:  Do not compress raster graphics at all. Output may be bigger.
+    -n: Do not compress raster graphics at all. Output may be bigger.
 
   extract [-f FIRST-PAGE] [-l LAST-PAGE]
     Extract a range of pages to a single PDF.
@@ -38,6 +38,8 @@ For more details on compression:
 
 EOF
 }
+
+[ $# -eq 0 ] && usage && exit
 
 cmd="$1"
 shift 1
