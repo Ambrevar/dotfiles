@@ -1,0 +1,7 @@
+#!/bin/sh
+
+path='lib="/media/COWON S9/Music"'
+if [ ! -d "/media/COWON S9/Music" ]; then
+	path='lib="/run/media/'$(id -nu)'/COWON S9/Music"'
+fi
+demlo -p -exist skip -r '' -pre "$path" -s 59-path-sync -s 60-path "$@"
