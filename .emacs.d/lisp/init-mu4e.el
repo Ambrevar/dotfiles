@@ -72,6 +72,9 @@ Default to unread messages if the header buffer does not already exist."
  ;; Gmail likes format=flowed(?)
  ;; mu4e-compose-format-flowed
 
+ ;; Also crypt to self so that we can read sent e-mails.
+ mml-secure-openpgp-encrypt-to-self t
+
  ;; Because default completion can be extended (e.g. Helm, Ivy).
  mu4e-completing-read-function 'completing-read)
 
