@@ -363,6 +363,9 @@
   (setq camcorder-recording-command '("recordmydesktop" " --fps 10 --no-sound --windowid " window-id " -o " file))
   (add-to-list 'camcorder-gif-conversion-commands '("ffmpeg-slow" "ffmpeg -i " input-file " -vf 'fps=10,scale=1024:-1:flags=lanczos' " gif-file)))
 (nconc package-selected-packages '(gif-screencast))
+(with-eval-after-load 'gif-screencast
+  (define-key gif-screencast-mode-map (kbd "<f8>") 'gif-screencast-toggle-pause)
+  (define-key gif-screencast-mode-map (kbd "<f9>") 'gif-screencast-stop))
 
 ;;; Shell
 (with-eval-after-load 'sh-script (require 'init-sh))
