@@ -31,6 +31,10 @@
 (setq auto-save-default nil)
 (setq auto-save-list-file-prefix nil)
 
+;;; Place backup files in specific directory.
+(setq backup-directory-alist
+      `(("." . ,(expand-file-name "backups" user-emacs-directory))))
+
 ;;; Default mode
 (setq-default major-mode 'text-mode)
 
