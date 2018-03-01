@@ -204,7 +204,6 @@
 ;;; Lisp
 (nconc package-selected-packages '(lispy lispyville))
 (with-eval-after-load 'lispyville
-  ;; TODO: Use '=' to indent.
   ;; TODO: lispy-occur: helm-occur does not restrict to region.
   (lispyville-set-key-theme
    '(operators            ; Add equivalent for lispy-delete?
@@ -214,7 +213,7 @@
      ;; (mark insert)
      mark-toggle                        ; TODO: Check out readme.
      ))
-  (lispyville--define-key '(motion normal)
+  (lispyville--define-key '(motion normal visual)
     (kbd "M-h") #'lispyville-previous-opening
     (kbd "M-l") #'lispyville-next-opening
     (kbd "M-j") #'lispy-down
@@ -224,6 +223,7 @@
     (kbd "M-K") #'lispyville-drag-backward
     (kbd "M-L") #'lispy-move-right ; lispy-up-slurp?
     (kbd "C-x C-e") #'lispy-eval
+    (kbd "=") #'lispyville-prettify
     (kbd "M-;") #'lispy-comment)
   (lispyville--define-key '(motion normal)
     "q" 'lispy-ace-paren
