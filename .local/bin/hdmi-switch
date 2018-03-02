@@ -2,74 +2,38 @@
 
 usage () {
 	cat <<EOF>&2
-Usage: ${0##*/}
+Usage: ${0##*/} [OPTIONS]
 
-This script will toggle HDMI Audio (and set video properly). To do this
-automatically when the cable is plugged, add the following udev rule:
+This script will enable all HDMI videos, passing xrandr OPTIONS to each one of
+them.
+
+On Linux, To do this automatically when the cable is plugged, add the following
+udev rule:
 
   $ cat /etc/udev/rules.d/hdmi.rules
   SUBSYSTEM=="drm", ACTION=="change", RUN+="/bin/sh $0"
-
-To get audio working on radeon, you may need to boot with the following kernel
-paremeter:
-
-  radeon.audio=1
-
-You must be root. This script is Linux only.
 EOF
 }
 
-if [ "$(uname)" != "Linux" ]; then
-	usage
-	exit 1
-fi
+echo date >> ~/hdmi.log
 
-if [ "$(id -u)" -ne 0 ]; then
-	usage
-	exit 1
-fi
+XRANDR_OPTIONS="$@"
+[ -z "$XRANDR_OPTIONS" ] && XRANDR_OPTIONS="--auto --noprimary"
 
-ALSACONF="/etc/asound.conf"
-HDMI_STATUS="$(cat /sys/class/drm/card0-HDMI-A-1/status)"
-[ -z "$HDMI_STATUS" ] && exit
+XRANDR_BUF=$(xrandr)
+PRIMARY=$(echo "$XRANDR_BUF" | awk '$1 !~ "HDMI" && $2 == "connected" {print $1; exit}')
+HDMI_OUTPUTS=$(echo "$XRANDR_BUF" | awk '$1 ~ "HDMI" && $2 == "connected" {printf $1 " "}')
+set -- $HDMI_OUTPUTS
 
-APLAY_BUF="$(aplay -l | grep HDMI)"
-getprop () {
-	echo "$APLAY_BUF" | awk -v prop="$1" '{for(i=1; i<NF; i++) if ($i == prop) { print substr($(i+1), 1,1); exit}}'
-}
-
-CARD="$(getprop card)"
-DEVICE="$(getprop device)"
-
-udevadm settle --timeout=2
-
-XRANDR_BUF="$(xrandr)"
-
-PRIMARY="$(echo "$XRANDR_BUF" | awk '/^[[:alnum:]-]+ connected/ {print $1; exit}')"
-HDMI="$(echo "$XRANDR_BUF" | awk '/^HDMI-[[:digit:]]+ connected/ {print $1; exit}')"
-
-echo "PRIMARY=[$PRIMARY], HDMI=[$HDMI]"
-
-## Video
-if [ -n "$HDMI" ]; then
-	# xrandr --output "$PRIMARY" --auto --primary --output "$HDMI" --auto --noprimary --right-of "$PRIMARY"
-	xrandr --output "$HDMI" --auto --noprimary --right-of "$PRIMARY"
-# else
-# 	xrandr --output "$HDMI" --off
-fi
-
-## Sound
-if [ "$HDMI_STATUS" = "connected" ]; then
-	cat <<EOF > "$ALSACONF"
-pcm.!default {
-	type hw
-	card $CARD
-	device $DEVICE
-}
-EOF
-	chmod 644 "${ALSACONF}"
-	echo "HDMI sound enabled"
+if [ $# -eq 0 ]; then
+	echo xrandr --output $PRIMARY --auto --primary
+	xrandr --output $PRIMARY --auto --primary
 else
-	rm -f "$ALSACONF"
-	echo "HDMI sound disabled"
+	for i; do
+		echo xrandr --output $i $XRANDR_OPTIONS
+		xrandr --output $i $XRANDR_OPTIONS
+	done
+	echo
+	echo "## Run this to turn off primary screen:"
+	echo "# xrandr --output $PRIMARY --off"
 fi
