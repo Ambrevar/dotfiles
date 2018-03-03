@@ -142,7 +142,7 @@
 (with-eval-after-load 'mu4e
   (when (require 'evil-mu4e nil t)
     ;; TODO: evil-mu4e needs a big overhaul, e.g. 'visual commands are not supported.  Report upstream.
-    (evil-define-key 'normal mu4e-headers-mode-map
+    (evil-define-key 'motion mu4e-headers-mode-map
       "i" 'mu4e-headers-mark-for-flag
       "I" 'mu4e-headers-mark-for-unflag
       ;; "R" 'mu4e-headers-mark-for-refile
@@ -152,7 +152,7 @@
       "d" 'mu4e-headers-mark-for-trash
       "D" 'mu4e-headers-mark-for-delete
       "u" 'mu4e-headers-mark-for-unmark)
-    (evil-define-key 'normal mu4e-view-mode-map
+    (evil-define-key 'motion mu4e-view-mode-map
       (kbd "SPC") 'mu4e-view-scroll-up-or-next
       (kbd "<tab>") 'shr-next-link
       (kbd "<backtab>") 'shr-previous-link
