@@ -87,7 +87,5 @@ is currently playing."
       (emms-browser-add-tracks)
     (emms-browser-add-tracks-and-play)))
 (define-key emms-browser-mode-map (kbd "<return>") 'ambrevar/emms-browser-add-tracks-and-maybe-play)
-(when (fboundp 'evil-define-key)
-  (evil-define-key '(normal motion) emms-browser-mode-map (kbd "<return>") 'ambrevar/emms-browser-add-tracks-and-maybe-play))
 
 (provide 'init-emms)
