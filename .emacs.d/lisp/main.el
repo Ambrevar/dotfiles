@@ -255,7 +255,8 @@
   ;; `server-running-p' is only useful once the daemon is started and cannot be
   ;; used for initialization.  Use `daemonp' instead.
   (require 'desktop)
-  (load "patch-desktop")
+  (when (< emacs-major-version 27)
+    (load "patch-desktop"))
   (setq history-length 250
         ;; Default timer (30) is way too high: for somebody too frenzy, the timer
         ;; might never be saved.  See
@@ -265,12 +266,15 @@
         ;; desktop-load-locked-desktop 'ask
         desktop-restore-frames nil
         desktop-save t)
-  (defun ambrevar/desktop-init (frame)
-    (when (frame-parameter frame 'client)
+  ;; Before Emacs 27, initialization needs the patch above.
+  (if (< emacs-major-version 27)
+      (desktop-save-mode)
+    (defun ambrevar/desktop-init (_frame)
       (desktop-save-mode)
       (desktop-read)
-      (remove-hook 'after-make-frame-functions 'ambrevar/desktop-init)))
-  (add-hook 'after-make-frame-functions 'ambrevar/desktop-init) ; This does not fix the window register restoration.
+      (remove-hook 'server-after-make-frame-hook 'ambrevar/desktop-init))
+    (add-hook 'server-after-make-frame-hook 'ambrevar/desktop-init))
+  ;; Discarding PDFs and images makes it lighter.
   (add-to-list 'desktop-modes-not-to-save 'pdf-view-mode)
   (add-to-list 'desktop-modes-not-to-save 'image-mode)
   ;; TODO: `compile-history' should be buffer local but that does not work.
