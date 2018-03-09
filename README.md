@@ -1,5 +1,4 @@
 # .dotfiles
-### Author: P. Neidhardt
 
 ## Overview
 
@@ -11,9 +10,7 @@ programs are gone (Awesome, cmus, fish, fzf, Mutt, newsbeuter, ranger, urxvt,
 zathura, zsh).  You can search for them before the git commit `README: The Big
 Emacs Shift`.
 
-
-
-I've also written a fair amount of scripts, most of which are POSIX.  The highlights include:
+I've also written a fair amount of scripts.  The highlights include:
 
 * asciify: convert many non-ASCII characters to their nearest ASCII counterpart.
 
@@ -49,7 +46,13 @@ automatically.
 
 * tc-video-*: batch conversion of any kind of videos. Using FFmpeg.
 
-## Versioning
+## Setup
+
+For the list of programs I currently use, see the `.pkglists/` folder.
+
+Dotfiles can be managed in different ways.
+
+### Direct versioning
 
 Git makes it possible to use your home folder as a git repo, thus versioning
 all files directly.
@@ -60,4 +63,26 @@ all files directly.
 	git fetch
 	git checkout master
 
-For the list of programs I currently use, see the `.pkglists/` folder.
+### GNU Stow
+
+[GNU Stow](https://www.gnu.org/software/stow/) lets you symlink a project's
+files to an arbitrary folder.
+
+The simplest setup would be to clone the dotfiles to, say, `~/dotfiles` then run
+
+	cd ~/dotfiles
+	stow .
+
+This has several advantages over direct versioning:
+
+- Subfolders in home are not subject to being included into the dotfiles git
+repository.  This is especially relevant for projects under a version control
+system other than git.
+
+- No need for a `.gitignore`.
+
+- Simplified file control (add/remove/etc.).
+
+- You can fine-tune which program configuration to synchronize on a per-system basis.
+
+- You can manage several configurations for the same programs.
