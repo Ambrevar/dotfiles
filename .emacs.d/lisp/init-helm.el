@@ -52,6 +52,7 @@
  helm-completion-mode-string ""
  helm-dwim-target 'completion
  helm-echo-input-in-header-line t
+ helm-use-frame-when-more-than-two-windows nil
 
  helm-apropos-fuzzy-match t
  helm-buffers-fuzzy-matching t
