@@ -63,6 +63,9 @@
 
 ;;; Multiedit
 (when (require 'evil-multiedit nil t)
+  ;; iedit exits as soon as an Evil operator is pressed.
+  ;; Replace iedit's default binding with multiedit to avoid confusions.
+  (global-set-key (kbd "C-;") 'evil-multiedit-match-all)
   ;; REVIEW: Some bindings are missing:
   ;; See https://github.com/hlissner/evil-multiedit/issues/20.
   (evil-multiedit-default-keybinds))
