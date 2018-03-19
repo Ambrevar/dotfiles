@@ -199,9 +199,13 @@
 ;;; Eshell commands always return 0.
 (setq eshell-input-filter
       (lambda (str)
-        (not (or (/= eshell-last-command-status 0)
-                 (string= "" str)
-                 (string-prefix-p " " str)))))
+        (not (or
+              ;; Here we can filter out failing commands.  This is usually a bad
+              ;; idea since a lot of useful commands have non-zero exit codes
+              ;; (including Emacs/Eshell functions).
+              ;; (/= eshell-last-command-status 0)
+              (string= "" str)
+              (string-prefix-p " " str)))))
 
 ;;; Shared history.
 (defvar ambrevar/eshell-history-global-ring nil
