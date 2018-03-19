@@ -117,7 +117,7 @@ Default to unread messages if the header buffer does not already exist."
   (dolist (map (list mu4e-headers-mode-map mu4e-main-mode-map mu4e-view-mode-map))
     (define-key map "s" 'helm-mu)))
 
-(defvar ambrevar/mu4e-compose-signed-p nil)
+(defvar ambrevar/mu4e-compose-signed-p t)
 (defvar ambrevar/mu4e-compose-signed-and-crypted-p nil)
 (defun ambrevar/mu4e-compose-maybe-signed-and-crypted ()
   "Maybe sign or encrypt+sign message.
