@@ -118,6 +118,9 @@
 (nconc package-selected-packages '(dired-du))
 (with-eval-after-load 'dired (require 'init-dired))
 
+;;; Daemons.
+(nconc package-selected-packages '(daemons))
+
 ;;; Emms
 (nconc package-selected-packages '(emms helm-emms emms-player-mpv))
 (with-eval-after-load 'emms (require 'init-emms))
@@ -367,7 +370,7 @@
         camcorder-gif-output-directory camcorder-output-directory)
   (setq camcorder-recording-command '("recordmydesktop" " --fps 10 --no-sound --windowid " window-id " -o " file))
   (add-to-list 'camcorder-gif-conversion-commands '("ffmpeg-slow" "ffmpeg -i " input-file " -vf 'fps=10,scale=1024:-1:flags=lanczos' " gif-file)))
-(nconc package-selected-packages '(gif-screencast))
+(nconc package-selected-packages '(gif-screencast keycast))
 (with-eval-after-load 'gif-screencast
   (define-key gif-screencast-mode-map (kbd "<f8>") 'gif-screencast-toggle-pause)
   (define-key gif-screencast-mode-map (kbd "<f9>") 'gif-screencast-stop))
