@@ -145,6 +145,8 @@
     (evil-define-key 'motion mu4e-headers-mode-map
       "i" 'mu4e-headers-mark-for-flag
       "I" 'mu4e-headers-mark-for-unflag
+      "]" 'mu4e-headers-next-unread
+      "[" 'mu4e-headers-prev-unread
       ;; "R" 'mu4e-headers-mark-for-refile
       "p" 'mu4e-headers-toggle-include-related
       "r" 'mu4e-compose-reply)
