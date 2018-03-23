@@ -88,4 +88,18 @@ is currently playing."
     (emms-browser-add-tracks-and-play)))
 (define-key emms-browser-mode-map (kbd "<return>") 'ambrevar/emms-browser-add-tracks-and-maybe-play)
 
+;;; Display album in playlist
+(defun ambrevar/emms-artist-album-track-and-title-format (bdata fmt)
+  (concat
+   "%i"
+   "%a - "
+   (let ((album (emms-browser-format-elem fmt "A")))
+     (if album "%A - " ""))
+   (let ((track (emms-browser-format-elem fmt "T")))
+     (if (and track (not (string= track "0")))
+         "%T. "
+       ""))
+   "%t"))
+(setq emms-browser-playlist-info-title-format 'ambrevar/emms-artist-album-track-and-title-format)
+
 (provide 'init-emms)
