@@ -193,7 +193,7 @@
     ;; org-evil is not as polished as of May 2017.
     ;; See https://github.com/Somelauw/evil-org-mode/blob/master/doc/keythemes.org for inspiration.
     (add-hook 'org-mode-hook 'evil-org-mode)
-    ;; No need for 'insert, 'shift (I use custom definitions), 'todo 'heading.
+    ;; No need for 'insert, 'todo 'heading.
     (evil-org-set-key-theme '(navigation textobjects additional shift))
     (defun ambrevar/evil-org-meta-return ()
       "Like `org-meta-return' but switch to insert mode."
@@ -211,8 +211,11 @@
 
 (with-eval-after-load 'gnus (require 'init-evil-gnus))
 
-(with-eval-after-load 'evil-collection-emms
-  (evil-define-key '(normal motion) emms-browser-mode-map
-    (kbd "<return>") 'ambrevar/emms-browser-add-tracks-and-maybe-play))
+;; EMMS
+(defun ambrevar/evil-emms (mode _mode-keymaps &rest _rest)
+  (when (eq mode 'emms)
+    (with-eval-after-load 'emms-browser
+      (evil-define-key '(normal motion) emms-browser-mode-map (kbd "<return>") 'ambrevar/emms-browser-add-tracks-and-maybe-play))))
+(add-hook 'evil-collection-setup-hook 'ambrevar/evil-emms)
 
 (provide 'init-evil)
