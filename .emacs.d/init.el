@@ -210,7 +210,7 @@
 (add-hook 'js-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
 
 ;;; Lisp
-(nconc package-selected-packages '(lispy lispyville))
+(nconc package-selected-packages '(lispy lispyville rainbow-delimiters))
 (with-eval-after-load 'lispyville
   ;; TODO: lispy-occur: helm-occur does not restrict to region.
   (lispyville-set-key-theme
@@ -249,7 +249,14 @@
   (add-hook hook 'ambrevar/turn-on-complete-filename)
   (add-hook hook 'ambrevar/turn-on-tab-width-to-8) ; Because some existing code uses tabs.
   (add-hook hook 'ambrevar/turn-off-indent-tabs)   ; Should not use tabs.
-  (add-hook hook 'ambrevar/init-lispy))
+  (add-hook hook 'ambrevar/init-lispy)
+  (when (fboundp 'rainbow-delimiters-mode)
+    (add-hook hook #'rainbow-delimiters-mode)))
+(when (require 'rainbow-delimiters nil t)
+  (set-face-attribute 'rainbow-delimiters-unmatched-face nil
+                      :foreground 'unspecified
+                      :inherit 'error
+                      :strike-through t))
 
 ;;; Common LISP
 (setq inferior-lisp-program "clisp")
