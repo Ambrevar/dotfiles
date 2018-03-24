@@ -218,4 +218,11 @@
       (evil-define-key '(normal motion) emms-browser-mode-map (kbd "<return>") 'ambrevar/emms-browser-add-tracks-and-maybe-play))))
 (add-hook 'evil-collection-setup-hook 'ambrevar/evil-emms)
 
+;; EWW
+(defun ambrevar/evil-eww (mode _mode-keymaps &rest _rest)
+  (when (eq mode 'eww)
+    (evil-define-key 'normal eww-mode-map "[" 'ambrevar/eww-previous-url)
+    (evil-define-key 'normal eww-mode-map "]" 'ambrevar/eww-next-url)))
+(add-hook 'evil-collection-setup-hook 'ambrevar/evil-eww)
+
 (provide 'init-evil)
