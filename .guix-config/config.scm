@@ -88,6 +88,7 @@
  ;; If generating an image to a USB stick, use -bios- instead.
  (bootloader (bootloader-configuration
               (bootloader grub-efi-bootloader)
+              (timeout 1)
               (target "/boot/efi")))
 
  (kernel linux-nonfree)
