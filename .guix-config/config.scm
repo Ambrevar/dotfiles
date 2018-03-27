@@ -15,8 +15,7 @@
              (srfi srfi-1))
 
 (use-service-modules desktop)
-;; TODO: Remove ratpoinson, wm
-(use-package-modules bootloaders certs ratpoison suckless wm)
+(use-package-modules bootloaders certs suckless)
 
 (define (linux-nonfree-urls version)
   "Return a list of URLs for Linux-Nonfree VERSION."
@@ -127,11 +126,7 @@
                ;; TODO: Mount dedicated home partition.
                %base-user-accounts))
 
- ;; Add a bunch of window managers; we can choose one at
- ;; the log-in screen with F1.
- ;; TODO: Remove i3-wm i3status dmenu ratpoison
- (packages (cons* ratpoison i3-wm i3status dmenu ;window managers
-                  nss-certs                      ;for HTTPS access
+ (packages (cons* nss-certs             ;for HTTPS access
                   %base-packages))
 
  (services %my-services)
