@@ -96,7 +96,8 @@ Default to unread messages if the header buffer does not already exist."
 (defun ambrevar/mu4e-add-fortune-signature ()
   (require 'functions) ; For `call-process-to-string'.
   (setq mu4e-compose-signature
-        (if ambrevar/mu4e-compose-fortune-p
+        (if (and ambrevar/mu4e-compose-fortune-p
+                 (executable-find "fortune"))
             (format "%s\n\n%s"
                     user-full-name
                     (ambrevar/call-process-to-string "fortune" "-s"))
