@@ -90,8 +90,8 @@ echo "==> 'projects' folder"
 mkdir -pv "$HOME/projects"
 
 if ! command -v emacs >/dev/null 2>&1 || \
-		 [ $(emacs --batch --eval '(message "%s" emacs-major-version)') -lt 26 ]; then
-	pushd "$HOME/project"
+		 [ $(emacs --quick --batch --eval '(message "%s" emacs-major-version)' 2>&1) -lt 26 ]; then
+	pushd "$HOME/projects"
 	git clone https://git.savannah.gnu.org/git/emacs.git
 	mkdir -p ../emacs-build
 	cd ../emacs-build
