@@ -240,7 +240,7 @@ Requires `call-process-to-string' from `functions'."
                        root))
              0)
           (message "locatedb file `%s' %s" db (if was-missing "created" "updated"))
-        (error "Failed to %s locatedb file `%s'" db (if was-missing "create" "update"))))))
+        (error "Failed to %s locatedb file `%s'" (if was-missing "create" "update") db)))))
 (defun ambrevar/helm-locate-meta (&optional update)
   "Like `helm-locate' but also use the databases found in /media and /run/media.
 With prefix argument, UPDATE the databases."
