@@ -66,11 +66,26 @@
      (description "Non-free firmware for the Linux kernel")
      (license #f))))
 
+;; Allow members of the "video" group to change the screen brightness.
+(define %backlight-udev-rule
+  (udev-rule
+   "90-backlight.rules"
+   (string-append "ACTION==\"add\", SUBSYSTEM==\"backlight\", "
+                  "RUN+=\"/run/current-system/profile/bin/chgrp video /sys/class/backlight/%k/brightness\""
+                  "\n"
+                  "ACTION==\"add\", SUBSYSTEM==\"backlight\", "
+                  "RUN+=\"/run/current-system/profile/bin/chmod g+w /sys/class/backlight/%k/brightness\"")))
+
 ;; Use the "desktop" services, which include the X11
 ;; log-in service, networking with Wicd, and more.
 (define %my-services
   (modify-services
    %desktop-services
+   (udev-service-type config =>
+                      (udev-configuration
+                       (inherit config)
+                       (rules (append (udev-configuration-rules config)
+                                      (list %backlight-udev-rule)))))
    (slim-service-type config =>
                       (slim-configuration
                        (inherit config)
