@@ -234,7 +234,8 @@
 
 ;;; Mail
 ;;; mu4e is usually site-local and not part of ELPA.
-(when (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path))
+(when (or (fboundp 'mu4e)
+          (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path)))
   ;; (nconc package-selected-packages '(mu4e-maildirs-extension))
   (nconc package-selected-packages '(helm-mu)))
 (with-eval-after-load 'mu4e (require 'init-mu4e))

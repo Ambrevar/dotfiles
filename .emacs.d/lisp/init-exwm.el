@@ -94,7 +94,8 @@
   (if (fboundp 'helm-emms)
       (exwm-input-set-key (kbd "s-A") #'helm-emms)
     (exwm-input-set-key (kbd "s-A") #'emms)))
-(when (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path))
+(when (or (fboundp 'mu4e)
+          (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path)))
   (exwm-input-set-key (kbd "s-m") #'ambrevar/mu4e-headers))
 (exwm-input-set-key (kbd "s-n") #'ambrevar/elfeed-switch-back) ; "n" for "news"
 (exwm-input-set-key (kbd "s-e") #'ambrevar/eww-switch-back)
