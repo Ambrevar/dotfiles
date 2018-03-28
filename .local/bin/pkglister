@@ -36,3 +36,8 @@ fi
 if command -v xbps-query >/dev/null 2>&1; then
 	xbps-query -m | sed 's/-[^-]\+$//' >"$PKG_ROOT/void-official"
 fi
+
+## Guix
+if command -v guix >/dev/null 2>&1; then
+	guix package -I | cut -f1 | LC_ALL=C sort >"$PKG_ROOT/guix"
+fi
