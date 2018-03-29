@@ -89,34 +89,37 @@ lnn "$SOURCEDIR/bookmarks/quickmarks" "$XDG_CONFIG_HOME/qutebrowser/"
 echo "==> 'projects' folder"
 mkdir -pv "$HOME/projects"
 
-if ! command -v emacs >/dev/null 2>&1 || \
+## Only build latest Emacs if not on Guix.
+if ! command -v guix >/dev/null 2>&1; then
+	if ! command -v emacs >/dev/null 2>&1 || \
 		 [ $(emacs --quick --batch --eval '(message "%s" emacs-major-version)' 2>&1) -lt 26 ]; then
-	pushd "$HOME/projects"
-	git clone https://git.savannah.gnu.org/git/emacs.git
-	mkdir -p ../emacs-build
-	cd ../emacs-build
-	../emacs/configure \
-		--disable-gtk-deprecation-warnings \
-		--without-pop \
-		--without-kerberos \
-		--without-kerberos5 \
-		--with-x-toolkit=gtk3 \
-		--with-jpeg \
-		--with-tiff \
-		--with-gif \
-		--with-png \
-		--with-rsvg \
-		--with-xml2 \
-		--with-imagemagick \
-		--with-xft \
-		--with-libotf \
-		--without-gsettings \
-		--without-gconf \
-		--with-gnutls \
-		--with-modules \
-		--with-threads
-	popd
-	sudo make install
+		pushd "$HOME/projects"
+		git clone https://git.savannah.gnu.org/git/emacs.git
+		mkdir -p ../emacs-build
+		cd ../emacs-build
+		../emacs/configure \
+			--disable-gtk-deprecation-warnings \
+			--without-pop \
+			--without-kerberos \
+			--without-kerberos5 \
+			--with-x-toolkit=gtk3 \
+			--with-jpeg \
+			--with-tiff \
+			--with-gif \
+			--with-png \
+			--with-rsvg \
+			--with-xml2 \
+			--with-imagemagick \
+			--with-xft \
+			--with-libotf \
+			--without-gsettings \
+			--without-gconf \
+			--with-gnutls \
+			--with-modules \
+			--with-threads
+		popd
+		sudo make install
+	fi
 fi
 
 if command -v emacs >/dev/null 2>&1; then
