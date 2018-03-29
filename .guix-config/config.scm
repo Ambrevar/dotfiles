@@ -124,7 +124,7 @@
                       (file-system
                        (device "home")
                        (title 'label)
-                       (mount-point "/mnt")
+                       (mount-point "/home")
                        (type "ext4"))
                       (file-system
                        (device (uuid "8AC2-4252" 'fat))
@@ -139,7 +139,6 @@
                 (supplementary-groups '("wheel" "netdev" ; netdev is needed for networking.
                                         "audio" "video"))
                 (home-directory "/home/ambrevar"))
-               ;; TODO: Mount dedicated home partition.
                %base-user-accounts))
 
  (packages (cons* nss-certs             ;for HTTPS access
