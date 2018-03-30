@@ -160,6 +160,11 @@ if command -v asp >/dev/null 2>&1; then
 	export ASPROOT="$HOME/.cache/asp"
 fi
 
+## Guix
+if command -v guix >/dev/null 2>&1; then
+	export GUIX_PACKAGE_PATH="$HOME/.guix-packages"
+fi
+
 ## Default text editor
 ## 'em' is a custom wrapper for emacsclient. See '.bin/em'.
 ## VISUAL is given priority by some programs like Mutt. This way we can separate
