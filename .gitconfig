@@ -37,10 +37,10 @@ smtpencryption = tls
 smtpserver = smtp.gmail.com
 smtpuser = ambrevar@gmail.com
 smtpserverport = 587
-to = pacman-dev@archlinux.org
+to = guix-patches@gnu.org
 suppresscc = author
-# sendemail.confir = auto
-aliasfiletype = mutt
+# sendemail.confirm = auto
+# aliasfiletype = mutt
 # aliasesfile = ~/.mutt.d/aliases
 
 [core]
