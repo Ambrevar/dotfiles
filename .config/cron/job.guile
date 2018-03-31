@@ -1,0 +1,17 @@
+;; -*- mode: Lisp; -*-
+
+;; This cannot be let-bound within `job'.
+(define currency-file (string-append (getenv "HOME") "/.cache/currency.units"))
+
+(job
+ (lambda (current-time)
+   (let* ((seconds-in-a-day (* 60 60 24))
+          (currency-time (stat:mtime (stat currency-file))))
+     (if (< currency-time (- current-time seconds-in-a-day))
+         (next-second)
+       ;; TODO: The following does not work while it should.  Report upstream.
+       ;; (next-hour-from (next-day) (list (tm:hour (localtime (current-time)))))
+       (+ (next-second) (- 86400 (- current-time currency-time))))))
+ ;; A string is nicer than Scheme code for `mcron --schedule' output.
+ ;; Other we could return '(system* "units_cur" currency-file)
+ (string-append "units_cur " currency-file))
