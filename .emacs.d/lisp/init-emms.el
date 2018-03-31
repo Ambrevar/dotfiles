@@ -83,9 +83,9 @@ This function uses 'info-albumartistsort, 'info-albumartist,
   "Like `emms-browser-add-tracks' but play immediately if nothing
 is currently playing."
   (interactive)
-  (if emms-player-playing-p
-      (emms-browser-add-tracks)
-    (emms-browser-add-tracks-and-play)))
+  (if emms-player-paused-p
+      (emms-browser-add-tracks-and-play)
+    (emms-browser-add-tracks)))
 (define-key emms-browser-mode-map (kbd "<return>") 'ambrevar/emms-browser-add-tracks-and-maybe-play)
 
 ;;; Display album in playlist
