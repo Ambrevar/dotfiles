@@ -92,14 +92,17 @@ is currently playing."
 (defun ambrevar/emms-artist-album-track-and-title-format (bdata fmt)
   (concat
    "%i"
-   "%a - "
-   (let ((album (emms-browser-format-elem fmt "A")))
-     (if album "%A - " ""))
-   (let ((track (emms-browser-format-elem fmt "T")))
-     (if (and track (not (string= track "0")))
-         "%T. "
-       ""))
-   "%t"))
+   (let ((artist (emms-browser-format-elem fmt "a")))
+     (if (not  artist)
+         "%n"                           ; If unknown, display the filename.
+       "%a - "
+       (let ((album (emms-browser-format-elem fmt "A")))
+         (if album "%A - " ""))
+       (let ((track (emms-browser-format-elem fmt "T")))
+         (if (and track (not (string= track "0")))
+             "%T. "
+           ""))
+       "%t"))))
 (setq emms-browser-playlist-info-title-format 'ambrevar/emms-artist-album-track-and-title-format)
 
 (provide 'init-emms)
