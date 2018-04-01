@@ -93,16 +93,32 @@ is currently playing."
   (concat
    "%i"
    (let ((artist (emms-browser-format-elem fmt "a")))
-     (if (not  artist)
+     (if (not artist)
          "%n"                           ; If unknown, display the filename.
-       "%a - "
-       (let ((album (emms-browser-format-elem fmt "A")))
-         (if album "%A - " ""))
-       (let ((track (emms-browser-format-elem fmt "T")))
-         (if (and track (not (string= track "0")))
-             "%T. "
-           ""))
-       "%t"))))
+       (concat
+        "%a - "
+        (let ((album (emms-browser-format-elem fmt "A")))
+          (if album "%A - " ""))
+        (let ((disc (emms-browser-format-elem fmt "D")))
+          (if (and disc (not (string= disc ""))) "%D/" ""))
+        (let ((track (emms-browser-format-elem fmt "T")))
+          (if (and track (not (string= track "0")))
+              "%T. "
+            ""))
+        "%t [%d]")))))
 (setq emms-browser-playlist-info-title-format 'ambrevar/emms-artist-album-track-and-title-format)
+;; Display disc number in browser
+(defun ambrevar/emms-browser-track-artist-and-title-format (bdata fmt)
+  (concat
+   "%i"
+   (let ((disc (emms-browser-format-elem fmt "D")))
+     (if (and disc (not (string= disc "")))
+         "%D/"))
+   (let ((track (emms-browser-format-elem fmt "T")))
+     (if (and track (not (string= track "0")))
+         "%T. "
+       ""))
+   "%n"))
+(setq emms-browser-info-title-format 'ambrevar/emms-browser-track-artist-and-title-format)
 
 (provide 'init-emms)
