@@ -151,6 +151,8 @@ if [ "$(uname -o)" = "GNU/Linux" ] ; then
 		udiskie &
 	elif command -v devmon >/dev/null 2>&1; then
 		devmon &
+	else
+		udisks-automount &
 	fi
 fi
 
