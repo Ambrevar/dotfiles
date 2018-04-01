@@ -10,6 +10,8 @@
              (guix download)
              (guix git-download)
              (gnu services xorg)
+             (gnu services networking)
+             (gnu packages admin)
              ((guix licenses) #:prefix license:)
              (guix packages)
              (srfi srfi-1))
@@ -139,12 +141,32 @@
                 (supplementary-groups '("wheel" "netdev" ; netdev is needed for networking.
                                         "audio" "video"))
                 (home-directory "/home/ambrevar"))
+               (user-account
+                (name "ftp")
+                (group "nogroup")
+                (home-directory "/home/ftp"))
                %base-user-accounts))
 
  (packages (cons* nss-certs             ;for HTTPS access
                   %base-packages))
 
- (services %my-services)
+ (services (cons* (service
+                   inetd-service-type
+                   (inetd-configuration
+                    (entries
+                     (list
+                      (inetd-entry
+                       (node "127.0.0.1")
+                       (name "ftp")
+                       (socket-type 'stream)
+                       (protocol "tcp")
+                       (wait? #f)
+                       (user "root")
+                       (program (file-append inetutils "/libexec/ftpd"))
+                       (arguments
+                        '("ftpd" "--anonymous-only" "-l"))
+                       )))))
+                  %my-services))
 
  ;; Allow resolution of '.local' host names with mDNS.
  (name-service-switch %mdns-host-lookup-nss))
