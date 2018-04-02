@@ -235,9 +235,10 @@ Requires `call-process-to-string' from `functions'."
   (let ((was-missing (not (file-exists-p db))))
     (when (or update was-missing)
       (if (= (shell-command
-              (funcall helm-locate-create-db-function
-                       db
-                       root))
+              (or  (executable-find "updatedb-local")
+                   (funcall helm-locate-create-db-function
+                            db
+                            root)))
              0)
           (message "locatedb file `%s' %s" db (if was-missing "created" "updated"))
         (error "Failed to %s locatedb file `%s'" (if was-missing "create" "update") db)))))

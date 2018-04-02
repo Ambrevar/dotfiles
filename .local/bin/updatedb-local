@@ -1,0 +1,25 @@
+#!/bin/sh
+
+update() {
+	[ $# -ne 2 ] && set -- "$1" "$1/locate.db"
+	echo >&2 "Updating '$2' database for '$1'..."
+	## From https://git.archlinux.org/svntogit/packages.git/tree/trunk/updatedb.conf?h=packages/mlocate.
+	updatedb -l 0 -o "$2" -U "$1" \
+		--prune-bind-mounts=1 \
+		--prunefs="9p afs anon_inodefs auto autofs bdev binfmt_misc cgroup cifs coda configfs cpuset cramfs debugfs devpts devtmpfs ecryptfs exofs ftpfs fuse fuse.encfs fuse.sshfs fusectl gfs gfs2 hugetlbfs inotifyfs iso9660 jffs2 lustre mqueue ncpfs nfs nfs4 nfsd pipefs proc ramfs rootfs rpc_pipefs securityfs selinuxfs sfs shfs smbfs sockfs sshfs sysfs tmpfs ubifs udf usbfs vboxsf" \
+		--prunepaths="/gnu/store /afs /mnt /net /sfs /tmp /udev /var/cache /var/lib/pacman/local /var/lock /var/run /var/spool /var/tmp" \
+		--prunenames=".git .hg .svn .cache Trash .Trash-$(id -u)"
+}
+
+update "/" "$HOME/.cache/locate.db"
+
+for i in "/run/media/$USER"/* "/media/$USER"/*; do
+	[ -d "$i" ] && update "$i"
+done
+
+if [ ! -d "/media/$USER" ]; then
+	for i in "/media/$USER"/*; do
+		[ -d "$i" ] && update "$i"
+	done
+fi
+
