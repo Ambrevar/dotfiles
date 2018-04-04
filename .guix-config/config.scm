@@ -109,8 +109,6 @@
               (target "/boot/efi")))
 
  (kernel linux-nonfree)
- (kernel-arguments '("rootwait"))       ; TODO: Do we need this?
- ;; https://unix.stackexchange.com/questions/67199/whats-the-point-of-rootwait-rootdelay
  (firmware (cons* linux-nonfree-firmware %base-firmware))
 
  (initrd-modules (append (list "shpchp")
