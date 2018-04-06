@@ -20,13 +20,27 @@
     (kbd "M-K") #'lispyville-drag-backward
     (kbd "M-L") #'lispy-move-right      ; lispy-up-slurp?
     (kbd "C-x C-e") #'lispy-eval
-    (kbd "=") #'lispyville-prettify
+    (kbd "C-j") #'lispy-split
+    (kbd "C-1") #'lispy-describe-inline
+    (kbd "C-2") #'lispy-arglist-inline
+    (kbd "C-4") #'lispy-x
     ;; (kbd "M-;") #'lispy-comment ; This conflicts with `iedit-toggle-selection' default binding.
-    )
+    ;; TODO: lispy-eval-and-replace
+    ")" #'lispy-right-nostring
+    (kbd "=") #'lispyville-prettify)
+  (lispyville--define-key 'insert
+    ";" 'lispy-comment
+    ":" 'lispy-colon
+    "'" 'lispy-tick
+    "`" 'lispy-backtick
+    "\"" 'lispy-quotes
+    "(" 'lispy-parens
+    ")" 'lispy-right-nostring)
   (lispyville--define-key '(motion normal)
-    "q" 'lispy-ace-paren              ; TODO: Conflicts with magit-blame's quit.
-    "Q" 'lispy-ace-symbol
+    "q" 'lispy-ace-paren              ; REVIEW: Conflicts with magit-blame's quit.  Fixed?
+    ;; "Q" 'lispy-ace-symbol
     "Y" 'lispy-new-copy
+    "C" 'lispy-clone
     "D" 'lispy-kill))
 
 (defun ambrevar/init-lispy ()
@@ -34,7 +48,7 @@
     (set-face-foreground 'lispy-face-hint "#FF00FF")
     (when (require 'lispyville nil t)
       (add-hook 'lispy-mode-hook 'lispyville-mode))
-    (lispy-mode)))
+    (lispyville-mode)))
 
 (dolist (hook '(lisp-mode-hook
                 common-lisp-mode-hook
@@ -48,28 +62,19 @@
   (when (fboundp 'rainbow-delimiters-mode)
     (add-hook hook #'rainbow-delimiters-mode)))
 
-;; Color parentheses.
 (when (require 'rainbow-delimiters nil t)
-  ;; https://yoo2080.wordpress.com/2013/09/08/living-with-rainbow-delimiters-mode/
-  (defvar my-paren-dual-colors
-    '("hot pink" "dodger blue"))
-  (setq rainbow-delimiters-outermost-only-face-count 0)
-  (setq rainbow-delimiters-max-face-count 2)
-  (set-face-foreground 'rainbow-delimiters-depth-1-face
-                       (elt my-paren-dual-colors 1))
-  (set-face-foreground 'rainbow-delimiters-depth-2-face
-                       (elt my-paren-dual-colors 0))
-
-  ;; TODO: The following fails when running in daemon mode.
+  ;; See https://yoo2080.wordpress.com/2013/09/08/living-with-rainbow-delimiters-mode/.
+  ;; TODO: The color saturation metioned in the URL fails when running in daemon mode.
   ;; https://github.com/Fanael/rainbow-delimiters/issues/36
-  ;; (require 'cl-lib)
-  ;; (require 'color)
-  ;; (cl-loop
-  ;;  for index from 1 to rainbow-delimiters-max-face-count
-  ;;  do
-  ;;  (let ((face (intern (format "rainbow-delimiters-depth-%d-face" index))))
-  ;;    (cl-callf color-saturate-name (face-foreground face) 30)))
-
+  (set-face-foreground 'rainbow-delimiters-depth-1-face "#fe1717")
+  (set-face-foreground 'rainbow-delimiters-depth-2-face "#589cff")
+  (set-face-foreground 'rainbow-delimiters-depth-3-face "#f1fe52")
+  (set-face-foreground 'rainbow-delimiters-depth-4-face "#44ff4c")
+  (set-face-foreground 'rainbow-delimiters-depth-5-face "#83b2ff")
+  (set-face-foreground 'rainbow-delimiters-depth-6-face "#6161ff")
+  (set-face-foreground 'rainbow-delimiters-depth-7-face "#35ff35")
+  (set-face-foreground 'rainbow-delimiters-depth-8-face "#7ca8ff")
+  (set-face-foreground 'rainbow-delimiters-depth-9-face "#50fec1")
   (set-face-attribute 'rainbow-delimiters-unmatched-face nil
                       :foreground 'unspecified
                       :inherit 'error
