@@ -211,13 +211,6 @@
 
 (with-eval-after-load 'gnus (require 'init-evil-gnus))
 
-;; EMMS
-(defun ambrevar/evil-emms (mode _mode-keymaps &rest _rest)
-  (when (eq mode 'emms)
-    (with-eval-after-load 'emms-browser
-      (evil-define-key '(normal motion) emms-browser-mode-map (kbd "<return>") 'ambrevar/emms-browser-add-tracks-and-maybe-play))))
-(add-hook 'evil-collection-setup-hook 'ambrevar/evil-emms)
-
 ;; EWW
 (defun ambrevar/evil-eww (mode _mode-keymaps &rest _rest)
   (when (eq mode 'eww)

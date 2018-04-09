@@ -2,24 +2,18 @@
 
 ;;; TODO: See if mpd is faster at building the db. Not so important.
 ;;; TODO: Change face from purple to white?
-;;; TODO: Delete entry from cache? See `emms-cache-del'.
-
+;;; TODO: emms-all causes some "require"d files to be loaded twice if called after, say, emms-browser was loaded.
 (emms-all)
-;; TODO: emms-all causes some "require"d files to be loaded twice if called after, say, emms-browser was loaded.
 (emms-history-load)
-(emms-default-players)
-(when (require 'emms-player-mpv nil t)
-  ;; Don't use default players as they have poor playback support, e.g. seeking is missing for OGG.
-  ;; REVIEW: mpv should not display covers.
-  ;; Reported at https://github.com/dochang/emms-player-mpv/issues/8.
-  (add-to-list 'emms-player-mpv-parameters "--no-audio-display")
-  (setq emms-player-mpv-input-file (expand-file-name "emms-mpv-input-file" emms-directory))
-  (setq emms-player-list '(emms-player-mpv emms-player-mplayer-playlist emms-player-mplayer)))
 
-(setq emms-source-file-default-directory (expand-file-name "~/music")
-      emms-source-file-directory-tree-function 'emms-source-file-directory-tree-find)
-
+(setq emms-player-list (list emms-player-mpv)
+      emms-source-file-default-directory (expand-file-name "~/music")
+      emms-source-file-directory-tree-function 'emms-source-file-directory-tree-find
+      ;; Cover thumbnails.
+      emms-browser-covers 'emms-browser-cache-thumbnail)
+(add-to-list 'emms-player-mpv-parameters "--no-audio-display")
 (add-to-list 'emms-info-functions 'emms-info-cueinfo)
+
 (if (executable-find "emms-print-metadata")
     (progn
       (require 'emms-info-libtag)
@@ -46,29 +40,9 @@
       (and (memq 'emms-player-mpv emms-player-list)
            (executable-find "mpv")
            (pop emms-player-mpv-parameters)
+           ;; TODO: Adapt this to simple-mpv.
            (call-process-shell-command (emms-player-mpv--format-command "mute") nil nil nil))
       (emms-pause))))
-
-;;; Browse by album-artist.
-(defun ambrevar/emms-browser-get-track-custom (track type)
-  "Return TYPE from TRACK.
-This function uses 'info-albumartistsort, 'info-albumartist,
-'info-artistsort, 'info-originalyear, 'info-originaldate and
-'info-date symbols, if available for TRACK."
-  (cond ((eq type 'info-artist)
-         (or (emms-track-get track 'info-albumartistsort)
-             (emms-track-get track 'info-albumartist)
-             (emms-track-get track 'info-artistsort)
-             (emms-track-get track 'info-artist "<unknown>")))
-        ((eq type 'info-year)
-         (let ((date (or (emms-track-get track 'info-originaldate)
-                         (emms-track-get track 'info-originalyear)
-                         (emms-track-get track 'info-date)
-                         (emms-track-get track 'info-year "<unknown>"))))
-           (emms-format-date-to-year date)))
-        (t (emms-track-get track type "<unknown>"))))
-
-(setq emms-browser-get-track-field-function #'ambrevar/emms-browser-get-track-custom)
 
 (when (require 'helm-emms nil t)
   (setq helm-emms-default-sources
@@ -76,17 +50,22 @@ This function uses 'info-albumartistsort, 'info-albumartist,
           helm-source-emms-files ; Disable for a huge speed-up.
           helm-source-emms-streams)))
 
-;;; Cover thumbnails.
-(setq emms-browser-covers 'emms-browser-cache-thumbnail)
-
-(defun ambrevar/emms-browser-add-tracks-and-maybe-play ()
-  "Like `emms-browser-add-tracks' but play immediately if nothing
+(defun ambrevar/emms-play-on-add (old-pos)
+  "Play tracks when calling `emms-browser-add-tracks' if nothing
 is currently playing."
   (interactive)
-  (if emms-player-paused-p
-      (emms-browser-add-tracks-and-play)
-    (emms-browser-add-tracks)))
-(define-key emms-browser-mode-map (kbd "<return>") 'ambrevar/emms-browser-add-tracks-and-maybe-play)
+  (when (or (not emms-player-playing-p)
+            emms-player-paused-p
+            emms-player-stopped-p)
+    (with-current-emms-playlist
+      (goto-char old-pos)
+      ;; if we're sitting on a group name, move forward
+      (unless (emms-playlist-track-at (point))
+        (emms-playlist-next))
+      (emms-playlist-select (point)))
+    (emms-stop)
+    (emms-start)))
+(add-hook 'emms-browser-tracks-added-hook 'ambrevar/emms-play-on-add)
 
 ;;; Display album in playlist
 (defun ambrevar/emms-artist-album-track-and-title-format (bdata fmt)
