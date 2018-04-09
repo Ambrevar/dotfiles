@@ -88,17 +88,17 @@ fi
 ## Cask
 appendpath "$HOME/.cask/bin"
 
-## mcron
-if command -v mcron >/dev/null 2>&1; then
-	 mcron &
-fi
-
 ## Last PATH entries.
 appendpath "/usr/lib/surfraw"
 appendpath "${HOME}/personal/games/launchers"
 appendpath "${HOME}/.local/bin"
 command -v pacman >/dev/null 2>&1 && appendpath "${HOME}/.local/bin/pacman"
 
+## mcron: needs to be run after PATH is fully set or else local programs could
+## be missing.
+if command -v mcron >/dev/null 2>&1; then
+	 mcron &
+fi
 
 
 ## Remove less history.
