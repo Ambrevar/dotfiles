@@ -20,6 +20,9 @@
   (setq file-name-handler-alist default-file-name-handler-alist))
 (add-hook 'after-init-hook 'ambrevar/reset-file-name-handler-alist)
 
+;;; Avoid the "loaded old bytecode instead of newer source" pitfall.
+(setq load-prefer-newer t)
+
 ;;; Store additional config in a 'lisp' subfolder and add it to the load path so
 ;;; that `require' can find the files.
 ;;; This must be done before moving `user-emacs-directory'.
