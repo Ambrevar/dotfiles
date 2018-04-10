@@ -168,7 +168,7 @@
 
 ;;; Some programs such as 'emacs' are better off being started in char-mode.
 (defun ambrevar/exwm-start-in-char-mode ()
-  (when (string= exwm-instance-name "emacs")
+  (when (string-prefix-p "emacs" exwm-instance-name)
     (exwm-input-release-keyboard (exwm--buffer->id (window-buffer)))))
 (add-hook 'exwm-manage-finish-hook 'ambrevar/exwm-start-in-char-mode)
 
