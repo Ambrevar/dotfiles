@@ -94,4 +94,8 @@
 ;;; Common LISP.
 (setq inferior-lisp-program "clisp")    ; TODO: Use sbcl instead?
 
+;;; Scheme.
+(setq geiser-repl-skip-version-check-p t
+      geiser-mode-start-repl-p t)
+
 (provide 'init-lisp)
