@@ -147,6 +147,41 @@ This function is suitable for `mu4e-compose-mode-hook'."
     (define-key map (kbd "C-c C-t") 'org-mu4e-store-and-capture))
   (setq org-mu4e-link-query-in-headers-mode nil))
 
+;;; Gmail trash fix.
+(defvar ambrevar/mu4e-move-to-trash-patterns nil
+  "List of regexps to match for moving to trash instead of deleting them.
+Matches are done against the :maildir field of the e-mail at
+point.  See `ambrevar/mu4e-headers-move-to-trash' and
+`ambrevar/mu4e-view-move-to-trash'.")
+
+(defun ambrevar/mu4e-headers-move-to-trash ()
+  (interactive)
+  (let ((msg-dir (mu4e-message-field (mu4e-message-at-point) :maildir)))
+    (if (not (seq-filter (lambda (re)
+                           (string-match re msg-dir))
+                         ambrevar/mu4e-move-to-trash-patterns))
+        (mu4e-headers-mark-for-delete)
+      (mu4e-mark-set 'move (funcall mu4e-trash-folder (mu4e-message-at-point)))
+      (mu4e-headers-next))))
+
+(defun ambrevar/mu4e-view-move-to-trash ()
+  (interactive)
+  (mu4e~view-in-headers-context
+   (ambrevar/mu4e-headers-move-to-trash)
+   (mu4e~headers-move (or n 1))))
+
+;;; Don't display trashed messages in bookmarks.  This is useful for Gmail where
+;;; the "delete" flag is not used.
+(defvar ambrevar/mu4e-trash-folders nil
+  "List of trash folders to filter out from bookmarks.")
+
 (load "~/personal/mail/mu4e.el" t)
+
+;; Do this after setting `ambrevar/mu4e-trash-folders'.
+(dolist (bookmark mu4e-bookmarks)
+  ;; TODO: Why mu4e-bookmark-query does not work here?
+  (setf (car bookmark) (concat  (mapconcat (lambda (s) (format "NOT maildir:\"%s\" and " s))
+                                           ambrevar/mu4e-trash-folders "")
+                                (car bookmark))))
 
 (provide 'init-mu4e)

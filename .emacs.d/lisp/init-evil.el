@@ -152,11 +152,15 @@
       "[" 'mu4e-headers-prev-unread
       ;; "R" 'mu4e-headers-mark-for-refile
       "p" 'mu4e-headers-toggle-include-related
-      "r" 'mu4e-compose-reply)
+      "r" 'mu4e-compose-reply
+      ;; Custom
+      "d" 'ambrevar/mu4e-headers-move-to-trash)
     (evil-define-key 'visual mu4e-headers-mode-map
-      "d" 'mu4e-headers-mark-for-trash
+      "m" 'mu4e-headers-mark-for-move
       "D" 'mu4e-headers-mark-for-delete
-      "u" 'mu4e-headers-mark-for-unmark)
+      "u" 'mu4e-headers-mark-for-unmark
+      ;; Custom
+      "d" 'ambrevar/mu4e-headers-move-to-trash)
     (evil-define-key 'motion mu4e-view-mode-map
       (kbd "SPC") 'mu4e-view-scroll-up-or-next
       (kbd "<tab>") 'shr-next-link
@@ -172,7 +176,9 @@
       (kbd "M-k") 'mu4e-view-headers-prev ; Custom
       "h" 'evil-backward-char
       "zh" 'mu4e-view-toggle-html
-      "gx" 'mu4e-view-go-to-url)
+      "gx" 'mu4e-view-go-to-url
+      ;; Custom
+      "d" 'ambrevar/mu4e-view-move-to-trash)
     (evil-set-initial-state 'mu4e-compose-mode 'insert)
     (evil-define-key 'normal mu4e-compose-mode-map
       "gg" 'mu4e-compose-goto-top)))
