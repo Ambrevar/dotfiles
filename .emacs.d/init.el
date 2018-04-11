@@ -174,6 +174,14 @@
 ;;; GUD (GDB, etc.)
 (with-eval-after-load 'gud (require 'init-gud))
 
+;;; Guix
+(when (executable-find "guix")
+  (nconc package-selected-packages '(guix))
+  (defun ambrevar/init-guix ()
+    (when (string-match "/guix/" buffer-file-name)
+      (guix-devel-mode)))
+  (add-hook 'scheme-mode-hook 'ambrevar/init-guix))
+
 ;;; Helm
 (nconc package-selected-packages '(helm helm-descbinds helm-ls-git))
 (when (require 'helm-config nil t) (require 'init-helm))
