@@ -1,7 +1,7 @@
-;; Lisp
+;;; Lisp
 
 (with-eval-after-load 'lispyville
-  ;; TODO: lispy-occur: helm-occur does not restrict to region.
+  ;; REVIEW: lispy-occur: helm-occur does not restrict to region.  Check latest helm.
   (lispyville-set-key-theme
    '(operators            ; Add equivalent for lispy-delete?
      c-w                  ; Bind M-backspace to lispyville-delete-backward-word?
@@ -11,6 +11,7 @@
      mark-toggle                        ; TODO: Check out readme.
      ))
   (lispyville--define-key '(motion normal visual)
+    (kbd "^") #'lispy-left
     (kbd "M-h") #'lispyville-previous-opening
     (kbd "M-l") #'lispyville-next-opening
     (kbd "M-j") #'lispy-down
@@ -24,11 +25,14 @@
     (kbd "C-1") #'lispy-describe-inline
     (kbd "C-2") #'lispy-arglist-inline
     (kbd "C-4") #'lispy-x
+    (kbd "gd") #'lispy-goto-symbol
+    ;; (kbd "/") #'lispy-occur
     ;; (kbd "M-;") #'lispy-comment ; This conflicts with `iedit-toggle-selection' default binding.
     ;; TODO: lispy-eval-and-replace
-    ")" #'lispy-right-nostring
-    (kbd "=") #'lispyville-prettify)
+    ")" #'lispy-right
+    "=" #'lispyville-prettify)
   (lispyville--define-key 'insert
+    (kbd "<backspace>") 'lispy-delete-backward
     ";" 'lispy-comment
     ":" 'lispy-colon
     "'" 'lispy-tick
@@ -37,11 +41,18 @@
     "(" 'lispy-parens
     ")" 'lispy-right-nostring)
   (lispyville--define-key '(motion normal)
-    "q" 'lispy-ace-paren              ; REVIEW: Conflicts with magit-blame's quit.  Fixed?
+    ;; "q" 'lispy-ace-paren              ; REVIEW: Conflicts with magit-blame's quit.  Fixed?
+    "q" 'lispy-teleport
+    "f" 'lispy-ace-paren
     ;; "Q" 'lispy-ace-symbol
+    "t" 'lispy-ace-char
     "Y" 'lispy-new-copy
-    "C" 'lispy-clone
-    "D" 'lispy-kill))
+    (kbd "S-<return>") 'lispy-eval-other-window
+    ;; "p" 'lispy-paste
+    (kbd "M-C") 'lispy-clone            ; TODO: Go to closest parenthesis if not on one.  forward-char + lispyville-previous-opening?
+    "D" 'lispy-kill)
+
+  (lispy-define-key lispy-mode-map-special "C" 'lispy-clone))
 
 (defun ambrevar/init-lispy ()
   (when (require 'lispy nil t)
