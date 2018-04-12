@@ -128,7 +128,7 @@
 (nconc package-selected-packages '(daemons))
 
 ;;; Emms
-(nconc package-selected-packages '(emms helm-emms emms-player-mpv))
+(nconc package-selected-packages '(emms helm-emms))
 (with-eval-after-load 'emms (require 'init-emms))
 
 ;;; Evil
