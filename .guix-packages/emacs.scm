@@ -54,55 +54,129 @@
   #:use-module (srfi srfi-1)
   #:use-module (ice-9 match))
 
-(define-public emacs-dev
+;; TODO: Use local dir instead.
+;; TODO: Include sources.
+(define-public emacs-prerelease
   (package
-   (inherit emacs)
-   (name "emacs-dev")
-   (version "26.0.91")
-   (source
-    ;; (local-file "/home/ambrevar/projects/emacs-build")
-    (origin
-     (method git-fetch)
-     (uri (git-reference
-           (url "/home/ambrevar/projects/emacs")
-           (commit "")))
-     (sha256
-      (base32
-       "1b7n3g4m2rbvrwsgbfl8wl91z42g1ld42clwxs8qpl9ny5rwz6sq"))
-     (patches (search-patches "emacs-exec-path.patch"
-                              ;; "emacs-fix-scheme-indent-function.patch"
-                              "emacs-source-date-epoch.patch"))
-     (modules '((guix build utils)))
-     (snippet
-      ;; Delete the bundled byte-compiled elisp files and
-      ;; generated autoloads.
-      (quote (with-directory-excursion
-              "lisp"
-              (for-each delete-file
-                        (append (find-files "." "\\.elc$")
-                                (find-files "." "loaddefs\\.el$")
-                                ;; This is the only "autoloads" file that
-                                ;; does not have "*loaddefs.el" name.
-                                (quote ("eshell/esh-groups.el"))))
-              ;; Make sure Tramp looks for binaries in the right places on
-              ;; remote GuixSD machines, where 'getconf PATH' returns
-              ;; something bogus.
-              (substitute*
-               "net/tramp-sh.el"
-               ;; Patch the line after "(defcustom tramp-remote-path".
-               (("\\(tramp-default-remote-path")
-                (format #f "(tramp-default-remote-path ~s ~s ~s ~s "
-                        "~/.guix-profile/bin" "~/.guix-profile/sbin"
-                        "/run/current-system/profile/bin"
-                        "/run/current-system/profile/sbin")))
-              ;; Make sure Man looks for C header files in the right
-              ;; places.
-              (substitute*
-               "man.el"
-               (("\"/usr/local/include\"" line)
-                (string-join
-                 (list line
-                       "\"~/.guix-profile/include\""
-                       "\"/var/guix/profiles/system/profile/include\"")
-                 " ")))))))
-    )))
+    (name "emacs-prerelease")
+    (version "26.1-rc1")
+    (source (origin
+             (method url-fetch)
+             (uri (string-append "ftp://alpha.gnu.org/gnu/emacs/pretest/emacs-" version ".tar.xz"))
+             (sha256
+              (base32
+               "0n2pl1i4piga43p1kbscbb2sgg74gy4qq5jgmmrnxf80vrlfd535"))
+             (patches (search-patches "emacs-exec-path.patch"
+                                      ;; "emacs-fix-scheme-indent-function.patch"
+                                      "emacs-source-date-epoch.patch"))
+             (modules '((guix build utils)))
+             (snippet
+              ;; Delete the bundled byte-compiled elisp files and
+              ;; generated autoloads.
+              '(with-directory-excursion "lisp"
+                 (for-each delete-file
+                           (append (find-files "." "\\.elc$")
+                                   (find-files "." "loaddefs\\.el$")
+                                   ;; This is the only "autoloads" file that
+                                   ;; does not have "*loaddefs.el" name.
+                                   '("eshell/esh-groups.el")))
+
+                 ;; Make sure Tramp looks for binaries in the right places on
+                 ;; remote GuixSD machines, where 'getconf PATH' returns
+                 ;; something bogus.
+                 (substitute* "net/tramp-sh.el"
+                   ;; Patch the line after "(defcustom tramp-remote-path".
+                   (("\\(tramp-default-remote-path")
+                    (format #f "(tramp-default-remote-path ~s ~s ~s ~s "
+                            "~/.guix-profile/bin" "~/.guix-profile/sbin"
+                            "/run/current-system/profile/bin"
+                            "/run/current-system/profile/sbin")))
+
+                 ;; Make sure Man looks for C header files in the right
+                 ;; places.
+                 (substitute* "man.el"
+                   (("\"/usr/local/include\"" line)
+                    (string-join
+                     (list line
+                           "\"~/.guix-profile/include\""
+                           "\"/var/guix/profiles/system/profile/include\"")
+                     " ")))))))
+    (build-system glib-or-gtk-build-system)
+    (arguments
+     `(#:tests? #f
+       #:phases
+       (modify-phases %standard-phases
+         (add-before 'configure 'fix-/bin/pwd
+           (lambda _
+             ;; Use `pwd', not `/bin/pwd'.
+             (substitute* (find-files "." "^Makefile\\.in$")
+               (("/bin/pwd")
+                "pwd"))))
+         (add-after 'install 'install-site-start
+           ;; Use 'guix-emacs' in "site-start.el".  This way, Emacs packages
+           ;; provided by Guix and installed in
+           ;; ~/.guix-profile/share/emacs/site-lisp/guix.d/PACKAGE-VERSION are
+           ;; automatically found.
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (let* ((out      (assoc-ref outputs "out"))
+                    (lisp-dir (string-append out "/share/emacs/site-lisp")))
+               (copy-file (assoc-ref inputs "guix-emacs.el")
+                          (string-append lisp-dir "/guix-emacs.el"))
+               (with-output-to-file (string-append lisp-dir "/site-start.el")
+                 (lambda ()
+                   (display
+                    (string-append "(when (require 'guix-emacs nil t)\n"
+                                   "  (guix-emacs-autoload-packages))\n"))))
+               #t))))))
+    (inputs
+     `(("gnutls" ,gnutls)
+       ("ncurses" ,ncurses)
+
+       ;; TODO: Add the optional dependencies.
+       ("libx11" ,libx11)
+       ("gtk+" ,gtk+)
+       ("libxft" ,libxft)
+       ("libtiff" ,libtiff)
+       ("giflib" ,giflib)
+       ("libjpeg" ,libjpeg-8)
+       ("imagemagick" ,imagemagick)
+       ("acl" ,acl)
+
+       ;; When looking for libpng `configure' links with `-lpng -lz', so we
+       ;; must also provide zlib as an input.
+       ("libpng" ,libpng)
+       ("zlib" ,zlib)
+
+       ("librsvg" ,librsvg)
+       ("libxpm" ,libxpm)
+       ("libxml2" ,libxml2)
+       ("libice" ,libice)
+       ("libsm" ,libsm)
+       ("alsa-lib" ,alsa-lib)
+       ("dbus" ,dbus)
+
+       ;; multilingualization support
+       ("libotf" ,libotf)
+       ("m17n-lib" ,m17n-lib)))
+    (native-inputs
+     `(("guix-emacs.el" ,(search-auxiliary-file "emacs/guix-emacs.el"))
+       ("pkg-config" ,pkg-config)
+       ("texinfo" ,texinfo)))
+
+    (native-search-paths
+     (list (search-path-specification
+            (variable "INFOPATH")
+            (files '("share/info")))))
+
+    (home-page "https://www.gnu.org/software/emacs/")
+    (synopsis "The extensible, customizable, self-documenting text editor")
+    (description
+     "GNU Emacs is an extensible and highly customizable text editor.  It is
+based on an Emacs Lisp interpreter with extensions for text editing.  Emacs
+has been extended in essentially all areas of computing, giving rise to a
+vast array of packages supporting, e.g., email, IRC and XMPP messaging,
+spreadsheets, remote server editing, and much more.  Emacs includes extensive
+documentation on all aspects of the system, from basic editing to writing
+large Lisp programs.  It has full Unicode support for nearly all human
+languages.")
+    (license license:gpl3+)))
