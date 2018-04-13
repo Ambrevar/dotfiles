@@ -30,15 +30,15 @@
   (package
     (inherit linux-libre)
     (name "linux-nonfree")
+    (version "4.14.33")
     (source
-     ;; (origin
-     ;;  (method url-fetch)
-     ;;  (uri (linux-nonfree-urls
-     ;;        (package-version linux-libre)))
-     ;;  (sha256
-     ;;   (base32
-     ;;    "144gd7f7qpzcwj0yyj75cdfj6b1a9vk8s6qc3pg61j10div2gvf8")))
-     (local-file "/linux.tar.xz"))))
+     (origin
+      (method url-fetch)
+      (uri (linux-nonfree-urls version))
+      (sha256
+       (base32 "0c88p5vly63jsz62ff7971zl6vqzzbv5q519gi8z17ld66sf5063" ; 4.14.33
+        ;; "1hv00176njm4g9m1aj92lvhwqn75c46qwsglsmx95ivbr9qc58av" ; 4.16.1
+        ))))))
 
 (define-public linux-nonfree-firmware
   (let ((version "0.0.0")
