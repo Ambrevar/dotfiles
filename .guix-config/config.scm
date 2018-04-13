@@ -17,7 +17,8 @@
              (srfi srfi-1))
 
 (use-service-modules desktop)
-(use-package-modules bootloaders certs suckless)
+(use-package-modules bootloaders certs suckless ;; xorg
+                     )
 
 (define (linux-nonfree-urls version)
   "Return a list of URLs for Linux-Nonfree VERSION."
@@ -78,6 +79,10 @@
                   "ACTION==\"add\", SUBSYSTEM==\"backlight\", "
                   "RUN+=\"/run/current-system/profile/bin/chmod g+w /sys/class/backlight/%k/brightness\"")))
 
+;; (define my-xorg-modules
+;;   ;; Everything but Nouveau.
+;;   (delete xf86-video-nouveau %default-xorg-modules))
+
 ;; Use the "desktop" services, which include the X11
 ;; log-in service, networking with Wicd, and more.
 (define %my-services
@@ -92,6 +97,7 @@
                       (slim-configuration
                        (inherit config)
                        (auto-login? #f)
+                       ;; (startx (xorg-start-command #:modules my-xorg-modules))
                        ;; TODO: Can't slim pre-fill the username?
                        (default-user "ambrevar")))))
 
@@ -109,6 +115,8 @@
               (target "/boot/efi")))
 
  (kernel linux-nonfree)
+ ;; (kernel-arguments '("modprobe.blacklist=nouveau"))
+ ;; (kernel-arguments '("pcie_port_pm=off"))
  (firmware (cons* linux-nonfree-firmware %base-firmware))
 
  (initrd-modules (append (list "shpchp")
