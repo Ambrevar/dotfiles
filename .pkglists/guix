@@ -67,7 +67,6 @@ p7zip
 password-store
 pavucontrol
 perl
-pinentry
 pinentry-emacs
 pkg-config
 pulseaudio
@@ -96,6 +95,7 @@ unzip
 valgrind
 vorbis-tools
 wget
+woof
 xbacklight
 xbindkeys
 xcape
