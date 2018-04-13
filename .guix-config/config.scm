@@ -148,23 +148,7 @@
  (packages (cons* nss-certs             ;for HTTPS access
                   %base-packages))
 
- (services (cons* (service
-                   inetd-service-type
-                   (inetd-configuration
-                    (entries
-                     (list
-                      (inetd-entry
-                       (node "127.0.0.1")
-                       (name "ftp")
-                       (socket-type 'stream)
-                       (protocol "tcp")
-                       (wait? #f)
-                       (user "root")
-                       (program (file-append inetutils "/libexec/ftpd"))
-                       (arguments
-                        '("ftpd" "--anonymous-only" "-l"))
-                       )))))
-                  %my-services))
+ (services %my-services)
 
  ;; Allow resolution of '.local' host names with mDNS.
  (name-service-switch %mdns-host-lookup-nss))
