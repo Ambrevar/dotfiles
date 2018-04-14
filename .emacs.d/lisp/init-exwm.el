@@ -107,10 +107,15 @@
     (interactive)
     (require 'helm-pass)
     (helm :sources 'helm-source-pass
-          :input (and exwm-title
-                      (let* ((url (car (last (split-string exwm-title " "))))
-                             (domain (split-string url "\\.")))
-                        (concat (nth (- (length domain) 2) domain) "." (nth (1- (length domain)) domain))))
+          :input (cond
+                  ((derived-mode-p 'eww-mode)
+                   (let* ((url (replace-regexp-in-string ".*//\\([^/]*\\).*" "\\1" (eww-current-url)))
+                          (domain (split-string url "\\.")))
+                     (concat (nth (- (length domain) 2) domain) "." (nth (1- (length domain)) domain))))
+                  ((and (derived-mode-p 'exwm-mode) exwm-title)
+                   (let* ((url (car (last (split-string exwm-title " "))))
+                          (domain (split-string url "\\.")))
+                     (concat (nth (- (length domain) 2) domain) "." (nth (1- (length domain)) domain)))))
           :buffer "*helm-pass*"))
   (exwm-input-set-key (kbd "s-p") #'ambrevar/helm-pass-for-page))
 
