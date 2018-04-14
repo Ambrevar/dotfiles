@@ -220,6 +220,7 @@
 ;; EWW
 (defun ambrevar/evil-eww (mode _mode-keymaps &rest _rest)
   (when (eq mode 'eww)
+    (evil-define-key 'normal eww-mode-map "O" 'ambrevar/eww-open-in-new-buffer)
     (evil-define-key 'normal eww-mode-map "[" 'ambrevar/eww-previous-url)
     (evil-define-key 'normal eww-mode-map "]" 'ambrevar/eww-next-url)))
 (add-hook 'evil-collection-setup-hook 'ambrevar/evil-eww)
