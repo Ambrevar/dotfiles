@@ -166,7 +166,8 @@ word(s) will be searched for via `eww-search-prefix'."
   (ambrevar/eww-name-buffer-with-title))
 (advice-add 'eww-update-header-line-format :override 'ambrevar/eww-update-header-line-format)
 
-;; TODO: Implement quickmarks.  Then merge them.
+;; TODO: Fix quickmarks bindings.
+;; TODO: Merge qutebrowser quickmarks.
 ;; TODO: Implement search engines.  Then merge them too.
 ;; If only one word is found as a non-ambiguous mark, use it as quickmark.
 ;; If several words and first word is a non-ambiguous mark where search-engine
@@ -223,5 +224,56 @@ word(s) will be searched for via `eww-search-prefix'."
         (pp eww-bookmarks (current-buffer))
         (buffer-string))))))
 (advice-add 'eww-write-bookmarks :override 'ambrevar/eww-write-bookmarks)
+
+(defvar ambrevar/eww-quickmark-prefix ""
+  "Prefix to load a quickmark.")
+
+(defun ambrevar/eww-bookmark-prepare ()
+  ;; PATCH: Don't load if already loaded.  This allows for overrides (e.g. quickmarks).
+  (unless eww-bookmarks
+    (eww-read-bookmarks))
+  (unless eww-bookmarks
+    (user-error "No bookmarks are defined"))
+  (set-buffer (get-buffer-create "*eww bookmarks*"))
+  (eww-bookmark-mode)
+  (let* ((width (/ (window-width) 2))
+         (format (format "%%-%ds %%s" width))
+         (inhibit-read-only t)
+         start title)
+    (erase-buffer)
+    (setq header-line-format (concat " " (format format "Title" "URL")))
+    (dolist (bookmark eww-bookmarks)
+      (setq start (point)
+            title (plist-get bookmark :title))
+      ;; PATCH: Show quickmark.
+      (when (plist-get bookmark :mark)
+        (setq title (format "[%s] %s" (plist-get bookmark :mark) title)))
+      (when (> (length title) width)
+        (setq title (truncate-string-to-width title width)))
+      (insert (format format title
+                      (concat (plist-get bookmark :url)
+                              (when (plist-get bookmark :tags)
+                                (concat " ("
+                                        (mapconcat 'identity (plist-get bookmark :tags) ",")
+                                        ")"))))
+              "\n")
+      (put-text-property start (1+ start) 'eww-bookmark bookmark)
+      ;; PATCH: Bind keys
+      (when (plist-get bookmark :mark)
+        (define-key eww-bookmark-mode-map
+          (kbd (concat ambrevar/eww-quickmark-prefix (plist-get bookmark :mark)))
+          (lambda (&optional new-window)
+            (interactive "P")
+            (if new-window
+                (ambrevar/eww-open-in-new-buffer (plist-get bookmark :url))
+              (eww (plist-get bookmark :url)))))))
+    (goto-char (point-min))))
+(advice-add 'eww-bookmark-prepare :override 'ambrevar/eww-bookmark-prepare)
+
+(defun ambrevar/eww-quickmarks (&optional new-window)
+  "Display quickmarks."
+  (interactive "P")
+  (let ((eww-bookmarks (seq-filter (lambda (b) (plist-get b :mark)) eww-bookmarks)))
+    (eww-list-bookmarks)))
 
 (provide 'init-eww)
