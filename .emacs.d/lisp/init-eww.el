@@ -82,7 +82,9 @@ If BUFFERS is not specified, then reload all buffers."
                 (helm-eww)
               (switch-to-buffer (completing-read "EWW: " (mapcar 'buffer-name buffer-info))))
           (switch-to-buffer (car buffer-info)))
-      (call-interactively 'eww))))
+      (if (fboundp 'helm-eww)
+          (helm-eww)
+        (call-interactively 'eww)))))
 
 (defun ambrevar/eww (url)
   "Fetch URL and render the page.
