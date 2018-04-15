@@ -2,7 +2,10 @@
 
 ;; TODO: Fix `eww-forward-url' infinite forwarding.
 
-;; TODO: Extend the history / bookmarks view to display tags, etc.
+;; TODO: Extend the history / bookmarks view to display tags, mark and search engine.
+;; With colors: [mark] title url (tags)
+;; Mark is red if no search engine, green otherwise.
+;; Tags have their own face.
 
 ;; TODO: Make something useful with the tags.  Helm function?  Could chain two
 ;; functions: tag selection then filtered bookmark selection, then tag selection
@@ -162,7 +165,8 @@ word(s) will be searched for via `eww-search-prefix'."
   (ambrevar/eww-name-buffer-with-title))
 (advice-add 'eww-update-header-line-format :override 'ambrevar/eww-update-header-line-format)
 
-;; TODO: Fix quickmarks bindings.
+;; TODO: Fix quickmarks bindings.  Or maybe just display the quickmarks buffer
+;; and start `eww', which follows the quickmarks when first word is the mark.
 ;; TODO: Merge qutebrowser quickmarks.
 ;; TODO: Implement search engines.  Then merge them too.
 ;; If only one word is found as a non-ambiguous mark, use it as quickmark.
@@ -290,5 +294,64 @@ With prefix argument or ARG, bookmarks much match all tags."
   (interactive "P")
   (let ((eww-bookmarks (ambrevar/eww-bookmarks-list-by-tags arg)))
     (eww-list-bookmarks)))
+
+(defun ambrevar/eww--dwim-expand-url (url)
+  (setq url (string-trim url))
+  (cond ((string-match-p "\\`file:/" url))
+        ;; Don't mangle file: URLs at all.
+        ((string-match-p "\\`ftp://" url)
+         (user-error "FTP is not supported"))
+        (t
+         ;; Anything that starts with something that vaguely looks
+         ;; like a protocol designator is interpreted as a full URL.
+         (if (or (string-match "\\`[A-Za-z]+:" url)
+                 ;; Also try to match "naked" URLs like
+                 ;; en.wikipedia.org/wiki/Free software
+                 (string-match "\\`[A-Za-z_]+\\.[A-Za-z._]+/" url)
+                 (and (= (length (split-string url)) 1)
+                      (or (and (not (string-match-p "\\`[\"'].*[\"']\\'" url))
+                               (> (length (split-string url "[.:]")) 1))
+                          (string-match eww-local-regex url))))
+             (progn
+               (unless (string-match-p "\\`[a-zA-Z][-a-zA-Z0-9+.]*://" url)
+                 (setq url (concat "http://" url)))
+               ;; Some sites do not redirect final /
+               (when (string= (url-filename (url-generic-parse-url url)) "")
+                 (setq url (concat url "/"))))
+           ;; PATCH: Add support for search engines and quickmarks.
+           (string-match (rx (group (1+ (not space)))
+                             (0+ space)
+                             (? (group (0+ any))))
+                         url)
+           (let* ((first-word (match-string 1 url))
+                  (rest-url (match-string 2 url))
+                  (marks (make-hash-table :test 'equal))
+                  (engines (make-hash-table :test 'equal)))
+             (dolist (b eww-bookmarks)
+               (let ((mark (plist-get b :mark))
+                     engine)
+                 (when mark
+                   (puthash mark (plist-get b :url) marks)
+                   (setq engine (plist-get b :search))
+                   (when engine
+                     (puthash mark (concat (let ((case-fold-search t))
+                                             (unless (string-match "^https?://" engine)
+                                               (plist-get b :url)))
+                                           engine)
+                              engines)))))
+             (cond
+              ((and (gethash first-word engines)
+                    (not (string= rest-url "")) )
+               (setq url (format (gethash first-word engines) ; Engines must have exactly one "%s".
+                                 (mapconcat
+                                  #'url-hexify-string (split-string rest-url) "+"))))
+              ((and (gethash first-word marks)
+                    (string= rest-url ""))
+               (setq url (gethash first-word marks)))
+              (t (setq url (concat eww-search-prefix
+                                   (mapconcat
+                                    #'url-hexify-string (split-string url) "+")))))))))
+  url)
+(advice-add 'eww--dwim-expand-url :override 'ambrevar/eww--dwim-expand-url)
 
 (provide 'init-eww)
