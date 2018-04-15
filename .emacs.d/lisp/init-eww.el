@@ -1,9 +1,5 @@
 ;;; EWW
 
-;; DONE: Bookmarks: Check if count is correct after saving.
-;; DONE: Bookmarks: Check sorting.
-;; DONE: Bookmarks: Fix encoding.
-
 ;; TODO: Fix `eww-forward-url' infinite forwarding.
 
 ;; TODO: Extend the history / bookmarks view to display tags, etc.
@@ -274,6 +270,25 @@ word(s) will be searched for via `eww-search-prefix'."
   "Display quickmarks."
   (interactive "P")
   (let ((eww-bookmarks (seq-filter (lambda (b) (plist-get b :mark)) eww-bookmarks)))
+    (eww-list-bookmarks)))
+
+(defun ambrevar/eww-bookmarks-list-by-tags (&optional arg)
+  "Return bookmarks matching one of the specified tags.
+With prefix argument or ARG, bookmarks much match all tags."
+  (let ((tag-list (delq nil (mapcar (lambda (b) (plist-get b :tags)) eww-bookmarks))))
+    (seq-uniq (mapcar 'append tag-list))
+    (let ((tags (completing-read-multiple "Tags for bookmark (comma separated): " tag-list)))
+      (seq-filter (lambda (b)
+                    (if arg
+                        (null (seq-difference tags (plist-get b :tags)))
+                      (seq-intersection tags (plist-get b :tags))))
+                  eww-bookmarks))))
+
+(defun ambrevar/eww-bookmarks-by-tags (&optional arg)
+  "Display bookmarks matching one of the specified tags.
+With prefix argument or ARG, bookmarks much match all tags."
+  (interactive "P")
+  (let ((eww-bookmarks (ambrevar/eww-bookmarks-list-by-tags arg)))
     (eww-list-bookmarks)))
 
 (provide 'init-eww)
