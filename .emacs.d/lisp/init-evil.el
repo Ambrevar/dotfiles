@@ -220,6 +220,15 @@
 ;; EWW
 (defun ambrevar/evil-eww (mode _mode-keymaps &rest _rest)
   (when (eq mode 'eww)
+    (evil-define-key 'operator eww-mode-map
+      "t" '(menu-item
+            ""
+            nil
+            :filter (lambda (&optional _)
+                      (when (memq evil-this-operator
+                                  evil-collection-yank-operators)
+                        (setq evil-inhibit-operator t)
+                        #'ambrevar/eww-copy-page-title))))
     (evil-define-key 'normal eww-mode-map "O" 'ambrevar/eww-open-in-new-buffer)
     (evil-define-key 'normal eww-mode-map "[" 'ambrevar/eww-previous-url)
     (evil-define-key 'normal eww-mode-map "]" 'ambrevar/eww-next-url)))
