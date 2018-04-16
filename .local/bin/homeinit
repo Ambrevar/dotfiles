@@ -130,6 +130,7 @@ if command -v emacs >/dev/null 2>&1; then
 	fi
 	echo "==> Emacs extra packages"
 	mkdir -pv ~/.emacs.d/site-lisp
+	git_update https://github.com/emacs-helm/helm-eww ~/.emacs.d/site-lisp/helm-eww
 fi
 
 echo "==> Go path"

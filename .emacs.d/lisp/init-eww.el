@@ -13,7 +13,7 @@
 ;; Alternative: use special syntax in prompt, like find-files does.  This does
 ;; not allow for listing tags though.
 
-(require 'package-helm-eww nil t)
+(require 'helm-eww nil t)
 
 (setq eww-bookmarks-directory "~/personal/bookmarks"
       eww-download-directory "~/temp")
@@ -168,13 +168,6 @@ word(s) will be searched for via `eww-search-prefix'."
 ;; TODO: Fix quickmarks bindings.  Or maybe just display the quickmarks buffer
 ;; and start `eww', which follows the quickmarks when first word is the mark.
 ;; TODO: Merge qutebrowser quickmarks.
-;; TODO: Implement search engines.  Then merge them too.
-;; If only one word is found as a non-ambiguous mark, use it as quickmark.
-;; If several words and first word is a non-ambiguous mark where search-engine
-;; is provided, search.
-;; Search-engine is either appended if not starting with https?, or a full
-;; URL otherwise.  Append search terms like eww already does.  Use %s as a place
-;; holder.
 ;; TODO: Add bookmark editing functions such as edit title, tags, quickmark,
 ;; search-engine.  Use eww-buffers and Helm.
 (defun ambrevar/eww-add-bookmark ()
