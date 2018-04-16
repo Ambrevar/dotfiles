@@ -59,6 +59,16 @@ new buffer."
   (switch-to-buffer-other-frame (helm-eww-new-buffer candidate)))
 (put 'helm-eww-switch-other-frame 'helm-only t)
 
+(defun helm-eww-browser-with-external-browser (_candidates)
+  "Like `eww-browse-with-external-browser' with multiple URLs."
+  (dolist (c (helm-marked-candidates))
+    (eww-browse-with-external-browser
+     (if (bufferp c)
+         (with-current-buffer c
+           (plist-get eww-data :url))
+       c))))
+(put 'helm-eww-browser-with-external-browser 'helm-only t)
+
 
 (defvar helm-eww-buffers-map
   (let ((map (make-sparse-keymap)))
@@ -102,6 +112,7 @@ See `helm-eww' for more details."
     :candidates (seq-filter (lambda (b) (with-current-buffer b (derived-mode-p 'eww-mode))) (buffer-list))
     :candidate-transformer 'helm-eww-highlight-buffers
     :action '(("Switch to buffer(s)" . helm-buffer-switch-buffers)
+              ("Open URL(s) in external browser" . helm-eww-browser-with-external-browser)
               ("Switch to buffer(s) in other window `C-c o'" . helm-buffer-switch-buffers-other-window)
               ("Switch to buffer in other frame `C-c C-o'" . switch-to-buffer-other-frame)
               ("Kill buffer(s) `M-D`" . helm-kill-marked-buffers))
@@ -171,6 +182,7 @@ See `helm-eww-bookmarks' for more details."
     :candidate-transformer 'helm-eww-highlight-bookmarks
     :candidate-number-limit 1000
     :action '(("Open URL(s)" . helm-eww-switch-buffers)
+              ("Open URL(s) in external browser" . helm-eww-browser-with-external-browser)
               ("Open URL(s) in other window `C-c o'" . helm-eww-switch-other-window)
               ("Open URL in other frame `C-c C-o'" . helm-eww-switch-other-frame)
               ("Delete bookmark(s) `M-D`" . helm-eww-bookmarks-delete))
