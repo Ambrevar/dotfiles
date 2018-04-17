@@ -268,7 +268,8 @@
         desktop-save t)
   ;; Before Emacs 27, initialization needs the patch above.
   (if (< emacs-major-version 27)
-      (desktop-save-mode)
+      (let ((enable-local-variables :all))
+        (desktop-save-mode))
     (defun ambrevar/desktop-init (_frame)
       (desktop-save-mode)
       (desktop-read)
