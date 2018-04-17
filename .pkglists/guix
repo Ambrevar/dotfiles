@@ -21,10 +21,12 @@ ffmpeg
 file
 fish
 font-dejavu
+fortune-mod
 gcc
 gcc-toolchain
 gcc:lib
 gettext
+gimp
 git
 git:send-email
 glibc-utf8-locales
@@ -40,6 +42,7 @@ htop
 icecat
 idutils
 imagemagick
+inxi
 isync
 libextractor
 libtool
@@ -56,7 +59,6 @@ mpv
 mtools
 mu
 nasm
-ncdu
 nethogs
 nmap
 ntfs-3g
@@ -69,10 +71,12 @@ pavucontrol
 perl
 pinentry-emacs
 pkg-config
+powertop
 pulseaudio
 pwgen
 recutils
 rsync
+sbcl
 scrot
 setxkbmap
 speedtest-cli
