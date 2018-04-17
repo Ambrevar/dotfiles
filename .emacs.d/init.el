@@ -178,8 +178,9 @@
 (when (executable-find "guix")
   (nconc package-selected-packages '(guix))
   (defun ambrevar/init-guix ()
-    (when (string-match "\\<guix\\>" buffer-file-name)
-      (guix-devel-mode)))
+    (and buffer-file-name
+         (string-match "\\<guix\\>" buffer-file-name)
+         (guix-devel-mode)))
   (add-hook 'scheme-mode-hook 'ambrevar/init-guix))
 
 ;;; Helm
