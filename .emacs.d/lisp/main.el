@@ -254,7 +254,17 @@
   ;; Auto-load/save sessions only when running the daemon.
   ;; `server-running-p' is only useful once the daemon is started and cannot be
   ;; used for initialization.  Use `daemonp' instead.
-  (require 'desktop)
+  (when (< emacs-major-version 27)
+    ;; By default, Emacs<27 prompts for unsafe variable when loading desktop
+    ;; which stucks the daemon.  Disable this behaviour.
+    (defun ambrevar/enable-safe-local-variables ()
+      (setq enable-local-variables t))
+    (add-hook 'after-init-hook 'ambrevar/enable-safe-local-variables))
+  (require 'desktop)                    ; This adds a hook to `after-init-hook'.
+  (when (< emacs-major-version 27)
+    (defun ambrevar/enable-all-local-variables ()
+      (setq enable-local-variables :all))
+    (add-hook 'after-init-hook 'ambrevar/enable-all-local-variables))
   (when (< emacs-major-version 27)
     (load "patch-desktop"))
   (setq history-length 250
@@ -268,8 +278,7 @@
         desktop-save t)
   ;; Before Emacs 27, initialization needs the patch above.
   (if (< emacs-major-version 27)
-      (let ((enable-local-variables :all))
-        (desktop-save-mode))
+      (desktop-save-mode)
     (defun ambrevar/desktop-init (_frame)
       (desktop-save-mode)
       (desktop-read)
