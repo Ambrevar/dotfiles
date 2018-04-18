@@ -115,6 +115,7 @@
               (target "/boot/efi")))
 
  (kernel linux-nonfree)
+ (kernel-arguments '("modprobe.blacklist=pcspkr"))
  ;; (kernel-arguments '("modprobe.blacklist=nouveau"))
  ;; (kernel-arguments '("pcie_port_pm=off"))
  (firmware (cons* linux-nonfree-firmware %base-firmware))
