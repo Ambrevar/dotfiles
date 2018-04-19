@@ -51,6 +51,7 @@ lm-sensors
 lsof
 lua
 make
+man-pages
 mcron
 mediainfo
 mlocate
@@ -67,6 +68,7 @@ optipng
 opus-tools
 p7zip
 password-store
+patchelf
 pavucontrol
 perl
 pinentry-emacs
@@ -99,6 +101,7 @@ unzip
 valgrind
 vorbis-tools
 wget
+wine
 woof
 xbacklight
 xbindkeys
