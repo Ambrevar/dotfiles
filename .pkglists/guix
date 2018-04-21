@@ -26,6 +26,7 @@ gcc
 gcc-toolchain
 gcc:lib
 gettext
+ghostscript
 gimp
 git
 git:send-email
@@ -73,6 +74,7 @@ pavucontrol
 perl
 pinentry-emacs
 pkg-config
+poppler
 powertop
 pulseaudio
 pwgen
@@ -89,6 +91,7 @@ sxiv
 taglib
 tcpdump
 the-silver-searcher
+time
 tor
 translate-shell
 transmission
