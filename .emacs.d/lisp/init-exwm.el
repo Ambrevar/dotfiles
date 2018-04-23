@@ -106,7 +106,7 @@
     "Default prompt to current exwm-title"
     (interactive)
     (require 'helm-pass)
-    (helm :sources 'helm-source-pass
+    (helm :sources 'helm-pass-source-pass
           :input (cond
                   ((derived-mode-p 'eww-mode)
                    (let* ((url (replace-regexp-in-string ".*//\\([^/]*\\).*" "\\1" (eww-current-url)))
@@ -137,8 +137,10 @@
                                     helm-source-bookmarks
                                     helm-source-bookmark-set
                                     helm-source-buffer-not-found))
-  (ambrevar/define-keys helm-exwm-map "M-d" 'helm-buffer-run-kill-persistent)
-  (ambrevar/define-keys helm-exwm-map "S-<return>" 'helm-buffer-switch-other-window)
+  (ambrevar/define-keys
+   helm-exwm-map
+   "M-d" 'helm-buffer-run-kill-persistent
+   "S-<return>" 'helm-buffer-switch-other-window)
   ;; Launcher
   (exwm-input-set-key (kbd "s-r") 'helm-run-external-command)
   ;; Web browser
