@@ -153,7 +153,20 @@
  (packages (cons* nss-certs             ;for HTTPS access
                   %base-packages))
 
- (services %my-services)
+ (services (cons*
+            ;; TODO: The following service starts too soon and results in a
+            ;; kernel panic because /sys/... is not found.
+            ;; (simple-service 'my-/sys-tweaks activation-service-type
+            ;;                 ;; >> echo '1' > '/sys/module/snd_hda_intel/parameters/power_save';
+            ;;                 #~(call-with-output-file "/sys/module/snd_hda_intel/parameters/power_save"
+            ;;                     (lambda (port)
+            ;;                       (display "1" port)))
+            ;;                 ;; >> echo 'auto' > '/sys/bus/usb/devices/1-6/power/control';
+            ;;                 ;; >> echo 'auto' > '/sys/bus/usb/devices/1-7/power/control';
+            ;;                 ;; >> echo 'auto' > '/sys/bus/i2c/devices/i2c-2/device/power/control';
+            ;;                 ;; >> echo 'auto' > '/sys/bus/pci/devices/0000:02:00.0/power/control';
+            ;;                 )
+            %my-services))
 
  ;; Allow resolution of '.local' host names with mDNS.
  (name-service-switch %mdns-host-lookup-nss))
