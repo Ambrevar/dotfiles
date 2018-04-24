@@ -27,6 +27,8 @@ xcape -e 'Control_L=Escape'
 numlockx on
 # xinput disable "SynPS/2 Synaptics TouchPad"
 xbindkeys
+## Turn off the bell.
+xset -b
 
 ## Lock screen on sleep.
 # xss-lock slock &
