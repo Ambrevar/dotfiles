@@ -3,7 +3,10 @@
 	XF86AudioLowerVolume
 "amixer set Master 5%+"
 	XF86AudioRaiseVolume
-"amixer set Master toggle"
+## Toggling ALSA master also mutes other channels (e.g. speakers) when
+## Pulseaudio is running.
+# "amixer set Master toggle"
+"pactl set-sink-mute @DEFAULT_SINK@ toggle"
 	XF86AudioMute
 
 ## Screen brightness
