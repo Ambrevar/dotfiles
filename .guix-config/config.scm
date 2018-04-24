@@ -148,10 +148,6 @@
                 (supplementary-groups '("wheel" "netdev" ; netdev is needed for networking.
                                         "audio" "video"))
                 (home-directory "/home/ambrevar"))
-               (user-account
-                (name "ftp")
-                (group "nogroup")
-                (home-directory "/home/ftp"))
                %base-user-accounts))
 
  (packages (cons* nss-certs             ;for HTTPS access
