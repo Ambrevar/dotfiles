@@ -22,6 +22,7 @@
     (kbd "M-L") #'lispy-move-right      ; lispy-up-slurp?
     (kbd "C-x C-e") #'lispy-eval
     (kbd "C-j") #'lispy-split
+    (kbd "S-C-j") #'lispy-join
     (kbd "C-1") #'lispy-describe-inline
     (kbd "C-2") #'lispy-arglist-inline
     (kbd "C-4") #'lispy-x
@@ -42,14 +43,15 @@
     ")" 'lispy-right-nostring)
   (lispyville--define-key '(motion normal)
     ;; "q" 'lispy-ace-paren              ; REVIEW: Conflicts with magit-blame's quit.  Fixed?
-    "q" 'lispy-teleport
-    "f" 'lispy-ace-paren
+    "Q" 'special-lispy-teleport         ; TODO: Go to closest parenthesis if not on one.
+    "q" 'lispy-ace-paren
+    ;; "f" 'lispy-ace-paren
     ;; "Q" 'lispy-ace-symbol
-    "t" 'lispy-ace-char
+    ;; "t" 'lispy-ace-char
     "Y" 'lispy-new-copy
     (kbd "S-<return>") 'lispy-eval-other-window
     ;; "p" 'lispy-paste
-    (kbd "M-C") 'lispy-clone            ; TODO: Go to closest parenthesis if not on one.  forward-char + lispyville-previous-opening?
+    (kbd "M-C") 'lispy-clone            ; TODO: Go to closest parenthesis if not on one.  forward-char + lispyville-backward-up-list?
     "D" 'lispy-kill)
 
   (lispy-define-key lispy-mode-map-special "C" 'lispy-clone))
