@@ -30,6 +30,8 @@ ${if_match ${to_bytes ${diskio nvme0n1}} > 1048576}^fg(grey)nvme0n1:^fg(DeepSkyB
 ${if_match ${to_bytes ${diskio sda}} > 1048576}^fg(grey)sda:^fg(DeepSkyBlue)${diskio sda}${endif} \
 ${if_match ${to_bytes ${diskio sdb}} > 1048576}^fg(grey)sdb:^fg(DeepSkyBlue)${diskio sdb}${endif} \
 ${if_match ${to_bytes ${diskio sdc}} > 1048576}^fg(grey)sdc:^fg(DeepSkyBlue)${diskio sdc}${endif} \
+${if_match ${to_bytes ${fs_free /}} < 1073741824}^fg(grey)/:^fg(Red)${fs_free /}${endif} \
+${if_match ${to_bytes ${fs_free /home}} < 1073741824}^fg(grey)/home:^fg(Red)${fs_free /home}${endif} \
 ]]
 
 -- TODO: Emms current track:
