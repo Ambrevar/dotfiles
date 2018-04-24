@@ -8,10 +8,11 @@
    (let* ((seconds-in-a-day (* 60 60 24))
           (currency-time (stat:mtime (stat currency-file))))
      (if (< currency-time (- current-time seconds-in-a-day))
-         (next-second)
+         ;; Use next-minute to avoid overwhelming the system in case of failure.
+         (next-minute)
        ;; TODO: The following does not work while it should.  Report upstream.
        ;; (next-hour-from (next-day) (list (tm:hour (localtime (current-time)))))
-       (+ (next-second) (- 86400 (- current-time currency-time))))))
+       (+ (next-minute) (- 86400 (- current-time currency-time))))))
  ;; A string is nicer than Scheme code for `mcron --schedule' output.
  ;; Otherwise we could return '(system* "units_cur" currency-file)
  ;; and use job's 3rd argument as a description.
