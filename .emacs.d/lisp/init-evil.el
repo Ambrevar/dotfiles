@@ -234,4 +234,8 @@
     (evil-define-key 'normal eww-mode-map "]" 'ambrevar/eww-next-url)))
 (add-hook 'evil-collection-setup-hook 'ambrevar/evil-eww)
 
+(with-eval-after-load 'helm-eww
+  (evil-define-key '(insert normal) helm-eww-buffers-map (kbd "S-<return>") 'helm-buffer-switch-other-window)
+  (evil-define-key '(insert normal) helm-eww-bookmarks-map (kbd "S-<return>") 'helm-buffer-switch-other-window))
+
 (provide 'init-evil)
