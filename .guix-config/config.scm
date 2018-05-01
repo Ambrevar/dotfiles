@@ -30,14 +30,17 @@
   (package
     (inherit linux-libre)
     (name "linux-nonfree")
-    (version "4.14.33")
+    ;; (version "4.14.33")
     (source
      (origin
       (method url-fetch)
-      (uri (linux-nonfree-urls version))
+      (uri (linux-nonfree-urls
+            ;; version
+            (package-version linux-libre)))
       (sha256
-       (base32 "0c88p5vly63jsz62ff7971zl6vqzzbv5q519gi8z17ld66sf5063" ; 4.14.33
-        ;; "1hv00176njm4g9m1aj92lvhwqn75c46qwsglsmx95ivbr9qc58av" ; 4.16.1
+       (base32
+        ;; "0c88p5vly63jsz62ff7971zl6vqzzbv5q519gi8z17ld66sf5063" ; 4.14.33
+        "1hv00176njm4g9m1aj92lvhwqn75c46qwsglsmx95ivbr9qc58av" ; 4.16.1
         ))))))
 
 (define-public linux-nonfree-firmware
@@ -103,7 +106,7 @@
 
 (operating-system
  (host-name "mimimi")
- (timezone "Asia/Kolkata")
+ (timezone "Europe/Paris")
  (locale "en_US.utf8")
 
  ;; Use the UEFI variant of GRUB with the EFI System
