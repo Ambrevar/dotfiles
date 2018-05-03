@@ -84,9 +84,9 @@
                   "ACTION==\"add\", SUBSYSTEM==\"backlight\", "
                   "RUN+=\"/run/current-system/profile/bin/chmod g+w /sys/class/backlight/%k/brightness\"")))
 
-;; (define my-xorg-modules
-;;   ;; Everything but Nouveau.
-;;   (delete xf86-video-nouveau %default-xorg-modules))
+(define my-xorg-modules
+  ;; Everything but Nouveau.
+  (delete xf86-video-nouveau %default-xorg-modules))
 
 ;; Use the "desktop" services, which include the X11
 ;; log-in service, networking with Wicd, and more.
@@ -102,7 +102,7 @@
                       (slim-configuration
                        (inherit config)
                        (auto-login? #f)
-                       ;; (startx (xorg-start-command #:modules my-xorg-modules))
+                       (startx (xorg-start-command #:modules my-xorg-modules))
                        ;; TODO: Can't slim pre-fill the username?
                        (default-user "ambrevar")))))
 
@@ -120,7 +120,7 @@
               (target "/boot/efi")))
 
  (kernel linux-nonfree)
- (kernel-arguments '("modprobe.blacklist=pcspkr"))
+ ;; (kernel-arguments '("modprobe.blacklist=pcspkr"))
  ;; (kernel-arguments '("modprobe.blacklist=nouveau"))
  ;; (kernel-arguments '("pcie_port_pm=off"))
  (firmware (cons* linux-nonfree-firmware %base-firmware))
