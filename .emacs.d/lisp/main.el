@@ -74,7 +74,7 @@
   (if (>= emacs-major-version 26)
       (add-hook hook 'display-line-numbers-mode)
     (add-hook hook 'linum-mode)))
-(setq display-line-numbers-type 'relative)
+(setq display-line-numbers-type 'visual)
 ;;; Emacs-nox does not display a fringe after the linum: Setting linum-format in
 ;;; linum-before-numbering-hook is not the right approach as it will change the
 ;;; type of linum-format in the middle. See linum-update-window.
