@@ -12,6 +12,7 @@
              (gnu services xorg)
              (gnu services networking)
              (gnu packages admin)
+             (gnu packages xorg)
              ((guix licenses) #:prefix license:)
              (guix packages)
              (srfi srfi-1))
@@ -30,17 +31,18 @@
   (package
     (inherit linux-libre)
     (name "linux-nonfree")
-    ;; (version "4.14.33")
+    (version "4.14.33")
     (source
      (origin
       (method url-fetch)
       (uri (linux-nonfree-urls
-            ;; version
-            (package-version linux-libre)))
+            version
+            ;; (package-version linux-libre)
+            ))
       (sha256
        (base32
-        ;; "0c88p5vly63jsz62ff7971zl6vqzzbv5q519gi8z17ld66sf5063" ; 4.14.33
-        "1hv00176njm4g9m1aj92lvhwqn75c46qwsglsmx95ivbr9qc58av" ; 4.16.1
+        "0c88p5vly63jsz62ff7971zl6vqzzbv5q519gi8z17ld66sf5063" ; 4.14.33
+        ;; "0jwa2r3gpn4ahy38730b7g4xzavfqwxxwgyfhpn5ssvzsc4934gs" ; 4.16.6
         ))))))
 
 (define-public linux-nonfree-firmware
