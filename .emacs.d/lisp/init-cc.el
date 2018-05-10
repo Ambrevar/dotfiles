@@ -102,6 +102,10 @@ restored."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Options
 
+;; We don't want semantic in Scheme and others.
+(setq semantic-new-buffer-setup-functions
+      '((c-mode . semantic-default-c-setup)
+        (c++-mode . semantic-default-c-setup)))
 ;;; Make sure Semanticdb folders is set before starting semantic.
 (semantic-mode 1)
 
