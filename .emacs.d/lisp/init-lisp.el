@@ -94,7 +94,7 @@
                       :strike-through t))
 
 ;;; Common LISP.
-(setq inferior-lisp-program "clisp")    ; TODO: Use sbcl instead?
+(setq inferior-lisp-program "sbcl")
 
 ;;; Scheme.
 (setq geiser-repl-skip-version-check-p t
