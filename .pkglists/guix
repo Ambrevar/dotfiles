@@ -1,8 +1,10 @@
+acpi
 alsa-utils
 aspell
 aspell-dict-en
 aspell-dict-fr
 atool
+bzip2
 chromaprint
 cloc
 conky
@@ -13,6 +15,7 @@ dtach
 dzen
 e2fsprogs
 emacs
+electrum
 emacs-emms
 emacs-guix
 emacs-pdf-tools
@@ -30,6 +33,7 @@ ghostscript
 gimp
 git
 git:send-email
+glib:bin
 glibc-utf8-locales
 gnu-standards
 gnupg
@@ -38,10 +42,16 @@ go:doc
 go:tests
 graphviz
 gtypist
+guile
+guile-gnome
+guile-opengl
 guile-readline
+guile-sdl
+guile-sdl2
+guile:debug
+hicolor-icon-theme
 htop
 icecat
-idutils
 imagemagick
 inxi
 isync
@@ -74,6 +84,7 @@ pavucontrol
 perl
 pinentry-emacs
 pkg-config
+ploticus
 poppler
 powertop
 pulseaudio
@@ -83,6 +94,7 @@ rsync
 sbcl
 scrot
 setxkbmap
+sicp
 speedtest-cli
 stow
 strace
