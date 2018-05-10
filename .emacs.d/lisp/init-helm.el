@@ -132,6 +132,11 @@
   (define-key eshell-mode-map (kbd "M-s f") 'helm-eshell-prompts-all))
 (add-hook 'eshell-mode-hook 'ambrevar/helm/eshell-set-keys)
 
+;;; Comint
+(defun ambrevar/helm/comint-set-keys ()
+  (define-key comint-mode-map (kbd "M-p") 'helm-comint-input-ring))
+(add-hook 'comint-mode-hook 'ambrevar/helm/comint-set-keys)
+
 ;;; TODO: Use helm-ff history in helm file completion.
 ;;; https://github.com/emacs-helm/helm/issues/1118
 ;; (define-key helm-read-file-map (kbd "M-p") 'helm-ff-run-switch-to-history)
