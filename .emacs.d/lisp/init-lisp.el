@@ -95,9 +95,13 @@
 
 ;;; Common LISP.
 (setq inferior-lisp-program "sbcl")
+;; (add-hook 'slime-mode-hook
+;;           (lambda ()
+;;             (unless (slime-connected-p)
+;;               (save-excursion (slime)))))
 
 ;;; Scheme.
-(setq geiser-repl-skip-version-check-p t
-      geiser-mode-start-repl-p t)
+;; (setq geiser-repl-skip-version-check-p t
+;;       geiser-mode-start-repl-p t)
 
 (provide 'init-lisp)
