@@ -229,7 +229,7 @@
 (add-hook 'js-mode-hook (lambda () (defvaralias 'js-indent-level 'tab-width)))
 
 ;;; Lisp
-(nconc package-selected-packages '(lispy lispyville rainbow-delimiters))
+(nconc package-selected-packages '(lispy lispyville rainbow-delimiters geiser slime))
 (with-eval-after-load 'lisp-mode (require 'init-lisp))
 
 ;;; Lua
