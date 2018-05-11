@@ -143,6 +143,10 @@
 (nconc package-selected-packages '(fish-completion bash-completion
                                                    pcomplete-extension pcmpl-args pcmpl-git))
 (nconc package-selected-packages '(esh-autosuggest))
+(with-eval-after-load 'bash-completion
+  ;; REVIEW: Upstream should set path dynamically.
+  ;; https://github.com/szermatt/emacs-bash-completion/issues/33
+  (setq bash-completion-prog (executable-find "bash")))
 (when (and (executable-find "fish")
            (require 'fish-completion nil t))
   (setq fish-completion-fallback-on-bash-p t)
@@ -450,6 +454,10 @@
 ;;; Window manager
 (nconc package-selected-packages '(exwm helm-exwm))
 (nconc package-selected-packages '(pulseaudio-control))
+(with-eval-after-load 'pulseaudio-control
+  ;; REVIEW: Upstream should set path dynamically.
+  ;; https://github.com/flexibeast/pulseaudio-control/issues/7
+  (setq pulseaudio-control-pactl-path (executable-find "pactl")))
 (when (require 'exwm nil t) (require 'init-exwm))
 
 ;;; XML / SGML
