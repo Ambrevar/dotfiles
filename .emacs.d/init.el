@@ -146,6 +146,7 @@
 (with-eval-after-load 'bash-completion
   ;; REVIEW: Upstream should set path dynamically.
   ;; https://github.com/szermatt/emacs-bash-completion/issues/33
+  ;; Done.  Need to update Guix package.
   (setq bash-completion-prog (executable-find "bash")))
 (when (and (executable-find "fish")
            (require 'fish-completion nil t))
