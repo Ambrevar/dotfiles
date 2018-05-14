@@ -39,5 +39,10 @@ fi
 
 ## Guix
 if command -v guix >/dev/null 2>&1; then
-	guix package -I | awk '{if($3!="out") {print $1 ":" $3} else {print $1}}' | LC_ALL=C sort >"$PKG_ROOT/guix"
+	cat<<EOF>"$PKG_ROOT/guix"
+(specifications->manifest
+ '(
+EOF
+	guix package -I | awk '{printf("\"%s", $1); if($3!="out") {printf("%s", ":" $3)}; print "\""}' | LC_ALL=C sort >>"$PKG_ROOT/guix"
+	echo "))" >>"$PKG_ROOT/guix"
 fi
