@@ -137,6 +137,8 @@
 (with-eval-after-load 'man
   (set-face-attribute 'Man-underline nil :foreground (face-foreground 'font-lock-string-face) :underline nil)
   (set-face-attribute 'Man-overstrike nil :foreground (face-foreground 'font-lock-comment-face) :weight 'normal))
+(with-eval-after-load 'woman
+  (set-face-foreground 'woman-bold (face-foreground 'font-lock-comment-face)))
 
 ;;; Term
 ;;; Use lighter blue.

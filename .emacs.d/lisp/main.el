@@ -381,4 +381,6 @@
 (when (>= emacs-major-version 26)
   (setq x-wait-for-event-timeout nil))
 
+(setq woman-fill-column fill-column)
+
 (provide 'main)
