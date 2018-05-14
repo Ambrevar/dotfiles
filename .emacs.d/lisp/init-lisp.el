@@ -35,7 +35,7 @@
   (lispyville--define-key 'insert
     (kbd "<backspace>") 'lispy-delete-backward
     ";" 'lispy-comment
-    ":" 'lispy-colon
+    ;; ":" 'lispy-colon ; The colon is not always used to delimit keys.
     "'" 'lispy-tick
     "`" 'lispy-backtick
     "\"" 'lispy-quotes
