@@ -240,7 +240,7 @@ See `eshell' for the numeric prefix ARG."
 
 ;;; Auto-suggestion
 (when (require 'esh-autosuggest nil t)
-  (setq esh-autosuggest-delay 0.5)
+  (setq esh-autosuggest-delay 0.75)
   (add-hook 'eshell-mode-hook 'esh-autosuggest-mode)
   (define-key esh-autosuggest-active-map (kbd "<tab>") 'company-complete-selection)
   (when (require 'helm-config nil t)
