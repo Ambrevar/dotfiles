@@ -61,6 +61,9 @@
  helm-M-x-fuzzy-match t
  helm-recentf-fuzzy-match t
 
+ ;; Use woman instead of man.
+ helm-man-or-woman-function nil
+
  ;; https://github.com/emacs-helm/helm/issues/1910
  helm-buffers-end-truncated-string "…"
  helm-buffer-max-length 22
