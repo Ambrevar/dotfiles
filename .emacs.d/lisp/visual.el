@@ -12,7 +12,7 @@
 ;;; Font size
 (when (fboundp 'tool-bar-mode)
   ;; (set-face-attribute 'default nil :height 100)
-  (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-10")))
+  (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-12")))
 
 ;;; More readable but more space consuming; try on big screens.
 ;; (setq-default line-spacing 1)
