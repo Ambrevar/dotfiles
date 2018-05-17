@@ -54,8 +54,8 @@
   #:use-module (srfi srfi-1)
   #:use-module (ice-9 match))
 
-;; TODO: Use local dir instead.
 ;; TODO: Include sources.
+
 (define-public emacs-prerelease
   (package
     (name "emacs-prerelease")
@@ -180,3 +180,25 @@ documentation on all aspects of the system, from basic editing to writing
 large Lisp programs.  It has full Unicode support for nearly all human
 languages.")
     (license license:gpl3+)))
+
+;; TODO: emacs-dev fails unless `make clean` was run.  There is an issue with
+;; timestamps which makes `make` rebuild everything while the "source" folder is
+;; read-only.
+(define-public emacs-dev
+  (package
+    (inherit emacs)
+    (name "emacs-dev")
+    (version "27.0.0")                  ; TODO: Use git version.
+    (source (local-file "/home/ambrevar/projects/emacs" #:recursive? #t)) ; TODO: Use HOME.
+    ;; (build-system trivial-build-system)
+    (arguments
+     `(#:tests? #f               ; TODO: Enable tests?  Need to fix tramp first.
+                #:phases
+                (modify-phases %standard-phases
+                  (delete 'reset-gzip-timestamps) ; TODO: Why does this fail?
+                  (delete 'build)
+                  ;; (delete 'configure)
+                  ;; TODO: Delete "check"?
+                  )))
+    (synopsis "Emacs (development version)")
+    (license license:lgpl3+)))
