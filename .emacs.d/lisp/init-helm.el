@@ -263,7 +263,7 @@ With prefix argument, UPDATE the databases."
                          (lambda (db)
                            (ambrevar/helm-locate-create-or-update-db db (file-name-directory db) update))
                          (apply 'append (mapcar
-                                         (lambda (root) (file-expand-wildcards (concat root "/*/locate.db")))
+                                         (lambda (root) (ignore-errors (file-expand-wildcards (concat root "/*/locate.db"))))
                                          (list (concat "/run/media/" (user-login-name)) "/media")))))
                 ":")
      nil (thing-at-point 'filename))))
