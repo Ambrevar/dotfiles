@@ -33,6 +33,7 @@ Default to unread messages if the header buffer does not already exist."
  mu4e-maildir "~/.cache/mail"
  mu4e-get-mail-command "mbsync -a"
  mu4e-update-interval 90
+ mu4e-headers-auto-update nil        ; Don't refresh so that we don't lose the current filter upon, e.g. reading e-mails.
  mu4e-change-filenames-when-moving t ; Preferred for mbsync according to the man page.
 
  ;; SMTP
