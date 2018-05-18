@@ -45,9 +45,16 @@ fi
 echo "==> GPG"
 if [ -d ~/.gnupg ]; then
 	chmod go-rwx ~/.gnupg ~/.gnupg/*
-	[ -e "$SOURCEDIR" ] || git clone git@gitlab.com:Ambrevar/personal
-	mkdir ~/.password-store
-	[ -e ~/.password-store ] || git clone git@gitlab.com:Ambrevar/password-store ~/.password-store
+	if [ -e "$SOURCEDIR" ]; then
+		git -C "$SOURCEDIR" pull
+	else
+		git clone git@gitlab.com:Ambrevar/personal
+	fi
+	if [ -e ~/.password-store ]; then
+		git -C ~/.password-store pull
+	else
+		git clone git@gitlab.com:Ambrevar/password-store ~/.password-store
+	fi
 else
 	echo "~/.gnupg not found."
 fi
@@ -59,7 +66,8 @@ done
 
 echo "==> dotfiles"
 if [ -e ~/dotfiles ]; then
-	git remote origin set-url git@github.com:Ambrevar/dotfiles
+	git -C ~/dotfiles remote set-url origin git@github.com:Ambrevar/dotfiles
+	git -C ~/dotfiles pull
 else
 	git clone git@github.com:Ambrevar/dotfiles
 fi
@@ -95,6 +103,8 @@ if command -v pacman >/dev/null 2>&1; then
 	if [ -n "$pacman_list" ]; then
 		sudo pacman --noconfirm -Rs "$pacman_list"
 	fi
+elif command -v guix >/dev/null 2>&1; then
+	guix package --manifest=~/.pkglists/guix
 fi
 
 echo "==> Bookmarks"
@@ -147,9 +157,8 @@ if command -v emacs >/dev/null 2>&1; then
 	echo "==> Emacs extra packages"
 	mkdir -pv ~/.local/share/emacs/site-lisp
 	for i in ~/.local/share/emacs/site-lisp/*; do
-		pushd "$i"
-		git pull
-		popd
+		echo "$i"
+		git -C "$i" pull
 	done
 fi
 
