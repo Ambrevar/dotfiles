@@ -7,8 +7,8 @@ Usage: ${0##*/} [OPTIONS]
 This script will enable all HDMI videos, passing xrandr OPTIONS to each one of
 them.
 
-On Linux, To do this automatically when the cable is plugged, add the following
-udev rule:
+To do this automatically when the cable is plugged, add the following
+udev rule (Linux only):
 
   $ cat /etc/udev/rules.d/hdmi.rules
   SUBSYSTEM=="drm", ACTION=="change", RUN+="/bin/sh $0"
