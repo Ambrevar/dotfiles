@@ -31,7 +31,7 @@ xbindkeys
 xset -b
 
 ## Lock screen on sleep.
-# xss-lock slock &
+xss-lock slock &
 
 ## PulseAudio
 start-pulseaudio-x11 &
