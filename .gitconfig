@@ -37,7 +37,7 @@ smtpencryption = tls
 smtpserver = smtp.gmail.com
 smtpuser = ambrevar@gmail.com
 smtpserverport = 587
-to = guix-patches@gnu.org
+# to = guix-patches@gnu.org
 suppresscc = author
 # sendemail.confirm = auto
 # aliasfiletype = mutt
@@ -51,3 +51,5 @@ viewer = catman
 
 [man "catman"]
 cmd = man -P cat
+[credential]
+	helper = netrc
