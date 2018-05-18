@@ -145,6 +145,12 @@
                        (title 'uuid)
                        (mount-point "/boot/efi")
                        (type "vfat"))
+                      (file-system
+                       (mount-point "/tmp")
+                       (device "none")
+                       (title 'device)
+                       (type "tmpfs")
+                       (check? #f))
                       %base-file-systems))
 
  (users (cons* (user-account
