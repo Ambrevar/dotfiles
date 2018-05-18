@@ -81,6 +81,10 @@ fi
 echo "==> 'temp' folder"
 mkdir -pv "$HOME/temp"
 
+echo "==> '.local' folder"
+mkdir -pv "$HOME/.local/bin"
+mkdir -pv "$HOME/.local/share"
+
 echo "==> Bookmarks"
 mkdir -pv "$XDG_CONFIG_HOME/qutebrowser/bookmarks"
 lnn "$SOURCEDIR/bookmarks/bookmarks" "$XDG_CONFIG_HOME/qutebrowser/bookmarks/urls"
@@ -123,31 +127,18 @@ if ! command -v guix >/dev/null 2>&1; then
 fi
 
 if command -v emacs >/dev/null 2>&1; then
+	echo "==> '.emacs.d' folder"
+	mkdir -pv "$HOME/.emacs.d"
+
+	## TODO: Don't load on Guix once all packages are ready.
 	mkdir -pv "$HOME/.cache/emacs/"
 	if $OPT_UPDATE; then
 		echo "==> Emacs ELPA packages"
 		yes | emacs --batch -l ~/.emacs.d/init.el --eval '(progn (package-refresh-contents) (package-install-selected-packages))'
 	fi
 	echo "==> Emacs extra packages"
-	mkdir -pv ~/.emacs.d/site-lisp
-	git_update https://github.com/emacs-helm/helm-eww ~/.emacs.d/site-lisp/helm-eww
-fi
-
-echo "==> Go path"
-mkdir -pv "$HOME/go" "$HOME/.go-tools"
-if command -v go >/dev/null 2>&1; then
-	echo "==> Go extra dev tools"
-	export GOPATH="$HOME/.go-tools"
-	export PATH="$PATH:$GOPATH/bin"
-
-	go get -v $OPT_GO -ldflags "-s -w" github.com/alecthomas/gometalinter && gometalinter -i $OPT_GO
-	strip -s "$GOPATH"/bin/*
-
-	## See https://dominik.honnef.co/posts/2014/12/an_incomplete_list_of_go_tools/.
-	## https://dominik.honnef.co/go/
-	go get -v $OPT_GO -ldflags "-s -w" \
-		github.com/nsf/gocode \
-		github.com/rogpeppe/godef
+	mkdir -pv ~/.local/share/emacs/site-lisp
+	# git_update https://github.com/emacs-helm/helm-eww ~/.local/share/emacs/site-lisp
 fi
 
 echo "==> Mail"
