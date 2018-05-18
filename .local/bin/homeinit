@@ -1,5 +1,5 @@
 #!/bin/sh
-## Home session initialization.
+## Initialize and update user profile.
 
 if [ "$1" = "-h" ]; then
 	cat <<EOF>&2
@@ -16,10 +16,8 @@ EOF
 fi
 
 OPT_UPDATE=true
-OPT_GO="-u"
 if [ "$1" = "-u" ]; then
 	OPT_UPDATE=false
-	OPT_GO=""
 	shift
 fi
 
@@ -37,16 +35,37 @@ lnn() {
 	fi
 }
 
-## git-update <repo> <dest-folder>
-git_update() {
-	if [ -e "$2" ]; then
-		pushd "$2"
-		git pull
-		popd
-	else
-		git clone "$1" "$2"
-	fi
-}
+echo "==> Initial packages"
+if command -v pacman >/dev/null 2>&1; then
+	sudo pacman --noconfirm -S --needed gnupg git stow
+elif command -v guix >/dev/null 2>&1; then
+	guix package --install gnupg git stow
+fi
+
+echo "==> GPG"
+if [ -d ~/.gnupg ]; then
+	chmod go-rwx ~/.gnupg ~/.gnupg/*
+	[ -e "$SOURCEDIR" ] || git clone git@gitlab.com:Ambrevar/personal
+	mkdir ~/.password-store
+	[ -e ~/.password-store ] || git clone git@gitlab.com:Ambrevar/password-store ~/.password-store
+else
+	echo "~/.gnupg not found."
+fi
+
+echo "==> Persistent folders"
+for i in .emacs.d .local/share projects temp; do
+	mkdir -pv "$HOME/$i"
+done
+
+echo "==> dotfiles"
+if [ -e ~/dotfiles ]; then
+	git remote origin set-url git@github.com:Ambrevar/dotfiles
+else
+	git clone git@github.com:Ambrevar/dotfiles
+fi
+pushd ~/dotfiles
+stow -v .
+popd
 
 echo "==> System packages"
 if command -v pacman >/dev/null 2>&1; then
@@ -78,27 +97,18 @@ if command -v pacman >/dev/null 2>&1; then
 	fi
 fi
 
-echo "==> 'temp' folder"
-mkdir -pv "$HOME/temp"
-
-echo "==> '.local' folder"
-mkdir -pv "$HOME/.local/bin"
-mkdir -pv "$HOME/.local/share"
-
 echo "==> Bookmarks"
 mkdir -pv "$XDG_CONFIG_HOME/qutebrowser/bookmarks"
 lnn "$SOURCEDIR/bookmarks/bookmarks" "$XDG_CONFIG_HOME/qutebrowser/bookmarks/urls"
 lnn "$SOURCEDIR/bookmarks/quickmarks" "$XDG_CONFIG_HOME/qutebrowser/"
 
-echo "==> 'projects' folder"
-mkdir -pv "$HOME/projects"
-
-## Only build latest Emacs if not on Guix.
-if ! command -v guix >/dev/null 2>&1; then
-	if ! command -v emacs >/dev/null 2>&1 || \
+if ! command -v emacs >/dev/null 2>&1 || \
 		 [ $(emacs --quick --batch --eval '(message "%s" emacs-major-version)' 2>&1) -lt 26 ]; then
-		pushd "$HOME/projects"
-		git clone https://git.savannah.gnu.org/git/emacs.git
+	pushd "$HOME/projects"
+	[ -e emacs ] || git clone https://git.savannah.gnu.org/git/emacs.git
+	if command -v guix >/dev/null 2>&1; then
+		guix package --install emacs-dev
+	else
 		mkdir -p ../emacs-build
 		cd ../emacs-build
 		../emacs/configure \
@@ -127,32 +137,32 @@ if ! command -v guix >/dev/null 2>&1; then
 fi
 
 if command -v emacs >/dev/null 2>&1; then
-	echo "==> '.emacs.d' folder"
-	mkdir -pv "$HOME/.emacs.d"
-
-	## TODO: Don't load on Guix once all packages are ready.
 	mkdir -pv "$HOME/.cache/emacs/"
-	if $OPT_UPDATE; then
-		echo "==> Emacs ELPA packages"
-		yes | emacs --batch -l ~/.emacs.d/init.el --eval '(progn (package-refresh-contents) (package-install-selected-packages))'
+	if ! command -v guix >/dev/null 2>&1; then
+		if $OPT_UPDATE; then
+			echo "==> Emacs ELPA packages"
+			yes | emacs --batch -l ~/.emacs.d/init.el --eval '(progn (package-refresh-contents) (package-install-selected-packages))'
+		fi
 	fi
 	echo "==> Emacs extra packages"
 	mkdir -pv ~/.local/share/emacs/site-lisp
-	# git_update https://github.com/emacs-helm/helm-eww ~/.local/share/emacs/site-lisp
+	for i in ~/.local/share/emacs/site-lisp/*; do
+		pushd "$i"
+		git pull
+		popd
+	done
 fi
 
 echo "==> Mail"
 lnn "$SOURCEDIR/mail/mbsyncrc" "$HOME/.mbsyncrc"
 lnn "$SOURCEDIR/mail/authinfo.gpg" "$HOME/.authinfo.gpg"
 mkdir -pv "$HOME/.cache/mail/"
-if $OPT_UPDATE; then
-	while IFS= read -r i; do
-		## We get a shell command, so we need to evaluate it to expand "~".
-		eval "$i"
-	done <<EOF
+while IFS= read -r i; do
+	## We get a shell command, so we need to evaluate it to expand "~".
+	eval "$i"
+done <<EOF
 $(awk '/^Path/ {$1="mkdir -pv"; print}' ~/.mbsyncrc)
 EOF
-fi
 
 if $OPT_UPDATE; then
 	mbsync -aV
