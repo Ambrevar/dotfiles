@@ -15,8 +15,6 @@ udev rule (Linux only):
 EOF
 }
 
-echo date >> ~/hdmi.log
-
 XRANDR_OPTIONS="$@"
 [ -z "$XRANDR_OPTIONS" ] && XRANDR_OPTIONS="--auto --noprimary"
 
