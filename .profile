@@ -66,17 +66,6 @@ fi
 unset TEXDIR
 export BIBINPUTS=~/personal/bibliography
 
-## Plan9 (base)
-PLAN9DIR="/opt/plan9"
-if [ -d "$PLAN9DIR" ]; then
-	## No need to add to path if /etc/profile.d/plan9.sh does it already.
-	# appendpath "$PLAN9DIR/bin"
-	if [ "$(uname -o)" = "GNU/Linux" ]; then
-		appendpath "$PLAN9DIR/share/man" MANPATH
-	fi
-fi
-unset PLAN9DIR
-
 ## Go
 if [ -d "$HOME/go" ]; then
 	export GOPATH=~/go:~/.go-tools
@@ -100,19 +89,14 @@ if command -v mcron >/dev/null 2>&1; then
 	 mcron &
 fi
 
-
 ## Remove less history.
 LESSHISTFILE='-'
 
 ## Manpage.
 export MANPAGER="less -s"
 export MANWIDTH=80
-## The following options are useful for FreeBSD default 'less' command which has
-## an empty prompt. Sadly this gets messy with 'apropos'.
-# export MANPAGER="less -sP '?f%f .?m(file %i of %m) .?ltlines %lt-%lb?L/%L. .byte %bB?s/%s. ?e(END) :?pB%pB\%..%t'"
 
-## Time display (with ls command for example)
-## TODO: BSD version?
+## Time display (with ls command for example).  GNU 'ls' only.
 export TIME_STYLE=+"|%Y-%m-%d %H:%M:%S|"
 
 ## SSH-Agent
