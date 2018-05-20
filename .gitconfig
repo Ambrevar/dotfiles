@@ -2,8 +2,10 @@
 [user]
 email = ambrevar@gmail.com
 name = Pierre Neidhardt
+
 [color]
 ui = true
+
 [alias]
 b = branch -vva
 c = commit
@@ -17,8 +19,10 @@ m = mergetool
 r = remote -v
 s = status -uno
 su = status -uno -u
+
 [tar "tar.xz"]
 command = xz -c
+
 [push]
 default = current
 
@@ -51,5 +55,6 @@ viewer = catman
 
 [man "catman"]
 cmd = man -P cat
+
 [credential]
 	helper = netrc
