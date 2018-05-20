@@ -2,22 +2,13 @@
 ## This file is sourced by some DM and should not contain any desktop execution.
 
 ## Internet browsers that need X to run.
-for i in qutebrowser dwb luakit chromium google-chrome; do
+for i in next qutebrowser chromium icecat firefox google-chrome; do
 	command -v $i >/dev/null 2>&1 && export BROWSER=$i && break
 done
 
-## X resources for xterm, rxvt et al.
-## Some DM merge this automatically; merge it for manual logins.
+## X resources for xterm.
+## Some DM merge this automatically; we merge it for TTY logins.
 [ -f "$HOME/.Xresources" ] && xrdb -merge "$HOME/.Xresources"
-## Dynamic values. We could have defined the value from a variable in
-## .Xresources which we would have set with the preprocessor. But the login
-## manager may merge after sourcing this file without setting the preprocessor
-## variable, thus overwriting the value with the variable name.
-cat <<EOF | xrdb -merge
-*VT100*translations: #override Ctrl Meta <KeyPress> U: exec-formatted("$BROWSER '%t'", CLIPBOARD) \n\
-	Shift <KeyPress> Up:scroll-back(1,line,m) \n\
-	Shift <KeyPress> Down:scroll-forw(1,line,m)
-EOF
 
 ## Load custom keymap and configure input devices.
 ## Some login managers don't like output hence the redirection.
@@ -25,16 +16,18 @@ setxkbmap -layout us -variant ""
 xkbcomp -I"$HOME/.xkb" "$HOME/.xkb/usim.xkb" $DISPLAY 2>/dev/null
 xcape -e 'Control_L=Escape'
 numlockx on
-# xinput disable "SynPS/2 Synaptics TouchPad"
 xbindkeys
+## Disable the touchpad.  There might be better ways to do this.
+# xinput disable "SynPS/2 Synaptics TouchPad"
+
 ## Turn off the bell.
 xset -b
 
 ## Lock screen on sleep.
 xss-lock slock &
 
-## PulseAudio
-start-pulseaudio-x11 &
+## PulseAudio.  It should start automatically.
+# start-pulseaudio-x11 &
 
 ## Hook. Should be sourced last.
 [ -f ~/.xprofile_hook ] && . ~/.xprofile_hook
