@@ -6,6 +6,23 @@ for i in next qutebrowser chromium icecat firefox google-chrome; do
 	command -v $i >/dev/null 2>&1 && export BROWSER=$i && break
 done
 
+## ~/.local/share/applications/mimeapps.list shoud symlink to ~/.config/mimeapps.list.
+cat<<EOF > ~/.config/mimeapps.list
+[Added Associations]
+image/jpeg=sxiv.desktop
+video/H264=mpv.desktop
+text/html=$BROWSER.desktop
+application/pdf=$BROWSER.desktop
+
+[Default Applications]
+image/jpeg=sxiv.desktop
+image/png=sxiv.desktop
+text/html=$BROWSER.desktop
+application/pdf=zathura.desktop
+x-scheme-handler/http=$BROWSER.desktop
+x-scheme-handler/https=$BROWSER.desktop
+EOF
+
 ## X resources for xterm.
 ## Some DM merge this automatically; we merge it for TTY logins.
 [ -f "$HOME/.Xresources" ] && xrdb -merge "$HOME/.Xresources"
