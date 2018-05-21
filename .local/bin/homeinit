@@ -64,6 +64,7 @@ for i in .emacs.d .local/share projects temp; do
 	mkdir -pv "$HOME/$i"
 done
 
+## TODO: Remove .bash_profile?
 echo "==> dotfiles"
 if [ -e ~/dotfiles ]; then
 	git -C ~/dotfiles remote set-url origin git@github.com:Ambrevar/dotfiles
@@ -104,6 +105,8 @@ if command -v pacman >/dev/null 2>&1; then
 		sudo pacman --noconfirm -Rs "$pacman_list"
 	fi
 elif command -v guix >/dev/null 2>&1; then
+	## TODO: The manifest will uninstall other unspecified packages.  Is this
+	## really what we want?
 	guix package --manifest=~/.pkglists/guix
 fi
 
