@@ -42,3 +42,6 @@ ${if_match ${to_bytes ${fs_free /home}} < 1073741824}^fg(grey)/home:^fg(Red)${fs
 -- TODO: Change color when e-mails are not 0?
 -- TODO: Conditional display of network, sound.
 -- Probably need $lua+$eval for most of the TODOs.
+-- TODO: Calling pactl when pulseaudio is not running will fire it up, which can
+-- lead to a race condition when relogging: 4 pulseaudio processes will end up
+-- running.
