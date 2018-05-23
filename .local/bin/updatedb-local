@@ -1,5 +1,24 @@
 #!/bin/sh
 
+HOME_DB_FOLDER="$HOME/.cache"
+DB_FILE="locate.db"
+
+if [ "$1" = "-h" ]; then
+	cat <<EOF>&2
+Usage: ${0##*/} [FOLDERS]
+
+Update the 'locate' databases for the home folder, external drives and the FOLDERS arguments.
+
+For external drives, databases are only updated if found, they are not
+automatically created (unless explicitly specified in the FOLDERS arguments).
+
+- The database for the home folder is store in '$HOME_DB_FOLDER/$DB_FILE'.
+- Other databases are stored in '$MEDIA_DB' at the target root.
+
+EOF
+	exit
+fi
+
 update() {
 	[ $# -ne 2 ] && set -- "$1" "$1/locate.db"
 	echo >&2 "Updating '$2' database for '$1'..."
@@ -11,15 +30,20 @@ update() {
 		--prunenames=".git .hg .svn .cache Trash .Trash-$(id -u)"
 }
 
-update "/" "$HOME/.cache/locate.db"
+update "/" "$HOME_DB_FOLDER/$DB_FILE"
 
+## Only update external media databases.
 for i in "/run/media/$USER"/* "/media/$USER"/*; do
-	[ -d "$i" ] && update "$i"
+	[ -f "$i/$DB_FILE" ] && update "$i"
 done
 
 if [ ! -d "/media/$USER" ]; then
-	for i in "/media/$USER"/*; do
-		[ -d "$i" ] && update "$i"
+	for i in "/media"/*; do
+		[ -f "$i/$DB_FILE" ] && update "$i"
 	done
 fi
 
+## Create database for the specified folders.
+for i; do
+	[ -d "$i" ] && update "$i"
+done
