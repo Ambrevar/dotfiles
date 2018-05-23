@@ -2,8 +2,8 @@
 
 set -- "$HOME/.bash_history" \
 	"$HOME/.cache/chromium" \
-	"$HOME/.cache/emacs/" \
-	"$HOME/.cache/locatedb/" \
+	"$HOME/.cache/emacs" \
+	"$HOME/.cache/locatedb" \
 	"$HOME/.cache/qutebrowser" \
 	"$HOME/.cache/thumbnails" \
 	"$HOME/.config/gtk-2.0" \
@@ -26,11 +26,19 @@ set -- "$HOME/.bash_history" \
 
 echo "==> Files to be removed (beside trash):"
 echo "$@" | sed 's/ /\n/g'
+echo
+echo "==> Critical data:"
+for i in ~/.cache/mail ~/.password-store ~/personal ~/.ssh/*.pub; do
+	[ -e "$i" ] && echo ":: WARNING: Found '$i'."
+done
+if [ -n "$(gpg --list-secret-keys)" ]; then
+	echo ":: WARNING: Found PGP secret keys."
+fi
 
 CHOICE="N"
 echo
-echo ":: WARNING: Please close all applications before cleaning."
-echo "==> Clean home? [y/N]"
+echo ":: WARNING: Please close all applications before proceeding."
+echo -n "==> Clean home? (y/N) "
 read -r CHOICE
 case "$CHOICE" in
 Y|y) ;;
@@ -49,23 +57,5 @@ else
 fi
 
 echo
-echo "==> Remove dotfiles:"
+echo "==> Delete garbage in $HOME:"
 rm -rvf "$@"
-
-echo
-echo "==> Critical data:"
-if [ -e ~/.cache/mail ]; then
-	echo "WARNING: Found ~/.cache/mail."
-fi
-if [ -e ~/.password-store ]; then
-	echo "WARNING: Found ~/.password-store."
-fi
-if [ -e ~/personal ]; then
-	echo "WARNING: Found ~/personal."
-fi
-for key in ~/.ssh/*.pub; do
-	echo "WARNING: Found SSH keys."
-done
-if [ -n "$(gpg --list-secret-keys)" ]; then
-	echo "WARNING: Found PGP secret keys."
-fi
