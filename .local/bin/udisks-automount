@@ -1,5 +1,16 @@
 #!/bin/sh
-## From https://wiki.archlinux.org/index.php/Udisks#udevadm_monitor.
+
+if [ "$1" = "-h" ]; then
+	cat <<EOF>&2
+Usage: ${0##*/}
+
+Automatically mount external drives 'udisksctl'.
+
+From https://wiki.archlinux.org/index.php/Udisks#udevadm_monitor.
+
+EOF
+	exit
+fi
 
 pathtoname() {
 	udevadm info -p /sys/"$1" | awk -v FS== '/DEVNAME/ {print $2}'
