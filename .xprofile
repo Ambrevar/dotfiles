@@ -2,7 +2,7 @@
 ## This file is sourced by some DM and should not contain any desktop execution.
 
 ## Internet browsers that need X to run.
-for i in next qutebrowser chromium icecat firefox google-chrome; do
+for i in next qutebrowser conkeror chromium icecat firefox google-chrome; do
 	command -v $i >/dev/null 2>&1 && export BROWSER=$i && break
 done
 
