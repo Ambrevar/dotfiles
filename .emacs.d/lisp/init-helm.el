@@ -238,33 +238,26 @@ Requires `call-process-to-string' from `functions'."
   (setq helm-locate-recursive-dirs-command "find %s -type d -regex .*%s.*$"))
 
 ;; See https://github.com/emacs-helm/helm/issues/1962.
-(defun ambrevar/helm-locate-create-or-update-db (db root &optional update)
-  "See `ambrevar/helm-locate-meta'."
-  (let ((was-missing (not (file-exists-p db))))
-    (when (or update was-missing)
-      (if (= (shell-command
-              (or  (executable-find "updatedb-local")
-                   (funcall helm-locate-create-db-function
-                            db
-                            root)))
-             0)
-          (message "locatedb file `%s' %s" db (if was-missing "created" "updated"))
-        (error "Failed to %s locatedb file `%s'" (if was-missing "create" "update") db)))))
 (defun ambrevar/helm-locate-meta (&optional update)
   "Like `helm-locate' but also use the databases found in /media and /run/media.
-With prefix argument, UPDATE the databases."
+With prefix argument, UPDATE the databases with custom uptions thanks to the
+'updatedb-local' script."
   (interactive "P")
-  (let ((user-db (expand-file-name "~/.cache/locate.db")))
-    (ambrevar/helm-locate-create-or-update-db user-db "/" update)
+  (let ((user-db (expand-file-name "~/.cache/locate.db"))
+        (media-dbs (apply 'append
+                          (mapcar
+                           (lambda (root) (ignore-errors (file-expand-wildcards (concat root "/*/locate.db"))))
+                           (list (concat "/run/media/" (user-login-name))
+                                 (concat "/media/" (user-login-name))
+                                 "/media")))))
+    (when update
+      (with-temp-buffer
+        (if (= (shell-command "updatedb-local" (current-buffer)) 0)
+            (message "%s" (buffer-string))
+          (error "%s" (current-buffer)))))
     (helm-locate-with-db
      (mapconcat 'identity
-                (append (list user-db)
-                        (mapc
-                         (lambda (db)
-                           (ambrevar/helm-locate-create-or-update-db db (file-name-directory db) update))
-                         (apply 'append (mapcar
-                                         (lambda (root) (ignore-errors (file-expand-wildcards (concat root "/*/locate.db"))))
-                                         (list (concat "/run/media/" (user-login-name)) "/media")))))
+                (cons user-db media-dbs)
                 ":")
      nil (thing-at-point 'filename))))
 
