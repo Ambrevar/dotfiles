@@ -10,47 +10,21 @@ programs are gone (Awesome, cmus, fish, fzf, Mutt, newsbeuter, ranger, urxvt,
 zathura, zsh).  You can search for them before the git commit `README: The Big
 Emacs Shift`.
 
-I've also written a fair amount of scripts.  The highlights include:
-
-* asciify: convert many non-ASCII characters to their nearest ASCII counterpart.
-
-* bsdman: read *BSD man pages.
-
-* crun: quick way to execute C files.
-
-* dataindex: create index of hierarchies. Useful to keep track of folder content
-and structure.
-
-* ediff: diff with Emacs.
-
-* einfo: info viewer with Emacs.
-
-* elisp: Emacs Lisp interpreter using Emacs.
-
-* git-*: some git helper functions for sync and so on.
-
-* homeinit: initialize a new home configuration, i.e. get needed files, create
-symlinks, etc.
-
-* imagemount: a CDEmu/fuseiso wrapper that creates/deletes virtual drives
-automatically.
-
-* mover: move and merge folder into destination.
-
-* pac*: pacman helper functions.
-
-* pdfctl: PDF manipulation, e.g. extract pages, compress, resize to A4.
-
-* pkglister: generate lists of installed with pacman, FreeBSD's pkg and tlmgr
-(TeX Live manager).
-
-* tc-video-*: batch conversion of any kind of videos. Using FFmpeg.
-
 ## Setup
 
 For the list of programs I currently use, see the `.pkglists/` folder.
 
-Dotfiles can be managed in different ways.
+The `homeinit` script fully bootstraps a user profile with required files,
+folders, symlinks applications.
+
+The `homeclean` script removes trash files, caches and warns if critically
+private data is found (e.g. PGP keys).
+
+The `homesync` script updates the package lists, prints the status of all known
+projects and optionally pushes the unmerged changes upstream.
+
+As for managing a dotfiles repository, there are various approaches.
+
 
 ### Direct versioning
 
