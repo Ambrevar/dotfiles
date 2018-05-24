@@ -1,0 +1,71 @@
+#!/bin/sh
+
+if [ "$1" = "-h" ]; then
+	cat <<EOF>&2
+Usage: ${0##*/}
+
+Sync home folder:
+
+Options:
+
+  -p: Push upstream.
+
+EOF
+	exit
+fi
+
+OPT_UPDATE=false
+if [ "$1" = "-p" ]; then
+	OPT_UPDATE=true
+	shift
+fi
+
+PERSONAL_FOLDER="$HOME/personal"
+[ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME="$HOME/.config"
+[ -z "$XDG_DATA_HOME" ] && XDG_DATA_HOME="$HOME/.local/share"
+
+RED='\033[0;31m\033[1m'
+GREEN='\033[0;32m\033[1m'
+YELLOW='\033[0;33m\033[1m'
+BOLD='\033[0m\033[1m'
+NORMAL='\033[0m'
+
+section() {
+    echo -e "$GREEN==> $@$NORMAL"
+}
+message() {
+    echo -e "$YELLOW:: $@$NORMAL"
+}
+
+section "Generate package lists"
+pkglister
+
+project_status() {
+	local path=$1
+	local title=$2
+	local body=$3
+
+	[ -z "$body" ] && return
+
+	if $CHANGED; then
+		section "$path"
+		CHANGED=false
+	fi
+	message "$title"
+	echo "$body"
+}
+
+for i in ~/dotfiles ~/.password-store ~/personal ~/projects/* ~/.local/share/emacs/site-lisp/* "$@"; do
+	[ ! -d "$i/.git" ] && continue
+	CHANGED=true
+	unmerged=$(git -C "$i" log --oneline  origin/master..)
+	project_status "$i" "Unmerged commits" "$unmerged"
+	project_status "$i" "Unstaged files" "$(git -C "$i" diff --name-only)"
+	project_status "$i" "Staged files" "$(git -C "$i" diff --name-only --cached)"
+	if $OPT_UPDATE && [ -n "$unmerged" ]; then
+		message "Pushing"
+		git -C "$i" push
+	fi
+done
+
+## TODO: Generate music, etc. indexes?
