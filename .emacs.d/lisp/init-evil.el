@@ -167,6 +167,8 @@
       (kbd "<backtab>") 'shr-previous-link
       "i" 'mu4e-view-mark-for-flag
       "I" 'mu4e-view-mark-for-unflag
+      "]" 'mu4e-view-headers-next-unread
+      "[" 'mu4e-view-headers-prev-unread
       ;; "R" 'mu4e-view-mark-for-refile
       "r" 'mu4e-compose-reply
       "za" 'mu4e-view-save-attachment-multi
