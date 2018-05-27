@@ -94,7 +94,7 @@
                       :strike-through t))
 
 ;;; Common LISP.
-(setq inferior-lisp-program "sbcl")
+(setq inferior-lisp-program "sbcl --noinform")
 ;; (add-hook 'slime-mode-hook
 ;;           (lambda ()
 ;;             (unless (slime-connected-p)
