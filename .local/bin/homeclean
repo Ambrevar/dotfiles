@@ -10,8 +10,11 @@ set -- "$HOME/.bash_history" \
 	"$HOME/.config/gtk-3.0" \
 	"$HOME/.config/qutebrowser/bookmarks" \
 	"$HOME/.config/qutebrowser/quickmarks" \
+	"$HOME/.esd_auth" \
 	"$HOME/.fehbg" \
+	"$HOME/.geiser_history.*" \
 	"$HOME/.gtk-bookmarks" \
+	"$HOME/.guile_history" \
 	"$HOME/.lesshst" \
 	"$HOME/.local/share/fish" \
 	"$HOME/.local/share/qutebrowser" \
@@ -20,8 +23,11 @@ set -- "$HOME/.bash_history" \
 	"$HOME/.mtap.fuseiso" \
 	"$HOME/.mu" \
 	"$HOME/.pulse-cookie" \
+	"$HOME/.python_history" \
 	"$HOME/.thumbnails" \
 	"$HOME/.tramp_history" \
+	"$HOME/.units_history" \
+	"$HOME/.wget-hsts" \
 	"$HOME/.w3m"
 
 echo "==> Files to be removed (beside trash):"
