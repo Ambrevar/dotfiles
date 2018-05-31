@@ -2,7 +2,9 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix packages)
   #:use-module (gnu packages tex)
+  #:use-module (gnu packages perl)
   #:use-module (guix build-system texlive)
+  #:use-module (guix build-system gnu)
   #:use-module (guix build-system trivial)
   #:use-module (guix svn-download)
   #:use-module (ice-9 ftw)
@@ -88,6 +90,7 @@ either PostScript or PDF output.")
     (license license:lppl1.3c+)))
 
 ;; TODO: Koma-script does not build.
+;; Try pre-built file https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=koma-script.
 (define-public texlive-latex-koma-script
   (package
     (name "texlive-latex-koma-script")
@@ -99,8 +102,31 @@ either PostScript or PDF output.")
               (sha256
                (base32
                 "0nn0nr437f5rasmb48iq2h2gvmvpafkayihx7wvxkfh7rrr8ils4"))))
-    (build-system texlive-build-system)
-    (arguments '(#:tex-directory "latex/koma-script"))
+    (build-system gnu-build-system)
+    (native-inputs
+     `(("texlive-bin" ,texlive-bin)
+       ("perl" ,perl)
+       ;; ("texlive-metafont-base" ,texlive-metafont-base)
+       ;; ("texlive-fonts-cm" ,texlive-fonts-cm)
+       ))
+    ;; (arguments
+    ;;  `(#:modules ((guix build utils))
+    ;;    #:builder
+    ;;    (begin
+    ;;      (use-modules (guix build utils))
+    ;;      (let ((target (string-append (assoc-ref %outputs "out")
+    ;;                                   "/share/texmf-dist/tex/latex/eukdate")))
+    ;;        (mkdir-p target)
+    ;;        (copy-recursively (assoc-ref %build-inputs "source") target)
+    ;;        #t))))
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         ;; TODO: Need to set PATH variable in Makefile.baseinit.
+         (delete 'configure))))
+    (inputs
+     `(("texlive-latex-filecontents" ,texlive-latex-filecontents)
+       ("texlive-latex-babel" ,texlive-latex-babel)))
     (home-page "https://www.ctan.org/pkg/koma-script")
     (synopsis "Bundle of versatile classes and packages")
     (description
@@ -130,6 +156,7 @@ typearea (which are the main parts of the bundle).")
 ;; TODO: Marvosym fonts build but they can't be used properly.
 ;; http://www.tug.org/svn/texlive/tags/texlive-2017.1/Master/texmf-dist/source/fonts/marvosym/
 ;; https://github.com/mojca/marvosym
+;; TODO: Check out texlive-fonts-ec, we need to patch some PATHS.
 (define-public texlive-fonts-marvosym
   (package
     (name "texlive-fonts-marvosym")
@@ -317,55 +344,56 @@ page, a new page will be started.")
     ;; TODO: Check if this is the proper license.
     (license license:lppl1.3c+)))
 
-(define-public texlive-latex-microtype
-  (package
-    (name "texlive-latex-microtype")
-    (version (number->string %texlive-revision))
-    (source (origin
-              (method svn-fetch)
-              (uri (texlive-ref "latex" "microtype"))
-              (file-name (string-append name "-" version "-checkout"))
-              (sha256
-               (base32
-                "1dwhlxy35bydlljb40ck6d5j93gd4889hpr4j3x8vqhl46k3lfph"))))
-    (build-system texlive-build-system)
-    (arguments '(#:tex-directory "latex/microtype"))
-    ;; (arguments
-    ;;  `(#:modules ((guix build utils))
-    ;;    #:builder
-    ;;    (begin
-    ;;      (use-modules (guix build utils))
-    ;;      (let ((target (string-append (assoc-ref %outputs "out")
-    ;;                                   "/share/texmf-dist/tex/latex/needspace")))
-    ;;        (mkdir-p target)
-    ;;        (copy-recursively (assoc-ref %build-inputs "source") target)
-    ;;        #t))))
-    (home-page "https://www.ctan.org/pkg/microtype")
-    (synopsis "Subliminal refinements towards typographical perfection")
-    (description
-     "The package provides a LaTeX interface to the micro-typographic
-extensions that were introduced by pdfTeX and have since also propagated to
-XeTeX and LuaTeX: most prominently, character protrusion and font expansion,
-furthermore the adjustment of interword spacing and additional kerning, as well
-as hyphenatable letterspacing (tracking) and the possibility to disable all or
-selected ligatures.
+;; TODO: Do I need microtype?
+;; (define-public texlive-latex-microtype
+;;   (package
+;;     (name "texlive-latex-microtype")
+;;     (version (number->string %texlive-revision))
+;;     (source (origin
+;;               (method svn-fetch)
+;;               (uri (texlive-ref "latex" "microtype"))
+;;               (file-name (string-append name "-" version "-checkout"))
+;;               (sha256
+;;                (base32
+;;                 "1dwhlxy35bydlljb40ck6d5j93gd4889hpr4j3x8vqhl46k3lfph"))))
+;;     (build-system texlive-build-system)
+;;     (arguments '(#:tex-directory "latex/microtype"))
+;;     ;; (arguments
+;;     ;;  `(#:modules ((guix build utils))
+;;     ;;    #:builder
+;;     ;;    (begin
+;;     ;;      (use-modules (guix build utils))
+;;     ;;      (let ((target (string-append (assoc-ref %outputs "out")
+;;     ;;                                   "/share/texmf-dist/tex/latex/needspace")))
+;;     ;;        (mkdir-p target)
+;;     ;;        (copy-recursively (assoc-ref %build-inputs "source") target)
+;;     ;;        #t))))
+;;     (home-page "https://www.ctan.org/pkg/microtype")
+;;     (synopsis "Subliminal refinements towards typographical perfection")
+;;     (description
+;;      "The package provides a LaTeX interface to the micro-typographic
+;; extensions that were introduced by pdfTeX and have since also propagated to
+;; XeTeX and LuaTeX: most prominently, character protrusion and font expansion,
+;; furthermore the adjustment of interword spacing and additional kerning, as well
+;; as hyphenatable letterspacing (tracking) and the possibility to disable all or
+;; selected ligatures.
 
-These features may be applied to customisable sets of fonts, and all
-micro-typographic aspects of the fonts can be configured in a straight-forward
-and flexible way. Settings for various fonts are provided.
+;; These features may be applied to customisable sets of fonts, and all
+;; micro-typographic aspects of the fonts can be configured in a straight-forward
+;; and flexible way. Settings for various fonts are provided.
 
-Note that character protrusion requires pdfTeX, LuaTeX, or XeTeX. Font expansion
-works with pdfTeX or LuaTeX. The package will by default enable protrusion and
-expansion if they can safely be assumed to work. Disabling ligatures requires
-pdfTeX or LuaTeX, while the adjustment of interword spacing and of kerning only
-works with pdfTeX. Letterspacing is available with pdfTeX or LuaTeX.
+;; Note that character protrusion requires pdfTeX, LuaTeX, or XeTeX. Font expansion
+;; works with pdfTeX or LuaTeX. The package will by default enable protrusion and
+;; expansion if they can safely be assumed to work. Disabling ligatures requires
+;; pdfTeX or LuaTeX, while the adjustment of interword spacing and of kerning only
+;; works with pdfTeX. Letterspacing is available with pdfTeX or LuaTeX.
 
-The alternative package @code{letterspace}, which also works with plain TeX, provides
-the user commands for letterspacing only, omitting support for all other
-extensions.
-")
-    ;; TODO: Check if this is the proper license.
-    (license license:lppl1.3c+)))
+;; The alternative package @code{letterspace}, which also works with plain TeX, provides
+;; the user commands for letterspacing only, omitting support for all other
+;; extensions.
+;; ")
+;;     ;; TODO: Check if this is the proper license.
+;;     (license license:lppl1.3c+)))
 
 ;; TODO: Rename texlive-for-org-letter
 (define-public texlive-medium
@@ -376,7 +404,7 @@ extensions.
                texlive-generic-ifxetex
                texlive-latex-wrapfig
                texlive-fonts-amsfonts   ; For custom letter?
-               texlive-dvips   ; For custom letter and marvosym?  Already in texlive-union?
+               ; texlive-dvips   ; For custom letter and marvosym?  Already in texlive-union?
                ;; texlive-latex-amscls
                texlive-latex-amsfonts
                ;; texlive-latex-amsmath
@@ -395,7 +423,7 @@ extensions.
                ;; TODO: For needspace (build inputs)
                texlive-latex-filecontents
                texlive-latex-titlesec
-               ;; TODO: needspace needs microtype
+               ;; TODO: needspace needs microtype?
                ;; TODO: Send patches for those.
                texlive-latex-pgf
                texlive-generic-ulem)))
