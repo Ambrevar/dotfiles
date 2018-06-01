@@ -250,19 +250,19 @@ If W2 is a window too, swap both."
 (defun ambrevar/swap-windows-left ()
   "Swap current window with the window to the left."
   (interactive)
-  (swap-windows (window-in-direction 'left)))
+  (ambrevar/swap-windows (window-in-direction 'left)))
 (defun ambrevar/swap-windows-below ()
   "Swap current window with the window below."
   (interactive)
-  (swap-windows (window-in-direction 'below)))
+  (ambrevar/swap-windows (window-in-direction 'below)))
 (defun ambrevar/swap-windows-above ()
   "Swap current window with the window above."
   (interactive)
-  (swap-windows (window-in-direction 'above)))
+  (ambrevar/swap-windows (window-in-direction 'above)))
 (defun ambrevar/swap-windows-right ()
   "Swap current window with the window to the right."
   (interactive)
-  (swap-windows (window-in-direction 'right)))
+  (ambrevar/swap-windows (window-in-direction 'right)))
 
 (defun ambrevar/switch-to-last-buffer ()
   "Switch to last open buffer in current window."
@@ -311,7 +311,7 @@ from acting on it."
        "Window '%s' is dedicated"
      "Window '%s' is normal")
    (current-buffer)))
-(global-set-key (kbd "<pause>") 'toggle-window-dedicated)
+(global-set-key (kbd "<pause>") 'ambrevar/toggle-window-dedicated)
 
 (defun ambrevar/toggle-window-split ()
   "Switch between vertical and horizontal split.
