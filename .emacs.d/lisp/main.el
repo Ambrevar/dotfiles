@@ -378,7 +378,7 @@
 ;; (setq edebug-trace t)
 
 ;;; Make windowing more reactive on.  This is especially true with Helm on EXWM.
-(when (>= emacs-major-version 26)
+(when (= emacs-major-version 26)
   (setq x-wait-for-event-timeout nil))
 
 (setq woman-fill-column fill-column)
