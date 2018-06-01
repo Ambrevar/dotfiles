@@ -40,7 +40,7 @@ prependpath () {
 ## Use this to override system executables.
 prependpath "${HOME}/personal/hackpool"
 
-## TeXlive
+## TeXlive -- TODO: Remove once guix has packaged it all properly.
 TEXDIR="${TEXDIR:-/usr/local/texlive}"
 if [ -d "${TEXDIR}" ]; then
 	TEXYEAR=$(/bin/ls -1r "${TEXDIR}" | grep -m1 "[0-9]\{4\}")
@@ -126,8 +126,8 @@ if [ "$(uname -o)" = "GNU/Linux" ] ; then
 		fi
 	fi
 
-	## Set sound volume.
-	amixer 2>/dev/null | grep -q PCM && amixer set PCM 100%
+	## Set sound volume.  (Useless when running Pulseaudio.)
+	# amixer 2>/dev/null | grep -q PCM && amixer set PCM 100%
 
 	## External device auto-mounting.
 	## If already started, the new process will replace the old one.
