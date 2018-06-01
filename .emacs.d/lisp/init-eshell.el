@@ -13,11 +13,6 @@
 ;;; `eshell-write-history' won't work.
 ;;; See #29153.
 
-;;; REVIEW: ANSI coloring goes wrong sometimes.  Quite often with emerge/eix.
-;;; Fixed in #27407.
-(when (< emacs-major-version 26)
-  (require 'patch-eshell))
-
 ;;; REVIEW: Sometimes transmission-daemon does not start from Eshell.
 ;;; See #30465.
 

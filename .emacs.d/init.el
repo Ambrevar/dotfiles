@@ -3,7 +3,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Prerequisites
 
-(let ((minver "24.1"))
+(let ((minver "26.1"))
   (when (version< emacs-version minver)
     (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
 
@@ -133,7 +133,7 @@
 
 ;;; Evil
 (nconc package-selected-packages '(evil
-                                   evil-commentary evil-multiedit linum-relative
+                                   evil-commentary evil-multiedit
                                    evil-ediff evil-magit evil-mu4e evil-org evil-collection))
 (setq evil-want-integration nil)
 (when (require 'evil nil t) (require 'init-evil))

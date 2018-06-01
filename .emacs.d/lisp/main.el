@@ -71,9 +71,7 @@
 (dolist (hook '(prog-mode-hook text-mode-hook))
   (add-hook hook 'ambrevar/turn-on-column-number-mode)
   (add-hook hook 'ambrevar/turn-off-line-number-mode)
-  (if (>= emacs-major-version 26)
-      (add-hook hook 'display-line-numbers-mode)
-    (add-hook hook 'linum-mode)))
+  (add-hook hook 'display-line-numbers-mode))
 (setq display-line-numbers-type 'visual)
 ;;; Emacs-nox does not display a fringe after the linum: Setting linum-format in
 ;;; linum-before-numbering-hook is not the right approach as it will change the
@@ -149,12 +147,6 @@
  ;; "s-w" 'other-window
  "s-c" 'delete-window)
 
-
-;;; Since `browse-url-default-browser' fails at seeing we can run xdg, force it.
-(when (<  emacs-major-version 26)
-  (require 'browse-url)
-  (setq browse-url-browser-function
-        (if (executable-find "xdg-open") 'browse-url-xdg-open 'browse-url-generic)))
 ;; REVIEW: If xdg-open is not found, set Emacs URL browser to the environment browser,
 ;; or w3m if BROWSER is not set.
 ;; See https://debbugs.gnu.org/cgi/bugreport.cgi?bug=18986.
