@@ -162,6 +162,7 @@
                %base-user-accounts))
 
  (packages (cons* nss-certs             ;for HTTPS access
+                  ntfs-3g
                   %base-packages))
 
  (services (cons*
