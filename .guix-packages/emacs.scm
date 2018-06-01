@@ -55,150 +55,50 @@
   #:use-module (ice-9 match))
 
 ;; TODO: Include sources.
-
-(define-public emacs-prerelease
-  (package
-    (name "emacs-prerelease")
-    (version "26.1-rc1")
-    (source (origin
-             (method url-fetch)
-             (uri (string-append "ftp://alpha.gnu.org/gnu/emacs/pretest/emacs-" version ".tar.xz"))
-             (sha256
-              (base32
-               "0n2pl1i4piga43p1kbscbb2sgg74gy4qq5jgmmrnxf80vrlfd535"))
-             (patches (search-patches "emacs-exec-path.patch"
-                                      ;; "emacs-fix-scheme-indent-function.patch"
-                                      "emacs-source-date-epoch.patch"))
-             (modules '((guix build utils)))
-             (snippet
-              ;; Delete the bundled byte-compiled elisp files and
-              ;; generated autoloads.
-              '(with-directory-excursion "lisp"
-                 (for-each delete-file
-                           (append (find-files "." "\\.elc$")
-                                   (find-files "." "loaddefs\\.el$")
-                                   ;; This is the only "autoloads" file that
-                                   ;; does not have "*loaddefs.el" name.
-                                   '("eshell/esh-groups.el")))
-
-                 ;; Make sure Tramp looks for binaries in the right places on
-                 ;; remote GuixSD machines, where 'getconf PATH' returns
-                 ;; something bogus.
-                 (substitute* "net/tramp-sh.el"
-                   ;; Patch the line after "(defcustom tramp-remote-path".
-                   (("\\(tramp-default-remote-path")
-                    (format #f "(tramp-default-remote-path ~s ~s ~s ~s "
-                            "~/.guix-profile/bin" "~/.guix-profile/sbin"
-                            "/run/current-system/profile/bin"
-                            "/run/current-system/profile/sbin")))
-
-                 ;; Make sure Man looks for C header files in the right
-                 ;; places.
-                 (substitute* "man.el"
-                   (("\"/usr/local/include\"" line)
-                    (string-join
-                     (list line
-                           "\"~/.guix-profile/include\""
-                           "\"/var/guix/profiles/system/profile/include\"")
-                     " ")))))))
-    (build-system glib-or-gtk-build-system)
-    (arguments
-     `(#:tests? #f
-       #:phases
-       (modify-phases %standard-phases
-         (add-before 'configure 'fix-/bin/pwd
-           (lambda _
-             ;; Use `pwd', not `/bin/pwd'.
-             (substitute* (find-files "." "^Makefile\\.in$")
-               (("/bin/pwd")
-                "pwd"))))
-         (add-after 'install 'install-site-start
-           ;; Use 'guix-emacs' in "site-start.el".  This way, Emacs packages
-           ;; provided by Guix and installed in
-           ;; ~/.guix-profile/share/emacs/site-lisp/guix.d/PACKAGE-VERSION are
-           ;; automatically found.
-           (lambda* (#:key inputs outputs #:allow-other-keys)
-             (let* ((out      (assoc-ref outputs "out"))
-                    (lisp-dir (string-append out "/share/emacs/site-lisp")))
-               (copy-file (assoc-ref inputs "guix-emacs.el")
-                          (string-append lisp-dir "/guix-emacs.el"))
-               (with-output-to-file (string-append lisp-dir "/site-start.el")
-                 (lambda ()
-                   (display
-                    (string-append "(when (require 'guix-emacs nil t)\n"
-                                   "  (guix-emacs-autoload-packages))\n"))))
-               #t))))))
-    (inputs
-     `(("gnutls" ,gnutls)
-       ("ncurses" ,ncurses)
-
-       ;; TODO: Add the optional dependencies.
-       ("libx11" ,libx11)
-       ("gtk+" ,gtk+)
-       ("libxft" ,libxft)
-       ("libtiff" ,libtiff)
-       ("giflib" ,giflib)
-       ("libjpeg" ,libjpeg-8)
-       ("imagemagick" ,imagemagick)
-       ("acl" ,acl)
-
-       ;; When looking for libpng `configure' links with `-lpng -lz', so we
-       ;; must also provide zlib as an input.
-       ("libpng" ,libpng)
-       ("zlib" ,zlib)
-
-       ("librsvg" ,librsvg)
-       ("libxpm" ,libxpm)
-       ("libxml2" ,libxml2)
-       ("libice" ,libice)
-       ("libsm" ,libsm)
-       ("alsa-lib" ,alsa-lib)
-       ("dbus" ,dbus)
-
-       ;; multilingualization support
-       ("libotf" ,libotf)
-       ("m17n-lib" ,m17n-lib)))
-    (native-inputs
-     `(("guix-emacs.el" ,(search-auxiliary-file "emacs/guix-emacs.el"))
-       ("pkg-config" ,pkg-config)
-       ("texinfo" ,texinfo)))
-
-    (native-search-paths
-     (list (search-path-specification
-            (variable "INFOPATH")
-            (files '("share/info")))))
-
-    (home-page "https://www.gnu.org/software/emacs/")
-    (synopsis "The extensible, customizable, self-documenting text editor")
-    (description
-     "GNU Emacs is an extensible and highly customizable text editor.  It is
-based on an Emacs Lisp interpreter with extensions for text editing.  Emacs
-has been extended in essentially all areas of computing, giving rise to a
-vast array of packages supporting, e.g., email, IRC and XMPP messaging,
-spreadsheets, remote server editing, and much more.  Emacs includes extensive
-documentation on all aspects of the system, from basic editing to writing
-large Lisp programs.  It has full Unicode support for nearly all human
-languages.")
-    (license license:gpl3+)))
-
-;; TODO: emacs-dev fails unless `make clean` was run.  There is an issue with
-;; timestamps which makes `make` rebuild everything while the "source" folder is
-;; read-only.
+;; TODO: Make a script which calls
+;; > Patch s,/bin/pwd,pwd,g in all Makefile.in files.
+;; > guix environment emacs -- ./configure --prefix="/gnu/store/n6cr7jvmj8j4ig3ldkzsrnywmlilm1ap-emacs-dev-27.0.0" --localstatedir=/var
+;; > guix environment emacs -- make DESTDIR=$HOME/projects/emacs/output -j5 install
+;; (Full path to output is important.)
+;; TODO: Glib wrapper as in original Guix package?
+;; #!/gnu/store/mm0zclrzj3y7rj74hzyd0f224xly04fh-bash-minimal-4.4.12/bin/bash
+;; export XDG_DATA_DIRS="/gnu/store/jj58sgi6aa73s1k09x7ximrspnii5q0n-shared-mime-info-1.8/share:/gnu/store/i1x64fz6m3i1l61vywn5bgdamw0h71c0-glib-2.54.2/share:/gnu/store/dvzhbixz5brkabisgq2m6i7yj4543c1y-gtk+-3.22.29/share:/gnu/store/0ffgqq2x44f09qnlck62m354kfqznw83-emacs-prerelease-26.1-rc1/share${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS"
+;; export GTK_PATH="/gnu/store/dvzhbixz5brkabisgq2m6i7yj4543c1y-gtk+-3.22.29/lib/gtk-3.0${GTK_PATH:+:}$GTK_PATH"
+;; export GIO_EXTRA_MODULES="/gnu/store/i1x64fz6m3i1l61vywn5bgdamw0h71c0-glib-2.54.2/lib/gio/modules${GIO_EXTRA_MODULES:+:}$GIO_EXTRA_MODULES"
+;; exec -a "$0" "/gnu/store/0ffgqq2x44f09qnlck62m354kfqznw83-emacs-prerelease-26.1-rc1/bin/emacs-26.1" "$@"
+;; Try:
+;; export XDG_DATA_DIRS="/gnu/store/n6cr7jvmj8j4ig3ldkzsrnywmlilm1ap-emacs-dev-27.0.0${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS"
 (define-public emacs-dev
   (package
     (inherit emacs)
     (name "emacs-dev")
-    (version "27.0.0")                  ; TODO: Use git version.
-    (source (local-file "/home/ambrevar/projects/emacs" #:recursive? #t)) ; TODO: Use HOME.
-    ;; (build-system trivial-build-system)
+    (version "27.0.0")                  ; TODO: Use git version?
+    (source (local-file (string-append (getenv "HOME") "/projects/emacs/output")
+                        #:recursive? #t))
+    ;; TODO: Include patches and snippets?
+    ;; - emacs-exec-path.patch is useless because we don't need our build to be reproduicible.
+    ;; - emacs-source-date-epoch.patch: same.
+    ;; - emacs-fix-scheme-indent-function.patch?
+    ;; - Snippet to delete .elc and loadefs?  Probably not.
+    ;; - Snippet tramp-default-remote-path?
+    ;; - Snippet for C header path in man.el?
+    (build-system trivial-build-system)
     (arguments
-     `(#:tests? #f               ; TODO: Enable tests?  Need to fix tramp first.
-                #:phases
-                (modify-phases %standard-phases
-                  (delete 'reset-gzip-timestamps) ; TODO: Why does this fail?
-                  (delete 'build)
-                  ;; (delete 'configure)
-                  ;; TODO: Delete "check"?
-                  )))
+     `(#:modules ((guix build utils))
+       #:builder
+       (begin
+         (use-modules (guix build utils))
+         (copy-recursively (assoc-ref %build-inputs "source") %output)
+         ;; Install guix-emacs as per original Emacs package declaration.
+         (let* ((out %output)
+                (lisp-dir (string-append out "/share/emacs/site-lisp")))
+           (copy-file (assoc-ref %build-inputs "guix-emacs.el")
+                      (string-append lisp-dir "/guix-emacs.el"))
+           (with-output-to-file (string-append lisp-dir "/site-start.el")
+             (lambda ()
+               (display
+                (string-append "(when (require 'guix-emacs nil t)\n"
+                               "  (guix-emacs-autoload-packages))\n")))))
+         #t)))
     (synopsis "Emacs (development version)")
     (license license:lgpl3+)))
