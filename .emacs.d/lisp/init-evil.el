@@ -175,6 +175,12 @@
   ;;     (kbd "<return>") 'mu4e-conversation))
   )
 
+(with-eval-after-load 'mu4e-conversation
+  (evil-define-minor-mode-key 'normal 'mu4e-conversation-mode
+    "[" 'mu4e-conversation-previous-message
+    "]" 'mu4e-conversation-next-message
+    "V" 'mu4e-conversation-toggle-view))
+
 (with-eval-after-load 'magit
   (when (require 'evil-magit nil t)
     (evil-magit-define-key evil-magit-state 'magit-mode-map "<" 'magit-section-up)

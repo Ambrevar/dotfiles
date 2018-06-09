@@ -258,7 +258,24 @@
           (delq nil (mapcar (lambda (path) (string-match "/mu4e/\\|/mu4e$" path)) load-path)))
   ;; (nconc package-selected-packages '(mu4e-maildirs-extension))
   (nconc package-selected-packages '(helm-mu)))
-(with-eval-after-load 'mu4e (require 'init-mu4e))
+(with-eval-after-load 'mu4e
+  ;; mu4e-conversation must be enabled here.
+  ;; REVIEW: https://github.com/djcb/mu/issues/1258
+  (when (require 'mu4e-conversation nil t)
+    (setq mu4e-view-func 'mu4e-conversation)
+    (setq mu4e-headers-show-threads nil)
+    ;; For testing purposes:
+    ;; (set-face-background mu4e-conversation-sender-1 "#335533")
+    ;; (set-face-background mu4e-conversation-sender-2 "#553333")
+    ;; (set-face-background mu4e-conversation-sender-3 "#333355")
+    ;; (set-face-background mu4e-conversation-sender-4 "#888855")
+    (defun mu4e-conversation-toggle ()
+      "Toggle-replace `mu4e-view' with `mu4e-conversation' everywhere."
+      (interactive)
+      (if (eq mu4e-view-func 'mu4e-conversation)
+          (setq mu4e-view-func 'mu4e~headers-view-handler)
+        (setq mu4e-view-func 'mu4e-conversation))))
+  (require 'init-mu4e))
 (autoload 'ambrevar/mu4e-headers "mu4e")
 
 ;;; Makefile
