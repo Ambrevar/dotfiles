@@ -142,48 +142,38 @@
   ">" 'nxml-down-element
   "<" 'nxml-backward-up-element)
 
-(with-eval-after-load 'mu4e
-  (when (require 'evil-mu4e nil t)
-    ;; TODO: evil-mu4e needs a big overhaul, e.g. 'visual commands are not supported.  Report upstream.
-    (evil-define-key 'motion mu4e-headers-mode-map
-      "i" 'mu4e-headers-mark-for-flag
-      "I" 'mu4e-headers-mark-for-unflag
-      "]" 'mu4e-headers-next-unread
-      "[" 'mu4e-headers-prev-unread
-      ;; "R" 'mu4e-headers-mark-for-refile
-      "p" 'mu4e-headers-toggle-include-related
-      "r" 'mu4e-compose-reply
-      ;; Custom
-      "d" 'ambrevar/mu4e-headers-move-to-trash)
-    (evil-define-key 'visual mu4e-headers-mode-map
-      "m" 'mu4e-headers-mark-for-move
-      "D" 'mu4e-headers-mark-for-delete
-      "u" 'mu4e-headers-mark-for-unmark
-      ;; Custom
-      "d" 'ambrevar/mu4e-headers-move-to-trash)
-    (evil-define-key 'motion mu4e-view-mode-map
-      (kbd "SPC") 'mu4e-view-scroll-up-or-next
-      (kbd "<tab>") 'shr-next-link
-      (kbd "<backtab>") 'shr-previous-link
-      "i" 'mu4e-view-mark-for-flag
-      "I" 'mu4e-view-mark-for-unflag
-      "]" 'mu4e-view-headers-next-unread
-      "[" 'mu4e-view-headers-prev-unread
-      ;; "R" 'mu4e-view-mark-for-refile
-      "r" 'mu4e-compose-reply
-      "za" 'mu4e-view-save-attachment-multi
-      (kbd "C-j") 'mu4e-view-headers-next
-      (kbd "C-k") 'mu4e-view-headers-prev
-      (kbd "M-j") 'mu4e-view-headers-next ; Custom
-      (kbd "M-k") 'mu4e-view-headers-prev ; Custom
-      "h" 'evil-backward-char
-      "zh" 'mu4e-view-toggle-html
-      "gx" 'mu4e-view-go-to-url
-      ;; Custom
-      "d" 'ambrevar/mu4e-view-move-to-trash)
-    (evil-set-initial-state 'mu4e-compose-mode 'insert)
-    (evil-define-key 'normal mu4e-compose-mode-map
-      "gg" 'mu4e-compose-goto-top)))
+(when (require 'evil-mu4e nil t)
+  (evil-define-key 'normal mu4e-main-mode-map
+    "s" 'helm-mu)
+  (evil-define-key 'normal mu4e-headers-mode-map
+    ;; "r" 'mu4e-compose-reply
+    "s" 'helm-mu
+    ;; Custom
+    "x" 'ambrevar/mu4e-mark-execute-all-no-confirm
+    "d" 'ambrevar/mu4e-headers-move-to-trash)
+  (evil-define-key 'visual mu4e-headers-mode-map
+    "s" 'helm-mu
+    ;; Custom
+    "x" 'ambrevar/mu4e-mark-execute-all-no-confirm
+    "d" 'ambrevar/mu4e-headers-move-to-trash)
+  (evil-define-key 'normal mu4e-view-mode-map
+    ;; "r" 'mu4e-compose-reply
+    "s" 'helm-mu
+    ;; Custom
+    "d" 'ambrevar/mu4e-view-move-to-trash
+    "x" 'ambrevar/mu4e-mark-execute-all-no-confirm)
+  ;; (evil-define-key 'visual mu4e-view-mode-map
+  ;;   ;; "r" 'mu4e-compose-reply
+  ;;   "s" 'helm-mu
+  ;;   ;; Custom
+  ;;   "d" 'ambrevar/mu4e-view-move-to-trash
+  ;;   "x" 'ambrevar/mu4e-mark-execute-all-no-confirm)
+  ;; (evil-define-key 'normal mu4e-compose-mode-map
+  ;;   "gg" 'mu4e-compose-goto-top) ; TODO: Move this upstream?
+  ;; (when (require 'mu4e-conversation nil t)
+  ;;   (evil-define-key 'normal mu4e-headers-mode-map
+  ;;     (kbd "<return>") 'mu4e-conversation))
+  )
 
 (with-eval-after-load 'magit
   (when (require 'evil-magit nil t)
