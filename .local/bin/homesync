@@ -58,8 +58,13 @@ project_status() {
 for i in ~/dotfiles ~/.password-store ~/personal ~/projects/* ~/.local/share/emacs/site-lisp/* "$@"; do
 	[ ! -d "$i/.git" ] && continue
 	CHANGED=true
-	unmerged=$(git -C "$i" log --oneline  origin/master..)
-	project_status "$i" "Unmerged commits" "$unmerged"
+	upstream=$(git -C "$i" rev-parse --abbrev-ref --symbolic-full-name @{u} 2>&1)
+	if [ $? -eq 0 ]; then
+		unmerged=$(git -C "$i" log --oneline  "$upstream"..)
+		project_status "$i" "Unmerged commits" "$unmerged"
+	else
+		project_status "$i" "Unmerged commits" "$upstream"
+	fi
 	project_status "$i" "Unstaged files" "$(git -C "$i" diff --name-only)"
 	project_status "$i" "Staged files" "$(git -C "$i" diff --name-only --cached)"
 	if $OPT_UPDATE && [ -n "$unmerged" ]; then
