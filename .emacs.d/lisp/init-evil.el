@@ -109,9 +109,10 @@
 (with-eval-after-load 'elfeed
   ;; Custom
   (evil-define-key 'normal elfeed-search-mode-map
-    (kbd "S-<return>") 'ambrevar/elfeed-visit-maybe-external)
-  (evil-define-key 'normal elfeed-show-mode-map
-    (kbd "S-<return>") 'ambrevar/elfeed-visit-maybe-external)
+    (kbd "S-<return>") 'elfeed-search-show-entry
+    (kbd "<return>") 'ambrevar/elfeed-visit-maybe-external)
+  ;; (evil-define-key 'normal elfeed-show-mode-map
+  ;;   (kbd "S-<return>") 'ambrevar/elfeed-visit-maybe-external)
   (evil-define-key 'normal elfeed-show-mode-map
     (kbd "q") 'ambrevar/elfeed-kill-entry))
 

@@ -31,15 +31,18 @@ whether how to visit the link.")
   "Visit with external function if entry link matches `ambrevar/elfeed-visit-patterns',
 visit otherwise."
   (interactive)
-  (let ((entry (if (eq major-mode 'elfeed-show-mode) elfeed-show-entry (elfeed-search-selected :single)))
+  (let ((entry (if (eq major-mode 'elfeed-show-mode)
+                   elfeed-show-entry
+                 (elfeed-search-selected :single)))
         (patterns ambrevar/elfeed-visit-patterns))
     (while (and patterns (not (string-match (caar patterns) (elfeed-entry-link entry))))
       (setq patterns (cdr patterns)))
-    (if patterns
-        (funcall (cdar patterns))
-      (if (eq major-mode 'elfeed-search-mode)
-          (elfeed-search-browse-url)
-        (elfeed-show-visit)))))
+    (cond
+     (patterns
+      (funcall (cdar patterns)))
+     ((eq major-mode 'elfeed-search-mode)
+      (elfeed-search-show-entry))
+     (t (elfeed-show-visit)))))
 
 (define-key elfeed-search-mode-map "v" #'elfeed-play-in-mpv)
 
