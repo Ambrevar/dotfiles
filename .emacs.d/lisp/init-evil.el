@@ -177,10 +177,26 @@
   )
 
 (with-eval-after-load 'mu4e-conversation
-  (evil-define-minor-mode-key 'normal 'mu4e-conversation-mode
-    "[" 'mu4e-conversation-previous-message
-    "]" 'mu4e-conversation-next-message
-    "V" 'mu4e-conversation-toggle-view))
+  ;; (evil-define-key 'normal mu4e-conversation-mode-map
+  ;;   "zv" 'mu4e-conversation-toggle-view)
+  (evil-define-key 'normal mu4e-conversation-linear-map
+    "zv" 'mu4e-conversation-toggle-view)
+  (evil-define-key 'normal mu4e-conversation-tree-map
+    "zv" 'mu4e-conversation-toggle-view)
+  (evil-define-key '(normal visual) mu4e-conversation-mode-map ; TODO: Does not work?
+    "#" 'mu4e-conversation-toggle-hide-cited)
+  (evil-define-key '(normal visual) mu4e-conversation-linear-map
+    "q" 'mu4e~view-quit-buffer
+    "[" 'mu4e-conversation-previous-message ; TODO: Don't override previous-unread.
+    "]" 'mu4e-conversation-next-message)
+  (evil-define-key '(normal visual) mu4e-conversation-tree-map
+    "C" 'mu4e-compose-new
+    "R" 'mu4e-compose-reply
+    "cc" 'mu4e-compose-new
+    "cr" 'mu4e-compose-reply
+    "ce" 'mu4e-compose-edit
+    "cf" 'mu4e-compose-forward
+    "q" 'mu4e-conversation-quit))
 
 (with-eval-after-load 'magit
   (when (require 'evil-magit nil t)
