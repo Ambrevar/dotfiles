@@ -134,7 +134,7 @@
 ;;; Evil
 (nconc package-selected-packages '(evil
                                    evil-commentary evil-multiedit
-                                   evil-ediff evil-magit evil-mu4e evil-org evil-collection))
+                                   evil-magit evil-org evil-collection))
 (setq evil-want-integration nil)
 (when (require 'evil nil t) (require 'init-evil))
 

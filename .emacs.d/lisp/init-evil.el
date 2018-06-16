@@ -143,38 +143,32 @@
   ">" 'nxml-down-element
   "<" 'nxml-backward-up-element)
 
-(when (require 'evil-mu4e nil t)
-  (evil-define-key 'normal mu4e-main-mode-map
-    "s" 'helm-mu)
-  (evil-define-key 'normal mu4e-headers-mode-map
-    ;; "r" 'mu4e-compose-reply
-    "s" 'helm-mu
-    ;; Custom
-    "x" 'ambrevar/mu4e-mark-execute-all-no-confirm
-    "d" 'ambrevar/mu4e-headers-move-to-trash)
-  (evil-define-key 'visual mu4e-headers-mode-map
-    "s" 'helm-mu
-    ;; Custom
-    "x" 'ambrevar/mu4e-mark-execute-all-no-confirm
-    "d" 'ambrevar/mu4e-headers-move-to-trash)
-  (evil-define-key 'normal mu4e-view-mode-map
-    ;; "r" 'mu4e-compose-reply
-    "s" 'helm-mu
-    ;; Custom
-    "d" 'ambrevar/mu4e-view-move-to-trash
-    "x" 'ambrevar/mu4e-mark-execute-all-no-confirm)
-  ;; (evil-define-key 'visual mu4e-view-mode-map
-  ;;   ;; "r" 'mu4e-compose-reply
-  ;;   "s" 'helm-mu
-  ;;   ;; Custom
-  ;;   "d" 'ambrevar/mu4e-view-move-to-trash
-  ;;   "x" 'ambrevar/mu4e-mark-execute-all-no-confirm)
-  ;; (evil-define-key 'normal mu4e-compose-mode-map
-  ;;   "gg" 'mu4e-compose-goto-top) ; TODO: Move this upstream?
-  ;; (when (require 'mu4e-conversation nil t)
-  ;;   (evil-define-key 'normal mu4e-headers-mode-map
-  ;;     (kbd "<return>") 'mu4e-conversation))
-  )
+
+(defun ambrevar/evil-mu4e (mode _mode-keymaps &rest _rest)
+  (when (eq mode 'mu4e)
+    (evil-define-key 'normal mu4e-main-mode-map
+      "s" 'helm-mu)
+    (evil-define-key 'normal mu4e-headers-mode-map
+      ;; "r" 'mu4e-compose-reply
+      "s" 'helm-mu
+      ;; Custom
+      "x" 'ambrevar/mu4e-mark-execute-all-no-confirm
+      "d" 'ambrevar/mu4e-headers-move-to-trash)
+    (evil-define-key 'visual mu4e-headers-mode-map
+      "s" 'helm-mu
+      ;; Custom
+      "x" 'ambrevar/mu4e-mark-execute-all-no-confirm
+      "d" 'ambrevar/mu4e-headers-move-to-trash)
+    (evil-define-key 'normal mu4e-view-mode-map
+      ;; "r" 'mu4e-compose-reply
+      "s" 'helm-mu
+      ;; Custom
+      "d" 'ambrevar/mu4e-view-move-to-trash
+      "x" 'ambrevar/mu4e-mark-execute-all-no-confirm)
+    ;; (evil-define-key 'normal mu4e-compose-mode-map
+    ;;   "gg" 'mu4e-compose-goto-top) ; TODO: Move this upstream?
+    ))
+(add-hook 'evil-collection-setup-hook 'ambrevar/evil-mu4e)
 
 (with-eval-after-load 'mu4e-conversation
   ;; (evil-define-key 'normal mu4e-conversation-mode-map
@@ -206,8 +200,6 @@
     ;; C-j/k is the default, M-j/k is more consistent with our customization for Helm.
     (evil-magit-define-key evil-magit-state 'magit-mode-map "M-j" 'magit-section-forward)
     (evil-magit-define-key evil-magit-state 'magit-mode-map "M-k" 'magit-section-backward)))
-
-(require 'evil-ediff nil t)
 
 (with-eval-after-load 'org
   ;; Don't require evil-org before org is loaded.
