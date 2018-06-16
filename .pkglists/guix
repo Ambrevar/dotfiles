@@ -1,6 +1,7 @@
 (specifications->manifest
  '(
 "acpi"
+"aircrack-ng"
 "alsa-utils"
 "aspell"
 "aspell-dict-en"
@@ -77,7 +78,6 @@
 "nasm"
 "nethogs"
 "nmap"
-"ntfs-3g"
 "openssh"
 "optipng"
 "opus-tools"
