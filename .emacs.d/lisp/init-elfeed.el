@@ -41,7 +41,7 @@ visit otherwise."
      (patterns
       (funcall (cdar patterns)))
      ((eq major-mode 'elfeed-search-mode)
-      (elfeed-search-show-entry))
+      (call-interactively 'elfeed-search-show-entry))
      (t (elfeed-show-visit)))))
 
 (define-key elfeed-search-mode-map "v" #'elfeed-play-in-mpv)
