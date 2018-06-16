@@ -192,6 +192,8 @@
   (evil-define-key '(normal visual) mu4e-conversation-tree-map
     "C" 'mu4e-compose-new
     "R" 'mu4e-compose-reply
+    "p" 'mu4e-conversation-save-attachment
+    "o" 'mu4e-conversation-open-attachment
     "cc" 'mu4e-compose-new
     "cr" 'mu4e-compose-reply
     "ce" 'mu4e-compose-edit
