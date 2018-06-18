@@ -396,6 +396,8 @@
 ;;; StackExchange
 (nconc package-selected-packages '(sx))
 
+(nconc package-selected-packages '(strace-mode))
+
 ;;; Syntax checking
 (nconc package-selected-packages '(flycheck helm-flycheck))
 (when (require 'flycheck nil t) (require 'init-flycheck))
