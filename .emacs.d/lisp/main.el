@@ -375,4 +375,6 @@
 
 (setq woman-fill-column fill-column)
 
+(setq abbrev-file-name (expand-file-name "abbrev_defs" "~/personal"))
+
 (provide 'main)
