@@ -1,8 +1,11 @@
 ;;; Engine mode
 
 (engine-mode)
+(require 'eww)
 
-;; TODO: Add (guix) ML search engines, tell them to open with eww.
+(defun ambrevar/engine-eww-function (url &optional _)
+  (interactive)
+  (eww url))
 
 (defengine arch-aur
   "https://aur.archlinux.org/packages.php?O=0&K=%s&do_Search=Go"
@@ -30,7 +33,18 @@
 
 (defengine emacs-debbugs
   "https://debbugs.gnu.org/cgi/pkgreport.cgi?package=emacs;include=subject%3A%s;repeatmerged=on;archive=both"
-  :keybinding "e")
+  :keybinding "eb"
+  :browser 'ambrevar/engine-eww-function)
+
+(defengine emacs-devel
+  "https://lists.gnu.org/archive/cgi-bin/namazu.cgi?idxname=emacs-devel&submit=Search&query=%s"
+  :keybinding "ed"
+  :browser 'ambrevar/engine-eww-function)
+
+(defengine emms-help
+  "https://lists.gnu.org/archive/cgi-bin/namazu.cgi?idxname=emms-help&submit=Search!&query=%s"
+  :keybinding "ee"
+  :browser 'ambrevar/engine-eww-function)
 
 (defengine gentoo
   "https://wiki.gentoo.org/index.php?title=Special%3ASearch&search=%s&go=Go"
@@ -48,12 +62,18 @@
   "https://maps.google.com/maps?q=%s"
   :keybinding "gm")
 
+(defengine guix-devel
+  "https://lists.gnu.org/archive/cgi-bin/namazu.cgi?idxname=guix-devel&submit=Search&query=%s"
+  :keybinding "gud"
+  :browser 'ambrevar/engine-eww-function)
+
+(defengine guix-help
+  "https://lists.gnu.org/archive/cgi-bin/namazu.cgi?idxname=help-guix&submit=Search!&query=%s"
+  :keybinding "guh"
+  :browser 'ambrevar/engine-eww-function)
+
 (defengine imdb
   "http://www.imdb.com/find?q=%s&s=all"
-  :keybinding "i")
-
-(defengine leo
-  "http://dict.leo.org/frde/index_de.html#/search={}"
   :keybinding "i")
 
 (defengine musicbrainz
