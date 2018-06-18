@@ -131,6 +131,11 @@
 (nconc package-selected-packages '(emms helm-emms))
 (with-eval-after-load 'emms (require 'init-emms))
 
+;;; Engine
+(nconc package-selected-packages '(engine-mode))
+(when (require 'engine-mode nil t)
+  (require 'init-engine))
+
 ;;; Evil
 (nconc package-selected-packages '(evil
                                    evil-commentary evil-multiedit
