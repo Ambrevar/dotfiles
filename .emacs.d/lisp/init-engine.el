@@ -8,8 +8,12 @@
   "https://aur.archlinux.org/packages.php?O=0&K=%s&do_Search=Go"
   :keybinding "aa")
 
+(defengine arch-packages
+  "https://www.archlinux.org/packages/?sort=&q=%s&maintainer=&flagged="
+  :keybinding "ap")
+
 (defengine arch-wiki
-  "http://wiki.archlinux.org/index.php?title=Special%3ASearch&search=%s&go=Go"
+  "http://wiki.archlinux.org/index.php?title=Special%%3ASearch&search=%s&go=Go"
   :keybinding "aw")
 
 (defengine ctan
