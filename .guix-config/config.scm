@@ -132,7 +132,7 @@
  ;; and the EFI System Partition is specified by its UUID.
  (file-systems (cons* (file-system
                        (device "guixsd")
-                       (title 'label)
+                       (title 'label)   ; TODO: Deprecated?
                        (mount-point "/")
                        (type "ext4"))
                       (file-system
@@ -157,7 +157,9 @@
                 (name "ambrevar")
                 (group "users")
                 (supplementary-groups '("wheel" "netdev" ; netdev is needed for networking.
-                                        "audio" "video"))
+                                        ;; "audio"
+                                        "lp" ; for bluetooth
+                                        "video"))
                 (home-directory "/home/ambrevar"))
                %base-user-accounts))
 
@@ -178,6 +180,7 @@
             ;;                 ;; >> echo 'auto' > '/sys/bus/i2c/devices/i2c-2/device/power/control';
             ;;                 ;; >> echo 'auto' > '/sys/bus/pci/devices/0000:02:00.0/power/control';
             ;;                 )
+            (bluetooth-service)
             %my-services))
 
  ;; Allow resolution of '.local' host names with mDNS.
