@@ -17,7 +17,8 @@
 
 (defengine arch-wiki
   "http://wiki.archlinux.org/index.php?title=Special%%3ASearch&search=%s&go=Go"
-  :keybinding "aw")
+  :keybinding "aw"
+  :browser 'ambrevar/engine-eww-function)
 
 (defengine ctan
   "http://www.ctan.org/search?phrase=%s"
