@@ -268,7 +268,8 @@
   ;; REVIEW: https://github.com/djcb/mu/issues/1258
   (when (require 'mu4e-conversation nil t)
     (setq mu4e-view-func 'mu4e-conversation)
-    (setq mu4e-headers-show-threads nil)
+    (setq mu4e-headers-show-threads nil
+          mu4e-headers-include-related nil)
     ;; For testing purposes:
     ;; (set-face-background mu4e-conversation-sender-1 "#335533")
     ;; (set-face-background mu4e-conversation-sender-2 "#553333")
